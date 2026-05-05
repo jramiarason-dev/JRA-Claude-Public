@@ -8,9 +8,6 @@ const RAPPORT = {
   // ── Informations générales ────────────────────────────────────
   meta: {
     titre:     "Audit Tech Architecture Framework",
-    client:    "Entreprise ABC",
-    date:      "Mai 2024",
-    auditeur:  "Équipe Cybersécurité",
     version:   "v1.0",
   },
 
