@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhotoPost AI — Descriptions automatiques</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">✨</span>
+        <span class="logo-text">PhotoPost <span class="logo-ai">AI</span></span>
+      </div>
+      <p class="tagline">Chargez une photo → choisissez la plateforme → obtenez votre description en un clic</p>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="card upload-card">
+      <h2 class="card-title">1. Chargez votre photo</h2>
+
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-zone-content" id="dropContent">
+          <div class="drop-icon">🖼️</div>
+          <p class="drop-primary">Glissez-déposez votre photo ici</p>
+          <p class="drop-secondary">ou</p>
+          <label class="btn btn-outline" for="fileInput">Parcourir les fichiers</label>
+          <input type="file" id="fileInput" accept="image/jpeg,image/png,image/gif,image/webp" hidden />
+          <p class="drop-hint">JPEG, PNG, WebP · Max 16 Mo</p>
+        </div>
+        <div class="preview-wrapper hidden" id="previewWrapper">
+          <img id="previewImg" src="" alt="Aperçu" class="preview-img" />
+          <button class="btn btn-remove" id="removeBtn" title="Supprimer l'image">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card platform-card">
+      <h2 class="card-title">2. Choisissez la plateforme</h2>
+      <div class="platform-grid">
+
+        <label class="platform-item">
+          <input type="radio" name="platform" value="instagram" />
+          <div class="platform-box">
+            <span class="platform-emoji">📸</span>
+            <span class="platform-name">Instagram</span>
+            <span class="platform-desc">Légende + hashtags</span>
+          </div>
+        </label>
+
+        <label class="platform-item">
+          <input type="radio" name="platform" value="vinted" />
+          <div class="platform-box">
+            <span class="platform-emoji">👗</span>
+            <span class="platform-name">Vinted</span>
+            <span class="platform-desc">Description + prix</span>
+          </div>
+        </label>
+
+        <label class="platform-item">
+          <input type="radio" name="platform" value="leboncoin" />
+          <div class="platform-box">
+            <span class="platform-emoji">🔶</span>
+            <span class="platform-name">Leboncoin</span>
+            <span class="platform-desc">Annonce complète</span>
+          </div>
+        </label>
+
+        <label class="platform-item">
+          <input type="radio" name="platform" value="facebook" />
+          <div class="platform-box">
+            <span class="platform-emoji">🛍️</span>
+            <span class="platform-name">Facebook Marketplace</span>
+            <span class="platform-desc">Annonce conviviale</span>
+          </div>
+        </label>
+
+      </div>
+    </div>
+
+    <div class="generate-row">
+      <button class="btn btn-generate" id="generateBtn" disabled>
+        <span class="btn-icon">✨</span>
+        <span class="btn-label">Générer la description</span>
+      </button>
+    </div>
+
+    <div class="card result-card hidden" id="resultCard">
+      <div class="result-header">
+        <h2 class="card-title">3. Votre description</h2>
+        <div class="result-meta" id="resultMeta"></div>
+      </div>
+      <div class="result-body" id="resultBody"></div>
+      <div class="result-footer">
+        <button class="btn btn-copy" id="copyBtn">
+          <span class="copy-icon">📋</span>
+          <span class="copy-label">Copier tout</span>
+        </button>
+        <button class="btn btn-outline btn-new" id="newBtn">Nouvelle génération</button>
+      </div>
+    </div>
+
+    <div class="card error-card hidden" id="errorCard">
+      <p class="error-icon">⚠️</p>
+      <p class="error-msg" id="errorMsg"></p>
+    </div>
+
+    <div class="loader hidden" id="loader">
+      <div class="spinner"></div>
+      <p class="loader-text">Analyse de la photo en cours…</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Propulsé par <strong>Claude AI</strong> d'Anthropic · Vision par IA</p>
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
