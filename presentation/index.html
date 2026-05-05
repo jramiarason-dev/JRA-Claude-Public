@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rapport d'Audit</title>
+  <script src="config.js"></script>
+  <style>
+    /* ── Reset & variables ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #07090f;
+      --surface:  rgba(255,255,255,.055);
+      --border:   rgba(255,255,255,.09);
+      --text:     #eef0f8;
+      --muted:    rgba(238,240,248,.45);
+      --accent:   #6366f1;
+      --accent2:  #818cf8;
+      --green:    #22c55e;
+      --yellow:   #eab308;
+      --orange:   #f97316;
+      --red:      #ef4444;
+      --blue:     #60a5fa;
+      --r:        14px;
+    }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    /* ── Ambient background blobs ── */
+    .blob {
+      position: fixed; border-radius: 50%;
+      filter: blur(90px); opacity: .12;
+      pointer-events: none; z-index: 0;
+    }
+    #b1 { width: 600px; height: 600px; background: #4f46e5; top: -150px; left: -150px;
+          animation: blobMove1 18s ease-in-out infinite; }
+    #b2 { width: 500px; height: 500px; background: #0ea5e9; bottom: -100px; right: -100px;
+          animation: blobMove2 22s ease-in-out infinite; }
+    #b3 { width: 400px; height: 400px; background: #7c3aed; top: 40%; left: 40%;
+          animation: blobMove3 15s ease-in-out infinite; }
+    @keyframes blobMove1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(80px,60px)} }
+    @keyframes blobMove2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-60px,-80px)} }
+    @keyframes blobMove3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-40px,40px) scale(1.1)} }
+
+    /* ── Presentation shell ── */
+    #pres { position: relative; width: 100vw; height: 100vh; overflow: hidden; z-index: 1; }
+
+    /* ── Slides ── */
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: translateX(80px);
+      transition: opacity .55s cubic-bezier(.4,0,.2,1), transform .55s cubic-bezier(.4,0,.2,1);
+      pointer-events: none; overflow-y: auto; padding: 1.5rem;
+    }
+    .slide.active  { opacity: 1; transform: translateX(0); pointer-events: all; }
+    .slide.leaving { opacity: 0; transform: translateX(-80px); }
+
+    .slide-inner { max-width: 960px; width: 100%; }
+
+    /* ── Glass card ── */
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    /* ── Slide label ── */
+    .slide-tag {
+      display: inline-block;
+      background: rgba(99,102,241,.18);
+      border: 1px solid rgba(99,102,241,.35);
+      color: var(--accent2);
+      border-radius: 20px;
+      padding: .2rem .85rem;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: .85rem;
+    }
+
+    /* ── Headings ── */
+    h1.hero {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      background: linear-gradient(130deg, #fff 30%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    h2.section-title {
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      font-weight: 800;
+      background: linear-gradient(90deg, #fff 50%, var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Cover slide ── */
+    #slide-0 .slide-inner { text-align: center; }
+    .cover-subtitle {
+      font-size: clamp(.95rem, 2vw, 1.15rem);
+      color: var(--muted); margin: .6rem 0 2.5rem;
+    }
+    .cover-meta {
+      display: inline-flex; gap: 1.5rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 50px; padding: .6rem 1.8rem;
+      font-size: .85rem; color: var(--muted);
+      flex-wrap: wrap; justify-content: center;
+    }
+    .cover-meta span { display: flex; align-items: center; gap: .4rem; }
+    .cover-meta strong { color: var(--text); }
+    .cover-deco {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(99,102,241,.2); pointer-events: none;
+    }
+
+    /* ── Score slide ── */
+    .score-layout {
+      display: grid; grid-template-columns: auto 1fr; gap: 3rem; align-items: center;
+    }
+    .gauge-wrap { display: flex; flex-direction: column; align-items: center; gap: .75rem; }
+    .gauge-label-text { color: var(--muted); font-size: .85rem; }
+    .gauge-interp {
+      font-size: .9rem; font-weight: 700; padding: .25rem .9rem;
+      border-radius: 20px; border: 1px solid;
+    }
+    svg.gauge text { font-family: inherit; fill: var(--text); }
+    .gauge-num { font-size: 2.8rem; font-weight: 900; dominant-baseline: middle; }
+    .gauge-pct { font-size: 1.1rem; fill: var(--muted); }
+
+    .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .kpi-card {
+      padding: 1.25rem 1.5rem;
+      display: flex; flex-direction: column; gap: .4rem;
+    }
+    .kpi-icon { font-size: 1.5rem; }
+    .kpi-val  { font-size: 2rem; font-weight: 900; line-height: 1; }
+    .kpi-lbl  { font-size: .8rem; color: var(--muted); }
+
+    /* ── Répartition ── */
+    .rep-row { display: flex; flex-direction: column; gap: .9rem; }
+    .rep-item { display: grid; grid-template-columns: 110px 1fr 36px; align-items: center; gap: 1rem; }
+    .rep-name { font-size: .85rem; font-weight: 600; }
+    .rep-track {
+      height: 10px; background: rgba(255,255,255,.07);
+      border-radius: 6px; overflow: hidden;
+    }
+    .rep-fill {
+      height: 100%; border-radius: 6px;
+      width: 0; transition: width 1s cubic-bezier(.4,0,.2,1);
+    }
+    .rep-count { font-size: .85rem; font-weight: 700; text-align: right; }
+
+    /* ── Constats ── */
+    .findings-grid { display: flex; flex-direction: column; gap: .85rem; max-height: 68vh; overflow-y: auto; }
+    .findings-grid::-webkit-scrollbar { width: 5px; }
+    .findings-grid::-webkit-scrollbar-track { background: transparent; }
+    .findings-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .finding-card { padding: 1.1rem 1.25rem; display: grid; grid-template-columns: auto 1fr; gap: .75rem 1rem; }
+    .finding-id { grid-row: 1/3; align-self: start; padding: .2rem .6rem; border-radius: 6px;
+                  font-size: .72rem; font-weight: 800; letter-spacing: .04em;
+                  background: rgba(255,255,255,.07); color: var(--muted); white-space: nowrap; }
+    .finding-top { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+    .badge {
+      padding: .15rem .6rem; border-radius: 20px; font-size: .7rem; font-weight: 800;
+      letter-spacing: .05em; text-transform: uppercase;
+    }
+    .badge-critique { background: rgba(239,68,68,.18);  color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+    .badge-eleve    { background: rgba(249,115,22,.18); color: #fdba74; border: 1px solid rgba(249,115,22,.3); }
+    .badge-moyen    { background: rgba(234,179,8,.18);  color: #fde047; border: 1px solid rgba(234,179,8,.3); }
+    .badge-faible   { background: rgba(34,197,94,.18);  color: #86efac; border: 1px solid rgba(34,197,94,.3); }
+    .badge-info     { background: rgba(96,165,250,.18); color: #93c5fd; border: 1px solid rgba(96,165,250,.3); }
+    .finding-title  { font-size: .93rem; font-weight: 700; }
+    .finding-desc   { font-size: .82rem; color: var(--muted); line-height: 1.55; grid-column: 2; }
+
+    /* ── Recommandations ── */
+    .reco-list { display: flex; flex-direction: column; gap: .8rem; max-height: 68vh; overflow-y: auto; }
+    .reco-list::-webkit-scrollbar { width: 5px; }
+    .reco-list::-webkit-scrollbar-track { background: transparent; }
+    .reco-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .reco-card {
+      padding: 1rem 1.25rem;
+      display: grid; grid-template-columns: 1fr auto auto auto; gap: .5rem 1.25rem;
+      align-items: center;
+    }
+    .reco-title { font-size: .9rem; font-weight: 700; }
+    .badge-immediat { background: rgba(239,68,68,.18);  color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+    .badge-court    { background: rgba(249,115,22,.18); color: #fdba74; border: 1px solid rgba(249,115,22,.3); }
+    .badge-moyen-p  { background: rgba(234,179,8,.18);  color: #fde047; border: 1px solid rgba(234,179,8,.3); }
+    .reco-meta { display: flex; flex-direction: column; align-items: flex-end; gap: .1rem; }
+    .reco-meta span { font-size: .72rem; color: var(--muted); }
+    .reco-meta strong { font-size: .8rem; font-weight: 700; color: var(--text); }
+    .reco-delai {
+      font-size: .8rem; font-weight: 700;
+      background: rgba(99,102,241,.15); color: var(--accent2);
+      border: 1px solid rgba(99,102,241,.25); border-radius: 8px;
+      padding: .2rem .65rem; white-space: nowrap;
+    }
+
+    /* ── Roadmap ── */
+    .roadmap-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .phase-card { padding: 1.25rem; display: flex; flex-direction: column; gap: .85rem; }
+    .phase-header { display: flex; flex-direction: column; gap: .2rem; }
+    .phase-num {
+      font-size: .72rem; font-weight: 800; letter-spacing: .08em;
+      text-transform: uppercase; padding: .2rem .7rem; border-radius: 20px;
+      display: inline-block; width: fit-content;
+    }
+    .phase-period { font-size: .8rem; color: var(--muted); }
+    .phase-actions { display: flex; flex-direction: column; gap: .5rem; }
+    .phase-action {
+      font-size: .8rem; display: flex; align-items: flex-start; gap: .5rem;
+      color: rgba(238,240,248,.8); line-height: 1.4;
+    }
+    .phase-bullet { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: .4rem; }
+
+    /* ── Conclusion ── */
+    .conclusion-wrap { text-align: center; max-width: 680px; margin: 0 auto; }
+    .conclusion-msg {
+      font-size: clamp(.95rem, 2vw, 1.1rem); line-height: 1.75;
+      color: rgba(238,240,248,.8); margin: 1.5rem 0 2rem;
+    }
+    .conclusion-contact {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 50px; padding: .6rem 1.5rem;
+      font-size: .9rem; color: var(--accent2);
+    }
+    .score-circle-big {
+      width: 90px; height: 90px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; font-weight: 900; margin: 0 auto 1rem;
+    }
+
+    /* ── Navigation ── */
+    #nav {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1.5rem; z-index: 100;
+      background: rgba(7,9,15,.7); border: 1px solid var(--border);
+      border-radius: 50px; padding: .5rem 1rem;
+      backdrop-filter: blur(16px);
+    }
+    .nav-btn {
+      width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); cursor: pointer;
+      font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .nav-btn:disabled { opacity: .3; cursor: not-allowed; }
+    #dots { display: flex; gap: .45rem; align-items: center; }
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(255,255,255,.2); cursor: pointer;
+      transition: all .2s;
+    }
+    .dot.active { background: var(--accent); transform: scale(1.4); }
+
+    /* ── Progress bar ── */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--blue));
+      transition: width .4s ease; z-index: 200;
+    }
+
+    /* ── Slide counter ── */
+    #counter {
+      position: fixed; top: 1.25rem; right: 1.5rem;
+      font-size: .78rem; color: var(--muted); z-index: 100;
+      background: rgba(7,9,15,.5); border: 1px solid var(--border);
+      border-radius: 20px; padding: .25rem .85rem;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ── Keyboard hint ── */
+    #hint {
+      position: fixed; bottom: 2rem; right: 1.5rem;
+      font-size: .72rem; color: var(--muted);
+      display: flex; gap: .4rem; align-items: center;
+    }
+    .key {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border: 1px solid var(--border);
+      border-radius: 5px; font-size: .75rem; background: var(--surface);
+    }
+
+    /* ── Fade-in animation ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp .55s ease both; }
+
+    /* ── Responsive ── */
+    @media (max-width: 760px) {
+      .score-layout   { grid-template-columns: 1fr; gap: 1.5rem; justify-items: center; }
+      .roadmap-grid   { grid-template-columns: 1fr 1fr; }
+      .reco-card      { grid-template-columns: 1fr; }
+      .reco-meta      { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+    }
+    @media (max-width: 480px) {
+      .roadmap-grid   { grid-template-columns: 1fr; }
+      .kpi-grid       { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Ambient blobs -->
+<div class="blob" id="b1"></div>
+<div class="blob" id="b2"></div>
+<div class="blob" id="b3"></div>
+
+<!-- Presentation -->
+<div id="pres"></div>
+
+<!-- UI chrome -->
+<div id="progress"></div>
+<div id="counter"></div>
+<nav id="nav">
+  <button class="nav-btn" id="prev">‹</button>
+  <div id="dots"></div>
+  <button class="nav-btn" id="next">›</button>
+</nav>
+<div id="hint">
+  <span class="key">←</span><span class="key">→</span>
+</div>
+
+<script>
+(function () {
+  const R = RAPPORT;
+  const SCORE_COLOR = { bon: '#22c55e', moyen: '#eab308', critique: '#ef4444' };
+  const SEV_LABEL   = { critique:'Critique', eleve:'Élevé', moyen:'Moyen', faible:'Faible', info:'Info' };
+  const PRIO_LABEL  = { immediat:'Immédiat', court:'Court terme', moyen:'Moyen terme' };
+
+  /* ── Utility ── */
+  const el = (tag, cls, html) => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  };
+  const scoreColor = () => SCORE_COLOR[R.scoreGlobal.niveau] || '#eab308';
+  const totalRisques = () => R.repartition.reduce((s,r)=>s+r.count,0);
+
+  /* ── Slide builders ── */
+
+  function buildCover() {
+    const s = el('div','slide',''); s.id='slide-0';
+    const inner = el('div','slide-inner');
+
+    // decorative rings
+    [300,500,700].forEach((sz,i)=>{
+      const d = el('div','cover-deco');
+      Object.assign(d.style,{
+        width:sz+'px',height:sz+'px',
+        top:`calc(50% - ${sz/2}px)`,left:`calc(50% - ${sz/2}px)`,
+        opacity:.06+i*.015,
+        animation:`blobMove${i%3+1} ${18+i*4}s ease-in-out infinite`
+      });
+      s.appendChild(d);
+    });
+
+    inner.innerHTML = `
+      <div class="slide-tag fade-up" style="animation-delay:.1s">✦ Rapport d'Audit</div>
+      <h1 class="hero fade-up" style="animation-delay:.25s">${R.meta.titre}</h1>
+      <p class="cover-subtitle fade-up" style="animation-delay:.4s">${R.meta.sousTitre}</p>
+      <div class="cover-meta fade-up" style="animation-delay:.55s">
+        <span>🏢 <strong>${R.meta.client}</strong></span>
+        <span>📅 <strong>${R.meta.date}</strong></span>
+        <span>👤 <strong>${R.meta.auditeur}</strong></span>
+        <span>🔖 <strong>${R.meta.version}</strong></span>
+      </div>`;
+    s.appendChild(inner);
+    return s;
+  }
+
+  function buildScore() {
+    const s = el('div','slide',''); s.id='slide-1';
+    const inner = el('div','slide-inner');
+    const color = scoreColor();
+    const circ  = 2 * Math.PI * 80;
+
+    inner.innerHTML = `
+      <div class="slide-tag">📊 Vue d'ensemble</div>
+      <h2 class="section-title">${R.scoreGlobal.label}</h2>
+      <div class="score-layout">
+        <div class="gauge-wrap">
+          <svg class="gauge" width="210" height="210" viewBox="0 0 210 210">
+            <circle cx="105" cy="105" r="80" fill="none"
+              stroke="rgba(255,255,255,.07)" stroke-width="14"/>
+            <circle cx="105" cy="105" r="80" fill="none"
+              stroke="${color}" stroke-width="14" stroke-linecap="round"
+              stroke-dasharray="${circ.toFixed(2)}"
+              stroke-dashoffset="${circ.toFixed(2)}"
+              transform="rotate(-90 105 105)" id="gauge-arc"/>
+            <text class="gauge-num" x="105" y="100" text-anchor="middle" id="gauge-num">0</text>
+            <text class="gauge-pct" x="105" y="122" text-anchor="middle"
+              font-size="13" fill="rgba(238,240,248,.45)">/100</text>
+          </svg>
+          <span class="gauge-interp" style="color:${color};border-color:${color}33;background:${color}18">
+            ${R.scoreGlobal.interpretation}
+          </span>
+        </div>
+        <div>
+          <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem">Indicateurs clés</p>
+          <div class="kpi-grid" id="kpi-grid"></div>
+        </div>
+      </div>`;
+
+    const grid = inner.querySelector('#kpi-grid');
+    R.kpis.forEach(k => {
+      const card = el('div','glass kpi-card');
+      card.innerHTML = `<span class="kpi-icon">${k.icone}</span>
+        <span class="kpi-val" data-target="${k.valeur}">0</span>
+        <span class="kpi-lbl">${k.label}</span>`;
+      grid.appendChild(card);
+    });
+
+    s.appendChild(inner);
+    return s;
+  }
+
+  function buildRepartition() {
+    const s = el('div','slide',''); s.id='slide-2';
+    const inner = el('div','slide-inner');
+    const total = totalRisques();
+    inner.innerHTML = `
+      <div class="slide-tag">📉 Analyse des risques</div>
+      <h2 class="section-title">Répartition des Constats</h2>
+      <div class="glass" style="padding:2rem">
+        <div class="rep-row" id="rep-row"></div>
+      </div>`;
+
+    const row = inner.querySelector('#rep-row');
+    R.repartition.forEach(r => {
+      const pct = Math.round(r.count/total*100);
+      const item = el('div','rep-item');
+      item.innerHTML = `
+        <span class="rep-name">${r.niveau}</span>
+        <div class="rep-track"><div class="rep-fill" data-pct="${pct}" style="background:${r.couleur}"></div></div>
+        <span class="rep-count">${r.count}</span>`;
+      row.appendChild(item);
+    });
+
+    s.appendChild(inner);
+    return s;
+  }
+
+  function buildConstats() {
+    const s = el('div','slide',''); s.id='slide-3';
+    const inner = el('div','slide-inner');
+    inner.innerHTML = `
+      <div class="slide-tag">🔍 Constats</div>
+      <h2 class="section-title">Principaux Constats</h2>
+      <div class="findings-grid" id="findings"></div>`;
+
+    const grid = inner.querySelector('#findings');
+    R.constats.forEach(c => {
+      const card = el('div','glass finding-card');
+      card.innerHTML = `
+        <span class="finding-id">${c.id}</span>
+        <div class="finding-top">
+          <span class="badge badge-${c.severite}">${SEV_LABEL[c.severite]}</span>
+          <span class="finding-title">${c.titre}</span>
+        </div>
+        <div class="finding-desc">${c.description}
+          <span style="color:var(--accent2);margin-left:.4rem">→ ${c.recommandation}</span>
+        </div>`;
+      grid.appendChild(card);
+    });
+
+    s.appendChild(inner);
+    return s;
+  }
+
+  function buildRecos() {
+    const s = el('div','slide',''); s.id='slide-4';
+    const inner = el('div','slide-inner');
+    inner.innerHTML = `
+      <div class="slide-tag">✅ Actions</div>
+      <h2 class="section-title">Recommandations Prioritaires</h2>
+      <div class="reco-list" id="reco-list"></div>`;
+
+    const list = inner.querySelector('#reco-list');
+    R.recommandations.forEach(r => {
+      const prioClass = r.priorite==='immediat'?'badge-immediat':r.priorite==='court'?'badge-court':'badge-moyen-p';
+      const card = el('div','glass reco-card');
+      card.innerHTML = `
+        <div>
+          <span class="badge ${prioClass}" style="margin-bottom:.35rem;display:inline-block">
+            ${PRIO_LABEL[r.priorite]}
+          </span><br/>
+          <span class="reco-title">${r.titre}</span>
+        </div>
+        <div class="reco-meta">
+          <span>Impact</span><strong>${r.impact}</strong>
+        </div>
+        <div class="reco-meta">
+          <span>Effort</span><strong>${r.effort}</strong>
+        </div>
+        <span class="reco-delai">⏱ ${r.delai}</span>`;
+      list.appendChild(card);
+    });
+
+    s.appendChild(inner);
+    return s;
+  }
+
+  function buildRoadmap() {
+    const s = el('div','slide',''); s.id='slide-5';
+    const inner = el('div','slide-inner');
+    inner.innerHTML = `
+      <div class="slide-tag">🗺️ Planification</div>
+      <h2 class="section-title">Feuille de Route</h2>
+      <div class="roadmap-grid" id="roadmap-grid"></div>`;
+
+    const grid = inner.querySelector('#roadmap-grid');
+    R.roadmap.forEach(phase => {
+      const card = el('div','glass phase-card');
+      const actHtml = phase.actions.map(a=>`
+        <div class="phase-action">
+          <div class="phase-bullet" style="background:${phase.couleur}"></div>
+          <span>${a}</span>
+        </div>`).join('');
+      card.innerHTML = `
+        <div class="phase-header">
+          <span class="phase-num" style="color:${phase.couleur};background:${phase.couleur}18;border:1px solid ${phase.couleur}33">
+            ${phase.phase}
+          </span>
+          <span class="phase-period">${phase.periode}</span>
+        </div>
+        <div class="phase-actions">${actHtml}</div>`;
+      grid.appendChild(card);
+    });
+
+    s.appendChild(inner);
+    return s;
+  }
+
+  function buildConclusion() {
+    const s = el('div','slide',''); s.id='slide-6';
+    const inner = el('div','slide-inner');
+    const color = scoreColor();
+    inner.innerHTML = `
+      <div class="slide-tag">🎯 Conclusion</div>
+      <div class="conclusion-wrap">
+        <div class="score-circle-big glass" style="color:${color};border-color:${color}33;border-width:2px">
+          ${R.scoreGlobal.valeur}
+        </div>
+        <h2 class="section-title" style="text-align:center">Synthèse & Prochaines Étapes</h2>
+        <p class="conclusion-msg">${R.conclusion.message}</p>
+        <div class="conclusion-contact">
+          <span>✉️</span> ${R.conclusion.contact}
+        </div>
+        <p style="font-size:.75rem;color:var(--muted);margin-top:2rem">
+          Propulsé par <strong style="color:var(--accent2)">Claude AI</strong> · Anthropic
+        </p>
+      </div>`;
+    s.appendChild(inner);
+    return s;
+  }
+
+  /* ── Build all slides ── */
+  const SLIDE_BUILDERS = [buildCover,buildScore,buildRepartition,buildConstats,buildRecos,buildRoadmap,buildConclusion];
+  const pres = document.getElementById('pres');
+  const slides = SLIDE_BUILDERS.map(fn => { const s = fn(); pres.appendChild(s); return s; });
+
+  /* ── Navigation state ── */
+  let current = 0;
+
+  /* ── Dots ── */
+  const dotsWrap = document.getElementById('dots');
+  slides.forEach((_,i) => {
+    const d = el('div','dot');
+    d.addEventListener('click',()=>goTo(i));
+    dotsWrap.appendChild(d);
+  });
+
+  /* ── Progress ── */
+  function updateUI() {
+    const progress = document.getElementById('progress');
+    progress.style.width = ((current/(slides.length-1))*100)+'%';
+    document.getElementById('counter').textContent = `${current+1} / ${slides.length}`;
+    document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+    document.getElementById('prev').disabled = current===0;
+    document.getElementById('next').disabled = current===slides.length-1;
+  }
+
+  /* ── Animations on enter ── */
+  function animateGauge() {
+    const arc = document.getElementById('gauge-arc');
+    const numEl = document.getElementById('gauge-num');
+    if (!arc) return;
+    const circ  = 2*Math.PI*80;
+    const target = R.scoreGlobal.valeur;
+    const color  = scoreColor();
+    const targetOffset = circ*(1-target/100);
+    const start = performance.now();
+    const dur = 1200;
+    function tick(now) {
+      const t = Math.min((now-start)/dur, 1);
+      const ease = 1-Math.pow(1-t,3);
+      const offset = circ - ease*(circ-targetOffset);
+      arc.style.strokeDashoffset = offset;
+      arc.style.stroke = color;
+      numEl.textContent = Math.round(ease*target);
+      if (t<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function animateCounters(slide) {
+    slide.querySelectorAll('[data-target]').forEach(el => {
+      const target = +el.dataset.target;
+      const start  = performance.now();
+      const dur    = 900;
+      function tick(now) {
+        const t = Math.min((now-start)/dur,1);
+        const ease = 1-Math.pow(1-t,3);
+        el.textContent = Math.round(ease*target);
+        if (t<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  function animateBars(slide) {
+    setTimeout(()=>{
+      slide.querySelectorAll('.rep-fill').forEach(b=>{
+        b.style.width = b.dataset.pct+'%';
+      });
+    }, 100);
+  }
+
+  function animateCards(slide) {
+    const cards = slide.querySelectorAll('.glass');
+    cards.forEach((c,i) => {
+      c.style.opacity = '0';
+      c.style.transform = 'translateY(16px)';
+      c.style.transition = `opacity .4s ease ${i*.08}s, transform .4s ease ${i*.08}s`;
+      requestAnimationFrame(()=>{
+        c.style.opacity = '1';
+        c.style.transform = 'translateY(0)';
+      });
+    });
+  }
+
+  /* ── Go to slide ── */
+  function goTo(n) {
+    if (n === current || n < 0 || n >= slides.length) return;
+    const prev = slides[current];
+    const next = slides[n];
+    prev.classList.add('leaving');
+    prev.classList.remove('active');
+    next.classList.remove('leaving');
+    next.classList.add('active');
+    setTimeout(()=> prev.classList.remove('leaving'), 600);
+    current = n;
+    updateUI();
+    // Trigger slide-specific animations
+    if (n===1) { animateGauge(); animateCounters(next); }
+    if (n===2)   animateBars(next);
+    if (n>0)     animateCards(next);
+  }
+
+  /* ── Init ── */
+  slides[0].classList.add('active');
+  updateUI();
+
+  /* ── Event listeners ── */
+  document.getElementById('prev').addEventListener('click',()=>goTo(current-1));
+  document.getElementById('next').addEventListener('click',()=>goTo(current+1));
+
+  document.addEventListener('keydown',e=>{
+    if (e.key==='ArrowRight'||e.key==='ArrowDown') { e.preventDefault(); goTo(current+1); }
+    if (e.key==='ArrowLeft'||e.key==='ArrowUp')    { e.preventDefault(); goTo(current-1); }
+  });
+
+  // Touch/swipe
+  let touchX = 0;
+  document.addEventListener('touchstart',e=>{ touchX=e.touches[0].clientX; },{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx)>50) goTo(dx<0?current+1:current-1);
+  },{passive:true});
+
+})();
+</script>
+</body>
+</html>
