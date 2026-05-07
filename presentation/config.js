@@ -7,11 +7,7 @@ const RAPPORT = {
 
   // ── Informations générales ────────────────────────────────────
   meta: {
-    titre:     "Audit de Sécurité Informatique",
-    sousTitre: "Rapport d'Analyse & Recommandations",
-    client:    "Entreprise ABC",
-    date:      "Mai 2024",
-    auditeur:  "Équipe Cybersécurité",
+    titre:     "Audit Tech Architecture Framework",
     version:   "v1.0",
   },
 
