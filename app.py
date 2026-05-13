@@ -2,10 +2,17 @@
 AuditIQ — Interface Streamlit pour les 3 agents d'audit
 """
 
-import streamlit as st
+import sys
 import os
 import tempfile
 from pathlib import Path
+
+import streamlit as st
+
+# ── Add audit_system to path ──────────────────────────────────────────────────
+AUDIT_SYS = Path(__file__).parent / "audit_system"
+if str(AUDIT_SYS) not in sys.path:
+    sys.path.insert(0, str(AUDIT_SYS))
 
 st.set_page_config(
     page_title="AuditIQ",
@@ -16,31 +23,26 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-  /* ── Base ── */
   html, body, [class*="css"] { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
   .stApp { background-color: #080b12; color: #dde3f5; }
   .main .block-container { padding: 2.5rem 3rem 4rem; max-width: 860px; }
 
-  /* ── Sidebar ── */
   section[data-testid="stSidebar"] {
     background-color: #0c0f1a;
     border-right: 1px solid rgba(255,255,255,0.05);
   }
   section[data-testid="stSidebar"] .block-container { padding: 2rem 1.4rem; }
 
-  /* ── Logo / Brand ── */
   .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 1.8rem; }
   .brand-icon { font-size: 22px; }
   .brand-name { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; color: #e8edf8; }
   .brand-sub { font-size: 11px; color: #424d72; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 1px; }
 
-  /* ── Sidebar nav ── */
   .nav-label { font-size: 10px; font-weight: 600; color: #3a4566; text-transform: uppercase;
                letter-spacing: 1px; margin: 1.6rem 0 0.6rem; }
   div[data-testid="stRadio"] label { font-size: 13.5px !important; }
   div[data-testid="stRadio"] > div { gap: 2px !important; }
 
-  /* ── API key status ── */
   .api-ok   { display:inline-flex; align-items:center; gap:6px; color:#22d3a5;
               font-size:12px; font-weight:600; background:rgba(34,211,165,0.08);
               border:1px solid rgba(34,211,165,0.2); border-radius:6px; padding:5px 10px; }
@@ -48,23 +50,16 @@ st.markdown("""
               font-size:12px; font-weight:600; background:rgba(245,158,11,0.08);
               border:1px solid rgba(245,158,11,0.2); border-radius:6px; padding:5px 10px; }
 
-  /* ── Jurisdiction badges ── */
   .jur-grid { display:flex; flex-wrap:wrap; gap:6px; margin-top: 8px; }
   .jur-badge { font-size:11px; color:#8392bb; background:rgba(255,255,255,0.04);
                border:1px solid rgba(255,255,255,0.07); border-radius:5px; padding:3px 8px; }
 
-  /* ── Page header ── */
   .page-header { margin-bottom: 2rem; }
   .page-header h1 { font-size:24px; font-weight:700; color:#e8edf8; margin:0 0 6px;
                     letter-spacing:-0.4px; }
   .page-header p  { font-size:13.5px; color:#5a6488; margin:0; line-height:1.6; }
 
-  /* ── Section label ── */
-  .section-label { font-size:11px; font-weight:600; color:#3a4566; text-transform:uppercase;
-                   letter-spacing:0.9px; margin-bottom:10px; }
-
-  /* ── Input fields ── */
-  .stTextInput input, .stTextArea textarea, .stSelectbox select {
+  .stTextInput input, .stTextArea textarea {
     background-color: #10141f !important;
     border: 1px solid rgba(255,255,255,0.08) !important;
     border-radius: 8px !important;
@@ -77,120 +72,161 @@ st.markdown("""
   }
   label[data-testid="stWidgetLabel"] p { font-size:13px !important; color:#8392bb !important; font-weight:500; }
 
-  /* ── Select slider ── */
-  div[data-testid="stSlider"] .stSlider { margin-top: 4px; }
-
-  /* ── File uploader ── */
   div[data-testid="stFileUploader"] {
     border: 1px dashed rgba(255,255,255,0.1) !important;
     border-radius: 10px !important;
     background: #10141f !important;
   }
-  div[data-testid="stFileUploader"] button { font-size:12px !important; }
 
-  /* ── Primary button ── */
   div[data-testid="stButton"] > button[kind="primary"] {
     background: linear-gradient(135deg, #2d54d4 0%, #4f7ef8 100%);
-    border: none;
-    border-radius: 9px;
-    color: #ffffff;
-    font-size: 13.5px;
-    font-weight: 600;
-    padding: 10px 24px;
-    letter-spacing: 0.1px;
+    border: none; border-radius: 9px; color: #ffffff;
+    font-size: 13.5px; font-weight: 600; padding: 10px 24px;
     transition: opacity 0.15s;
   }
   div[data-testid="stButton"] > button[kind="primary"]:hover { opacity: 0.88; }
   div[data-testid="stButton"] > button[kind="primary"]:disabled {
     background: #1a1f32 !important; color: #3a4566 !important; }
 
-  /* ── Secondary button ── */
   div[data-testid="stButton"] > button[kind="secondary"] {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 9px;
-    color: #8392bb;
-    font-size: 13px;
-    padding: 8px 18px;
+    background: transparent; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 9px; color: #8392bb; font-size: 13px; padding: 8px 18px;
   }
 
-  /* ── Download button ── */
   div[data-testid="stDownloadButton"] button {
-    background: rgba(79,126,248,0.1);
-    color: #7fa8fb;
-    border: 1px solid rgba(79,126,248,0.25);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
+    background: rgba(79,126,248,0.1); color: #7fa8fb;
+    border: 1px solid rgba(79,126,248,0.25); border-radius: 8px;
+    font-size: 13px; font-weight: 500;
   }
   div[data-testid="stDownloadButton"] button:hover { background: rgba(79,126,248,0.18); }
 
-  /* ── Divider ── */
   hr { border: none; border-top: 1px solid rgba(255,255,255,0.05) !important; margin: 1.8rem 0; }
-
-  /* ── Alert / info boxes ── */
   div[data-testid="stAlert"] { border-radius: 9px !important; font-size: 13px !important; }
-
-  /* ── Tabs ── */
   button[data-baseweb="tab"] { font-size: 13px !important; color: #5a6488 !important; }
   button[data-baseweb="tab"][aria-selected="true"] { color: #a0b4f8 !important; }
 
-  /* ── Output box ── */
   .output-box {
-    background: #0f121e;
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 10px;
-    padding: 20px;
-    font-size: 13px;
-    line-height: 1.85;
-    white-space: pre-wrap;
-    color: #c8d0e8;
-    max-height: 520px;
-    overflow-y: auto;
+    background: #0f121e; border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 20px; font-size: 13px; line-height: 1.85;
+    white-space: pre-wrap; color: #c8d0e8; max-height: 520px; overflow-y: auto;
   }
 
-  /* ── Context pill ── */
   .ctx-pill {
     display: inline-flex; align-items: center; gap: 8px;
     background: rgba(34,211,165,0.07); border: 1px solid rgba(34,211,165,0.18);
-    color: #22d3a5; border-radius: 8px; padding: 7px 14px; font-size: 12.5px; font-weight:500;
-    margin-bottom: 1.6rem;
+    color: #22d3a5; border-radius: 8px; padding: 7px 14px;
+    font-size: 12.5px; font-weight:500; margin-bottom: 1.6rem;
   }
   .ctx-miss {
     display: inline-flex; align-items: center; gap: 8px;
     background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2);
-    color: #f59e0b; border-radius: 8px; padding: 7px 14px; font-size: 12.5px; font-weight:500;
-    margin-bottom: 1.6rem;
+    color: #f59e0b; border-radius: 8px; padding: 7px 14px;
+    font-size: 12.5px; font-weight:500; margin-bottom: 1.6rem;
   }
 
-  /* ── Risk slider label ── */
-  div[data-testid="stSelectSlider"] > div > div { font-size: 12px !important; }
-
-  /* ── Checkbox ── */
   label[data-testid="stCheckbox"] p { font-size:13px !important; color:#8392bb !important; }
-
-  /* ── Radio horizontal ── */
-  div[data-testid="stRadio"][data-horizontal="true"] label { font-size:13px !important; }
-
-  /* ── Footer ── */
-  .footer { font-size:11px; color:#262e47; text-align:center; margin-top:3rem; letter-spacing:0.3px; }
-
-  /* ── Spinner ── */
   div[data-testid="stSpinner"] p { font-size: 13px !important; color: #5a6488 !important; }
+  .footer { font-size:11px; color:#262e47; text-align:center; margin-top:3rem; letter-spacing:0.3px; }
 </style>
 """, unsafe_allow_html=True)
 
 # ── Agent imports ─────────────────────────────────────────────────────────────
 AGENTS_OK = False
+_import_error = ""
 try:
-    from agent1_regulatory import Agent1Regulatory
-    from agent2_audit_plan import Agent2AuditPlan
-    from agent3_report import Agent3Report
+    import anthropic as _anthropic
+    import agent1_regulatory as _a1
+    import agent2_audit_plan as _a2
+    import agent3_report as _a3
+    from base_agent import upload_file as _upload_file, build_file_content_blocks, MODEL
+    from generators import (generate_regulatory_framework_docx,
+                             generate_audit_plan_ppt,
+                             generate_audit_procedures_excel,
+                             generate_audit_report_docx)
     AGENTS_OK = True
-except ImportError:
-    pass
+except ImportError as e:
+    _import_error = str(e)
 
 JURISDICTIONS = ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "Bahamas / SCB", "EU", "UK / FCA+PRA"]
+OUTPUT_DIR = str(Path(__file__).parent / "outputs")
+Path(OUTPUT_DIR).mkdir(exist_ok=True)
+
+
+def _make_client(api_key: str):
+    return _anthropic.Anthropic(api_key=api_key)
+
+
+def _upload_streamlit_file(client, uploaded_file) -> tuple[str, str] | None:
+    """Upload a Streamlit UploadedFile to the Anthropic Files API."""
+    if not uploaded_file:
+        return None
+    suffix = Path(uploaded_file.name).suffix
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+        tmp.write(uploaded_file.read())
+        tmp_path = tmp.name
+    try:
+        result = _upload_file(client, tmp_path)
+        return result
+    finally:
+        os.unlink(tmp_path)
+
+
+def _extract_text(response) -> str:
+    """Extract text content from an Anthropic message response."""
+    parts = []
+    for block in response.content:
+        if hasattr(block, "text") and block.text:
+            parts.append(block.text)
+    return "\n".join(parts)
+
+
+def _agentic_loop(client, system_prompt, tools, messages, tool_handler) -> tuple[str, dict]:
+    """Run the agentic loop. Returns (text_output, extra_results)."""
+    text_parts = []
+    extra = {}
+
+    while True:
+        kwargs = dict(
+            model=MODEL,
+            max_tokens=16000,
+            thinking={"type": "adaptive"},
+            system=system_prompt,
+            messages=messages,
+            tools=tools,
+            betas=["files-api-2025-04-14"],
+        )
+        response = client.beta.messages.create(**kwargs)
+
+        for block in response.content:
+            if hasattr(block, "text") and block.text:
+                text_parts.append(block.text)
+
+        messages.append({"role": "assistant", "content": response.content})
+
+        if response.stop_reason == "end_turn":
+            break
+
+        if response.stop_reason == "tool_use":
+            tool_results = []
+            for block in response.content:
+                if block.type != "tool_use":
+                    continue
+                result_text, result_extra = tool_handler(block.name, block.input)
+                extra.update(result_extra)
+                tool_results.append({
+                    "type": "tool_result",
+                    "tool_use_id": block.id,
+                    "content": result_text,
+                })
+            if tool_results:
+                messages.append({"role": "user", "content": tool_results})
+            else:
+                break
+        else:
+            break
+
+    return "\n".join(text_parts), extra
+
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
@@ -235,7 +271,7 @@ with st.sidebar:
 
     if not AGENTS_OK:
         st.markdown("---")
-        st.error("Agents non trouvés. Vérifiez que `app.py` est dans le dossier des agents.")
+        st.error(f"Agents non chargés : `{_import_error}`")
 
 # ── Session state ─────────────────────────────────────────────────────────────
 for key in ("reg_context", "audit_plan_context"):
@@ -275,65 +311,80 @@ if "Agent 1" in agent_choice:
 
     st.markdown("<div style='margin-top:1.4rem'></div>", unsafe_allow_html=True)
     run_agent1 = st.button("Lancer l'analyse", type="primary",
-                           disabled=not api_key or not audit_topic)
+                           disabled=not api_key or not audit_topic or not AGENTS_OK)
 
     if run_agent1:
-        if not AGENTS_OK:
-            st.error("Les fichiers agents ne sont pas trouvés dans ce dossier.")
-        else:
-            with st.spinner("Compilation du cadre réglementaire en cours…"):
-                try:
-                    agent = Agent1Regulatory()
-                    file_id = None
-                    if uploaded_file:
-                        with tempfile.NamedTemporaryFile(delete=False, suffix=Path(uploaded_file.name).suffix) as tmp:
-                            tmp.write(uploaded_file.read())
-                            tmp_path = tmp.name
-                        file_id = agent.upload_file(tmp_path)
-                        os.unlink(tmp_path)
+        with st.spinner("Compilation du cadre réglementaire en cours…"):
+            try:
+                client = _make_client(api_key)
+                file_ids_mimes = []
+                if uploaded_file:
+                    fid_mime = _upload_streamlit_file(client, uploaded_file)
+                    if fid_mime:
+                        file_ids_mimes.append(fid_mime)
 
-                    jur_str = ", ".join(JURISDICTIONS)
-                    focus_str = ", ".join(focus_areas) if focus_areas else "tous domaines"
-                    prompt = f"Audit topic: {audit_topic}. Jurisdictions: {jur_str}. Focus: {focus_str}."
-                    result = agent.run(prompt, file_id=file_id)
+                jur_str   = ", ".join(JURISDICTIONS)
+                focus_str = ", ".join(focus_areas) if focus_areas else "tous domaines"
 
-                    st.session_state.agent1_result = result
-                    st.session_state.reg_context = result.get("text", "")
-                    st.success("Analyse terminée.")
-                except Exception as e:
-                    st.error(f"Erreur : {e}")
+                user_content: list = []
+                if file_ids_mimes:
+                    user_content.extend(build_file_content_blocks(file_ids_mimes))
+                    user_content.append({"type": "text",
+                        "text": f"I have uploaded {len(file_ids_mimes)} document(s) for context."})
+
+                user_content.append({"type": "text", "text": (
+                    f"Please compile a comprehensive regulatory framework for the following audit topic:\n\n"
+                    f"**Audit Topic:** {audit_topic}\n"
+                    f"**Focus Areas:** {focus_str}\n"
+                    f"**Institution:** Swiss private bank and asset manager with operations in: {jur_str}.\n\n"
+                    f"For EACH jurisdiction, list key regulations with precise citations, key requirements, "
+                    f"and upcoming changes. Then highlight cross-jurisdictional considerations and top 5 "
+                    f"priority areas. Once complete, call `save_regulatory_framework` to export."
+                )})
+
+                messages = [{"role": "user", "content": user_content}]
+
+                def _handle_a1(tool_name, tool_input):
+                    if tool_name == "save_regulatory_framework":
+                        try:
+                            path = generate_regulatory_framework_docx(tool_input, OUTPUT_DIR)
+                            return f"Framework saved: {path}", {"docx_path": path}
+                        except Exception as e:
+                            return f"Error saving document: {e}", {}
+                    return "Unknown tool", {}
+
+                text_out, extra = _agentic_loop(
+                    client, _a1.SYSTEM_PROMPT, _a1.TOOLS, messages, _handle_a1)
+
+                result = {"text": text_out}
+                if "docx_path" in extra and Path(extra["docx_path"]).exists():
+                    result["docx_bytes"] = Path(extra["docx_path"]).read_bytes()
+
+                st.session_state.agent1_result = result
+                st.session_state.reg_context = text_out
+                st.success("Analyse terminée.")
+            except Exception as e:
+                st.error(f"Erreur : {e}")
 
     if st.session_state.agent1_result:
         res = st.session_state.agent1_result
         st.markdown("---")
         tabs = st.tabs(["Contenu réglementaire", "Téléchargement"])
-
         with tabs[0]:
-            text_content = res.get("text", "")
-            if text_content:
-                st.markdown(f'<div class="output-box">{text_content}</div>', unsafe_allow_html=True)
+            if res.get("text"):
+                st.markdown(f'<div class="output-box">{res["text"]}</div>', unsafe_allow_html=True)
             else:
                 st.info("Le contenu réglementaire a été exporté directement en Word.")
-
         with tabs[1]:
-            docx_bytes = res.get("docx_bytes")
-            if docx_bytes:
+            if res.get("docx_bytes"):
                 st.download_button(
                     "⬇ Télécharger le Regulatory Framework (.docx)",
-                    data=docx_bytes,
+                    data=res["docx_bytes"],
                     file_name=f"Regulatory_Framework_{audit_topic.replace(' ','_')}.docx",
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 )
             else:
-                docx_path = res.get("docx_path")
-                if docx_path and os.path.exists(docx_path):
-                    with open(docx_path, "rb") as f:
-                        st.download_button(
-                            "⬇ Télécharger le Regulatory Framework (.docx)",
-                            data=f.read(),
-                            file_name=f"Regulatory_Framework_{audit_topic.replace(' ','_')}.docx",
-                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                        )
+                st.info("Aucun document Word généré — relancez l'agent pour obtenir l'export.")
 
         st.info("Le contexte réglementaire est automatiquement transmis à l'Agent 2.")
 
@@ -351,7 +402,7 @@ elif "Agent 2" in agent_choice:
     if st.session_state.reg_context:
         st.markdown('<div class="ctx-pill">✓ Contexte réglementaire (Agent 1) disponible</div>', unsafe_allow_html=True)
     else:
-        st.markdown('<div class="ctx-miss">⚠ Aucun contexte Agent 1 — lancez d\'abord l\'Agent 1 ou saisissez le sujet manuellement</div>', unsafe_allow_html=True)
+        st.markdown("<div class='ctx-miss'>⚠ Aucun contexte Agent 1 — saisissez le sujet manuellement</div>", unsafe_allow_html=True)
 
     audit_topic_2 = st.text_input(
         "Sujet d'audit",
@@ -378,70 +429,89 @@ elif "Agent 2" in agent_choice:
 
     st.markdown("<div style='margin-top:1.4rem'></div>", unsafe_allow_html=True)
     run_agent2 = st.button("Générer le plan d'audit", type="primary",
-                           disabled=not api_key or not audit_topic_2)
+                           disabled=not api_key or not audit_topic_2 or not AGENTS_OK)
 
     if run_agent2:
-        if not AGENTS_OK:
-            st.error("Les fichiers agents ne sont pas trouvés dans ce dossier.")
-        else:
-            with st.spinner("Génération du plan d'audit en cours…"):
-                try:
-                    agent = Agent2AuditPlan()
-                    file_id = None
-                    if uploaded_file_2:
-                        with tempfile.NamedTemporaryFile(delete=False, suffix=Path(uploaded_file_2.name).suffix) as tmp:
-                            tmp.write(uploaded_file_2.read())
-                            tmp_path = tmp.name
-                        file_id = agent.upload_file(tmp_path)
-                        os.unlink(tmp_path)
+        with st.spinner("Génération du plan d'audit en cours…"):
+            try:
+                client = _make_client(api_key)
+                file_ids_mimes = []
+                if uploaded_file_2:
+                    fid_mime = _upload_streamlit_file(client, uploaded_file_2)
+                    if fid_mime:
+                        file_ids_mimes.append(fid_mime)
 
-                    prompt = f"Audit topic: {audit_topic_2}. Risk appetite: {risk_appetite}. Scope: {audit_scope}."
-                    if st.session_state.reg_context:
-                        prompt += f"\n\nRegulatory context from Agent 1:\n{st.session_state.reg_context[:3000]}"
+                extra_context = ""
+                if st.session_state.reg_context:
+                    extra_context = f"\n\nREGULATORY CONTEXT (from Agent 1):\n{st.session_state.reg_context[:3000]}"
 
-                    result = agent.run(prompt, file_id=file_id)
-                    st.session_state.agent2_result = result
-                    st.session_state.audit_plan_context = result.get("text", "")
-                    st.success("Plan d'audit généré.")
-                except Exception as e:
-                    st.error(f"Erreur : {e}")
+                user_content: list = []
+                if file_ids_mimes:
+                    user_content.extend(build_file_content_blocks(file_ids_mimes))
+
+                user_content.append({"type": "text", "text": (
+                    f"Create a comprehensive, risk-based audit plan for the following:\n\n"
+                    f"**Audit Topic:** {audit_topic_2}\n"
+                    f"**Risk Appetite:** {risk_appetite}\n"
+                    f"**Scope:** {audit_scope or 'All entities'}\n"
+                    f"**Institution:** Swiss private bank and asset manager (CH, SG, HK, Bahamas, EU, UK)\n"
+                    f"{extra_context}\n\n"
+                    f"1. Identify 6-12 distinct audit subjects, then call `generate_audit_plan_ppt`.\n"
+                    f"2. For each subject, design 4-8 detailed procedures, then call `generate_audit_procedures_excel`.\n"
+                    f"Be thorough and professional."
+                )})
+
+                messages = [{"role": "user", "content": user_content}]
+
+                def _handle_a2(tool_name, tool_input):
+                    if tool_name == "generate_audit_plan_ppt":
+                        try:
+                            path = generate_audit_plan_ppt(tool_input, OUTPUT_DIR)
+                            return f"PPT generated: {path}. Now generate the procedures Excel.", {"ppt_path": path}
+                        except Exception as e:
+                            return f"Error: {e}", {}
+                    elif tool_name == "generate_audit_procedures_excel":
+                        try:
+                            path = generate_audit_procedures_excel(tool_input, OUTPUT_DIR)
+                            return f"Excel generated: {path}. Audit plan complete.", {"excel_path": path}
+                        except Exception as e:
+                            return f"Error: {e}", {}
+                    return "Unknown tool", {}
+
+                text_out, extra = _agentic_loop(
+                    client, _a2.SYSTEM_PROMPT, _a2.TOOLS, messages, _handle_a2)
+
+                result = {"text": text_out}
+                if "ppt_path" in extra and Path(extra["ppt_path"]).exists():
+                    result["pptx_bytes"] = Path(extra["ppt_path"]).read_bytes()
+                if "excel_path" in extra and Path(extra["excel_path"]).exists():
+                    result["xlsx_bytes"] = Path(extra["excel_path"]).read_bytes()
+
+                st.session_state.agent2_result = result
+                st.session_state.audit_plan_context = text_out
+                st.success("Plan d'audit généré.")
+            except Exception as e:
+                st.error(f"Erreur : {e}")
 
     if st.session_state.agent2_result:
         res = st.session_state.agent2_result
         st.markdown("---")
         tabs = st.tabs(["Plan d'audit", "Téléchargements"])
-
         with tabs[0]:
-            text_content = res.get("text", "")
-            if text_content:
-                st.markdown(f'<div class="output-box">{text_content}</div>', unsafe_allow_html=True)
-
+            if res.get("text"):
+                st.markdown(f'<div class="output-box">{res["text"]}</div>', unsafe_allow_html=True)
         with tabs[1]:
             col_a, col_b = st.columns(2)
             with col_a:
-                pptx_bytes = res.get("pptx_bytes")
-                pptx_path = res.get("pptx_path")
-                if pptx_bytes:
-                    st.download_button("⬇ Plan d'audit (.pptx)", data=pptx_bytes,
+                if res.get("pptx_bytes"):
+                    st.download_button("⬇ Plan d'audit (.pptx)", data=res["pptx_bytes"],
                         file_name=f"Audit_Plan_{audit_topic_2.replace(' ','_')}.pptx",
                         mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
-                elif pptx_path and os.path.exists(pptx_path):
-                    with open(pptx_path, "rb") as f:
-                        st.download_button("⬇ Plan d'audit (.pptx)", data=f.read(),
-                            file_name=f"Audit_Plan_{audit_topic_2.replace(' ','_')}.pptx",
-                            mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
             with col_b:
-                xlsx_bytes = res.get("xlsx_bytes")
-                xlsx_path = res.get("xlsx_path")
-                if xlsx_bytes:
-                    st.download_button("⬇ Procédures détaillées (.xlsx)", data=xlsx_bytes,
+                if res.get("xlsx_bytes"):
+                    st.download_button("⬇ Procédures détaillées (.xlsx)", data=res["xlsx_bytes"],
                         file_name=f"Audit_Procedures_{audit_topic_2.replace(' ','_')}.xlsx",
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                elif xlsx_path and os.path.exists(xlsx_path):
-                    with open(xlsx_path, "rb") as f:
-                        st.download_button("⬇ Procédures détaillées (.xlsx)", data=f.read(),
-                            file_name=f"Audit_Procedures_{audit_topic_2.replace(' ','_')}.xlsx",
-                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 # ═════════════════════════════════════════════════════════════════════════════
 # AGENT 3
@@ -473,18 +543,18 @@ elif "Agent 3" in agent_choice:
     with col_op:
         audit_opinion = st.select_slider(
             "Opinion d'audit",
-            options=["Satisfaisant", "Partiellement satisfaisant", "Insatisfaisant"],
-            value="Partiellement satisfaisant",
+            options=["Satisfactory", "Needs Improvement", "Unsatisfactory", "Critical"],
+            value="Needs Improvement",
         )
     with col_lang:
         report_lang = st.radio("Langue", options=["Français", "English"], horizontal=True)
 
     st.markdown("<div style='margin-top:0.4rem'></div>", unsafe_allow_html=True)
     c1, c2, c3, c4 = st.columns(4)
-    include_exec_summary  = c1.checkbox("Résumé exécutif", value=True)
+    include_exec_summary   = c1.checkbox("Résumé exécutif", value=True)
     include_findings_table = c2.checkbox("Tableau findings", value=True)
     include_recommendations = c3.checkbox("Recommandations", value=True)
-    include_action_plan   = c4.checkbox("Plan d'action", value=True)
+    include_action_plan    = c4.checkbox("Plan d'action", value=True)
 
     uploaded_files_3 = st.file_uploader(
         "Documents à analyser *(optionnel — issues log, workpapers, APM…)*",
@@ -495,67 +565,86 @@ elif "Agent 3" in agent_choice:
 
     st.markdown("<div style='margin-top:1.4rem'></div>", unsafe_allow_html=True)
     run_agent3 = st.button("Générer le rapport", type="primary",
-                           disabled=not api_key or not audit_name or not observations)
+                           disabled=not api_key or not audit_name or not observations or not AGENTS_OK)
 
     if run_agent3:
-        if not AGENTS_OK:
-            st.error("Les fichiers agents ne sont pas trouvés dans ce dossier.")
-        else:
-            with st.spinner("Rédaction du rapport d'audit en cours…"):
-                try:
-                    agent = Agent3Report()
-                    file_ids = []
-                    for uf in (uploaded_files_3 or []):
-                        with tempfile.NamedTemporaryFile(delete=False, suffix=Path(uf.name).suffix) as tmp:
-                            tmp.write(uf.read())
-                            tmp_path = tmp.name
-                        fid = agent.upload_file(tmp_path)
-                        if fid:
-                            file_ids.append(fid)
-                        os.unlink(tmp_path)
+        with st.spinner("Rédaction du rapport d'audit en cours…"):
+            try:
+                client = _make_client(api_key)
+                file_ids_mimes = []
+                for uf in (uploaded_files_3 or []):
+                    fid_mime = _upload_streamlit_file(client, uf)
+                    if fid_mime:
+                        file_ids_mimes.append(fid_mime)
 
-                    options_str = ", ".join(filter(None, [
-                        "executive summary" if include_exec_summary else "",
-                        "findings table" if include_findings_table else "",
-                        "recommendations" if include_recommendations else "",
-                        "action plan" if include_action_plan else "",
-                    ]))
-                    lang_str = "French" if report_lang == "Français" else "English"
-                    prompt = f"Audit name: {audit_name}\nLanguage: {lang_str}\nAudit opinion: {audit_opinion}\nInclude: {options_str}\n\nObservations and findings:\n{observations}"
-                    if st.session_state.reg_context:
-                        prompt += f"\n\nRegulatory context:\n{st.session_state.reg_context[:2000]}"
+                options_str = ", ".join(filter(None, [
+                    "executive summary" if include_exec_summary else "",
+                    "findings table" if include_findings_table else "",
+                    "recommendations" if include_recommendations else "",
+                    "action plan" if include_action_plan else "",
+                ]))
+                lang_str = "French" if report_lang == "Français" else "English"
 
-                    result = agent.run(prompt, file_ids=file_ids if file_ids else None)
-                    st.session_state.agent3_result = result
-                    st.success("Rapport généré.")
-                except Exception as e:
-                    st.error(f"Erreur : {e}")
+                user_content: list = []
+                if file_ids_mimes:
+                    user_content.extend(build_file_content_blocks(file_ids_mimes))
+                    user_content.append({"type": "text",
+                        "text": f"I have uploaded {len(file_ids_mimes)} document(s) with audit evidence."})
+
+                reg_ctx = ""
+                if st.session_state.reg_context:
+                    reg_ctx = f"\n\nRegulatory context:\n{st.session_state.reg_context[:2000]}"
+
+                user_content.append({"type": "text", "text": (
+                    f"Draft a professional audit report:\n\n"
+                    f"**Report Title:** {audit_name}\n"
+                    f"**Language:** {lang_str}\n"
+                    f"**Suggested Opinion:** {audit_opinion}\n"
+                    f"**Include:** {options_str}\n"
+                    f"{reg_ctx}\n\n"
+                    f"**Observations and findings:**\n{observations}\n\n"
+                    f"Structure each finding with risk rating, impact, root cause, recommendation, "
+                    f"and target date. Order by severity. Then call `generate_audit_report` to export."
+                )})
+
+                messages = [{"role": "user", "content": user_content}]
+
+                def _handle_a3(tool_name, tool_input):
+                    if tool_name == "generate_audit_report":
+                        try:
+                            path = generate_audit_report_docx(tool_input, OUTPUT_DIR)
+                            return f"Report saved: {path}", {"docx_path": path}
+                        except Exception as e:
+                            return f"Error: {e}", {}
+                    return "Unknown tool", {}
+
+                text_out, extra = _agentic_loop(
+                    client, _a3.SYSTEM_PROMPT, _a3.TOOLS, messages, _handle_a3)
+
+                result = {"text": text_out}
+                if "docx_path" in extra and Path(extra["docx_path"]).exists():
+                    result["docx_bytes"] = Path(extra["docx_path"]).read_bytes()
+
+                st.session_state.agent3_result = result
+                st.success("Rapport généré.")
+            except Exception as e:
+                st.error(f"Erreur : {e}")
 
     if st.session_state.agent3_result:
         res = st.session_state.agent3_result
         st.markdown("---")
         tabs = st.tabs(["Aperçu du rapport", "Téléchargement Word"])
-
         with tabs[0]:
-            text_content = res.get("text", "")
-            if text_content:
-                st.markdown(f'<div class="output-box">{text_content}</div>', unsafe_allow_html=True)
-
+            if res.get("text"):
+                st.markdown(f'<div class="output-box">{res["text"]}</div>', unsafe_allow_html=True)
         with tabs[1]:
             fname = f"Rapport_Audit_{audit_name.replace(' ','_')}.docx" if audit_name else "Rapport_Audit.docx"
-            docx_bytes = res.get("docx_bytes")
-            docx_path = res.get("docx_path")
-            if docx_bytes:
-                st.download_button("⬇ Télécharger le rapport (.docx)", data=docx_bytes,
+            if res.get("docx_bytes"):
+                st.download_button("⬇ Télécharger le rapport (.docx)", data=res["docx_bytes"],
                     file_name=fname,
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-            elif docx_path and os.path.exists(docx_path):
-                with open(docx_path, "rb") as f:
-                    st.download_button("⬇ Télécharger le rapport (.docx)", data=f.read(),
-                        file_name=fname,
-                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
             else:
-                st.info("Le fichier Word sera disponible dans le dossier de l'application.")
+                st.info("Le fichier Word sera disponible après génération.")
 
         st.markdown("---")
         st.markdown("**Demander une révision**")
@@ -565,12 +654,31 @@ elif "Agent 3" in agent_choice:
             height=80,
             label_visibility="collapsed",
         )
-        if st.button("Réviser le rapport", disabled=not followup or not api_key):
+        if st.button("Réviser le rapport", disabled=not followup or not api_key or not AGENTS_OK):
             with st.spinner("Révision en cours…"):
                 try:
-                    agent = Agent3Report()
-                    revision_prompt = f"Previous report context: {res.get('text','')[:2000]}\n\nRevision requested: {followup}"
-                    result2 = agent.run(revision_prompt)
+                    client = _make_client(api_key)
+                    prior_text = res.get("text", "")[:2000]
+                    rev_content = [{"type": "text", "text":
+                        f"Previous report:\n{prior_text}\n\nRevision requested: {followup}\n\n"
+                        f"Apply the revision and call `generate_audit_report` to export the updated report."}]
+                    messages2 = [{"role": "user", "content": rev_content}]
+
+                    def _handle_a3_rev(tool_name, tool_input):
+                        if tool_name == "generate_audit_report":
+                            try:
+                                path = generate_audit_report_docx(tool_input, OUTPUT_DIR)
+                                return f"Updated report saved: {path}", {"docx_path": path}
+                            except Exception as e:
+                                return f"Error: {e}", {}
+                        return "Unknown tool", {}
+
+                    text_out2, extra2 = _agentic_loop(
+                        client, _a3.SYSTEM_PROMPT, _a3.TOOLS, messages2, _handle_a3_rev)
+
+                    result2 = {"text": text_out2}
+                    if "docx_path" in extra2 and Path(extra2["docx_path"]).exists():
+                        result2["docx_bytes"] = Path(extra2["docx_path"]).read_bytes()
                     st.session_state.agent3_result = result2
                     st.rerun()
                 except Exception as e:
