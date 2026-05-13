@@ -1,7 +1,8 @@
 import streamlit as st
-import anthropic
 import os
 import re
+from google import genai
+from google.genai import types
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -234,17 +235,17 @@ SPORT_PHASES = {
 }
 
 
-# ── Anthropic client ──────────────────────────────────────────────────────────
+# ── Gemini client ─────────────────────────────────────────────────────────────
 def get_client():
     api_key = ""
     try:
-        api_key = st.secrets["ANTHROPIC_API_KEY"]
+        api_key = st.secrets["GEMINI_API_KEY"]
     except Exception:
-        api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+        api_key = os.environ.get("GEMINI_API_KEY", "")
     if not api_key:
-        st.error("Clé API Anthropic manquante. Ajoutez ANTHROPIC_API_KEY dans les secrets Streamlit.")
+        st.error("Clé API Gemini manquante. Ajoutez GEMINI_API_KEY dans les secrets Streamlit.")
         st.stop()
-    return anthropic.Anthropic(api_key=api_key)
+    return genai.Client(api_key=api_key)
 
 
 # ── Analysis engine ───────────────────────────────────────────────────────────
@@ -265,7 +266,7 @@ def generate_analysis(equipe1: str, equipe2: str, competition: str) -> str:
     user_prompt = f"""Tu dois analyser le match le plus récent entre {equipe1} et {equipe2} en {competition}.
 
 **Étape 1 — Recherche du match récent**
-Commence par rechercher sur le web : "{equipe1} {equipe2} {competition} résultat 2025"
+Utilise Google Search pour trouver : "{equipe1} {equipe2} {competition} résultat 2025"
 Trouve le match le plus récent (dernières semaines ou derniers mois) avec :
 - La date exacte
 - Le score final
@@ -308,25 +309,22 @@ Note de performance tactique (/10) pour chaque équipe et conclusion en 3 phrase
 
 Tout en français. Sois précis et utilise la terminologie professionnelle du {sport}."""
 
-    tools = [{"type": "web_search_20250305", "name": "web_search", "max_uses": 6}]
-
     with st.status("🔍 Recherche du match récent en cours...", expanded=True) as status:
         st.write(f"Recherche du dernier {equipe1} — {equipe2} en {competition}...")
 
-        response = client.messages.create(
-            model="claude-opus-4-5",
-            max_tokens=4096,
-            system=system_prompt,
-            tools=tools,
-            messages=[{"role": "user", "content": user_prompt}],
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=user_prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=system_prompt,
+                tools=[types.Tool(google_search=types.GoogleSearch())],
+                max_output_tokens=4096,
+                temperature=0.7,
+            ),
         )
 
         st.write("Génération de l'analyse tactique complète...")
-
-        full_text = ""
-        for block in response.content:
-            if hasattr(block, "text"):
-                full_text += block.text
+        full_text = response.text or ""
 
         status.update(label="✅ Analyse générée !", state="complete", expanded=False)
 
@@ -421,10 +419,8 @@ def main():
                 "equipe2": equipe2,
                 "competition": competition,
             }
-        except anthropic.APIStatusError as e:
-            st.error(f"Erreur API Anthropic : {e.status_code} — {e.message}")
         except Exception as e:
-            st.error(f"Erreur inattendue : {e}")
+            st.error(f"Erreur API Gemini : {e}")
 
     # ── Render stored analysis ──
     if st.session_state.get("last_analysis"):
