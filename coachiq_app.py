@@ -206,11 +206,15 @@ SPORT_PHASES = {
 
 
 # ── Anthropic client ──────────────────────────────────────────────────────────
-@st.cache_resource
 def get_client():
-    api_key = os.environ.get("ANTHROPIC_API_KEY", st.secrets.get("ANTHROPIC_API_KEY", ""))
+    # Try st.secrets first (Streamlit Cloud), then env var
+    api_key = ""
+    try:
+        api_key = st.secrets["ANTHROPIC_API_KEY"]
+    except Exception:
+        api_key = os.environ.get("ANTHROPIC_API_KEY", "")
     if not api_key:
-        st.error("Clé API Anthropic manquante. Définissez ANTHROPIC_API_KEY.")
+        st.error("Clé API Anthropic manquante. Ajoutez ANTHROPIC_API_KEY dans les secrets Streamlit.")
         st.stop()
     return anthropic.Anthropic(api_key=api_key)
 
