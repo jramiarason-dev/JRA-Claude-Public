@@ -1,8 +1,8 @@
 import streamlit as st
-import anthropic
-import json
 import os
-from datetime import date
+import re
+from google import genai
+from google.genai import types
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -16,14 +16,12 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* ---- Global background ---- */
     html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
         background-color: #0d0f14 !important;
         color: #e2e8f0 !important;
     }
     [data-testid="stSidebar"] { background-color: #111318 !important; }
 
-    /* ---- Header / hero ---- */
     .hero {
         background: linear-gradient(135deg, #1a1f2e 0%, #0f1722 60%, #0d1a2a 100%);
         border: 1px solid #1e3a5f;
@@ -41,13 +39,8 @@ st.markdown(
         margin: 0;
         letter-spacing: -1px;
     }
-    .hero p {
-        color: #94a3b8;
-        font-size: 1.1rem;
-        margin-top: 0.5rem;
-    }
+    .hero p { color: #94a3b8; font-size: 1.1rem; margin-top: 0.5rem; }
 
-    /* ---- Form card ---- */
     .form-card {
         background: #111827;
         border: 1px solid #1e293b;
@@ -60,26 +53,25 @@ st.markdown(
         font-size: 1rem;
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
+    }
+    .step-label {
+        color: #3b82f6;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 0.25rem;
     }
 
-    /* ---- Inputs ---- */
-    [data-testid="stTextInput"] input,
-    [data-testid="stSelectbox"] > div > div,
-    [data-testid="stDateInput"] input {
+    [data-testid="stSelectbox"] > div > div {
         background-color: #1e2535 !important;
         color: #e2e8f0 !important;
         border: 1px solid #2d3748 !important;
         border-radius: 8px !important;
     }
-    [data-testid="stTextInput"] input:focus,
-    [data-testid="stSelectbox"] > div > div:focus {
-        border-color: #3b82f6 !important;
-        box-shadow: 0 0 0 2px rgba(59,130,246,0.25) !important;
-    }
     label { color: #94a3b8 !important; font-size: 0.9rem !important; }
 
-    /* ---- Button ---- */
     [data-testid="stButton"] > button {
         background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
         color: #fff !important;
@@ -97,8 +89,13 @@ st.markdown(
         box-shadow: 0 6px 20px rgba(59,130,246,0.45) !important;
         transform: translateY(-1px) !important;
     }
+    [data-testid="stButton"] > button:disabled {
+        background: #1e2535 !important;
+        color: #475569 !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
 
-    /* ---- Analysis sections ---- */
     .section-card {
         background: #111827;
         border: 1px solid #1e293b;
@@ -107,9 +104,6 @@ st.markdown(
         margin-bottom: 1.25rem;
     }
     .section-title {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
         font-size: 1.1rem;
         font-weight: 700;
         color: #60a5fa;
@@ -117,9 +111,7 @@ st.markdown(
         padding-bottom: 0.6rem;
         border-bottom: 1px solid #1e293b;
     }
-    .section-icon { font-size: 1.25rem; }
 
-    /* ---- Match header badge ---- */
     .match-badge {
         background: linear-gradient(135deg, #1e3a5f 0%, #1a2f4a 100%);
         border: 1px solid #2563eb;
@@ -132,34 +124,16 @@ st.markdown(
         flex-wrap: wrap;
         gap: 0.5rem;
     }
-    .match-badge .teams {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: #f1f5f9;
-    }
+    .match-badge .teams { font-size: 1.5rem; font-weight: 800; color: #f1f5f9; }
     .match-badge .meta {
-        font-size: 0.85rem;
-        color: #93c5fd;
+        font-size: 0.85rem; color: #93c5fd;
         background: rgba(37,99,235,0.2);
-        padding: 0.3rem 0.8rem;
-        border-radius: 20px;
+        padding: 0.3rem 0.8rem; border-radius: 20px;
     }
-
-    /* ---- Spinner override ---- */
-    [data-testid="stSpinner"] { color: #3b82f6 !important; }
-
-    /* ---- Progress / info ---- */
-    .stAlert { border-radius: 10px !important; }
-    [data-testid="stExpander"] {
-        background: #111827 !important;
-        border: 1px solid #1e293b !important;
-        border-radius: 10px !important;
+    .divider-step {
+        border: none; border-top: 1px solid #1e293b; margin: 1.25rem 0;
     }
-
-    /* ---- Separator ---- */
     hr { border-color: #1e293b !important; }
-
-    /* ---- Scrollbar ---- */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #0d0f14; }
     ::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 3px; }
@@ -169,7 +143,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ── Sport metadata ────────────────────────────────────────────────────────────
+# ── Data ──────────────────────────────────────────────────────────────────────
 COMPETITIONS = {
     "Ligue 1": {"sport": "football", "icon": "⚽", "country": "France"},
     "Super League Suisse": {"sport": "football", "icon": "⚽", "country": "Suisse"},
@@ -178,6 +152,62 @@ COMPETITIONS = {
     "Euroleague": {"sport": "basketball", "icon": "🏀", "country": "Europe"},
     "NBA": {"sport": "basketball", "icon": "🏀", "country": "USA"},
     "Top 14": {"sport": "rugby", "icon": "🏉", "country": "France"},
+}
+
+TEAMS = {
+    "Ligue 1": [
+        "Paris Saint-Germain", "Olympique de Marseille", "AS Monaco", "OGC Nice",
+        "Stade Rennais", "RC Lens", "LOSC Lille", "Olympique Lyonnais",
+        "Montpellier HSC", "RC Strasbourg", "Stade de Reims", "Stade Brestois",
+        "FC Nantes", "Le Havre AC", "Toulouse FC", "AJ Auxerre",
+        "Angers SCO", "AS Saint-Étienne",
+    ],
+    "Super League Suisse": [
+        "FC Basel", "BSC Young Boys", "Servette FC", "Grasshopper Club",
+        "FC Lugano", "FC Zurich", "FC Luzern", "FC Sion",
+        "FC St. Gallen", "FC Winterthur", "Lausanne-Sport", "Yverdon-Sport",
+    ],
+    "Champions League": [
+        "Real Madrid", "FC Barcelona", "Manchester City", "Bayern Munich",
+        "Paris Saint-Germain", "Liverpool", "Arsenal", "Chelsea",
+        "Juventus", "Inter Milan", "AC Milan", "Atletico Madrid",
+        "Borussia Dortmund", "Napoli", "Porto", "Benfica",
+        "PSV Eindhoven", "Bayer Leverkusen", "RB Leipzig", "Atalanta",
+        "Aston Villa", "Club Brugge", "AS Monaco", "LOSC Lille",
+        "Celtic", "Sporting CP", "Feyenoord", "Girona",
+        "VfB Stuttgart", "Sparta Prague", "Sturm Graz", "BSC Young Boys",
+        "Red Star Belgrade", "Shakhtar Donetsk", "Slavia Prague", "Red Bull Salzburg",
+    ],
+    "Betclic Elite": [
+        "LDLC ASVEL", "Paris Basketball", "Monaco Basket", "Cholet Basket",
+        "Strasbourg IG", "Boulazac Basket Dordogne", "Limoges CSP", "Nanterre 92",
+        "Elan Chalon", "JL Bourg", "Dijon Basketball", "Gravelines-Dunkerque",
+        "Le Mans Sarthe Basket", "Metropolitans 92", "Pau-Lacq-Orthez", "Roanne Basket",
+        "Blois Basket", "Antibes Sharks",
+    ],
+    "Euroleague": [
+        "Real Madrid", "FC Barcelona", "Fenerbahce Beko", "Olympiacos",
+        "Panathinaikos", "Maccabi Tel Aviv", "Anadolu Efes", "Bayern Munich",
+        "Alba Berlin", "Zalgiris Kaunas", "Valencia Basket", "Olimpia Milano",
+        "LDLC ASVEL", "Monaco Basket", "Virtus Bologna", "Baskonia",
+        "Partizan Belgrade", "Red Star Belgrade",
+    ],
+    "NBA": [
+        "Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
+        "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets",
+        "Detroit Pistons", "Golden State Warriors", "Houston Rockets", "Indiana Pacers",
+        "LA Clippers", "LA Lakers", "Memphis Grizzlies", "Miami Heat",
+        "Milwaukee Bucks", "Minnesota Timberwolves", "New Orleans Pelicans", "New York Knicks",
+        "Oklahoma City Thunder", "Orlando Magic", "Philadelphia 76ers", "Phoenix Suns",
+        "Portland Trail Blazers", "Sacramento Kings", "San Antonio Spurs", "Toronto Raptors",
+        "Utah Jazz", "Washington Wizards",
+    ],
+    "Top 14": [
+        "Stade Toulousain", "Racing 92", "Stade Rochelais", "Union Bordeaux-Bègles",
+        "Montpellier Hérault RC", "Stade Français", "Lyon OU", "Clermont Auvergne",
+        "Castres Olympique", "Aviron Bayonnais", "Section Paloise", "USA Perpignan",
+        "RC Toulon", "Vannes RC",
+    ],
 }
 
 SPORT_PHASES = {
@@ -205,46 +235,52 @@ SPORT_PHASES = {
 }
 
 
-# ── Anthropic client ──────────────────────────────────────────────────────────
+# ── Gemini client ─────────────────────────────────────────────────────────────
 def get_client():
-    # Try st.secrets first (Streamlit Cloud), then env var
     api_key = ""
     try:
-        api_key = st.secrets["ANTHROPIC_API_KEY"]
+        api_key = st.secrets["GEMINI_API_KEY"]
     except Exception:
-        api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+        api_key = os.environ.get("GEMINI_API_KEY", "")
     if not api_key:
-        st.error("Clé API Anthropic manquante. Ajoutez ANTHROPIC_API_KEY dans les secrets Streamlit.")
+        st.error("Clé API Gemini manquante. Ajoutez GEMINI_API_KEY dans les secrets Streamlit.")
         st.stop()
-    return anthropic.Anthropic(api_key=api_key)
+    return genai.Client(api_key=api_key)
 
 
 # ── Analysis engine ───────────────────────────────────────────────────────────
-def generate_analysis(equipe1: str, equipe2: str, date_match: str, competition: str) -> str:
+def generate_analysis(equipe1: str, equipe2: str, competition: str) -> str:
     client = get_client()
     meta = COMPETITIONS[competition]
     sport = meta["sport"]
-    phases = SPORT_PHASES[sport]
-    phases_str = "\n".join(f"  - {p}" for p in phases)
+    phases_str = "\n".join(f"  - {p}" for p in SPORT_PHASES[sport])
 
-    system_prompt = """Tu es un analyste tactique d'élite et entraîneur expert avec 20 ans d'expérience
-dans le sport professionnel. Tu fournis des analyses de match ultra-détaillées, précises et professionnelles
-en français. Ton style est direct, technique et orienté performance. Tu t'appuies sur des données concrètes
-et des observations tactiques précises. Tes analyses sont lues par des coaches professionnels."""
+    system_prompt = (
+        "Tu es un analyste tactique d'élite et entraîneur expert avec 20 ans d'expérience "
+        "dans le sport professionnel. Tu fournis des analyses de match ultra-détaillées, précises "
+        "et professionnelles en français. Ton style est direct, technique et orienté performance. "
+        "Tu t'appuies sur des données concrètes et des observations tactiques précises. "
+        "Tes analyses sont lues par des coaches professionnels."
+    )
 
-    user_prompt = f"""Effectue une analyse coaching complète et détaillée du match suivant :
+    user_prompt = f"""Tu dois analyser le match le plus récent entre {equipe1} et {equipe2} en {competition}.
 
-**Match :** {equipe1} vs {equipe2}
-**Date :** {date_match}
-**Compétition :** {competition} ({meta['country']})
-**Sport :** {sport}
+**Étape 1 — Recherche du match récent**
+Utilise Google Search pour trouver : "{equipe1} {equipe2} {competition} résultat 2025"
+Trouve le match le plus récent (dernières semaines ou derniers mois) avec :
+- La date exacte
+- Le score final
+- Les buteurs / marqueurs / essayeurs selon le sport
+- Les compositions si disponibles
 
-Commence par rechercher les informations réelles de ce match (score, statistiques, événements clés, compositions d'équipes).
+Si aucun match récent n'existe entre ces deux équipes dans cette compétition, indique-le clairement
+en introduction puis analyse le match le plus récent disponible ou le dernier affrontement connu.
 
-Ensuite, rédige une analyse structurée avec exactement ces sections (utilise des titres Markdown ##) :
+**Étape 2 — Analyse coaching complète**
+Une fois le match identifié, rédige une analyse structurée avec exactement ces sections (titres Markdown ##) :
 
 ## 🔍 Résumé du Match
-Score final, contexte, enjeux, ambiance générale et faits marquants.
+Date, score final, contexte, enjeux, faits marquants. Précise le match analysé en en-tête.
 
 ## 📋 Formations et Dispositifs Tactiques
 Dispositifs utilisés par chaque équipe, changements de schéma en cours de match, positionnement des joueurs clés.
@@ -271,35 +307,24 @@ Pour **{equipe2}** : Décisions tactiques discutables, remplacements ratés, aju
 ## 📊 Verdict Final CoachIQ
 Note de performance tactique (/10) pour chaque équipe et conclusion en 3 phrases.
 
-Sois précis, technique et utilise la terminologie professionnelle du {sport}. Tout en français."""
+Tout en français. Sois précis et utilise la terminologie professionnelle du {sport}."""
 
-    # Call with web_search tool for real match data
-    tools = [
-        {
-            "type": "web_search_20250305",
-            "name": "web_search",
-            "max_uses": 5,
-        }
-    ]
+    with st.status("🔍 Recherche du match récent en cours...", expanded=True) as status:
+        st.write(f"Recherche du dernier {equipe1} — {equipe2} en {competition}...")
 
-    with st.status("🔍 Recherche des données du match en cours...", expanded=True) as status:
-        st.write("Interrogation de l'API Anthropic avec web search...")
-
-        response = client.messages.create(
-            model="claude-opus-4-5",
-            max_tokens=4096,
-            system=system_prompt,
-            tools=tools,
-            messages=[{"role": "user", "content": user_prompt}],
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=user_prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=system_prompt,
+                tools=[types.Tool(google_search=types.GoogleSearch())],
+                max_output_tokens=4096,
+                temperature=0.7,
+            ),
         )
 
-        st.write("Génération de l'analyse tactique...")
-
-        # Collect all text blocks from response
-        full_text = ""
-        for block in response.content:
-            if hasattr(block, "text"):
-                full_text += block.text
+        st.write("Génération de l'analyse tactique complète...")
+        full_text = response.text or ""
 
         status.update(label="✅ Analyse générée !", state="complete", expanded=False)
 
@@ -307,21 +332,8 @@ Sois précis, technique et utilise la terminologie professionnelle du {sport}. T
 
 
 # ── Section renderer ──────────────────────────────────────────────────────────
-SECTION_ICONS = {
-    "Résumé": ("🔍", "Résumé du Match"),
-    "Formations": ("📋", "Formations & Tactiques"),
-    "Phases": ("⚡", "Phases de Jeu"),
-    "Performances": ("🌟", "Performances Individuelles"),
-    "Points Forts": ("💪", "Points Forts"),
-    "Points Faibles": ("⚠️", "Points Faibles"),
-    "Coach": ("🧠", "Analyse Coach"),
-    "Verdict": ("📊", "Verdict Final CoachIQ"),
-}
-
-
 def render_analysis(text: str, equipe1: str, equipe2: str, competition: str):
     meta = COMPETITIONS[competition]
-    # Match header badge
     st.markdown(
         f"""
         <div class="match-badge">
@@ -332,8 +344,6 @@ def render_analysis(text: str, equipe1: str, equipe2: str, competition: str):
         unsafe_allow_html=True,
     )
 
-    # Split by ## headers and render each section
-    import re
     sections = re.split(r"(?=##\s)", text.strip())
     for section in sections:
         if not section.strip():
@@ -343,11 +353,7 @@ def render_analysis(text: str, equipe1: str, equipe2: str, competition: str):
             title = lines[0].replace("##", "").strip()
             body = lines[1].strip() if len(lines) > 1 else ""
             st.markdown(
-                f"""
-                <div class="section-card">
-                    <div class="section-title">{title}</div>
-                </div>
-                """,
+                f'<div class="section-card"><div class="section-title">{title}</div></div>',
                 unsafe_allow_html=True,
             )
             st.markdown(body)
@@ -358,7 +364,6 @@ def render_analysis(text: str, equipe1: str, equipe2: str, competition: str):
 
 # ── Main UI ───────────────────────────────────────────────────────────────────
 def main():
-    # Hero header
     st.markdown(
         """
         <div class="hero">
@@ -369,58 +374,53 @@ def main():
         unsafe_allow_html=True,
     )
 
-    # ── Input form ──
-    st.markdown('<div class="form-card"><h3>🏟 Saisir un match</h3>', unsafe_allow_html=True)
+    st.markdown('<div class="form-card"><h3>🏟 Configurer le match</h3>', unsafe_allow_html=True)
+
+    # ── Étape 1 : Championnat ──
+    st.markdown('<p class="step-label">① Championnat</p>', unsafe_allow_html=True)
+    competition = st.selectbox(
+        "Compétition",
+        options=list(COMPETITIONS.keys()),
+        format_func=lambda c: f"{COMPETITIONS[c]['icon']}  {c}",
+        label_visibility="collapsed",
+    )
+
+    st.markdown('<hr class="divider-step">', unsafe_allow_html=True)
+
+    # ── Étape 2 : Équipes ──
+    st.markdown('<p class="step-label">② Équipes</p>', unsafe_allow_html=True)
+    teams = TEAMS[competition]
 
     col1, col2 = st.columns(2)
     with col1:
-        equipe1 = st.text_input("Équipe 1 (domicile)", placeholder="ex: Paris Saint-Germain")
-        equipe2 = st.text_input("Équipe 2 (extérieur)", placeholder="ex: Olympique de Marseille")
+        equipe1 = st.selectbox("Équipe 1 (domicile)", options=teams, key="eq1")
     with col2:
-        competition = st.selectbox(
-            "Compétition",
-            options=list(COMPETITIONS.keys()),
-            format_func=lambda c: f"{COMPETITIONS[c]['icon']}  {c}",
-        )
-        date_match = st.date_input(
-            "Date du match",
-            value=date.today(),
-            max_value=date.today(),
-        )
+        # Exclude the team already selected for eq1
+        teams_eq2 = [t for t in teams if t != equipe1]
+        equipe2 = st.selectbox("Équipe 2 (extérieur)", options=teams_eq2, key="eq2")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # Validation
-    ready = equipe1.strip() and equipe2.strip()
+    # ── Info ──
+    meta = COMPETITIONS[competition]
+    st.info(
+        f"{meta['icon']} L'IA va rechercher automatiquement le **match le plus récent** "
+        f"entre {equipe1} et {equipe2} en {competition} et générer l'analyse.",
+        icon=None,
+    )
 
-    if not ready:
-        st.info("Renseignez les deux équipes pour lancer l'analyse.", icon="ℹ️")
-
-    if st.button("🧠 Générer l'analyse CoachIQ", disabled=not ready):
-        if equipe1.strip().lower() == equipe2.strip().lower():
-            st.error("Les deux équipes doivent être différentes.")
-            return
-
+    if st.button("🧠 Rechercher & Analyser le dernier match"):
         st.session_state["last_analysis"] = None
-
         try:
-            analysis = generate_analysis(
-                equipe1.strip(),
-                equipe2.strip(),
-                date_match.strftime("%d/%m/%Y"),
-                competition,
-            )
+            analysis = generate_analysis(equipe1, equipe2, competition)
             st.session_state["last_analysis"] = {
                 "text": analysis,
-                "equipe1": equipe1.strip(),
-                "equipe2": equipe2.strip(),
+                "equipe1": equipe1,
+                "equipe2": equipe2,
                 "competition": competition,
-                "date": date_match.strftime("%d/%m/%Y"),
             }
-        except anthropic.APIStatusError as e:
-            st.error(f"Erreur API Anthropic : {e.status_code} — {e.message}")
         except Exception as e:
-            st.error(f"Erreur inattendue : {e}")
+            st.error(f"Erreur API Gemini : {e}")
 
     # ── Render stored analysis ──
     if st.session_state.get("last_analysis"):
@@ -428,11 +428,11 @@ def main():
         st.markdown("## 📄 Analyse Complète")
         render_analysis(data["text"], data["equipe1"], data["equipe2"], data["competition"])
 
-        # Download button
+        filename = f"CoachIQ_{data['equipe1'].replace(' ', '_')}_vs_{data['equipe2'].replace(' ', '_')}.md"
         st.download_button(
             label="⬇️ Télécharger l'analyse (Markdown)",
             data=data["text"],
-            file_name=f"CoachIQ_{data['equipe1']}_vs_{data['equipe2']}_{data['date'].replace('/', '-')}.md",
+            file_name=filename,
             mime="text/markdown",
         )
 
