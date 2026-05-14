@@ -125,11 +125,16 @@ html, body,
     border:1px solid #1e1e1e;
     border-radius:14px;
     padding:1.25rem 1.5rem;
-    margin-bottom:1rem;
+    margin-bottom:.5rem;
     transition:all .25s ease;
     cursor:pointer;
     position:relative;
     overflow:hidden;
+    height:140px;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
 }
 .match-card::before {
     content:"";position:absolute;top:0;left:0;right:0;height:2px;
@@ -381,10 +386,10 @@ ANALYSIS = {
                 ["Embolo","BU"],
             ],
             "phases": {
-                "Pressing": "PSG PPDA : 7.2 — pressing haut dès la relance monégasque. 14 récupérations dans le camp adverse, dont 3 ayant mené à des tirs.",
-                "Transitions": "Transitions offensives fulgurantes via les couloirs. Hakimi–Dembélé à droite : 6 combinaisons, 3 centres, 2 buts. Monaco trop exposé dans le dos de ses latéraux.",
-                "Phases arrêtées": "5 corners PSG (2 occasions directes), 2 Monaco. Corner travaillé en angle court sur le 3e but. Monaco dangereux sur un coup-franc à 25m (Majecki sauve sa barre).",
-                "Bloc défensif": "Monaco en 4-4-2 bas en récupération, ligne à 35m. PSG : bloc haut à 55m, ligne défensive agressive. Monaco a subi 18 tirs (9 cadrés).",
+                "Pressing": "Ce n'était pas du pressing — c'était du harcèlement systématisé. Fabian Ruiz a coupé la ligne de passe verticale de Zakaria 17 fois en première période. Monaco ne pouvait physiquement pas jouer. Quand ton milieu défensif ne reçoit jamais ballon dans les pieds dans son propre camp, ta structure de jeu s'effondre. C'est exactement ce qui s'est passé à la 34' : Ruiz récupère le ballon sur une relance monégasque ratée, Dembélé part dans le dos de Maripan, 1-0. Le pressing n'est pas une question d'intensité — c'est une question de lignes de passe coupées. PSG a maîtrisé ça parfaitement.",
+                "Transitions": "Hakimi–Dembélé sur le côté droit : c'est le couloir le plus dangereux d'Europe en ce moment. Trois fois en première période, Monaco a tenté de sortir par la gauche, trois fois ils se sont retrouvés pris en supériorité numérique. Le problème de Monaco n'était pas défensif — c'était leur incapacité à fixer les latéraux parisiens avec leurs ailiers. Minamino n'a jamais rentré dans son côté pour aider Caio Henrique. C'est ça la vraie erreur tactique de ce soir.",
+                "Phases arrêtées": "Le coin à angle court sur le 3e but est un chef-d'œuvre de préparation. PSG a travaillé ça toute la semaine. Barcola sert Fabian qui décale Dembélé — Monaco ne l'a pas vu venir malgré deux répétitions similaires dans la mi-temps. En tant que coach, quand tu vois une séquence se reproduire deux fois, tu dois adapter ta défense de corner immédiatement. Hütter ne l'a pas fait.",
+                "Bloc défensif": "Monaco a essayé le bloc bas, mais un bloc bas ne fonctionne que si tu as la capacité de repartir vite en contre. Avec Embolo seul en pointe, coupé de tout soutien, c'était mission impossible. J'ai compté 6 récupérations de Monaco en seconde période — dont aucune n'a débouché sur une situation offensive. Un bloc bas sans contre-attaque, ce n'est pas une tactique, c'est de la survie.",
             },
             "home_stats": {"Possession": (64,36), "Tirs": (18,8), "Tirs cadrés": (9,3), "Passes réussies": (87,71), "Fautes": (11,16)},
         },
@@ -409,33 +414,33 @@ ANALYSIS = {
         },
         "bilan": {
             "home_forts": [
-                "Maîtrise totale du milieu : Fabian + Vitinha dictent le tempo",
-                "Efficacité offensive : 3 buts sur 9 tirs cadrés (33%)",
-                "Pressing collectif : 14 récupérations en zone haute",
-                "Couloir droit dominant — Hakimi–Dembélé combinaison redoutable",
+                "Occupation de l'espace : 64% de possession AVEC pressing haut — combinaison rarissime qui signifie que Monaco n'a jamais pu respirer ni reposer",
+                "Permutation Ruiz–Vitinha parfaite : quand l'un montait presser, l'autre couvrait dans l'axe — automatisme d'un niveau Champions League évident",
+                "Dembélé en faux ailier droit : ses décrochages attiraient Maripan, libérant les courses de Barcola dans l'espace. Monaco ne savait jamais qui marquer",
+                "Gestion de score sans ego à 3-1 : Luis Enrique sort Mbappé à 70' pour préserver les jambes avant un déplacement crucial. Priorité collective, zéro concession aux statistiques individuelles",
             ],
             "home_faibles": [
-                "Quelques pertes de balle risquées dans la construction basse",
-                "Indiscipline défensive sur 2 corners encaissés (fautes dans la surface)",
+                "3 relances courtes perdues entre la 55' et la 65' dans le camp adverse — face à un Monaco plus ambitieux, ces ballons perdus en zone de pressing auraient pu coûter très cher",
+                "Ligne défensive trop haute à 2-0 : sur le but de Ben Seghir, Skriniar est à 40m de sa cage. Ce relâchement est inacceptable. Un champion du monde ne se permet jamais ça",
             ],
             "away_forts": [
-                "Bloc défensif 0-0 solide en première période",
-                "Réalisme sur le seul corner travaillé : but de Ben Seghir",
+                "Solidité défensive jusqu'à la 38' avec un bloc 4-4-2 bien compacté — Monaco a forcé PSG à 18 passes avant chaque tir en première période",
+                "Ben Seghir, seul joueur qui a su trouver les espaces entre les lignes parisiennes — son but illustre ce qu'aurait dû faire toute l'équipe : jouer vite, entre les lignes",
             ],
             "away_faibles": [
-                "Incapacité à sortir proprement face au pressing : 47% pertes de balle dans leur camp",
-                "Seulement 3 tirs cadrés sur 8 tirs : manque de finition en transition",
-                "Gestion du ballon défaillante après le 2-0 (retraite trop profonde)",
-                "Embolo totalement coupé du jeu : 0 duel gagné en attaque",
+                "Zakaria fantôme : 31 touches en 90 minutes pour un milieu défensif censé être le pivot du jeu — c'est la signature d'un pressing adverse qui fonctionne à 100%",
+                "Zéro jeu dans la profondeur : Monaco n'a tenté que 4 passes dans le dos des défenseurs parisiens sur tout le match — comment mettre sous pression une défense qui ne défend jamais reculée ?",
+                "Embolo en souffrance totale : 12 duels, 3 gagnés — sans combinaisons, sans soutien, un avant-centre seul ne peut rien. Hütter l'a sacrifié en ne lui donnant aucun point d'appui",
+                "Transitions défensives indignes du niveau Ligue 1 sur les 2e et 3e buts : Caio Henrique ne sprinte pas pour revenir, Fofana ne ferme pas le couloir — deux buts que la discipline seule pouvait éviter",
             ],
         },
         "verdict": {
             "home_perf": 8.7, "away_perf": 5.9,
             "intensite": 7.5, "spectacle": 7.8,
-            "home_txt": "Le PSG a livré une prestation aboutie. Luis Enrique a parfaitement exploité les espaces laissés par Monaco avec un pressing collectif exemplaire. Fabian Ruiz, métronome du milieu, a permis une possession de haute qualité (87% de passes réussies).",
-            "away_txt": "Monaco a manqué d'ambition en seconde période. Après le 2-0, conserver un bloc bas était suicidaire. Adi Hütter aurait dû libérer Ben Seghir et passer en 4-3-3 offensif dès la 60'.",
-            "coach_home": "✅ Choix tactiques validés. Sortie calculée de Mbappé à 70' (ménagement). Hakimi maintenu haut malgré les contre-attaques monégasques : prise de risque assumée et maîtrisée.",
-            "coach_away": "⚠️ Erreur de lecture manifeste. Rester en bloc bas après le 2-0 a privé Monaco de tout espoir de renversement. Embolo devait sortir dès la 55' pour faire entrer Gölovin.",
+            "home_txt": "J'ai rarement vu un pressing aussi bien structuré en Ligue 1 cette saison. Luis Enrique a construit quelque chose de rare : une équipe qui court autant sans ballon qu'avec. Fabian Ruiz est le cerveau caché de ce système — quand il est dans ce niveau-là, PSG est imbattable en France. Ce qui m'impressionne, c'est la cohérence collective : aucun joueur ne décide seul, chaque déplacement est une réponse au déplacement d'un coéquipier. C'est du football de haute intensité intellectuelle.",
+            "away_txt": "Monaco a le talent pour faire mieux. Beaucoup mieux. La vraie question ce soir, c'est : pourquoi Hütter n'a-t-il pas osé jouer ? Avec Ben Seghir, Akliouche, Minamino — tu as des joueurs capables de déstabiliser n'importe quelle défense en un contre un. Les garder dans un bloc bas pendant 70 minutes, c'est du gâchis pur. Je ne comprends pas la peur tactique de ce soir.",
+            "coach_home": "✅ Plan de jeu rigoureux, parfaitement exécuté. La sortie de Mbappé à 70' est la décision la plus intelligente de la soirée — protéger le collectif sur le long terme plutôt que flatter les stats d'un joueur. C'est ça, une mentalité de champion.",
+            "coach_away": "❌ Erreur stratégique majeure. À 0-2 à la 60', Hütter devait passer en 4-3-3 offensif avec Gölovin entrant, Ben Seghir libre dans l'axe et Embolo remplacé par un deuxième milieu. Rester en bloc bas dans ces conditions, c'est abandonner le match. Inacceptable.",
         },
     },
     "lakers_warriors": {
@@ -453,10 +458,10 @@ ANALYSIS = {
                 ["Looney","C"],["GP2","PF"],
             ],
             "phases": {
-                "Pick & Roll": "Lakers : 18 P&R, 14 pts générés (efficacité 0.78 ppt). Warriors : 22 P&R, mais défense Lakers agressive sur le ball-handler — Curry limité à 3/9 sur P&R.",
-                "Fast Break": "Warriors génèrent 18 pts en transition (meilleure attaque en contre). Lakers réduisent les transitions à 11 en seconde mi-temps grâce à un meilleur retour défensif.",
-                "Isolation": "LeBron en isolation côté gauche : 5/9, 14 pts, 3 fautes provoquées. Klay Thompson trop statique : isolation peu productive (2/7).",
-                "Clutch Time": "Q4 : Lakers prennent le contrôle à 95-85 (8-0 run). Curry sort sur fautes à 4'30. Davis domine la peinture : 8 pts dans le 4e quart.",
+                "Pick & Roll": "La clé de ce match, c'est ce que les Lakers ont fait défensivement sur le P&R de Curry. Au lieu du drop coverage habituel, Redick a demandé un hedge agressif avec Hachimura qui sort haut sur Curry dès la prise d'écran. Résultat : Curry à 3/9 sur P&R, 6 turnovers. Quand tu enlèves le P&R à Curry, tu enlèves 40% du système offensif des Warriors. Côté Lakers, le P&R Davis–Russell a fonctionné parce que Looney n'a jamais su choisir : couvrir le roll ou le pop ? Davis a marqué 14 points sur cette seule action.",
+                "Fast Break": "Les Warriors ont généré 18 points en transition en première mi-temps — et ça aurait pu être 30 si les Lakers n'avaient pas ajusté leur retour défensif à la pause. LeBron a personnellement décidé de sprinter sur chaque transition en 3e quart. Quand le meilleur joueur de ton équipe montre l'exemple défensivement, les autres suivent. C'est du leadership, pas de la tactique. En 2e mi-temps, Golden State n'a marqué que 5 points en contre. Ajustement parfait.",
+                "Isolation": "LeBron en isolation côté gauche contre Klay Thompson : c'est une asymétrie que Redick a exploitée à dessein. Thompson à 34 ans n'a plus les jambes pour défendre 4 quarts en premier rideau. LeBron l'a su et l'a abusé à 5 reprises pour provoquer des fautes ou créer des décalages. En face, les isolations Warriors étaient prévisibles et mal servies — Draymond prenait trop de temps pour choisir entre passer et attaquer.",
+                "Clutch Time": "Le run 8-0 à 4 minutes de la fin, c'est le moment où on voit la différence entre une équipe qui a appris à gagner et une qui cherche encore comment le faire. Davis en post bas sur Looney, LeBron en drive, Reaves qui plante le 3pts de l'écart définitif — trois actions différentes, trois joueurs différents, un seul objectif. C'est ça une culture de clutch. Warriors : Curry sur fautes à 4'30, aucun autre créateur de shoot capable de prendre ses responsabilités. Le vide a été immense.",
             },
             "home_stats": {"Tirs 3pts": (12,9), "Rebonds": (48,40), "Interceptions": (9,6), "Passes dec.": (28,22), "Fautes": (19,22)},
         },
@@ -478,33 +483,33 @@ ANALYSIS = {
         },
         "bilan": {
             "home_forts": [
-                "Davis dominateur en peinture : 32 pts / 14 rebonds (impossible à stopper)",
-                "Défense sur Curry efficace en 2e mi-temps : 3 interceptions sur ses P&R",
-                "Exécution clutch parfaite au 4e quart (8-0 run décisif)",
-                "Reaves surprenant à 3pts : 4/7, énorme impact offensif",
+                "AD en mode dominant absolu : 32 pts / 14 reb sur Looney, c'est une incompatibilité physique. Kerr aurait dû switcher dès le 2e quart — il ne l'a jamais fait",
+                "Ajustement défensif sur Curry à la mi-temps : passer du drop au hedge agressif a complètement cassé le rythme des Warriors en 2e mi-temps. Redick a lu le match",
+                "Reaves en décideur : 18 pts et 4/7 à 3pts en sortant du double-écran — les Warriors ne l'ont jamais identifié comme menace prioritaire. Erreur de scouting",
+                "Culture clutch : quand Curry sort sur fautes, Lakers ont 3 créateurs différents capables de prendre le match. Golden State n'en a qu'un",
             ],
             "home_faibles": [
-                "19 fautes concédées, risque de mise en foul trouble pour Davis en 3e quart",
-                "Début de match poussif : -7 au score à 8' du 2e quart",
+                "19 fautes en 48 minutes, dont 4 pour Davis en 3e quart — si Kerr avait mieux joué les possessions hautes, Davis aurait pu sortir à 6 fautes",
+                "1er quart à -9 : la défense était trop molle sur les catch-and-shoot Warriors. Si Golden State avait maintenu ce rythme, le match était plié à la mi-temps",
             ],
             "away_forts": [
-                "Jeu en mouvement rapide efficace en 1ère mi-temps : 53 pts à la pause",
-                "Wiggins surprenant : meilleur marqueur côté Warriors",
+                "53 points en 1ère mi-temps avec une circulation de balle fluide — le Motion Offense Warriors fonctionne encore quand Curry est propre balle en main",
+                "Wiggins : meilleur Warriors cette nuit, 21 pts en jouant sans ballon. Le seul à avoir compris que les Lakers défendaient le ballon, pas les mouvements",
             ],
             "away_faibles": [
-                "Curry dans ses pires soirées sur P&R : 3/9, face à une défense physique",
-                "Klay Thompson en manque de rythme : 3/11 à 3pts, aucune influence au clutch",
-                "Looney écrasé par Davis : -8 en rebonds offensifs",
-                "6 turnovers de Curry au total : trop de décisions précipitées",
+                "Curry : 6 turnovers, c'est sa pire nuit de la saison sur ce plan. À chaque fois qu'il était pressé sur P&R, il choisissait la mauvaise option. La défense Lakers l'a lu",
+                "Klay Thompson : 43 minutes jouées pour 13 points à 3/11. Kerr lui est trop fidèle. Klay n'a plus les jambes pour défendre ET shooter à ce niveau 4 quarts de suite",
+                "Looney contre Davis : -8 en rebonds offensifs, score négatif en +/- (-14). Cette incompatibilité physique devait être gérée avec Kuminga ou Wiseman en pivot",
+                "Aucun créateur de clutch hormis Curry : quand il sort sur fautes, Golden State n'a personne capable de créer du shoot en isolation. Lacune structurelle du roster",
             ],
         },
         "verdict": {
             "home_perf": 8.9, "away_perf": 6.4,
             "intensite": 8.2, "spectacle": 8.6,
-            "home_txt": "Les Lakers ont parfaitement construit leur victoire. JJ Redick a eu la bonne idée d'orienter le jeu vers Davis dès le 3e quart et de réduire les isolations LeBron. La discipline défensive sur Curry en 2e mi-temps a été déterminante.",
-            "away_txt": "Steve Kerr a manqué d'ajustements. Thompson aurait dû être sorti à la mi-temps au profit d'un shooter plus en jambes. La gestion des fautes de Curry (sortir plus tôt) aurait pu changer la dynamique du 4e quart.",
-            "coach_home": "✅ Plan de jeu optimal. Mise en valeur de Davis dans le pick & pop et dans le post bas a déstabilisé toute la défense Golden State.",
-            "coach_away": "⚠️ Kerr trop fidèle à un Klay Thompson inexistant (43 min jouées). La rotation Kuminga aurait pu changer le rapport de forces en peinture.",
+            "home_txt": "Ce que Redick a construit cette nuit, c'est une leçon de lecture de jeu en temps réel. Identifier la faiblesse Looney–Davis, sur-exploiter le match-up Klay–LeBron, et mettre Reaves en position de décideur face à une défense qui l'ignorait — c'est du coaching de haut niveau. Les jeunes coaches ont intérêt à étudier les ajustements de mi-temps de ce soir. Davis était inarrêtable, mais c'est Redick qui a créé les conditions pour qu'il le soit.",
+            "away_txt": "Kerr a perdu ce match dans son vestiaire à la mi-temps. Il avait toutes les informations pour sortir Klay, switcher son plan défensif sur Davis, et remettre Kuminga pour aider Looney. Il n'a rien fait. Dans les grandes confrontations, l'inaction d'un coach est une décision en soi. Ce soir, sa fidélité à des joueurs sur le déclin a coûté la victoire à Golden State.",
+            "coach_home": "✅ Ajustement défensif sur Curry en 2e mi-temps : parfait. Décision de laisser Davis en post bas malgré ses 4 fautes plutôt que de le plonger en bench : le bon risque calculé. C'est l'instinct des grands coaches.",
+            "coach_away": "❌ Kerr n'a pas vu — ou n'a pas voulu voir — que Klay Thompson n'avait plus rien à apporter offensivement après le 2e quart. 43 minutes pour 3/11 à 3pts, c'est indéfendable. Kuminga aurait changé complètement la dynamique de la peinture.",
         },
     },
     "bordeaux_larochelle": {
@@ -524,10 +529,10 @@ ANALYSIS = {
                 ["Alldritt","N°8"],["Skelton","TL"],["Priso","PI"],
             ],
             "phases": {
-                "Ruck & Maul": "Bordeaux domine les rucks en 1ère période (15 rucks gagnés vs 11). La Rochelle réagit en 2e mi-temps avec des mauls offensifs : 3 pénalités obtenues dans les 5 dernières mètres.",
-                "Touche & Mêlée": "La Rochelle dominatrice en touche (86% ball won). Bordeaux solide en mêlée fermée (5 mêlées gagnées). Skelton omniprésent dans les airs (8 ballons saisis).",
-                "Jeu au pied": "Jalibert : 5/6 en pénalités, 1 transformation. Jeu territorial précis (60% au-delà des 22m). Hastoy répond par des coups de pied rasants dans les couloirs.",
-                "Défense en ligne": "La Rochelle en rideau défensif efficace en 2e mi-temps. UBB concède 3 pénalités sous pression dans les 20 dernières minutes — coûteuses.",
+                "Ruck & Maul": "Le maul est la grande arme de La Rochelle, et O'Gara l'a sorti au bon moment. En 2e mi-temps, sur chaque touche proche des 22m, La Rochelle poussait en maul fermé — et Bordeaux fauchait. 3 pénalités sur maul en 20 minutes. Ce n'est pas de la malchance, c'est une stratégie. O'Gara savait que Bordeaux ne pouvait pas arrêter le maul légalement face à Skelton et Alldritt — alors il les a forcés à fauter. C'est du rugby d'intellectuel.",
+                "Touche & Mêlée": "Skelton contre les sauteurs bordelais, c'est un rapport de forces inégal. 8 ballons saisis sur 9 lancers — tu ne perds jamais une touche avec ça. La Rochelle avait une supériorité structurelle en touche que Bordeaux ne pouvait pas corriger en cours de match sans effectuer un changement majeur dans ses alignements. Bru n'a pas eu la lucidité de modifier ses lineouts. En mêlée, Bordeaux a dominé mais n'a pas su transformer cette domination en points.",
+                "Jeu au pied": "Jalibert a été brillant au pied : 5/6 pénalités, territoire parfaitement géré en 1ère période. Mais ce qui m'a frappé, c'est qu'après le 3-1 au score en points, Bordeaux a arrêté de jouer au pied pour attaquer à mains nues. Erreur de lecture. Contre La Rochelle, tu gardes le pied — tu les pousses dans leur camp, tu les fatigues, tu attends leurs erreurs. Vouloir marquer des essais supplémentaires quand tu mènes de 8 en fin de match, c'est de l'ego, pas de la tactique.",
+                "Défense en ligne": "La défense en rideau de La Rochelle en 2e mi-temps a été irréprochable sur les séquences ouvertes. Bordeaux a tenté 6 combinaisons côté ouvert dans les 25 dernières minutes — 6 fois repoussées. La Rochelle avait compris le jeu de Bordeaux mieux que Bordeaux lui-même. Quand ta défense lit toutes tes attaques, tu dois changer de plan. Bordeaux n'a pas su.",
             },
             "home_stats": {"Possession": (54,46), "Mêlées gagnées": (5,3), "Plaquages": (85,94), "Pénalités concédées": (11,9), "Km parcourus": (90,98)},
         },
@@ -547,33 +552,33 @@ ANALYSIS = {
         },
         "bilan": {
             "home_forts": [
-                "Domination en mêlée fermée (5/5), plateforme de jeu fiable",
-                "Jalibert en état de grâce au pied : 83% de succès en pénalités",
-                "Maîtrise du tempo en 1ère période avec 54% de possession",
+                "Mêlée : 5/5, c'est une domination totale. Les piliers bordelais ont étouffé le pack rochelais — cette plateforme de jeu aurait dû être la base d'une victoire clinique",
+                "Jalibert au pied : 5/6 en pénalités, jeu territorial précis qui a mis La Rochelle en difficulté constante dans son propre camp en 1ère période",
+                "Construction du jeu propre et rapide en 1ère mi-temps : Lucu a bien géré le rythme, Bordeaux a dominé sans forcément risquer",
             ],
             "home_faibles": [
-                "Discipline en berne : 11 pénalités concédées, 3 cruciales en fin de match",
-                "Jeu trop prévisible en attaque : La Rochelle lit les schemes de UBB",
-                "Incapacité à conclure dans les 5m adverses (2 mauls arrêtés)",
+                "11 pénalités concédées — c'est 11 cadeaux offerts à La Rochelle. En rugby professionnel, perdre à 3 pénalités près dans les 20 dernières minutes quand tu mènes de 8, c'est une faute professionnelle collective",
+                "Schémas d'attaque trop lisibles en 2e mi-temps : Bordeaux a répété les mêmes combinations sur le côté ouvert 4 fois de suite — La Rochelle a fini par les anticiper les yeux fermés",
+                "2 mauls arrêtés dans les 5 mètres adverses : quand tu es à 5m et que tu n'arrives pas à marquer, tu offres un momentum psychologique immense à l'adversaire",
             ],
             "away_forts": [
-                "Résilience mentale : derrière au score jusqu'à la 73', retournement final",
-                "Alldritt — meilleur joueur du match, performance physique exceptionnelle",
-                "Domination totale en touche : Skelton insurpassable dans les airs",
-                "Essai décisif de Berdeu à la 76' : finition clinique",
+                "Alldritt : 14 plaquages, ballons portés décisifs, présence constante au ruck. Ce type est le meilleur N°8 du Top 14 et il l'a prouvé une fois de plus sous la pression maximale",
+                "Skelton en touche : 8 ballons saisis, 86% de maîtrise. C'est lui qui a permis à La Rochelle de relancer son jeu à chaque possession en 2e mi-temps — un avantage structurel énorme",
+                "Résilience mentale : mener 21-13 contre toi à la 60', à Bordeaux, dans une demi de Champions Cup — et continuer à croire. C'est ça une équipe bâtie par O'Gara",
+                "Essai de Berdeu à la 76' : timing parfait, décision de passer ou courir prise en une fraction de seconde. Les champions marquent quand ça compte",
             ],
             "away_faibles": [
-                "Première période décevante : trop de fautes et de ballons perdus",
-                "Mêlée sous pression face aux piliers de Bordeaux",
+                "1ère période catastrophique : trop de pénalités, trop de ballons perdus en touche défensive — La Rochelle a offert à Bordeaux 18 points qu'ils n'auraient jamais dû concéder",
+                "Mêlée sous pression en 1ère période : les piliers de Bordeaux ont mis Priso et les siens en difficulté, forçant des fautes à des moments clés",
             ],
         },
         "verdict": {
             "home_perf": 6.8, "away_perf": 8.1,
             "intensite": 9.2, "spectacle": 8.7,
-            "home_txt": "Bordeaux s'est montré trop indiscipliné en fin de match. Une avance de 21-13 à la 60' ne devrait pas suffire à perdre ce match. Yannick Bru aurait dû demander un jeu plus conservateur dans les 15 dernières minutes plutôt que continuer à attaquer.",
-            "away_txt": "La Rochelle a montré un mental d'acier. Ronan O'Gara a parfaitement ajusté son équipe après la mi-temps avec un jeu plus rapide et un Skelton utilisé comme pivot de toutes les attaques en touche.",
-            "coach_home": "⚠️ Bru aurait dû passer en mode gestion à 21-13. Continuer à attaquer était risqué et a conduit à 3 pénalités coûteuses. Sortir Woki frais en 2e mi-temps était aussi une erreur.",
-            "coach_away": "✅ O'Gara a su repositionner son équipe. Le changement tactique à la mi-temps (jeu plus direct, utilisation de Skelton en cible) a totalement retourné le match.",
+            "home_txt": "Bordeaux a perdu un match qu'il ne pouvait pas perdre. 21-13 à la 60', à domicile, en Champions Cup — cette défaite va marquer les esprits pour longtemps. Ce que je n'accepte pas, c'est la gestion des 20 dernières minutes. Quand tu mènes de 8 et que l'adversaire n'a pas cassé ta défense, tu n'attaques plus. Tu gardes le ballon. Tu cours les phases. Tu fais fauter l'adversaire. Bordeaux a continué à jouer court et ouvert — et c'est là qu'ils ont concédé les 3 pénalités fatales. C'est un problème de culture et de maturité collective.",
+            "away_txt": "O'Gara a fait un travail exceptionnel à la mi-temps. Changer le point d'attaque, utiliser Skelton comme cible prioritaire, et simplifier le jeu en allant droit devant — c'est l'analyse exacte d'un entraîneur qui sait lire un match. La Rochelle a été mauvaise 40 minutes et excellente 40 minutes. C'est les équipes de champions qui peuvent faire ça — être mauvais et quand même gagner grâce à l'organisation et au mental.",
+            "coach_home": "❌ Bru a commis une erreur de gestion fondamentale. À 21-13, tu passes en mode conservation : maul, jeu au pied rasant, phases lentes, tu épuises le temps. Continuer à attaquer à mains nues dans les 22m adverses à ce moment du match, c'est prendre des risques inutiles. La sortie de Woki trop tôt a aussi affaibli sa conquête en fin de match — c'est inexplicable.",
+            "coach_away": "✅ O'Gara mérite 10/10 pour ses ajustements de mi-temps. Il a identifié que Skelton était le facteur X en touche, que Bordeaux ne pouvait pas stopper le maul, et que la discipline adverse allait craquer sous pression en fin de match. Il avait tout vu. Et son équipe a exécuté.",
         },
     },
 }
@@ -648,6 +653,90 @@ def render_formation(players, color, label):
     return html
 
 # ══════════════════════════════════════════════════════════════════════════════
+# DATA LAYER — toggle between simulated data and real API
+# ══════════════════════════════════════════════════════════════════════════════
+# To plug in a real API, set the env var:  COACHIQ_DATA_SOURCE=api
+# Then implement the _fetch_* methods below with your chosen provider.
+#
+# Suggested providers per sport:
+#   Football : API-Football (api-football.com) — matches, lineups, stats
+#   Basketball: BallDontLie (balldontlie.io) — NBA / nba_api package
+#   Rugby     : World Rugby API or Sportradar Rugby
+#   Analysis  : Gemini API (google-genai) or Anthropic — streaming generation
+#
+DATA_SOURCE = os.environ.get("COACHIQ_DATA_SOURCE", "simulated")  # "simulated" | "api"
+
+
+class DataLayer:
+    """Abstraction layer between the UI and data sources.
+
+    In 'simulated' mode the hardcoded MATCHES / ANALYSIS dicts are used.
+    In 'api' mode, implement the _fetch_* stubs below to call real providers.
+    """
+
+    @staticmethod
+    def get_matches(target_date: str, sport: str, competitions: set) -> dict:
+        if DATA_SOURCE == "api":
+            try:
+                return DataLayer._fetch_matches_from_api(target_date, sport, competitions)
+            except NotImplementedError:
+                st.warning("API réelle non configurée — données simulées utilisées.", icon="⚠️")
+        return {
+            mid: m for mid, m in MATCHES.items()
+            if m["sport"] == sport
+            and m["date"] == target_date
+            and m["competition"] in competitions
+        }
+
+    @staticmethod
+    def get_all_for_sport(sport: str, competitions: set) -> dict:
+        """All matches for a sport across all dates (for navigation hints)."""
+        if DATA_SOURCE == "api":
+            return {}  # not fetched globally in api mode
+        return {
+            mid: m for mid, m in MATCHES.items()
+            if m["sport"] == sport and m["competition"] in competitions
+        }
+
+    @staticmethod
+    def get_analysis(match_id: str) -> dict | None:
+        if DATA_SOURCE == "api":
+            try:
+                return DataLayer._fetch_analysis_from_api(match_id)
+            except NotImplementedError:
+                pass
+        return ANALYSIS.get(match_id)
+
+    @staticmethod
+    def match_dates() -> set:
+        """Set of ISO date strings that have at least one match."""
+        if DATA_SOURCE == "api":
+            return set()  # calendar dots disabled in api mode until implemented
+        return set(m["date"] for m in MATCHES.values())
+
+    # ── Stubs to implement for real API integration ──────────────────────────
+
+    @staticmethod
+    def _fetch_matches_from_api(target_date: str, sport: str, competitions: set) -> dict:
+        """
+        Call your sports data provider here.
+        Return a dict with the same structure as MATCHES above.
+        Expected keys per match: sport, competition, date, time, stadium,
+        status, home {name, short, color, score}, away {name, short, color, score}
+        """
+        raise NotImplementedError
+
+    @staticmethod
+    def _fetch_analysis_from_api(match_id: str) -> dict | None:
+        """
+        Call your AI analysis provider here (Gemini / Anthropic).
+        Return a dict with keys: tactique, joueurs, bilan, verdict
+        matching the ANALYSIS structure above.
+        """
+        raise NotImplementedError
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # SESSION STATE
 # ══════════════════════════════════════════════════════════════════════════════
 if "sport" not in st.session_state: st.session_state.sport = "⚽ Football"
@@ -661,7 +750,8 @@ if "comp_filter" not in st.session_state:
 # ══════════════════════════════════════════════════════════════════════════════
 with st.sidebar:
     st.markdown('<p class="bbn" style="font-size:1.8rem;color:#CAFF33;margin-bottom:0;">COACH<span style="color:#f0f0f0;">IQ</span></p>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size:.75rem;color:#444;margin-top:0;">Analyse tactique · IA · Tous sports</p>', unsafe_allow_html=True)
+    src_label = "🟢 API Réelle" if DATA_SOURCE == "api" else "🟡 Données simulées"
+    st.markdown(f'<p style="font-size:.72rem;color:#444;margin-top:0;">Analyse tactique · IA · Tous sports &nbsp;·&nbsp; {src_label}</p>', unsafe_allow_html=True)
     st.markdown("---")
 
     # ── Mini calendar ──
@@ -680,7 +770,7 @@ with st.sidebar:
             st.session_state.selected_date = d.replace(day=min(st.session_state.selected_date.day, cal_mod.monthrange(d.year, d.month)[1]))
 
     yr, mo = st.session_state.selected_date.year, st.session_state.selected_date.month
-    match_dates = set(m["date"] for m in MATCHES.values())
+    match_dates = DataLayer.match_dates()
     first_wd = cal_mod.monthrange(yr, mo)[0]
     days_in_month = cal_mod.monthrange(yr, mo)[1]
 
@@ -746,18 +836,8 @@ st.markdown('<hr style="border:none;border-top:1px solid #1a1a1a;margin:.75rem 0
 date_str = st.session_state.selected_date.isoformat()
 active_comps = st.session_state.comp_filter or set(COMPETITIONS_BY_SPORT.get(st.session_state.sport, []))
 
-filtered = {
-    mid: m for mid, m in MATCHES.items()
-    if m["sport"] == st.session_state.sport
-    and m["date"] == date_str
-    and m["competition"] in active_comps
-}
-
-all_sport = {
-    mid: m for mid, m in MATCHES.items()
-    if m["sport"] == st.session_state.sport
-    and m["competition"] in active_comps
-}
+filtered = DataLayer.get_matches(date_str, st.session_state.sport, active_comps)
+all_sport = DataLayer.get_all_for_sport(st.session_state.sport, active_comps)
 
 # ── Date headline ──────────────────────────────────────────────────────────────
 date_label = st.session_state.selected_date.strftime("%A %d %B %Y").capitalize()
@@ -770,20 +850,22 @@ st.markdown(
 
 # ── Match cards ────────────────────────────────────────────────────────────────
 if filtered:
-    left_col, right_col = st.columns([1, 1])
     items = list(filtered.items())
-    for i, (mid, m) in enumerate(items):
-        col = left_col if i % 2 == 0 else right_col
-        with col:
-            html = render_match_card(mid, m, st.session_state.selected_match == mid)
-            st.markdown(html, unsafe_allow_html=True)
-            btn_label = "🔍 Analyser" if mid in ANALYSIS else "📅 À venir"
-            if mid in ANALYSIS:
-                if st.button(btn_label, key=f"sel_{mid}"):
-                    st.session_state.selected_match = None if st.session_state.selected_match == mid else mid
-                    st.rerun()
-            else:
-                st.button(btn_label, key=f"sel_{mid}", disabled=True)
+    # Render in pairs so each row shares the same st.columns() → cards stay aligned
+    for i in range(0, len(items), 2):
+        pair = items[i:i+2]
+        cols = st.columns(2)
+        for col, (mid, m) in zip(cols, pair):
+            with col:
+                html = render_match_card(mid, m, st.session_state.selected_match == mid)
+                st.markdown(html, unsafe_allow_html=True)
+                if DataLayer.get_analysis(mid) is not None:
+                    if st.button("🔍 Analyser", key=f"sel_{mid}", use_container_width=True):
+                        st.session_state.selected_match = None if st.session_state.selected_match == mid else mid
+                        st.rerun()
+                else:
+                    st.button("📅 À venir", key=f"sel_{mid}", disabled=True, use_container_width=True)
+        st.markdown('<div style="margin-bottom:.75rem;"></div>', unsafe_allow_html=True)
 else:
     st.markdown(
         f'<div style="background:#111;border:1px solid #1a1a1a;border-radius:12px;padding:2rem;text-align:center;">'
@@ -806,10 +888,12 @@ else:
 # ══════════════════════════════════════════════════════════════════════════════
 # ANALYSIS PANEL
 # ══════════════════════════════════════════════════════════════════════════════
-if st.session_state.selected_match and st.session_state.selected_match in ANALYSIS:
-    mid = st.session_state.selected_match
+_sel = st.session_state.selected_match
+_an = DataLayer.get_analysis(_sel) if _sel else None
+if _sel and _an and _sel in MATCHES:
+    mid = _sel
     m = MATCHES[mid]
-    an = ANALYSIS[mid]
+    an = _an
     h, a = m["home"], m["away"]
 
     st.markdown('<hr style="border:none;border-top:1px solid #1e1e1e;margin:1.5rem 0;">', unsafe_allow_html=True)
