@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import re
+import requests
 from datetime import date, datetime, timedelta
 import calendar as cal_mod
 
@@ -602,6 +603,18 @@ def stat_bar_pct(home_val, away_val):
     if total == 0: return 50, 50
     return int(home_val / total * 100), int(away_val / total * 100)
 
+def _team_icon(t: dict, align: str = "left") -> str:
+    """Return a logo <img> if available, otherwise a colored badge with initials."""
+    logo = t.get("logo", "")
+    if logo:
+        return (
+            f'<img src="{logo}" '
+            f'style="width:44px;height:44px;object-fit:contain;flex-shrink:0;border-radius:6px;" '
+            f'alt="{t["name"]}" onerror="this.style.display=\'none\'">'
+        )
+    return f'<div class="team-badge" style="background:{t["color"]};flex-shrink:0;">{t["short"]}</div>'
+
+
 def render_match_card(mid, m, selected):
     h, a = m["home"], m["away"]
     sc_h = h["score"] if h["score"] is not None else "–"
@@ -609,12 +622,14 @@ def render_match_card(mid, m, selected):
     status_cls = {"Terminé": "badge-done", "Live": "badge-live", "À venir": "badge-soon"}.get(m["status"], "badge-done")
     selected_cls = "selected" if selected else ""
     date_fmt = datetime.strptime(m["date"], "%Y-%m-%d").strftime("%d %b")
+    home_icon = _team_icon(h)
+    away_icon = _team_icon(a)
     return f"""
 <div class="match-card {selected_cls}">
   <div class="comp-label">{m['competition']} &nbsp;·&nbsp; {date_fmt} {m['time']}</div>
   <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
     <div style="display:flex;align-items:center;gap:.75rem;min-width:0;flex:1;">
-      <div class="team-badge" style="background:{h['color']};flex-shrink:0;">{h['short']}</div>
+      {home_icon}
       <div><div class="team-name">{h['name']}</div><div class="team-name-sm">Domicile</div></div>
     </div>
     <div style="display:flex;align-items:center;gap:.3rem;flex-shrink:0;">
@@ -624,7 +639,7 @@ def render_match_card(mid, m, selected):
     </div>
     <div style="display:flex;align-items:center;gap:.75rem;min-width:0;flex:1;justify-content:flex-end;">
       <div style="text-align:right;"><div class="team-name">{a['name']}</div><div class="team-name-sm">Extérieur</div></div>
-      <div class="team-badge" style="background:{a['color']};flex-shrink:0;">{a['short']}</div>
+      {away_icon}
     </div>
   </div>
   <div class="meta-row" style="display:flex;align-items:center;justify-content:space-between;margin-top:.75rem;">
@@ -653,46 +668,184 @@ def render_formation(players, color, label):
     return html
 
 # ══════════════════════════════════════════════════════════════════════════════
-# DATA LAYER — toggle between simulated data and real API
+# THESPORTSDB CONFIG
 # ══════════════════════════════════════════════════════════════════════════════
-# To plug in a real API, set the env var:  COACHIQ_DATA_SOURCE=api
-# Then implement the _fetch_* methods below with your chosen provider.
-#
-# Suggested providers per sport:
-#   Football : API-Football (api-football.com) — matches, lineups, stats
-#   Basketball: BallDontLie (balldontlie.io) — NBA / nba_api package
-#   Rugby     : World Rugby API or Sportradar Rugby
-#   Analysis  : Gemini API (google-genai) or Anthropic — streaming generation
-#
-DATA_SOURCE = os.environ.get("COACHIQ_DATA_SOURCE", "simulated")  # "simulated" | "api"
+TSDB_KEY  = os.environ.get("THESPORTSDB_KEY", "123")
+TSDB_BASE = f"https://www.thesportsdb.com/api/v1/json/{TSDB_KEY}"
+
+# TheSportsDB league ID → our competition name
+TSDB_LEAGUE_MAP: dict[str, str] = {
+    "4334": "Ligue 1",
+    "4328": "Premier League",
+    "4480": "Champions League",
+    "4718": "Super League Suisse",
+    "4387": "NBA",
+    "4406": "Euroleague",
+    "4448": "Betclic Elite",
+    "4440": "Top 14",
+}
+COMP_TO_LID: dict[str, str] = {v: k for k, v in TSDB_LEAGUE_MAP.items()}
+
+# TheSportsDB raw status → our display status
+TSDB_STATUS_MAP: dict[str, str] = {
+    "Match Finished": "Terminé", "FT": "Terminé",
+    "AET": "Terminé", "PEN": "Terminé",
+    "1H": "Live", "2H": "Live", "HT": "Live",
+    "ET": "Live",  "P": "Live", "In Progress": "Live",
+    "NS": "À venir", "": "À venir",
+}
+
+# Primary team colours (fallback when no logo available)
+TEAM_COLORS: dict[str, str] = {
+    "Paris Saint-Germain": "#004174", "PSG": "#004174",
+    "Monaco": "#E4002B", "AS Monaco": "#E4002B",
+    "Marseille": "#2CBFEF", "Olympique de Marseille": "#2CBFEF",
+    "Lyon": "#1A1A1A", "Olympique Lyonnais": "#1A1A1A",
+    "Arsenal": "#EF0107", "Manchester City": "#6CABDD",
+    "Liverpool": "#C8102E", "Chelsea": "#034694",
+    "Tottenham Hotspur": "#132257", "Manchester United": "#DA291C",
+    "Real Madrid": "#FEBE10", "Barcelona": "#A50044",
+    "Bayern Munich": "#DC052D", "Borussia Dortmund": "#FDE100",
+    "Juventus": "#000000", "Inter": "#0033A0",
+    "AC Milan": "#AC0830", "Atletico Madrid": "#CB3524",
+    "FC Basel": "#CC0000", "BSC Young Boys": "#FFD700",
+    "Los Angeles Lakers": "#552583", "Golden State Warriors": "#1D428A",
+    "Boston Celtics": "#007A33", "New York Knicks": "#006BB6",
+    "Miami Heat": "#98002E", "Chicago Bulls": "#CE1141",
+    "LDLC ASVEL": "#003a70", "Monaco Basket": "#B5121B",
+    "Stade Toulousain": "#B60000", "Racing 92": "#0099CC",
+    "Union Bordeaux-Bègles": "#001F5B", "Stade Rochelais": "#FCD000",
+    "Stade Français": "#E1002B", "La Rochelle": "#FCD000",
+}
+
+def _team_color(name: str) -> str:
+    return TEAM_COLORS.get(name, "#2a2a2a")
+
+def _tsdb_status(raw: str) -> str:
+    return TSDB_STATUS_MAP.get(raw or "", "À venir")
+
+def _short(name: str) -> str:
+    """3-char abbreviation: first letter of each word, max 3."""
+    parts = (name or "???").split()
+    if len(parts) == 1:
+        return name[:3].upper()
+    return "".join(p[0] for p in parts[:3]).upper()
+
+
+# ── Cached API helpers ────────────────────────────────────────────────────────
+
+@st.cache_data(ttl=300, show_spinner=False)
+def _tsdb_day(date_str: str) -> list | None:
+    """Fetch all events for a given date from TheSportsDB."""
+    try:
+        r = requests.get(f"{TSDB_BASE}/eventsday.php", params={"d": date_str}, timeout=10)
+        r.raise_for_status()
+        return r.json().get("events") or []
+    except requests.exceptions.ConnectionError:
+        return None
+    except Exception:
+        return None
+
+@st.cache_data(ttl=600, show_spinner=False)
+def _tsdb_league_recent(league_id: str) -> list:
+    """Fetch last 5 + next 5 events for a league (for calendar dots)."""
+    events: list = []
+    for ep in ("eventspastleague.php", "eventsnextleague.php"):
+        try:
+            r = requests.get(f"{TSDB_BASE}/{ep}", params={"id": league_id}, timeout=10)
+            r.raise_for_status()
+            events += r.json().get("events") or []
+        except Exception:
+            pass
+    return events
+
+def _tsdb_to_match(ev: dict, comp: str, sport: str) -> dict:
+    home_score = away_score = None
+    if ev.get("intHomeScore") not in (None, "", "null"):
+        try:
+            home_score = int(ev["intHomeScore"])
+            away_score = int(ev.get("intAwayScore") or 0)
+        except (ValueError, TypeError):
+            pass
+    home_name = ev.get("strHomeTeam") or ""
+    away_name = ev.get("strAwayTeam") or ""
+    return {
+        "sport": sport,
+        "competition": comp,
+        "date": ev.get("strDate", ""),
+        "time": (ev.get("strTime") or "")[:5],
+        "stadium": ev.get("strVenue") or "",
+        "status": _tsdb_status(ev.get("strStatus") or ""),
+        "home": {
+            "name": home_name,
+            "short": _short(home_name),
+            "color": _team_color(home_name),
+            "score": home_score,
+            "logo": ev.get("strHomeTeamBadge") or "",
+        },
+        "away": {
+            "name": away_name,
+            "short": _short(away_name),
+            "color": _team_color(away_name),
+            "score": away_score,
+            "logo": ev.get("strAwayTeamBadge") or "",
+        },
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# DATA LAYER
+# ══════════════════════════════════════════════════════════════════════════════
+# COACHIQ_DATA_SOURCE=api  → TheSportsDB live data
+# COACHIQ_DATA_SOURCE=simulated (default) → hardcoded demo data
+DATA_SOURCE = os.environ.get("COACHIQ_DATA_SOURCE", "api")
 
 
 class DataLayer:
-    """Abstraction layer between the UI and data sources.
-
-    In 'simulated' mode the hardcoded MATCHES / ANALYSIS dicts are used.
-    In 'api' mode, implement the _fetch_* stubs below to call real providers.
-    """
+    """Routes all data requests to TheSportsDB (api) or hardcoded demo (simulated)."""
 
     @staticmethod
     def get_matches(target_date: str, sport: str, competitions: set) -> dict:
         if DATA_SOURCE == "api":
-            try:
-                return DataLayer._fetch_matches_from_api(target_date, sport, competitions)
-            except NotImplementedError:
-                st.warning("API réelle non configurée — données simulées utilisées.", icon="⚠️")
+            events = _tsdb_day(target_date)
+            if events is None:
+                st.error(
+                    "⚠️ **TheSportsDB inaccessible** — vérifiez votre connexion. "
+                    "Les données simulées sont affichées à la place.",
+                    icon="🔌",
+                )
+            else:
+                target_ids = {
+                    COMP_TO_LID[c]: (c, sport)
+                    for c in competitions if c in COMP_TO_LID
+                }
+                result: dict = {}
+                for ev in events:
+                    lid = str(ev.get("idLeague", ""))
+                    if lid in target_ids:
+                        comp, sp = target_ids[lid]
+                        mid = str(ev.get("idEvent", f"{lid}_{ev.get('strEvent','')}"))
+                        result[mid] = _tsdb_to_match(ev, comp, sp)
+                return result
+        # simulated fallback
         return {
             mid: m for mid, m in MATCHES.items()
-            if m["sport"] == sport
-            and m["date"] == target_date
-            and m["competition"] in competitions
+            if m["sport"] == sport and m["date"] == target_date and m["competition"] in competitions
         }
 
     @staticmethod
     def get_all_for_sport(sport: str, competitions: set) -> dict:
-        """All matches for a sport across all dates (for navigation hints)."""
+        """Recent + upcoming matches across all dates (for 'no matches' navigation)."""
         if DATA_SOURCE == "api":
-            return {}  # not fetched globally in api mode
+            result: dict = {}
+            for comp in competitions:
+                if comp not in COMP_TO_LID:
+                    continue
+                for ev in _tsdb_league_recent(COMP_TO_LID[comp]):
+                    mid = str(ev.get("idEvent", ""))
+                    if mid:
+                        result[mid] = _tsdb_to_match(ev, comp, sport)
+            return result
         return {
             mid: m for mid, m in MATCHES.items()
             if m["sport"] == sport and m["competition"] in competitions
@@ -700,40 +853,22 @@ class DataLayer:
 
     @staticmethod
     def get_analysis(match_id: str) -> dict | None:
-        if DATA_SOURCE == "api":
-            try:
-                return DataLayer._fetch_analysis_from_api(match_id)
-            except NotImplementedError:
-                pass
+        # Analysis always comes from the hardcoded expert data for now.
+        # Future: call an AI provider here when match_id is a live TSDB event ID.
         return ANALYSIS.get(match_id)
 
     @staticmethod
     def match_dates() -> set:
-        """Set of ISO date strings that have at least one match."""
+        """ISO date strings that have at least one match (for calendar dots)."""
         if DATA_SOURCE == "api":
-            return set()  # calendar dots disabled in api mode until implemented
+            dates: set = set()
+            for lid in TSDB_LEAGUE_MAP:
+                for ev in _tsdb_league_recent(lid):
+                    d = ev.get("strDate")
+                    if d:
+                        dates.add(d)
+            return dates
         return set(m["date"] for m in MATCHES.values())
-
-    # ── Stubs to implement for real API integration ──────────────────────────
-
-    @staticmethod
-    def _fetch_matches_from_api(target_date: str, sport: str, competitions: set) -> dict:
-        """
-        Call your sports data provider here.
-        Return a dict with the same structure as MATCHES above.
-        Expected keys per match: sport, competition, date, time, stadium,
-        status, home {name, short, color, score}, away {name, short, color, score}
-        """
-        raise NotImplementedError
-
-    @staticmethod
-    def _fetch_analysis_from_api(match_id: str) -> dict | None:
-        """
-        Call your AI analysis provider here (Gemini / Anthropic).
-        Return a dict with keys: tactique, joueurs, bilan, verdict
-        matching the ANALYSIS structure above.
-        """
-        raise NotImplementedError
 
 
 # ══════════════════════════════════════════════════════════════════════════════
