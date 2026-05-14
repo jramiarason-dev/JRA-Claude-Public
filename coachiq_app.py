@@ -5,6 +5,16 @@ import requests
 from datetime import date, datetime, timedelta
 import calendar as cal_mod
 
+def safe_parse_date(date_str, output_format="%d %b"):
+    if not date_str:
+        return ""
+    for fmt in ["%Y-%m-%d", "%d/%m/%Y", "%Y-%m-%dT%H:%M:%S", "%d-%m-%Y", "%Y/%m/%d"]:
+        try:
+            return datetime.strptime(date_str, fmt).strftime(output_format)
+        except ValueError:
+            continue
+    return str(date_str)
+
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="CoachIQ",
@@ -621,7 +631,7 @@ def render_match_card(mid, m, selected):
     sc_a = a["score"] if a["score"] is not None else "–"
     status_cls = {"Terminé": "badge-done", "Live": "badge-live", "À venir": "badge-soon"}.get(m["status"], "badge-done")
     selected_cls = "selected" if selected else ""
-    date_fmt = datetime.strptime(m["date"], "%Y-%m-%d").strftime("%d %b")
+    date_fmt = safe_parse_date(m["date"])
     home_icon = _team_icon(h)
     away_icon = _team_icon(a)
     return f"""
