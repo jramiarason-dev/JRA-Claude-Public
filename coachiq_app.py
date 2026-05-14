@@ -678,11 +678,11 @@ TSDB_LEAGUE_MAP: dict[str, str] = {
     "4334": "Ligue 1",
     "4328": "Premier League",
     "4480": "Champions League",
-    "4718": "Super League Suisse",
+    "4335": "Super League Suisse",
     "4387": "NBA",
-    "4406": "Euroleague",
-    "4448": "Betclic Elite",
-    "4440": "Top 14",
+    "4422": "Euroleague",
+    "4391": "Betclic Elite",
+    "4481": "Top 14",
 }
 COMP_TO_LID: dict[str, str] = {v: k for k, v in TSDB_LEAGUE_MAP.items()}
 
@@ -735,10 +735,14 @@ def _short(name: str) -> str:
 # ── Cached API helpers ────────────────────────────────────────────────────────
 
 @st.cache_data(ttl=300, show_spinner=False)
-def _tsdb_day(date_str: str) -> list | None:
-    """Fetch all events for a given date from TheSportsDB."""
+def _tsdb_day_league(date_str: str, league_id: str) -> list | None:
+    """Fetch events for a given date and league from TheSportsDB."""
     try:
-        r = requests.get(f"{TSDB_BASE}/eventsday.php", params={"d": date_str}, timeout=10)
+        r = requests.get(
+            f"{TSDB_BASE}/eventsday.php",
+            params={"d": date_str, "l": league_id},
+            timeout=10,
+        )
         r.raise_for_status()
         return r.json().get("events") or []
     except requests.exceptions.ConnectionError:
@@ -807,26 +811,41 @@ class DataLayer:
     @staticmethod
     def get_matches(target_date: str, sport: str, competitions: set) -> dict:
         if DATA_SOURCE == "api":
-            events = _tsdb_day(target_date)
-            if events is None:
+            target_ids = {
+                COMP_TO_LID[c]: c
+                for c in competitions if c in COMP_TO_LID
+            }
+            result: dict = {}
+            debug_info: dict = {}
+            connection_error = False
+
+            for lid, comp in target_ids.items():
+                events = _tsdb_day_league(target_date, lid)
+                if events is None:
+                    connection_error = True
+                    debug_info[comp] = "❌ Connexion impossible"
+                else:
+                    debug_info[comp] = f"{len(events)} événement(s)"
+                    for ev in events:
+                        mid = str(ev.get("idEvent", f"{lid}_{ev.get('strEvent','')}"))
+                        result[mid] = _tsdb_to_match(ev, comp, sport)
+
+            with st.expander("🔍 Debug API TheSportsDB", expanded=False):
+                st.caption(f"Date : `{target_date}` · Compétitions filtrées : {list(target_ids.values())}")
+                for comp, info in debug_info.items():
+                    lid = COMP_TO_LID.get(comp, "?")
+                    st.caption(f"**{comp}** (id={lid}) → {info}")
+
+            if connection_error and not result:
                 st.error(
                     "⚠️ **TheSportsDB inaccessible** — vérifiez votre connexion. "
                     "Les données simulées sont affichées à la place.",
                     icon="🔌",
                 )
-            else:
-                target_ids = {
-                    COMP_TO_LID[c]: (c, sport)
-                    for c in competitions if c in COMP_TO_LID
-                }
-                result: dict = {}
-                for ev in events:
-                    lid = str(ev.get("idLeague", ""))
-                    if lid in target_ids:
-                        comp, sp = target_ids[lid]
-                        mid = str(ev.get("idEvent", f"{lid}_{ev.get('strEvent','')}"))
-                        result[mid] = _tsdb_to_match(ev, comp, sp)
-                return result
+            elif not result:
+                st.info("Aucun match trouvé pour cette date dans les compétitions sélectionnées.", icon="📭")
+
+            return result
         # simulated fallback
         return {
             mid: m for mid, m in MATCHES.items()
