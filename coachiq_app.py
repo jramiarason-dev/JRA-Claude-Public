@@ -821,6 +821,13 @@ TSDB_LEAGUE_MAP: dict[str, str] = {
 }
 COMP_TO_LID: dict[str, str] = {v: k for k, v in TSDB_LEAGUE_MAP.items()}
 
+# TheSportsDB strSport values expected per CoachIQ sport tab
+TSDB_SPORT_NAMES: dict[str, set] = {
+    "⚽ Football": {"Soccer"},
+    "🏀 Basket": {"Basketball"},
+    "🏉 Rugby": {"Rugby Union", "Rugby League", "Rugby"},
+}
+
 # TheSportsDB raw status → our display status
 TSDB_STATUS_MAP: dict[str, str] = {
     "Match Finished": "Terminé", "FT": "Terminé",
@@ -970,12 +977,15 @@ class DataLayer:
             result: dict = {}
             connection_error = False
 
+            expected_sports = TSDB_SPORT_NAMES.get(sport, set())
             for lid, comp in target_ids.items():
                 events = _tsdb_day_league(target_date, lid)
                 if events is None:
                     connection_error = True
                 else:
                     for ev in events:
+                        if expected_sports and ev.get("strSport", "") not in expected_sports:
+                            continue
                         mid = str(ev.get("idEvent", f"{lid}_{ev.get('strEvent','')}"))
                         result[mid] = _tsdb_to_match(ev, comp, sport)
 
@@ -997,10 +1007,13 @@ class DataLayer:
         """Recent + upcoming matches across all dates (for 'no matches' navigation)."""
         if DATA_SOURCE == "api":
             result: dict = {}
+            expected_sports = TSDB_SPORT_NAMES.get(sport, set())
             for comp in competitions:
                 if comp not in COMP_TO_LID:
                     continue
                 for ev in _tsdb_league_recent(COMP_TO_LID[comp]):
+                    if expected_sports and ev.get("strSport", "") not in expected_sports:
+                        continue
                     mid = str(ev.get("idEvent", ""))
                     if mid:
                         result[mid] = _tsdb_to_match(ev, comp, sport)
@@ -1171,8 +1184,8 @@ if filtered:
 else:
     st.markdown(
         f'<div style="background:#111;border:1px solid #1a1a1a;border-radius:12px;padding:2rem;text-align:center;">'
-        f'<p style="color:#444;font-size:1rem;">Aucun match {st.session_state.sport} le {date_label}.</p>'
-        f'<p style="color:#333;font-size:.85rem;">Essayez une autre date.</p></div>',
+        f'<p style="color:#555;font-size:1rem;">Aucun match disponible pour cette date et ces compétitions.</p>'
+        f'<p style="color:#333;font-size:.85rem;">Sélectionnez une autre date ou vérifiez vos filtres.</p></div>',
         unsafe_allow_html=True,
     )
 
