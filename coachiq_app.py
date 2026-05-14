@@ -772,7 +772,7 @@ def _tsdb_to_match(ev: dict, comp: str, sport: str) -> dict:
     return {
         "sport": sport,
         "competition": comp,
-        "date": ev.get("strDate", ""),
+        "date": (ev.get("strDate") or "")[:10],
         "time": (ev.get("strTime") or "")[:5],
         "stadium": ev.get("strVenue") or "",
         "status": _tsdb_status(ev.get("strStatus") or ""),
@@ -1010,14 +1010,28 @@ else:
     )
 
     # show other available dates for this sport
-    other_dates = sorted(set(m["date"] for m in all_sport.values()))
+    def _parse_date(d: str):
+        """Safely parse ISO date strings, handling timestamps and edge cases."""
+        if not d:
+            return None
+        d = d[:10]  # keep only YYYY-MM-DD portion
+        try:
+            return datetime.strptime(d, "%Y-%m-%d")
+        except ValueError:
+            return None
+
+    other_dates = sorted(
+        d for d in set(m["date"][:10] for m in all_sport.values() if m.get("date"))
+        if _parse_date(d) is not None
+    )
     if other_dates:
         st.markdown('<p style="color:#555;font-size:.8rem;margin-top:1rem;">Matchs disponibles :</p>', unsafe_allow_html=True)
         for od in other_dates:
-            od_label = datetime.strptime(od, "%Y-%m-%d").strftime("%d %b")
-            od_cnt = sum(1 for m in all_sport.values() if m["date"] == od)
+            od_dt = _parse_date(od)
+            od_label = od_dt.strftime("%d %b")
+            od_cnt = sum(1 for m in all_sport.values() if (m.get("date") or "")[:10] == od)
             if st.button(f"{od_label} — {od_cnt} match{'s' if od_cnt>1 else ''}", key=f"goto_{od}"):
-                st.session_state.selected_date = datetime.strptime(od, "%Y-%m-%d").date()
+                st.session_state.selected_date = od_dt.date()
                 st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
