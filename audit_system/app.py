@@ -1,6 +1,6 @@
 """
-AuditIQ — Interface Streamlit 3 onglets
-Démarrage : streamlit run app.py (depuis audit_system/)
+AuditIQ — Streamlit interface — 3 tabs
+Launch: streamlit run app.py (from audit_system/)
 """
 
 import sys
@@ -8,7 +8,6 @@ import os
 import json
 import tempfile
 from pathlib import Path
-from datetime import date
 
 import streamlit as st
 
@@ -124,7 +123,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ── Clé d'accès (backend uniquement) ─────────────────────────────────────────
+# ── API key (backend only) ────────────────────────────────────────────────────
 try:
     _api_key = st.secrets["ANTHROPIC_API_KEY"]
 except Exception:
@@ -133,7 +132,7 @@ except Exception:
 if _api_key:
     os.environ["ANTHROPIC_API_KEY"] = _api_key
 
-# ── Imports modules ───────────────────────────────────────────────────────────
+# ── Module imports ────────────────────────────────────────────────────────────
 _READY = False
 _ERR = ""
 try:
@@ -158,8 +157,9 @@ Path(OUTPUT_DIR).mkdir(exist_ok=True)
 
 # ── Session state ─────────────────────────────────────────────────────────────
 _SS = [
-    "t1_risks", "t1_regs", "t1_docx", "t1_topic", "t1_entity", "t1_jurs",
-    "t2_background", "t2_plan", "t2_tests", "t2_pptx", "t2_xlsx",
+    "t1_risks", "t1_regs", "t1_docx", "t1_topic", "t1_jurs",
+    "t2_rationale", "t2_background", "t2_org_plan", "t2_tests", "t2_analytics",
+    "t2_pptx", "t2_xlsx",
     "t3_report",
 ]
 for _k in _SS:
@@ -168,7 +168,7 @@ for _k in _SS:
 
 _disabled = not _api_key or not _READY
 
-# ── Fonctions utilitaires ─────────────────────────────────────────────────────
+# ── Utility functions ─────────────────────────────────────────────────────────
 
 def _client():
     return _ant.Anthropic(api_key=_api_key)
@@ -248,19 +248,19 @@ def _agentic_loop(client, sys_prompt, tools, messages, tool_fn):
     return "\n".join(texts), extra
 
 
-# ── Composants d'affichage ────────────────────────────────────────────────────
+# ── Display components ────────────────────────────────────────────────────────
 
 _LEVEL_STYLE = {
-    "Critique": ("#ef4444", "rgba(239,68,68,0.10)", "rgba(239,68,68,0.28)"),
-    "Élevé":    ("#f97316", "rgba(249,115,22,0.10)", "rgba(249,115,22,0.28)"),
-    "Modéré":   ("#eab308", "rgba(234,179,8,0.08)",  "rgba(234,179,8,0.24)"),
+    "Critical": ("#ef4444", "rgba(239,68,68,0.10)", "rgba(239,68,68,0.28)"),
+    "High":     ("#f97316", "rgba(249,115,22,0.10)", "rgba(249,115,22,0.28)"),
+    "Moderate": ("#eab308", "rgba(234,179,8,0.08)",  "rgba(234,179,8,0.24)"),
 }
 
 
 def _risk_table(risks):
     if not risks:
         return
-    for level in ["Critique", "Élevé", "Modéré"]:
+    for level in ["Critical", "High", "Moderate"]:
         bucket = [r for r in risks if r.get("level") == level]
         if not bucket:
             continue
@@ -270,7 +270,7 @@ def _risk_table(risks):
             f'<td style="padding:10px 13px;color:#dde3f5;font-weight:500;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{r.get("name","")}</td>'
             f'<td style="padding:10px 13px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{r.get("description","")}</td>'
             f'<td style="padding:10px 13px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{r.get("impact","")}</td>'
-            f'<td style="padding:10px 13px;color:#8392bb;vertical-align:top;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)">{r.get("probability","")}</td>'
+            f'<td style="padding:10px 13px;color:#8392bb;vertical-align:top;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)">{r.get("likelihood","")}</td>'
             f'<td style="padding:10px 13px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{r.get("control","")}</td>'
             f'</tr>'
             for r in bucket
@@ -282,11 +282,11 @@ def _risk_table(risks):
         </div>
         <table class="data-table" style="margin-bottom:1.2rem">
           <thead><tr style="background:{bg};border-bottom:1px solid {border}">
-            <th style="color:{col};width:18%">Risque</th>
+            <th style="color:{col};width:18%">Risk</th>
             <th style="color:#6b7599;width:26%">Description</th>
             <th style="color:#6b7599;width:20%">Impact</th>
-            <th style="color:#6b7599;width:12%;text-align:center">Probabilité</th>
-            <th style="color:#6b7599;width:24%">Contrôle attendu</th>
+            <th style="color:#6b7599;width:12%;text-align:center">Likelihood</th>
+            <th style="color:#6b7599;width:24%">Expected Control</th>
           </tr></thead>
           <tbody>{rows}</tbody>
         </table>
@@ -308,10 +308,10 @@ def _reg_table(regs):
     st.markdown(f"""
     <table class="data-table">
       <thead><tr style="background:rgba(79,126,248,0.08);border-bottom:1px solid rgba(79,126,248,0.2)">
-        <th style="color:#7fa8fb;width:15%">Juridiction</th>
-        <th style="color:#7fa8fb;width:22%">Texte</th>
-        <th style="color:#7fa8fb;width:16%">Référence</th>
-        <th style="color:#7fa8fb;width:47%">Exigence clé</th>
+        <th style="color:#7fa8fb;width:15%">Jurisdiction</th>
+        <th style="color:#7fa8fb;width:22%">Regulation</th>
+        <th style="color:#7fa8fb;width:16%">Reference</th>
+        <th style="color:#7fa8fb;width:47%">Key Requirement</th>
       </tr></thead>
       <tbody>{rows}</tbody>
     </table>
@@ -327,103 +327,123 @@ def _tests_table(tests):
         f'<td style="padding:9px 10px;color:#dde3f5;font-weight:500;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{t.get("objective","")}</td>'
         f'<td style="padding:9px 10px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{t.get("procedure","")}</td>'
         f'<td style="padding:9px 10px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{t.get("population","")}</td>'
-        f'<td style="padding:9px 10px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{t.get("sample","")}</td>'
-        f'<td style="padding:9px 10px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{t.get("failure_criterion","")}</td>'
+        f'<td style="padding:9px 10px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{t.get("sample_size","")}</td>'
+        f'<td style="padding:9px 10px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{t.get("failure_criteria","")}</td>'
         f'</tr>'
         for t in tests
     )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
       <thead><tr style="background:rgba(79,126,248,0.08);border-bottom:1px solid rgba(79,126,248,0.2)">
-        <th style="color:#7fa8fb;width:4%;text-align:center">N°</th>
-        <th style="color:#7fa8fb;width:16%">Objectif</th>
-        <th style="color:#7fa8fb;width:27%">Procédure</th>
-        <th style="color:#7fa8fb;width:15%">Population</th>
-        <th style="color:#7fa8fb;width:12%">Échantillon</th>
-        <th style="color:#7fa8fb;width:26%">Critère de défaillance</th>
+        <th style="color:#7fa8fb;width:4%;text-align:center">No.</th>
+        <th style="color:#7fa8fb;width:16%">Objective</th>
+        <th style="color:#7fa8fb;width:27%">Procedure</th>
+        <th style="color:#7fa8fb;width:14%">Population</th>
+        <th style="color:#7fa8fb;width:12%">Sample Size</th>
+        <th style="color:#7fa8fb;width:27%">Failure Criteria</th>
       </tr></thead>
       <tbody>{rows}</tbody>
     </table>
     """, unsafe_allow_html=True)
 
 
-# ── En-tête ───────────────────────────────────────────────────────────────────
+def _analytics_table(scenarios):
+    if not scenarios:
+        return
+    rows = "".join(
+        f'<tr>'
+        f'<td style="padding:9px 13px;color:#dde3f5;font-weight:500;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{s.get("scenario","")}</td>'
+        f'<td style="padding:9px 13px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{s.get("objective","")}</td>'
+        f'<td style="padding:9px 13px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{s.get("data_source","")}</td>'
+        f'<td style="padding:9px 13px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{s.get("analysis_type","")}</td>'
+        f'<td style="padding:9px 13px;color:#8392bb;vertical-align:top;border-bottom:1px solid rgba(255,255,255,0.04)">{s.get("anomaly","")}</td>'
+        f'</tr>'
+        for s in scenarios
+    )
+    st.markdown(f"""
+    <table class="data-table" style="font-size:12px">
+      <thead><tr style="background:rgba(79,126,248,0.08);border-bottom:1px solid rgba(79,126,248,0.2)">
+        <th style="color:#7fa8fb;width:18%">Scenario</th>
+        <th style="color:#7fa8fb;width:20%">Objective</th>
+        <th style="color:#7fa8fb;width:18%">Data Source</th>
+        <th style="color:#7fa8fb;width:16%">Analysis Type</th>
+        <th style="color:#7fa8fb;width:28%">Anomaly Detected</th>
+      </tr></thead>
+      <tbody>{rows}</tbody>
+    </table>
+    """, unsafe_allow_html=True)
+
+
+# ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div style="display:flex;align-items:center;gap:14px;padding:1.2rem 0 1.8rem">
   <span style="font-size:28px">🏦</span>
   <div>
     <div style="font-size:20px;font-weight:700;color:#e8edf8;letter-spacing:-0.4px">AuditIQ</div>
     <div style="font-size:11.5px;color:#424d72;text-transform:uppercase;letter-spacing:1px;margin-top:2px">
-      Système d'audit — Banque Privée · Multi-juridictions
+      Internal Audit System · Private Banking · Multi-Jurisdiction
     </div>
   </div>
 </div>
 """, unsafe_allow_html=True)
 
 if not _api_key:
-    st.error("Accès non configuré. Contactez l'administrateur.")
+    st.error("Access not configured. Please contact your administrator.")
     st.stop()
 if not _READY:
-    st.error(f"Modules indisponibles : {_ERR}")
+    st.error(f"Required modules unavailable: {_ERR}")
     st.stop()
 
 # ═════════════════════════════════════════════════════════════════════════════
-# ONGLETS
+# TABS
 # ═════════════════════════════════════════════════════════════════════════════
-tab1, tab2, tab3 = st.tabs(["🔍  Analyse & Risques", "📋  Plan d'audit", "📄  Rapport final"])
+tab1, tab2, tab3 = st.tabs(["🔍  Risk Analysis", "📋  Audit Plan", "📄  Audit Report"])
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# ONGLET 1 — ANALYSE & RISQUES
+# TAB 1 — RISK ANALYSIS
 # ─────────────────────────────────────────────────────────────────────────────
 with tab1:
-    st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 1.8rem">Cartographie des risques et réglementations applicables par juridiction.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 1.8rem">Risk mapping and applicable regulations by jurisdiction.</p>', unsafe_allow_html=True)
 
-    c1, c2 = st.columns([3, 2])
-    with c1:
-        audit_topic = st.text_input("Sujet d'audit", placeholder="Ex : AML/KYC, Risque de crédit, Cybersécurité…", key="t1_topic_in")
-    with c2:
-        entity = st.text_input("Entité auditée", placeholder="Ex : Banque Privée XYZ — Groupe", key="t1_entity_in")
-
-    jurisdictions = st.multiselect("Juridictions", options=JURISDICTIONS, default=JURISDICTIONS[:4], key="t1_jurs_in")
+    audit_topic = st.text_input("Audit Topic", placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity, Operational Risk…", key="t1_topic_in")
+    jurisdictions = st.multiselect("Jurisdictions", options=JURISDICTIONS, default=JURISDICTIONS[:4], key="t1_jurs_in")
 
     st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
 
-    if st.button("Analyser", type="primary", disabled=_disabled or not audit_topic, key="t1_run"):
-        with st.spinner("Analyse en cours…"):
+    if st.button("Analyze", type="primary", disabled=_disabled or not audit_topic, key="t1_run"):
+        with st.spinner("Analyzing…"):
             try:
                 c = _client()
-                jur_str = ", ".join(jurisdictions) if jurisdictions else "toutes juridictions"
-                entity_str = entity or "Swiss private bank and asset manager (HNWI, wealth management, cross-border)"
+                jur_str = ", ".join(jurisdictions) if jurisdictions else "all jurisdictions"
 
                 risks_raw = _call(c, f"""Audit topic: {audit_topic}
-Entity: {entity_str}
 Jurisdictions: {jur_str}
+Institution: Swiss private bank and asset manager (HNWI, wealth management, cross-border)
 
 Identify 10-12 key risks for this audit topic across 3 severity levels.
 Respond ONLY with a valid JSON array — no markdown, no preamble:
-[{{"level":"Critique|Élevé|Modéré","name":"<5-8 words>","description":"<2-3 sentences>","impact":"<1-2 sentences, quantified where possible>","probability":"Élevée|Moyenne|Faible","control":"<1-2 sentences on expected control mechanism>"}}]""",
+[{{"level":"Critical|High|Moderate","name":"<5-8 words>","description":"<2-3 sentences>","impact":"<1-2 sentences, quantified where possible>","likelihood":"High|Medium|Low","control":"<1-2 sentences on expected control mechanism>"}}]""",
                     max_tokens=5000)
 
                 regs_raw = _call(c, f"""Audit topic: {audit_topic}
 Jurisdictions: {jur_str}
-Entity: Swiss private bank / wealth manager (HNWI, gestion de fortune, cross-border)
+Institution: Swiss private bank / wealth manager (HNWI, wealth management, cross-border)
 
-List applicable regulations, specific to private banking.
+List applicable regulations specific to private banking and wealth management.
 Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
-[{{"jurisdiction":"<e.g. CH / FINMA>","text":"<law or regulation name>","reference":"<specific article/circular>","requirement":"<key requirement in 1-2 sentences>"}}]""",
+[{{"jurisdiction":"<e.g. CH / FINMA>","text":"<law or regulation name>","reference":"<specific article/circular number>","requirement":"<key requirement in 1-2 sentences>"}}]""",
                     max_tokens=5000)
 
                 risks = _parse_json(risks_raw)
                 regs  = _parse_json(regs_raw)
 
-                st.session_state.t1_risks  = risks
-                st.session_state.t1_regs   = regs
-                st.session_state.t1_topic  = audit_topic
-                st.session_state.t1_entity = entity
-                st.session_state.t1_jurs   = jurisdictions
+                st.session_state.t1_risks = risks
+                st.session_state.t1_regs  = regs
+                st.session_state.t1_topic = audit_topic
+                st.session_state.t1_jurs  = jurisdictions
 
-                # Export .docx via agent
+                # Generate .docx export via agent
                 def _h1(name, inp):
                     if name == "save_regulatory_framework":
                         try:
@@ -437,7 +457,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     [{"role": "user", "content": [{"type": "text", "text": (
                         f"Generate a comprehensive regulatory framework report.\n\n"
                         f"Audit Topic: {audit_topic}\n"
-                        f"Entity: {entity_str}\n"
+                        f"Institution: Swiss private bank / wealth manager (HNWI, cross-border)\n"
                         f"Jurisdictions: {jur_str}\n\n"
                         f"Cover: identified risks, applicable regulations, cross-jurisdictional analysis. "
                         f"Then call save_regulatory_framework to export."
@@ -447,125 +467,159 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     st.session_state.t1_docx = Path(extra["docx_path"]).read_bytes()
 
             except Exception:
-                st.error("Une erreur est survenue. Veuillez réessayer.")
+                st.error("An error occurred. Please try again.")
 
-    # Résultats
+    # Results
     if st.session_state.t1_risks or st.session_state.t1_regs:
         topic_lbl = st.session_state.t1_topic or "audit"
         st.markdown("---")
 
-        st.markdown('<div class="section-title">Cartographie des risques</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-title">Risk Mapping</div>', unsafe_allow_html=True)
         _risk_table(st.session_state.t1_risks)
 
         st.markdown("---")
-        st.markdown('<div class="section-title">Réglementations applicables</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-title">Applicable Regulations</div>', unsafe_allow_html=True)
         _reg_table(st.session_state.t1_regs)
 
         if st.session_state.t1_docx:
             st.markdown("---")
             st.download_button(
-                "⬇  Télécharger l'analyse complète (.docx)",
+                "⬇  Download Full Analysis (.docx)",
                 data=st.session_state.t1_docx,
-                file_name=f"Analyse_Risques_{topic_lbl.replace(' ', '_')}.docx",
+                file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.docx",
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             )
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# ONGLET 2 — PLAN D'AUDIT
+# TAB 2 — AUDIT PLAN
 # ─────────────────────────────────────────────────────────────────────────────
 with tab2:
-    st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 1.4rem">Planification structurée et programme de travail détaillé.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 1.4rem">Structured audit planning, test programme, and data analytics scenarios.</p>', unsafe_allow_html=True)
 
     if st.session_state.t1_topic:
-        st.markdown(f'<div class="ctx-pill">✓ Sujet : {st.session_state.t1_topic}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="ctx-pill">✓ Topic: {st.session_state.t1_topic}</div>', unsafe_allow_html=True)
 
-    topic2 = st.text_input("Sujet d'audit",
+    topic2 = st.text_input("Audit Topic",
         value=st.session_state.t1_topic or "",
-        placeholder="Ex : AML/KYC, Risque de crédit…", key="t2_topic_in")
+        placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity…", key="t2_topic_in")
 
-    scope = st.text_area("Périmètre de l'audit",
-        placeholder="Ex : Toutes entités du groupe en CH, SG et HK. Focus onboarding et transaction monitoring.",
+    scope = st.text_area("Audit Scope",
+        placeholder="e.g. All group entities in CH, SG and HK. Focus on client onboarding and transaction monitoring.",
         height=80, key="t2_scope_in")
 
-    c1, c2 = st.columns([2, 2])
-    with c1:
-        risk_appetite = st.select_slider("Appétit au risque",
-            options=["Faible", "Modéré", "Élevé"], value="Modéré", key="t2_ra_in")
-    with c2:
-        cd1, cd2 = st.columns(2)
-        with cd1:
-            date_start = st.date_input("Début de mission", value=date.today(), key="t2_d1_in")
-        with cd2:
-            d2_default = date(date.today().year, min(date.today().month + 3, 12), date.today().day)
-            date_end = st.date_input("Fin de mission", value=d2_default, key="t2_d2_in")
+    uploads2 = st.file_uploader(
+        "Supporting documents (optional — PDF, Word, Excel, TXT)",
+        type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t2_upload")
 
     st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
 
-    if st.button("Générer le plan", type="primary", disabled=_disabled or not topic2, key="t2_run"):
-        with st.spinner("Génération en cours…"):
+    if st.button("Generate Plan", type="primary", disabled=_disabled or not topic2, key="t2_run"):
+        with st.spinner("Generating…"):
             try:
                 c = _client()
                 jur_str = ", ".join(st.session_state.t1_jurs or JURISDICTIONS[:3])
-                period_str = f"{date_start.strftime('%d/%m/%Y')} – {date_end.strftime('%d/%m/%Y')}"
                 top_risks_str = ""
                 if st.session_state.t1_risks:
-                    top = [r["name"] for r in st.session_state.t1_risks if r.get("level") == "Critique"][:4]
+                    top = [r["name"] for r in st.session_state.t1_risks if r.get("level") == "Critical"][:4]
                     if top:
-                        top_risks_str = f"\nRisques critiques identifiés : {', '.join(top)}"
+                        top_risks_str = f"\nKey critical risks identified: {', '.join(top)}"
 
-                bg = _call(c, f"""You are a senior audit partner at a Big 4 firm writing for a Swiss private bank client.
+                # Upload supporting documents if provided
+                file_ids2 = []
+                for uf in (uploads2 or []):
+                    fm = _upload_sf(c, uf)
+                    if fm:
+                        file_ids2.append(fm)
+                doc_ctx = f"\n{len(file_ids2)} supporting document(s) provided for context." if file_ids2 else ""
 
-Topic: {topic2}
-Scope: {scope or "All group entities"}
-Jurisdictions: {jur_str}
-Risk appetite: {risk_appetite}{top_risks_str}
+                sys_prompt = "You are a senior audit partner at a Big 4 firm specialising in private banking and wealth management. Write in English, professional tone, concise and precise."
 
-Write in French. Tone: McKinsey/EY — strategic, consultative, structured.
-Produce a professional background section (3-4 paragraphs, NO section headers):
-1. Market context and recent regulatory trends for this topic in private banking
-2. Key challenges for wealth managers / HNWI institutions
-3. Rationale for audit prioritisation at this time
+                # 1. Rationale
+                rationale = _call(c, f"""Audit topic: {topic2}
+Institution: Swiss private bank (HNWI, cross-border: {jur_str})
+Scope: {scope or "All group entities"}{top_risks_str}{doc_ctx}
 
-Plain prose only. Use **bold** for key terms where appropriate.""",
-                    max_tokens=3000)
+Write a concise RATIONALE section explaining why this audit is relevant RIGHT NOW (2-3 paragraphs).
+Cover:
+- Current regulatory triggers (recent circulars, enforcement actions, industry incidents)
+- Sector-level risk evolution and emerging threats specific to private banking
+- Why this topic is a priority for the audit committee at this time
 
-                plan_txt = _call(c, f"""You are a senior internal auditor (IIA-certified).
-Topic: {topic2}
-Entity: Swiss private bank / asset manager (cross-border: CH, SG, HK, Bahamas, EU, UK)
-Scope: {scope or "All entities and processes"}
-Risk appetite: {risk_appetite}
-Period: {period_str}{top_risks_str}
+Plain prose, no headers. Bold key terms where appropriate.""",
+                    system=sys_prompt, max_tokens=2000)
 
-Write a structured audit plan in French (NO JSON). Sections:
-**Objectifs** — 3-4 clear audit objectives
-**Périmètre** — entities, processes, geographic coverage, exclusions
-**Méthodologie** — approach (risk-based), standards (IIA, ISAE), techniques
-**Ressources et calendrier** — team, key milestones
+                # 2. Background Information
+                background = _call(c, f"""Audit topic: {topic2}
+Institution: Swiss private bank (HNWI, cross-border: {jur_str})
+Scope: {scope or "All group entities"}{top_risks_str}{doc_ctx}
 
-Plain prose, professional tone.""",
-                    max_tokens=3000)
+Write a BACKGROUND INFORMATION section (3-4 paragraphs). Tone: McKinsey/EY — strategic, consultative.
+Cover:
+- Market context and current state of this topic in global wealth management
+- Key challenges and pressure points for HNWI-focused institutions
+- Regulatory landscape and cross-border complexity for the specified jurisdictions
 
-                tests_raw = _call(c, f"""You are a senior internal auditor.
-Topic: {topic2}
-Scope: {scope or "All entities"}
-Risk appetite: {risk_appetite}{top_risks_str}
+Plain prose, no headers. Bold key terms where appropriate.""",
+                    system=sys_prompt, max_tokens=2500)
 
-Generate EXACTLY 15 audit test procedures in French.
+                # 3. Audit Plan (org, activities, objectives, methodology)
+                org_plan = _call(c, f"""Audit topic: {topic2}
+Institution: Swiss private bank / asset manager (CH, SG, HK, Bahamas, EU, UK)
+Scope: {scope or "All entities and processes"}{top_risks_str}{doc_ctx}
+
+Write a structured AUDIT PLAN in three sections. Use **bold** for section names inline:
+
+**Organization** — Key business units, governance structure, and stakeholders involved in or responsible for the audited area.
+
+**Activities in Scope** — Business processes, systems, and activities included in the audit perimeter. Be specific.
+
+**Audit Objectives & Methodology** — 3-4 clear objectives. Risk-based approach aligned with IIA standards. Key techniques (interviews, sampling, walkthroughs, data analytics).
+
+Plain prose per section. Professional, precise tone.""",
+                    system=sys_prompt, max_tokens=2500)
+
+                # 4. Test list
+                tests_raw = _call(c, f"""Audit topic: {topic2}
+Institution: Swiss private bank (cross-border: {jur_str})
+Scope: {scope or "All entities"}{top_risks_str}
+
+Generate EXACTLY 15 audit test procedures.
 Respond ONLY with a valid JSON array — no markdown, no preamble:
-[{{"num":1,"objective":"<test objective, 1 sentence>","procedure":"<step-by-step procedure, 2-3 sentences>","population":"<what is being tested>","sample":"<sampling method and size>","failure_criterion":"<what constitutes a control failure>"}}]""",
-                    max_tokens=7000)
-
+[{{"num":1,"objective":"<test objective, 1 sentence>","procedure":"<step-by-step procedure, 2-3 sentences>","population":"<what is being tested>","sample_size":"<method and size, e.g. 25 items, random>","failure_criteria":"<what constitutes a control failure>"}}]""",
+                    system=sys_prompt, max_tokens=7000)
                 tests = _parse_json(tests_raw)
 
-                st.session_state.t2_background = bg
-                st.session_state.t2_plan       = plan_txt
-                st.session_state.t2_tests      = tests
+                # 5. Data Analytics Scenarios
+                analytics_raw = _call(c, f"""Audit topic: {topic2}
+Institution: Swiss private bank (cross-border: {jur_str})
+Scope: {scope or "All entities"}{top_risks_str}
 
-                # Export files via agents
+Generate 6-8 data analytics scenarios applicable to this audit.
+Respond ONLY with a valid JSON array — no markdown, no preamble:
+[{{"scenario":"<scenario name, 4-6 words>","objective":"<what the analysis aims to verify>","data_source":"<system or dataset, e.g. Core banking, CRM, transaction logs>","analysis_type":"<e.g. Trend analysis, Exception report, Clustering, Threshold testing>","anomaly":"<specific anomaly or red flag being detected>"}}]""",
+                    system=sys_prompt, max_tokens=4000)
+                analytics = _parse_json(analytics_raw)
+
+                st.session_state.t2_rationale   = rationale
+                st.session_state.t2_background  = background
+                st.session_state.t2_org_plan    = org_plan
+                st.session_state.t2_tests       = tests
+                st.session_state.t2_analytics   = analytics
+
+                # Generate export files via agents
                 extra_ctx = ""
                 if st.session_state.t1_regs:
                     extra_ctx = f"\n\nREGULATORY CONTEXT:\n{json.dumps(st.session_state.t1_regs, indent=2)[:2000]}"
+
+                agent_content = [{"type": "text", "text": (
+                    f"Create a comprehensive audit plan for: {topic2}\n"
+                    f"Institution: Swiss private bank (CH, SG, HK, Bahamas, EU, UK)\n"
+                    f"Scope: {scope or 'All entities'}"
+                    f"{extra_ctx}\n\n"
+                    f"1. Identify 6-10 audit subjects → call generate_audit_plan_ppt.\n"
+                    f"2. For each subject design 4-8 procedures → call generate_audit_procedures_excel."
+                )}]
 
                 def _h2(name, inp):
                     if name == "generate_audit_plan_ppt":
@@ -583,15 +637,7 @@ Respond ONLY with a valid JSON array — no markdown, no preamble:
                     return "Unknown tool", {}
 
                 _, extra = _agentic_loop(c, _a2.SYSTEM_PROMPT, _a2.TOOLS,
-                    [{"role": "user", "content": [{"type": "text", "text": (
-                        f"Create an audit plan for: {topic2}\n"
-                        f"Risk appetite: {risk_appetite}\n"
-                        f"Scope: {scope or 'All entities'}\n"
-                        f"Period: {period_str}"
-                        f"{extra_ctx}\n\n"
-                        f"1. Identify 6-10 audit subjects → call generate_audit_plan_ppt.\n"
-                        f"2. For each design 4-8 procedures → call generate_audit_procedures_excel."
-                    )}]}], _h2)
+                    [{"role": "user", "content": agent_content}], _h2)
 
                 if "ppt_path" in extra and Path(extra["ppt_path"]).exists():
                     st.session_state.t2_pptx = Path(extra["ppt_path"]).read_bytes()
@@ -599,24 +645,44 @@ Respond ONLY with a valid JSON array — no markdown, no preamble:
                     st.session_state.t2_xlsx = Path(extra["excel_path"]).read_bytes()
 
             except Exception:
-                st.error("Une erreur est survenue. Veuillez réessayer.")
+                st.error("An error occurred. Please try again.")
 
-    # Résultats
-    if st.session_state.t2_background:
+    # Results
+    if st.session_state.t2_rationale:
         topic2_lbl = st.session_state.t1_topic or topic2 or "audit"
         st.markdown("---")
 
-        st.markdown('<div class="section-title">Contexte et enjeux</div>', unsafe_allow_html=True)
+        # 1. Rationale
+        st.markdown('<div class="section-title">1. Rationale</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="output-box">{st.session_state.t2_rationale}</div>', unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # 2. Background Information
+        st.markdown('<div class="section-title">2. Background Information</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="output-box">{st.session_state.t2_background}</div>', unsafe_allow_html=True)
 
         st.markdown("---")
-        st.markdown('<div class="section-title">Plan d\'audit</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="output-box">{st.session_state.t2_plan}</div>', unsafe_allow_html=True)
+
+        # 3. Audit Plan
+        st.markdown('<div class="section-title">3. Audit Plan</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="output-box">{st.session_state.t2_org_plan}</div>', unsafe_allow_html=True)
 
         st.markdown("---")
-        st.markdown('<div class="section-title">Programme de tests — ' + str(len(st.session_state.t2_tests or [])) + ' procédures</div>', unsafe_allow_html=True)
+
+        # 4. Test List
+        n_tests = len(st.session_state.t2_tests or [])
+        st.markdown(f'<div class="section-title">4. Test List — {n_tests} procedures</div>', unsafe_allow_html=True)
         _tests_table(st.session_state.t2_tests)
 
+        st.markdown("---")
+
+        # 5. Data Analytics Scenarios
+        n_analytics = len(st.session_state.t2_analytics or [])
+        st.markdown(f'<div class="section-title">5. Data Analytics Scenarios — {n_analytics} scenarios</div>', unsafe_allow_html=True)
+        _analytics_table(st.session_state.t2_analytics)
+
+        # Exports
         pptx = st.session_state.t2_pptx
         xlsx = st.session_state.t2_xlsx
         if pptx or xlsx:
@@ -624,93 +690,81 @@ Respond ONLY with a valid JSON array — no markdown, no preamble:
             ca, cb = st.columns(2)
             if pptx:
                 ca.download_button(
-                    "⬇  Plan d'audit (.pptx)", data=pptx,
-                    file_name=f"Plan_Audit_{topic2_lbl.replace(' ', '_')}.pptx",
+                    "⬇  Audit Plan (.pptx)", data=pptx,
+                    file_name=f"Audit_Plan_{topic2_lbl.replace(' ', '_')}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
                 )
             if xlsx:
                 cb.download_button(
-                    "⬇  Programme de tests (.xlsx)", data=xlsx,
-                    file_name=f"Tests_Audit_{topic2_lbl.replace(' ', '_')}.xlsx",
+                    "⬇  Test Programme (.xlsx)", data=xlsx,
+                    file_name=f"Audit_Tests_{topic2_lbl.replace(' ', '_')}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 )
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# ONGLET 3 — RAPPORT FINAL
+# TAB 3 — AUDIT REPORT
 # ─────────────────────────────────────────────────────────────────────────────
 with tab3:
-    st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 1.4rem">Rédaction du rapport formel conforme aux standards IIA.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 1.4rem">Formal IIA-standard audit report in English.</p>', unsafe_allow_html=True)
 
     ctx_parts = []
     if st.session_state.t1_topic:
-        ctx_parts.append(f"✓ Sujet : {st.session_state.t1_topic}")
-    if st.session_state.t2_plan:
-        ctx_parts.append("✓ Plan d'audit disponible")
+        ctx_parts.append(f"✓ Topic: {st.session_state.t1_topic}")
+    if st.session_state.t2_org_plan:
+        ctx_parts.append("✓ Audit plan available")
     if ctx_parts:
         st.markdown(f'<div class="ctx-pill">{" &nbsp;·&nbsp; ".join(ctx_parts)}</div>', unsafe_allow_html=True)
 
-    default_name = f"Audit {st.session_state.t1_topic} — 2025" if st.session_state.t1_topic else ""
-    audit_name = st.text_input("Intitulé du rapport",
+    default_name = f"Internal Audit — {st.session_state.t1_topic} — 2025" if st.session_state.t1_topic else ""
+    audit_name = st.text_input("Report Title",
         value=default_name,
-        placeholder="Ex : Audit AML/KYC — Groupe Banque Privée — 2025", key="t3_name_in")
+        placeholder="e.g. Internal Audit — AML/KYC — Private Banking Group — 2025", key="t3_name_in")
 
-    observations = st.text_area("Issues et observations",
-        placeholder="Ex :\n1. Surveillance des virements < CHF 10'000 non couverte.\n2. Dossiers KYC incomplets pour 12/50 clients testés.\n3. Absence de procédure PEP dans l'entité de Singapour.",
+    observations = st.text_area("Issues Log",
+        placeholder="e.g.\n1. Transaction monitoring does not cover transfers below CHF 10,000.\n2. Incomplete KYC files for 12 out of 50 clients tested.\n3. No PEP screening procedure in place at the Singapore entity.",
         height=200, key="t3_obs_in")
 
-    c1, c2 = st.columns([2, 1])
-    with c1:
-        opinion = st.select_slider("Opinion d'audit",
-            options=["Satisfaisant", "Partiellement satisfaisant", "Insatisfaisant"],
-            value="Partiellement satisfaisant", key="t3_op_in")
-    with c2:
-        lang = st.radio("Langue du rapport", options=["Français", "English"],
-            horizontal=True, key="t3_lang_in")
-
-    uploads = st.file_uploader("Documents de travail (optionnel)",
+    uploads3 = st.file_uploader("Working papers (optional — PDF, Word, Excel, TXT)",
         type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t3_upload")
 
     st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
 
-    if st.button("Générer le rapport", type="primary",
+    if st.button("Generate Report", type="primary",
                  disabled=_disabled or not audit_name or not observations, key="t3_run"):
-        with st.spinner("Rédaction en cours…"):
+        with st.spinner("Drafting report…"):
             try:
                 c = _client()
-                file_ids = []
-                for uf in (uploads or []):
+                file_ids3 = []
+                for uf in (uploads3 or []):
                     fm = _upload_sf(c, uf)
                     if fm:
-                        file_ids.append(fm)
+                        file_ids3.append(fm)
 
-                lang_str = "French" if lang == "Français" else "English"
                 reg_ctx = (f"\n\nApplicable regulations:\n{json.dumps(st.session_state.t1_regs, indent=2)[:1500]}"
                            if st.session_state.t1_regs else "")
-                plan_ctx = (f"\n\nAudit plan summary:\n{st.session_state.t2_plan[:900]}"
-                            if st.session_state.t2_plan else "")
+                plan_ctx = (f"\n\nAudit plan:\n{st.session_state.t2_org_plan[:900]}"
+                            if st.session_state.t2_org_plan else "")
 
                 user_content = []
-                if file_ids:
-                    user_content.extend(build_file_content_blocks(file_ids))
-                    user_content.append({"type": "text", "text": f"{len(file_ids)} supporting document(s) attached."})
+                if file_ids3:
+                    user_content.extend(build_file_content_blocks(file_ids3))
+                    user_content.append({"type": "text", "text": f"{len(file_ids3)} working paper(s) attached."})
 
                 user_content.append({"type": "text", "text": (
-                    f"Draft a professional IIA-standard internal audit report.\n\n"
+                    f"Draft a professional IIA-standard internal audit report in English.\n\n"
                     f"Report title: {audit_name}\n"
-                    f"Language: {lang_str}\n"
-                    f"Audit opinion: {opinion}\n"
                     f"Institution: Swiss private bank (HNWI, cross-border: CH, SG, HK, Bahamas, EU, UK)"
                     f"{reg_ctx}{plan_ctx}\n\n"
-                    f"Observations and findings:\n{observations}\n\n"
+                    f"Issues log:\n{observations}\n\n"
                     f"Structure the report:\n"
-                    f"1. Executive summary (opinion, key findings, recommended actions)\n"
-                    f"2. Background and context (institution, regulatory environment)\n"
-                    f"3. Scope and methodology\n"
+                    f"1. Executive Summary — overall opinion, key findings, priority actions\n"
+                    f"2. Background & Context — institution, regulatory environment, audit rationale\n"
+                    f"3. Scope & Methodology — perimeter, approach, standards applied\n"
                     f"4. Findings — sorted by severity (Critical first), each with: "
-                    f"risk rating, impact, root cause, recommendation, owner, target date\n"
-                    f"5. Action plan (table)\n"
-                    f"6. Motivated final opinion\n\n"
+                    f"risk rating, impact assessment, root cause, recommendation, responsible owner, target date\n"
+                    f"5. Action Plan — summary table\n"
+                    f"6. Audit Opinion — motivated conclusion\n\n"
                     f"Then call generate_audit_report to export."
                 )})
 
@@ -733,40 +787,40 @@ with tab3:
                 st.session_state.t3_report = result
 
             except Exception:
-                st.error("Une erreur est survenue. Veuillez réessayer.")
+                st.error("An error occurred. Please try again.")
 
-    # Résultats
+    # Results
     if st.session_state.t3_report:
         res  = st.session_state.t3_report
-        name = res.get("name", "rapport")
+        name = res.get("name", "report")
         st.markdown("---")
 
-        st.markdown('<div class="section-title">Rapport d\'audit</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-title">Audit Report</div>', unsafe_allow_html=True)
         text = res.get("text", "")
         if text:
             st.markdown(f'<div class="output-box">{text}</div>', unsafe_allow_html=True)
         else:
-            st.info("Le contenu du rapport est disponible dans l'export.")
+            st.info("Report content is available in the export file.")
 
         docx = res.get("docx_bytes")
         if docx:
             st.markdown("---")
             st.download_button(
-                "⬇  Télécharger le rapport (.docx)",
+                "⬇  Download Report (.docx)",
                 data=docx,
-                file_name=f"Rapport_Audit_{name.replace(' ', '_')}.docx",
+                file_name=f"Audit_Report_{name.replace(' ', '_')}.docx",
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             )
 
-        # Révision ciblée
+        # Targeted revision
         st.markdown("---")
-        st.markdown('<div class="section-title">Révision ciblée</div>', unsafe_allow_html=True)
-        followup = st.text_area("Instructions", label_visibility="collapsed", height=80,
-            placeholder="Ex : Reformulez la recommandation 3 de manière plus ferme. Ajoutez un délai de 30 jours pour le finding KYC.",
+        st.markdown('<div class="section-title">Targeted Revision</div>', unsafe_allow_html=True)
+        followup = st.text_area("Revision instructions", label_visibility="collapsed", height=80,
+            placeholder="e.g. Strengthen the wording of recommendation 3. Add a 30-day deadline for the KYC finding.",
             key="t3_rev_in")
 
-        if st.button("Réviser", disabled=not followup or _disabled, key="t3_rev_btn"):
-            with st.spinner("Révision en cours…"):
+        if st.button("Revise", disabled=not followup or _disabled, key="t3_rev_btn"):
+            with st.spinner("Applying revisions…"):
                 try:
                     c = _client()
                     rev_content = [{"type": "text", "text": (
@@ -794,11 +848,11 @@ with tab3:
                     st.rerun()
 
                 except Exception:
-                    st.error("Une erreur est survenue. Veuillez réessayer.")
+                    st.error("An error occurred. Please try again.")
 
-# ── Pied de page ──────────────────────────────────────────────────────────────
+# ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("---")
 st.markdown(
-    '<p class="footer">AuditIQ · Audit multi-juridictions · Banque Privée · CH · SG · HK · Bahamas · EU · UK</p>',
+    '<p class="footer">AuditIQ · Internal Audit System · Private Banking · CH · SG · HK · Bahamas · EU · UK</p>',
     unsafe_allow_html=True,
 )
