@@ -2821,3 +2821,1742 @@ CVE_BANKING = [
         ),
     },
 ]
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 5. PUBLIC_AUDIT_RECOMMENDATIONS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+PUBLIC_AUDIT_RECOMMENDATIONS = [
+
+    # ── AML / KYC ──────────────────────────────────────────────────────────────
+    {
+        "source": "FATF",
+        "year": "2023",
+        "theme": "AML_KYC",
+        "recommendation": (
+            "Private banks must apply enhanced due diligence for all HNWI clients and implement "
+            "proportionate verification — not merely declaration — of source of wealth. Documentation "
+            "must be substantiated by independent evidence, not solely client-provided statements."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Directly applicable: FATF's 2023 guidance specifically targets private banking. "
+            "Swiss, Singapore, and Hong Kong private banks are primary implementation targets."
+        ),
+    },
+    {
+        "source": "FATF",
+        "year": "2023",
+        "theme": "AML_KYC",
+        "recommendation": (
+            "Complex ownership structures used by HNWI clients — trusts, foundations, holding companies, "
+            "and SPVs across multiple jurisdictions — must be analysed to identify the ultimate beneficial "
+            "owner. Look-through must be applied regardless of the number of intermediary layers."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Fundamental requirement for private banks serving international HNWI clients. "
+            "Manual look-through for multi-layer structures is frequently cited as inadequate by FATF."
+        ),
+    },
+    {
+        "source": "FATF",
+        "year": "2022",
+        "theme": "AML_KYC",
+        "recommendation": (
+            "Transaction monitoring systems must be regularly tuned and back-tested against known "
+            "typologies. Alert thresholds must be calibrated to the risk profile of individual clients, "
+            "not applied as a single universal threshold across the entire customer base."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Critical for private banks where HNWI transaction patterns differ significantly from retail. "
+            "Universal thresholds create both excessive false positives and genuine detection gaps."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "AML_KYC",
+        "recommendation": (
+            "Swiss banks must maintain a complete and current register of beneficial owners. "
+            "FINMA enforcement reviews in 2023 found that Form A documentation was incomplete or "
+            "outdated for a significant proportion of client relationships at several private banks."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Enforcement finding directly applicable to Swiss private banks. Form A compliance "
+            "is a FINMA supervisory priority and key indicator in the annual audit."
+        ),
+    },
+    {
+        "source": "MAS",
+        "year": "2022",
+        "theme": "AML_KYC",
+        "recommendation": (
+            "Financial institutions should not rely exclusively on client declarations for PEP "
+            "identification. Automated screening tools must be supplemented by RM-level intelligence "
+            "and regular database updates. Domestic PEPs present a particular identification challenge "
+            "requiring explicit procedural controls."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "MAS thematic inspection findings (2022) across private banks in Singapore. "
+            "Domestic PEP identification failures were the most frequently cited AML weakness."
+        ),
+    },
+    {
+        "source": "FCA",
+        "year": "2022",
+        "theme": "AML_KYC",
+        "recommendation": (
+            "Banks must implement a risk-based approach to periodic review that ensures high-risk "
+            "clients are reviewed at least annually. Reviews must be substantive — confirming continued "
+            "KYC adequacy and re-assessing risk ratings — not merely administrative date-stamps."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FCA's Financial Crime Guide update (2022) specifically addressed private banking periodic "
+            "review backlogs identified during supervisory visits."
+        ),
+    },
+    {
+        "source": "EBA",
+        "year": "2022",
+        "theme": "AML_KYC",
+        "recommendation": (
+            "AML/CFT compliance functions must be adequately staffed and resourced relative to the "
+            "institution's risk profile. The ratio of compliance officers to total client-facing staff "
+            "should be reviewed annually against the volume and complexity of relationships managed."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "EBA opinion on ML/TF risks highlighted systematic under-resourcing of AML compliance "
+            "at mid-sized private banks as a key vulnerability."
+        ),
+    },
+    {
+        "source": "Basel Committee",
+        "year": "2021",
+        "theme": "AML_KYC",
+        "recommendation": (
+            "Correspondent banking relationships require a graduated due diligence approach. "
+            "Shell bank relationships must be prohibited in policy and actively screened for "
+            "in the onboarding and review processes for all respondent institutions."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "Relevant for Swiss and Bahamas private banks maintaining correspondent relationships "
+            "to facilitate cross-border HNWI transactions in lower-regulation jurisdictions."
+        ),
+    },
+
+    # ── CYBER RISK ─────────────────────────────────────────────────────────────
+    {
+        "source": "EBA",
+        "year": "2023",
+        "theme": "CYBER_RISK",
+        "recommendation": (
+            "Financial institutions must implement DORA-aligned ICT risk management frameworks by "
+            "January 2025. Boards and senior management must be able to demonstrate accountability "
+            "for ICT risk and understanding of digital resilience obligations."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Mandatory for all EU financial entities. Swiss and UK private banks with EU operations "
+            "face equivalent requirements. Board training on DORA obligations is specifically required."
+        ),
+    },
+    {
+        "source": "MAS",
+        "year": "2023",
+        "theme": "CYBER_RISK",
+        "recommendation": (
+            "Cyber incident reporting capabilities must be capable of detecting and reporting "
+            "significant incidents within 1 hour of detection. Financial institutions should conduct "
+            "annual end-to-end testing of their cyber incident response and reporting pipelines "
+            "to validate the 1-hour MAS reporting requirement."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "MAS TRM 2021 guidance. Banks relying on MSSPs for SOC services must contractually "
+            "require 1-hour notification to enable compliance with MAS reporting timelines."
+        ),
+    },
+    {
+        "source": "HKMA",
+        "year": "2023",
+        "theme": "CYBER_RISK",
+        "recommendation": (
+            "Authorised institutions should adopt a zero-trust architecture approach for network "
+            "access, moving away from perimeter-based security models. All access requests must "
+            "be authenticated, authorised, and continuously validated regardless of network location."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "HKMA CRAF 2021 recommendation. Remote working patterns post-COVID make perimeter "
+            "security insufficient for private banks with distributed RM and client service models."
+        ),
+    },
+    {
+        "source": "FSB",
+        "year": "2023",
+        "theme": "CYBER_RISK",
+        "recommendation": (
+            "Financial institutions should participate in sector-wide cyber threat intelligence "
+            "sharing frameworks. Real-time threat intelligence reduces mean time to detect and "
+            "enables pre-emptive defensive action for threats already observed in the sector."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "FS-ISAC membership and participation in HKMA CISP and MAS information sharing "
+            "platforms provides private banks with early warning of sector-specific threats."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "CYBER_RISK",
+        "recommendation": (
+            "Banks must maintain a tested capability to restore critical systems from immutable "
+            "backups within their defined RTO. Backup restoration must be tested end-to-end "
+            "at least annually. Backups must be immutable and logically isolated from production."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FINMA risk monitor 2023 identified untested BCPs and non-isolated backups as "
+            "significant vulnerabilities at Swiss financial institutions following ransomware incidents."
+        ),
+    },
+    {
+        "source": "FCA",
+        "year": "2023",
+        "theme": "CYBER_RISK",
+        "recommendation": (
+            "Firms must assess and test their operational resilience against severe but plausible "
+            "cyber attack scenarios, not merely technical failure. Impact tolerance testing must "
+            "include scenarios where recovery systems themselves are compromised."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FCA PS21/3 compliance (March 2025 deadline). Private banks must demonstrate they "
+            "remain within impact tolerances even in scenarios where cyber attacks target recovery "
+            "infrastructure."
+        ),
+    },
+    {
+        "source": "Basel Committee",
+        "year": "2021",
+        "theme": "CYBER_RISK",
+        "recommendation": (
+            "Third-party technology providers must be subject to cyber risk assessment throughout "
+            "the vendor lifecycle — not only at onboarding. Banks must conduct ongoing monitoring "
+            "of vendor security posture and require immediate notification of vendor-side incidents."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Highly relevant for private banks with extensive fintech and cloud vendor ecosystems. "
+            "SolarWinds and MOVEit incidents demonstrated that single vendor breaches can cascade "
+            "across hundreds of financial institutions."
+        ),
+    },
+    {
+        "source": "IIA",
+        "year": "2022",
+        "theme": "CYBER_RISK",
+        "recommendation": (
+            "Internal audit should conduct annual assessments of the cyber risk management framework, "
+            "including validation of SIEM coverage, privileged access controls, and patch management "
+            "compliance. Technical cyber audit capability — including certified staff (CISA, CISSP) — "
+            "must be available within or accessible to the internal audit function."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "IIA Global Technology Audit Guide. Many private banks rely on external co-sourcing "
+            "for cyber audit capability — the independence and depth of such arrangements must "
+            "be assessed."
+        ),
+    },
+
+    # ── CREDIT RISK ────────────────────────────────────────────────────────────
+    {
+        "source": "Basel Committee",
+        "year": "2023",
+        "theme": "CREDIT_RISK",
+        "recommendation": (
+            "Banks using internal ratings-based approaches must validate their PD, LGD, and EAD "
+            "models at least annually. Model performance during the 2022-2023 stress period must "
+            "be reviewed; models that underperformed must be recalibrated before continued use."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Banks using IRBA for Lombard lending or real estate must validate models post-rate "
+            "shock. CRR III output floor (2025) requires banks to compare internal model RWAs "
+            "against standardised approach RWAs."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "CREDIT_RISK",
+        "recommendation": (
+            "Swiss banks must review Lombard lending exposures for concentration risk following "
+            "the 2022 market correction. Stress test scenarios must be updated to reflect rapid "
+            "rate rises and equity market corrections of 30-40% in key markets."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Explicit FINMA 2023 supervisory priority. Private banks with large Lombard books "
+            "were specifically reviewed for concentration risk and margin call process adequacy."
+        ),
+    },
+    {
+        "source": "EBA",
+        "year": "2023",
+        "theme": "CREDIT_RISK",
+        "recommendation": (
+            "IFRS 9 staging criteria and provisioning models must reflect forward-looking information "
+            "current as of the reporting date. Banks must not apply 2021 macroeconomic scenarios in "
+            "2023 provisions; rapid rate rises and commercial real estate corrections must be "
+            "incorporated into ECL calculations."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "EBA supervisory convergence report 2023. Private banks with real estate and CRE "
+            "exposures face the largest provisioning adjustments given CRE market corrections "
+            "in CH, UK, and SG."
+        ),
+    },
+    {
+        "source": "IMF",
+        "year": "2023",
+        "theme": "CREDIT_RISK",
+        "recommendation": (
+            "Financial sector assessments have identified credit concentration risk in private "
+            "banking as a systemic vulnerability. Banks should maintain concentration limits "
+            "at the single-name, sector, and geographic levels and test these limits under "
+            "correlated stress scenarios."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "IMF FSAP recommendations for Switzerland (2023) highlighted Lombard lending "
+            "concentration as a key private banking risk requiring enhanced supervisory attention."
+        ),
+    },
+    {
+        "source": "FCA",
+        "year": "2022",
+        "theme": "CREDIT_RISK",
+        "recommendation": (
+            "Firms offering Lombard and securities-backed lending must ensure that margin call "
+            "processes are clearly documented, tested under stress, and capable of execution "
+            "within defined timeframes. Clients must be informed of margin call procedures "
+            "at inception of the facility."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "FCA portfolio letter to wealth managers (2022). UK private banks must demonstrate "
+            "that margin call processes have been tested under the 2022 market stress scenario."
+        ),
+    },
+
+    # ── OPERATIONAL RISK ───────────────────────────────────────────────────────
+    {
+        "source": "EBA",
+        "year": "2023",
+        "theme": "OPERATIONAL_RISK",
+        "recommendation": (
+            "Operational risk frameworks must be updated to reflect DORA requirements. The ICT "
+            "risk management framework required by DORA Article 6 must be integrated into the "
+            "broader operational risk governance structure, not maintained as a separate parallel "
+            "framework."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Mandatory DORA compliance by January 2025. Private banks with EU operations must "
+            "integrate ICT risk management into their existing operational risk governance."
+        ),
+    },
+    {
+        "source": "Basel Committee",
+        "year": "2021",
+        "theme": "OPERATIONAL_RISK",
+        "recommendation": (
+            "Banks must maintain a comprehensive operational loss data collection process. "
+            "Internal loss data, external loss data from industry databases, and scenario analysis "
+            "must be combined to produce a complete picture of operational risk exposure. "
+            "Near-miss capture is essential and must be incentivised culturally."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "BCBS operational risk principles directly applicable. Near-miss culture in private "
+            "banking is particularly weak given the relationship-driven, high-discretion environment."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2022",
+        "theme": "OPERATIONAL_RISK",
+        "recommendation": (
+            "Banks must conduct a formal business impact analysis annually to identify critical "
+            "processes, maximum tolerable downtime, and key person dependencies. BIA findings "
+            "must be reflected in tested BCP and, where key persons are identified, in documented "
+            "succession and knowledge transfer plans."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FINMA circular on operational risk management. Swiss private banks with high "
+            "concentration of AUM in a small number of senior RMs face acute key person risk."
+        ),
+    },
+    {
+        "source": "MAS",
+        "year": "2022",
+        "theme": "OPERATIONAL_RISK",
+        "recommendation": (
+            "Outsourcing oversight must include regular on-site or equivalent reviews of critical "
+            "service providers. Monitoring of contractual SLAs alone is insufficient; independent "
+            "assessment of the vendor's risk management and operational quality must be conducted."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "MAS Notice on Outsourcing (2022 update). Singapore private banks must demonstrate "
+            "active oversight of custodian, fund administrator, and IT service provider arrangements."
+        ),
+    },
+    {
+        "source": "IIA",
+        "year": "2023",
+        "theme": "OPERATIONAL_RISK",
+        "recommendation": (
+            "Internal audit must assess the quality and independence of the RCSA process, not "
+            "merely the outputs. Where RCSAs are business-led and unvalidated, internal audit "
+            "must challenge the risk ratings through independent testing and external benchmarking."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "IIA Practice Guide on RCSA auditing. Particularly relevant for private banks where "
+            "operational risk function is small and RCSA may be driven by business lines."
+        ),
+    },
+    {
+        "source": "FSB",
+        "year": "2022",
+        "theme": "OPERATIONAL_RISK",
+        "recommendation": (
+            "Financial institutions must develop and maintain exit strategies for all critical "
+            "outsourcing arrangements. Exit strategies must be tested through dry-run exercises "
+            "to validate feasibility; theoretical exit plans that have never been assessed for "
+            "practical executability are insufficient."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FSB discussion paper on outsourcing and third-party risk (2022). Exit strategy "
+            "for core banking platform is the most challenging requirement for private banks."
+        ),
+    },
+
+    # ── DATA PRIVACY ───────────────────────────────────────────────────────────
+    {
+        "source": "EDPB",
+        "year": "2023",
+        "theme": "DATA_PRIVACY",
+        "recommendation": (
+            "Controllers must conduct transfer impact assessments for all data exports to third "
+            "countries, even where SCCs are in place. The assessment must evaluate local law in "
+            "the destination country and whether it impairs the effectiveness of the SCC safeguards."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Mandatory post-Schrems II. Private banks transferring client data to Singapore, "
+            "Hong Kong, and US service providers must maintain documented transfer impact assessments."
+        ),
+    },
+    {
+        "source": "ICO",
+        "year": "2023",
+        "theme": "DATA_PRIVACY",
+        "recommendation": (
+            "Data Protection Impact Assessments must be conducted before implementing any new "
+            "processing activity that is likely to result in high risk, including automated client "
+            "profiling, large-scale processing of financial data, and new customer analytics tools."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "ICO guidance on DPIA requirements. Private banks adopting AI/ML for client "
+            "investment profiling or fraud detection must complete DPIAs before deployment."
+        ),
+    },
+    {
+        "source": "FDPIC",
+        "year": "2023",
+        "theme": "DATA_PRIVACY",
+        "recommendation": (
+            "Under the revised nDSG effective September 2023, Swiss organisations must update "
+            "their privacy notices, review processing activities for compliance, and implement "
+            "DPIA processes. Existing consent mechanisms must be reviewed for alignment with "
+            "the heightened nDSG requirements."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Mandatory for all Swiss private banks from September 2023. FDPIC has indicated "
+            "that financial institutions processing HNWI data are a priority supervision category."
+        ),
+    },
+    {
+        "source": "EBA",
+        "year": "2022",
+        "theme": "DATA_PRIVACY",
+        "recommendation": (
+            "Financial institutions must operationalise data subject rights — particularly the "
+            "right of access (DSAR) and the right to erasure. Manual, fragmented processes "
+            "that cannot meet the 30-day response deadline must be replaced by systematic, "
+            "documented workflows with ownership assigned at function level."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "Private banks holding extensive HNWI personal and financial data across legacy "
+            "systems face significant challenges in executing DSARs and erasure requests "
+            "within regulatory timelines."
+        ),
+    },
+    {
+        "source": "IMF",
+        "year": "2022",
+        "theme": "DATA_PRIVACY",
+        "recommendation": (
+            "Financial regulators and data protection authorities must coordinate their supervision "
+            "of data privacy at financial institutions. Institutions should proactively engage with "
+            "both regulatory frameworks and ensure that data protection obligations are integrated "
+            "into the overall compliance framework."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "Relevant for private banks managing dual compliance obligations under banking "
+            "regulators (FINMA, MAS) and data protection authorities (FDPIC, PDPC, ICO)."
+        ),
+    },
+
+    # ── MARKET RISK ────────────────────────────────────────────────────────────
+    {
+        "source": "Basel Committee",
+        "year": "2023",
+        "theme": "MARKET_RISK",
+        "recommendation": (
+            "Banks must prepare for Fundamental Review of the Trading Book (FRTB) implementation "
+            "under CRR III/CRD VI. Impact assessments on capital requirements must be completed "
+            "and strategic decisions on standardised vs. internal model approach finalised. "
+            "Data infrastructure for FRTB must be in place before the 2025 go-live date."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FRTB applies to banks with trading books above EUR 500m notional (EUR 1bn for SA-only). "
+            "Swiss and UK private banks with active trading desks must assess FRTB impact on capital."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "MARKET_RISK",
+        "recommendation": (
+            "Banks must update IRRBB stress scenarios to reflect the rate environment experienced "
+            "in 2022-2023. Behavioural assumptions for non-maturity deposits must be recalibrated; "
+            "deposit repricing betas derived from the 2010-2021 low-rate era are no longer valid."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FINMA risk monitor 2023. Swiss private banks with significant client cash balances "
+            "face materially different IRRBB profiles than assumed by pre-2022 models."
+        ),
+    },
+    {
+        "source": "EBA",
+        "year": "2022",
+        "theme": "MARKET_RISK",
+        "recommendation": (
+            "VaR model backtesting results showing multiple exceptions must trigger formal model "
+            "review rather than simply capital add-ons. Model limitations must be disclosed in "
+            "Pillar 3 reports. Banks should migrate to Expected Shortfall measures alongside VaR."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "EBA guidelines on market risk model performance following 2022 volatility. "
+            "Private banks relying on simple parametric VaR models face the highest model risk."
+        ),
+    },
+
+    # ── THIRD PARTY RISK ───────────────────────────────────────────────────────
+    {
+        "source": "EBA",
+        "year": "2023",
+        "theme": "THIRD_PARTY_RISK",
+        "recommendation": (
+            "Financial institutions must maintain a complete register of all ICT third-party "
+            "arrangements as required by DORA Article 28. The register must be reported to the "
+            "competent authority on an annual basis and must identify all critical and important "
+            "function providers."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "DORA mandate effective January 2025. Private banks with EU operations must build "
+            "or update their vendor registers to meet the DORA Article 28 reporting standard."
+        ),
+    },
+    {
+        "source": "PRA",
+        "year": "2021",
+        "theme": "THIRD_PARTY_RISK",
+        "recommendation": (
+            "Material outsourcing arrangements must not only be notified to the PRA but must "
+            "be actively managed with evidence of ongoing oversight. Firms must be able to "
+            "demonstrate that they understand the risks inherent in their outsourcing arrangements "
+            "and that contracts provide adequate protections."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "PRA SS2/21. UK private banks with extensive custody, IT, and back-office outsourcing "
+            "must demonstrate active management, not merely contract execution."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2022",
+        "theme": "THIRD_PARTY_RISK",
+        "recommendation": (
+            "Swiss banks outsourcing to non-Swiss entities must assess the legal and regulatory "
+            "risks in the provider's jurisdiction, including data access by foreign authorities, "
+            "and document compensating measures where Swiss banking secrecy could be compromised."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FINMA-RS 2018/3 implementation guidance. Swiss private banks using US cloud providers "
+            "must address CLOUD Act risks and document their assessment of Swiss secrecy exposure."
+        ),
+    },
+    {
+        "source": "FSB",
+        "year": "2023",
+        "theme": "THIRD_PARTY_RISK",
+        "recommendation": (
+            "Regulators and financial institutions should develop standardised metrics to measure "
+            "third-party concentration risk. Banks should regularly report their critical third-party "
+            "dependencies to boards and regulators, including the percentage of critical functions "
+            "delivered by each top-five provider."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "FSB report on financial stability implications of third-party dependencies (2023). "
+            "Private banks relying on a single core banking vendor (e.g. Avaloq, Temenos) for "
+            "all front-to-back operations represent the extreme concentration risk case."
+        ),
+    },
+
+    # ── GOVERNANCE ─────────────────────────────────────────────────────────────
+    {
+        "source": "Basel Committee",
+        "year": "2023",
+        "theme": "GOVERNANCE",
+        "recommendation": (
+            "Boards must receive risk reports that are sufficiently granular, timely, and accurate "
+            "to enable effective oversight. The quality and adequacy of management information "
+            "provided to the Board must itself be assessed in the ICAAP and SREP process."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "BCBS corporate governance principles for banks (2015, updated 2023). The Credit "
+            "Suisse collapse renewed focus on whether boards received adequate, accurate risk "
+            "information — directly relevant for Swiss private bank boards."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "GOVERNANCE",
+        "recommendation": (
+            "Following the Credit Suisse resolution, FINMA has signalled that governance and "
+            "accountability requirements will be tightened across the Swiss banking sector. "
+            "Private banks should proactively review board composition, senior management "
+            "accountability frameworks, and risk culture."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Direct FINMA supervisory signal post-Credit Suisse. Governance is the single highest "
+            "priority area for FINMA supervision in 2024-2025 across the Swiss banking sector."
+        ),
+    },
+    {
+        "source": "IIA",
+        "year": "2024",
+        "theme": "GOVERNANCE",
+        "recommendation": (
+            "Under the 2024 Global Internal Audit Standards, internal audit functions must have "
+            "a formally documented and Board-approved internal audit charter. The chief audit "
+            "executive must report functionally to the Audit Committee and have unfettered access "
+            "to all people, records, and properties relevant to engagements."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Mandatory under IIA Standards 2024. Private banks where the head of internal audit "
+            "reports to the CEO rather than the Audit Committee are in breach of these standards."
+        ),
+    },
+    {
+        "source": "FCA",
+        "year": "2023",
+        "theme": "GOVERNANCE",
+        "recommendation": (
+            "Under SMCR, firms must ensure that senior management functions are appropriately "
+            "staffed with individuals who can demonstrate accountability for their allocated "
+            "responsibilities. Responsibility maps must be kept current and reflect actual "
+            "decision-making authority."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FCA SMCR in-scope private banks must review responsibility maps annually. "
+            "Gaps between stated responsibility and actual authority are a primary FCA "
+            "enforcement trigger."
+        ),
+    },
+    {
+        "source": "MAS",
+        "year": "2022",
+        "theme": "GOVERNANCE",
+        "recommendation": (
+            "Risk appetite statements must be cascaded into business-unit-level limits and KRIs "
+            "that are monitored and reported to risk committees regularly. A Board-level risk "
+            "appetite statement that is not operationalised at the business unit level does not "
+            "constitute effective risk governance."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "MAS thematic review findings on risk governance at Singapore banks (2022). "
+            "Specifically highlighted that private banking risk appetite was frequently stated "
+            "at enterprise level without meaningful cascade to portfolio or RM level."
+        ),
+    },
+    {
+        "source": "IMF",
+        "year": "2023",
+        "theme": "GOVERNANCE",
+        "recommendation": (
+            "Financial Sector Assessment Programs have consistently identified weaknesses in the "
+            "independence of internal audit and compliance at smaller financial institutions. "
+            "Supervisory authorities should require a minimum level of independence for these "
+            "functions regardless of firm size."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "IMF FSAP finding applicable across all jurisdictions. Smaller private banks must "
+            "ensure that cost-efficiency measures do not compromise the functional independence "
+            "of their second and third lines of defence."
+        ),
+    },
+    {
+        "source": "EBA",
+        "year": "2022",
+        "theme": "GOVERNANCE",
+        "recommendation": (
+            "Remuneration policies must ensure that variable compensation is genuinely risk-adjusted "
+            "and incorporates non-financial performance indicators including compliance, conduct, "
+            "and risk management behaviour. Clawback provisions must be enforceable and applied "
+            "in practice."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "EBA guidelines on sound remuneration (2022). Private banking RM compensation models "
+            "driven purely by AUM and revenue growth create structural incentives misaligned "
+            "with risk management and client interests."
+        ),
+    },
+    {
+        "source": "Basel Committee",
+        "year": "2021",
+        "theme": "GOVERNANCE",
+        "recommendation": (
+            "Banks must implement a robust whistleblowing framework that enables staff to raise "
+            "concerns without fear of retaliation. The effectiveness of whistleblowing mechanisms "
+            "should be monitored through participation rates and benchmarked against peer institutions."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "BCBS corporate governance principles. Low whistleblowing report volumes in private "
+            "banking — given the close-knit, relationship-driven culture — require careful "
+            "assessment of channel accessibility and perceived safety."
+        ),
+    },
+
+    # ── ESG / CLIMATE ──────────────────────────────────────────────────────────
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "ESG",
+        "recommendation": (
+            "Systemically important banks must integrate climate and nature-related financial risks "
+            "into their risk management frameworks in accordance with FINMA-RS 2023/1. Climate "
+            "scenario analysis must be conducted annually and results disclosed under TCFD. "
+            "Physical and transition risk must be assessed at portfolio level."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FINMA RS 2023/1 applicable to SIBs immediately; proportional application expected "
+            "for other banks. Private banks with large real estate and commodity-linked portfolios "
+            "face material transition and physical risk exposures."
+        ),
+    },
+    {
+        "source": "EBA",
+        "year": "2023",
+        "theme": "ESG",
+        "recommendation": (
+            "ESG risks must be integrated into the Internal Capital Adequacy Assessment Process "
+            "(ICAAP) and Pillar 2 assessments. Banks cannot treat ESG risks as a separate parallel "
+            "framework; they must be embedded in credit, market, and operational risk methodologies."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "EBA discussion paper on ESG risk management (2022/2023). Swiss and EU private banks "
+            "must demonstrate that green bond holdings, ESG advisory mandates, and sustainable "
+            "investment products are subject to adequate risk assessment."
+        ),
+    },
+    {
+        "source": "MAS",
+        "year": "2022",
+        "theme": "ESG",
+        "recommendation": (
+            "Financial institutions in Singapore should implement TCFD-aligned disclosures and "
+            "develop internal capabilities for climate risk assessment. MAS has signalled that "
+            "mandatory climate disclosures for financial institutions will be phased in from 2024."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "MAS Environmental Risk Management Guidelines (2020, updated 2022). Singapore "
+            "private banks managing ESG-labelled mandates must ensure product claims are "
+            "substantiated by underlying risk analysis."
+        ),
+    },
+
+    # ── ADDITIONAL — Big4 Public Thought Leadership ────────────────────────────
+    {
+        "source": "Deloitte (public)",
+        "year": "2023",
+        "theme": "CYBER_RISK",
+        "recommendation": (
+            "Financial institutions should adopt an 'assume breach' mentality, focusing investment "
+            "on detection and response capabilities rather than purely on prevention. Mean time to "
+            "detect (MTTD) and mean time to respond (MTTR) are the primary metrics that correlate "
+            "with breach impact limitation."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Deloitte Global Financial Services Cyber Risk Report 2023. Particularly relevant "
+            "for private banks where prevention-focused security investments dominate but "
+            "detection capabilities lag industry benchmarks."
+        ),
+    },
+    {
+        "source": "PwC (public)",
+        "year": "2023",
+        "theme": "GOVERNANCE",
+        "recommendation": (
+            "The three lines of defence model requires updating to reflect modern risk frameworks. "
+            "The 2LoD role should shift from pure oversight to collaborative risk partnership with "
+            "the business, while maintaining the independence required for credible challenge. "
+            "Internal audit should focus on systemic risks rather than transactional compliance."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "PwC Global Internal Audit Study 2023. Private banks with small 2LoD teams must "
+            "prioritise where collaborative risk partnership adds most value — typically "
+            "in new product approval, strategic transactions, and regulatory change."
+        ),
+    },
+    {
+        "source": "KPMG (public)",
+        "year": "2023",
+        "theme": "AML_KYC",
+        "recommendation": (
+            "Financial institutions should evaluate AI/ML-based transaction monitoring solutions "
+            "to supplement rules-based systems. Hybrid approaches — combining rules for regulatory "
+            "typologies with ML for anomaly detection — materially reduce false positive rates "
+            "while improving suspicious activity detection."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "KPMG AML survey 2023. Private banks with relatively small transaction volumes may "
+            "find ML-based monitoring more accessible and cost-effective than large-scale "
+            "enterprise TM platforms."
+        ),
+    },
+    {
+        "source": "EY (public)",
+        "year": "2023",
+        "theme": "THIRD_PARTY_RISK",
+        "recommendation": (
+            "Organisations should develop a 'fourth-party risk management' capability to understand "
+            "and monitor risks embedded in the supply chains of their critical third-party providers. "
+            "Annual disclosure from critical vendors of their material sub-processors should be "
+            "a contractual requirement."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "EY Third-Party Risk Management Survey 2023. Financial institutions using cloud-hosted "
+            "fintech solutions must understand the sub-processor dependency chain that underpins "
+            "their vendor's service delivery."
+        ),
+    },
+    {
+        "source": "Deloitte (public)",
+        "year": "2022",
+        "theme": "OPERATIONAL_RISK",
+        "recommendation": (
+            "Operational resilience programmes must move beyond compliance with regulatory "
+            "requirements to genuinely test the ability to serve clients under stress. "
+            "Scenario testing should include multi-hazard events — simultaneous cyber attack "
+            "and key person unavailability — that test organisational resilience holistically."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Deloitte Operational Resilience for Financial Services 2022. Private banks testing "
+            "only physical disruption scenarios are likely unprepared for cyber-driven disruptions "
+            "that affect systems, people, and vendors simultaneously."
+        ),
+    },
+    {
+        "source": "PwC (public)",
+        "year": "2022",
+        "theme": "CREDIT_RISK",
+        "recommendation": (
+            "Stress testing frameworks must be updated to reflect the new macroeconomic paradigm "
+            "of higher rates, elevated inflation, and geopolitical fragmentation. Scenarios designed "
+            "in 2015-2021 for a low-rate, high-growth environment no longer represent plausible "
+            "severe but plausible adverse scenarios."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "PwC Banking Perspectives 2022. Lombard lending stress tests that assume only mild "
+            "equity corrections are no longer adequate. Private banks must test -40% equity and "
+            "+400bp rate scenarios simultaneously."
+        ),
+    },
+    {
+        "source": "KPMG (public)",
+        "year": "2022",
+        "theme": "DATA_PRIVACY",
+        "recommendation": (
+            "Data lineage and inventory tools should be implemented to provide a complete and "
+            "queryable map of personal data flows. Organisations that cannot locate all personal "
+            "data cannot fulfil GDPR/nDSG rights obligations — notably erasure and portability — "
+            "within statutory timelines."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "KPMG GDPR Health Check 2022. Private banks with 15-30 year old core banking systems "
+            "and multiple data warehouses face significant data lineage challenges that expose "
+            "them to regulatory risk for DSAR and erasure requests."
+        ),
+    },
+    {
+        "source": "EY (public)",
+        "year": "2024",
+        "theme": "GOVERNANCE",
+        "recommendation": (
+            "Boards should conduct periodic deep-dives on emerging risks including AI governance, "
+            "quantum computing threats to encryption, and geopolitical risk. Board minutes should "
+            "reflect substantive deliberation on emerging risks — not merely receipt of management "
+            "presentations."
+        ),
+        "priority": "Medium",
+        "private_banking_relevance": (
+            "EY Board Effectiveness Survey 2024. AI adoption in private banking — for client "
+            "profiling, trade recommendations, and compliance monitoring — requires explicit "
+            "board-level AI governance that many private bank boards have not yet established."
+        ),
+    },
+]
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 6. DATA_ANALYTICS_SCENARIOS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+DATA_ANALYTICS_SCENARIOS = {
+
+    "AML_KYC": [
+        {
+            "id": "DA001",
+            "theme": "AML_KYC",
+            "title": "Structuring / Smurfing Detection",
+            "objective": "Detect transactions deliberately structured below reporting thresholds to avoid detection.",
+            "data_sources": ["Core banking transaction ledger", "Wire transfer logs", "Cash transaction records"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Multiple transactions just below CHF/SGD/HKD 10,000 reporting threshold by same client or group of related clients within a short time window.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA002",
+            "theme": "AML_KYC",
+            "title": "Round-Trip Transaction Detection",
+            "objective": "Identify funds that leave and re-enter the bank within a short period, potentially indicating circular flow to disguise origin.",
+            "data_sources": ["Wire transfer logs", "Correspondent bank transaction records", "Client account ledger"],
+            "analysis_type": "Network",
+            "anomaly_searched": "Funds transferred out and back to the same or related accounts within 30 days, particularly across jurisdictions.",
+            "tools": ["Python", "SQL"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA003",
+            "theme": "AML_KYC",
+            "title": "Dormant Account Activation",
+            "objective": "Identify accounts that become suddenly active after extended dormancy with high-value or unusual transactions.",
+            "data_sources": ["Account activity logs", "Transaction records", "Client onboarding date records"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Accounts with no transactions for >12 months that suddenly receive or send transfers above CHF 100,000 without prior client contact.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA004",
+            "theme": "AML_KYC",
+            "title": "Geographic Transaction Inconsistency",
+            "objective": "Flag transactions to or from jurisdictions inconsistent with the client's declared source of wealth, residence, or business profile.",
+            "data_sources": ["Wire transfer records", "Client KYC profile", "FATF risk country lists"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Transfers to/from FATF grey or black-listed jurisdictions, or jurisdictions not mentioned in client KYC documentation.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA005",
+            "theme": "AML_KYC",
+            "title": "PEP Portfolio Monitoring",
+            "objective": "Monitor all transactions and portfolio changes for PEP-classified clients to detect unusual activity requiring EDD review.",
+            "data_sources": ["PEP flag register", "Account transaction history", "Trade execution records", "Wire transfer logs"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Transactions exceeding 200% of the prior 12-month average for PEP clients; large incoming transfers without identified source.",
+            "tools": ["SQL", "Python", "Tableau"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA006",
+            "theme": "AML_KYC",
+            "title": "STR Filing Rate Analysis",
+            "objective": "Analyse the rate and quality of STR/SAR filings relative to transaction volumes, risk profile, and peer benchmarks.",
+            "data_sources": ["STR/SAR register", "Transaction monitoring alert log", "Client risk ratings", "Transaction volumes"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "STR filing rate disproportionately low vs. high-risk client proportion; jurisdictions with zero STRs in >12 months.",
+            "tools": ["Excel", "Python"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA007",
+            "theme": "AML_KYC",
+            "title": "Beneficial Ownership Completeness",
+            "objective": "Identify client accounts where UBO documentation is missing, outdated, or flagged as incomplete in the CRM/onboarding system.",
+            "data_sources": ["CRM system", "KYC document repository", "Client onboarding records", "Periodic review logs"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "Accounts with missing UBO form, Form A not signed, or UBO last verified >2 years ago — particularly for high-risk or trust/foundation structures.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+    ],
+
+    "CYBER_RISK": [
+        {
+            "id": "DA008",
+            "theme": "CYBER_RISK",
+            "title": "Privileged Account Usage Outside Business Hours",
+            "objective": "Detect privileged account logons and activity outside normal business hours that may indicate insider threat or credential compromise.",
+            "data_sources": ["Active Directory / LDAP logs", "PAM solution session logs", "SIEM event data"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Privileged account logons between 22:00-06:00 local time or on weekends; admin actions on production systems outside change windows.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA009",
+            "theme": "CYBER_RISK",
+            "title": "Patch Compliance Dashboard",
+            "objective": "Measure and report the proportion of systems with outstanding critical and high-severity patches beyond the defined SLA.",
+            "data_sources": ["Vulnerability management platform (Qualys, Tenable, Rapid7)", "CMDB asset register", "Patch deployment logs"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "Systems with critical patches outstanding >15 days or high patches >30 days; EOL systems with no compensating control documented.",
+            "tools": ["Python", "Tableau", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA010",
+            "theme": "CYBER_RISK",
+            "title": "Failed Authentication Spike Detection",
+            "objective": "Identify potential brute-force attacks, credential stuffing, or account takeover attempts via anomalous failed logon patterns.",
+            "data_sources": ["Active Directory event logs", "VPN authentication logs", "Application access logs", "SIEM"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "More than 10 failed logons in 5 minutes for a single account; geographically impossible logon pairs (same account logging in from two distant locations within minutes).",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA011",
+            "theme": "CYBER_RISK",
+            "title": "Data Exfiltration Indicators",
+            "objective": "Detect unusual outbound data transfers that may indicate exfiltration of client data or intellectual property.",
+            "data_sources": ["DLP solution logs", "Proxy/web gateway logs", "Email gateway logs", "Cloud storage access logs"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Outbound email or upload volumes 3× standard deviation above the user's 90-day average; transfers to personal email or cloud storage (Dropbox, Google Drive) of files containing client data keywords.",
+            "tools": ["Python", "SQL"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA012",
+            "theme": "CYBER_RISK",
+            "title": "Third-Party Access Review",
+            "objective": "Identify vendor and contractor accounts with active access that should have been revoked following contract termination.",
+            "data_sources": ["Active Directory third-party OUs", "PAM vendor access logs", "HR/procurement system (contract termination dates)", "VPN logs"],
+            "analysis_type": "Duplicate",
+            "anomaly_searched": "Active vendor accounts where contract end date has passed; vendor accounts not used in >90 days; accounts with no matching active contract in the procurement system.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA013",
+            "theme": "CYBER_RISK",
+            "title": "MFA Bypass or Downgrade Detection",
+            "objective": "Identify authentication events where MFA was bypassed or a downgrade to single-factor authentication occurred.",
+            "data_sources": ["Identity provider logs (Azure AD, Okta)", "VPN authentication logs", "Application access logs"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Successful logons to MFA-protected systems where MFA challenge was not recorded; legacy protocol authentications (NTLM, basic auth) on MFA-required systems.",
+            "tools": ["Python", "SQL"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA014",
+            "theme": "CYBER_RISK",
+            "title": "SIEM Alert SLA Compliance",
+            "objective": "Monitor whether SOC team is meeting defined SLAs for alert triage and escalation.",
+            "data_sources": ["SIEM platform (Splunk, Sentinel, QRadar)", "ITSM ticket system (ServiceNow)", "SOC shift logs"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "High-severity alerts not triaged within 1 hour; medium alerts not reviewed within 4 hours; open alerts aged beyond SLA without documented investigation.",
+            "tools": ["SQL", "Python", "Tableau"],
+            "complexity": "Low",
+        },
+    ],
+
+    "CREDIT_RISK": [
+        {
+            "id": "DA015",
+            "theme": "CREDIT_RISK",
+            "title": "Lombard Loan LTV Monitoring",
+            "objective": "Identify Lombard loans where the current market value of collateral has deteriorated, causing LTV to breach the policy limit.",
+            "data_sources": ["Core banking loan register", "Collateral management system", "Market data feed (Bloomberg, Reuters)"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Loans with current LTV exceeding approved limit; loans within 5% of margin call trigger; concentrated collateral (>25% single name) approaching haircut threshold.",
+            "tools": ["Python", "SQL", "Excel"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA016",
+            "theme": "CREDIT_RISK",
+            "title": "Collateral Staleness Analysis",
+            "objective": "Identify collateral positions that have not been revalued within the required frequency for their asset class.",
+            "data_sources": ["Collateral management system", "Valuation history records", "Asset class classification register"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "Listed securities not repriced in >1 business day; unlisted/private equity not revalued in >90 days; real estate not externally appraised in >12 months.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA017",
+            "theme": "CREDIT_RISK",
+            "title": "Credit Exception Rate Trending",
+            "objective": "Track the volume and nature of credit policy exceptions over time to identify trend deterioration in underwriting standards.",
+            "data_sources": ["Credit approval system", "Credit committee minutes", "Exception log", "Credit policy document"],
+            "analysis_type": "Trend",
+            "anomaly_searched": "Exception rate increasing quarter-over-quarter; repeat exceptions of the same type (policy not updated); exceptions approved by same senior without committee review.",
+            "tools": ["Excel", "Python"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA018",
+            "theme": "CREDIT_RISK",
+            "title": "Covenant Breach Aging",
+            "objective": "Identify covenant breaches that have not been escalated, remediated, or waived within the defined SLA.",
+            "data_sources": ["Loan management system", "Covenant monitoring schedule", "Credit committee records", "Waiver log"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "Covenant breaches outstanding >30 days without formal waiver or remediation plan; waivers granted without Credit Committee approval; recurring breach by same borrower.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA019",
+            "theme": "CREDIT_RISK",
+            "title": "IFRS 9 Stage Migration Analysis",
+            "objective": "Analyse the movement of loans between IFRS 9 stages to identify potential under-staging and provisioning inadequacy.",
+            "data_sources": ["Loan staging records (IFRS 9 system)", "Arrears history", "Credit risk grades", "Macroeconomic scenario inputs"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "High volume of Stage 3 loans migrating back to Stage 1 without genuine credit improvement; provision coverage ratio declining while NPL ratio is stable or increasing.",
+            "tools": ["Python", "SQL"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA020",
+            "theme": "CREDIT_RISK",
+            "title": "Single-Name Concentration Heat Map",
+            "objective": "Map credit exposure concentration by obligor, sector, and geography to identify limit breaches or near-breaches.",
+            "data_sources": ["Credit exposure register", "Collateral position data", "Industry/sector classification", "Country risk ratings"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Single obligor exposure exceeding 10% of Tier 1 capital; sector concentration exceeding policy limit; geographic concentration in FATF grey-listed jurisdiction.",
+            "tools": ["Python", "Tableau", "SQL"],
+            "complexity": "Medium",
+        },
+    ],
+
+    "OPERATIONAL_RISK": [
+        {
+            "id": "DA021",
+            "theme": "OPERATIONAL_RISK",
+            "title": "Operational Loss Event Frequency Trending",
+            "objective": "Monitor the frequency and severity of operational loss events over time to detect deterioration in the control environment.",
+            "data_sources": ["Operational loss database", "Incident reporting system", "Insurance claim records"],
+            "analysis_type": "Trend",
+            "anomaly_searched": "Increasing frequency of losses in a specific risk category; single loss events exceeding materiality threshold not escalated to senior management; near-miss rate declining (possible under-reporting).",
+            "tools": ["Python", "Excel", "Tableau"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA022",
+            "theme": "OPERATIONAL_RISK",
+            "title": "KRI Threshold Breach Analysis",
+            "objective": "Identify Key Risk Indicators that have breached amber or red thresholds and assess whether escalation occurred per policy.",
+            "data_sources": ["KRI monitoring system", "Risk committee minutes", "KRI escalation log"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "KRIs in red zone for >30 days without documented escalation; same KRI breaching amber threshold in >3 consecutive months — indicative of unresolved root cause.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA023",
+            "theme": "OPERATIONAL_RISK",
+            "title": "Reconciliation Break Aging",
+            "objective": "Track unreconciled items in cash and securities accounts by age to identify persistent breaks that may indicate errors or fraud.",
+            "data_sources": ["Reconciliation system", "Nostro account statements", "Custody system position records"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "Cash breaks aged >5 business days above materiality threshold; securities position breaks outstanding >1 business day; total aged break value exceeding defined tolerance.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA024",
+            "theme": "OPERATIONAL_RISK",
+            "title": "Emergency Change Overuse",
+            "objective": "Identify whether the emergency change process is being overused as a workaround for standard change process controls.",
+            "data_sources": ["IT change management system (ServiceNow, BMC Remedy)", "Change Advisory Board records", "Incident tickets linked to changes"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Emergency changes >15% of total change volume; emergency changes not reviewed post-implementation within 5 days; recurrent emergency changes by same team or system.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA025",
+            "theme": "OPERATIONAL_RISK",
+            "title": "Segregation of Duties Conflict Detection",
+            "objective": "Identify access rights conflicts where a single user holds permissions that should be segregated.",
+            "data_sources": ["Identity and access management system", "Role-based access control matrix", "Application user access logs", "SoD conflict rule library"],
+            "analysis_type": "Duplicate",
+            "anomaly_searched": "Users with both trade input and trade approval access; users with both payment creation and payment release permissions; single user with access to modify transaction records and approve them.",
+            "tools": ["SQL", "Python"],
+            "complexity": "High",
+        },
+    ],
+
+    "DATA_PRIVACY": [
+        {
+            "id": "DA026",
+            "theme": "DATA_PRIVACY",
+            "title": "Data Retention Compliance Scan",
+            "objective": "Identify personal data held beyond its defined retention period in key systems.",
+            "data_sources": ["Core banking system", "CRM", "Email archive", "Document management system", "Data retention schedule"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "Former client records in active systems beyond retention period (e.g. >10 years post-relationship end); email archives containing personal data with no retention controls applied.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA027",
+            "theme": "DATA_PRIVACY",
+            "title": "DSAR Response Time Tracking",
+            "objective": "Monitor the time taken to respond to data subject access requests and identify overdue responses.",
+            "data_sources": ["DSAR log / privacy management platform", "Request intake records", "Response dispatch records"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "DSARs not responded to within 30 calendar days of receipt; extension notices (up to 2 months) not sent within the initial 30-day period; DSAR backlog growing quarter-over-quarter.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA028",
+            "theme": "DATA_PRIVACY",
+            "title": "Cross-Border Transfer Mapping",
+            "objective": "Identify all personal data transfers to third countries and validate that appropriate transfer mechanisms are in place.",
+            "data_sources": ["Records of processing activities (RoPA)", "IT system inventory with hosting location", "Vendor contracts and DPAs", "SCC register"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Personal data hosted or processed in non-adequate countries without executed SCCs; data transfers not reflected in RoPA; vendor location changes not reassessed for transfer mechanism validity.",
+            "tools": ["Excel", "Python"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA029",
+            "theme": "DATA_PRIVACY",
+            "title": "Breach Log Completeness Analysis",
+            "objective": "Assess whether the data breach log captures all security incidents and validates reportability assessment quality.",
+            "data_sources": ["Data breach register", "IT security incident log", "SIEM incident records", "DLP alert log"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Security incidents in the IT log not reflected in the breach register; breaches classified as non-reportable without documented risk assessment; near-misses not recorded in breach log.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA030",
+            "theme": "DATA_PRIVACY",
+            "title": "Consent Record Completeness",
+            "objective": "Verify that consent records exist and are current for all marketing and profiling processing activities.",
+            "data_sources": ["Consent management platform", "Marketing campaign system", "CRM client contact preferences", "Privacy preference centre logs"],
+            "analysis_type": "Duplicate",
+            "anomaly_searched": "Marketing emails sent to clients without a valid consent record; consent records with no timestamp or version; withdrawn consents not processed within 72 hours.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Medium",
+        },
+    ],
+
+    "MARKET_RISK": [
+        {
+            "id": "DA031",
+            "theme": "MARKET_RISK",
+            "title": "VaR Backtesting Exception Tracking",
+            "objective": "Count and classify VaR backtesting exceptions to assess model performance and capital adequacy.",
+            "data_sources": ["Risk system VaR output", "Daily P&L data", "Trading book positions", "Market data feed"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "More than 4 exceptions in a 250-day window (Yellow Zone) or more than 10 (Red Zone) per Basel II traffic light approach; clustering of exceptions in specific market conditions suggesting systematic model bias.",
+            "tools": ["Python", "Excel"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA032",
+            "theme": "MARKET_RISK",
+            "title": "Market Risk Limit Utilisation Trending",
+            "objective": "Monitor risk limit utilisation over time to detect limit creep and assess headroom adequacy.",
+            "data_sources": ["Risk management system limit utilisation reports", "Trading system positions", "Market data"],
+            "analysis_type": "Trend",
+            "anomaly_searched": "Limits consistently >90% utilised — insufficient headroom for normal business fluctuations; limits breached and waived repeatedly without policy amendment; new positions added without limit capacity.",
+            "tools": ["Python", "Tableau", "Excel"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA033",
+            "theme": "MARKET_RISK",
+            "title": "IRRBB Sensitivity Trend Analysis",
+            "objective": "Track NII and EVE sensitivity to interest rate changes over time to assess IRRBB risk trend and compliance with appetite.",
+            "data_sources": ["ALM system", "Balance sheet data", "Interest rate curves", "Behavioural assumption inputs"],
+            "analysis_type": "Trend",
+            "anomaly_searched": "EVE sensitivity under +200bp scenario increasing quarter-over-quarter; NII sensitivity exceeding risk appetite; behavioural assumptions not updated since prior year.",
+            "tools": ["Python", "Excel"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA034",
+            "theme": "MARKET_RISK",
+            "title": "P&L Attribution Unexplained Variance",
+            "objective": "Identify unexplained variance between predicted P&L (based on risk sensitivities) and actual P&L to detect model weaknesses.",
+            "data_sources": ["Trading P&L records", "Risk sensitivity report", "Market data moves", "Position data"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Unexplained P&L variance exceeding 10% of total daily P&L on more than 3 days per month; systematic bias in a specific risk factor suggesting missing sensitivity.",
+            "tools": ["Python", "Excel"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA035",
+            "theme": "MARKET_RISK",
+            "title": "Independent Price Verification Coverage",
+            "objective": "Confirm that all positions in the trading and banking book are subject to independent price verification at the required frequency.",
+            "data_sources": ["Position data", "IPV results log", "Asset class register", "Pricing sources (Bloomberg, third-party)"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Positions not included in IPV scope; Level 2/3 assets priced using internal models without external validation; IPV frequency below policy requirement for specific asset classes.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Medium",
+        },
+    ],
+
+    "THIRD_PARTY_RISK": [
+        {
+            "id": "DA036",
+            "theme": "THIRD_PARTY_RISK",
+            "title": "Vendor Due Diligence Completeness",
+            "objective": "Identify vendors in the outsourcing register where due diligence documentation is missing, expired, or below the required standard for their risk tier.",
+            "data_sources": ["Outsourcing / vendor register", "Due diligence document repository", "SOC 2 report tracker", "Vendor risk tier classification"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "Critical vendors with SOC 2 reports >12 months old; high-risk vendors without completed security questionnaire; any vendor with no due diligence on file.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA037",
+            "theme": "THIRD_PARTY_RISK",
+            "title": "SLA Breach Monitoring",
+            "objective": "Track vendor SLA performance against contractual commitments and identify chronic underperformers.",
+            "data_sources": ["Vendor SLA monitoring reports", "Service performance records", "Incident tickets linked to vendor failures", "Contract terms extract"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Vendors failing SLA in >2 consecutive months without formal notice; service credits not claimed despite SLA breach; SLA not defined or measurable in contract.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA038",
+            "theme": "THIRD_PARTY_RISK",
+            "title": "Concentration Risk Quantification",
+            "objective": "Quantify the proportion of critical functions delivered by each top-five vendor to assess concentration risk.",
+            "data_sources": ["Outsourcing register", "Critical function mapping", "Vendor spend data", "Business continuity dependency mapping"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Single vendor supporting >30% of critical business services; single cloud provider hosting >50% of production workloads; top-3 vendors collectively responsible for >80% of outsourced critical functions.",
+            "tools": ["Python", "Tableau"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA039",
+            "theme": "THIRD_PARTY_RISK",
+            "title": "Sub-Outsourcing Disclosure Tracking",
+            "objective": "Monitor whether critical vendors have disclosed material sub-outsourcers as required by contract, and flag new or changed sub-outsourcers.",
+            "data_sources": ["Vendor sub-outsourcing disclosure records", "Fourth-party register", "Vendor contracts sub-outsourcing clauses"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Critical vendors that have not provided annual sub-outsourcer disclosure; new sub-outsourcers disclosed in FATF-listed or sanctioned jurisdictions; sub-outsourcers not approved by the bank.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA040",
+            "theme": "THIRD_PARTY_RISK",
+            "title": "Contract Coverage Gap Analysis",
+            "objective": "Identify gaps in vendor contracts relative to regulatory requirements (DORA, FINMA RS 2018/3, PRA SS2/21) for critical and material vendors.",
+            "data_sources": ["Contract register", "Contract terms database", "Regulatory minimum clause checklist", "Vendor risk tier classification"],
+            "analysis_type": "Duplicate",
+            "anomaly_searched": "Critical vendor contracts missing audit rights clause; contracts without data portability obligation; contracts with no business continuity or exit provision; contracts not updated since 2020.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Medium",
+        },
+    ],
+
+    "GOVERNANCE": [
+        {
+            "id": "DA041",
+            "theme": "GOVERNANCE",
+            "title": "Policy Review Cycle Compliance",
+            "objective": "Identify policies that are overdue for their mandatory periodic review.",
+            "data_sources": ["Policy management system", "Policy register with review dates", "Approval workflow records"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "Policies overdue for review by >3 months; critical policies (AML, Cyber, Operational Risk) with review overdue; policies approved by individuals who have since left the organisation.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA042",
+            "theme": "GOVERNANCE",
+            "title": "Board Meeting Attendance Analysis",
+            "objective": "Assess Board and Committee meeting attendance rates to identify potential governance concerns.",
+            "data_sources": ["Board and committee meeting minutes", "Attendance registers", "Director profiles"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Directors attending <75% of Board or Committee meetings in a year; independent director missing >2 consecutive Risk Committee meetings; Audit Committee quorum not met.",
+            "tools": ["Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA043",
+            "theme": "GOVERNANCE",
+            "title": "Audit Finding Closure Aging",
+            "objective": "Track the age of open internal audit findings and identify items overdue for remediation.",
+            "data_sources": ["Internal audit tracking system", "Finding register with target dates", "Management response records"],
+            "analysis_type": "Aging",
+            "anomaly_searched": "Critical findings open >90 days past target remediation date; high findings with >2 deadline extensions; repeat findings from prior audit cycles (systemic control failure).",
+            "tools": ["SQL", "Excel", "Tableau"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA044",
+            "theme": "GOVERNANCE",
+            "title": "Conflicts of Interest Disclosure Gap",
+            "objective": "Identify staff who have not submitted their annual conflicts of interest declaration.",
+            "data_sources": ["HR system", "Conflicts of interest register", "Declaration submission records", "In-scope staff list"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Staff in material functions (RM, compliance, risk, finance) who have not submitted annual CoI declaration; new hires >30 days without initial CoI disclosure.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA045",
+            "theme": "GOVERNANCE",
+            "title": "Mandatory Training Completion Rate",
+            "objective": "Monitor completion rates for mandatory compliance training and identify non-compliant staff.",
+            "data_sources": ["Learning management system (LMS)", "Training curriculum register", "Staff list by function and role", "Completion certificates"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Staff with mandatory AML, data privacy, or cyber awareness training completion overdue >30 days past deadline; senior management with lower completion rates than general staff.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+    ],
+}
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 7. IIA_STANDARDS_2024
+# ═══════════════════════════════════════════════════════════════════════════════
+
+IIA_STANDARDS_2024 = [
+    {
+        "standard_id": "Global Internal Audit Standards — Overview",
+        "title": "New Global Internal Audit Standards (GIAS) — Effective 9 January 2024",
+        "description": (
+            "The IIA released the Global Internal Audit Standards on 9 January 2024, replacing the "
+            "2017 International Standards for the Professional Practice of Internal Auditing. "
+            "The new framework is organised into 15 Domains, 52 Standards, and 170 Principles. "
+            "Financial institutions must implement the new standards by 9 January 2025."
+        ),
+        "key_requirements": [
+            "All internal audit functions must adopt the new Standards by January 2025",
+            "Quality assurance programme must be updated to assess conformance with new Standards",
+            "Internal audit charter must reference the new Global Internal Audit Standards",
+            "CAE must communicate adoption plan to Audit Committee and senior management",
+            "Training plan for internal audit staff on new Standards requirements must be documented",
+        ],
+        "relevance_to_banking": (
+            "Immediate relevance: all bank internal audit functions must update their charters, "
+            "quality assurance programmes, and audit methodologies to conform by January 2025. "
+            "Regulators in key jurisdictions (FINMA, FCA, MAS) have indicated they will use the "
+            "new Standards as the reference framework for evaluating internal audit quality."
+        ),
+    },
+    {
+        "standard_id": "Domain I",
+        "title": "Purpose of Internal Auditing",
+        "description": (
+            "Establishes the fundamental purpose of internal auditing: to enhance and protect "
+            "organisational value by providing risk-based and objective assurance, advice, insight, "
+            "and foresight. The Standards now explicitly include 'insight' and 'foresight' as "
+            "internal audit responsibilities alongside traditional assurance."
+        ),
+        "key_requirements": [
+            "Internal audit must provide assurance, advice, insight, AND foresight — all four",
+            "Internal audit must assess and contribute to improving governance processes",
+            "Internal audit must evaluate and improve risk management and control effectiveness",
+            "The purpose must be reflected in the internal audit charter",
+            "Foresight requires internal audit to identify and communicate emerging risks proactively",
+        ],
+        "relevance_to_banking": (
+            "Private bank internal audit functions that restrict themselves to backward-looking "
+            "compliance testing are no longer conforming. The Standards now require proactive "
+            "identification of emerging risks — AI adoption, geopolitical risk, climate transition, "
+            "DORA compliance — as part of the audit mandate."
+        ),
+    },
+    {
+        "standard_id": "Standard 1.1",
+        "title": "Accountability of the Board",
+        "description": (
+            "The Board is ultimately accountable for internal audit. The Board — through the Audit "
+            "Committee — must approve the internal audit charter, ensure the CAE reports functionally "
+            "to the Audit Committee, approve the audit plan, and receive periodic communications "
+            "on the results of internal audit activity."
+        ),
+        "key_requirements": [
+            "Board must approve the internal audit charter annually",
+            "CAE must have an unobstructed reporting line to the Audit Committee",
+            "Board must approve or concur with the appointment or dismissal of the CAE",
+            "Audit Committee must assess the performance of the CAE at least annually",
+            "Board must ensure internal audit has sufficient resources to fulfil its mandate",
+        ],
+        "relevance_to_banking": (
+            "Common finding at private banks: CAE reports to CEO administratively AND functionally, "
+            "compromising independence. Regulators increasingly ask Audit Committees to confirm "
+            "the functional independence of internal audit from executive management."
+        ),
+    },
+    {
+        "standard_id": "Standard 2.1",
+        "title": "Independence and Objectivity",
+        "description": (
+            "Internal audit must be independent of the activities it audits. The organisational "
+            "independence of internal audit must be reflected in the reporting structure, and "
+            "individual internal auditors must maintain objectivity in performing their work. "
+            "Threats to independence must be identified, documented, and managed."
+        ),
+        "key_requirements": [
+            "CAE must report functionally to the Board/Audit Committee; any administrative reporting to senior management must not impair independence",
+            "Internal auditors must not audit activities for which they previously had responsibility within the past 12 months",
+            "Independence impairments must be disclosed to the Board",
+            "Consulting engagements must not compromise audit objectivity",
+            "Rotation of audit staff on engagements with long-term personal relationships recommended",
+        ],
+        "relevance_to_banking": (
+            "Significant issue in smaller private banks where audit staff may combine 2LoD and 3LoD "
+            "roles, or where the head of internal audit has pre-existing management relationships "
+            "with business line heads. FINMA and MAS have cited independence deficiencies at "
+            "private banks as a recurring finding."
+        ),
+    },
+    {
+        "standard_id": "Standard 4.1",
+        "title": "Quality Assurance and Improvement Programme (QAIP)",
+        "description": (
+            "The CAE must establish a Quality Assurance and Improvement Programme covering all "
+            "aspects of internal audit activity. The QAIP must include both ongoing monitoring "
+            "and periodic self-assessments, as well as independent external assessments at "
+            "least every 5 years."
+        ),
+        "key_requirements": [
+            "Ongoing monitoring: regular supervision and review of each audit engagement",
+            "Periodic internal assessment: at minimum annual self-assessment against the Standards",
+            "External assessment: independent review by qualified assessor at least every 5 years",
+            "Results of QAIP must be communicated to the Board and senior management",
+            "CAE must confirm to the Board annually that the function conforms to the Standards",
+        ],
+        "relevance_to_banking": (
+            "External quality assessment is required for any internal audit function making a "
+            "statement of conformance with the Standards. Regulatory expectations are increasing — "
+            "FINMA has signalled that it will review whether Swiss banks' internal audit functions "
+            "maintain current external quality assessments."
+        ),
+    },
+    {
+        "standard_id": "Standard 9.1",
+        "title": "Risk-Based Audit Planning",
+        "description": (
+            "The CAE must establish a risk-based audit plan that identifies the audit universe, "
+            "assesses risks and risk management maturity across auditable entities, and prioritises "
+            "audit engagements based on risk. The plan must be approved by the Board annually "
+            "and refreshed when significant changes in risk profile occur."
+        ),
+        "key_requirements": [
+            "Audit universe must cover all significant activities, processes, and risk areas",
+            "Risk assessment must use multiple inputs: management input, risk registers, regulatory themes, external events",
+            "Audit plan must be presented to the Audit Committee for approval at least annually",
+            "Material changes to the audit plan must be approved by the Audit Committee",
+            "Coverage of the audit universe must be tracked; significant gaps in coverage must be reported",
+        ],
+        "relevance_to_banking": (
+            "Private bank audit plans that rely solely on a pre-set 3-year rolling cycle without "
+            "dynamic risk reassessment are no longer conforming. The 2024 Standards explicitly "
+            "require that the plan be updated when significant risk changes occur — e.g. DORA "
+            "implementation, M&A, new technology platform deployment."
+        ),
+    },
+    {
+        "standard_id": "Standard 10.2",
+        "title": "Engagement Planning",
+        "description": (
+            "For each audit engagement, the internal auditor must develop a planning document "
+            "that identifies: objectives, scope, timing, resource requirements, and the risk "
+            "and control framework for the area under review. Planning must include a preliminary "
+            "assessment of the risk and controls in the area."
+        ),
+        "key_requirements": [
+            "Engagement objectives must align to the identified risks in the area",
+            "Scope must be clearly defined and agreed with engagement management",
+            "Timing must allow for adequate fieldwork without impairing objectivity",
+            "Staffing must ensure the team has competence for the subject matter",
+            "Pre-engagement briefing with auditee management must be documented",
+        ],
+        "relevance_to_banking": (
+            "Audit planning quality is a primary differentiator between high- and low-performing "
+            "internal audit functions at financial institutions. Regulators reviewing audit workpapers "
+            "will assess whether engagement planning was substantive and whether it linked risks "
+            "identified in the planning phase to testing procedures."
+        ),
+    },
+    {
+        "standard_id": "Standard 11.1",
+        "title": "Engagement Work Programme",
+        "description": (
+            "Internal auditors must develop and document a work programme for each engagement "
+            "that identifies the procedures to be performed, the information to be gathered, "
+            "and the testing approach to be applied. The programme must be approved by the CAE "
+            "or designee before fieldwork commences."
+        ),
+        "key_requirements": [
+            "Work programme must link each procedure to a specific risk or control objective",
+            "Procedures must include both design assessment and operating effectiveness testing",
+            "Data analytics and automated testing techniques should be embedded in the work programme",
+            "Work programme must be approved before fieldwork begins",
+            "Deviations from the approved work programme must be documented and approved",
+        ],
+        "relevance_to_banking": (
+            "Work programme quality is directly assessed in FINMA, MAS, and FCA supervisory reviews "
+            "of internal audit files. The requirement to approve work programmes before fieldwork "
+            "starts is frequently violated in smaller private bank audit teams under time pressure."
+        ),
+    },
+    {
+        "standard_id": "Standard 13.1",
+        "title": "Communicating Engagement Results",
+        "description": (
+            "Internal audit must communicate the results of each engagement in a timely manner. "
+            "The communication must include: the engagement objectives, scope, conclusions, "
+            "findings, root causes, criteria, impact, and recommendations. "
+            "Final reports must be distributed to appropriate parties."
+        ),
+        "key_requirements": [
+            "Findings must include: condition, criteria, cause (root cause), and consequence (impact)",
+            "Recommendations must be actionable, specific, and risk-proportionate",
+            "Draft reports must be shared with auditee management for factual accuracy review",
+            "Final reports must be issued within a defined timeframe after fieldwork completion",
+            "Reports must be distributed to the Audit Committee and appropriate senior management",
+        ],
+        "relevance_to_banking": (
+            "Report quality — particularly root cause analysis and actionable recommendations — "
+            "is the primary measure by which Audit Committees assess internal audit value in banking. "
+            "Findings that describe symptoms without root cause analysis fail to support systemic "
+            "control improvement."
+        ),
+    },
+    {
+        "standard_id": "Standard 14.1",
+        "title": "Monitoring Engagement Outcomes",
+        "description": (
+            "The CAE must establish a process for monitoring and verifying the adequate and timely "
+            "implementation of management actions arising from audit findings. The status of "
+            "management actions must be reported to the Audit Committee periodically."
+        ),
+        "key_requirements": [
+            "Formal follow-up process for all open findings with target dates",
+            "Verification of management action implementation must be evidence-based — not reliance on management assertion",
+            "Overdue or inadequately addressed findings must be escalated to the Audit Committee",
+            "Repeat findings (prior recommendations not implemented) must be highlighted in subsequent reports",
+            "Closure of critical findings must be verified by internal audit within 30 days of target date",
+        ],
+        "relevance_to_banking": (
+            "Finding closure tracking is a leading indicator of audit function effectiveness. "
+            "Regulators assess not only the quality of findings raised, but whether the bank's "
+            "management and board are driving timely remediation. Repeat findings with missed "
+            "deadlines are a direct FINMA and MAS supervisory concern."
+        ),
+    },
+    {
+        "standard_id": "Standard 15.1",
+        "title": "External Service Providers",
+        "description": (
+            "When external service providers perform internal audit work, the CAE remains responsible "
+            "for the quality and conformance of all engagements. The CAE must ensure that external "
+            "providers are competent, objective, and adhere to the Standards. Independence of "
+            "the external provider from the auditee must be confirmed."
+        ),
+        "key_requirements": [
+            "CAE must review and approve work programmes for all externally co-sourced engagements",
+            "External provider must not perform work in areas where they have advisory conflicts",
+            "Quality review of external provider's workpapers must be performed by CAE or designee",
+            "External provider must sign a representation on compliance with the Standards",
+            "CAE must communicate to the Board when external providers are used for significant engagements",
+        ],
+        "relevance_to_banking": (
+            "Widespread in private banking: co-sourcing or fully outsourcing internal audit to "
+            "Big 4 or specialist firms. The new Standards clarify that the CAE cannot delegate "
+            "responsibility for quality to the external provider — active oversight is mandatory "
+            "regardless of the outsourcing model."
+        ),
+    },
+]
