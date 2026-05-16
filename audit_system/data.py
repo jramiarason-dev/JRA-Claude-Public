@@ -4921,3 +4921,1161 @@ AUDIT_TESTS_LIBRARY = {
         },
     ],
 }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# THEMATIC_BACKGROUND
+# Static thematic intelligence cards — one per audit topic.
+# Used by app.py Tab 0 (Intelligence Dashboard) for contextual framing.
+# ══════════════════════════════════════════════════════════════════════════════
+THEMATIC_BACKGROUND = {
+
+    "AML_KYC": {
+        "theme": "AML / KYC",
+        "market_context": (
+            "Financial crime risk remains the single largest source of regulatory action against private banks. "
+            "The FATF 2023–2026 priorities explicitly target professional money laundering networks and beneficial "
+            "ownership opacity in high-net-worth segments. Swiss private banks are subject to dual pressure: FINMA's "
+            "revised AMLA circular (effective 2024) and cross-border enforcement coordination with EU supervisors "
+            "under AMLD6. The introduction of the EU Anti-Money Laundering Authority (AMLA) — operational by 2025 — "
+            "creates a new supranational oversight layer affecting any bank with EU clients.\n\n"
+            "Transaction monitoring models are under intense scrutiny: regulators expect banks to evidence ongoing "
+            "calibration, alert-to-SAR conversion ratios, and model risk management frameworks applied to AML "
+            "systems with the same rigour as credit models. Name screening against sanctions lists (OFAC, EU, UN, "
+            "SECO) must now achieve near-real-time refresh cycles.\n\n"
+            "Politically Exposed Persons (PEPs) and family-office structures remain the highest-risk client segments "
+            "in private banking, requiring enhanced due diligence programmes that are both robust and commercially "
+            "sustainable — a balance that many mid-tier institutions continue to struggle with."
+        ),
+        "private_banking_issues": (
+            "Swiss private banks face specific structural vulnerabilities: (1) high proportion of cross-border "
+            "clients from jurisdictions with weak AML regimes; (2) complex ownership chains involving trusts, "
+            "foundations, and special-purpose vehicles that obscure beneficial ownership; (3) relationship-manager "
+            "culture that historically prioritised client retention over compliance rigour; (4) correspondent "
+            "banking relationships providing indirect exposure to higher-risk counterparties."
+        ),
+        "regulatory_pressure": (
+            "FINMA issued enforcement actions against four Swiss banks in 2023–2024 for AML deficiencies, including "
+            "one case resulting in business restrictions. AMLA enforcement coordination creates extraterritorial "
+            "risk for banks holding EU assets. The FATF Fourth Round mutual evaluation of Switzerland (2024) "
+            "highlighted persistent weaknesses in beneficial ownership transparency and STR filing rates."
+        ),
+        "industry_trends": (
+            "Leading institutions are investing in graph analytics to map complex client networks and identify "
+            "hidden beneficial ownership links. AI-driven transaction monitoring (replacing rule-based engines) "
+            "is gaining traction, with RegTech vendors offering explainable-AI models to satisfy supervisory "
+            "scrutiny. KYC utilities and consortium data-sharing are emerging as cost-efficiency levers, "
+            "particularly for smaller private banks lacking scale to maintain full in-house capabilities."
+        ),
+        "peer_incidents": (
+            "Credit Suisse faced prolonged AML enforcement over the Mozambique 'Tuna Bonds' affair and Bulgarian "
+            "money-laundering case (2022–2024). Julius Bär disclosed client onboarding failures in Latin American "
+            "portfolios (2023). Lombard Odier settled AML-adjacent governance issues with FINMA (2023). "
+            "Internationally, Deutsche Bank's €75M OFAC settlement (2023) underscored sanctions-screening failures "
+            "affecting correspondent networks."
+        ),
+        "key_statistics": [
+            "FATF estimates annual global money laundering flows at USD 800B–2T (1–5% of global GDP)",
+            "Swiss STR filing rate rose 18% YoY in 2023 (MROS Annual Report 2024), yet absolute volumes remain low vs. peers",
+            "Average cost of AML compliance per private bank: CHF 8–15M annually (KPMG, 2023)",
+            "EU AMLA will directly supervise ~40 highest-risk obliged entities from 2026, including several Swiss institutions with EU nexus",
+            "73% of FINMA-supervised banks rated AML controls 'adequate' in 2024 self-assessments vs. 61% in supervisory assessments — gap indicates overconfidence",
+        ],
+        "mckinsey_angle": (
+            "The strategic imperative is to transform AML/KYC from a pure cost centre into a competitive "
+            "differentiator. Banks that build genuinely efficient, risk-calibrated compliance programmes — "
+            "avoiding both false-positive overload and coverage gaps — will outperform peers on the dual "
+            "metrics of regulatory standing and client experience. The optimal intervention point is the "
+            "KYC data architecture: a single, enriched client data lake driving both onboarding, ongoing "
+            "monitoring, and regulatory reporting eliminates the fragmented, manual processes that create "
+            "both compliance risk and disproportionate cost."
+        ),
+        "tone": "professional",
+    },
+
+    "CYBER_RISK": {
+        "theme": "Cybersecurity & ICT Risk",
+        "market_context": (
+            "The European Digital Operational Resilience Act (DORA) entered into force on 17 January 2025, "
+            "establishing binding ICT risk management, incident reporting, and third-party ICT provider "
+            "oversight requirements for all EU financial institutions — including Swiss banks with EU-regulated "
+            "entities or branches. FINMA's circular 2023/1 (Operational Risks and Resilience) simultaneously "
+            "raised the bar for ICT governance domestically. The convergence of these two frameworks creates "
+            "a dual-compliance challenge that is reshaping cybersecurity programmes across Swiss private banking.\n\n"
+            "The threat landscape has escalated materially: ransomware-as-a-service (RaaS) operators now "
+            "specifically target financial services for double-extortion attacks, exploiting supply-chain "
+            "vulnerabilities in core banking and custody platforms. Nation-state actors — particularly those "
+            "aligned with Russia and China — are conducting persistent campaigns against Swiss financial "
+            "infrastructure, motivated by intelligence gathering on sanctioned entities' assets.\n\n"
+            "Generative AI introduces a new attack vector dimension: AI-powered phishing (highly personalised, "
+            "multi-language), deepfake-enabled social engineering targeting relationship managers, and "
+            "adversarial attacks on banks' own AI models."
+        ),
+        "private_banking_issues": (
+            "Private banks face heightened cyber exposure through: (1) high-value client data attracting "
+            "sophisticated attackers; (2) legacy core banking systems (some 15–25 years old) with limited "
+            "patching cadence; (3) extensive use of third-party wealth management platforms and custodian APIs "
+            "creating supply-chain risk; (4) remote-working expansion of the attack surface; (5) privileged "
+            "access management gaps in relationship-manager tooling accessing multiple client systems."
+        ),
+        "regulatory_pressure": (
+            "DORA mandates: ICT risk management framework, incident classification and reporting within 4 hours "
+            "(major incidents), annual threat-led penetration testing (TLPT) for significant institutions, "
+            "and contractual requirements for all critical ICT third-party providers. FINMA expects board-level "
+            "cybersecurity governance and annual reporting of material ICT incidents. NIS2 Directive (EU) "
+            "creates additional obligations for banks' EU-based entities from October 2024."
+        ),
+        "industry_trends": (
+            "Zero-trust architecture adoption is accelerating, driven by DORA's requirement for network "
+            "segmentation and access control. Security Operations Centres (SOCs) are increasingly outsourced "
+            "to Managed Detection & Response (MDR) providers — a model regulators are scrutinising under "
+            "third-party ICT provider rules. Cyber insurance premiums rose 25–40% in 2024, with insurers "
+            "imposing technical pre-conditions (MFA, EDR, immutable backups) as coverage prerequisites."
+        ),
+        "peer_incidents": (
+            "ION Trading cyber attack (January 2023) disrupted derivatives processing for multiple banks globally, "
+            "including Swiss institutions with commodity trading exposure. Temenos (core banking platform used by "
+            "Swiss private banks) disclosed a data breach affecting client environments (2023). SWIFT-related "
+            "social engineering attacks on correspondent messaging continued throughout 2023–2024. Locally, "
+            "several Swiss cantonal banks suffered DDoS attacks attributed to pro-Russian hacktivist groups (2023)."
+        ),
+        "key_statistics": [
+            "Average cost of a financial services data breach: USD 5.9M (IBM Cost of a Data Breach Report, 2024)",
+            "DORA compliance gap for mid-tier Swiss private banks estimated at 60–70% as of Q4 2024 (PwC survey)",
+            "73% of financial services firms experienced a ransomware attack in 2023 (Sophos State of Ransomware)",
+            "Mean time to detect (MTTD) a breach in financial services: 168 days (Mandiant M-Trends 2024)",
+            "ICT third-party risk: average private bank relies on 15–30 critical technology vendors (Deloitte, 2024)",
+        ],
+        "mckinsey_angle": (
+            "Cyber resilience is a board-level strategic priority, not a technology problem. The institutions "
+            "that will outperform are those treating DORA compliance as an opportunity to fundamentally "
+            "redesign ICT governance — consolidating vendor ecosystems, retiring legacy platforms, and "
+            "embedding security-by-design into digital transformation programmes. The TLPT requirement "
+            "in particular should be leveraged as a catalyst for red-team capability building rather than "
+            "a compliance checkbox. The ROI case for a CHF 5–10M cyber resilience investment is compelling "
+            "when measured against the average EUR 50M+ cost of a major incident (fines, remediation, "
+            "reputational damage)."
+        ),
+        "tone": "professional",
+    },
+
+    "CREDIT_RISK": {
+        "theme": "Credit Risk (Lombard & Mortgage Lending)",
+        "market_context": (
+            "The 2022–2024 rate cycle fundamentally altered the credit risk landscape for private banks. "
+            "Rising rates compressed collateral values in fixed-income Lombard portfolios while simultaneously "
+            "increasing debt servicing costs for mortgage clients — a dual squeeze not seen since the 1990s. "
+            "Swiss private banks with concentrated Lombard lending books (often 40–60% of total advances) "
+            "faced elevated margin-call frequency and forced liquidation events, stress-testing collateral "
+            "management frameworks that had operated in a benign environment for over a decade.\n\n"
+            "The SNB's pivot to rate cuts from March 2024 has eased some pressure but introduced reinvestment "
+            "risk in collateral portfolios. Meanwhile, Swiss residential real estate — a primary collateral "
+            "class — remains overvalued by 15–25% on OECD metrics, sustaining latent concentration risk in "
+            "mortgage books. FINMA's countercyclical capital buffer guidance and its 2023 self-regulation "
+            "requirements for residential mortgage lending reinforce the supervisory focus on this exposure.\n\n"
+            "Private credit (direct lending, structured products) has grown as an asset class in private "
+            "bank client portfolios, creating indirect credit risk exposure through structured products "
+            "where credit performance affects collateral values."
+        ),
+        "private_banking_issues": (
+            "Key credit risk vulnerabilities in private banking: (1) Lombard loan concentration in single "
+            "asset classes (e.g., illiquid alternatives, concentrated single-stock positions); (2) inadequate "
+            "stress-testing of collateral under correlated market stress scenarios; (3) relationship-manager "
+            "discretion in granting initial margin call extensions; (4) UHNW client credit facilities "
+            "structured to avoid margin calls (bullet facilities, bespoke LTV covenants) creating asymmetric "
+            "risk profiles; (5) cross-collateralisation complexity in multi-entity family structures."
+        ),
+        "regulatory_pressure": (
+            "FINMA Circular 2008/18 (Banking — Mortgage lending) was revised in 2024 to tighten affordability "
+            "calculations. Basel III final rule implementation (CRR3/CRD6 in EU) increases RWA density for "
+            "certain Lombard exposures. FINMA's supervisory priorities for 2024–2025 explicitly include "
+            "real estate and Lombard lending concentration risk. Credit Suisse's collapse reinforced regulatory "
+            "focus on large single-counterparty credit exposures within private banking groups."
+        ),
+        "industry_trends": (
+            "Leading private banks are deploying dynamic LTV monitoring with intraday collateral valuation "
+            "feeds, replacing end-of-day batch processes. AI-powered early warning systems scanning client "
+            "portfolio data, news, and market indicators for deterioration signals are being piloted. "
+            "Stress-testing sophistication is increasing: scenario analysis now incorporates liquidity "
+            "haircuts under market dislocation (not just price moves) and cross-asset correlation shocks."
+        ),
+        "peer_incidents": (
+            "Credit Suisse's Archegos exposure (USD 4.7B loss, 2021) remains the defining private banking "
+            "credit risk case study — prime brokerage, but directly relevant to Lombard governance. "
+            "Several Swiss private banks reported Lombard losses in Q4 2022 during the crypto market collapse, "
+            "as crypto-backed lending LTVs proved inadequate. EFG International disclosed elevated credit "
+            "provisions in its Lombard book in 2023 amid emerging-market client stress."
+        ),
+        "key_statistics": [
+            "Swiss Lombard lending market: estimated CHF 150–200B outstanding (SNB, 2024)",
+            "Swiss residential real estate overvaluation: 15–25% above fundamental value (OECD, 2024)",
+            "FINMA-flagged concentration risk in mortgage lending: 6 banks required remediation plans in 2023",
+            "Average Lombard LTV at Swiss private banks: 50–65% (client-weighted); stress LTV tolerance: 75–80%",
+            "Private credit AUM in Swiss bank-distributed products grew 35% in 2023 (KPMG Private Banking Survey)",
+        ],
+        "mckinsey_angle": (
+            "Credit risk in private banking is fundamentally a data and governance problem masquerading as "
+            "a risk problem. The banks that suffered most in the 2022–2023 stress cycle had two characteristics "
+            "in common: fragmented collateral data (no single view of client collateral across products and "
+            "entities) and inadequate stress-testing granularity (portfolio-level shocks rather than "
+            "name-specific, correlation-adjusted scenarios). The strategic priority is therefore not simply "
+            "tightening LTV ratios — it is building an integrated credit intelligence platform that gives "
+            "risk managers and relationship teams real-time, actionable signals. Done well, this "
+            "simultaneously improves risk management and client service quality."
+        ),
+        "tone": "professional",
+    },
+
+    "OPERATIONAL_RISK": {
+        "theme": "Operational Risk & Business Continuity",
+        "market_context": (
+            "Operational risk has moved from back-office discipline to boardroom priority following a decade "
+            "of high-profile failures: rogue trading, mis-selling, system outages, and the COVID-19 stress "
+            "test. For Swiss private banks, the Credit Suisse collapse was an operational risk event at its "
+            "core — a sequence of governance failures, cultural breakdowns, and inadequate escalation "
+            "mechanisms that are studied in every risk management curriculum. Basel III's revised operational "
+            "risk capital charge (Standardised Measurement Approach) is increasing capital requirements for "
+            "banks with significant historical loss experience.\n\n"
+            "FINMA Circular 2023/1 (Operational Risks and Resilience, effective January 2024) consolidates "
+            "ICT, business continuity, and crisis management requirements into a unified framework, raising "
+            "the bar for Swiss banks' operational resilience programmes. The concept of 'impact tolerance' — "
+            "defining the maximum tolerable disruption to critical services — is now explicitly required. "
+            "This aligns Swiss practice with the UK PRA's operational resilience framework and anticipates "
+            "DORA's requirements.\n\n"
+            "Outsourcing risk has become a dominant theme: Swiss private banks are net outsourcers (custody, "
+            "IT, compliance operations), creating long chains of operational dependency that are difficult "
+            "to monitor and control. FINMA outsourcing guidelines require banks to maintain the ability to "
+            "insource critical functions within defined timeframes."
+        ),
+        "private_banking_issues": (
+            "Specific operational risk exposures: (1) key-person dependency on senior relationship managers "
+            "holding substantial client relationships; (2) manual process concentration in high-value "
+            "transaction workflows (wires, structured product settlement); (3) inadequate RCSA (Risk and "
+            "Control Self-Assessment) processes that are perceived as compliance exercises rather than "
+            "genuine risk identification tools; (4) BCP plans not tested under realistic scenarios "
+            "(single-site dependencies, key-person absence); (5) change management risk from digital "
+            "transformation programmes running in parallel with BAU operations."
+        ),
+        "regulatory_pressure": (
+            "FINMA 2023/1 mandates: documented critical services mapping, impact tolerance definitions, "
+            "annual resilience testing, and board-approved BCP. Basel III SMA increases capital sensitivity "
+            "to historical operational losses. DORA's ICT-related operational resilience requirements "
+            "overlap significantly with FINMA 2023/1 for banks with EU entities. Swiss Financial Market "
+            "Supervisory Act (FINMASA) Art. 29 empowers FINMA to order operational remediation measures."
+        ),
+        "industry_trends": (
+            "Operational resilience has replaced business continuity as the conceptual framework — from "
+            "'survive the event' to 'stay within impact tolerance'. Automation of operational risk data "
+            "collection (loss events, near misses, KRIs) via GRC platforms is reducing reporting lag from "
+            "weeks to hours. Process mining tools are being applied to identify hidden manual process "
+            "vulnerabilities in banking workflows. Cultural risk measurement — using indicators like "
+            "speak-up culture scores, ethics hotline utilisation, and manager risk training completion — "
+            "is gaining traction as a leading indicator of operational risk quality."
+        ),
+        "peer_incidents": (
+            "Credit Suisse's multiple operational failures (supply chain finance, prime brokerage, "
+            "governance) culminated in the 2023 emergency rescue — the most significant operational "
+            "risk event in Swiss banking history. UBS suffered a technology outage affecting e-banking "
+            "services for several hours in 2023. Pictet disclosed an FINMA investigation into outsourcing "
+            "governance arrangements (2022–2023). Internationally, TSB Bank's (UK) core banking migration "
+            "disaster (2018) continues to serve as the reference case for IT change management risk."
+        ),
+        "key_statistics": [
+            "Global financial services operational risk losses: USD 47B in 2023 (ORX Annual Banking Loss Report)",
+            "Swiss private banks spend on average 12–18% of total operating costs on risk and compliance (McKinsey, 2024)",
+            "58% of FINMA-supervised banks rated their BCP 'tested and adequate' in 2023; regulators disagreed with 30% of those self-assessments",
+            "Key-person risk: top 20 RMs at a typical Swiss private bank manage 40–60% of AUM",
+            "Average time to detect and contain an operational loss event: 47 days (ORX, 2023)",
+        ],
+        "mckinsey_angle": (
+            "The most impactful lever in operational risk management is not adding more controls — it is "
+            "improving the quality of risk culture and the effectiveness of existing controls. Banks that "
+            "invest in genuine RCSA processes (engaging first-line ownership, not just compliance sign-off), "
+            "coupled with real-time KRI dashboards visible to business leaders, consistently outperform "
+            "peers on both loss frequency and regulatory standing. The strategic framing should be "
+            "'operational excellence enables growth': a bank with demonstrably resilient operations commands "
+            "higher client trust, faster regulatory approval for new products, and lower capital charges — "
+            "all of which translate directly to competitive advantage."
+        ),
+        "tone": "professional",
+    },
+
+    "DATA_PRIVACY": {
+        "theme": "Data Privacy & Protection",
+        "market_context": (
+            "Switzerland's revised Federal Act on Data Protection (revFADP / nDSG) entered into force on "
+            "1 September 2023, substantially aligning Swiss data protection law with GDPR principles "
+            "while maintaining Swiss-specific characteristics. For Swiss private banks, this created a "
+            "dual compliance obligation: nDSG for Swiss-resident clients and Swiss-processed data, "
+            "GDPR for EU-resident clients and EU-transferred data. The practical challenge is that most "
+            "banks manage a single data infrastructure serving both populations.\n\n"
+            "The EU-Switzerland adequacy decision framework — allowing data flows without additional "
+            "safeguards — is periodically reviewed and cannot be assumed stable. Post-Schrems II, banks "
+            "must maintain Standard Contractual Clauses (SCCs) or equivalent mechanisms for cross-border "
+            "data transfers, adding administrative complexity to cloud migrations and outsourcing arrangements.\n\n"
+            "Generative AI introduces new data privacy vectors: client data ingested into LLM training "
+            "pipelines, AI-generated client communications potentially revealing protected personal "
+            "information, and biometric data used in voice authentication systems all create novel "
+            "compliance questions not fully addressed by existing regulatory guidance."
+        ),
+        "private_banking_issues": (
+            "Private banking-specific data privacy risks: (1) sensitive client financial data (wealth "
+            "levels, investment positions, beneficial ownership) attracting heightened regulatory scrutiny "
+            "under nDSG/GDPR 'sensitive data' categories; (2) cross-border data transfer complexity for "
+            "clients with multi-jurisdictional structures; (3) data minimisation tension with AML/KYC "
+            "requirements to collect and retain extensive client information; (4) AI-driven personalisation "
+            "services requiring extensive profiling; (5) third-party data processors (custodians, "
+            "platform providers) with inconsistent data protection standards."
+        ),
+        "regulatory_pressure": (
+            "FDPIC (Swiss Federal Data Protection and Information Commissioner) has increased investigative "
+            "activity since nDSG implementation, with several financial services cases opened in 2023–2024. "
+            "EU DPAs (particularly the French CNIL and German BfDI) are actively investigating Swiss "
+            "banks' EU operations for GDPR compliance. Cross-border enforcement cooperation under GDPR "
+            "Article 60 is creating multi-jurisdictional risk for institutions with EU presence."
+        ),
+        "industry_trends": (
+            "Privacy-by-design is moving from aspiration to regulatory expectation. Data protection impact "
+            "assessments (DPIAs) are now routine for new product launches and technology deployments. "
+            "Automated data discovery and classification tools (scanning structured and unstructured data "
+            "for personal data) are being deployed to address the 'data dark matter' problem in legacy "
+            "systems. Privacy-enhancing technologies (PETs) — differential privacy, federated learning, "
+            "homomorphic encryption — are under evaluation for analytics use cases."
+        ),
+        "peer_incidents": (
+            "Julius Bär faced data breach notification obligations under nDSG after a phishing attack "
+            "compromised employee email accounts containing client data (2024). A major Swiss private bank "
+            "received an FDPIC recommendation following inadequate data retention practices — client data "
+            "retained 15+ years beyond the legal requirement (2023). HSBC's EU entities faced GDPR fines "
+            "totalling €40M in 2024 for unlawful data processing in marketing activities."
+        ),
+        "key_statistics": [
+            "EU GDPR fines cumulative total: €4.5B+ since 2018 (enforcement.gdprhub.eu, 2024); financial services sector accounts for ~12%",
+            "Swiss nDSG: maximum administrative fine CHF 250,000 (per individual, not per company — different from GDPR model)",
+            "Average cost of a personal data breach in financial services: USD 5.9M (IBM, 2024)",
+            "73% of Swiss private banks had not completed a full ROPA (Records of Processing Activities) update since nDSG implementation (KPMG, 2024)",
+            "Data subject access requests (DSARs) increased 40% YoY in 2023 across Swiss financial services firms",
+        ],
+        "mckinsey_angle": (
+            "Data privacy is the hidden infrastructure problem of private banking. Most institutions have "
+            "accumulated two decades of client data in fragmented, poorly documented systems — creating "
+            "both regulatory exposure and a competitive handicap (they cannot safely leverage their data "
+            "assets for AI or personalisation without privacy remediation). The banks that will lead "
+            "the next cycle of data-driven wealth management are those investing now in a clean, "
+            "well-governed data architecture: a single client data platform with embedded privacy "
+            "controls, enabling both compliance and commercial capability simultaneously. "
+            "Privacy-by-design is not a cost — it is the foundation of trusted data monetisation."
+        ),
+        "tone": "professional",
+    },
+
+    "MARKET_RISK": {
+        "theme": "Market Risk & Trading",
+        "market_context": (
+            "The 2022–2023 rate shock — the most rapid tightening cycle in 40 years — exposed structural "
+            "weaknesses in market risk frameworks across the industry. Banks that had benefited from a "
+            "decade of near-zero rates and compressed volatility found their VaR models systematically "
+            "under-predicting losses in the new regime. The failure of Silicon Valley Bank (March 2023), "
+            "triggered by mark-to-market losses on an Available-For-Sale bond portfolio, demonstrated "
+            "that market risk in the banking book (IRRBB) could create existential threats — not just "
+            "P&L volatility in the trading book.\n\n"
+            "Basel III's Fundamental Review of the Trading Book (FRTB) — the most significant market "
+            "risk regulation since Basel II — is progressively entering into force: EU implementation "
+            "from January 2025, UK from January 2026, Switzerland in alignment with EU timeline. FRTB "
+            "replaces VaR with Expected Shortfall, introduces a more granular internal model approval "
+            "process, and significantly increases capital requirements for illiquid and complex instruments "
+            "common in private bank client portfolios.\n\n"
+            "Structured products — a significant revenue source for Swiss private banks — create "
+            "complex, concentrated market risk exposures. Capital-guaranteed products and autocallables "
+            "embed options that create convexity and barrier risk not fully captured by standard VaR."
+        ),
+        "private_banking_issues": (
+            "Market risk specifics for private banking: (1) structured product manufacturing and "
+            "distribution creating delta/gamma/vega exposures in treasury books; (2) IRRBB from "
+            "sight-deposit funding of fixed-rate mortgage books; (3) FX risk from multi-currency "
+            "client account structures; (4) equity concentration risk in client discretionary mandates "
+            "creating implicit market risk through potential redemption; (5) commodity exposure via "
+            "structured products on gold, energy, and agricultural indices popular with HNWI clients."
+        ),
+        "regulatory_pressure": (
+            "FRTB (BCBS 457) implementation is the dominant market risk regulatory driver, requiring "
+            "fundamental model rebuilds and data infrastructure upgrades. FINMA's IRRBB supervisory "
+            "expectations (aligned with EBA IRRBB Guidelines) require annual IRRBB stress testing "
+            "reported to the Board. SNB's Financial Stability Report (2024) highlighted IRRBB as a "
+            "priority concern for Swiss banks given the rate environment."
+        ),
+        "industry_trends": (
+            "Machine learning is being applied to VaR forecasting, scenario generation, and Greeks "
+            "calculation — reducing both model error and computational time for complex portfolios. "
+            "Real-time risk dashboards integrating positions from custodians, structured product "
+            "platforms, and treasury systems are replacing overnight batch risk reports. Scenario "
+            "analysis libraries are being enriched with geopolitical stress scenarios (Taiwan Strait "
+            "conflict, US debt ceiling, oil supply shocks) reflecting the new risk landscape."
+        ),
+        "peer_incidents": (
+            "Credit Suisse's AT1 write-down (CHF 17B, March 2023) was the largest single market "
+            "event in Swiss private banking, triggering repricing of the entire AT1 asset class "
+            "globally. SVB's collapse (USD 1.8B AFS portfolio loss) remains the canonical IRRBB "
+            "case study. Nomura's Archegos-related market risk losses (USD 2.9B, 2021) illustrated "
+            "prime brokerage concentration risk. Several Swiss private banks reported structured "
+            "product losses during the 2022 inflation shock as autocallable barriers were breached."
+        ),
+        "key_statistics": [
+            "Global bank market risk capital (VaR-based) increased 23% on average in 2022–2023 (BIS, 2024)",
+            "FRTB implementation cost for a mid-tier private bank: estimated CHF 15–40M (Oliver Wyman, 2024)",
+            "Swiss private banks' structured product AUM: CHF 200–300B (SBA, 2024)",
+            "IRRBB shock impact (200bp parallel shift) on CET1 ratio: average -1.8pp for Swiss private banks (FINMA, 2024)",
+            "AT1 market: CHF 17B Credit Suisse write-down prompted 15–20% spread widening for Swiss bank AT1 instruments (2023)",
+        ],
+        "mckinsey_angle": (
+            "Market risk is the domain where data infrastructure quality most directly translates to "
+            "competitive advantage. Banks with integrated, real-time position and risk data — across "
+            "the trading book, banking book, and client portfolios — can make better hedging decisions, "
+            "price structured products more accurately, and respond to regulatory inquiries faster. "
+            "The FRTB implementation programme, while costly, is the forcing function to modernise "
+            "risk data architecture that most private banks have deferred for too long. "
+            "Treated strategically, it delivers lasting operational leverage beyond mere compliance."
+        ),
+        "tone": "professional",
+    },
+
+    "THIRD_PARTY_RISK": {
+        "theme": "Third-Party & Vendor Risk",
+        "market_context": (
+            "Third-party risk has emerged as one of the most material and least mature risk domains in "
+            "private banking. The average Swiss private bank relies on 80–120 third-party vendors for "
+            "critical operational functions — from core banking (Temenos, Avaloq, Olympic) to custody "
+            "(Clearstream, SIX), trading infrastructure (Bloomberg, Refinitiv), and cloud services "
+            "(AWS, Azure, Google Cloud). This creates complex chains of operational, financial, "
+            "reputational, and regulatory dependency that few institutions fully understand.\n\n"
+            "DORA's third-party ICT provider framework (effective January 2025) represents the most "
+            "significant third-party risk regulatory development in a decade, requiring: register of "
+            "all ICT providers, risk assessments, contractual minimum requirements, and exit strategy "
+            "documentation for all providers — with enhanced requirements for 'critical' ICT providers "
+            "who will be directly supervised by EU financial regulators. FINMA's outsourcing circular "
+            "has been updated to align broadly with DORA principles for Swiss-only banks.\n\n"
+            "Concentration risk is the systemic dimension: if Temenos or Avaloq (used by 60%+ of "
+            "Swiss private banks) suffers a major outage or security breach, the sector-wide impact "
+            "would be severe. Regulators are increasingly concerned about this monoculture risk."
+        ),
+        "private_banking_issues": (
+            "Third-party risk specifics for private banking: (1) critical dependency on a small number "
+            "of core banking platform vendors with limited alternatives and high switching costs; "
+            "(2) custody chain complexity — sub-custodian networks spanning 50+ jurisdictions create "
+            "monitoring challenges; (3) FinTech partnerships for digital onboarding, portfolio analytics, "
+            "and client reporting introduce technology and reputational risk from less mature vendors; "
+            "(4) data processor exposure — vendors processing client financial data subject to both "
+            "nDSG/GDPR and banking secrecy requirements; (5) fourth-party risk (vendors' vendors) "
+            "largely unmonitored."
+        ),
+        "regulatory_pressure": (
+            "DORA Articles 28–44 establish comprehensive third-party ICT risk management requirements "
+            "including mandatory contractual provisions, performance monitoring, and exit strategies. "
+            "FINMA Circular 2018/3 (Outsourcing) requires Board-approved outsourcing policy, "
+            "risk assessment for all material outsourcing, and audit access rights. "
+            "EBA Guidelines on Outsourcing apply to EU-licensed entities within Swiss banking groups."
+        ),
+        "industry_trends": (
+            "Third-party risk management platforms (ProcessUnity, Archer, OneTrust) are being adopted "
+            "to replace spreadsheet-based vendor registers. Continuous monitoring — combining "
+            "cybersecurity ratings (BitSight, SecurityScorecard), financial health feeds, and "
+            "news/sanctions screening — is replacing point-in-time due diligence. Vendor "
+            "concentration management is becoming a Board-level topic, with some banks establishing "
+            "explicit concentration limits by vendor, technology stack, and geography."
+        ),
+        "peer_incidents": (
+            "ION Trading ransomware attack (January 2023) disrupted derivatives processing for banks "
+            "in multiple countries, exposing depth of operational dependency on a single vendor. "
+            "Temenos disclosed a security incident affecting client-hosted environments (2023), "
+            "triggering patch management obligations across dozens of Swiss banks. "
+            "A major Swiss private bank's custodian (Clearstream) suffered a processing delay "
+            "in 2022 that cascaded into client reporting failures. "
+            "Capita (UK outsourcer) breach (2023) exposed third-party data risk in financial services outsourcing."
+        ),
+        "key_statistics": [
+            "Average number of critical third-party vendors per Swiss private bank: 80–120 (Deloitte, 2024)",
+            "DORA compliance gap on third-party requirements: 65% of Swiss banks not fully compliant at January 2025 go-live (PwC, 2024)",
+            "Third-party data breaches account for 29% of all financial services breaches (IBM Cost of Data Breach, 2024)",
+            "Switching cost from one core banking platform to another: CHF 30–100M and 3–5 years for a mid-tier private bank",
+            "4th-party risk: average financial institution's critical vendors each have 50+ sub-processors (Prevalent, 2024)",
+        ],
+        "mckinsey_angle": (
+            "Third-party risk is fundamentally a strategic sourcing problem that has been delegated to "
+            "operational risk teams — and the mismatch creates both governance gaps and missed "
+            "opportunities. The banks that manage third-party risk most effectively treat vendor "
+            "relationships as a portfolio: actively managing concentration, maintaining viable "
+            "alternatives for critical functions, and negotiating enhanced contractual protections "
+            "from a position of informed strength. DORA compliance should be the catalyst for this "
+            "strategic reset — using the regulatory impetus to drive vendor consolidation, strengthen "
+            "negotiating leverage, and build the exit strategy capabilities that reduce long-term "
+            "dependency risk. The compliance investment pays for itself in reduced vendor pricing power."
+        ),
+        "tone": "professional",
+    },
+
+    "GOVERNANCE": {
+        "theme": "Governance & Internal Controls",
+        "market_context": (
+            "Corporate governance failures have driven the most consequential risk events in financial "
+            "services over the past decade — from the 2008 financial crisis through to Credit Suisse's "
+            "collapse in 2023. The Credit Suisse case is particularly instructive for Swiss private "
+            "banking: it demonstrated how inadequate Board challenge, a dysfunctional risk culture, "
+            "and misaligned executive incentives can overwhelm technically sound risk frameworks. "
+            "FINMA's post-mortem identified Board governance as the primary failure point.\n\n"
+            "The Three Lines of Defence model — long the standard governance framework — is under "
+            "critical review. Regulators increasingly expect the model to be operationalised with "
+            "genuine independence and expertise in the second and third lines, not paper structures. "
+            "FINMA has made it explicit that non-executive directors must have sufficient financial "
+            "industry expertise to exercise meaningful challenge, raising the bar for Board composition.\n\n"
+            "ESG governance is becoming inseparable from financial governance: regulators expect "
+            "Board-level accountability for climate risk, sustainability disclosures, and "
+            "ESG-related fiduciary obligations. The Swiss Climate Scores initiative and TCFD "
+            "requirements are adding new governance accountability dimensions for private banks "
+            "managing client portfolios."
+        ),
+        "private_banking_issues": (
+            "Governance vulnerabilities in private banking: (1) Board composition — limited number of "
+            "qualified independent directors available with private banking expertise; (2) Audit "
+            "Committee oversight of highly complex structured products and off-balance-sheet risks; "
+            "(3) executive compensation structures that incentivise short-term AUM growth over "
+            "sustainable risk-adjusted performance; (4) management information quality — Boards "
+            "receiving aggregated, positive-biased reporting rather than risk-calibrated intelligence; "
+            "(5) group governance complexity in international private banking groups with multiple "
+            "regulated entities."
+        ),
+        "regulatory_pressure": (
+            "FINMA Circular 2017/1 (Corporate governance) sets minimum standards for Board and "
+            "senior management governance in Swiss banks. New FINMA enforcement tools introduced "
+            "in the Financial Market Infrastructure Act (FMIA) amendments include senior manager "
+            "accountability provisions similar to the UK Senior Managers Regime — creating personal "
+            "liability for governance failures. The Basel Committee's revised Principles for the "
+            "Sound Management of Operational Risk include enhanced governance expectations."
+        ),
+        "industry_trends": (
+            "Board effectiveness reviews conducted by external advisers (formerly a best practice, "
+            "now effectively expected by FINMA) are becoming annual rather than triennial exercises. "
+            "Digital Board portals and AI-assisted Board pack analysis are being introduced to help "
+            "non-executive directors efficiently process increasingly complex regulatory and risk "
+            "information. Internal Audit's mandate is expanding: from assurance to advisory, "
+            "including pre-implementation reviews of transformation programmes and M&A integration "
+            "governance. Behavioural risk indicators — tracking speak-up culture, ethics hotline "
+            "utilisation, and management response to escalations — are being integrated into "
+            "risk dashboards."
+        ),
+        "peer_incidents": (
+            "Credit Suisse's collapse (2023) is the definitive Swiss governance failure — Board "
+            "and risk committee weaknesses identified in multiple post-mortem analyses. "
+            "Falcon Private Bank had its banking licence revoked by FINMA (2019) following "
+            "1MDB governance failures, with Board oversight cited as inadequate. "
+            "BSI Bank (Singapore, 2016) — another Swiss private bank — closed following governance "
+            "failures in client onboarding and management escalation in the 1MDB affair. "
+            "Wirecard's collapse (2020) — while not a bank — exposed audit committee and "
+            "supervisory board limitations in detecting complex fraud."
+        ),
+        "key_statistics": [
+            "FINMA enforcement actions with governance as primary finding: 40% of all enforcement cases 2021–2024",
+            "Average Swiss private bank Board size: 5–9 members; FINMA recommends at least one-third independent",
+            "Internal Audit investment: leading private banks spend 0.8–1.2% of operating costs on IA; laggards spend 0.3–0.5%",
+            "Board gender diversity: Swiss SIX-listed financial institutions average 31% female directors (2024) vs. 22% for non-listed private banks",
+            "Management information quality gap: 68% of Audit Committee members at Swiss banks rate MI quality as 'adequate or below' (IIA Switzerland survey, 2024)",
+        ],
+        "mckinsey_angle": (
+            "Governance quality is the meta-risk that determines the effectiveness of every other "
+            "risk control. The institutions that govern best — with genuinely independent and "
+            "expert Boards, rigorous management information, and a culture where risk escalation "
+            "is rewarded rather than suppressed — consistently outperform on regulatory standing, "
+            "risk-adjusted returns, and crisis resilience. The investment case for governance "
+            "improvement is therefore not defensive but offensive: a bank with demonstrably "
+            "superior governance commands regulatory trust (faster product approvals, less "
+            "intrusive supervision), employee loyalty (talent retention in a competitive market), "
+            "and client confidence (critical in private banking where trust is the product). "
+            "The ROI on a governance improvement programme is measurable — and substantial."
+        ),
+        "tone": "professional",
+    },
+
+    "CROSS_BORDER": {
+        "theme": "Cross-Border Banking & Tax Compliance",
+        "market_context": (
+            "The era of Swiss banking secrecy as a structural competitive advantage is definitively "
+            "over. The Automatic Exchange of Information (AEoI/CRS) — now covering 120+ "
+            "jurisdictions — has fundamentally changed the information asymmetry that underpinned "
+            "undeclared asset business. FATCA reporting to the US IRS is mandatory for all "
+            "Swiss financial institutions with US persons. The OECD's Common Reporting Standard "
+            "generates millions of data exchanges annually, enabling revenue authorities globally "
+            "to identify undisclosed Swiss accounts.\n\n"
+            "The residual risk is not eliminated assets — it is the long tail of complex cases: "
+            "dual or multi-nationality clients with reporting ambiguity, trusts and foundations "
+            "with contested beneficial ownership for CRS purposes, clients from non-CRS "
+            "jurisdictions (notably the US, which does not participate in CRS), and "
+            "cryptocurrency holdings not yet captured by standard AEoI frameworks "
+            "(DAC8 in the EU changes this from 2026).\n\n"
+            "Cross-border market access — the right to serve clients physically located in "
+            "other jurisdictions — remains a complex patchwork of national rules. Post-Brexit, "
+            "the UK has tightened restrictions on Swiss firms serving UK retail clients without "
+            "FCA authorisation. EU MiFID II cross-border rules create significant complexity "
+            "for Swiss banks serving EU-resident clients at scale."
+        ),
+        "private_banking_issues": (
+            "Cross-border specific risks: (1) client domicile tracking — failure to update "
+            "client residency data when clients relocate creates both tax reporting gaps and "
+            "market access breaches; (2) reverse solicitation reliance as a substitute for "
+            "proper cross-border licensing — regulators in multiple jurisdictions have signalled "
+            "this is not an unlimited exemption; (3) complex estate situations involving "
+            "multi-jurisdictional assets and heirs; (4) US person identification — "
+            "even FATCA-trained institutions experience classification errors on complex "
+            "cases (Green Card holders, accidental Americans); (5) Qualified Intermediary "
+            "(QI) obligations for US securities withholding."
+        ),
+        "regulatory_pressure": (
+            "OECD Pillar Two (global minimum tax, 15%) affects the profitability of certain "
+            "offshore structures used by HNWI clients. DAC8 (EU, 2026) extends AEoI to "
+            "crypto-asset reporting. UK's expanded CRS equivalent reporting post-Brexit. "
+            "US FATCA enforcement: IRS has increased FATCA audit activity on Swiss QIs. "
+            "Swiss-EU negotiations on cross-border financial services remain unresolved, "
+            "creating ongoing market access uncertainty."
+        ),
+        "industry_trends": (
+            "Tax transparency is now a 'table stakes' operational capability. Leading institutions "
+            "have invested in integrated CRS/FATCA reporting engines with automated client "
+            "classification and self-certification workflows. Residency change detection — "
+            "using address data, IP tracking, and client activity patterns — is being automated "
+            "to identify clients whose domicile has changed without notification. Legal "
+            "Entity Identifier (LEI) and Global Legal Entity Identifier Foundation (GLEIF) "
+            "data is being integrated into client onboarding to standardise entity classification."
+        ),
+        "peer_incidents": (
+            "UBS agreed a EUR 1.8B settlement with French tax authorities (2019) for cross-border "
+            "solicitation and tax evasion facilitation — the largest Swiss bank tax settlement in "
+            "European history. Credit Suisse paid USD 2.6B to the US DOJ for historic tax evasion "
+            "facilitation (2014), with ongoing compliance obligations. Pictet reached a US DOJ "
+            "non-prosecution agreement and paid USD 122.9M for helping US clients evade taxes (2023). "
+            "The US DOJ Swiss Bank Program resulted in 80+ Swiss banks paying settlements totalling "
+            "over USD 5B between 2014 and 2022."
+        ),
+        "key_statistics": [
+            "CRS: Switzerland exchanged data on 3.5M+ accounts with 105 partner jurisdictions in 2023 (FTA, 2024)",
+            "FATCA: 7,500+ Swiss financial institutions registered with the IRS as of 2024",
+            "Undeclared assets still held at Swiss banks: estimated CHF 50–100B (Swiss Bankers Association, 2024) — a fraction of the 2008 level of CHF 2T+",
+            "Cross-border compliance cost: CHF 3–8M annually for a mid-tier private bank (PWC, 2024)",
+            "MiFID II cross-border: 12 EU jurisdictions have filed enforcement actions against Swiss banks for unlicensed cross-border activities since 2018",
+        ],
+        "mckinsey_angle": (
+            "The strategic opportunity in cross-border banking is not to minimise regulatory "
+            "exposure — it is to build a genuinely compliant, transparent value proposition that "
+            "attracts the next generation of international HNWI clients who want simplicity and "
+            "certainty, not opacity. The banks that invested early in CRS/FATCA infrastructure "
+            "and cross-border compliance frameworks are now reaping the benefit: they can serve "
+            "complex multi-national client relationships with confidence, while competitors are "
+            "still managing legacy remediation. The white space is the growing population of "
+            "internationally mobile HNWI clients — entrepreneurs, executives, and families "
+            "with multi-country lives — who need a bank with genuine cross-border capability, "
+            "not just a Swiss account number."
+        ),
+        "tone": "professional",
+    },
+
+    "INVESTMENT_SUITABILITY": {
+        "theme": "Investment Suitability & MiFID Compliance",
+        "market_context": (
+            "Investment suitability — the obligation to recommend only products appropriate "
+            "for each client's financial situation, risk appetite, and investment objectives — "
+            "has been a persistent regulatory flashpoint in private banking. The root tension "
+            "is structural: relationship managers earn revenue from product placement, "
+            "creating an inherent conflict of interest that no disclosure framework fully resolves.\n\n"
+            "The EU's MiFID II framework (directly relevant to Swiss banks' EU-licensed entities "
+            "and EU clients) establishes detailed product governance, inducement, and suitability "
+            "requirements. FINMA's Financial Services Act (FinSA), effective January 2020, "
+            "created a parallel Swiss framework with similar suitability obligations — though "
+            "with different perimeter and enforcement mechanisms. The practical challenge for "
+            "Swiss private banks is managing dual compliance: FinSA for Swiss-regulated activity, "
+            "MiFID II for EU entities, often across shared client relationships.\n\n"
+            "The recent market volatility (2022–2023 rate shock, crypto collapse) triggered a "
+            "wave of client complaints about suitability — particularly for structured products, "
+            "high-yield bonds, and crypto-linked instruments sold during the low-rate environment "
+            "to clients who did not fully understand the risk profile."
+        ),
+        "private_banking_issues": (
+            "Suitability risk specifics: (1) discretionary mandate drift — portfolios diverging "
+            "from agreed risk profile over time without client notification; (2) advisory mandate "
+            "documentation gaps — verbal recommendations not recorded, creating post-hoc "
+            "suitability disputes; (3) structured product complexity — clients signing suitability "
+            "assessments without genuine understanding of payoff structures; (4) inducement "
+            "arrangements — retrocession payments from product manufacturers creating undisclosed "
+            "conflicts; (5) client segmentation accuracy — HNWI clients incorrectly classified "
+            "as 'sophisticated' or 'professional' to reduce compliance requirements."
+        ),
+        "regulatory_pressure": (
+            "FinSA requires: client segmentation, needs assessment, suitability/appropriateness "
+            "checks, point-of-sale disclosure, and annual portfolio reporting for discretionary "
+            "mandates. MiFID II product governance (PROD) requirements mandate manufacturer and "
+            "distributor obligations for all financial instruments. ESMA guidelines on MiFID II "
+            "suitability assessment (updated 2022) raised expectations for client knowledge "
+            "and experience assessment. FINMA has increased supervisory focus on inducement "
+            "arrangements and retrocession disclosure."
+        ),
+        "industry_trends": (
+            "AI-powered suitability engines are being deployed to automate portfolio-level "
+            "suitability monitoring in real-time, flagging drift from risk profile before "
+            "it requires manual intervention. Digital client onboarding platforms with "
+            "embedded FinSA/MiFID II questionnaires are replacing paper-based processes, "
+            "improving data quality and creating audit trails. Product governance platforms "
+            "are integrating manufacturer and distributor data to automate target market "
+            "compliance. Video-recorded client meetings are being adopted to create "
+            "unambiguous suitability evidence."
+        ),
+        "peer_incidents": (
+            "Julius Bär paid CHF 26M to FINMA in 2023, partly related to inadequate controls "
+            "around suitability and client advice documentation. HSBC Private Bank (Switzerland) "
+            "faced FINMA findings on structured product suitability documentation (2022). "
+            "Several EU private banks (BNP Paribas Wealth, Deutsche Bank Private) faced "
+            "MiFID II inducement enforcement actions in 2023–2024. Globally, Barclays paid "
+            "£40M to the FCA for structured product mis-selling to retail clients (2023)."
+        ),
+        "key_statistics": [
+            "FinSA client segmentation: 85%+ of Swiss private bank clients classified as 'private clients' requiring full suitability protection",
+            "Average structured product mis-selling claim value: CHF 150–500K (Swiss Ombudsman data, 2024)",
+            "MiFID II inducement enforcement: EU regulators imposed €320M in fines related to inducement violations 2021–2024",
+            "Suitability documentation deficiency rate: 25–40% of advisory recommendations at mid-tier banks lack complete FinSA documentation (FINMA findings, 2024)",
+            "Discretionary mandate drift: 18% of portfolios deviate from agreed risk profile by >10% at any given monitoring point (industry average, EY, 2024)",
+        ],
+        "mckinsey_angle": (
+            "Suitability compliance is where risk management and client experience intersect most "
+            "directly — and where the best institutions are creating competitive advantage. A "
+            "genuine suitability framework — with real-time portfolio monitoring, transparent "
+            "conflict-of-interest management, and proactive client communication — is not just "
+            "a compliance requirement; it is the foundation of a trusted advisory relationship. "
+            "Clients who understand what they own and why, who receive timely alerts when their "
+            "portfolio drifts, and who see a clear alignment between the bank's recommendations "
+            "and their own interests, are demonstrably more loyal and more profitable over time. "
+            "The technology investment to build this capability is moderate; the client retention "
+            "and referral value is substantial."
+        ),
+        "tone": "professional",
+    },
+
+    "TAX_COMPLIANCE": {
+        "theme": "Tax Compliance & Withholding",
+        "market_context": (
+            "Tax compliance obligations for private banks have multiplied in complexity over the "
+            "past decade. Beyond the cross-border AEoI/CRS/FATCA framework, banks face layered "
+            "withholding tax obligations: US FATCA withholding on US-source income, EU Savings "
+            "Tax Directive legacy obligations, Swiss anticipatory tax (Verrechnungssteuer) "
+            "administration, and QI (Qualified Intermediary) responsibilities for US securities. "
+            "Each creates distinct operational processes, client documentation requirements, "
+            "and regulatory reporting obligations.\n\n"
+            "The OECD's BEPS (Base Erosion and Profit Shifting) framework — particularly "
+            "Pillar Two (global minimum tax of 15% on large multinationals, effective 2024) — "
+            "indirectly affects private banking through its impact on the tax efficiency of "
+            "client holding structures. Legal and fiscal advisers are revisiting structures "
+            "that relied on tax treaty benefits or low-tax jurisdiction intermediaries, "
+            "creating asset restructuring needs that flow through private banks.\n\n"
+            "DAC8 (EU, 2026) extends AEoI reporting to crypto-assets and e-money, closing "
+            "the last significant gap in the automatic exchange framework and adding new "
+            "operational reporting complexity for banks that have developed crypto-asset services."
+        ),
+        "private_banking_issues": (
+            "Tax compliance specific risks: (1) withholding tax reclaim administration — "
+            "dividend withholding reclaim processes for clients holding foreign securities "
+            "are complex and error-prone; (2) QI compliance — annual QI reporting to the IRS "
+            "requires high-quality US person identification and FATCA withholding; "
+            "(3) Swiss Verrechnungssteuer — 35% withholding on Swiss dividends and interest, "
+            "with reclaim rights dependent on residency and beneficial ownership; "
+            "(4) CRS self-certification quality — expired or inaccurate self-certifications "
+            "create reporting gaps; (5) tax evasion facilitation risk — even unintentional "
+            "assistance with client tax evasion creates criminal and regulatory liability."
+        ),
+        "regulatory_pressure": (
+            "Swiss Federal Tax Administration (ESTV) increased audit activity on "
+            "Verrechnungssteuer reclaim processes in 2023–2024. IRS QI examination programme "
+            "has intensified, with several Swiss institutions under active examination. "
+            "EU DAC6 mandatory disclosure of certain cross-border tax arrangements applies "
+            "to Swiss banks' EU entities. Swiss Criminal Code Art. 305bis (money laundering) "
+            "applies to tax offences as predicate offences — since 2016."
+        ),
+        "industry_trends": (
+            "Tax reporting automation is the dominant trend: integrated platforms managing "
+            "FATCA, CRS, and QI reporting from a single data source are replacing "
+            "siloed, manual processes. Real-time self-certification status tracking — "
+            "alerting relationship managers when client certifications are expiring or "
+            "inconsistent — is being deployed. Substance-over-form analysis of client "
+            "structures (identifying arrangements designed primarily for tax avoidance "
+            "rather than economic purpose) is being formalised in client acceptance policies."
+        ),
+        "peer_incidents": (
+            "Pictet paid USD 122.9M to the US DOJ (2023) for helping US clients evade taxes, "
+            "with extensive QI compliance failures cited. Credit Suisse paid USD 2.6B to "
+            "US DOJ for tax facilitation (2014), with compliance monitors in place until 2024. "
+            "Lombard Odier, Mirabaud, and Rothschild reached US DOJ non-prosecution "
+            "agreements with payments ranging from USD 17M to USD 47M under the "
+            "Swiss Bank Program. Multiple Swiss banks remain under IRS QI examination."
+        ),
+        "key_statistics": [
+            "Swiss Bank Program total settlements: USD 5B+ paid by 80+ Swiss banks to US DOJ (2014–2022)",
+            "Pictet US DOJ settlement: USD 122.9M (2023) — most recent major Swiss private bank tax case",
+            "QI examination: IRS examined 15%+ of registered Swiss QIs in 2023–2024 (estimated)",
+            "CRS self-certification staleness: average 22% of client CRS self-certifications at Swiss private banks >3 years old (KPMG, 2024)",
+            "DAC8 estimated reporting scope: 30–50M additional crypto-asset account reports across EU from 2026 (European Commission, 2023)",
+        ],
+        "mckinsey_angle": (
+            "Tax compliance is the area where the gap between compliance investment and strategic "
+            "value is most underappreciated. A fully automated, accurate tax reporting infrastructure "
+            "is not just a cost mitigation — it is a client service capability. The banks that can "
+            "provide clients with accurate, timely, multi-jurisdictional tax reporting (e.g., "
+            "a consolidated annual tax pack covering Swiss, EU, and US reporting requirements) "
+            "have a genuine service differentiator for internationally mobile HNWI clients. "
+            "The technology investment required is moderate; the client retention value — "
+            "particularly for clients who have historically changed banks to resolve tax "
+            "reporting problems — is substantial and measurable."
+        ),
+        "tone": "professional",
+    },
+
+    "CRYPTO_ASSETS": {
+        "theme": "Crypto-Assets & Digital Finance",
+        "market_context": (
+            "Switzerland has positioned itself as a leading jurisdiction for crypto-asset "
+            "regulation and institutional adoption. FINMA's principles-based approach — "
+            "applying existing financial market law to crypto-assets rather than creating "
+            "a separate regime — has enabled Swiss banks to offer crypto custody, trading, "
+            "and structured products under existing licensing frameworks. The Swiss DLT Act "
+            "(effective 2021) created the world's first legal framework for blockchain-based "
+            "securities (DLT securities), enabling tokenised bonds and fund units with "
+            "legal certainty.\n\n"
+            "The EU's Markets in Crypto-Assets Regulation (MiCA), effective from June 2024 "
+            "for stablecoins and December 2024 for crypto-asset service providers (CASPs), "
+            "creates a harmonised EU framework that Swiss banks with EU entities must "
+            "comply with. MiCA's passporting mechanism — applicable only to EU-licensed "
+            "entities — creates potential competitive disadvantage for Swiss-only operators "
+            "serving EU clients.\n\n"
+            "The 2022 crypto market collapse (Luna/Terra implosion, FTX bankruptcy) and "
+            "2023 recovery fundamentally reshaped institutional appetite: clients who "
+            "suffered losses have been replaced by a more sophisticated HNWI segment "
+            "seeking regulated, custody-safe exposure to Bitcoin and Ethereum as "
+            "portfolio diversifiers."
+        ),
+        "private_banking_issues": (
+            "Crypto-specific risks for private banking: (1) custody risk — self-custody "
+            "vs. institutional custody decisions and the 'not your keys, not your coins' "
+            "risk in third-party custody arrangements; (2) valuation complexity — illiquid "
+            "tokens and NFTs without reliable market prices create suitability and "
+            "NAV calculation challenges; (3) AML/KYC — blockchain transaction history "
+            "analysis (chain analytics) required for source-of-funds verification; "
+            "(4) tax reporting gap — DAC8 reporting requirements require new data "
+            "collection capabilities; (5) staff competency — relationship managers "
+            "advising on crypto products without adequate product knowledge."
+        ),
+        "regulatory_pressure": (
+            "MiCA (EU, December 2024) requires crypto-asset service provider authorisation "
+            "for EU entities offering crypto trading, custody, and advice. FINMA applies "
+            "existing AMLA, FinSA, and Banking Act provisions to crypto — no crypto-specific "
+            "licence, but full application of existing frameworks. DAC8 (EU, 2026) requires "
+            "AEoI reporting on crypto-asset accounts. FATF Travel Rule applies to crypto "
+            "transfers above EUR 1,000 — compliance required for Swiss crypto intermediaries. "
+            "SNB is developing a wholesale CBDC (Project Helvetia Phase III ongoing)."
+        ),
+        "industry_trends": (
+            "Tokenisation of traditional assets — bonds, real estate, private equity fund units — "
+            "is the dominant institutional blockchain application, with Swiss banks (UBS, "
+            "Julius Bär, Sygnum) actively involved in tokenised bond issuances. "
+            "Bitcoin ETF approval in the US (January 2024) has mainstreamed institutional "
+            "BTC exposure, increasing demand for structured products linked to regulated ETFs. "
+            "Chain analytics platforms (Chainalysis, Elliptic) are being integrated into "
+            "AML workflows as standard for crypto onboarding. "
+            "Institutional DeFi participation is being explored cautiously — most banks "
+            "maintaining a 'monitor and prepare' posture."
+        ),
+        "peer_incidents": (
+            "FTX collapse (November 2022) resulted in losses for several institutional clients "
+            "of Swiss private banks, exposing crypto custody concentration risk. "
+            "Silvergate Bank and Signature Bank failures (March 2023) disrupted USD settlement "
+            "for crypto-exposed clients. Several Swiss private banks suffered Lombard loan "
+            "losses when crypto collateral values collapsed 60–80% in 2022, testing LTV "
+            "frameworks applied to digital assets. Sygnum Bank (Switzerland's crypto-native "
+            "bank) disclosed enhanced FINMA oversight following rapid growth in 2022–2023."
+        ),
+        "key_statistics": [
+            "Global crypto market cap: USD 2.3T (May 2024), recovering from USD 800B trough in late 2022",
+            "Swiss crypto-asset industry: 1,100+ blockchain companies, 50+ banks with crypto services (CV VC Swiss Crypto Report 2024)",
+            "Bitcoin ETF US inflows: USD 15B+ in first 90 days post-approval (January–March 2024)",
+            "MiCA compliance gap: 60% of EU crypto-asset service providers estimated not fully compliant at December 2024 go-live (EY, 2024)",
+            "HNWI crypto allocation: average 3–5% of investable assets among Swiss HNWI with crypto exposure (UBS HNWI Survey, 2024)",
+        ],
+        "mckinsey_angle": (
+            "Crypto and digital assets represent the most significant structural shift in private "
+            "banking since the introduction of derivatives. The institutions that establish "
+            "credible, regulated custody and advisory capabilities now — while the regulatory "
+            "framework is crystallising and competitors are hesitating — will capture a "
+            "disproportionate share of the next generation of HNWI digital asset mandates. "
+            "The strategic play is not to offer 'crypto services' as a sideshow, but to build "
+            "a digital asset capability that is: (1) fully integrated into the existing "
+            "suitability, custody, and reporting infrastructure; (2) compliant with MiCA/FINMA "
+            "from day one; and (3) positioned around institutional-grade tokenised assets "
+            "(bonds, funds) rather than speculative tokens. This is a 3–5 year window "
+            "before the market consolidates around established players."
+        ),
+        "tone": "professional",
+    },
+
+    "ESG": {
+        "theme": "ESG & Sustainable Finance",
+        "market_context": (
+            "Sustainable finance has moved from marketing narrative to regulatory requirement "
+            "at an accelerating pace. The EU Taxonomy Regulation, SFDR (Sustainable Finance "
+            "Disclosure Regulation), and CSRD (Corporate Sustainability Reporting Directive) "
+            "create a layered framework of product classification, disclosure, and reporting "
+            "obligations that Swiss banks with EU entities or EU clients must navigate. "
+            "Switzerland's own FIDLEG/FinSA sustainability integration requirements — "
+            "effective from January 2024 — extend sustainability preference assessment to "
+            "all investment advisory and discretionary mandate clients.\n\n"
+            "TCFD (Task Force on Climate-Related Financial Disclosures) requirements are "
+            "now mandatory for Swiss companies above CHF 20B balance sheet — covering "
+            "all major Swiss private banking groups. Physical climate risk (asset values "
+            "in flood plains, wildfire zones, coastal areas) and transition risk "
+            "(stranded assets in fossil fuel-linked securities) are being integrated "
+            "into risk frameworks.\n\n"
+            "Greenwashing is the dominant enforcement risk: regulators in the EU, UK, and "
+            "Switzerland are actively pursuing funds and banks that make sustainability "
+            "claims unsupported by underlying portfolio data. The risk is reputational, "
+            "financial (fines), and legal (client compensation claims)."
+        ),
+        "private_banking_issues": (
+            "ESG-specific risks for private banking: (1) client ESG preference integration — "
+            "FinSA requires systematic ESG preference assessment in advisory mandates, "
+            "creating data and process demands; (2) ESG product quality — due diligence "
+            "on ESG fund claims; identifying greenwashing in third-party products "
+            "distributed through the bank; (3) discretionary mandate ESG integration — "
+            "evidencing that ESG preferences are actually reflected in portfolio construction; "
+            "(4) engagement and exclusions — managing client expectations around "
+            "controversial sector exclusions; (5) non-financial reporting — TCFD and "
+            "CSRD disclosure requirements for the bank itself."
+        ),
+        "regulatory_pressure": (
+            "Swiss FinSA sustainability integration: mandatory ESG preference assessment "
+            "for all clients from January 2024. SFDR Article 8/9 fund classification "
+            "obligations for EU funds distributed by Swiss banks. CSRD mandatory for "
+            "large Swiss companies (listed or above size thresholds) from FY2025. "
+            "FINMA sustainable finance risk circular expected in 2025. "
+            "UK FCA SDR (Sustainability Disclosure Requirements) labels mandatory from July 2024."
+        ),
+        "industry_trends": (
+            "ESG data quality is the critical battleground: leading institutions are "
+            "integrating multiple ESG data providers (MSCI ESG, Sustainalytics, Bloomberg ESG) "
+            "and building proprietary scoring models to overcome data inconsistency. "
+            "Impact investing — deploying client capital into measurable real-world outcomes "
+            "— is growing fastest among next-generation HNWI clients. "
+            "AI is being applied to TCFD scenario analysis and physical climate risk "
+            "assessment of real estate and infrastructure holdings. "
+            "Biodiversity (TNFD framework) is emerging as the 'next climate' — "
+            "early movers are preparing reporting capabilities ahead of mandatory requirements."
+        ),
+        "peer_incidents": (
+            "DWS (Deutsche Bank's asset management arm) paid EUR 25M to German regulators "
+            "for greenwashing (2023) — the largest greenwashing enforcement action to date. "
+            "BNP Paribas faced FCA investigation for sustainability disclosure inconsistencies "
+            "in UK-marketed funds (2024). Several Swiss-domiciled SFDR Article 9 funds were "
+            "downgraded to Article 8 in 2023–2024 following ESMA guidance clarifications. "
+            "HSBC Asset Management fined £6.3M by FCA for misleading ESG marketing statements (2024)."
+        ),
+        "key_statistics": [
+            "Swiss sustainable investment market: CHF 1.6T AUM in 2023, representing 56% of total professionally managed assets (Swiss Sustainable Finance, 2024)",
+            "FinSA ESG preference assessment: 70% of Swiss private banks not fully operationalised by January 2024 go-live (EY survey, 2024)",
+            "SFDR Article 9 (dark green) fund AUM declined 30% in 2022–2023 as managers downgraded to Article 8 amid clarification uncertainty",
+            "TCFD disclosure: 85% of Swiss SIX-listed companies published TCFD-aligned reports in 2023 (SIX, 2024)",
+            "Greenwashing regulatory actions globally: 40+ enforcement cases totalling EUR 150M+ in 2022–2024",
+        ],
+        "mckinsey_angle": (
+            "ESG is simultaneously the most commercially significant trend and the most "
+            "operationally demanding compliance challenge in private banking today. "
+            "The commercial opportunity is real and growing: next-generation HNWI clients "
+            "(particularly under-40s inheriting or creating wealth) have demonstrably "
+            "different values regarding ESG integration than their predecessors — and "
+            "they are willing to switch banks to access credible sustainable finance "
+            "capabilities. The risk is equally real: greenwashing exposure, regulatory "
+            "non-compliance, and reputational damage from products that don't deliver "
+            "on sustainability claims. The winning strategy is narrow but deep: focus "
+            "on a small number of genuinely differentiated sustainable investment "
+            "propositions with robust underlying data, rigorous third-party validation, "
+            "and transparent client reporting — rather than trying to label everything "
+            "green and hoping regulators don't look closely."
+        ),
+        "tone": "professional",
+    },
+
+    "FRAUD": {
+        "theme": "Fraud Prevention & Detection",
+        "market_context": (
+            "Financial fraud targeting private banking clients and institutions is evolving "
+            "rapidly in sophistication and scale. Three vectors dominate the current threat "
+            "landscape: (1) social engineering — CEO/CFO impersonation fraud, deepfake-enabled "
+            "voice/video fraud targeting relationship managers, and romance/investment scams "
+            "targeting HNWI clients; (2) payment fraud — authorised push payment (APP) fraud "
+            "where clients or bank staff are manipulated into initiating legitimate-looking "
+            "transfers to fraudster-controlled accounts; (3) account takeover — credential "
+            "theft, SIM-swapping, and identity theft enabling fraudulent account access.\n\n"
+            "Generative AI has dramatically lowered the barrier to sophisticated fraud: "
+            "hyper-personalised phishing emails (using publicly available HNWI data), "
+            "real-time deepfake voice calls impersonating relationship managers, and "
+            "AI-generated false identity documents pass traditional detection controls. "
+            "The HNWI profile — high account values, complex transaction patterns, "
+            "international activity, sophisticated clients expecting relationship banking "
+            "rather than friction — creates specific fraud detection challenges.\n\n"
+            "Internal fraud remains a material risk: the relationship-manager model — "
+            "with significant client relationship control and transaction authority — "
+            "creates opportunities for misappropriation that have materialised in "
+            "multiple Swiss private banking cases."
+        ),
+        "private_banking_issues": (
+            "Fraud risks specific to private banking: (1) wire fraud — large value "
+            "international transfers initiated on relationship-manager instruction "
+            "without robust authentication; (2) investment fraud — fraudulent structured "
+            "product documents, unauthorised portfolio reallocations; (3) elder financial "
+            "abuse — HNWI clients (particularly elderly) targeted by sophisticated "
+            "investment scams; (4) internal fraud — relationship manager embezzlement "
+            "or kickback arrangements with external parties; (5) account onboarding "
+            "fraud — synthetic identity creation to open accounts for money laundering "
+            "or subsequent takeover."
+        ),
+        "regulatory_pressure": (
+            "FINMA expects banks to have fraud risk frameworks integrated into operational "
+            "risk management, with Board-level reporting of material fraud events. "
+            "EU PSD2/PSR (Payment Services Regulation) creates shared liability for "
+            "APP fraud, increasing banks' financial exposure. UK Payment Systems Regulator "
+            "mandatory APP fraud reimbursement (from October 2023) is influencing "
+            "Swiss banks' EU subsidiaries. Swiss Criminal Code Art. 138 (misappropriation) "
+            "and Art. 158 (unfaithful management) create criminal liability for "
+            "fraud-adjacent failures."
+        ),
+        "industry_trends": (
+            "AI-powered behavioural analytics are being deployed for real-time fraud detection: "
+            "identifying anomalous transaction patterns, login behaviour, and communication "
+            "characteristics that diverge from the client's established baseline. "
+            "Biometric authentication — voice recognition, behavioural biometrics "
+            "(keystroke dynamics, device handling patterns) — is replacing static "
+            "passwords and PINs. Friction-right design — applying step-up authentication "
+            "proportional to transaction risk without creating friction for normal "
+            "banking activity — is the emerging best practice replacing blanket friction. "
+            "Inter-bank fraud data sharing consortia are developing in Switzerland."
+        ),
+        "peer_incidents": (
+            "Julius Bär disclosed internal fraud by a private banker involving client "
+            "fund misappropriation (2022) — settled confidentially. Falcon Private Bank "
+            "suffered a major internal fraud case linked to the 1MDB scandal, resulting "
+            "in the bank's liquidation. In 2023, multiple Swiss private banking clients "
+            "suffered APP fraud losses of CHF 500K–5M via deepfake voice calls "
+            "impersonating relationship managers. An international private banking group "
+            "lost EUR 35M to a CEO impersonation wire fraud in 2023 (European banking sector, "
+            "name undisclosed per regulatory guidance)."
+        ),
+        "key_statistics": [
+            "Global financial services fraud losses: USD 485B in 2023 (Nasdaq Global Financial Crime Report, 2024)",
+            "APP fraud in Swiss banking: CHF 180M+ estimated annual losses (Swiss Banking, 2024)",
+            "Deepfake fraud: 700% increase in deepfake fraud attempts globally 2023 vs. 2022 (Onfido Identity Fraud Report, 2024)",
+            "Internal fraud: 35% of financial services fraud losses are internal (ACFE Report to the Nations, 2024)",
+            "Average time to detect internal fraud: 12 months; average loss per case in financial services: USD 1.5M (ACFE, 2024)",
+        ],
+        "mckinsey_angle": (
+            "Fraud prevention is one of the highest-ROI investments available to a private bank "
+            "when framed correctly. The direct loss prevention value is significant; the "
+            "client trust and retention value is larger. A client who experiences fraud "
+            "and receives excellent bank response (fast detection, immediate containment, "
+            "full restitution) becomes a bank advocate. A client who experiences fraud and "
+            "perceives bank negligence becomes a regulator or litigant. The strategic "
+            "imperative is therefore to invest in friction-right fraud detection — catching "
+            "genuine fraud without degrading the experience for legitimate high-value activity — "
+            "and in client education programmes that arm HNWI clients against social engineering. "
+            "The technology is available; the differentiator is deployment quality and "
+            "client communication design."
+        ),
+        "tone": "professional",
+    },
+
+    "LIQUIDITY_RISK": {
+        "theme": "Liquidity Risk & Funding",
+        "market_context": (
+            "The bank failures of spring 2023 — Silicon Valley Bank (USD 209B), Signature Bank, "
+            "and First Republic (USD 213B), followed by Credit Suisse's emergency rescue — "
+            "represent the most significant liquidity stress events since 2008. The common "
+            "thread: depositor confidence collapsed faster than regulatory frameworks anticipated, "
+            "amplified by social media and digital banking enabling near-instant deposit flight. "
+            "SVB lost USD 42B in deposits in a single day — a speed of run that outpaced the "
+            "assumptions embedded in the Basel III Liquidity Coverage Ratio (LCR) framework.\n\n"
+            "For Swiss private banks, the Credit Suisse case is the defining liquidity event: "
+            "CHF 110B+ in deposits and AUM outflows in Q4 2022 and Q1 2023 demonstrated that "
+            "a major Swiss institution could face a liquidity crisis of existential proportions "
+            "within weeks of a reputational shock. The Swiss 'too big to fail' (TBTF) framework "
+            "— revised in FINMA's post-Credit Suisse analysis — is being strengthened to address "
+            "identified gaps in liquidity backstop mechanisms.\n\n"
+            "SNB's rate cycle (2022–2024) transformed the liquidity landscape: sight deposits "
+            "paying positive rates for the first time in years, clients moving from sight accounts "
+            "to term deposits and money market funds seeking yield. This deposit repricing dynamic "
+            "compressed net interest margin (NIM) and created funding structure volatility "
+            "that banks' liquidity management frameworks were not designed to handle."
+        ),
+        "private_banking_issues": (
+            "Liquidity risk specifics for private banking: (1) deposit concentration — "
+            "private banking deposits are typically more concentrated (larger average balances "
+            "per client) and more mobile than retail deposits, creating higher 'wholesale-like' "
+            "outflow assumptions in stress scenarios; (2) sight deposit stickiness — "
+            "HNWI clients historically less price-sensitive, but more prone to rapid flight "
+            "in reputational stress events; (3) structured product liquidity — "
+            "capital-guaranteed products create contingent liquidity obligations; "
+            "(4) custody cash — uninvested client cash on deposit creates large, "
+            "potentially volatile liquidity pools; (5) intraday liquidity — high-value "
+            "payment flows requiring intraday liquidity management."
+        ),
+        "regulatory_pressure": (
+            "Basel III LCR (>100% of 30-day stress outflows) and NSFR (stable funding ratio) "
+            "are mandatory for Swiss systemically important banks. FINMA post-CS review is "
+            "expected to tighten liquidity requirements for larger private banks, potentially "
+            "extending LCR/NSFR requirements more broadly. SNB Emergency Liquidity Assistance "
+            "(ELA) framework has been reformed following the Credit Suisse experience to include "
+            "a Public Liquidity Backstop (PLB) mechanism. FINMA requires annual ILAAP "
+            "(Internal Liquidity Adequacy Assessment Process) for significant institutions."
+        ),
+        "industry_trends": (
+            "Intraday liquidity monitoring is the leading edge of liquidity risk management "
+            "modernisation — replacing end-of-day snapshots with real-time position visibility "
+            "across settlement systems and correspondent banks. Stress scenario enrichment — "
+            "adding social-media-amplified bank run scenarios, crypto contagion scenarios, "
+            "and geopolitical shock scenarios to standard regulatory stress tests — is "
+            "becoming standard. Deposit behavioural modelling is being upgraded: "
+            "machine learning applied to deposit cohort analysis to improve outflow "
+            "assumption accuracy in the LCR. Contingency funding plan (CFP) testing "
+            "through tabletop exercises and live drills is increasing in frequency."
+        ),
+        "peer_incidents": (
+            "Credit Suisse: CHF 110B+ deposit and AUM outflows Q4 2022–Q1 2023, emergency "
+            "SNB liquidity support of CHF 168B, subsequent rescue by UBS — the largest "
+            "liquidity stress event in Swiss banking history. SVB (USD 42B single-day "
+            "outflow, March 2023) demonstrated social-media-accelerated bank run dynamics. "
+            "First Republic Bank (USD 213B collapse, May 2023) illustrated deposit "
+            "concentration risk in high-net-worth client base. Several Swiss private "
+            "banks reported elevated deposit outflows in March 2023 during peak "
+            "Credit Suisse stress contagion."
+        ),
+        "key_statistics": [
+            "Credit Suisse liquidity outflows: CHF 110B+ in Q4 2022 + Q1 2023 (FINMA Annual Report, 2024)",
+            "SVB single-day outflow: USD 42B (10 March 2023) — unprecedented in US banking history",
+            "Swiss bank LCR average: 185% (Q4 2023), well above 100% minimum — but CS demonstrated regulatory minimums insufficient in systemic stress",
+            "HNWI deposit stickiness: 60–70% of sight deposits assumed 'stable' in LCR models; post-CS, banks revising downward to 45–55%",
+            "SNB emergency liquidity to Credit Suisse: CHF 168B peak (March 2023) — equivalent to 22% of Swiss GDP",
+        ],
+        "mckinsey_angle": (
+            "Liquidity risk management is the discipline where the gap between regulatory "
+            "compliance and genuine resilience is most dangerous. The Credit Suisse and SVB "
+            "cases both passed standard LCR tests before failing — because regulatory "
+            "frameworks measure the wrong things at the wrong frequency. The strategic "
+            "investment for private banks is therefore in three areas: (1) intraday "
+            "liquidity visibility — knowing where cash is in real-time, not at end of day; "
+            "(2) behavioural modelling sophistication — deposit outflow assumptions calibrated "
+            "to the actual behaviour of HNWI clients in stress, not regulatory averages; "
+            "(3) CFP testing realism — stress-testing the bank's crisis response capability, "
+            "not just its balance sheet. Done well, this investment in liquidity intelligence "
+            "directly enables more aggressive and profitable balance sheet deployment "
+            "in normal conditions — the liquidity dividend of a genuinely resilient framework."
+        ),
+        "tone": "professional",
+    },
+
+}
