@@ -32,6 +32,7 @@ _SS_DEFAULTS = {
     # Tab 1
     "t1_risks": None, "t1_regs": None, "t1_docx": None, "t1_topic": None,
     "t1_jurs": None, "t1_pub_recs": None,
+    "topic_tab1": "",  # typed (not yet run) topic from Tab 1
     # Tab 2
     "t2_rationale": None, "t2_background": None, "t2_org_plan": None,
     "t2_tests": None, "t2_analytics": None, "t2_pptx": None, "t2_xlsx": None,
@@ -1217,23 +1218,152 @@ def render_mode_toggle(tab_key: str) -> str:
     return "static" if selected == _MODE_STATIC else "live"
 
 
-def _show_tests_library(theme: str, search: str = "", level_filter: str = "All", type_filter: str = "All"):
-    """Display AUDIT_TESTS_LIBRARY for a given theme with filters."""
+_LEVEL_COLOR = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308"}
+_LEVEL_BG    = {"Critical": "rgba(239,68,68,0.08)", "High": "rgba(249,115,22,0.08)", "Moderate": "rgba(234,179,8,0.06)"}
+_LEVEL_EMOJI = {"Critical": "🔴", "High": "🟠", "Moderate": "🟡"}
+
+_STOPWORDS = {"the","a","an","and","or","of","for","in","to","is","are","be","that","all","with","on",
+              "at","by","as","its","from","it","this","that","if","any","no","each","per","must","will"}
+
+
+def _build_risk_test_map(theme: str, live_risks: list | None = None) -> dict:
+    """Build test_id → {risk_id, risk_title, risk_level, control} mapping.
+
+    Uses keyword overlap between test objective/procedure and risk title/expected_controls.
+    Result is cached in session_state to avoid recomputation on every interaction.
+    """
+    cache_key = f"_rtmap_{theme}_{'live' if live_risks is not None else 'static'}"
+    if cache_key in st.session_state:
+        return st.session_state[cache_key]
+
     tests = AUDIT_TESTS_LIBRARY.get(theme, [])
+    risks = live_risks if live_risks is not None else RISK_INDICATORS.get(theme, [])
+
+    def _words(text: str) -> set:
+        return {w for w in text.lower().split() if w not in _STOPWORDS and len(w) > 2}
+
+    def _score(test, risk) -> int:
+        t_words = _words(test.get("objective", "") + " " + test.get("procedure", ""))
+        r_words = _words(
+            (risk.get("title") or risk.get("name", "")) + " " +
+            " ".join(risk.get("expected_controls", []))
+        )
+        return len(t_words & r_words)
+
+    def _best_control(test, risk) -> str:
+        controls = risk.get("expected_controls", [])
+        if not controls:
+            return ""
+        t_words = _words(test.get("objective", "") + " " + test.get("procedure", ""))
+        best, best_s = controls[0], 0
+        for ctrl in controls:
+            s = len(_words(ctrl) & t_words)
+            if s > best_s:
+                best_s, best = s, ctrl
+        return best
+
+    result = {}
+    for t in tests:
+        best_risk, best_s = None, 0
+        for r in risks:
+            s = _score(t, r)
+            if s > best_s:
+                best_s, best_risk = s, r
+        if best_risk:
+            rid = best_risk.get("id") or best_risk.get("name", "")
+            result[t["id"]] = {
+                "risk_id":    rid,
+                "risk_title": best_risk.get("title") or best_risk.get("name", ""),
+                "risk_level": best_risk.get("level", ""),
+                "control":    _best_control(t, best_risk),
+            }
+
+    st.session_state[cache_key] = result
+    return result
+
+
+def _show_risk_coverage_summary(theme: str, risk_map: dict, live_risks: list | None = None):
+    """Render Risk Coverage Summary below the test table."""
+    risks = live_risks if live_risks is not None else RISK_INDICATORS.get(theme, [])
+    if not risks:
+        return
+
+    covered_ids = {v["risk_id"] for v in risk_map.values()}
+    total = len(risks)
+    covered = sum(1 for r in risks if (r.get("id") or r.get("name", "")) in covered_ids)
+    pct = round(covered / total * 100) if total else 0
+
+    uncovered = [r for r in risks if (r.get("id") or r.get("name", "")) not in covered_ids]
+    uncovered_critical_high = [r for r in uncovered if r.get("level") in ("Critical", "High")]
+
+    pct_color = "#22d3a5" if pct >= 80 else ("#eab308" if pct >= 50 else "#ef4444")
+    uncov_rows = "".join(
+        f'<li><span style="color:#7fa8fb;font-weight:700">{r.get("id") or ""}</span>'
+        f' — {r.get("title") or r.get("name","")} &nbsp;'
+        f'<span style="color:{_LEVEL_COLOR.get(r.get("level",""),"#8392bb")};font-size:11px">'
+        f'{_LEVEL_EMOJI.get(r.get("level",""),"")} {r.get("level","")}</span></li>'
+        for r in uncovered
+    )
+
+    st.markdown(f"""
+    <div style="background:rgba(79,126,248,0.04);border:1px solid rgba(79,126,248,0.18);
+                border-radius:8px;padding:16px 20px;margin-top:18px">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;
+                  color:#7fa8fb;margin-bottom:12px">Risk Coverage Summary</div>
+      <div style="display:flex;gap:32px;flex-wrap:wrap;margin-bottom:12px">
+        <div style="font-size:13px;color:var(--text-secondary)">
+          Total risks identified: <strong style="color:var(--text-primary)">{total}</strong></div>
+        <div style="font-size:13px;color:var(--text-secondary)">
+          Covered by ≥1 test: <strong style="color:var(--text-primary)">{covered}</strong></div>
+        <div style="font-size:13px;color:var(--text-secondary)">
+          Coverage rate: <strong style="color:{pct_color};font-size:15px">{pct}%</strong></div>
+      </div>
+      {"" if not uncovered else f'''
+      <div style="font-size:11.5px;font-weight:700;color:#8392bb;margin-bottom:6px">⚠️ Uncovered risks:</div>
+      <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.9">{uncov_rows}</ul>
+      '''}
+    </div>""", unsafe_allow_html=True)
+
+    if uncovered_critical_high:
+        names = ", ".join(
+            (r.get("id") or "") + " " + (r.get("title") or r.get("name", ""))
+            for r in uncovered_critical_high
+        )
+        st.warning(
+            f"⚠️ {len(uncovered_critical_high)} Critical/High risk(s) have no associated test. "
+            f"Consider adding coverage for: {names}"
+        )
+
+
+def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
+                        type_filter: str = "All", risk_level_filter: str = "All",
+                        live_risks: list | None = None):
+    """Display AUDIT_TESTS_LIBRARY for a given theme with risk mapping columns."""
+    risk_map = _build_risk_test_map(theme, live_risks)
+    tests = AUDIT_TESTS_LIBRARY.get(theme, [])
+
+    # Apply filters
     if level_filter != "All":
         tests = [t for t in tests if t.get("level") == level_filter]
-    if type_filter != "All" and type_filter == "Data Analytics":
+    if type_filter == "Data Analytics":
         tests = [t for t in tests if t.get("category") == "Data Analytics"]
     elif type_filter == "Standard":
         tests = [t for t in tests if t.get("category") == "Standard"]
+    if risk_level_filter != "All":
+        tests = [t for t in tests if risk_map.get(t["id"], {}).get("risk_level") == risk_level_filter]
     if search:
         q = search.lower()
         tests = [t for t in tests if q in (t.get("objective","") + t.get("procedure","") + t.get("id","")).lower()]
+
+    # Sort: Critical risks first, then High, then Moderate
+    _rl_order = {"Critical": 0, "High": 1, "Moderate": 2}
+    tests = sorted(tests, key=lambda t: _rl_order.get(risk_map.get(t["id"], {}).get("risk_level",""), 3))
+
     if not tests:
         st.caption("No tests match the filter.")
+        _show_risk_coverage_summary(theme, risk_map, live_risks)
         return
-    _LEVEL_COLOR = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308"}
-    _LEVEL_BG    = {"Critical": "rgba(239,68,68,0.08)", "High": "rgba(249,115,22,0.08)", "Moderate": "rgba(234,179,8,0.06)"}
+
     _DA_BADGE = '<span style="background:rgba(79,126,248,0.12);color:#7fa8fb;border:1px solid rgba(79,126,248,0.28);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600">📊 DA</span>'
     rows = ""
     for t in tests:
@@ -1243,15 +1373,34 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
         da  = _DA_BADGE if t.get("category") == "Data Analytics" else ""
         lv_badge = f'<span style="background:{bg};color:{col};border:1px solid {col}44;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">{lv}</span>'
         tr_ref = t.get("tr_reference", "")
-        tr_cell = f'<span style="background:rgba(79,126,248,0.09);color:#7fa8fb;border:1px solid rgba(79,126,248,0.25);border-radius:3px;padding:1px 5px;font-size:10px;white-space:nowrap">{tr_ref}</span>' if tr_ref else ""
+        tr_cell = (f'<span style="background:rgba(79,126,248,0.09);color:#7fa8fb;border:1px solid rgba(79,126,248,0.25);'
+                   f'border-radius:3px;padding:1px 5px;font-size:10px;white-space:nowrap">{tr_ref}</span>' if tr_ref else "")
+
+        rm = risk_map.get(t["id"], {})
+        r_title = rm.get("risk_title", "—")
+        r_id    = rm.get("risk_id", "")
+        r_lv    = rm.get("risk_level", "")
+        r_ctrl  = rm.get("control", "—")
+        r_col   = _LEVEL_COLOR.get(r_lv, "#8392bb")
+        r_bg    = _LEVEL_BG.get(r_lv, "transparent")
+        r_emoji = _LEVEL_EMOJI.get(r_lv, "")
+        risk_cell = (
+            f'<div style="white-space:nowrap;color:#7fa8fb;font-size:11px;font-weight:700">{r_id}</div>'
+            f'<div style="font-size:11.5px;color:var(--text-secondary)">{r_title}</div>'
+            f'<div style="margin-top:3px"><span style="background:{r_bg};color:{r_col};border:1px solid {r_col}44;'
+            f'border-radius:3px;padding:1px 6px;font-size:10.5px;font-weight:700">{r_emoji} {r_lv}</span></div>'
+        ) if rm else "—"
+        ctrl_cell = f'<span style="font-size:11.5px;color:var(--text-secondary);font-style:italic">{r_ctrl}</span>' if r_ctrl and r_ctrl != "—" else "—"
+
         rows += (
             f'<tr style="background:{bg}">'
             f'<td style="padding:9px 12px;color:#7fa8fb;font-weight:700;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("id","")} {da}</td>'
             f'<td style="padding:9px 12px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{lv_badge}</td>'
             f'<td style="padding:9px 12px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("objective","")}</td>'
             f'<td style="padding:9px 12px;color:var(--text-secondary);font-size:12px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("procedure","")}</td>'
-            f'<td style="padding:9px 12px;color:var(--text-muted);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("population","")}</td>'
             f'<td style="padding:9px 12px;color:var(--text-muted);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("sample_size","")}</td>'
+            f'<td style="padding:9px 12px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{risk_cell}</td>'
+            f'<td style="padding:9px 12px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{ctrl_cell}</td>'
             f'<td style="padding:9px 12px;color:#ef4444;font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("failure_criteria","")}</td>'
             f'<td style="padding:9px 12px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{tr_cell}</td>'
             f'</tr>'
@@ -1259,16 +1408,19 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
       <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
-        <th style="color:#7fa8fb;width:7%">ID</th>
-        <th style="color:#7fa8fb;width:7%">Level</th>
-        <th style="color:#7fa8fb;width:18%">Objective</th>
-        <th style="color:#7fa8fb;width:24%">Procedure</th>
-        <th style="color:#7fa8fb;width:14%">Population</th>
-        <th style="color:#7fa8fb;width:11%">Sample Size</th>
-        <th style="color:#7fa8fb;width:11%">Failure Criteria</th>
-        <th style="color:#7fa8fb;width:8%">TR Ref</th>
+        <th style="color:#7fa8fb;width:6%">ID</th>
+        <th style="color:#7fa8fb;width:6%">Level</th>
+        <th style="color:#7fa8fb;width:16%">Objective</th>
+        <th style="color:#7fa8fb;width:20%">Procedure</th>
+        <th style="color:#7fa8fb;width:9%">Sample</th>
+        <th style="color:#7fa8fb;width:14%">Associated Risk</th>
+        <th style="color:#7fa8fb;width:14%">Control Verified</th>
+        <th style="color:#7fa8fb;width:10%">Failure Criteria</th>
+        <th style="color:#7fa8fb;width:5%">TR</th>
       </tr></thead><tbody>{rows}</tbody>
     </table>""", unsafe_allow_html=True)
+
+    _show_risk_coverage_summary(theme, risk_map, live_risks)
 
 
 def _render_iia_standard(s):
@@ -2147,6 +2299,9 @@ with tab1:
         key="t1_topic_in",
         help="Enter the main audit topic or domain to analyze (e.g. 'AML/KYC', 'Cyber Risk'). Must be at least 3 characters.",
     )
+    # Propagate typed topic to Tab 2 pre-fill
+    st.session_state["topic_tab1"] = audit_topic or ""
+
     jurisdictions = st.multiselect(
         "Jurisdictions",
         options=JURISDICTIONS,
@@ -2448,12 +2603,22 @@ with tab2:
     if st.session_state.t1_topic:
         st.markdown(f'<div class="ctx-pill">✓ Topic: {st.session_state.t1_topic}</div>', unsafe_allow_html=True)
 
+    # Pre-fill from Tab 1 if Tab 2 field is still empty
+    if not st.session_state.get("t2_topic_in"):
+        _prefill = st.session_state.get("topic_tab1") or st.session_state.get("t1_topic") or ""
+        if _prefill:
+            st.session_state["t2_topic_in"] = _prefill
+
     topic2 = st.text_input(
         "Audit Topic",
-        value=st.session_state.t1_topic or "",
         placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity…",
         key="t2_topic_in",
     )
+    if st.session_state.get("topic_tab1"):
+        st.markdown(
+            '<p style="color:#5a6488;font-size:11px;margin:-8px 0 8px">ℹ️ Pre-filled from Risk Analysis. You can modify it freely.</p>',
+            unsafe_allow_html=True,
+        )
 
     scope = st.text_area(
         "Audit Scope",
@@ -2526,11 +2691,14 @@ with tab2:
                 unsafe_allow_html=True,
             )
             st.markdown(_EXAMPLE_TEST, unsafe_allow_html=True)
-            _tl_c1, _tl_c2, _tl_c3 = st.columns([3, 1.5, 1.8])
-            _tl_sq = _tl_c1.text_input("Search tests", placeholder="Filter tests…", key="_tl_sq", label_visibility="collapsed")
-            _tl_slv = _tl_c2.selectbox("Level", ["All", "Critical", "High", "Moderate"], key="_tl_slv", label_visibility="collapsed")
+            _tl_c1, _tl_c2, _tl_c3, _tl_c4 = st.columns([3, 1.5, 1.8, 1.8])
+            _tl_sq    = _tl_c1.text_input("Search tests", placeholder="Filter tests…", key="_tl_sq", label_visibility="collapsed")
+            _tl_slv   = _tl_c2.selectbox("Level", ["All", "Critical", "High", "Moderate"], key="_tl_slv", label_visibility="collapsed")
             _tl_stype = _tl_c3.selectbox("Type", ["All", "Standard", "Data Analytics"], key="_tl_stype", label_visibility="collapsed")
-            _show_tests_library(_t2_theme, search=_tl_sq, level_filter=_tl_slv, type_filter=_tl_stype)
+            _tl_rlv   = _tl_c4.selectbox("Filter by Risk Level", ["All", "🔴 Critical", "🟠 High", "🟡 Moderate"], key="_tl_rlv", label_visibility="collapsed")
+            _rl_map   = {"All": "All", "🔴 Critical": "Critical", "🟠 High": "High", "🟡 Moderate": "Moderate"}
+            _show_tests_library(_t2_theme, search=_tl_sq, level_filter=_tl_slv, type_filter=_tl_stype,
+                                risk_level_filter=_rl_map[_tl_rlv])
 
         with st.expander("📊 C — Data Analytics Scenarios", expanded=False):
             st.markdown(
@@ -2701,6 +2869,24 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                 "t2_analytics",
             )
             _analytics_table(filtered_analytics)
+
+        # Static test library with risk mapping (live mode)
+        _live_theme = _topic_to_theme(topic2) or "AML_KYC"
+        _live_risks = st.session_state.t1_risks or None
+        _live_n_tests = len(AUDIT_TESTS_LIBRARY.get(_live_theme, []))
+        with st.expander(f"🗂️ 6 — Test Library & Risk Coverage ({_live_n_tests} tests)", expanded=False):
+            st.markdown(
+                f'<div class="section-title">6. Test Library &amp; Risk Coverage — {_live_theme.replace("_"," ").title()}</div>',
+                unsafe_allow_html=True,
+            )
+            _live_c1, _live_c2, _live_c3, _live_c4 = st.columns([3, 1.5, 1.8, 1.8])
+            _live_sq   = _live_c1.text_input("Search", placeholder="Filter tests…", key="_live_tl_sq", label_visibility="collapsed")
+            _live_slv  = _live_c2.selectbox("Level", ["All", "Critical", "High", "Moderate"], key="_live_tl_slv", label_visibility="collapsed")
+            _live_stype = _live_c3.selectbox("Type", ["All", "Standard", "Data Analytics"], key="_live_tl_stype", label_visibility="collapsed")
+            _live_rlv  = _live_c4.selectbox("Risk Level", ["All", "🔴 Critical", "🟠 High", "🟡 Moderate"], key="_live_tl_rlv", label_visibility="collapsed")
+            _rl_map2   = {"All": "All", "🔴 Critical": "Critical", "🟠 High": "High", "🟡 Moderate": "Moderate"}
+            _show_tests_library(_live_theme, search=_live_sq, level_filter=_live_slv, type_filter=_live_stype,
+                                risk_level_filter=_rl_map2[_live_rlv], live_risks=_live_risks)
 
         pptx = st.session_state.t2_pptx
         xlsx = st.session_state.t2_xlsx
