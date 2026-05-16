@@ -67,13 +67,14 @@ REGULATORY_FRAMEWORKS = {
             "title": "Operational Risks — Banks",
             "authority": "FINMA",
             "year": 2008,
-            "scope": "Banks subject to FINMA supervision; references Basel II/III operational risk framework",
+            "scope": "Banks subject to FINMA supervision; references Basel II/III operational risk framework. NOTE: Substantially superseded by FINMA-RS 2023/1 for ICT risk management, business continuity/resilience, and outsourcing. Residual applicability: operational loss data collection methodology and regulatory capital approach framework (BIA/TSA/AMA).",
             "key_requirements": [
                 "Banks must maintain an operational risk management framework aligned with Basel II Pillar 2",
                 "All material operational risk events must be captured in a loss database",
                 "Risk and Control Self-Assessment (RCSA) must be performed at least annually",
                 "Business continuity plans must be tested regularly and kept up to date",
                 "Capital allocation for operational risk must use approved approach (BIA, TSA, or AMA)",
+                "SUPERSEDED by FINMA-RS 2023/1 (effective 1 Jan 2024) for ICT risk, BCP, and outsourcing — audit engagements must reference FINMA-RS 2023/1 as primary standard for those areas",
             ],
             "applies_to": ["Operational Risk", "BCP", "Governance"],
         },
@@ -116,26 +117,41 @@ REGULATORY_FRAMEWORKS = {
             "key_requirements": [
                 "Customer due diligence (CDD) must be performed at onboarding; EDD required for high-risk clients",
                 "Beneficial owner must be identified for all accounts; Form A or equivalent must be held",
-                "PEP screening mandatory; domestic and foreign PEPs require senior management approval",
+                "PEP screening mandatory; foreign PEPs require mandatory EDD and senior management approval (FATF R.12); domestic PEPs require risk-based EDD — FINMA-RS 2011/1 is stricter than FATF baseline and requires senior management approval for all PEPs regardless of origin",
                 "Transaction monitoring must detect unusual patterns; SAR must be filed with MROS promptly",
                 "AML risk assessment must be reviewed annually; high-risk clients reviewed at least annually",
             ],
             "applies_to": ["AML", "KYC", "Compliance"],
         },
         {
+            "reference": "FINMA-RS 2008/18",
+            "title": "Mortgage Lending — Banks",
+            "authority": "FINMA",
+            "year": 2008,
+            "scope": "All banks granting mortgage loans secured on Swiss residential and commercial real estate",
+            "key_requirements": [
+                "Maximum LTV of 80% for residential mortgages; borrowers must contribute at least 10% own funds not sourced from pledged pension assets",
+                "Affordability test: debt service must be sustainable at a notional stress rate of 5%; income must cover principal, interest, and maintenance",
+                "1st mortgage (up to 65% LTV) can be held indefinitely; 2nd mortgage (65-80% LTV) must be amortised to 65% within 15 years or by retirement",
+                "Independent valuation of collateral required at origination; periodic revaluation for loans above materiality threshold",
+                "FINMA may impose countercyclical capital buffer surcharges for banks with excessive residential mortgage concentration",
+            ],
+            "applies_to": ["Credit Risk", "Operational Risk", "Governance"],
+        },
+        {
             "reference": "FINMA-RS 2023/1",
-            "title": "Climate and Nature-Related Financial Risks",
+            "title": "Operational Risks and Resilience",
             "authority": "FINMA",
             "year": 2023,
-            "scope": "Systemically important banks; other banks on proportional basis",
+            "scope": "All FINMA-supervised banks and insurance companies; proportionate application based on systemic importance",
             "key_requirements": [
-                "Governance framework must explicitly assign responsibility for climate risk to Board and senior management",
-                "Physical and transition risks must be integrated into credit, market, and operational risk frameworks",
-                "Climate scenario analysis and stress testing must be performed at least annually",
-                "Climate-related disclosures must align with TCFD framework; mandatory for SIBs from 2024",
-                "Portfolio alignment metrics must be developed to assess transition risk exposure",
+                "ICT risk management framework must be fully documented with defined roles, governance processes, and control objectives",
+                "Critical service mapping required: banks must identify and document all services whose disruption would cause intolerable harm",
+                "Board-approved impact tolerance definitions for each critical service (maximum tolerable disruption)",
+                "Annual resilience testing of critical services under severe but plausible disruption scenarios",
+                "FINMA incident reporting: material ICT incidents must be reported immediately upon discovery; follow-up report within 24 hours",
             ],
-            "applies_to": ["Operational Risk", "Credit Risk", "Governance", "ESG"],
+            "applies_to": ["Operational Risk", "Cyber Risk", "BCP", "Third Party Risk"],
         },
         {
             "reference": "FINMA-RS 2022/2",
@@ -167,6 +183,36 @@ REGULATORY_FRAMEWORKS = {
             ],
             "applies_to": ["Data Privacy", "Compliance", "Cyber Risk"],
         },
+        {
+            "reference": "FinSA 2020",
+            "title": "Financial Services Act (Finanzdienstleistungsgesetz)",
+            "authority": "FINMA",
+            "year": 2020,
+            "scope": "All financial service providers and client advisers serving clients in Switzerland",
+            "key_requirements": [
+                "Client segmentation mandatory: private clients (full protection), professional clients (reduced), institutional clients (minimal) — classification must be documented and reviewable",
+                "Suitability assessment required for investment advisory mandates; appropriateness test required for execution-only services involving complex instruments",
+                "Key Information Document (KID/BIB) mandatory for all financial instruments sold to private clients; must disclose costs, risks, and expected returns",
+                "Retrocession and inducement payments to third parties must be disclosed to clients; clients may waive entitlement in writing",
+                "ESG preference assessment mandatory for all suitability determinations from January 2024; preference must be documented and reflected in recommendations",
+            ],
+            "applies_to": ["Investment Suitability", "Governance", "Compliance"],
+        },
+        {
+            "reference": "FinIA 2020",
+            "title": "Financial Institutions Act (Finanzinstitutsgesetz)",
+            "authority": "FINMA",
+            "year": 2020,
+            "scope": "Portfolio managers, trustees, fund management companies, securities firms, and banks in Switzerland",
+            "key_requirements": [
+                "All independent portfolio managers and trustees must be authorised and supervised by FINMA or a recognised supervisory organisation (SO)",
+                "Fit-and-proper requirements for management and qualified shareholders; minimum capital and professional indemnity insurance",
+                "Prudential requirements including minimum capital (CHF 100,000 for portfolio managers), risk management, and internal controls",
+                "Client asset segregation and safekeeping obligations equivalent to banking standards",
+                "Annual reporting to supervisory organisation; FINMA retains ultimate enforcement authority",
+            ],
+            "applies_to": ["Governance", "Investment Suitability", "Compliance"],
+        },
     ],
 
     # ── EU / DORA & others ─────────────────────────────────────────────────────
@@ -179,7 +225,7 @@ REGULATORY_FRAMEWORKS = {
             "scope": "Financial entities in the EU: banks, investment firms, payment institutions, crypto-asset service providers, ICT third-party providers",
             "key_requirements": [
                 "ICT Risk Management Framework must be fully documented with roles, processes, and governance (Art. 5-16)",
-                "ICT-related incidents above defined thresholds must be reported to competent authority within 4 hours (major), 24 hours (significant), and 1 month final report (Art. 17-23)",
+                "Major ICT incidents must be reported to the competent authority: initial notification within 4 hours of classification as major; intermediate report within 72 hours; final report within 1 month (Art. 19-20). Classification criteria for 'major' incidents defined in ESA RTS. Note: the 24h 'significant incident' category belongs to NIS2, not DORA.",
                 "Digital Operational Resilience Testing (TLPT) required at least every 3 years for significant firms (Art. 24-27)",
                 "Register of contractual arrangements with all ICT third-party providers must be maintained and reported annually (Art. 28)",
                 "Concentration risk for critical ICT providers must be assessed; exit strategies required (Art. 30-44)",
@@ -253,7 +299,7 @@ REGULATORY_FRAMEWORKS = {
             "year": 2025,
             "scope": "Credit institutions and investment firms in the EU",
             "key_requirements": [
-                "Output floor of 72.5% applied to RWA calculated using internal models vs. standardised approach",
+                "Output floor phase-in: 50% from 1 January 2025, rising in annual steps to 72.5% by 1 January 2030. Calculated as: floor RWA = max(internal model RWA, floor% × standardised approach RWA)",
                 "Revised standardised approach for credit risk with more risk-sensitive risk weights",
                 "Fundamental Review of the Trading Book (FRTB) replaces internal model for market risk capital",
                 "New standardised approach for operational risk replaces all existing approaches (BIA, TSA, AMA)",
@@ -619,9 +665,11 @@ REGULATORY_FRAMEWORKS = {
             "scope": "Global standard — applicable to all countries and financial institutions",
             "key_requirements": [
                 "R.10: Customer due diligence — identification and verification of customers and beneficial owners",
-                "R.12-13: Politically Exposed Persons — enhanced measures for PEPs and their family members/close associates",
-                "R.16: Wire transfers — full originator and beneficiary information must accompany wire transfers",
-                "R.20: Reporting of suspicious transactions — prompt filing with national FIU required",
+                "R.12-13: Politically Exposed Persons — enhanced measures for foreign PEPs (mandatory EDD) and domestic PEPs (risk-based EDD); applies to family members and close associates",
+                "R.14: Money or value transfer services (MVTS) — MVTS providers must be licensed and subject to AML/CFT measures",
+                "R.15: New technologies — financial institutions must assess ML/TF risks from new products, services and technologies; VASPs (virtual asset service providers) subject to FATF standards",
+                "R.16: Wire transfers / Travel Rule — full originator and beneficiary information must accompany transfers ≥USD/EUR 1,000",
+                "R.20: Reporting of suspicious transactions — prompt filing with national FIU required; no tipping-off",
                 "R.26-35: Regulation and supervision of financial institutions and designated non-financial businesses",
             ],
             "applies_to": ["AML", "KYC", "Compliance", "Sanctions"],
@@ -673,10 +721,8 @@ AUDIT_TEMPLATES = {
             "beneficial ownership identification, PEP and sanctions screening, transaction monitoring system "
             "effectiveness, STR/SAR filing quality and timeliness, and periodic review of high-risk clients."
         ),
-        "key_risks": ["R001", "R002", "R003", "R004", "R005"],
-        "recommended_tests": [
-            "T001", "T002", "T003", "T004", "T005", "T006", "T007", "T008", "T009", "T010",
-        ],
+        "key_risks": ["R001", "R002", "R003", "R004", "R005", "R006", "R007", "R008"],
+        "recommended_tests": ["T001", "T002", "T003", "T004", "T005"],
         "typical_findings": [
             "Incomplete beneficial ownership documentation for clients held through trust structures",
             "Transaction monitoring thresholds not calibrated to client risk profile — excessive false positives",
@@ -704,10 +750,8 @@ AUDIT_TEMPLATES = {
             "endpoint protection, network segmentation, patch management, SIEM/SOC effectiveness, "
             "third-party IT access, cloud security posture, and incident response capability."
         ),
-        "key_risks": ["R006", "R007", "R008", "R009", "R010"],
-        "recommended_tests": [
-            "T026", "T027", "T028", "T029", "T030", "T031", "T032", "T033", "T034", "T035",
-        ],
+        "key_risks": ["R009", "R010", "R011", "R012", "R013", "R014", "R015", "R016"],
+        "recommended_tests": ["T011", "T012", "T013", "T014", "T015"],
         "typical_findings": [
             "Privileged access accounts not subject to periodic recertification; stale accounts exist",
             "Critical security patches applied beyond the 30-day policy deadline",
@@ -735,10 +779,8 @@ AUDIT_TEMPLATES = {
             "credit underwriting standards, collateral valuation and management, covenant monitoring, "
             "credit concentration risk, impairment provisioning, and credit risk stress testing."
         ),
-        "key_risks": ["R011", "R012", "R013", "R014", "R015"],
-        "recommended_tests": [
-            "T046", "T047", "T048", "T049", "T050", "T051", "T052", "T053", "T054", "T055",
-        ],
+        "key_risks": ["R017", "R018", "R019", "R020", "R021"],
+        "recommended_tests": ["T021", "T022", "T023", "T024", "T025"],
         "typical_findings": [
             "Lombard loan-to-value ratios exceed approved limits for concentrated single-name portfolios",
             "Collateral valuations not updated at required frequency; stale prices used for margin calculations",
@@ -766,10 +808,8 @@ AUDIT_TEMPLATES = {
             "disaster recovery planning and testing, key person dependencies, outsourcing governance, "
             "change management controls, four-eyes principle application, and reconciliation processes."
         ),
-        "key_risks": ["R016", "R017", "R018", "R019", "R020"],
-        "recommended_tests": [
-            "T066", "T067", "T068", "T069", "T070", "T071", "T072", "T073", "T074", "T075",
-        ],
+        "key_risks": ["R022", "R023", "R024", "R025", "R026"],
+        "recommended_tests": ["T031", "T032", "T033", "T034", "T035"],
         "typical_findings": [
             "RCSA methodology not consistently applied across business units; assessments lack independence",
             "KRIs not regularly reported to Risk Committee; thresholds not updated for current risk environment",
@@ -797,10 +837,8 @@ AUDIT_TEMPLATES = {
             "cross-border data transfer mechanisms, subject access request (SAR/DSAR) process, "
             "breach detection and notification, DPO role effectiveness, and DPIA process."
         ),
-        "key_risks": ["R021", "R022", "R023", "R024", "R025"],
-        "recommended_tests": [
-            "T086", "T087", "T088", "T089", "T090", "T091", "T092", "T093", "T094", "T095",
-        ],
+        "key_risks": ["R027", "R028", "R029", "R030"],
+        "recommended_tests": ["T041", "T042", "T043", "T044", "T045"],
         "typical_findings": [
             "Records of processing activities (RoPA) incomplete or not maintained for all data processing",
             "No DPIA conducted for high-risk processing (automated profiling, large-scale monitoring)",
@@ -828,10 +866,8 @@ AUDIT_TEMPLATES = {
             "stress testing framework, market risk limit framework and breach management, "
             "independent price verification (IPV), P&L attribution, and front-office risk controls."
         ),
-        "key_risks": ["R026", "R027", "R028", "R029", "R030"],
-        "recommended_tests": [
-            "T101", "T102", "T103", "T104", "T105", "T106", "T107", "T108", "T109", "T110",
-        ],
+        "key_risks": ["R031", "R032", "R033"],
+        "recommended_tests": ["T051", "T052", "T053", "T054", "T055"],
         "typical_findings": [
             "VaR model backtesting shows exceptions exceeding the 1% threshold; model review overdue",
             "Market risk limits for FX and interest rate risk not reviewed since 2022; no escalation process",
@@ -860,10 +896,8 @@ AUDIT_TEMPLATES = {
             "initial due diligence, ongoing oversight, contract adequacy, concentration risk, "
             "sub-outsourcing, and exit strategy."
         ),
-        "key_risks": ["R031", "R032", "R033", "R034", "R035"],
-        "recommended_tests": [
-            "T116", "T117", "T118", "T119", "T120", "T121", "T122", "T123", "T124", "T125",
-        ],
+        "key_risks": ["R034", "R035", "R036"],
+        "recommended_tests": ["T061", "T062", "T063", "T064", "T065"],
         "typical_findings": [
             "Outsourcing register incomplete; non-material outsourcing threshold not defined or applied",
             "Due diligence files for critical vendors missing latest SOC 2 reports or security certifications",
@@ -892,10 +926,8 @@ AUDIT_TEMPLATES = {
             "conflicts of interest management, remuneration framework, whistleblowing mechanism, "
             "and RCSA process."
         ),
-        "key_risks": ["R036", "R037", "R038", "R039", "R040"],
-        "recommended_tests": [
-            "T131", "T132", "T133", "T134", "T135", "T136", "T137", "T138", "T139", "T140",
-        ],
+        "key_risks": ["R037", "R038", "R039", "R040"],
+        "recommended_tests": ["T071", "T072", "T073", "T074", "T075"],
         "typical_findings": [
             "Board Risk Committee does not receive sufficient granularity of risk reporting; MI is too high-level",
             "Risk Appetite Statement not cascaded to individual business unit limits and KRIs",
@@ -998,7 +1030,7 @@ RISK_INDICATORS = {
                 "identified at onboarding or during the relationship, resulting in enhanced due diligence "
                 "not being applied and mandatory senior management approval being bypassed."
             ),
-            "level": "Critical",
+            "level": "High",
             "probability": "Medium",
             "impact": "High",
             "expected_controls": [
@@ -1133,6 +1165,7 @@ RISK_INDICATORS = {
             "level": "Critical",
             "probability": "Low",
             "impact": "High",
+            "level_rationale": "Elevated to Critical despite Low probability: sanctions violations carry strict-liability criminal exposure, irreversible reputational harm, and correspondent banking exclusion risk that make the consequence category qualitatively different from standard High-impact events.",
             "expected_controls": [
                 "Automated real-time screening of all transactions against current OFAC, UN, EU, SECO lists",
                 "Daily update cycle for sanctions lists; immediate update for emergency designations",
@@ -1433,6 +1466,7 @@ RISK_INDICATORS = {
             "level": "Critical",
             "probability": "Low",
             "impact": "High",
+            "level_rationale": "Elevated to Critical despite Low probability: losses are typically immediate and irreversible (e.g. Bangladesh Bank USD 81M theft); SWIFT CSP non-compliance directly attracts regulatory sanction; sector-wide SWIFT attack campaigns demonstrate that any single failure becomes systemic.",
             "expected_controls": [
                 "Full implementation of SWIFT Customer Security Programme (CSP) mandatory controls",
                 "Four-eyes authorisation for all SWIFT messages above defined threshold",
@@ -1835,7 +1869,7 @@ RISK_INDICATORS = {
                 "absence of defined retention schedules, lack of automated deletion processes, "
                 "or inability to locate and delete data across fragmented legacy systems."
             ),
-            "level": "Moderate",
+            "level": "High",
             "probability": "High",
             "impact": "Medium",
             "expected_controls": [
@@ -2106,7 +2140,7 @@ RISK_INDICATORS = {
                 "without the bank's knowledge or approval, creating hidden dependencies and making "
                 "it impossible to maintain adequate oversight of the full delivery chain."
             ),
-            "level": "High",
+            "level": "Moderate",
             "probability": "Medium",
             "impact": "Medium",
             "expected_controls": [
@@ -2265,6 +2299,109 @@ RISK_INDICATORS = {
                 "High client-value transactions that cross compliance boundaries may go unreported "
                 "to protect senior relationships. An effective, genuinely anonymous channel is "
                 "therefore disproportionately important in private banking relative to retail banking."
+            ),
+        },
+    ],
+
+    "LIQUIDITY_RISK": [
+        {
+            "id": "R041",
+            "title": "LCR / NSFR Threshold Breach Risk",
+            "description": (
+                "The Liquidity Coverage Ratio (LCR) or Net Stable Funding Ratio (NSFR) falls below "
+                "the regulatory minimum of 100% due to unexpected deposit outflows, HQLA quality "
+                "deterioration, or modelling errors in outflow assumptions — resulting in regulatory "
+                "breach and potential FINMA intervention."
+            ),
+            "level": "Critical",
+            "probability": "Low",
+            "impact": "High",
+            "level_rationale": "Elevated to Critical: LCR breach is a direct regulatory violation triggering mandatory FINMA notification and potential supervisory intervention; post-CS sector experience demonstrates that threshold breaches can escalate to existential liquidity events within days.",
+            "expected_controls": [
+                "Daily LCR calculation and monitoring with automated breach alert at 110% (early warning) and 100% (regulatory minimum)",
+                "Monthly NSFR calculation with trend analysis and Board reporting",
+                "Intraday liquidity monitoring across all material currencies and settlement accounts",
+                "Conservative outflow assumptions for HNWI sight deposits reflecting actual behavioural data",
+                "Contingency Funding Plan (CFP) with defined triggers and escalation procedures tested semi-annually",
+            ],
+            "red_flags": [
+                "LCR calculation relies on manual spreadsheets rather than automated treasury system",
+                "Outflow assumptions for HNWI deposits not reviewed since pre-2023 market stress",
+                "HQLA buffer concentrated in Level 2/3 assets with limited same-day liquidity",
+                "Intraday liquidity monitoring limited to end-of-day batch calculation",
+                "CFP not tested in the past 12 months or test limited to desktop exercise",
+            ],
+            "private_banking_specifics": (
+                "HNWI client deposits are structurally less stable than retail deposits: larger average "
+                "balances, higher price sensitivity, and potential for rapid coordinated withdrawal "
+                "in response to reputational events (as demonstrated by Credit Suisse Q4 2022). "
+                "Standard LCR outflow assumptions calibrated to retail banking understate the "
+                "run-risk of private banking deposit books."
+            ),
+        },
+        {
+            "id": "R042",
+            "title": "Deposit Concentration and Run Risk",
+            "description": (
+                "Excessive concentration of funding in a small number of large HNWI depositors creates "
+                "asymmetric liquidity risk: withdrawal of top-10 depositors could trigger immediate "
+                "LCR breach and require emergency asset liquidation or central bank facility access."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Concentration limits for largest depositors (e.g. no single depositor >5% of total deposits)",
+                "Quarterly stress test modelling simultaneous withdrawal of top-10 depositors",
+                "Monitoring of deposit outflow velocity against CFP escalation triggers",
+                "Client relationship intelligence to detect early indicators of withdrawal intent",
+                "Diversified funding base including term deposits, covered bonds, and repo facilities",
+            ],
+            "red_flags": [
+                "Top-10 depositors represent >30% of total deposit base",
+                "No defined depositor concentration limit or annual review",
+                "Stress test does not model correlated withdrawal scenarios (multiple clients simultaneously)",
+                "Sight-to-term deposit ratio increasing without compensating HQLA build",
+                "No early-warning monitoring for large depositor behavioural changes",
+            ],
+            "private_banking_specifics": (
+                "Private banking inherently creates deposit concentration: an institution with 500 "
+                "HNWI clients of which 20 hold CHF 50M+ constitutes a funding model fundamentally "
+                "different from retail banking. Post-SVB and Credit Suisse, regulators now expect "
+                "private banks to explicitly model and stress-test this concentration in ILAAP."
+            ),
+        },
+        {
+            "id": "R043",
+            "title": "HQLA Quality and Liquidity Horizon Risk",
+            "description": (
+                "High Quality Liquid Assets (HQLA) in the liquidity buffer are concentrated in "
+                "Level 2 or Level 2B assets, or in assets whose market liquidity deteriorates "
+                "rapidly under stress conditions, such that the theoretical LCR does not reflect "
+                "actual cashable liquidity in a stress scenario."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "HQLA classification regularly reviewed against regulatory eligibility criteria",
+                "Concentration limits for Level 2/2B assets within the HQLA buffer (max 40%/15% per Basel III)",
+                "Independent price verification for HQLA mark-to-market; haircut assumptions reviewed quarterly",
+                "HQLA monetisation test: annual live test of ability to repo or sell HQLA within 24 hours",
+                "Operational segregation of HQLA: assets held in dedicated custody accounts free from encumbrance",
+            ],
+            "red_flags": [
+                "HQLA buffer dominated by private bank bonds or structured notes classified as Level 2",
+                "No live HQLA monetisation test conducted in the past 12 months",
+                "Haircut assumptions for Level 2 assets not stress-tested under market dislocation scenario",
+                "HQLA operationally co-mingled with investment portfolio; encumbrance not tracked",
+                "Concentration of HQLA in single issuer or currency creates liquidity correlation risk",
+            ],
+            "private_banking_specifics": (
+                "Private banks managing client assets alongside proprietary HQLA face specific operational "
+                "risk: client-owned securities held in custody may be inappropriately included in HQLA "
+                "calculations. Bespoke structured products held on balance sheet as proprietary investments "
+                "are frequently misclassified as HQLA despite having no active secondary market."
             ),
         },
     ],
@@ -4337,7 +4474,7 @@ IIA_STANDARDS_2024 = [
         "description": "The GIAS 2024, effective January 9, 2024, replace the 2017 Standards. They establish mandatory requirements across five Domains, introduce Topical Requirements for specialised areas, and elevate the CAE's accountability to governing bodies. They apply to all internal audit functions globally.",
         "key_requirements": [
             "Mandatory for all IIA member functions globally from January 9, 2024",
-            "Five Domains covering Purpose, Ethics, Governance, Management, and Services",
+            "Five Domains: Domain I — Purpose of Internal Auditing; Domain II — Ethics and Professionalism; Domain III — Governing the Internal Audit Function; Domain IV — Managing the Internal Audit Function; Domain V — Performing Internal Audit Services",
             "Topical Requirements for Fraud, Cyber, Culture, ESG, and Third-Party Risk",
             "Enhanced independence and objectivity requirements",
             "Stronger quality assurance and reporting to governing bodies",
@@ -4950,10 +5087,10 @@ AUDIT_TESTS_LIBRARY = {
         {
             "id": "T001", "level": "Critical", "category": "Standard",
             "objective": "Verify completeness of CDD/EDD files for all active clients",
-            "procedure": "Extract full client list from CRM. Select judgmental sample of 30 files emphasising HNWIs and PEPs. Review each file for KYC form, ID copy, source of wealth, source of funds, and risk rating. Cross-reference with onboarding date and last review date.",
-            "population": "All active client files (~1,200)",
-            "sample_size": "Judgmental: 30 files (focus on High-risk and PEP segments)",
-            "failure_criteria": "Any file missing mandatory CDD document or overdue for periodic review",
+            "procedure": "Extract full client list from CRM segmented by risk rating. Test (a) 100% of PEP-flagged clients and all High-risk clients (typically 30-100 files); (b) statistical sample of 60 Standard-risk files using random number generation. Review each file for: KYC form, government-issued ID copy, source of wealth narrative with supporting evidence, source of funds, risk rating rationale, and last periodic review date vs. required cycle.",
+            "population": "All active client files (~1,200), segmented: High-risk/PEP (~50-100), Standard-risk (~1,100)",
+            "sample_size": "100% of High-risk and PEP clients + statistical sample of 60 Standard-risk files (~10% coverage)",
+            "failure_criteria": "Any High-risk or PEP file missing mandatory CDD document; any file overdue for periodic review by >3 months; Standard-risk deficiency rate >5%",
         },
         {
             "id": "T002", "level": "Critical", "category": "Standard",
@@ -5001,10 +5138,10 @@ AUDIT_TESTS_LIBRARY = {
         {
             "id": "T012", "level": "Critical", "category": "Standard",
             "objective": "Test patch management — critical CVE remediation within SLA",
-            "procedure": "Run vulnerability scan output (Qualys/Nessus) for 6-month period. Identify Critical/High CVEs by detection date. Cross-reference patch deployment date from CMDB/ITSM. Calculate remediation lead time vs. SLA (Critical: 24h, High: 7 days).",
+            "procedure": "Run vulnerability scan output (Qualys/Nessus) for 6-month period. Identify Critical/High CVEs by detection date. Cross-reference patch deployment date from CMDB/ITSM. Calculate remediation lead time vs. SLA (Critical: ≤15 calendar days, High: ≤30 calendar days). Note exceptions granted through formal change management.",
             "population": "All systems in scope: servers, network devices, endpoints (typically 200-500 assets)",
             "sample_size": "100% of Critical CVEs + random 25 High CVEs",
-            "failure_criteria": "Any Critical CVE not patched within 24h or High CVE within 7 days",
+            "failure_criteria": "Any Critical CVE not patched within 15 calendar days or High CVE within 30 calendar days without documented exception and compensating control",
             "tr_reference": "TR-Cyber CP-D, CP-E",
         },
         {
@@ -5337,6 +5474,7 @@ REGULATORY_CALENDAR = [
             "Aligns with IIA TR-2 (Cybersecurity) and TR-5 (Third-Party Relationships)."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
     {
@@ -5374,6 +5512,7 @@ REGULATORY_CALENDAR = [
             "Relevant to credit risk, market risk, and operational risk audit programmes."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
     {
@@ -5410,6 +5549,7 @@ REGULATORY_CALENDAR = [
             "AML/KYC adequacy for crypto onboarding (FATF Travel Rule compliance)."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
     {
@@ -5447,6 +5587,7 @@ REGULATORY_CALENDAR = [
             "governance completeness. High priority given FINMA supervisory focus."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
     {
@@ -5484,6 +5625,7 @@ REGULATORY_CALENDAR = [
             "staff training adequacy on extended predicate offences."
         ),
         "priority": "Medium",
+        "status": "IN FORCE",
     },
 
     {
@@ -5521,6 +5663,7 @@ REGULATORY_CALENDAR = [
             "AML coordination, preparation for potential AMLA inspection methodology."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
     {
@@ -5559,6 +5702,7 @@ REGULATORY_CALENDAR = [
             "complaints and vulnerability data integration."
         ),
         "priority": "Medium",
+        "status": "DEADLINE PASSED",
     },
 
     {
@@ -5595,6 +5739,7 @@ REGULATORY_CALENDAR = [
             "reporting capability."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -5633,6 +5778,7 @@ REGULATORY_CALENDAR = [
             "assessment methodology."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -5668,6 +5814,7 @@ REGULATORY_CALENDAR = [
             "coverage, governance of stress test results, climate risk integration."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -5706,6 +5853,7 @@ REGULATORY_CALENDAR = [
             "IT/cyber, and climate risk — creating regulatory value from audit planning."
         ),
         "priority": "High",
+        "status": "COMPLETED",
     },
 
     {
@@ -5743,6 +5891,7 @@ REGULATORY_CALENDAR = [
             "assurance readiness, greenwashing risk in disclosures."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
     {
@@ -5780,6 +5929,7 @@ REGULATORY_CALENDAR = [
             "risk in UK disclosures."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -5819,6 +5969,7 @@ REGULATORY_CALENDAR = [
             "explainability and bias testing for client-facing AI models."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
     {
@@ -5856,6 +6007,7 @@ REGULATORY_CALENDAR = [
             "identification, submission timeliness and data quality."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
     {
@@ -5895,6 +6047,7 @@ REGULATORY_CALENDAR = [
             "identification completeness, capital reporting accuracy."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
     {
@@ -5932,6 +6085,7 @@ REGULATORY_CALENDAR = [
             "priority areas maximises regulatory value and manages inspection risk."
         ),
         "priority": "High",
+        "status": "COMPLETED",
     },
 
     {
@@ -5967,6 +6121,7 @@ REGULATORY_CALENDAR = [
             "OTC VA derivatives risk management, stablecoin exposure assessment."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -6005,6 +6160,7 @@ REGULATORY_CALENDAR = [
             "Board attestation process, continuous monitoring capability."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
     {
@@ -6042,6 +6198,7 @@ REGULATORY_CALENDAR = [
             "risk chapter adequacy, financed emissions data quality."
         ),
         "priority": "Medium",
+        "status": "IN FORCE",
     },
 
     {
@@ -6078,6 +6235,7 @@ REGULATORY_CALENDAR = [
             "controls, virtual asset AML procedures."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -6115,6 +6273,7 @@ REGULATORY_CALENDAR = [
             "EBA expectations, PEP programme adequacy."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -6152,6 +6311,7 @@ REGULATORY_CALENDAR = [
             "HKMA licensing compliance for any stablecoin activities."
         ),
         "priority": "Medium",
+        "status": "IN FORCE",
     },
 
     {
@@ -6190,6 +6350,7 @@ REGULATORY_CALENDAR = [
             "regulatory change in non-MiCA jurisdictions."
         ),
         "priority": "Low",
+        "status": "COMPLETED",
     },
 
     {
@@ -6228,6 +6389,7 @@ REGULATORY_CALENDAR = [
             "supporting authoritative data sources. High regulatory exposure topic."
         ),
         "priority": "High",
+        "status": "COMPLETED",
     },
 
     {
@@ -6267,6 +6429,7 @@ REGULATORY_CALENDAR = [
             "human oversight controls for automated decisions."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -6305,6 +6468,7 @@ REGULATORY_CALENDAR = [
             "NFT AML procedures."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -6344,6 +6508,7 @@ REGULATORY_CALENDAR = [
             "monitoring, trade repository reconciliation."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -6382,6 +6547,7 @@ REGULATORY_CALENDAR = [
             "assessment, intragroup outsourcing documentation."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -6422,6 +6588,7 @@ REGULATORY_CALENDAR = [
             "High-value audit given FINMA supervisory focus."
         ),
         "priority": "High",
+        "status": "COMPLETED",
     },
 
     {
@@ -6461,6 +6628,7 @@ REGULATORY_CALENDAR = [
             "requirements, recovery plan adequacy, liquidity backstop arrangements."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -6501,6 +6669,7 @@ REGULATORY_CALENDAR = [
             "procedures, FATF FATF-aligned assessment methodology."
         ),
         "priority": "High",
+        "status": "COMPLETED",
     },
 
     {
@@ -6540,6 +6709,7 @@ REGULATORY_CALENDAR = [
             "appropriateness test coverage for complex products."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -6579,6 +6749,7 @@ REGULATORY_CALENDAR = [
             "framework, disclosure alignment."
         ),
         "priority": "Medium",
+        "status": "COMPLETED",
     },
 
     {
@@ -6618,6 +6789,7 @@ REGULATORY_CALENDAR = [
             "process, reporting infrastructure testing."
         ),
         "priority": "High",
+        "status": "IN FORCE",
     },
 
 ]
