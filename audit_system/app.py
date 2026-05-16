@@ -40,6 +40,9 @@ _SS_DEFAULTS = {
     "history": [],
     "_tpl_applied": False,
     "_tpl_name": "",
+    # Static data
+    "dash_source": "static",   # "static" | "live"
+    "ref_search": "",
 }
 for _k, _v in _SS_DEFAULTS.items():
     if _k not in st.session_state:
@@ -354,6 +357,14 @@ try:
 except ImportError as e:
     _ERR = str(e)
 
+# ── Static data (always available, zero API calls) ────────────────────────────
+from data import (
+    REGULATORY_FRAMEWORKS, AUDIT_TEMPLATES as _DATA_TEMPLATES,
+    RISK_INDICATORS, PUBLIC_AUDIT_RECOMMENDATIONS,
+    CVE_BANKING, IIA_STANDARDS_2024, DATA_ANALYTICS_SCENARIOS,
+    TOPIC_THEME_MAP,
+)
+
 JURISDICTIONS = ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "Bahamas / SCB", "EU / DORA", "UK / FCA+PRA"]
 OUTPUT_DIR = str(_HERE / "outputs")
 Path(OUTPUT_DIR).mkdir(exist_ok=True)
@@ -525,6 +536,251 @@ def _agentic_loop(client, sys_prompt, tools, messages, tool_fn):
         else:
             break
     return "\n".join(texts), extra
+
+
+# ── Static data helpers ───────────────────────────────────────────────────────
+
+def _topic_to_theme(topic: str) -> str | None:
+    """Map a free-text audit topic to a THEME key used in RISK_INDICATORS etc."""
+    if not topic:
+        return None
+    up = topic.upper()
+    for kw, theme in TOPIC_THEME_MAP.items():
+        if kw in up:
+            return theme
+    return None
+
+
+def _static_label():
+    """Small badge marking data as static reference (no API call)."""
+    st.markdown(
+        '<span style="background:rgba(34,211,165,0.10);color:#22d3a5;'
+        'border:1px solid rgba(34,211,165,0.25);border-radius:4px;'
+        'padding:2px 9px;font-size:11px;font-weight:600;vertical-align:middle">'
+        '📚 Reference Data</span>',
+        unsafe_allow_html=True,
+    )
+
+
+def _show_risk_indicators(theme: str, search: str = ""):
+    """Display RISK_INDICATORS for a given theme with optional search filter."""
+    risks = RISK_INDICATORS.get(theme, [])
+    if search:
+        q = search.lower()
+        risks = [r for r in risks if q in (r.get("title","") + r.get("description","") + r.get("private_banking_specifics","")).lower()]
+    if not risks:
+        st.caption("No matching risks.")
+        return
+
+    _LEVEL_COLOR = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308"}
+    _LEVEL_BG    = {"Critical": "rgba(239,68,68,0.08)", "High": "rgba(249,115,22,0.08)", "Moderate": "rgba(234,179,8,0.06)"}
+
+    for r in risks:
+        col = _LEVEL_COLOR.get(r["level"], "#8392bb")
+        bg  = _LEVEL_BG.get(r["level"], "transparent")
+        prob_color  = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(r.get("probability",""), "#8392bb")
+        impact_color = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(r.get("impact",""), "#8392bb")
+
+        controls_html = "".join(f"<li>{c}</li>" for c in r.get("expected_controls", []))
+        flags_html    = "".join(f"<li>{f}</li>" for f in r.get("red_flags", []))
+
+        st.markdown(f"""
+        <div style="border:1px solid {col}33;border-radius:9px;padding:14px 18px;margin-bottom:12px;background:{bg}">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="background:{col}22;color:{col};border:1px solid {col}44;border-radius:4px;
+                   padding:2px 9px;font-size:11px;font-weight:700">{r["level"]}</span>
+            <span style="font-size:13.5px;font-weight:600;color:var(--text-primary)">{r.get("id","")} — {r["title"]}</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">
+              Prob: <span style="color:{prob_color};font-weight:600">{r.get("probability","")}</span>
+              &nbsp;·&nbsp; Impact: <span style="color:{impact_color};font-weight:600">{r.get("impact","")}</span>
+            </span>
+          </div>
+          <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.7">{r["description"]}</p>
+          <details style="margin-bottom:6px">
+            <summary style="font-size:12px;color:#7fa8fb;cursor:pointer;font-weight:500">Controls &amp; Red Flags</summary>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+              <div>
+                <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px">EXPECTED CONTROLS</div>
+                <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{controls_html}</ul>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#ef4444aa;margin-bottom:4px">RED FLAGS</div>
+                <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{flags_html}</ul>
+              </div>
+            </div>
+            <div style="margin-top:10px;font-size:11.5px;color:var(--text-muted);font-style:italic">
+              🏦 {r.get("private_banking_specifics","")}
+            </div>
+          </details>
+        </div>
+        """, unsafe_allow_html=True)
+
+
+def _show_pub_recs(theme: str, search: str = ""):
+    """Display PUBLIC_AUDIT_RECOMMENDATIONS filtered by theme and search."""
+    recs = [r for r in PUBLIC_AUDIT_RECOMMENDATIONS if r.get("theme") == theme]
+    if search:
+        q = search.lower()
+        recs = [r for r in recs if q in (r.get("source","") + r.get("recommendation","") + r.get("private_banking_relevance","")).lower()]
+    if not recs:
+        st.caption("No recommendations for this theme.")
+        return
+
+    rows = ""
+    for r in recs:
+        pri = r.get("priority", "")
+        badge = '<span class="badge-high">High</span>' if pri == "High" else '<span class="badge-medium">Medium</span>'
+        rows += (
+            f'<tr>'
+            f'<td style="padding:9px 13px;color:#7fa8fb;font-weight:500;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-muted);text-align:center;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("year","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("recommendation","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-muted);font-size:11.5px;font-style:italic;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("private_banking_relevance","")}</td>'
+            f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{badge}</td>'
+            f'</tr>'
+        )
+    st.markdown(f"""
+    <table class="data-table" style="font-size:12px">
+      <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
+        <th style="color:#7fa8fb;width:12%">Source</th><th style="color:#7fa8fb;width:5%;text-align:center">Year</th>
+        <th style="color:#7fa8fb;width:40%">Recommendation</th>
+        <th style="color:#7fa8fb;width:35%">Private Banking Relevance</th>
+        <th style="color:#7fa8fb;width:8%">Priority</th>
+      </tr></thead><tbody>{rows}</tbody>
+    </table>""", unsafe_allow_html=True)
+
+
+def _show_da_scenarios(theme: str, search: str = ""):
+    """Display DATA_ANALYTICS_SCENARIOS for a theme."""
+    scenarios = DATA_ANALYTICS_SCENARIOS.get(theme, [])
+    if search:
+        q = search.lower()
+        scenarios = [s for s in scenarios if q in (s.get("title","") + s.get("objective","") + s.get("anomaly_searched","")).lower()]
+    if not scenarios:
+        st.caption("No scenarios for this theme.")
+        return
+
+    _CMPLX = {"Low": "#22d3a5", "Medium": "#eab308", "High": "#f97316"}
+    rows = ""
+    for s in scenarios:
+        cx_col = _CMPLX.get(s.get("complexity",""), "#8392bb")
+        ds = " · ".join(s.get("data_sources", []))
+        tools = " · ".join(s.get("tools", []))
+        rows += (
+            f'<tr>'
+            f'<td style="padding:9px 13px;color:#7fa8fb;font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("id","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("title","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("objective","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("analysis_type","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-muted);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("anomaly_searched","")}</td>'
+            f'<td style="padding:9px 13px;font-size:11px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">'
+            f'<span style="color:{cx_col};font-weight:600">{s.get("complexity","")}</span>'
+            f'<br><span style="color:var(--text-muted)">{tools}</span></td>'
+            f'</tr>'
+        )
+    st.markdown(f"""
+    <table class="data-table" style="font-size:12px">
+      <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
+        <th style="color:#7fa8fb;width:6%">ID</th><th style="color:#7fa8fb;width:18%">Scenario</th>
+        <th style="color:#7fa8fb;width:25%">Objective</th><th style="color:#7fa8fb;width:12%">Analysis Type</th>
+        <th style="color:#7fa8fb;width:28%">Anomaly Searched</th><th style="color:#7fa8fb;width:11%">Complexity / Tools</th>
+      </tr></thead><tbody>{rows}</tbody>
+    </table>""", unsafe_allow_html=True)
+
+
+def _show_regulatory_frameworks(jur_filter: str = "All", search: str = ""):
+    """Display REGULATORY_FRAMEWORKS grouped by jurisdiction."""
+    for jur, regs in REGULATORY_FRAMEWORKS.items():
+        if jur_filter != "All" and jur != jur_filter:
+            continue
+        filtered = regs
+        if search:
+            q = search.lower()
+            filtered = [r for r in regs if q in (r.get("reference","") + r.get("title","") + " ".join(r.get("applies_to",[]))).lower()]
+        if not filtered:
+            continue
+        with st.expander(f"**{jur}** — {len(filtered)} texts", expanded=(jur_filter != "All")):
+            rows = ""
+            for r in filtered:
+                applies = " &nbsp;".join(f'<span class="badge-info">{t}</span>' for t in r.get("applies_to", []))
+                reqs = "".join(f"<li>{k}</li>" for k in r.get("key_requirements", []))
+                rows += (
+                    f'<tr>'
+                    f'<td style="padding:9px 13px;color:#7fa8fb;font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
+                    f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("title","")}<br><span style="font-size:11px;color:var(--text-muted)">{r.get("authority","")} · {r.get("year","")}</span></td>'
+                    f'<td style="padding:9px 13px;color:var(--text-secondary);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("scope","")}</td>'
+                    f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{applies}</td>'
+                    f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)"><ul style="margin:0;padding-left:15px;font-size:11.5px;color:var(--text-secondary);line-height:1.7">{reqs}</ul></td>'
+                    f'</tr>'
+                )
+            st.markdown(f"""
+            <table class="data-table" style="font-size:12px">
+              <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
+                <th style="color:#7fa8fb;width:10%">Reference</th><th style="color:#7fa8fb;width:18%">Title</th>
+                <th style="color:#7fa8fb;width:22%">Scope</th><th style="color:#7fa8fb;width:14%">Applies To</th>
+                <th style="color:#7fa8fb;width:36%">Key Requirements</th>
+              </tr></thead><tbody>{rows}</tbody>
+            </table>""", unsafe_allow_html=True)
+
+
+def _show_cve_static(search: str = "", sev_filter: str = "All"):
+    """Display CVE_BANKING with optional filters."""
+    cves = CVE_BANKING
+    if sev_filter != "All":
+        cves = [c for c in cves if c.get("severity") == sev_filter]
+    if search:
+        q = search.lower()
+        cves = [c for c in cves if q in (c.get("cve_id","") + c.get("system_affected","") + c.get("description","")).lower()]
+    if not cves:
+        st.caption("No CVEs match the filter.")
+        return
+
+    rows = ""
+    for c in cves:
+        sev = c.get("severity","")
+        badge = '<span class="badge-critical">Critical</span>' if sev == "Critical" else '<span class="badge-high">High</span>'
+        cvss = c.get("cvss_score", "")
+        rows += (
+            f'<tr>'
+            f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("cve_id","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-muted);white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("date","")}</td>'
+            f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{badge} <span style="font-size:11px;color:var(--text-muted)">CVSS {cvss}</span></td>'
+            f'<td style="padding:9px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("system_affected","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("description","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("banking_relevance","")}</td>'
+            f'</tr>'
+        )
+    st.markdown(f"""
+    <table class="data-table" style="font-size:12px">
+      <thead><tr style="background:rgba(239,68,68,0.06);border-bottom:1px solid rgba(239,68,68,0.18)">
+        <th style="color:#ef4444;width:10%">CVE ID</th><th style="color:#6b7599;width:7%">Date</th>
+        <th style="color:#6b7599;width:10%">Severity</th><th style="color:#6b7599;width:16%">System</th>
+        <th style="color:#6b7599;width:28%">Description</th><th style="color:#6b7599;width:29%">Banking Relevance</th>
+      </tr></thead><tbody>{rows}</tbody>
+    </table>""", unsafe_allow_html=True)
+
+
+def _show_iia_standards():
+    """Display IIA_STANDARDS_2024 in expandable cards."""
+    for s in IIA_STANDARDS_2024:
+        reqs = "".join(f"<li>{r}</li>" for r in s.get("key_requirements", []))
+        with st.expander(f"**{s['standard_id']}** — {s['title']}"):
+            st.markdown(f"""
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px">{s['description']}</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div>
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;
+                     color:#7fa8fb;margin-bottom:6px">Key Requirements</div>
+                <ul style="margin:0;padding-left:16px;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{reqs}</ul>
+              </div>
+              <div style="background:rgba(34,211,165,0.06);border:1px solid rgba(34,211,165,0.18);
+                          border-radius:8px;padding:12px">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;
+                     color:#22d3a5;margin-bottom:6px">🏦 Banking Relevance</div>
+                <p style="margin:0;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{s['relevance_to_banking']}</p>
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 
 # ── UX helpers ────────────────────────────────────────────────────────────────
@@ -1041,6 +1297,42 @@ with st.sidebar:
                 ts_line += f" · {risk_str}"
             st.markdown(f'<div style="font-size:10.5px;color:var(--text-muted);margin:-4px 0 6px 4px">{ts_line}</div>', unsafe_allow_html=True)
 
+    # ── Reference Data search ─────────────────────────────────────────────────
+    st.markdown("---")
+    ref_open = st.checkbox("📚 Reference Data", key="ref_data_open")
+    if ref_open:
+        st.markdown(f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--sidebar-header-color);margin-bottom:6px">Global Search</div>', unsafe_allow_html=True)
+        ref_q = st.text_input("Search", placeholder="e.g. GDPR, AML, cyber, FINMA…", key="ref_search_q", label_visibility="collapsed")
+        if ref_q:
+            q = ref_q.lower()
+            hits = []
+            for theme, risks in RISK_INDICATORS.items():
+                for r in risks:
+                    if q in (r.get("title", "") + r.get("description", "")).lower():
+                        hits.append(f'🔴 **Risk** `{theme}` — {r["title"]}')
+            for r in PUBLIC_AUDIT_RECOMMENDATIONS:
+                if q in (r.get("source", "") + r.get("recommendation", "")).lower():
+                    hits.append(f'📋 **Rec** `{r.get("theme", "")}` — {r.get("source", "")} ({r.get("year", "")})')
+            for jur, regs in REGULATORY_FRAMEWORKS.items():
+                for r in regs:
+                    if q in (r.get("title", "") + r.get("reference", "") + " ".join(r.get("applies_to", []))).lower():
+                        hits.append(f'📜 **Reg** `{jur}` — {r.get("reference", "")} {r.get("title", "")[:40]}')
+            for c in CVE_BANKING:
+                if q in (c.get("cve_id", "") + c.get("system_affected", "") + c.get("description", "")).lower():
+                    hits.append(f'⚠️ **CVE** {c.get("cve_id", "")} — {c.get("system_affected", "")}')
+            for theme, scenarios in DATA_ANALYTICS_SCENARIOS.items():
+                for s in scenarios:
+                    if q in (s.get("title", "") + s.get("objective", "")).lower():
+                        hits.append(f'📊 **DA** `{theme}` — {s.get("id", "")} {s.get("title", "")[:40]}')
+            if hits:
+                st.markdown(f'<div style="font-size:10.5px;color:var(--text-muted);margin-bottom:5px">{len(hits)} result(s)</div>', unsafe_allow_html=True)
+                for h in hits[:25]:
+                    st.markdown(f'<div style="font-size:11.5px;color:var(--text-secondary);padding:3px 0;border-bottom:1px solid var(--border-divider);line-height:1.5">{h}</div>', unsafe_allow_html=True)
+                if len(hits) > 25:
+                    st.markdown(f'<div style="font-size:10.5px;color:var(--text-muted);margin-top:4px">…and {len(hits) - 25} more</div>', unsafe_allow_html=True)
+            else:
+                st.caption("No matches found.")
+
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -1080,20 +1372,93 @@ tab0, tab1, tab2, tab3 = st.tabs([
 # TAB 0 — INTELLIGENCE DASHBOARD
 # ─────────────────────────────────────────────────────────────────────────────
 with tab0:
-    hcol1, hcol2 = st.columns([5, 1])
-    with hcol1:
-        st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.4rem">Live intelligence feed: CVEs, regulatory updates, and public audit recommendations.</p>', unsafe_allow_html=True)
-        if st.session_state.dash_updated:
-            st.markdown(f'<p style="color:#2d3655;font-size:12px;margin:0">Last updated: {st.session_state.dash_updated}</p>', unsafe_allow_html=True)
-    with hcol2:
-        refresh = st.button("Refresh Dashboard", key="dash_refresh")
+    # Source selector
+    _src_c1, _src_c2, _ = st.columns([1.3, 1.5, 4])
+    _t0_static = st.session_state.dash_source == "static"
+    if _src_c1.button("📚 Static Reference", key="dash_src_static",
+                      type="primary" if _t0_static else "secondary"):
+        st.session_state.dash_source = "static"
+        st.rerun()
+    if _src_c2.button("🌐 Live Intelligence", key="dash_src_live",
+                      type="primary" if not _t0_static else "secondary"):
+        st.session_state.dash_source = "live"
+        st.rerun()
+
+    st.markdown("<div style='margin-top:0.4rem'></div>", unsafe_allow_html=True)
+
+    refresh = False  # only set inside the live branch below
+
+    if st.session_state.dash_source == "static":
+        # ── Static reference data (zero API calls) ────────────────────────────
+        _static_label()
+        st.markdown("<div style='margin-top:0.6rem'></div>", unsafe_allow_html=True)
+
+        _sev_opts = ["All", "Critical", "High"]
+        _jur_opts = ["All"] + list(REGULATORY_FRAMEWORKS.keys())
+
+        # A) CVEs
+        st.markdown("---")
+        st.markdown(
+            f'<div class="section-title">A. Banking CVE Reference'
+            f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{len(CVE_BANKING)} entries · 2021-2024</span></div>',
+            unsafe_allow_html=True,
+        )
+        _cve_sc1, _cve_sc2, _cve_sc3 = st.columns([3, 1.2, 1.2])
+        _cve_sq = _cve_sc1.text_input("Search CVEs", placeholder="Filter CVEs…", key="_cve_sq", label_visibility="collapsed")
+        _cve_ssev = _cve_sc2.selectbox("Severity", _sev_opts, key="_cve_ssev", label_visibility="collapsed")
+        _show_cve_static(search=_cve_sq, sev_filter=_cve_ssev)
+
+        # B) Regulatory frameworks
+        st.markdown("---")
+        _total_regs = sum(len(v) for v in REGULATORY_FRAMEWORKS.values())
+        st.markdown(
+            f'<div class="section-title">B. Regulatory Frameworks Reference'
+            f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{_total_regs} texts · CH · EU · UK · SG · HK · Bahamas · International</span></div>',
+            unsafe_allow_html=True,
+        )
+        _reg_sc1, _reg_sc2, _reg_sc3 = st.columns([3, 2, 1])
+        _reg_sq = _reg_sc1.text_input("Search frameworks", placeholder="Filter frameworks…", key="_reg_sq", label_visibility="collapsed")
+        _reg_sjur = _reg_sc2.selectbox("Jurisdiction", _jur_opts, key="_reg_sjur", label_visibility="collapsed")
+        _show_regulatory_frameworks(jur_filter=_reg_sjur, search=_reg_sq)
+
+        # C) Public audit recommendations
+        st.markdown("---")
+        _all_themes = list(dict.fromkeys(r.get("theme", "") for r in PUBLIC_AUDIT_RECOMMENDATIONS))
+        st.markdown(
+            f'<div class="section-title">C. Public Audit Recommendations'
+            f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{len(PUBLIC_AUDIT_RECOMMENDATIONS)} entries · FATF · FINMA · MAS · FCA · EBA · Basel · IIA · IMF</span></div>',
+            unsafe_allow_html=True,
+        )
+        _rec_sc1, _rec_sc2 = st.columns([3, 2])
+        _rec_sq = _rec_sc1.text_input("Search recommendations", placeholder="Filter recommendations…", key="_rec_sq", label_visibility="collapsed")
+        _rec_stheme = _rec_sc2.selectbox("Theme", ["All"] + _all_themes, key="_rec_stheme", label_visibility="collapsed")
+        for _t in (_all_themes if _rec_stheme == "All" else [_rec_stheme]):
+            if _rec_stheme == "All":
+                st.markdown(f'<div style="font-size:12px;font-weight:600;color:#7fa8fb;margin:10px 0 4px">{_t}</div>', unsafe_allow_html=True)
+            _show_pub_recs(theme=_t, search=_rec_sq)
+
+        st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
+        _print_button()
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    else:
+        # ── Live intelligence ─────────────────────────────────────────────────
+        hcol1, hcol2 = st.columns([5, 1])
+        with hcol1:
+            st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.4rem">Live intelligence feed: CVEs, regulatory updates, and public audit recommendations.</p>', unsafe_allow_html=True)
+            if st.session_state.dash_updated:
+                st.markdown(f'<p style="color:#2d3655;font-size:12px;margin:0">Last updated: {st.session_state.dash_updated}</p>', unsafe_allow_html=True)
+        with hcol2:
+            refresh = st.button("Refresh Dashboard", key="dash_refresh")
 
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
 
-    run_dash = refresh or (
-        st.session_state.dash_cves is None and
-        st.session_state.dash_regs is None and
-        st.session_state.dash_audit_recs is None
+    run_dash = (st.session_state.dash_source == "live") and (
+        refresh or (
+            st.session_state.dash_cves is None and
+            st.session_state.dash_regs is None and
+            st.session_state.dash_audit_recs is None
+        )
     )
 
     if run_dash:
@@ -1146,7 +1511,7 @@ with tab0:
             except Exception:
                 st.error("An error occurred while fetching intelligence data. Please try again.")
 
-    if st.session_state.dash_cves is not None:
+    if st.session_state.dash_source == "live" and st.session_state.dash_cves is not None:
         # A) CVEs
         st.markdown("---")
         n_cve = len(st.session_state.dash_cves or [])
@@ -1251,6 +1616,18 @@ with tab1:
     if not jurisdictions:
         st.warning("⚠ Please select at least one jurisdiction.")
         _t1_valid = False
+
+    # Reference data (always available, no API)
+    _t1_theme = _topic_to_theme(audit_topic) if audit_topic else None
+    if _t1_theme:
+        with st.expander(f"📚 Reference Risks — {_t1_theme.replace('_', ' ').title()}", expanded=False):
+            _static_label()
+            st.markdown("<div style='margin-top:0.5rem'></div>", unsafe_allow_html=True)
+            _show_risk_indicators(_t1_theme)
+        with st.expander(f"📚 Reference Recommendations — {_t1_theme.replace('_', ' ').title()}", expanded=False):
+            _static_label()
+            st.markdown("<div style='margin-top:0.5rem'></div>", unsafe_allow_html=True)
+            _show_pub_recs(_t1_theme)
 
     if st.button("Analyze", type="primary", disabled=_disabled or not audit_topic or not _t1_valid, key="t1_run"):
         with st.spinner("Analyzing…"):
@@ -1440,6 +1817,14 @@ with tab2:
     if topic2 and not scope.strip():
         st.warning("⚠ Please define the audit scope before generating the plan.")
         _t2_valid = False
+
+    # Reference data analytics scenarios (always available, no API)
+    _t2_theme = _topic_to_theme(topic2) if topic2 else None
+    if _t2_theme:
+        with st.expander(f"📚 Reference Analytics Scenarios — {_t2_theme.replace('_', ' ').title()}", expanded=False):
+            _static_label()
+            st.markdown("<div style='margin-top:0.5rem'></div>", unsafe_allow_html=True)
+            _show_da_scenarios(_t2_theme)
 
     if st.button("Generate Plan", type="primary", disabled=_disabled or not topic2 or not _t2_valid, key="t2_run"):
         with st.spinner("Generating…"):
@@ -1794,6 +2179,13 @@ with tab3:
 
                 except Exception:
                     st.error("An error occurred. Please try again.")
+
+    # IIA Standards Reference (always available, no API)
+    st.markdown("<div style='margin-top:1.5rem'></div>", unsafe_allow_html=True)
+    with st.expander("📚 IIA Standards Reference — 2024", expanded=False):
+        _static_label()
+        st.markdown("<div style='margin-top:0.5rem'></div>", unsafe_allow_html=True)
+        _show_iia_standards()
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("---")
