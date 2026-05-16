@@ -4331,8 +4331,9 @@ DATA_ANALYTICS_SCENARIOS = {
 
 IIA_STANDARDS_2024 = [
     {
-        "standard_id": "Global Internal Audit Standards — Overview",
-        "title": "New Global Internal Audit Standards (GIAS) — Effective 9 January 2024",
+        "standard_id": "Overview",
+        "domain": "Framework",
+        "title": "Global Internal Audit Standards (GIAS) 2024",
         "description": (
             "The IIA released the Global Internal Audit Standards on 9 January 2024, replacing the "
             "2017 International Standards for the Professional Practice of Internal Auditing. "
