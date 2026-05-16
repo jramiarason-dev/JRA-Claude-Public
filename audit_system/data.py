@@ -6621,3 +6621,2981 @@ REGULATORY_CALENDAR = [
     },
 
 ]
+
+# ══════════════════════════════════════════════════════════════════════════════
+# THEMATIC_BACKGROUND
+# Strategic market-context intelligence for each audit theme.
+# Used by AuditIQ to prime report narratives and opening briefings.
+# ══════════════════════════════════════════════════════════════════════════════
+
+THEMATIC_BACKGROUND = {
+
+    "AML_KYC": {
+        "theme": "AML / KYC",
+        "market_context": (
+            "The Swiss anti-money laundering landscape has undergone a structural reset between 2023 and 2026. "
+            "The revised Anti-Money Laundering Act (AMLA) introduced stricter beneficial ownership transparency "
+            "requirements, mandatory registration of bearer shares, and enhanced due diligence obligations for "
+            "high-risk client segments. FINMA's revised AML circular (2024 update to AMLA circular) raised the "
+            "bar on transaction monitoring calibration and documentation of risk assessments, placing Swiss private "
+            "banks squarely in the crosshairs of both domestic and international scrutiny.\n\n"
+            "At the international level, the Financial Action Task Force (FATF) Mutual Evaluation of Switzerland "
+            "highlighted persistent deficiencies in the effectiveness of suspicious transaction reporting (STR) "
+            "and in the supervision of designated non-financial businesses. The FATF grey list continues to evolve, "
+            "with several jurisdictions relevant to Swiss private banking client flows — including parts of the "
+            "Middle East, Southeast Asia, and Sub-Saharan Africa — subject to enhanced monitoring. Private banks "
+            "with concentrated geographic client books face disproportionate exposure.\n\n"
+            "Compliance expenditure has risen materially across the sector. Industry surveys estimate that "
+            "mid-tier Swiss private banks now allocate CHF 8–15 million annually to AML/KYC infrastructure, "
+            "encompassing technology platforms, dedicated compliance headcount, and external advisory. Despite "
+            "this investment, STR filing rates in Switzerland remain below the European peer average, prompting "
+            "FINMA to signal heightened supervisory focus on transaction monitoring effectiveness and the quality "
+            "— not merely quantity — of STRs submitted to MROS."
+        ),
+        "private_banking_issues": (
+            "Private banking presents a structurally elevated AML/KYC risk profile relative to retail or "
+            "commercial banking. The combination of complex client ownership structures (multi-layered trusts, "
+            "foundations, and special purpose vehicles domiciled across multiple jurisdictions), opaque sources "
+            "of wealth in emerging-market geographies, and the high transactional autonomy granted to relationship "
+            "managers creates conditions in which illicit flows can be obscured. HNWI clients routinely transact "
+            "across asset classes — cash, securities, real estate, and alternative investments — within a single "
+            "relationship, amplifying the monitoring surface. The pressure on relationship managers to preserve "
+            "client revenue can create implicit incentives to under-escalate CDD deficiencies, a dynamic "
+            "repeatedly cited in FINMA enforcement proceedings."
+        ),
+        "regulatory_pressure": (
+            "FINMA has materially intensified AML enforcement, accounting for more than 40% of formal enforcement "
+            "proceedings initiated in 2023–2025. The regulator's willingness to impose personal accountability — "
+            "including industry bans on senior compliance officers — has raised the stakes of AML governance "
+            "failures. The revised AMLA framework requires enhanced documentation of periodic review cycles, "
+            "risk re-classification triggers, and senior management sign-off on high-risk client continuations. "
+            "Simultaneously, the FATF's 40 Recommendations update and the EU's AMLD6 transposition by member "
+            "states are creating de facto compliance expectations for Swiss institutions with EU client flows "
+            "or EU-domiciled entities, requiring alignment of Swiss KYC standards with evolving EU norms "
+            "even where direct Swiss law does not yet mandate it."
+        ),
+        "industry_trends": (
+            "Four structural trends are reshaping AML/KYC practice in Swiss private banking. First, the "
+            "industrialisation of KYC through AI-assisted entity resolution and adverse media screening has "
+            "reduced manual effort but introduced model risk — institutions must now validate algorithm outputs "
+            "and demonstrate explainability to regulators. Second, the proliferation of digital onboarding "
+            "channels (FINMA-RS 2016/7 compliant video identification) has increased onboarding volume while "
+            "compressing the time available for qualitative risk judgment. Third, the shift toward perpetual "
+            "KYC (pKYC) — continuous, event-driven re-assessment rather than fixed periodic review — is gaining "
+            "traction among tier-one private banks, with technology vendors offering real-time UBO registry "
+            "monitoring and transactional anomaly feeds. Fourth, regulatory convergence between FINMA, EBA, and "
+            "FATF on the definition of 'adequate' transaction monitoring is narrowing the space for bespoke "
+            "Swiss interpretations, pushing institutions toward documented, risk-based calibration methodologies."
+        ),
+        "peer_incidents": (
+            "The Swiss private banking sector has been marked by several high-profile AML enforcement actions "
+            "in recent years. UBS faced FINMA supervisory proceedings related to legacy AML control weaknesses "
+            "inherited through the Credit Suisse acquisition, requiring significant remediation investment across "
+            "the combined entity's private banking platform. Julius Bär received a FINMA enforcement action in "
+            "2023 citing deficiencies in its Lombard lending AML controls and client risk classification framework, "
+            "resulting in a CHF 26 million fine and mandated governance remediation. Beyond Switzerland, "
+            "Pictet & Cie agreed to a USD 122.9 million settlement with the US Department of Justice in 2023 "
+            "related to facilitation of US tax evasion, underscoring the intersection of AML and tax compliance "
+            "risk. Internationally, Danske Bank's EUR 2 billion fine and the ongoing fallout from the Wirecard "
+            "collapse continue to set the benchmark for what regulators consider systemic AML failure."
+        ),
+        "key_statistics": [
+            "Swiss private banks spend an estimated CHF 8–15 million per year on AML/KYC compliance infrastructure",
+            "Switzerland's STR filing rate to MROS remains below the EU peer average, at approximately 0.04% of transactions",
+            "FATF grey-list jurisdictions account for a disproportionate share of high-risk client geographies in Swiss private banking",
+            "FINMA AML-related enforcement proceedings represented over 40% of all formal regulatory actions in 2023–2025",
+            "Julius Bär CHF 26 million FINMA fine (2023) and Pictet USD 122.9 million DOJ settlement (2023) are the sector's headline enforcement benchmarks",
+        ],
+        "mckinsey_angle": (
+            "From a strategic perspective, AML/KYC has crossed the threshold from pure compliance cost to "
+            "competitive differentiator. Institutions that have invested in scalable, technology-enabled KYC "
+            "utilities — shared data infrastructure, AI-assisted screening, and pKYC event triggers — are "
+            "demonstrating materially shorter onboarding cycle times and lower per-client compliance cost "
+            "without sacrificing risk quality. The strategic imperative for Swiss private bank leadership is "
+            "to reframe AML investment as a client experience and operational efficiency lever, not merely "
+            "a regulatory obligation. Banks that fail to modernise risk both regulatory censure and a "
+            "structural cost disadvantage as the compliance burden continues to escalate."
+        ),
+        "tone": "professional",
+    },
+
+    "CYBER_RISK": {
+        "theme": "Cyber Risk",
+        "market_context": (
+            "The Digital Operational Resilience Act (DORA), which entered into force across the European Union "
+            "in January 2025, has fundamentally recalibrated the cyber risk governance expectations for financial "
+            "institutions with EU operations or EU-domiciled clients. While Swiss private banks are not directly "
+            "subject to DORA, the regulation's extraterritorial reach through third-party ICT service providers "
+            "and EU subsidiary entities means that materially all significant Swiss private banks must align "
+            "their cyber governance frameworks with DORA's requirements. FINMA's own Technology Risk circular "
+            "(FINMA-RS 2023/1) mirrors many DORA principles, including mandatory ICT risk management frameworks, "
+            "incident classification and reporting obligations, and TLPT (Threat-Led Penetration Testing) "
+            "for systemically important institutions.\n\n"
+            "The threat landscape facing private banking has intensified sharply. The ION Trading ransomware "
+            "attack of January 2023 demonstrated that a single third-party technology provider disruption could "
+            "cascade across dozens of financial institutions simultaneously, impairing cleared derivatives "
+            "processing for days. The Temenos core banking platform security incident highlighted that "
+            "infrastructure shared across multiple private banks creates concentrated single-point-of-failure "
+            "risk. IBM's 2024 Cost of a Data Breach report put the average financial services breach cost at "
+            "USD 5.9 million, a figure that excludes regulatory fines, client remediation costs, and "
+            "reputational damage — all of which are materially higher in a private banking context.\n\n"
+            "The attack surface for private banking institutions has expanded with the adoption of digital "
+            "client portals, mobile banking platforms, and API-based connectivity to external custodians and "
+            "data aggregators. At the same time, the sophistication of threat actors targeting HNWI clients "
+            "and their advisors — through spear-phishing, deepfake voice authentication bypass, and social "
+            "engineering via family offices — has increased materially, requiring a shift from perimeter "
+            "defence to identity-centric zero-trust architectures."
+        ),
+        "private_banking_issues": (
+            "Private banking cyber risk is distinguished by the premium value of the data at stake. HNWI "
+            "client records contain not merely financial account information but consolidated wealth pictures, "
+            "tax positions, family structures, and geopolitical affiliations — intelligence of significant "
+            "value to state actors, organised crime, and competitors. The high degree of personalised service "
+            "delivery, including email-based client communication, verbal instruction acceptance, and "
+            "relationship manager autonomy, creates vulnerability vectors that are absent in more standardised "
+            "retail environments. The use of legacy core banking platforms across many mid-tier Swiss private "
+            "banks further compounds the exposure, as unpatched systems and proprietary integrations resist "
+            "modern security controls."
+        ),
+        "regulatory_pressure": (
+            "FINMA-RS 2023/1 imposes mandatory ICT risk management, operational resilience testing, and "
+            "cyber incident reporting obligations on all supervised Swiss financial institutions. The circular "
+            "requires institutions to classify ICT incidents by severity, report significant incidents to "
+            "FINMA within defined timeframes, and maintain a current ICT asset inventory. DORA's parallel "
+            "framework introduces mandatory TLPT every three years for in-scope institutions, binding "
+            "contractual requirements for ICT third-party providers, and cross-border supervisory cooperation "
+            "on cyber resilience. The EBA's Guidelines on ICT and Security Risk Management provide an "
+            "additional reference framework applicable to EU-connected entities, creating a multi-jurisdictional "
+            "compliance matrix for internationally active Swiss private banks."
+        ),
+        "industry_trends": (
+            "The cyber risk landscape for private banking is being reshaped by four converging trends. "
+            "Zero-trust architecture adoption is accelerating, driven by regulatory expectations and the "
+            "failure of perimeter-based models against insider threats and credential-based attacks. "
+            "AI-powered threat detection is being deployed at the network, endpoint, and application layers, "
+            "but is simultaneously being weaponised by adversaries to craft more convincing phishing lures "
+            "and automate vulnerability scanning. Cloud migration — particularly to hyperscaler platforms "
+            "such as AWS and Microsoft Azure — is increasing agility but introducing new third-party "
+            "concentration risks and data residency questions under Swiss banking secrecy law. Finally, "
+            "the emergence of quantum computing as a medium-term threat to current encryption standards "
+            "is prompting forward-looking institutions to begin post-quantum cryptography migration planning."
+        ),
+        "peer_incidents": (
+            "The ION Trading ransomware attack (January 2023) disrupted cleared derivatives processing for "
+            "over 40 financial institutions globally, demonstrating the systemic risk embedded in shared "
+            "financial infrastructure. The Temenos security incident exposed vulnerabilities in core banking "
+            "platforms used across multiple Swiss and European private banks, prompting emergency patching "
+            "cycles and FINMA supervisory inquiries. SWIFT's ongoing publication of cyber incident learnings "
+            "through its CSCF (Customer Security Controls Framework) reveals persistent authentication "
+            "weaknesses at correspondent banking nodes. Domestically, several Swiss private banks have "
+            "experienced targeted spear-phishing campaigns against relationship managers, with at least "
+            "two confirmed cases of fraudulent SWIFT transfer initiation through compromised RM credentials "
+            "in 2023–2024."
+        ),
+        "key_statistics": [
+            "Average cost of a financial services data breach: USD 5.9 million (IBM Cost of a Data Breach Report 2024)",
+            "DORA entered into force January 2025, requiring mandatory ICT risk management and TLPT for EU in-scope entities",
+            "ION Trading ransomware attack (Jan 2023) disrupted operations at 40+ financial institutions globally",
+            "FINMA-RS 2023/1 mandates cyber incident reporting within defined timeframes for all supervised Swiss institutions",
+            "Deepfake-enabled fraud attempts against financial institutions increased by over 700% between 2022 and 2023",
+        ],
+        "mckinsey_angle": (
+            "Cyber risk in private banking has transitioned from an IT management issue to a board-level "
+            "strategic risk. The McKinsey perspective is that leading institutions are investing in three "
+            "capabilities simultaneously: a modern, zero-trust security architecture that assumes breach "
+            "and limits lateral movement; a mature cyber crisis response capability with board-level "
+            "simulation testing; and a supply-chain security programme that extends contractual and "
+            "technical controls to the full ICT vendor ecosystem. The institutions that treat DORA and "
+            "FINMA-RS 2023/1 compliance as a floor rather than a ceiling will emerge with structurally "
+            "superior resilience and lower tail-risk exposure."
+        ),
+        "tone": "professional",
+    },
+
+    "CREDIT_RISK": {
+        "theme": "Credit Risk",
+        "market_context": (
+            "Swiss private banking credit risk is dominated by Lombard lending — collateralised lending "
+            "against diversified securities portfolios — which has grown to an estimated CHF 150–200 billion "
+            "in aggregate exposure across the Swiss private banking sector. The SNB's interest rate cycle, "
+            "which saw the policy rate rise from negative territory to 1.75% in 2023 before declining to "
+            "1.0% by mid-2025, has created a complex environment for Lombard portfolio management. Rising "
+            "rates initially compressed collateral values for fixed-income-heavy portfolios, triggering "
+            "margin call events not seen since the 2020 COVID volatility. The subsequent rate reduction "
+            "cycle has provided partial relief but has introduced IRRBB complexity for banks with "
+            "fixed-rate Lombard books.\n\n"
+            "FINMA's mortgage lending circular and supplementary guidance on Lombard credit risk have "
+            "raised the bar on LTV stress-testing, concentration limit governance, and margin call "
+            "procedures. Institutions are now expected to demonstrate that their Lombard credit frameworks "
+            "can withstand simultaneous collateral value declines and liquidity demands — the 'double "
+            "shock' scenario that materialised during the Archegos Capital Management collapse in 2021, "
+            "which resulted in over USD 10 billion in losses across prime brokers including Credit Suisse.\n\n"
+            "Beyond Lombard, Swiss private banks with integrated wealth management and investment banking "
+            "capabilities face credit risk from structured product counterparty exposures, real estate "
+            "lending to HNWI clients, and, increasingly, from direct lending mandates and private credit "
+            "allocations within client portfolios — creating a blurring of the traditional boundary between "
+            "wealth management and credit risk management."
+        ),
+        "private_banking_issues": (
+            "The Lombard lending model creates credit risk characteristics unique to private banking. "
+            "Collateral portfolios are often illiquid — concentrated in private equity, hedge funds, or "
+            "single-stock positions — creating margin call execution risk during market stress. HNWI "
+            "clients with significant leverage may also have Lombard facilities at multiple institutions "
+            "simultaneously, creating cross-bank concentration risks invisible to any single lender. "
+            "The relationship-driven culture of private banking can create pressure on credit officers "
+            "to accommodate client requests for LTV exceptions or extended margin call timelines, "
+            "potentially subordinating credit discipline to client retention objectives."
+        ),
+        "regulatory_pressure": (
+            "FINMA's Lombard lending guidelines require documented LTV frameworks with defined stress "
+            "haircuts by asset class, mandatory margin call procedures, and senior credit officer approval "
+            "for LTV exceptions. The Basel III final rules, being transposed into Swiss capital adequacy "
+            "ordinance, introduce revised standardised approach (SA-CCR) for counterparty credit risk and "
+            "tighten the treatment of illiquid collateral. The EBA's Guidelines on Loan Origination and "
+            "Monitoring (applicable to EU-regulated entities within Swiss banking groups) impose additional "
+            "suitability, affordability, and monitoring standards for credit exposures to retail clients, "
+            "including HNWI segments classified as retail for regulatory purposes."
+        ),
+        "industry_trends": (
+            "Four trends are reshaping credit risk management in Swiss private banking. First, the growth "
+            "of real-time collateral monitoring — integrating market data feeds directly into LTV "
+            "calculation engines — is reducing the lag between collateral value decline and margin call "
+            "initiation. Second, the expansion of private credit as an asset class within HNWI portfolios "
+            "is creating new credit risk exposures for banks offering NAV-based Lombard lending against "
+            "illiquid private credit fund holdings. Third, the concentration of Lombard books in "
+            "technology and emerging-market equities during the 2021–2022 period, followed by sharp "
+            "corrections, has prompted comprehensive back-testing of haircut adequacy. Fourth, "
+            "ESG-linked Lombard facilities — where pricing is tied to portfolio sustainability scores "
+            "— are introducing novel collateral valuation and monitoring challenges."
+        ),
+        "peer_incidents": (
+            "The Archegos Capital Management collapse (March 2021) remains the defining credit risk event "
+            "for private banking, with Credit Suisse sustaining a USD 5.5 billion loss from concentrated "
+            "total return swap exposures that were inadequately stress-tested and poorly governed. The "
+            "incident exposed the absence of cross-bank collateral visibility and the failure of prime "
+            "brokerage credit risk frameworks to capture family office concentration risk. Separately, "
+            "several Swiss private banks experienced Lombard margin call failures during the March 2020 "
+            "COVID liquidity shock, when concentrated positions in investment-grade bonds — normally "
+            "considered low-risk Lombard collateral — declined sharply in simultaneous selling. FINMA "
+            "subsequently issued supervisory guidance requiring enhanced stress scenarios for bond "
+            "collateral under liquidity-driven market dislocations."
+        ),
+        "key_statistics": [
+            "Estimated Swiss private banking Lombard lending market: CHF 150–200 billion in aggregate exposure",
+            "Archegos collapse (2021): Credit Suisse loss of USD 5.5 billion from inadequately governed prime brokerage exposure",
+            "SNB policy rate cycle: from -0.75% (2022) to +1.75% (2023), declining to 1.0% by mid-2025",
+            "FINMA Lombard guidelines require documented LTV stress haircuts by asset class and mandatory margin call procedures",
+            "Basel III final rules (Swiss CAO transposition) tighten SA-CCR treatment of illiquid Lombard collateral",
+        ],
+        "mckinsey_angle": (
+            "Credit risk in private banking is at an inflection point. The Lombard model, which has been "
+            "a primary revenue driver, is facing structural stress from rate volatility, illiquid collateral "
+            "growth, and regulatory tightening. Leading institutions are investing in three strategic "
+            "capabilities: real-time, cross-asset collateral monitoring with automated stress simulation; "
+            "disciplined credit culture reinforcement through independent credit officer authority; and "
+            "a differentiated private credit offering that extends the lending value proposition while "
+            "managing illiquidity risk through structural protections. The Archegos lessons must be "
+            "institutionalised — not merely as process controls, but as cultural norms around credit "
+            "discipline independent of client relationship pressure."
+        ),
+        "tone": "professional",
+    },
+
+    "OPERATIONAL_RISK": {
+        "theme": "Operational Risk",
+        "market_context": (
+            "The collapse of Credit Suisse in March 2023 — the largest banking failure in Swiss history "
+            "and the first resolution of a global systemically important bank (G-SIB) — fundamentally "
+            "altered the operational risk landscape for Swiss private banking. The failure was not "
+            "attributable to a single operational failure but to a compounding of governance weaknesses, "
+            "risk culture deficiencies, key-person dependencies, and business continuity gaps that "
+            "accumulated over years and were exposed by a confidence crisis. FINMA's post-crisis "
+            "supervisory priorities have included mandatory operational resilience self-assessments, "
+            "enhanced BCP testing requirements, and heightened scrutiny of key-person risk at senior "
+            "management level.\n\n"
+            "FINMA-RS 2023/1 represents the most significant overhaul of operational and technology risk "
+            "regulation in Switzerland in over a decade. The circular introduces a principles-based "
+            "resilience framework requiring institutions to identify critical business services, map "
+            "dependencies on people, processes, technology, and third parties, and demonstrate the "
+            "ability to maintain those services through severe but plausible disruption scenarios. "
+            "This shifts operational risk management from a loss-event cataloguing exercise to a "
+            "forward-looking resilience discipline.\n\n"
+            "Process automation and digitalisation — including the deployment of robotic process "
+            "automation (RPA) and AI-assisted client servicing tools — are simultaneously reducing "
+            "some traditional operational risks (manual keying errors, reconciliation failures) while "
+            "introducing new categories: algorithm failures, model drift, and cyber-operational "
+            "hybrid events. The operational risk taxonomy is being redefined in real time."
+        ),
+        "private_banking_issues": (
+            "Swiss private banking operational risk is characterised by a high degree of key-person "
+            "dependency — individual relationship managers who carry client relationships, know client "
+            "preferences, and hold institutional knowledge not formally documented. The departure or "
+            "incapacitation of a senior RM can trigger client attrition, regulatory scrutiny, and "
+            "operational disruption simultaneously. Additionally, the bespoke nature of private banking "
+            "service delivery — customised reporting, tailored investment mandates, complex multi-asset "
+            "portfolios — means that process standardisation is lower than in retail banking, increasing "
+            "the error rate and audit trail gaps. Succession planning at the RM and management level "
+            "remains a structural weakness across the sector."
+        ),
+        "regulatory_pressure": (
+            "FINMA-RS 2023/1 mandates a comprehensive ICT and operational risk management framework, "
+            "including critical business service identification, impact tolerance definition, and "
+            "regular BCP testing with documented results reported to the Board. The circular aligns "
+            "with DORA's operational resilience requirements, creating a consistent framework for "
+            "Swiss and EU-connected institutions. FINMA's enforcement track record on operational "
+            "risk weaknesses — including the Credit Suisse supervisory proceedings and the Julius "
+            "Bär governance action — demonstrates willingness to impose public censure and mandatory "
+            "remediation programmes for systemic operational control failures."
+        ),
+        "industry_trends": (
+            "Operational risk management in private banking is evolving along four axes. Operational "
+            "resilience — the ability to absorb disruption and recover critical services — is displacing "
+            "the traditional loss-event focus of Pillar 2 operational risk capital models. Process "
+            "mining tools are enabling real-time identification of control deviations and inefficiencies "
+            "in client-facing operations. The outsourcing of operational functions — including fund "
+            "administration, custody, and trade settlement — to specialist service providers is "
+            "transferring operational execution but retaining regulatory accountability with the bank, "
+            "creating a principal–agent governance challenge. Finally, the increasing integration of "
+            "ESG and sustainability considerations into operational practices is creating new "
+            "non-financial risk categories around data quality and reporting integrity."
+        ),
+        "peer_incidents": (
+            "The Credit Suisse collapse (March 2023) stands as the defining operational risk event "
+            "in Swiss banking history, demonstrating how governance failures, reputational erosion, "
+            "and BCP inadequacies can interact catastrophically. The Greensill Capital collapse (2021) "
+            "and associated Credit Suisse supply chain finance fund crisis exposed operational risk "
+            "in fund structuring, due diligence, and conflicts of interest management. Separately, "
+            "several Swiss private banks experienced significant operational disruptions during the "
+            "2021 Suez Canal incident-related trade finance processing backlog — a reminder that "
+            "operational risk is not confined to internal systems. The WannaCry and NotPetya cyber "
+            "events continue to be referenced as benchmark scenarios in operational resilience "
+            "stress-testing exercises across the sector."
+        ),
+        "key_statistics": [
+            "Credit Suisse failure (March 2023): CHF 110 billion in client outflows in Q4 2022 preceded the collapse",
+            "FINMA-RS 2023/1 (effective 2024): mandates critical business service mapping and impact tolerance for all supervised banks",
+            "Key-person dependency: an estimated 60–70% of Swiss private bank client relationships are held by fewer than 20% of RMs",
+            "Operational losses from process failures account for approximately 30% of total operational risk capital in Swiss private banking",
+            "BCP testing frequency under FINMA-RS 2023/1: at minimum annual, with results documented and reported to the Board",
+        ],
+        "mckinsey_angle": (
+            "Operational resilience has become the defining strategic operational risk imperative for "
+            "Swiss private banking leadership post-Credit Suisse. The McKinsey perspective is that "
+            "institutions must move beyond compliance-driven BCP exercises to embed genuine resilience "
+            "thinking into strategic planning, technology investment, and people development. The "
+            "institutions best positioned for the next market disruption will be those that have "
+            "mapped their critical service dependencies with precision, stress-tested their recovery "
+            "capabilities with genuine severity, and addressed key-person concentration through "
+            "systematic knowledge transfer and succession planning. Operational resilience is not "
+            "an IT project — it is a leadership and governance commitment."
+        ),
+        "tone": "professional",
+    },
+
+    "DATA_PRIVACY": {
+        "theme": "Data Privacy",
+        "market_context": (
+            "Switzerland's revised Federal Act on Data Protection (nDSG / revFADP), which entered into "
+            "force on 1 September 2023, represents the most significant overhaul of Swiss privacy law "
+            "in three decades. The nDSG aligns Swiss data protection standards substantially with the "
+            "EU General Data Protection Regulation (GDPR), introducing new requirements for data "
+            "protection impact assessments (DPIAs), mandatory breach notification to the Federal Data "
+            "Protection and Information Commissioner (FDPIC), data processing records, and enhanced "
+            "individual rights including the right to data portability. For Swiss private banks serving "
+            "EU-domiciled clients, dual compliance with nDSG and GDPR is now the operational baseline.\n\n"
+            "The intersection of data privacy and banking secrecy — a cornerstone of Swiss financial "
+            "law — creates a uniquely complex compliance environment. Swiss banking secrecy provisions "
+            "under Article 47 of the Banking Act impose criminal penalties for unauthorised client data "
+            "disclosure, while GDPR and nDSG impose obligations to respond to data subject requests, "
+            "including subject access requests (SARs) and erasure requests, that can create tension "
+            "with banking secrecy retention requirements. Managing this tension requires carefully "
+            "documented legal basis analysis and client-specific data retention schedules.\n\n"
+            "Cloud computing adoption — accelerating across the Swiss private banking sector as "
+            "institutions seek to leverage hyperscaler infrastructure for cost efficiency and "
+            "capability development — introduces data residency, cross-border transfer, and "
+            "sub-processor management challenges that are intensifying FDPIC and FINMA scrutiny "
+            "of data governance frameworks."
+        ),
+        "private_banking_issues": (
+            "Private banking data is among the most sensitive in the financial services sector. "
+            "HNWI client records encompass not merely account balances but consolidated family wealth "
+            "structures, tax positions, health information (for insurance and succession planning "
+            "purposes), geopolitical affiliations, and politically exposed person (PEP) status. "
+            "A data breach in the private banking context can have consequences extending far beyond "
+            "financial loss — reputational destruction, personal safety risk for clients, and "
+            "criminal exposure under banking secrecy law. The high degree of data sharing across "
+            "relationship managers, investment advisors, credit officers, and compliance teams "
+            "within a private bank creates extensive internal access control challenges."
+        ),
+        "regulatory_pressure": (
+            "The FDPIC has signalled a more assertive enforcement posture following the nDSG "
+            "implementation, with preliminary investigations into several financial institutions "
+            "regarding cookie practices, data retention, and cross-border transfer adequacy. "
+            "FINMA's supervisory expectations on data management — articulated in FINMA-RS 2023/1 "
+            "and the outsourcing circular — require documented data classification, access control "
+            "frameworks, and third-party data processing agreements meeting minimum security and "
+            "audit rights standards. The EU's planned adequacy decision review for Switzerland "
+            "remains a background risk: any adequacy decision withdrawal would impose significant "
+            "compliance costs on Swiss private banks with EU client data flows."
+        ),
+        "industry_trends": (
+            "Data privacy management in private banking is evolving across three dimensions. The "
+            "adoption of data governance platforms — centralised tools for data lineage mapping, "
+            "access control management, and automated SAR response — is gaining momentum as manual "
+            "compliance approaches prove insufficient at scale. Privacy-by-design principles are "
+            "being embedded into technology development and product design processes, driven by "
+            "both regulatory expectation and competitive differentiation in a trust-sensitive "
+            "client segment. Finally, the use of AI and machine learning for client analytics "
+            "is creating new privacy risks — including profiling, automated decision-making, "
+            "and training data governance — that are pushing data privacy teams into the "
+            "front end of technology development conversations."
+        ),
+        "peer_incidents": (
+            "The DWS greenwashing investigation (2022–2023) highlighted the reputational and "
+            "regulatory consequences of data integrity failures in client-facing reporting, with "
+            "EUR 25 million in fines and significant management disruption. In the banking context, "
+            "the Uber data breach enforcement by European data protection authorities — resulting "
+            "in EUR 290 million in fines — demonstrated the severity of cross-border transfer "
+            "violations. Within Swiss banking, several institutions have received FDPIC inquiries "
+            "following client data exposure incidents linked to legacy system migrations and "
+            "inadequate sub-processor oversight. The ongoing litigation around LinkedIn and "
+            "other social media data scraping for client prospecting purposes is a live "
+            "private banking exposure that has not yet been fully resolved by regulators."
+        ),
+        "key_statistics": [
+            "nDSG (revFADP) entered into force 1 September 2023, introducing GDPR-aligned breach notification and DPIA requirements",
+            "Swiss banking secrecy (Banking Act Art. 47) imposes criminal penalties for unauthorised client data disclosure",
+            "GDPR fines in the financial services sector exceeded EUR 1 billion cumulatively across EU member states by end-2024",
+            "Cloud adoption in Swiss private banking: estimated 60% of tier-one institutions have active hyperscaler migration programmes",
+            "FDPIC enforcement activity increased materially post-nDSG, with multiple preliminary investigations in financial services",
+        ],
+        "mckinsey_angle": (
+            "Data privacy has evolved from a compliance checkbox to a strategic client trust asset "
+            "in private banking. HNWI clients — particularly those with complex cross-border profiles "
+            "— are increasingly discriminating buyers of data privacy assurance, and leading private "
+            "banks are leveraging their data governance credentials as a client acquisition and "
+            "retention differentiator. The strategic imperative is to build a data governance "
+            "capability that is simultaneously nDSG/GDPR compliant, operationally efficient, and "
+            "capable of supporting the data-intensive analytics and personalisation that define "
+            "the next-generation private banking value proposition."
+        ),
+        "tone": "professional",
+    },
+
+    "MARKET_RISK": {
+        "theme": "Market Risk",
+        "market_context": (
+            "The Fundamental Review of the Trading Book (FRTB), adopted into EU regulation and "
+            "effective from January 2025, represents the most significant structural change to "
+            "market risk capital requirements since Basel 2.5. Swiss institutions with EU trading "
+            "entities are directly subject to FRTB's revised Internal Models Approach (IMA) and "
+            "Standardised Approach (SA), while FINMA is expected to transpose equivalent requirements "
+            "into Swiss capital ordinance in the near term. For private banks with structured product "
+            "manufacturing and distribution capabilities, FRTB significantly increases the capital "
+            "intensity of trading book positions and tightens the boundary between banking book "
+            "and trading book classification.\n\n"
+            "Interest Rate Risk in the Banking Book (IRRBB) remains a primary market risk concern "
+            "following the SNB rate cycle of 2022–2025 and the instructive failures of Silicon "
+            "Valley Bank (SVB) in March 2023. SVB's USD 1.8 billion loss crystallisation on "
+            "held-to-maturity bond sales — triggered by deposit outflows and inadequate IRRBB "
+            "hedging — demonstrated that banking book interest rate risk can become an acute "
+            "solvency threat under conditions of rapid rate movement and concentrated deposit "
+            "bases. Swiss private banks with significant fixed-rate lending books and "
+            "interest-sensitive deposit profiles face analogous structural vulnerabilities.\n\n"
+            "The write-down of Credit Suisse Additional Tier 1 (AT1) capital instruments — CHF "
+            "16 billion wiped out in the March 2023 resolution — created significant mark-to-market "
+            "losses for private banking clients holding AT1 securities in discretionary mandates "
+            "and advisory portfolios, triggering suitability challenges and client litigation."
+        ),
+        "private_banking_issues": (
+            "Market risk in private banking manifests primarily through the client portfolio channel "
+            "rather than the proprietary trading channel. Structured products — capital protected "
+            "notes, barrier reverse convertibles, and leveraged certificates — expose both the "
+            "issuing institution and the client to complex market risk payoffs that are frequently "
+            "misunderstood by relationship managers and inadequately stress-tested at the portfolio "
+            "level. The CS AT1 write-down crystallised the risk of recommending regulatory capital "
+            "instruments to clients without adequate disclosure of bail-in risk. Additionally, "
+            "discretionary mandate managers face market risk through benchmark tracking error, "
+            "concentration in illiquid positions, and currency risk in multi-currency portfolios."
+        ),
+        "regulatory_pressure": (
+            "FRTB (EU, January 2025) imposes mandatory IMA desk-level approval, daily P&L "
+            "attribution testing, and risk factor eligibility assessment — all of which require "
+            "significant technology investment and risk infrastructure upgrading. The EBA's "
+            "IRRBB guidelines (effective 2023) impose standardised interest rate shock scenarios, "
+            "supervisory outlier thresholds, and enhanced ICAAP integration requirements. FINMA's "
+            "supervisory priorities for 2025–2026 include explicit focus on IRRBB governance "
+            "and the adequacy of structured product risk disclosure under FinSA suitability "
+            "requirements — creating a dual market risk and conduct risk exposure for private "
+            "banks with active structured product businesses."
+        ),
+        "industry_trends": (
+            "Four trends are defining market risk management evolution in Swiss private banking. "
+            "FRTB implementation is driving a fundamental re-architecture of risk infrastructure, "
+            "with many institutions opting for third-party risk calculation engines rather than "
+            "in-house builds due to complexity and cost. IRRBB management is receiving board-level "
+            "attention post-SVB, with enhanced scenario analysis and hedging programme governance "
+            "becoming standard practice. The proliferation of alternative risk premia strategies "
+            "and systematic overlay programmes in discretionary mandates is introducing new "
+            "factor-based market risk exposures that require enhanced monitoring. Finally, "
+            "the integration of climate-related financial risk into market risk scenarios — "
+            "including transition risk impacts on equity and credit portfolios — is creating "
+            "a nascent but growing dimension of market risk management."
+        ),
+        "peer_incidents": (
+            "Silicon Valley Bank's collapse (March 2023) — driven by USD 1.8 billion in "
+            "realised losses on a HTM bond portfolio under rising rate stress — became the "
+            "defining IRRBB cautionary tale, prompting supervisory letters from FINMA and "
+            "the EBA to banking institutions with comparable balance sheet structures. "
+            "Credit Suisse's AT1 write-down (March 2023) of CHF 16 billion created direct "
+            "market risk losses for private banking clients and triggered widespread litigation "
+            "regarding suitability disclosures. The Archegos Capital collapse (2021) demonstrated "
+            "that concentrated equity derivative positions can crystallise market and counterparty "
+            "credit losses simultaneously with insufficient warning. The 2022 UK gilt market "
+            "dislocation — triggered by the Truss budget — remains a reference stress scenario "
+            "for IRRBB and structured product risk management."
+        ),
+        "key_statistics": [
+            "FRTB effective in EU from January 2025; FINMA transposition into Swiss CAO anticipated in near term",
+            "SVB: USD 1.8 billion HTM bond loss realisation triggered collapse — benchmark IRRBB stress scenario",
+            "Credit Suisse AT1 write-down: CHF 16 billion wiped out in March 2023 resolution, creating client portfolio losses",
+            "EBA IRRBB guidelines (2023) impose standardised shock scenarios and supervisory outlier NII thresholds",
+            "Structured product volumes in Swiss private banking: estimated CHF 200+ billion in outstanding notional",
+        ],
+        "mckinsey_angle": (
+            "Market risk management in private banking is undergoing a structural upgrade driven by "
+            "regulatory complexity (FRTB, IRRBB) and client liability exposure (AT1, structured "
+            "products). The strategic differentiation between leading and lagging institutions will "
+            "be determined by the quality of their risk infrastructure investment and the depth "
+            "of their client-level risk integration — the ability to aggregate market risk across "
+            "Lombard collateral, discretionary mandates, and advisory portfolios at the client "
+            "relationship level. Institutions that build this integrated view will be better "
+            "positioned to manage suitability risk, optimise capital allocation, and defend "
+            "against client litigation in stress scenarios."
+        ),
+        "tone": "professional",
+    },
+
+    "THIRD_PARTY_RISK": {
+        "theme": "Third-Party Risk",
+        "market_context": (
+            "The third-party risk landscape for Swiss private banking has been transformed by the "
+            "twin forces of accelerating technology outsourcing and escalating regulatory expectations. "
+            "Industry surveys indicate that mid-to-large Swiss private banks now maintain relationships "
+            "with 80–120 active technology and service vendors, encompassing core banking platforms, "
+            "custody and settlement infrastructure, data analytics providers, cloud hosting, and "
+            "regulatory reporting utilities. This vendor proliferation has created a complex dependency "
+            "map that few institutions have fully mapped at the operational level, let alone stress-tested "
+            "for concentration, substitutability, and cyber-resilience.\n\n"
+            "DORA's third-party provisions, effective January 2025, introduce binding contractual "
+            "requirements for ICT service providers to in-scope financial institutions, mandatory "
+            "concentration risk assessment for critical third-party providers (CTPPs), and a new "
+            "EU-level oversight framework for systemically important ICT providers. While Swiss "
+            "private banks are not directly subject to DORA, the regulation's reach through EU "
+            "subsidiaries, EU-regulated correspondent banks, and EU-domiciled ICT providers "
+            "creates de facto compliance pressure. FINMA's outsourcing circular (FINMA-RS 2018/3) "
+            "and FINMA-RS 2023/1 impose parallel requirements under Swiss law.\n\n"
+            "The concentration of Swiss private banking on a small number of core banking platforms "
+            "— including Temenos, Avaloq, and FIS — creates systemic single-point-of-failure risk "
+            "that is visible to FINMA and increasingly cited in supervisory discussions about "
+            "sector-wide operational resilience."
+        ),
+        "private_banking_issues": (
+            "Private banking third-party risk is amplified by the customisation-intensive nature "
+            "of the service model. Bespoke integrations between core banking platforms, portfolio "
+            "management systems, client reporting tools, and custody interfaces create complex, "
+            "poorly documented dependency chains that are expensive to replace and difficult to "
+            "monitor. The reliance on a small number of external custodians for HNWI asset "
+            "safekeeping creates counterparty concentration risk, while the use of third-party "
+            "introduced clients through external asset managers (EAMs) creates additional "
+            "outsourced relationship management dependencies with associated conduct risk."
+        ),
+        "regulatory_pressure": (
+            "DORA (EU, January 2025) requires mandatory mapping of ICT third-party dependencies, "
+            "concentration risk assessment for CTPPs, and contractual provisions ensuring audit "
+            "rights, incident notification, and service continuity. FINMA-RS 2018/3 imposes "
+            "prior notification requirements for material outsourcing, minimum contractual "
+            "standards, and periodic due diligence on service providers. FINMA-RS 2023/1 "
+            "extends these requirements to the ICT-specific domain, requiring institutions "
+            "to assess the substitutability of critical ICT providers and maintain documented "
+            "exit strategies. The EBA's Guidelines on Outsourcing provide a parallel framework "
+            "applicable to EU-regulated subsidiaries of Swiss banking groups."
+        ),
+        "industry_trends": (
+            "Third-party risk management is professionalising rapidly across four dimensions. "
+            "Dedicated vendor risk management platforms — offering automated due diligence, "
+            "contract obligation tracking, and continuous security rating monitoring — are "
+            "replacing spreadsheet-based vendor registers at leading institutions. The "
+            "concentration of shared financial infrastructure on a small number of hyperscaler "
+            "cloud providers (AWS, Azure, Google Cloud) is creating a new category of systemic "
+            "concentration risk that regulators are monitoring with increasing concern. Exit "
+            "strategy testing — actually simulating the replacement of a critical vendor — "
+            "is moving from aspirational to mandatory in supervisory expectations. Finally, "
+            "the integration of third-party cyber risk ratings (BitSight, SecurityScorecard) "
+            "into ongoing vendor monitoring is providing a continuous signal of vendor "
+            "security posture between formal due diligence cycles."
+        ),
+        "peer_incidents": (
+            "The ION Trading ransomware attack (January 2023) disrupted cleared derivatives "
+            "processing for over 40 financial institutions simultaneously, demonstrating that a "
+            "single shared infrastructure provider failure can have systemic consequences. The "
+            "Temenos core banking platform security incident prompted emergency patching across "
+            "multiple private banks sharing the same platform version, exposing the operational "
+            "risk embedded in shared technology stacks. The collapse of the third-party fund "
+            "administrator Citco's operational disruptions during COVID-19 impacted NAV reporting "
+            "for private banking clients with hedge fund allocations. The SolarWinds supply "
+            "chain attack (2020) remains a reference scenario for assessing software supply "
+            "chain risk management adequacy in vendor due diligence frameworks."
+        ),
+        "key_statistics": [
+            "Average number of active technology and service vendors per mid-to-large Swiss private bank: 80–120",
+            "DORA third-party provisions effective January 2025: mandatory CTPP mapping and concentration risk assessment",
+            "ION Trading ransomware (Jan 2023): 40+ financial institutions disrupted through a single shared infrastructure failure",
+            "FINMA-RS 2018/3: material outsourcing requires prior FINMA notification and documented exit strategies",
+            "Swiss private banking core banking platform concentration: Temenos, Avaloq, and FIS collectively serve the majority of the sector",
+        ],
+        "mckinsey_angle": (
+            "Third-party risk management has become a board-level strategic imperative, not merely "
+            "a procurement compliance function. The McKinsey view is that leading institutions are "
+            "building a differentiated capability in three areas: a comprehensive, living vendor "
+            "dependency map integrated with operational resilience planning; a tiered due diligence "
+            "model that applies proportionate scrutiny to critical versus non-critical vendors; and "
+            "a genuine exit strategy capability tested against realistic timelines. The institutions "
+            "that treat DORA and FINMA-RS 2023/1 as an opportunity to professionalise their vendor "
+            "ecosystem management will build a structural resilience advantage over peers who approach "
+            "third-party risk as a documentation exercise."
+        ),
+        "tone": "professional",
+    },
+
+    "GOVERNANCE": {
+        "theme": "Governance",
+        "market_context": (
+            "The collapse of Credit Suisse in March 2023 produced the most consequential governance "
+            "post-mortem in Swiss banking history. FINMA's public enforcement communication and the "
+            "subsequent Parliamentary Investigation Commission (PUK) report identified systemic "
+            "governance failures — including Board risk oversight inadequacies, management culture "
+            "that suppressed escalation, serial restructuring without strategic coherence, and the "
+            "marginalisation of the Chief Risk Officer function — as root causes of the bank's "
+            "vulnerability. The findings have catalysed a sector-wide reassessment of governance "
+            "frameworks, with FINMA increasing supervisory intensity on Board effectiveness, "
+            "management culture, and the independence of control functions.\n\n"
+            "FINMA's 2023–2026 supervisory strategy explicitly identifies governance and risk culture "
+            "as priority themes, signalling a shift from document-based compliance assessment to "
+            "qualitative evaluation of Board competency, management behaviour, and tone-from-the-top. "
+            "The proportion of formal FINMA enforcement proceedings attributable to governance "
+            "failures — estimated at 40% of all proceedings in 2023–2025 — underscores the "
+            "regulator's willingness to hold institutions and individuals accountable for control "
+            "environment deficiencies that cannot be attributed to a single rule breach.\n\n"
+            "Internationally, the Senior Managers and Certification Regime (SMCR) in the UK and "
+            "the EU's fit-and-proper requirements for significant institution managers are "
+            "influencing Swiss supervisory expectations, particularly for institutions with "
+            "UK or EU-regulated entities within their group structures."
+        ),
+        "private_banking_issues": (
+            "Private banking governance presents specific structural vulnerabilities. The "
+            "concentration of commercial power in senior relationship managers — who control "
+            "client revenues and can resist compliance challenges with implicit management "
+            "support — creates a governance dynamic in which the second line of defence is "
+            "structurally subordinated to first-line commercial priorities. The Three Lines "
+            "of Defence model, while formally adopted across the sector, frequently operates "
+            "as a compliance documentation exercise rather than a genuine risk governance "
+            "mechanism. Board-level expertise gaps in private banking-specific risks — including "
+            "Lombard credit risk, structured product suitability, and AML — further undermine "
+            "the effectiveness of Board risk oversight."
+        ),
+        "regulatory_pressure": (
+            "FINMA-RS 2017/1 (Corporate Governance — Banks) requires Board independence, "
+            "separation of Chair and CEO roles, and formal governance of conflicts of interest. "
+            "FINMA's enforcement posture post-Credit Suisse has elevated personal accountability, "
+            "with industry bans imposed on senior managers and compliance officers for governance "
+            "failures previously treated as institutional rather than individual liability. The "
+            "EBA's Guidelines on Internal Governance (applicable to EU-regulated subsidiaries) "
+            "impose additional requirements on management body composition, risk committee "
+            "functioning, and remuneration governance. Swiss corporate law reforms (effective "
+            "2023) have also tightened shareholder rights and management accountability "
+            "obligations for financial institution boards."
+        ),
+        "industry_trends": (
+            "Four governance trends are reshaping Swiss private banking. Board risk education "
+            "programmes — bringing external expertise into board discussions on cyber, AML, and "
+            "credit risk — are becoming standard at tier-one institutions. The Three Lines model "
+            "is being critically revisited, with several institutions restructuring their second "
+            "line to give risk and compliance functions genuine veto authority over significant "
+            "business decisions. Remuneration governance is under enhanced scrutiny, with "
+            "FINMA requiring documented linkage between variable compensation and non-financial "
+            "risk outcomes. Finally, ESG governance — board-level sustainability oversight, "
+            "climate risk integration into risk appetite, and ESG committee structures — "
+            "is rapidly professionalising across the sector."
+        ),
+        "peer_incidents": (
+            "The Credit Suisse collapse (2023) is the defining governance failure case for "
+            "Swiss private banking, with the FINMA enforcement communication citing serial "
+            "governance weaknesses over multiple years. Julius Bär's FINMA action (2023) "
+            "included governance findings related to the inadequacy of Board oversight of "
+            "compliance risk and the failure of the Three Lines model to surface AML "
+            "deficiencies. Internationally, the Wells Fargo fake accounts scandal and the "
+            "subsequent USD 3 billion regulatory settlement remain reference cases for "
+            "the consequences of governance cultures that prioritise commercial metrics "
+            "over conduct standards. The Wirecard collapse (2020) — involving auditor, "
+            "regulator, and board failures simultaneously — set the benchmark for multi-layer "
+            "governance breakdown in a financial services context."
+        ),
+        "key_statistics": [
+            "FINMA governance-related enforcement proceedings: estimated 40% of all formal actions in 2023–2025",
+            "Credit Suisse CHF 110 billion client outflows in Q4 2022 preceded collapse — governance failures identified as root cause",
+            "FINMA-RS 2017/1: mandates Board independence, Chair/CEO separation, and formal conflict of interest governance",
+            "Swiss corporate law reform (effective 2023): enhanced shareholder rights and management accountability for financial institutions",
+            "Julius Bär CHF 26 million FINMA action (2023) included Board-level governance findings on compliance oversight adequacy",
+        ],
+        "mckinsey_angle": (
+            "Governance effectiveness in private banking is the meta-risk that determines whether "
+            "all other risk management investments produce their intended outcomes. The McKinsey "
+            "perspective is that governance transformation requires three sequential interventions: "
+            "a rigorous Board effectiveness assessment that goes beyond compliance self-certification "
+            "to evaluate actual risk oversight quality; a cultural diagnostic that surfaces the "
+            "informal norms and incentive structures that govern real decision-making; and a "
+            "structural empowerment of the control functions — compliance, risk, and internal audit "
+            "— with genuine authority, adequate resources, and direct Board access. Without these "
+            "foundations, process and technology investments in other risk domains will consistently "
+            "underperform their potential."
+        ),
+        "tone": "professional",
+    },
+
+    "CROSS_BORDER": {
+        "theme": "Cross-Border Compliance",
+        "market_context": (
+            "Cross-border tax and regulatory compliance remains one of the most complex and "
+            "institutionally consequential risk dimensions in Swiss private banking. The global "
+            "automatic exchange of information (AEOI) architecture — built on the OECD Common "
+            "Reporting Standard (CRS) and the US Foreign Account Tax Compliance Act (FATCA) — "
+            "has fundamentally altered the Swiss banking secrecy model, replacing selective "
+            "disclosure with systematic, annual data exchange covering financial account "
+            "information for non-resident clients. Over 100 jurisdictions now participate in "
+            "CRS exchange, creating a near-universal information reporting framework that leaves "
+            "limited scope for undisclosed offshore accounts.\n\n"
+            "The EU's DAC8 Directive, expected to enter into force in 2026, extends automatic "
+            "exchange obligations to crypto-asset reporting, closing a significant perceived "
+            "gap in the AEOI framework. Swiss private banks with crypto-asset service offerings "
+            "must prepare CARF (Crypto-Asset Reporting Framework) implementation alongside "
+            "existing CRS/FATCA infrastructure, representing a material technology and data "
+            "management investment.\n\n"
+            "The United States DOJ Swiss Bank Program — which resulted in over USD 5 billion in "
+            "settlements from Swiss banks for facilitating US tax evasion — has left a permanent "
+            "mark on compliance culture and resourcing across the sector. The residual tail risk "
+            "from legacy US client relationships, combined with ongoing DOJ investigative activity, "
+            "means that US cross-border compliance remains a live risk management priority."
+        ),
+        "private_banking_issues": (
+            "Cross-border risk in private banking is inherently elevated by the international "
+            "client profile of the sector. Swiss private banks typically serve clients from "
+            "20–50 jurisdictions simultaneously, each with distinct tax reporting, investment "
+            "restriction, and market access requirements. The management of these multi-jurisdictional "
+            "obligations at the client relationship level — ensuring that CRS self-certifications "
+            "are current, that tax residency changes are identified and acted upon, and that "
+            "investment recommendations comply with the regulatory requirements of the client's "
+            "home jurisdiction — requires sophisticated compliance infrastructure and trained "
+            "relationship management teams. The departure of senior RMs with cross-border client "
+            "books creates acute compliance continuity risk."
+        ),
+        "regulatory_pressure": (
+            "FINMA's expectations on cross-border compliance are articulated through the FINMA "
+            "cross-border services policy and supervisory guidance on CRS/FATCA implementation. "
+            "The US QI (Qualified Intermediary) programme imposes specific documentation, "
+            "withholding, and reporting obligations on Swiss banks acting as QIs for US "
+            "securities transactions. The DOJ's continued investigative activity — including "
+            "the Pictet USD 122.9 million settlement in 2023 and the UBS EUR 1.8 billion French "
+            "tax settlement — demonstrates that historical cross-border facilitation exposures "
+            "remain prosecutable. DAC8's 2026 implementation will require new CARF reporting "
+            "infrastructure integrated with existing CRS/FATCA systems."
+        ),
+        "industry_trends": (
+            "Cross-border compliance is evolving along three dimensions. The maturation of CRS "
+            "and FATCA has shifted the compliance challenge from implementation to quality "
+            "assurance — ensuring that self-certification data is accurate, current, and "
+            "consistent with client transaction patterns, and that reportable accounts are "
+            "correctly identified. DAC8 and CARF are introducing a new crypto-asset reporting "
+            "layer that requires significant data infrastructure investment. The proliferation "
+            "of digital nomad clients — HNWI individuals with fluid tax residency, multiple "
+            "citizenships, and cross-border asset structures — is creating a new category of "
+            "cross-border complexity that existing CRS frameworks were not designed to handle "
+            "elegantly. Finally, country-specific market access restrictions — including EU "
+            "MiFID II third-country equivalence, SEC registration requirements, and Asian "
+            "regulatory restrictions on offshore services — are reshaping which Swiss private "
+            "banks can credibly serve which jurisdictions."
+        ),
+        "peer_incidents": (
+            "Pictet & Cie agreed to a USD 122.9 million DOJ settlement in 2023 for facilitating "
+            "US tax evasion through offshore accounts — the largest such settlement by a Swiss "
+            "private bank in the post-Swiss Bank Program era. UBS agreed to a EUR 1.8 billion "
+            "settlement with French authorities in 2023 for cross-border tax evasion facilitation, "
+            "following a decade-long investigation into Swiss-based relationship managers "
+            "soliciting French clients. The DOJ Swiss Bank Program (2013–2016) resulted in "
+            "over USD 5 billion in settlements from more than 80 Swiss banks. Separately, "
+            "German tax authority Cum-Ex investigations have implicated several Swiss-connected "
+            "entities, with ongoing criminal proceedings against individual bankers demonstrating "
+            "that personal criminal liability for cross-border tax facilitation is a live risk."
+        ),
+        "key_statistics": [
+            "DOJ Swiss Bank Program total settlements: over USD 5 billion from 80+ Swiss banks",
+            "Pictet & Cie USD 122.9 million DOJ settlement (2023) — largest post-Program Swiss private bank tax evasion settlement",
+            "UBS EUR 1.8 billion French tax settlement (2023) — decade-long cross-border investigation",
+            "CRS: over 100 jurisdictions participating in automatic exchange of financial account information",
+            "DAC8 / CARF: crypto-asset reporting framework targeted for implementation from 2026, requiring new infrastructure",
+        ],
+        "mckinsey_angle": (
+            "Cross-border compliance is a permanent strategic cost of the Swiss private banking "
+            "model, not a transitional regulatory challenge. The McKinsey perspective is that "
+            "the institutions best positioned for the next decade will be those that have "
+            "invested in a genuinely integrated cross-border compliance capability — one that "
+            "covers CRS/FATCA quality, QI programme management, CARF readiness, and "
+            "jurisdiction-by-jurisdiction market access governance within a single, client-centric "
+            "compliance framework. The alternative — managing cross-border compliance as a "
+            "fragmented set of regulatory workstreams — creates both regulatory risk and a "
+            "client experience penalty that sophisticated HNWI clients will increasingly notice."
+        ),
+        "tone": "professional",
+    },
+
+    "INVESTMENT_SUITABILITY": {
+        "theme": "Investment Suitability",
+        "market_context": (
+            "Switzerland's Financial Services Act (FinSA), which entered into force in January 2020 "
+            "with a transitional period expiring in 2022, has fundamentally restructured the legal "
+            "framework for investment advice and portfolio management in Swiss private banking. FinSA "
+            "introduces a tiered client classification system (retail, professional, institutional), "
+            "mandatory suitability and appropriateness assessments for investment recommendations, "
+            "written client agreement requirements, and enhanced conflict of interest disclosure "
+            "obligations. For private banks accustomed to a lighter regulatory touch than their "
+            "EU MiFID II-regulated counterparts, FinSA represents a material compliance uplift.\n\n"
+            "The parallel application of EU MiFID II requirements — applicable to Swiss private banks "
+            "with EU clients, EU-regulated subsidiaries, or cross-border service activities into EU "
+            "member states — creates a dual regulatory framework that must be navigated simultaneously. "
+            "MiFID II's product governance requirements, ex-ante cost disclosure obligations, and "
+            "target market definition standards are de facto applicable to a significant portion of "
+            "Swiss private banking AUM. The interaction between FinSA's Swiss suitability framework "
+            "and MiFID II's EU requirements creates compliance complexity, particularly for "
+            "cross-border mandates and structured product distribution.\n\n"
+            "The prohibition on retrocessions — third-party inducements paid to relationship managers "
+            "or portfolio managers in return for recommending specific products — under FinSA's "
+            "independence provisions has reshaped the economics of Swiss private banking product "
+            "distribution and aligned Swiss practice more closely with MiFID II's inducement rules."
+        ),
+        "private_banking_issues": (
+            "Investment suitability risk in private banking is structurally elevated by the "
+            "sophistication gap between product complexity and client understanding. Structured "
+            "products — barrier reverse convertibles, auto-callables, leveraged certificates — "
+            "are distributed widely in the Swiss private banking market but are frequently "
+            "inadequately explained, with suitability assessments that document process compliance "
+            "rather than genuine client comprehension. The discretionary mandate model introduces "
+            "a different suitability risk: portfolio managers making investment decisions that "
+            "deviate from client risk profiles without client awareness, creating latent "
+            "suitability breaches visible only during performance attribution review or market "
+            "stress events."
+        ),
+        "regulatory_pressure": (
+            "FINMA's enforcement action against Julius Bär in 2023 — including a CHF 26 million "
+            "fine and mandatory governance remediation — cited suitability control failures in "
+            "Lombard lending and investment advisory as core findings. FINMA has signalled "
+            "continuing supervisory focus on FinSA implementation quality, including the "
+            "adequacy of suitability documentation, the frequency of client profile updates, "
+            "and the robustness of structured product suitability assessments. ESG suitability "
+            "preferences — mandatory under FinSA as of January 2024 — add a further dimension "
+            "to the suitability assessment framework, requiring integration of sustainability "
+            "preferences into investment recommendation processes."
+        ),
+        "industry_trends": (
+            "Four trends are reshaping investment suitability management. The digitisation of "
+            "suitability assessment — moving from paper-based questionnaires to dynamic, "
+            "algorithm-assisted profiling tools — is improving data quality but introducing "
+            "model risk and regulatory uncertainty about algorithm explainability. ESG preference "
+            "integration is creating a new axis of suitability complexity, requiring systems that "
+            "can match client sustainability preferences against product ESG classifications that "
+            "are themselves contested. The growth of alternative investments in HNWI portfolios "
+            "— private equity, hedge funds, real assets — requires suitability frameworks "
+            "calibrated for illiquidity, valuation uncertainty, and concentration risk. Finally, "
+            "the vulnerable client agenda — addressing the needs of elderly, cognitively impaired, "
+            "or recently bereaved clients — is receiving growing regulatory and reputational "
+            "attention across the sector."
+        ),
+        "peer_incidents": (
+            "Julius Bär received a CHF 26 million FINMA fine in 2023, with suitability control "
+            "failures cited as a core finding alongside AML deficiencies — one of the largest "
+            "Swiss private banking regulatory penalties for conduct-related failures. The CS "
+            "AT1 write-down (2023) triggered widespread client litigation against private banks "
+            "that had recommended AT1 securities to clients whose risk profiles did not "
+            "accommodate full capital loss scenarios, creating a systemic suitability exposure "
+            "across the sector. Internationally, Deutsche Bank's EUR 400 million settlement "
+            "with US investors over structured product mis-selling set a benchmark for "
+            "institutional liability in structured product distribution. The UK FCA's Consumer "
+            "Duty (effective July 2023) is reshaping client outcome expectations in a manner "
+            "that is influencing Swiss supervisory thinking about suitability culture."
+        ),
+        "key_statistics": [
+            "FinSA entered into force January 2020; mandatory suitability and appropriateness assessments for all investment services",
+            "Julius Bär CHF 26 million FINMA fine (2023): suitability and AML control failures cited",
+            "ESG suitability preferences mandatory under FinSA from January 2024",
+            "CS AT1 write-down CHF 16 billion (2023): triggered sector-wide suitability litigation review",
+            "MiFID II inducement / retrocession rules: de facto applicable to Swiss banks with EU clients or subsidiaries",
+        ],
+        "mckinsey_angle": (
+            "Investment suitability is simultaneously a regulatory obligation and a client value "
+            "proposition in private banking. Leading institutions are recognising that a genuinely "
+            "robust suitability framework — one that integrates FinSA, MiFID II, and ESG preference "
+            "requirements in a seamless client profiling and product matching process — creates "
+            "commercial as well as compliance value. Clients who receive recommendations that "
+            "transparently reflect their objectives, constraints, and sustainability preferences "
+            "demonstrate higher satisfaction, lower litigation propensity, and stronger AUM "
+            "retention. The strategic investment in suitability infrastructure is thus "
+            "simultaneously a risk mitigation and a client franchise protection measure."
+        ),
+        "tone": "professional",
+    },
+
+    "TAX_COMPLIANCE": {
+        "theme": "Tax Compliance",
+        "market_context": (
+            "Tax compliance in Swiss private banking has undergone a structural transformation "
+            "over the past decade, driven by the global AEOI architecture, US DOJ enforcement, "
+            "and the collapse of offshore banking secrecy as a viable business model. The "
+            "OECD Common Reporting Standard (CRS) — now covering over 100 jurisdictions — "
+            "and FATCA together create a near-comprehensive automatic information exchange "
+            "framework that has rendered undisclosed offshore accounts an unacceptable risk "
+            "for compliant institutions. Swiss private banks have collectively invested "
+            "hundreds of millions of CHF in tax compliance infrastructure, client re-documentation "
+            "programmes, and legacy portfolio remediation.\n\n"
+            "The US Qualified Intermediary (QI) programme imposes specific withholding, "
+            "documentation, and reporting obligations on Swiss banks transacting in US "
+            "securities, with periodic QI audits by IRS-approved external reviewers creating "
+            "a regular compliance verification cycle. The programme's complexity — particularly "
+            "in the treatment of partnerships, trusts, and entity account holders — requires "
+            "dedicated QI compliance infrastructure and specialist expertise.\n\n"
+            "The EU's DAC8 Directive, extending AEOI to crypto-assets through the OECD's "
+            "Crypto-Asset Reporting Framework (CARF), targets implementation from 2026. "
+            "Swiss private banks with crypto service offerings must build parallel CARF "
+            "reporting infrastructure, collect new client self-certifications, and integrate "
+            "crypto reporting with existing CRS/FATCA frameworks — representing a significant "
+            "compliance investment horizon."
+        ),
+        "private_banking_issues": (
+            "Tax compliance risk in private banking is heightened by the complexity of HNWI "
+            "tax structures. Ultra-high-net-worth clients typically hold assets through multiple "
+            "legal entities — trusts, foundations, holding companies, and special purpose vehicles "
+            "— across several jurisdictions, each with distinct tax treatment and reporting "
+            "requirements. Determining the correct CRS/FATCA classification for complex entity "
+            "structures, identifying ultimate controlling persons, and ensuring that "
+            "self-certifications remain current across multiple account holders and jurisdictions "
+            "requires specialist expertise that is unevenly distributed across relationship "
+            "management teams. The risk of CRS under-reporting through classification errors "
+            "is a live exposure at most Swiss private banks."
+        ),
+        "regulatory_pressure": (
+            "FINMA expects Swiss private banks to maintain robust tax compliance frameworks "
+            "encompassing CRS/FATCA implementation quality, QI programme compliance, and "
+            "client documentation currency. The DOJ's continued investigative activity — "
+            "most recently the Pictet USD 122.9 million settlement in 2023 — demonstrates "
+            "that historical tax evasion facilitation exposures remain prosecutable, and that "
+            "cooperation with DOJ and IRS investigations is a determinant of settlement terms. "
+            "The OECD Pillar Two global minimum tax (15% effective tax rate) is creating new "
+            "compliance complexity for Swiss-domiciled holding structures used by HNWI clients, "
+            "with Swiss Federal Council implementation of qualifying domestic minimum top-up "
+            "tax (QDMTT) adding a domestic dimension to an international framework."
+        ),
+        "industry_trends": (
+            "Tax compliance in private banking is evolving along three dimensions. CARF/DAC8 "
+            "implementation is the sector's most pressing near-term investment priority, "
+            "requiring crypto-asset account identification, client self-certification collection, "
+            "and reporting infrastructure build. The quality assurance of existing CRS/FATCA "
+            "reporting — ensuring that entity classifications are correct, that controlling "
+            "person identification is complete, and that reportable accounts are not "
+            "erroneously excluded — is receiving increased supervisory and internal audit "
+            "scrutiny. Finally, the Pillar Two global minimum tax is creating new advisory "
+            "opportunities for private banks assisting HNWI clients with corporate structure "
+            "reviews, while also creating new compliance complexity in the treatment of "
+            "Swiss holding structures."
+        ),
+        "peer_incidents": (
+            "Pictet & Cie's USD 122.9 million DOJ settlement (2023) for facilitating US tax "
+            "evasion — through Swiss-based RMs soliciting undisclosed offshore accounts for "
+            "US persons — is the defining recent enforcement case for Swiss private banking "
+            "tax compliance. The DOJ Swiss Bank Program (2013–2016) resulted in USD 5 billion+ "
+            "in settlements from over 80 Swiss banks, permanently reshaping the sector's "
+            "approach to US client tax compliance. UBS's EUR 1.8 billion French settlement "
+            "(2023) for facilitating French client tax evasion through cross-border solicitation "
+            "demonstrates that the enforcement risk extends beyond the US to European tax "
+            "authorities. The ongoing German Cum-Ex dividend stripping investigations have "
+            "implicated Swiss-connected entities, with individual criminal prosecutions "
+            "demonstrating personal liability exposure."
+        ),
+        "key_statistics": [
+            "DOJ Swiss Bank Program: USD 5 billion+ in settlements from 80+ Swiss banks for US tax evasion facilitation",
+            "Pictet & Cie USD 122.9 million DOJ settlement (2023) — largest post-Program Swiss private bank tax enforcement action",
+            "CRS AEOI: 100+ jurisdictions exchanging financial account information annually",
+            "DAC8 / CARF: crypto-asset automatic reporting targeted for 2026, requiring new self-certification and infrastructure",
+            "OECD Pillar Two: 15% global minimum effective tax rate, with Swiss QDMTT implementation impacting HNWI holding structures",
+        ],
+        "mckinsey_angle": (
+            "Tax compliance has transitioned from a reactive, enforcement-driven function to a "
+            "proactive client advisory and institutional risk management capability. The "
+            "McKinsey perspective is that Swiss private banks that invest in high-quality "
+            "tax compliance infrastructure — including automated CRS/FATCA classification "
+            "engines, CARF-ready reporting platforms, and QI programme quality assurance "
+            "processes — will reduce their regulatory tail risk while simultaneously "
+            "providing a differentiating client advisory capability in an environment where "
+            "HNWI clients face unprecedented global tax transparency. Tax compliance "
+            "excellence is no longer a defensive capability — it is a client service imperative."
+        ),
+        "tone": "professional",
+    },
+
+    "CRYPTO_ASSETS": {
+        "theme": "Crypto Assets",
+        "market_context": (
+            "Switzerland has positioned itself as a leading crypto-asset and blockchain jurisdiction "
+            "through the Swiss DLT Act (Distributed Ledger Technology Act, effective 2021), which "
+            "created a dedicated legal framework for DLT-based securities, digital asset trading "
+            "facilities, and crypto custody. Swiss private banks operating crypto custody or "
+            "trading services benefit from one of the world's most developed regulatory frameworks "
+            "for digital assets, but simultaneously face the challenge of aligning with the EU's "
+            "Markets in Crypto-Assets Regulation (MiCA), which entered into force in December "
+            "2024 and applies extraterritorially to Swiss banks serving EU-resident clients.\n\n"
+            "The collapse of FTX in November 2022 — the most significant crypto exchange failure "
+            "in history, resulting in USD 8 billion in customer losses — crystallised operational, "
+            "custody, and counterparty risk concerns for institutional crypto participants. Swiss "
+            "private banks that had developed crypto product offerings faced immediate client "
+            "inquiries, regulatory scrutiny, and reputational management challenges. The FTX "
+            "fallout accelerated regulatory reform globally, contributing to MiCA's final text "
+            "and prompting FINMA to issue additional guidance on crypto custody safekeeping "
+            "obligations.\n\n"
+            "Beyond speculative crypto assets, the tokenisation of traditional financial assets — "
+            "private equity interests, real estate, bonds — is gaining institutional momentum, "
+            "with Swiss DLT infrastructure (SIX Digital Exchange, Taurus) enabling regulated "
+            "tokenised security issuance and settlement. Private banks are evaluating tokenised "
+            "asset custody and distribution as a near-term product development priority."
+        ),
+        "private_banking_issues": (
+            "Crypto asset risk in private banking is characterised by the combination of "
+            "client demand, regulatory uncertainty, and operational immaturity. HNWI clients "
+            "increasingly request crypto asset exposure — either through direct custody, "
+            "structured product wrappers, or discretionary mandate allocations — while the "
+            "AML/KYC risk associated with crypto assets (pseudonymous transactions, mixer "
+            "usage, DeFi interactions) is materially higher than for traditional assets. "
+            "The suitability framework for crypto assets remains underdeveloped, with limited "
+            "historical data for stress testing and valuation models that are contested even "
+            "among practitioners. Custody risk — the safekeeping of private keys and the "
+            "management of crypto asset operational processes — requires specialist "
+            "infrastructure absent from most traditional private banking platforms."
+        ),
+        "regulatory_pressure": (
+            "MiCA (EU, December 2024) requires authorisation for crypto-asset service providers "
+            "serving EU clients, imposes mandatory white paper disclosures, and establishes "
+            "conduct and operational requirements for crypto intermediaries. Swiss private "
+            "banks serving EU-resident clients through crypto services must assess MiCA "
+            "applicability and either seek EU authorisation or restructure their service model. "
+            "FINMA's expectations on crypto AML — including travel rule compliance for "
+            "crypto transfers under the revised AMLA — are among the world's most stringent. "
+            "DAC8/CARF requires crypto-asset reporting from 2026, imposing new client "
+            "self-certification and data collection obligations on Swiss private banks "
+            "offering crypto services."
+        ),
+        "industry_trends": (
+            "Four trends are defining crypto asset development in Swiss private banking. "
+            "Institutional custody infrastructure — dedicated crypto custody platforms with "
+            "multi-signature key management, insurance coverage, and regulatory-grade "
+            "AML controls — is becoming a prerequisite for private bank crypto offerings. "
+            "Tokenisation of traditional assets is moving from proof-of-concept to initial "
+            "commercial deployment on Swiss DLT infrastructure. Stablecoin regulation — "
+            "including HKMA's stablecoin framework and MiCA's e-money token requirements "
+            "— is creating a regulated stablecoin layer that private banks may leverage "
+            "for settlement and liquidity management. Finally, DeFi risk management is "
+            "emerging as a new competency requirement for institutions whose clients "
+            "are actively engaging with decentralised protocols, creating AML and "
+            "suitability monitoring challenges without centralised counterparty visibility."
+        ),
+        "peer_incidents": (
+            "The FTX collapse (November 2022) resulted in USD 8 billion in customer losses "
+            "and triggered global regulatory acceleration on crypto exchange regulation, "
+            "custody requirements, and client asset segregation. Swiss private banks with "
+            "FTX-related product exposure faced immediate client claims and reputational "
+            "management challenges. The Celsius Network collapse (2022) — a crypto lending "
+            "platform with institutional private banking clients — similarly crystallised "
+            "counterparty and liquidity risk in crypto lending structures. The OneCoin "
+            "fraud — a multi-billion-dollar crypto Ponzi scheme whose proceeds flowed "
+            "through Swiss financial institutions — resulted in FINMA inquiries and "
+            "demonstrated the AML risk of accepting crypto-origin funds without adequate "
+            "source of funds documentation."
+        ),
+        "key_statistics": [
+            "Swiss DLT Act (effective 2021): world-leading regulatory framework for DLT-based securities and crypto custody",
+            "MiCA (EU, December 2024): mandatory authorisation and conduct requirements for crypto-asset services to EU clients",
+            "FTX collapse (November 2022): USD 8 billion in customer losses — defining crypto counterparty risk event",
+            "DAC8 / CARF: crypto-asset reporting from 2026, requiring client self-certification and new reporting infrastructure",
+            "FINMA crypto AML: travel rule compliance for crypto transfers among the world's most stringent requirements",
+        ],
+        "mckinsey_angle": (
+            "Crypto assets represent both the highest-risk and potentially highest-reward "
+            "product development frontier for Swiss private banking. The McKinsey view is "
+            "that the institutions best positioned to capture the HNWI crypto opportunity "
+            "are those that have built a genuinely institutional-grade capability: regulated "
+            "custody infrastructure, robust AML/travel rule compliance, MiCA-ready service "
+            "architecture, and suitability frameworks calibrated for crypto's unique risk "
+            "profile. Rushing to market with inadequate infrastructure — as several "
+            "institutions did in the 2021 crypto bull market — creates regulatory, "
+            "reputational, and client liability exposure that far outweighs first-mover "
+            "revenue benefits."
+        ),
+        "tone": "professional",
+    },
+
+    "ESG": {
+        "theme": "ESG & Sustainable Finance",
+        "market_context": (
+            "Sustainable finance has moved from a niche client preference to a mainstream "
+            "regulatory and commercial imperative in Swiss private banking. The mandatory "
+            "integration of client ESG preferences into investment advice under FinSA "
+            "(effective January 2024) has transformed ESG from a product development "
+            "question into a core suitability compliance obligation. Swiss Asset Managers "
+            "Association (AMAS) sustainable finance guidelines and the Swiss Financial "
+            "Centre's sustainability roadmap have created a self-regulatory framework "
+            "that supplements — and in some areas exceeds — EU regulatory requirements.\n\n"
+            "The EU's Sustainable Finance Disclosure Regulation (SFDR) — directly applicable "
+            "to Swiss private banks distributing SFDR-classified funds to EU investors or "
+            "operating EU AIFMs within their group structures — has introduced a complex "
+            "product classification system (Article 6, 8, and 9 funds) and entity-level "
+            "principal adverse impact (PAI) disclosure requirements. The CSRD (Corporate "
+            "Sustainability Reporting Directive), effective for large EU companies from 2025, "
+            "is creating a step-change in sustainability data availability from corporate "
+            "issuers, which will in turn improve the quality of portfolio-level ESG metrics "
+            "available to private banking investment teams.\n\n"
+            "Greenwashing risk — the misrepresentation of sustainability credentials in "
+            "client communications, fund marketing materials, and discretionary mandate "
+            "reporting — is the defining ESG conduct risk for private banking, combining "
+            "regulatory, reputational, and litigation exposure in a single vulnerability."
+        ),
+        "private_banking_issues": (
+            "ESG risk in private banking is shaped by the tension between client demand, "
+            "product availability, and data quality. HNWI clients have widely divergent "
+            "sustainability preferences — from impact-first philanthropic mandates to "
+            "pure ESG-exclusion strategies to clients who resist any sustainability "
+            "integration — requiring a segmented advisory capability. The quality and "
+            "consistency of ESG data across asset classes remains uneven, with private "
+            "market assets, real estate, and alternative investments presenting particular "
+            "data gaps. The risk of suitability mis-match — recommending products with "
+            "inadequate sustainability credentials to clients who have expressed strong "
+            "ESG preferences — is an emerging FINMA conduct focus."
+        ),
+        "regulatory_pressure": (
+            "FinSA ESG preference integration (mandatory January 2024) requires Swiss "
+            "private banks to collect, document, and act upon client sustainability "
+            "preferences in investment advice. SFDR PAI disclosures and CSRD supply "
+            "chain data obligations are progressively improving the sustainability data "
+            "inputs available to portfolio managers. FINMA has signalled greenwashing "
+            "as a supervisory priority for 2025–2026, with expectations that marketing "
+            "materials, fund prospectuses, and client reporting accurately represent "
+            "sustainability characteristics and are not misleading. The EU Taxonomy "
+            "Regulation — classifying economic activities as environmentally sustainable "
+            "— is progressively creating a reference framework for sustainable product "
+            "classification applicable to Swiss institutions distributing EU-classified products."
+        ),
+        "industry_trends": (
+            "ESG practice in private banking is maturing rapidly along four dimensions. "
+            "Client ESG preference elicitation is being systematised through structured "
+            "profiling tools that map client values to product universe segments. "
+            "Impact measurement — going beyond ESG scores to quantify real-world "
+            "sustainability outcomes from portfolio holdings — is becoming a differentiating "
+            "capability for leading private banks. Transition finance — supporting "
+            "brown-to-green economic transition through blended finance structures "
+            "and sustainability-linked instruments — is emerging as a significant "
+            "product innovation domain. Climate risk integration into investment "
+            "mandates — including TCFD-aligned scenario analysis at the portfolio level "
+            "— is transitioning from best practice to regulatory expectation."
+        ),
+        "peer_incidents": (
+            "DWS received a EUR 25 million fine from BaFin in 2023 for greenwashing in "
+            "its fund marketing materials — the largest financial sector greenwashing "
+            "regulatory penalty to date, setting the benchmark for the severity of "
+            "ESG conduct enforcement. Goldman Sachs Asset Management settled SEC "
+            "greenwashing charges for USD 4 million related to inadequate ESG policy "
+            "implementation in marketed ESG funds. Several Swiss private banks received "
+            "FINMA inquiries in 2024 regarding the consistency between ESG credentials "
+            "claimed in marketing materials and actual portfolio construction methodology. "
+            "The broader 'SFDR reclassification wave' — in which numerous fund managers "
+            "downgraded funds from Article 9 to Article 8 status — created client trust "
+            "damage and regulatory scrutiny across the European private banking distribution "
+            "network."
+        ),
+        "key_statistics": [
+            "FinSA ESG preference integration: mandatory from January 2024 for all Swiss investment advisory services",
+            "DWS greenwashing fine: EUR 25 million (BaFin, 2023) — largest ESG conduct penalty in financial services to date",
+            "SFDR: Article 8 and 9 fund reclassification wave eroded sustainable fund AUM credibility across European distribution",
+            "CSRD (effective 2025): mandatory sustainability reporting for large EU companies, improving ESG data availability",
+            "Swiss private banking ESG AUM: estimated 35–45% of total managed assets incorporate some form of ESG criteria",
+        ],
+        "mckinsey_angle": (
+            "ESG in private banking has reached the maturity threshold at which it can no longer "
+            "be managed as a product overlay — it must be embedded in the core investment process, "
+            "client advisory model, and risk management framework. The McKinsey perspective is "
+            "that leading institutions are building three structural capabilities: a segmented "
+            "client ESG profiling model that goes beyond checkbox questionnaires; a product "
+            "architecture that maps transparently to client preferences with auditable methodology; "
+            "and a greenwashing prevention framework spanning marketing review, product validation, "
+            "and client reporting integrity. The institutions that build these capabilities will "
+            "capture the growing share of ESG-committed HNWI AUM; those that rely on marketing "
+            "narrative without substance face accelerating regulatory and reputational risk."
+        ),
+        "tone": "professional",
+    },
+
+    "FRAUD": {
+        "theme": "Fraud",
+        "market_context": (
+            "Fraud risk in Swiss private banking is undergoing a structural escalation driven "
+            "by the intersection of sophisticated cyber-enabled attack vectors, the high-value "
+            "targets represented by HNWI client relationships, and the trust-intensive, "
+            "relationship-driven service model that characterises the sector. Switzerland "
+            "recorded approximately CHF 180 million in reported fraud losses in 2023, with "
+            "authorised push payment (APP) fraud — in which victims are socially engineered "
+            "into authorising fraudulent transfers — representing the fastest-growing category. "
+            "The HNWI private banking segment is disproportionately targeted due to the "
+            "size of individual transactions and the relatively lower transaction monitoring "
+            "scrutiny applied to large, infrequent wire transfers by high-value clients.\n\n"
+            "Deepfake technology has emerged as a material fraud vector, with reported "
+            "incidents of AI-generated voice and video impersonation of clients to authorise "
+            "fraudulent instructions increasing by over 700% between 2022 and 2023. The "
+            "attack surface extends beyond client impersonation to advisor impersonation — "
+            "fraudsters using deepfake audio to mimic relationship manager voices in calls "
+            "to client family members or operations staff. A Hong Kong finance firm suffered "
+            "a USD 25 million loss in 2024 from a multi-person deepfake video conference "
+            "in which all participants were AI-generated.\n\n"
+            "Internal fraud — misappropriation of client assets, unauthorised trading, and "
+            "expense fraud by bank employees — accounts for an estimated 35% of total "
+            "private banking fraud losses, reflecting the access, trust, and autonomy "
+            "afforded to relationship managers and senior advisors in the private banking model."
+        ),
+        "private_banking_issues": (
+            "Private banking fraud risk is structurally amplified by the service model. "
+            "The high degree of relationship manager autonomy — including discretion over "
+            "client communication, transaction initiation, and documentation management — "
+            "creates conditions in which internal fraud can be sustained for extended periods "
+            "before detection. Client deference to trusted advisors can delay the reporting "
+            "of suspected unauthorised activity. The complexity of HNWI portfolio structures "
+            "— spanning multiple accounts, asset classes, and jurisdictions — makes routine "
+            "reconciliation and anomaly detection more challenging than in retail environments. "
+            "Family office structures, which aggregate decision-making authority over large "
+            "wealth pools in a small number of individuals, create high-value social "
+            "engineering targets."
+        ),
+        "regulatory_pressure": (
+            "FINMA expects Swiss private banks to maintain robust fraud prevention and detection "
+            "frameworks, encompassing transaction monitoring calibrated for HNWI behaviour "
+            "patterns, operational controls over wire transfer authorisation, and client "
+            "identity verification procedures for high-value instruction acceptance. The "
+            "revised AMLA and FINMA AML circular impose enhanced due diligence obligations "
+            "for unusual transaction patterns that may indicate fraud or money laundering. "
+            "DORA's operational resilience requirements include incident classification and "
+            "reporting obligations for fraud-related operational events. Swiss criminal law "
+            "(Articles 138–148 SCC) provides the prosecutorial framework for banking fraud, "
+            "with civil liability for insufficient controls being an additional exposure "
+            "under the Swiss Code of Obligations."
+        ),
+        "industry_trends": (
+            "Four fraud trends are defining the private banking risk landscape. Deepfake "
+            "and AI-enabled social engineering attacks are escalating in sophistication and "
+            "frequency, requiring liveness detection, callback verification, and multi-factor "
+            "authentication for high-value instruction authorisation. APP fraud prevention "
+            "— including enhanced payee verification, transaction delay mechanisms, and "
+            "client education programmes — is becoming an operational priority. Internal "
+            "fraud prevention is being strengthened through enhanced four-eyes principle "
+            "enforcement, exception reporting on RM transaction patterns, and surprise "
+            "audit programmes targeting high-access individuals. Behavioural analytics "
+            "— applying machine learning to detect anomalous advisor or client behaviour "
+            "patterns before losses crystallise — is emerging as a leading detection "
+            "capability at tier-one institutions."
+        ),
+        "peer_incidents": (
+            "A Hong Kong finance firm suffered a USD 25 million loss in early 2024 from "
+            "a deepfake video conference fraud in which all counterparties were AI-generated, "
+            "demonstrating the operational reality of multi-person deepfake attacks. Several "
+            "Swiss private banks experienced internal fraud incidents in 2022–2024 involving "
+            "relationship managers who misappropriated client assets over multi-year periods, "
+            "concealed through falsified portfolio statements — echoing the Kweku Adoboli "
+            "UBS rogue trader case pattern in a private banking context. The Bernie Madoff "
+            "Ponzi scheme — in which several Swiss private banks had placed client assets "
+            "with BMIS without adequate due diligence — remains a defining third-party fraud "
+            "risk reference case. Internationally, the Société Générale Jérôme Kerviel "
+            "case and the recent Morgan Stanley internal trading fraud cases illustrate "
+            "the persistent internal fraud risk at sophisticated financial institutions."
+        ),
+        "key_statistics": [
+            "Switzerland APP and wire fraud losses: approximately CHF 180 million reported in 2023",
+            "Deepfake fraud attempts against financial institutions: +700% increase between 2022 and 2023",
+            "Internal fraud share of total private banking fraud losses: estimated 35%",
+            "Hong Kong deepfake video conference fraud (2024): USD 25 million single-event loss",
+            "HNWI fraud targeting: average loss per successful HNWI fraud event estimated at CHF 2–5 million in Switzerland",
+        ],
+        "mckinsey_angle": (
+            "Fraud risk management in private banking requires a fundamental rethink of the "
+            "trust model that underpins the service relationship. The McKinsey perspective "
+            "is that the institutions best positioned to manage emerging fraud threats will "
+            "be those that have invested in three capabilities: a zero-trust verification "
+            "framework for high-value instruction authorisation that does not compromise "
+            "client experience; a behavioural analytics capability that detects internal "
+            "and external fraud signals before losses crystallise; and a client education "
+            "programme that empowers HNWI clients to identify and report social engineering "
+            "attempts. Fraud prevention in private banking is not in conflict with the "
+            "relationship model — it is a prerequisite for sustaining client trust."
+        ),
+        "tone": "professional",
+    },
+
+    "LIQUIDITY_RISK": {
+        "theme": "Liquidity Risk",
+        "market_context": (
+            "The liquidity risk landscape for Swiss private banking was fundamentally "
+            "reset by two events in rapid succession: the SVB collapse (March 2023) — "
+            "in which USD 42 billion in deposits were withdrawn in a single day, precipitating "
+            "a bank run driven by social media amplification — and the Credit Suisse crisis, "
+            "in which CHF 110 billion in client outflows across Q4 2022 and Q1 2023 "
+            "overwhelmed the bank's liquidity buffers despite its HQLA position appearing "
+            "adequate on standard LCR metrics. These events demonstrated that traditional "
+            "liquidity risk models — calibrated on historical deposit behaviour and regulatory "
+            "stress scenarios — systematically underestimate outflow velocity in confidence "
+            "crises amplified by digital communication.\n\n"
+            "The Swiss National Bank's Public Liquidity Backstop (PLB) mechanism, "
+            "legislated following the Credit Suisse emergency merger, provides a new "
+            "emergency liquidity instrument for systemically important Swiss banks, but "
+            "does not eliminate the need for robust internal liquidity risk management. "
+            "FINMA's post-CS supervisory priorities explicitly include intraday liquidity "
+            "monitoring, stress scenario calibration, and funding concentration risk "
+            "assessment as areas requiring enhanced management attention.\n\n"
+            "Private banks with concentrated HNWI deposit bases face distinctive liquidity "
+            "risk characteristics. A small number of large depositors can drive material "
+            "outflow events — particularly in a confidence crisis — creating lumpiness in "
+            "liquidity that standard LCR and NSFR frameworks do not fully capture."
+        ),
+        "private_banking_issues": (
+            "Liquidity risk in private banking is structurally shaped by the high concentration "
+            "of deposits among a small number of HNWI clients. A single large client departing "
+            "— or a cluster of clients responding simultaneously to adverse news — can drive "
+            "outflows that exceed LCR stress scenario assumptions calibrated on diversified "
+            "retail deposit bases. The investment of HNWI deposits in long-duration or "
+            "illiquid assets to generate yield creates a maturity transformation mismatch "
+            "that is particularly acute when client deposits are remunerated at floating "
+            "rates but invested in illiquid alternatives or Lombard loan books. The "
+            "relationship manager as a single point of client contact means that RM "
+            "departure — or RM misconduct exposure — can serve as a liquidity trigger."
+        ),
+        "regulatory_pressure": (
+            "FINMA's post-CS supervisory guidance requires enhanced intraday liquidity "
+            "monitoring, granular deposit concentration reporting, and stress scenario "
+            "testing that explicitly includes social-media-amplified confidence crisis "
+            "scenarios. The LCR and NSFR frameworks, transposed into Swiss liquidity "
+            "ordinance, remain the regulatory baseline, but FINMA expects institutions "
+            "to supplement these with bespoke internal liquidity stress tests calibrated "
+            "to their specific client base and funding structure. The PLB mechanism "
+            "requires systemically important Swiss banks to maintain the pre-conditions "
+            "for PLB access — eligible collateral, operational readiness — as a "
+            "standing liquidity contingency measure."
+        ),
+        "industry_trends": (
+            "Four liquidity risk trends are shaping Swiss private banking practice. "
+            "Real-time intraday liquidity monitoring — moving from end-of-day reporting "
+            "to continuous intraday position visibility — is becoming a supervisory "
+            "expectation for all but the smallest institutions. Social-media-aware "
+            "stress scenarios — calibrated on the SVB and CS outflow velocities — are "
+            "being incorporated into ILAAP stress testing frameworks. Deposit "
+            "concentration limits — formalised thresholds on the share of total deposits "
+            "held by a single client or client group — are being embedded into liquidity "
+            "risk appetite statements. Finally, the liquidity implications of the growth "
+            "in illiquid alternative investments within discretionary mandates — which "
+            "cannot be liquidated to meet client redemptions on short notice — are "
+            "receiving enhanced management and regulatory attention."
+        ),
+        "peer_incidents": (
+            "Credit Suisse experienced CHF 110 billion in client outflows across Q4 2022 "
+            "and Q1 2023, overwhelming its liquidity buffers and precipitating the "
+            "emergency UBS merger — the defining liquidity event in Swiss banking history. "
+            "Silicon Valley Bank's collapse (March 2023) was triggered by USD 42 billion "
+            "in single-day deposit outflows following social media amplification of "
+            "concerns about HTM bond losses — establishing the benchmark for digital-era "
+            "bank run velocity. First Republic Bank (May 2023) experienced USD 100 billion "
+            "in deposit outflows in Q1 2023 despite appearing adequately liquid on LCR "
+            "metrics — demonstrating that regulatory liquidity ratios do not prevent "
+            "confidence-driven runs. The SNB's CHF 50 billion emergency liquidity "
+            "assistance to Credit Suisse — exhausted within weeks — underscored the "
+            "inadequacy of traditional ELA mechanisms for modern confidence crises."
+        ),
+        "key_statistics": [
+            "Credit Suisse: CHF 110 billion client outflows in Q4 2022–Q1 2023 preceding emergency UBS merger",
+            "SVB: USD 42 billion in single-day deposit withdrawals (March 2023) — benchmark social-media-amplified bank run",
+            "Swiss PLB mechanism: legislated following CS emergency merger to provide backstop liquidity for SIBs",
+            "First Republic Bank: USD 100 billion in Q1 2023 deposit outflows despite adequate LCR metrics",
+            "Private banking deposit concentration: top 10 HNWI clients represent an estimated 20–40% of total deposits at mid-tier Swiss private banks",
+        ],
+        "mckinsey_angle": (
+            "Liquidity risk management in private banking must be recalibrated for the "
+            "digital-era confidence crisis — a qualitatively different threat from the "
+            "historical bank run that LCR and NSFR frameworks were designed to address. "
+            "The McKinsey perspective is that leading institutions must invest in three "
+            "capabilities: real-time intraday liquidity visibility that enables minutes-level "
+            "response to emerging outflow signals; stress scenarios explicitly calibrated "
+            "for social-media-amplified confidence events with CS and SVB-level outflow "
+            "velocities; and a deposit concentration management framework that prevents "
+            "the build-up of individual client liquidity cliff-edges. Liquidity risk in "
+            "private banking is ultimately a function of client trust — and the institutions "
+            "that manage it most effectively are those that combine technical liquidity "
+            "infrastructure with a relentless focus on client relationship quality."
+        ),
+        "tone": "professional",
+    },
+
+}
+
+# ══════════════════════════════════════════════════════════════════════════════
+# HNWI_RED_FLAGS
+# 45 structured red flags for HNWI / private banking audit and compliance use.
+# ══════════════════════════════════════════════════════════════════════════════
+
+HNWI_RED_FLAGS = [
+
+    # ── AML (RF001–RF015) ──────────────────────────────────────────────────────
+
+    {
+        "rf_id": "RF001",
+        "category": "AML",
+        "title": "Recurring round-number transactions",
+        "description": (
+            "The client repeatedly initiates or receives transfers in exact round-number amounts "
+            "(e.g., CHF 50,000, CHF 100,000, USD 500,000) without plausible commercial justification. "
+            "Round-number structuring is a classical indicator of deliberate transaction fragmentation "
+            "designed to evade monitoring thresholds or conceal the true amount being transferred."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Run automated transaction monitoring rules flagging outgoing and incoming transfers "
+            "in round denominations (multiples of CHF/USD/EUR 10,000) above a defined frequency "
+            "threshold. Cross-reference flagged transactions against client business profile to "
+            "assess economic plausibility."
+        ),
+        "regulatory_reference": "FATF Recommendation 20; AMLA Art. 9; FINMA AML Circular",
+        "private_banking_context": (
+            "HNWI clients frequently transact in large round amounts for legitimate purposes "
+            "(property purchases, investment subscriptions), making contextual analysis essential. "
+            "The pattern is most significant when combined with an unclear source of funds or "
+            "a history of fragmented cross-border transfers."
+        ),
+        "examples": [
+            "Client transfers CHF 100,000 to a counterparty in Dubai on the same date each month with no stated purpose",
+            "Twelve incoming wires of exactly USD 50,000 from three different offshore entities over 60 days",
+            "Client requests 15 separate payments of EUR 9,900 to the same beneficiary within a single quarter",
+        ],
+    },
+
+    {
+        "rf_id": "RF002",
+        "category": "AML",
+        "title": "Inflows from FATF grey-list jurisdictions",
+        "description": (
+            "The client receives significant fund inflows originating from jurisdictions currently "
+            "subject to FATF enhanced monitoring or identified as having strategic AML/CFT deficiencies. "
+            "Such flows carry elevated risk of laundered proceeds and require enhanced source-of-funds "
+            "verification beyond the standard CDD process."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Configure transaction monitoring to flag all inflows above a defined materiality threshold "
+            "from FATF grey-list and black-list jurisdictions. Validate against the client's documented "
+            "business activities, source of wealth narrative, and known counterparty network."
+        ),
+        "regulatory_reference": "FATF Recommendations 10, 19; AMLA Art. 6; FINMA AML Circular 2011/1",
+        "private_banking_context": (
+            "Private banking clients often maintain legitimate business or family ties to higher-risk "
+            "jurisdictions, but relationship managers may under-escalate FATF geography flags to avoid "
+            "client friction. Enhanced due diligence documentation and senior compliance sign-off are "
+            "required for all material flows from grey-list jurisdictions."
+        ),
+        "examples": [
+            "USD 2 million wire received from a corporate entity registered in Myanmar (FATF grey list)",
+            "Recurring inflows from a trust domiciled in a jurisdiction with known beneficial ownership opacity",
+            "Client's primary wealth source is a business operating in a jurisdiction recently added to the FATF grey list",
+        ],
+    },
+
+    {
+        "rf_id": "RF003",
+        "category": "AML",
+        "title": "Opaque nested structures (trusts, foundations)",
+        "description": (
+            "The client's assets are held through layered legal structures — such as a trust owning "
+            "a foundation which in turn owns an operating company — with no clear economic rationale "
+            "for the complexity beyond asset concealment. Identifying the ultimate beneficial owner "
+            "through the nested layers requires disproportionate effort and yields uncertain results."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Conduct a structured UBO mapping exercise for all clients with multi-layer ownership "
+            "structures, documenting each legal entity layer with registered address, jurisdiction, "
+            "and ownership percentage. Escalate to compliance for senior review where UBO cannot "
+            "be identified with confidence after reasonable investigation."
+        ),
+        "regulatory_reference": "FATF Recommendation 24, 25; AMLA Art. 4; FINMA AML Circular",
+        "private_banking_context": (
+            "Complex trust and foundation structures are prevalent and often legitimate in HNWI "
+            "wealth planning, making genuine concealment difficult to distinguish from estate "
+            "planning sophistication. The key risk indicators are jurisdictional opacity, "
+            "professional nominee trustees with no relationship to the settlor, and resistance "
+            "to providing underlying corporate documentation."
+        ),
+        "examples": [
+            "Client assets held in a BVI trust whose trustee is a Panamanian professional nominee firm, with no identified beneficiaries",
+            "Foundation registered in Liechtenstein owns a Cayman Islands holding company which holds Swiss bank accounts — no economic purpose documented",
+            "Four-layer ownership structure identified; RM unable to name the natural person controlling the structure",
+        ],
+    },
+
+    {
+        "rf_id": "RF004",
+        "category": "AML",
+        "title": "Frequent beneficial owner changes",
+        "description": (
+            "The declared beneficial owner of a client account or associated legal entity changes "
+            "repeatedly and without clear justification — such as succession events, corporate "
+            "restructuring, or documented ownership transactions. Frequent UBO substitution is "
+            "a classical technique for dissociating illicit funds from their origin."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Implement systematic tracking of UBO declaration changes in the client management "
+            "system, with automated alerts triggered when a UBO is changed more than once within "
+            "a 12-month period. Each change must be accompanied by documented justification and "
+            "compliance officer review."
+        ),
+        "regulatory_reference": "FATF Recommendations 10, 24; AMLA Art. 3–4; FINMA AML Circular",
+        "private_banking_context": (
+            "HNWI estates and family offices may legitimately change UBO registrations following "
+            "inheritance, divorce, or corporate reorganisation. The red flag arises when changes "
+            "occur without accompanying legal documentation, when the new UBO has no discernible "
+            "connection to the original client relationship, or when changes correlate with "
+            "significant inbound fund flows."
+        ),
+        "examples": [
+            "Beneficial owner of a holding company changes three times in 18 months with no disclosed corporate transaction",
+            "New UBO declared immediately prior to a large inbound wire transfer from a high-risk jurisdiction",
+            "Original client dies; assets transferred to an entity with an entirely new UBO without probate documentation",
+        ],
+    },
+
+    {
+        "rf_id": "RF005",
+        "category": "AML",
+        "title": "Source of wealth inconsistent with profile",
+        "description": (
+            "The client's documented or claimed source of wealth is materially inconsistent with "
+            "their professional background, business activities, or the jurisdictions in which they "
+            "operate. The discrepancy between the asserted wealth origin and verifiable evidence "
+            "raises the possibility that a false or misleading wealth narrative has been constructed."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "During onboarding and periodic review, cross-reference the client's source of wealth "
+            "declaration against independent verification sources: corporate registry filings, "
+            "property records, news searches, and professional background databases. Document "
+            "the evidence base and escalate where inconsistencies cannot be resolved."
+        ),
+        "regulatory_reference": "FATF Recommendation 10; AMLA Art. 6; FINMA AML Circular 2011/1",
+        "private_banking_context": (
+            "Private banking onboarding frequently relies on RM-provided source of wealth "
+            "narratives that are not independently verified beyond a plausibility check. The "
+            "HNWI context amplifies this risk: the larger the claimed wealth, the more "
+            "difficult it can be to verify through publicly available sources, and the "
+            "greater the potential AML consequence of an inaccurate narrative."
+        ),
+        "examples": [
+            "Client declares CHF 50 million from salary as a government official in a jurisdiction where maximum salary is CHF 80,000 annually",
+            "Claimed business sale proceeds cannot be traced to any identified company or transaction in the relevant jurisdiction",
+            "Client asserts inheritance from a deceased relative, but no probate documentation or estate record is obtainable",
+        ],
+    },
+
+    {
+        "rf_id": "RF006",
+        "category": "AML",
+        "title": "Transactions with no economic rationale",
+        "description": (
+            "The client initiates transactions — transfers, securities purchases, currency conversions "
+            "— that have no identifiable commercial, investment, or personal purpose consistent with "
+            "their known profile and stated objectives. Transactions lacking economic rationale may "
+            "indicate layering activity within a money laundering scheme."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Review transactions flagged by monitoring systems for absence of a documented business "
+            "purpose. Request client explanation for all non-routine transactions above defined "
+            "materiality thresholds. Where explanation is not provided or is implausible, escalate "
+            "to compliance for STR assessment."
+        ),
+        "regulatory_reference": "FATF Recommendation 20; AMLA Art. 9; FINMA AML Circular",
+        "private_banking_context": (
+            "In private banking, the breadth of legitimate HNWI transaction types — cross-border "
+            "investments, philanthropy, real estate purchases, art acquisitions — creates a wide "
+            "plausibility zone that can be exploited to conceal transactions lacking genuine purpose. "
+            "RM judgment plays a critical role in distinguishing legitimate complexity from "
+            "genuine absence of economic rationale."
+        ),
+        "examples": [
+            "Client repeatedly purchases and immediately sells the same securities position with no price movement — apparent wash trading",
+            "Large wire to an unrelated third party with no loan agreement, invoice, or relationship documentation",
+            "Currency conversion of CHF 5 million followed within 24 hours by reconversion to CHF at a loss, with no stated hedging purpose",
+        ],
+    },
+
+    {
+        "rf_id": "RF007",
+        "category": "AML",
+        "title": "Client reluctance to provide documentation",
+        "description": (
+            "The client consistently delays, refuses, or provides incomplete responses to requests "
+            "for KYC documentation — including identity documents, source of wealth evidence, "
+            "UBO declarations, or transaction purpose explanations. Persistent documentation "
+            "reluctance is a primary indicator of a client seeking to obscure relevant information."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Track all outstanding KYC documentation requests in the client management system "
+            "with escalation triggers for requests outstanding beyond defined timeframes (e.g., "
+            "30 days for periodic review, 5 days for urgent transaction-related requests). "
+            "Compliance must review all cases where documentation has been outstanding beyond "
+            "threshold and assess account restriction or exit."
+        ),
+        "regulatory_reference": "AMLA Art. 3–7; FINMA AML Circular; FATF Recommendation 10",
+        "private_banking_context": (
+            "HNWI clients and their advisors frequently cite complexity or advisor availability "
+            "as justification for documentation delays. While some delays are legitimate, "
+            "a pattern of consistent resistance — particularly correlated with pending "
+            "transactions or periodic review milestones — requires compliance escalation "
+            "regardless of client commercial importance."
+        ),
+        "examples": [
+            "Client has not provided updated source of wealth documentation despite three requests over six months",
+            "Trust deed requested for UBO mapping has not been provided for 90 days; RM has not escalated",
+            "Client's legal representative repeatedly claims documents are 'in preparation' without producing them",
+        ],
+    },
+
+    {
+        "rf_id": "RF008",
+        "category": "AML",
+        "title": "Undisclosed PEP discovered mid-relationship",
+        "description": (
+            "A client who was not identified as a Politically Exposed Person (PEP) at onboarding "
+            "is subsequently found — through screening, adverse media, or client disclosure — to "
+            "hold or have recently held a prominent public function. The failure to identify PEP "
+            "status at onboarding, or the client's active concealment, requires immediate "
+            "re-assessment of the entire relationship."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Conduct continuous PEP screening using real-time screening platforms that cover "
+            "domestic and foreign PEP lists across all relevant jurisdictions. Adverse media "
+            "monitoring should run in parallel to detect PEP-related news not yet reflected "
+            "in structured databases. Any PEP identification mid-relationship triggers "
+            "mandatory compliance escalation and enhanced due diligence review."
+        ),
+        "regulatory_reference": "FATF Recommendations 12, 22; AMLA Art. 6; FINMA AML Circular",
+        "private_banking_context": (
+            "In private banking, PEP status may be deliberately concealed through the use of "
+            "nominees, family member account holders, or complex ownership structures that "
+            "distance the PEP from the account. Relationship managers focused on commercial "
+            "relationship management may have limited incentive to conduct proactive PEP "
+            "identification beyond the onboarding screen."
+        ),
+        "examples": [
+            "Client identified post-onboarding as a senior minister in their home country; enhanced due diligence not performed at account opening",
+            "Client's spouse, listed as beneficial owner of a holding company, is revealed to be a state-owned enterprise executive",
+            "Adverse media search reveals client received a government infrastructure contract worth USD 500 million — not disclosed in onboarding",
+        ],
+    },
+
+    {
+        "rf_id": "RF009",
+        "category": "AML",
+        "title": "Flows toward sanctioned jurisdictions",
+        "description": (
+            "Client transactions involve fund flows to, from, or through jurisdictions subject to "
+            "international sanctions regimes — including OFAC, EU, UN, or Swiss SECO sanctions. "
+            "Even indirect exposure, such as correspondent bank routing through a sanctioned "
+            "country or a beneficial owner with sanctions-linked nationality, may create "
+            "regulatory and criminal liability."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Deploy real-time sanctions screening at transaction initiation covering beneficiary "
+            "name, beneficiary bank, intermediary bank, and payment routing. Cross-reference "
+            "client UBO structures against sanctions lists and SECO/OFAC designations. "
+            "Escalate all potential matches to compliance before transaction execution."
+        ),
+        "regulatory_reference": "SECO Embargo Ordinance; EU Sanctions Regulation; OFAC SDN List; FATF Recommendation 6",
+        "private_banking_context": (
+            "Private banking clients with business activities in geopolitically complex regions "
+            "may have legitimate relationships that inadvertently create sanctions exposure — "
+            "for example, a company operating in a partially sanctioned sector or a counterparty "
+            "owned by a newly designated individual. The complexity of HNWI structures increases "
+            "the risk of indirect sanctions exposure not visible in straightforward name screening."
+        ),
+        "examples": [
+            "Wire transfer routed through a correspondent bank with a branch in a comprehensively sanctioned jurisdiction",
+            "Client's business partner is identified as a designated person under EU Russia sanctions",
+            "Investment in a company with a 40%+ ownership stake held by a sanctioned Russian oligarch",
+        ],
+    },
+
+    {
+        "rf_id": "RF010",
+        "category": "AML",
+        "title": "Cash-intensive activity in wealth management",
+        "description": (
+            "The client requests cash withdrawals, deposits, or currency exchanges at a volume "
+            "or frequency inconsistent with their wealth profile and the expected service model "
+            "of private banking. Significant cash activity in a relationship primarily managed "
+            "through book-entry transfers is anomalous and requires enhanced scrutiny."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Monitor all cash transactions above CHF 15,000 (AMLA threshold) and cumulative "
+            "monthly cash activity above a defined client-specific threshold. Require documented "
+            "purpose for all material cash transactions and escalate where cash usage is "
+            "disproportionate to the client's documented lifestyle and business activities."
+        ),
+        "regulatory_reference": "AMLA Art. 3, 9; FINMA AML Circular; FATF Recommendation 10",
+        "private_banking_context": (
+            "While private banking clients may legitimately request cash for real estate, art, "
+            "or personal expenditure, cash-intensive patterns in a relationship that is otherwise "
+            "digital are a significant red flag. The risk is amplified when cash is used in "
+            "conjunction with cross-border transfers or when cash is deposited immediately "
+            "prior to international wires."
+        ),
+        "examples": [
+            "Client withdraws CHF 200,000 in cash on four occasions over three months with no documented purpose",
+            "Multiple large cash deposits by a client who describes their wealth as arising from a professional consulting business",
+            "Client requests foreign currency cash in multiple denominations for 'travel purposes' at a combined annual amount of CHF 500,000",
+        ],
+    },
+
+    {
+        "rf_id": "RF011",
+        "category": "AML",
+        "title": "Unusual correspondent banking flows",
+        "description": (
+            "Transactions routed through correspondent banking channels display patterns "
+            "inconsistent with the client's known counterparty network — including "
+            "unexpected originating jurisdictions, unfamiliar correspondent banks, "
+            "or multi-hop routing through intermediary accounts. Such patterns may "
+            "indicate deliberate layering through the correspondent banking system."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Analyse the routing headers of incoming SWIFT messages to identify originating "
+            "banks and jurisdictions not consistent with client's documented business geography. "
+            "Flag all transactions routed through jurisdictions with poor AML supervision "
+            "ratings for enhanced review."
+        ),
+        "regulatory_reference": "FATF Recommendation 13; AMLA Art. 6; FINMA AML Circular",
+        "private_banking_context": (
+            "HNWI clients with international business networks may legitimately receive funds "
+            "through multiple correspondent banking chains. The red flag is most significant "
+            "when correspondent routing involves jurisdictions with no connection to the "
+            "client's declared business geography, or when the originating bank operates "
+            "in a jurisdiction with identified AML deficiencies."
+        ),
+        "examples": [
+            "Inbound wire for a client whose business is in the UAE routed through a Moldovan correspondent bank",
+            "Payment from a Luxembourg investment fund routed through three intermediary banks across jurisdictions with poor FATF ratings",
+            "Client's regular counterparty suddenly begins routing payments through a new correspondent bank in a high-risk jurisdiction",
+        ],
+    },
+
+    {
+        "rf_id": "RF012",
+        "category": "AML",
+        "title": "Urgent international transfer requests",
+        "description": (
+            "The client makes repeated requests for same-day or urgent international transfers, "
+            "typically for large amounts, with pressure on operations staff to bypass standard "
+            "authorisation and verification procedures. Urgency-driven requests that circumvent "
+            "controls are a common precursor to fraud and money laundering transaction execution."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Log all urgent transfer requests with timestamps, client-stated rationale, "
+            "and authorisation chain documentation. Identify patterns of urgency through "
+            "monitoring exception reports. Compliance review is mandatory before same-day "
+            "execution for any transfer above a defined threshold where standard verification "
+            "cannot be completed."
+        ),
+        "regulatory_reference": "FATF Recommendation 16 (Wire Transfers); AMLA Art. 9; FINMA AML Circular",
+        "private_banking_context": (
+            "Private banking clients may legitimately require urgent transfers for time-sensitive "
+            "transactions such as property closings or investment subscriptions. The red flag "
+            "arises when urgency is used systematically to suppress compliance checks, when "
+            "the stated purpose cannot be verified, or when the beneficiary has not previously "
+            "featured in the client's transaction history."
+        ),
+        "examples": [
+            "Client calls RM demanding immediate CHF 3 million transfer for a 'deal closing today' to an account never previously used",
+            "Operations receives pressure to waive compliance callback for urgent USD 5 million wire with a beneficiary in a high-risk jurisdiction",
+            "Recurring urgent transfer requests to different beneficiaries over a 30-day period, each accompanied by a different stated purpose",
+        ],
+    },
+
+    {
+        "rf_id": "RF013",
+        "category": "AML",
+        "title": "Sudden refusal of re-profiling",
+        "description": (
+            "A client who previously cooperated with KYC and periodic review processes "
+            "abruptly refuses to participate in a scheduled or triggered re-profiling "
+            "exercise — including updating source of wealth, providing current documentation, "
+            "or confirming UBO information. Sudden refusal after prior cooperation is a "
+            "significant behavioural change requiring immediate compliance assessment."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Track compliance with periodic review requests in the client management system. "
+            "Flag all accounts where a re-profiling request has been outstanding beyond 30 "
+            "days without client engagement. Compliance must assess all refusal cases for "
+            "STR filing obligation and account restriction necessity."
+        ),
+        "regulatory_reference": "AMLA Art. 7; FINMA AML Circular; FATF Recommendation 10",
+        "private_banking_context": (
+            "In private banking, periodic review can be postponed for relationship management "
+            "reasons — client travelling, advisor gap, documentation complexity — creating "
+            "opportunities for compliance timelines to lapse without genuine escalation. "
+            "A sudden refusal following a change in the client's personal or business "
+            "circumstances (e.g., media exposure, criminal investigation in home country) "
+            "is particularly significant."
+        ),
+        "examples": [
+            "Client who completed full KYC at onboarding refuses to provide updated UBO documentation at triennial review",
+            "Previously cooperative client declines to answer source of wealth questions following news reports linking them to a corruption investigation",
+            "Client instructs RM 'not to send any more compliance questionnaires' and threatens to transfer assets if review proceeds",
+        ],
+    },
+
+    {
+        "rf_id": "RF014",
+        "category": "AML",
+        "title": "Sudden change in transactional behaviour",
+        "description": (
+            "A client's transaction pattern undergoes a material and unexplained shift — such "
+            "as a dramatic increase in transfer volume, a change in counterparty geography, "
+            "or a shift from investment to high-frequency cash-like transactions — without "
+            "a corresponding change in documented business activities or personal circumstances. "
+            "Sudden behavioural changes are among the most reliable indicators of emerging "
+            "AML or financial crime risk."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Deploy behavioural analytics to establish normalised transaction baselines per "
+            "client and generate automated alerts for deviations exceeding defined thresholds "
+            "(e.g., volume increase >200%, new geography >3 new jurisdictions in 30 days). "
+            "RM review is mandatory for all material behavioural shift alerts within 5 business days."
+        ),
+        "regulatory_reference": "FATF Recommendation 20; AMLA Art. 9; FINMA AML Circular",
+        "private_banking_context": (
+            "Private banking relationship managers are well-positioned to detect behavioural "
+            "changes through client interaction, but this detection depends on active monitoring "
+            "rather than reactive documentation. Automated behavioural analytics are increasingly "
+            "required to complement RM judgment, particularly for dormant accounts that reactivate "
+            "with high-volume activity."
+        ),
+        "examples": [
+            "Client who had maintained a stable equity portfolio for five years suddenly initiates 40 outbound wires over 30 days",
+            "Dormant account reactivates with CHF 8 million inflow followed by immediate fragmented outbound transfers",
+            "Client transitions from primarily CHF-denominated transactions to a mix of USD, AED, and HKD without business rationale",
+        ],
+    },
+
+    {
+        "rf_id": "RF015",
+        "category": "AML",
+        "title": "Multiple accounts without justification",
+        "description": (
+            "The client maintains multiple accounts at the same institution — across different "
+            "booking centres, legal entities, or currency books — without a documented business "
+            "rationale for the structural separation. Multiple accounts with overlapping "
+            "beneficiary patterns may be used to fragment transaction volumes and evade "
+            "monitoring thresholds."
+        ),
+        "risk_level": "Medium",
+        "detection_method": (
+            "Conduct periodic cross-account analysis to identify clients with three or more "
+            "accounts and assess whether the structural separation is documented and justified. "
+            "Aggregate transaction monitoring across all accounts held by the same UBO "
+            "to prevent fragmentation-based threshold evasion."
+        ),
+        "regulatory_reference": "FATF Recommendation 10; AMLA Art. 3; FINMA AML Circular",
+        "private_banking_context": (
+            "HNWI clients legitimately maintain multiple accounts for currency management, "
+            "entity-specific booking, or discretionary mandate segregation. The red flag "
+            "arises where account multiplication is unexplained, where transfers between "
+            "own accounts are used to obscure fund flows, or where different accounts "
+            "are managed through different RMs with no consolidated oversight."
+        ),
+        "examples": [
+            "Client holds seven accounts across three booking centres with no documented business reason for the structural separation",
+            "Transfers between client's own accounts aggregate to CHF 15 million over a month, each individually below the reporting threshold",
+            "Different family members hold nominally separate accounts that are effectively controlled by a single UBO without disclosure",
+        ],
+    },
+
+    # ── Fraud (RF016–RF025) ────────────────────────────────────────────────────
+
+    {
+        "rf_id": "RF016",
+        "category": "Fraud",
+        "title": "Rogue advisor — unauthorised trades",
+        "description": (
+            "A relationship manager or portfolio manager executes transactions in a client's "
+            "account without explicit client authorisation or in excess of the authority granted "
+            "under the client's mandate. Unauthorised trading may be motivated by fee generation, "
+            "position unwinding, or personal financial gain, and can result in significant client "
+            "losses and institutional liability."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Implement systematic comparison of executed transactions against client-signed "
+            "instruction records or discretionary mandate parameters. Generate exception reports "
+            "for all trades executed without a corresponding client instruction record in advisory "
+            "mandates. Surprise trade reconciliation audits should be conducted for high-activity "
+            "advisory portfolios quarterly."
+        ),
+        "regulatory_reference": "FinSA Art. 9–10; MiFID II Art. 25; Swiss Code of Obligations Art. 398",
+        "private_banking_context": (
+            "The trust-based private banking relationship model, in which clients often defer "
+            "to advisor judgment without reviewing individual trade confirmations, creates "
+            "conditions in which unauthorised trading can persist for extended periods. "
+            "The risk is highest where a single RM has exclusive client contact and controls "
+            "both the advisory relationship and transaction initiation."
+        ),
+        "examples": [
+            "RM executes 30 equity purchases in a client's advisory account over six months with no documented client instructions on file",
+            "Portfolio manager invests client's capital in illiquid structured products not permitted under the agreed mandate parameters",
+            "Advisor transfers client assets between own accounts and client account without authorisation, concealed through falsified confirmations",
+        ],
+    },
+
+    {
+        "rf_id": "RF017",
+        "category": "Fraud",
+        "title": "Churning — excessive portfolio turnover",
+        "description": (
+            "A relationship manager or portfolio manager generates excessive trading activity "
+            "in a client account — measured by turnover ratio relative to portfolio size — "
+            "primarily to generate commission or transaction fee income rather than to serve "
+            "the client's investment objectives. Churning results in direct client cost and "
+            "potential underperformance relative to a buy-and-hold benchmark."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Calculate annualised portfolio turnover ratios for all advisory and discretionary "
+            "accounts and flag accounts where turnover exceeds a defined threshold (e.g., 200% "
+            "annually for equity mandates). Cross-reference against the investment objective "
+            "and compare transaction costs paid against peer benchmarks. Management review "
+            "required for outlier accounts."
+        ),
+        "regulatory_reference": "FinSA Art. 9; MiFID II Art. 25; ESMA Guidelines on MiFID II Suitability",
+        "private_banking_context": (
+            "In retrocession-based compensation models (where permitted), churning incentives "
+            "are structurally embedded. Even in advisory fee models, excessive trading can "
+            "arise from RM incentives tied to transaction volume. Private banking clients "
+            "who trust their advisors implicitly may not scrutinise trade confirmations "
+            "closely enough to detect churning before significant costs accumulate."
+        ),
+        "examples": [
+            "Advisory account with CHF 5 million in assets generates CHF 250,000 in transaction costs annually — 5% cost drag",
+            "Portfolio manager executes 120 trades per year in a conservative balanced mandate, resulting in 350% annual turnover",
+            "Client's equity portfolio is fully liquidated and reinvested three times in 18 months with no documented strategic rationale",
+        ],
+    },
+
+    {
+        "rf_id": "RF018",
+        "category": "Fraud",
+        "title": "Front-running on client orders",
+        "description": (
+            "A bank employee — typically a trader or RM — trades for their own account or "
+            "a related party's account in the same securities as a pending client order, "
+            "exploiting advance knowledge of the client order to profit from the anticipated "
+            "price movement. Front-running constitutes market abuse and is a criminal offence "
+            "in Switzerland and across EU jurisdictions."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Monitor personal trading accounts of client-facing employees and traders for "
+            "transactions in the same securities as client orders placed within a defined "
+            "time window (e.g., 24 hours before client order execution). Flag all matches "
+            "for compliance investigation. Require pre-clearance for personal trades in "
+            "securities within research or client order pipelines."
+        ),
+        "regulatory_reference": "Swiss FMIA Art. 142–143; MiFID II Art. 16; MAR Art. 8",
+        "private_banking_context": (
+            "Front-running risk in private banking arises primarily from RMs or investment "
+            "advisors who receive large client orders in concentrated positions and can "
+            "anticipate the price impact. The risk is heightened in illiquid securities "
+            "or structured products where a single large client order is sufficient "
+            "to move the market."
+        ),
+        "examples": [
+            "Trader buys 50,000 shares of a small-cap equity 10 minutes before executing a client purchase order of 500,000 shares",
+            "RM purchases call options on a stock the day before executing a large discretionary buy order for client portfolios",
+            "Investment desk employee shorts a bond on personal account before distributing a sell recommendation to client portfolios",
+        ],
+    },
+
+    {
+        "rf_id": "RF019",
+        "category": "Fraud",
+        "title": "Misappropriation of client assets",
+        "description": (
+            "A bank employee — typically a relationship manager or back-office staff member "
+            "— diverts client funds or securities to their own account or a related party's "
+            "account, concealing the diversion through falsified records, false statements "
+            "to the client, or manipulation of the client management system. "
+            "Misappropriation is a criminal offence under Swiss law and invariably triggers "
+            "FINMA notification obligations."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Conduct surprise reconciliations of client asset holdings against custodian "
+            "records independently of the RM relationship. Implement system access controls "
+            "preventing individual employees from both initiating and approving transactions. "
+            "Independent client statement confirmation exercises — contacting clients directly "
+            "to verify portfolio values — should be conducted annually for all advisory accounts."
+        ),
+        "regulatory_reference": "Swiss SCC Art. 138; Banking Act Art. 3; FINMA notification obligation",
+        "private_banking_context": (
+            "Misappropriation in private banking is particularly insidious because HNWI "
+            "clients typically review their portfolios infrequently and trust their "
+            "relationship manager completely. The absence of independent custodian "
+            "confirmation and the reliance on RM-produced portfolio reporting creates "
+            "an environment in which small-scale misappropriation can compound over "
+            "years before detection."
+        ),
+        "examples": [
+            "RM transfers CHF 500,000 from client account to a personal account over 18 months through a series of small transfers disguised as advisory fees",
+            "Back-office employee creates fictitious redemption instructions to divert fund proceeds to a controlled account",
+            "RM provides client with falsified portfolio statements showing full asset values while having sold positions for personal gain",
+        ],
+    },
+
+    {
+        "rf_id": "RF020",
+        "category": "Fraud",
+        "title": "Client document falsification",
+        "description": (
+            "KYC or account documentation submitted by or on behalf of a client is found "
+            "to be falsified, altered, or fabricated — including identity documents, "
+            "source of wealth certificates, corporate registration documents, or "
+            "financial statements. Document falsification may be client-initiated or "
+            "facilitated by bank employees or external intermediaries."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Implement document authentication procedures including biometric passport "
+            "NFC chip verification, third-party corporate registry cross-referencing, "
+            "and reverse image search for identity document fraud detection. Flag "
+            "documents with inconsistent formatting, unusual metadata, or discrepancies "
+            "against independent sources for specialist review."
+        ),
+        "regulatory_reference": "Swiss SCC Art. 251 (forgery); AMLA Art. 3; FINMA AML Circular",
+        "private_banking_context": (
+            "The complexity of HNWI documentation — including foreign corporate records, "
+            "trust deeds from less transparent jurisdictions, and wealth certificates "
+            "from private accountants — creates more opportunities for falsification "
+            "than in standardised retail onboarding. External asset managers introducing "
+            "clients may inadvertently or deliberately facilitate document fraud."
+        ),
+        "examples": [
+            "Passport submitted during onboarding found to have altered date of birth when cross-referenced against INTERPOL database",
+            "Source of wealth certificate from a private accountant in a high-risk jurisdiction cannot be verified and shows formatting inconsistencies",
+            "Corporate registration documents provided for a Cayman Islands holding company are fabricated — the company does not appear in registry records",
+        ],
+    },
+
+    {
+        "rf_id": "RF021",
+        "category": "Fraud",
+        "title": "Identity fraud during onboarding",
+        "description": (
+            "A fraudster assumes the identity of another individual — including through "
+            "stolen identity documents, deepfake video presentation, or proxy use — "
+            "to open or take over a private banking account. Identity fraud during "
+            "onboarding bypasses the legitimate client's risk profile and creates "
+            "accounts under false identities for subsequent illicit use."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Deploy liveness detection and biometric matching in digital onboarding flows "
+            "per FINMA-RS 2016/7 requirements. For high-value accounts, require in-person "
+            "identity verification or certified notary confirmation. Cross-reference "
+            "document metadata, IP address geolocation, and device fingerprint for "
+            "digital onboarding sessions."
+        ),
+        "regulatory_reference": "FINMA-RS 2016/7; AMLA Art. 3; FATF Recommendation 10",
+        "private_banking_context": (
+            "Private banking digital onboarding — increasingly adopted for efficiency — "
+            "creates identity fraud vulnerability where high account values provide "
+            "strong criminal motivation. The HNWI context is particularly exposed "
+            "to deepfake-enabled identity impersonation, as HNWI individuals' facial "
+            "and voice data is often available through public media."
+        ),
+        "examples": [
+            "Fraudster presents a high-quality deepfake video during online onboarding, passing standard liveness checks",
+            "Stolen passport of a prominent businessperson used to open an account by a third party presenting similar physical characteristics",
+            "Account opened in the name of a recently deceased individual using their authentic identity documents before death registration",
+        ],
+    },
+
+    {
+        "rf_id": "RF022",
+        "category": "Fraud",
+        "title": "Targeted phishing against HNWI clients",
+        "description": (
+            "HNWI clients are targeted by highly personalised spear-phishing attacks — "
+            "crafted using publicly available or previously stolen information about "
+            "the client's relationships, investments, and lifestyle — designed to "
+            "obtain login credentials, authorise fraudulent transactions, or extract "
+            "sensitive personal information. Spear-phishing against HNWI clients "
+            "is a growing and sophisticated fraud vector."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Monitor for anomalous client portal login activity — unusual geolocation, "
+            "device, or time-of-day patterns. Implement out-of-band transaction "
+            "confirmation for high-value transfers. Client education programme on "
+            "spear-phishing recognition should be delivered annually with incident "
+            "reporting mechanisms."
+        ),
+        "regulatory_reference": "FINMA-RS 2023/1; DORA Art. 17; Swiss SCC Art. 147",
+        "private_banking_context": (
+            "HNWI clients are high-value targets whose public profiles — on corporate "
+            "websites, social media, and press releases — provide attackers with "
+            "the raw material for highly credible impersonation. The private banking "
+            "relationship's personalised communication style makes it easier for "
+            "fraudsters to craft convincing mimicry of legitimate bank communications."
+        ),
+        "examples": [
+            "Client receives a phishing email mimicking the bank's domain, with the RM's name and the client's correct account number, requesting login credentials",
+            "HNWI targeted with a spear-phishing SMS claiming urgent action is required to prevent account closure, linking to a credential-harvesting site",
+            "Attacker uses LinkedIn data to craft a phishing email referencing the client's recent board appointment and investment activity",
+        ],
+    },
+
+    {
+        "rf_id": "RF023",
+        "category": "Fraud",
+        "title": "Social engineering via family office",
+        "description": (
+            "Fraudsters target the family office structure — employees, advisors, or "
+            "family members involved in wealth management — to gain access to client "
+            "accounts, authorise transactions, or extract sensitive information. "
+            "Family offices are attractive targets due to their significant financial "
+            "authority, smaller compliance teams, and less robust cybersecurity "
+            "infrastructure than institutional banks."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Maintain a current register of all authorised family office representatives "
+            "for each client relationship, with documented authority levels. Implement "
+            "callback verification for all transaction instructions received from family "
+            "office contacts above a defined threshold. Monitor for new or changed "
+            "contact information purportedly from family offices."
+        ),
+        "regulatory_reference": "FINMA-RS 2023/1; Swiss SCC Art. 147; FATF Recommendation 10",
+        "private_banking_context": (
+            "Family offices managing HNWI wealth often operate with substantial discretionary "
+            "authority over client accounts, creating an extended attack surface beyond the "
+            "directly identified client. Social engineering through family office staff "
+            "can be more effective than direct client targeting due to lower awareness "
+            "and weaker security protocols."
+        ),
+        "examples": [
+            "Fraudster impersonates the family office CFO by email and requests an urgent CHF 2 million wire to a new beneficiary",
+            "Social engineer builds a long-term relationship with a family office junior employee, eventually obtaining account access credentials",
+            "Deepfake audio call simulating the family patriarch's voice instructs the private bank to change wire transfer authorisation contacts",
+        ],
+    },
+
+    {
+        "rf_id": "RF024",
+        "category": "Fraud",
+        "title": "Unauthorised third-party instructions",
+        "description": (
+            "Instructions for account actions — transfers, investment changes, beneficiary "
+            "amendments — are received from a third party who has not been formally authorised "
+            "by the client through documented power of attorney or mandate arrangements. "
+            "Acting on unauthorised third-party instructions exposes the bank to civil "
+            "liability and may facilitate fraud against the client."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Maintain a current, signed register of authorised third-party representatives "
+            "for each client account, with clearly defined authority scope and validity period. "
+            "Reject all instructions from unregistered third parties and require the client "
+            "to confirm authority in writing before any action is taken."
+        ),
+        "regulatory_reference": "Swiss Code of Obligations Art. 32; FinSA Art. 9; FINMA AML Circular",
+        "private_banking_context": (
+            "In private banking, instructions from lawyers, accountants, family members, "
+            "and external asset managers are common and often legitimate — but the "
+            "informal culture of trusting known advisors creates risk where authority "
+            "is assumed rather than verified. Elderly or incapacitated clients are "
+            "particularly vulnerable to third-party instruction fraud."
+        ),
+        "examples": [
+            "Client's accountant calls the bank requesting a CHF 1 million transfer, citing client approval 'already given verbally' — no written authority on file",
+            "Person claiming to be the client's son instructs the bank to change the beneficiary address for recurring transfers",
+            "External asset manager exceeds their documented mandate scope by requesting redemption of assets outside the agreed investment universe",
+        ],
+    },
+
+    {
+        "rf_id": "RF025",
+        "category": "Fraud",
+        "title": "Fake inheritance / windfall scams",
+        "description": (
+            "A client is approached by fraudsters — sometimes through the bank's communication "
+            "channels — with a fraudulent inheritance, lottery, or windfall opportunity requiring "
+            "an advance payment or account access to release a large sum. The client is persuaded "
+            "to transfer funds or provide account details, resulting in direct financial loss "
+            "and potential account compromise."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Monitor outgoing transfers to previously unknown beneficiaries accompanied by "
+            "client-stated justifications consistent with advance-fee fraud patterns. "
+            "Train RMs to recognise behavioural indicators of client victimisation — "
+            "urgency, secrecy, unusual counterparty profile — and to initiate a welfare "
+            "check and compliance escalation."
+        ),
+        "regulatory_reference": "Swiss SCC Art. 146; FINMA AML Circular; FCA Consumer Duty (reference)",
+        "private_banking_context": (
+            "Advance-fee and windfall fraud disproportionately targets elderly HNWI clients "
+            "who may be socially isolated and less familiar with digital fraud vectors. "
+            "The private banking relationship manager is often the first institutional "
+            "contact who can identify victimisation before it results in significant loss — "
+            "but only if trained and empowered to intervene."
+        ),
+        "examples": [
+            "78-year-old client requests an urgent CHF 500,000 transfer to release an inheritance from a deceased Nigerian diplomat — a classic advance-fee pattern",
+            "Client received an email purportedly from the bank's wealth management team announcing a prize draw win requiring an administrative deposit",
+            "Recently widowed client persuaded by a new 'romantic interest' to transfer CHF 300,000 as an 'investment in their joint future'",
+        ],
+    },
+
+    # ── Suitability (RF026–RF033) ──────────────────────────────────────────────
+
+    {
+        "rf_id": "RF026",
+        "category": "Suitability",
+        "title": "Complex products sold to unsophisticated clients",
+        "description": (
+            "Structured products — including barrier reverse convertibles, auto-callables, "
+            "leveraged certificates, or capital-at-risk notes — are recommended to or held "
+            "by clients whose documented risk profile, financial knowledge, or investment "
+            "experience does not meet the product's complexity and risk threshold. This "
+            "represents a core FinSA suitability failure with significant conduct liability."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Conduct systematic product-to-client suitability mapping for all structured "
+            "product holdings, cross-referencing product risk rating and complexity score "
+            "against client knowledge assessment and risk profile. Generate an exception "
+            "report for all mismatches and require documented compliance review before "
+            "any new structured product recommendation to sub-threshold clients."
+        ),
+        "regulatory_reference": "FinSA Art. 10–12; MiFID II Art. 25; PRIIPs KID Regulation",
+        "private_banking_context": (
+            "Structured products are a significant revenue generator in Swiss private banking, "
+            "and the commercial pressure to distribute complex instruments can result in "
+            "suitability documentation that reflects post-hoc justification rather than "
+            "genuine pre-sale assessment. The CS AT1 write-down (2023) crystallised the "
+            "litigation exposure from selling regulatory capital instruments without "
+            "adequate bail-in risk disclosure."
+        ),
+        "examples": [
+            "Client classified as 'balanced' with no derivatives experience holds a portfolio comprising 40% barrier reverse convertibles",
+            "Auto-callable structured note with 50% capital protection barrier sold to a 75-year-old client with a 'capital preservation' objective",
+            "Leveraged commodity certificate recommended to a client who indicated on their knowledge assessment that they had no understanding of leverage mechanics",
+        ],
+    },
+
+    {
+        "rf_id": "RF027",
+        "category": "Suitability",
+        "title": "Excessive concentration in single asset",
+        "description": (
+            "A client's portfolio is concentrated in a single issuer, sector, or asset class "
+            "at a level materially exceeding the diversification parameters implied by their "
+            "risk profile and investment objective. Excessive concentration creates "
+            "idiosyncratic risk that is inconsistent with the stated mandate and exposes "
+            "the bank to suitability liability if the concentrated position suffers losses."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Run quarterly portfolio concentration analysis for all managed and advisory "
+            "mandates, flagging portfolios where a single issuer exceeds 20% of NAV or "
+            "a single sector exceeds 40% unless explicitly documented as client instruction "
+            "and suitability-assessed. Senior investment oversight review required for "
+            "all flagged portfolios."
+        ),
+        "regulatory_reference": "FinSA Art. 10; MiFID II Art. 25; ESMA Suitability Guidelines",
+        "private_banking_context": (
+            "HNWI clients frequently have legitimate concentrated positions — founder equity "
+            "stakes, inherited shareholdings, or strategic investments — that are not managed "
+            "by the private bank. The suitability risk arises when the bank's managed or "
+            "advisory portfolio adds further concentration on top of known external "
+            "concentrations, without consolidating the full client wealth picture."
+        ),
+        "examples": [
+            "Discretionary mandate portfolio holds 45% in a single technology stock, with no documented client instruction to deviate from diversification parameters",
+            "Client's advisory portfolio concentrates 70% in Swiss real estate investment trusts, inconsistent with their documented 'globally diversified equity' objective",
+            "Portfolio manager adds a 30% position in an emerging market bond fund to a client profile whose knowledge assessment excludes emerging market fixed income",
+        ],
+    },
+
+    {
+        "rf_id": "RF028",
+        "category": "Suitability",
+        "title": "Risk profile not updated >24 months",
+        "description": (
+            "A client's investment risk profile, financial situation assessment, or investment "
+            "objective documentation has not been reviewed or updated within the past 24 months, "
+            "or has not been updated following a known material change in the client's "
+            "circumstances (retirement, inheritance, divorce, health event). Stale profiles "
+            "create suitability exposure where portfolio positioning continues to be based "
+            "on outdated client information."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Generate automated alerts for all client accounts where the risk profile "
+            "documentation date exceeds 24 months or where the bank is aware of a material "
+            "life event that has not been reflected in an updated profile. Compliance review "
+            "is required before any new product recommendation for clients with stale profiles."
+        ),
+        "regulatory_reference": "FinSA Art. 12; MiFID II Art. 25; ESMA Suitability Guidelines",
+        "private_banking_context": (
+            "In private banking, periodic risk profile updates are frequently deferred "
+            "by relationship managers to avoid client friction — particularly for older "
+            "clients who resist being asked to complete questionnaires. The regulatory "
+            "expectation is unambiguous: profiles must be current to support ongoing "
+            "suitability assessments, regardless of client preference."
+        ),
+        "examples": [
+            "Client turns 70 and retires — risk profile still documents 'growth-oriented' objective based on assessment conducted at age 65",
+            "Client inherited EUR 20 million following a parent's death 18 months ago; risk profile has not been updated to reflect changed financial situation",
+            "Risk profile last updated in 2022; client has since disclosed a terminal health diagnosis that materially affects investment time horizon",
+        ],
+    },
+
+    {
+        "rf_id": "RF029",
+        "category": "Suitability",
+        "title": "Divergence between client instructions and transactions",
+        "description": (
+            "Executed transactions in a client's account materially diverge from the "
+            "instructions recorded in the client's mandate, the most recent client "
+            "communication, or the agreed investment strategy. Systematic divergence "
+            "between instructions and execution may indicate unauthorised trading, "
+            "system error, or suitability failure."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Implement systematic instruction-to-execution matching for advisory accounts, "
+            "with exception reports generated for all transactions where no corresponding "
+            "client instruction is recorded within a defined time window. Quarterly "
+            "portfolio reviews should include a reconciliation of portfolio positioning "
+            "against the agreed investment strategy."
+        ),
+        "regulatory_reference": "FinSA Art. 9; MiFID II Art. 25; Swiss Code of Obligations Art. 398",
+        "private_banking_context": (
+            "The personalised, relationship-driven nature of private banking means that "
+            "verbal instructions are frequently acted upon without contemporaneous written "
+            "confirmation. This creates an instruction record gap that makes divergence "
+            "between intent and execution difficult to detect and document."
+        ),
+        "examples": [
+            "Client gives verbal instruction to maintain defensive positioning; RM executes significant equity increase the following week with no recorded client confirmation",
+            "Discretionary mandate positioned as 60% equity / 40% bonds drifts to 85% equity without rebalancing or client notification",
+            "Client instructs sale of all positions in a specific sector on ethical grounds; RM fails to execute the instruction and positions remain",
+        ],
+    },
+
+    {
+        "rf_id": "RF030",
+        "category": "Suitability",
+        "title": "Absent suitability documentation for structured products",
+        "description": (
+            "Structured product recommendations or transactions are executed without the "
+            "required pre-sale suitability assessment documentation — including client "
+            "knowledge assessment, risk profile confirmation, and product-specific "
+            "risk disclosure acknowledgement. The absence of suitability documentation "
+            "creates unmitigated regulatory and civil liability in the event of loss."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Conduct a retrospective audit of all structured product transactions in the "
+            "past 24 months to verify that pre-sale suitability documentation is complete "
+            "and on file for each transaction. Implement a system control requiring "
+            "suitability assessment sign-off before structured product orders can be "
+            "entered in the order management system."
+        ),
+        "regulatory_reference": "FinSA Art. 10–12; PRIIPs KID Regulation; MiFID II Art. 25",
+        "private_banking_context": (
+            "Structured product documentation gaps are endemic in Swiss private banking "
+            "due to the pace of distribution, reliance on verbal client agreement, and "
+            "the volume of products transacted. The CS AT1 litigation post-2023 write-down "
+            "demonstrated that documentation gaps convert regulatory risk into client "
+            "litigation exposure at scale."
+        ),
+        "examples": [
+            "Barrier reverse convertible transaction executed in 2024 with no pre-sale KID acknowledgement on file",
+            "Client's holding of EUR 1 million in auto-callable notes has no corresponding suitability assessment in the client file",
+            "Structured note recommended via WhatsApp message from RM — no written suitability documentation, risk profile confirmation, or KID provision on record",
+        ],
+    },
+
+    {
+        "rf_id": "RF031",
+        "category": "Suitability",
+        "title": "Recommendations without written justification",
+        "description": (
+            "Investment recommendations — whether for specific securities, asset allocation "
+            "changes, or structured products — are made to clients without a contemporaneous "
+            "written record of the suitability rationale. FinSA and MiFID II require that "
+            "the basis for suitability assessments be documented and retainable for regulatory "
+            "review."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Sample advisory client files and verify that each material investment recommendation "
+            "in the past 12 months has a corresponding written suitability note explaining why "
+            "the recommendation meets the client's investment objective, risk profile, and "
+            "financial situation. Flag accounts where recommendations exceed documented "
+            "advisory interactions."
+        ),
+        "regulatory_reference": "FinSA Art. 15; MiFID II Art. 25(6); FINMA AML Circular (documentation)",
+        "private_banking_context": (
+            "The relationship-driven advisory model in private banking — characterised by "
+            "verbal conversations, informal emails, and WhatsApp messages — creates a "
+            "structural documentation deficit. Senior RMs often make investment recommendations "
+            "in the course of client lunches or informal calls without generating written "
+            "suitability records, creating latent compliance exposure."
+        ),
+        "examples": [
+            "RM recommends a CHF 500,000 reallocation to emerging market equities during a client dinner — no written suitability note generated",
+            "Client file contains 15 trade confirmations for the past year but only three written investment recommendations with suitability rationale",
+            "Advisory account review conducted by email with no documented suitability assessment — only a portfolio performance summary",
+        ],
+    },
+
+    {
+        "rf_id": "RF032",
+        "category": "Suitability",
+        "title": "Vulnerable client (age/health) without safeguards",
+        "description": (
+            "A client who is elderly, cognitively impaired, recently bereaved, or otherwise "
+            "in a vulnerable condition continues to be managed without enhanced safeguards — "
+            "such as designated trusted contact persons, restricted product access, enhanced "
+            "instruction verification, or periodic welfare checks. Vulnerable client management "
+            "is an emerging regulatory priority with significant conduct and civil liability implications."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Maintain a vulnerable client register identifying clients who have been assessed "
+            "as potentially vulnerable based on age, disclosed health conditions, behavioural "
+            "observations, or life events. Conduct periodic welfare-oriented review calls "
+            "for all clients on the register and document outcomes. Compliance sign-off "
+            "required for all significant transactions initiated by registered vulnerable clients."
+        ),
+        "regulatory_reference": "FinSA Art. 10; FCA Consumer Duty (reference); Swiss Civil Code on capacity",
+        "private_banking_context": (
+            "Private banking serves a disproportionately older HNWI client population, "
+            "and cognitive decline among long-standing clients is a structural challenge "
+            "that the sector has historically addressed insufficiently. The combination "
+            "of significant wealth, reduced financial literacy capacity, and social isolation "
+            "creates acute third-party exploitation risk."
+        ),
+        "examples": [
+            "85-year-old client with documented early-stage dementia continues to have a high-risk discretionary mandate with no documented safeguard review",
+            "Recently widowed client displaying significant emotional distress is approached by the RM with a complex restructuring proposal within weeks of bereavement",
+            "Client's family members raise concerns about cognitive capacity with the bank — RM documents the concern but takes no action pending relationship management considerations",
+        ],
+    },
+
+    {
+        "rf_id": "RF033",
+        "category": "Suitability",
+        "title": "Undisclosed conflict of interest on in-house products",
+        "description": (
+            "A relationship manager or investment advisor recommends in-house investment "
+            "products — proprietary funds, structured products manufactured by the bank's "
+            "own desks, or products generating retrocessions — without disclosing the "
+            "material conflict of interest arising from the bank's financial interest "
+            "in the recommendation. Non-disclosure of conflicts violates FinSA's "
+            "transparency requirements and MiFID II's inducement rules."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Audit a sample of advisory recommendations for in-house product concentration "
+            "and cross-reference against disclosed conflicts of interest in client "
+            "documentation. Verify that all retrocession arrangements are disclosed "
+            "in the client agreement and that in-house product recommendations include "
+            "a specific conflict disclosure note."
+        ),
+        "regulatory_reference": "FinSA Art. 25–26; MiFID II Art. 23; FINMA-RS 2017/1",
+        "private_banking_context": (
+            "In-house product recommendations are a significant source of private banking "
+            "revenue, and the commercial pressure to place proprietary products can "
+            "compromise advisory independence. The prohibition on undisclosed retrocessions "
+            "under FinSA and MiFID II has not eliminated the underlying conflict — it "
+            "has shifted it to disclosures that are technically compliant but practically "
+            "ineffective in communicating the conflict to clients."
+        ),
+        "examples": [
+            "RM recommends that 60% of client AUM be allocated to the bank's proprietary multi-asset fund range without disclosing the bank's fund management fee income",
+            "Structured note manufactured by the bank's own desk recommended to client without disclosure that the issuing desk receives a distribution margin",
+            "Client's discretionary mandate is systematically overweight in the bank's own funds relative to peer benchmarks — conflict disclosed in boilerplate but not specifically highlighted",
+        ],
+    },
+
+    # ── Tax (RF034–RF040) ──────────────────────────────────────────────────────
+
+    {
+        "rf_id": "RF034",
+        "category": "Tax",
+        "title": "Offshore structures with no economic substance",
+        "description": (
+            "A client maintains offshore legal entities — holding companies, trusts, "
+            "or investment vehicles — in low-tax jurisdictions that lack genuine "
+            "economic substance: no real employees, no management decisions made locally, "
+            "no physical presence, and no commercial purpose beyond asset holding or "
+            "tax minimisation. Substance-less offshore structures are a primary OECD "
+            "BEPS and CRS compliance risk."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "During CDD reviews, assess documented economic substance for all offshore "
+            "entities held by the client. Request evidence of local management, "
+            "employees, and genuine economic activity. Flag entities registered in "
+            "known zero-substance jurisdictions (BVI, Cayman, Panama, Seychelles) "
+            "without corresponding substance documentation for compliance tax review."
+        ),
+        "regulatory_reference": "OECD BEPS Action 5; CRS; EU Anti-Tax Avoidance Directive",
+        "private_banking_context": (
+            "HNWI clients frequently use offshore holding structures for legitimate "
+            "investment and estate planning purposes, but the line between legitimate "
+            "tax efficiency and artificial arrangement lacking substance is increasingly "
+            "scrutinised by OECD member states and CRS information recipients. "
+            "The bank's CRS reporting obligations make it a de facto participant "
+            "in the automatic disclosure of these structures."
+        ),
+        "examples": [
+            "Client holds CHF 30 million through a BVI company with a professional nominee director, no employees, and no documented business purpose",
+            "Cayman Islands limited partnership holds a portfolio of Swiss equities with no identifiable investment management function in the Cayman jurisdiction",
+            "Client's holding structure includes four layered companies across three zero-tax jurisdictions — none with documented management or operational activity",
+        ],
+    },
+
+    {
+        "rf_id": "RF035",
+        "category": "Tax",
+        "title": "Beneficial owner in FATF/OECD-monitored jurisdiction",
+        "description": (
+            "The beneficial owner of a client account resides in or is a national of a "
+            "jurisdiction subject to heightened FATF or OECD tax transparency scrutiny, "
+            "including jurisdictions on the EU non-cooperative jurisdictions list or "
+            "with limited CRS exchange relationships. This combination elevates both "
+            "AML and tax compliance risk simultaneously."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Cross-reference client UBO residency and nationality against current FATF "
+            "grey/black lists, EU non-cooperative jurisdictions list, and OECD Global "
+            "Forum peer review outcomes. Flag all matches for enhanced CRS classification "
+            "review and compliance tax assessment."
+        ),
+        "regulatory_reference": "CRS; FATF Recommendation 10; EU Directive on Administrative Cooperation",
+        "private_banking_context": (
+            "The Swiss private banking client base includes significant representation "
+            "from jurisdictions with evolving or limited AEOI participation, creating "
+            "complex CRS classification challenges and elevated tax facilitation risk "
+            "for accounts held by beneficial owners in such jurisdictions."
+        ),
+        "examples": [
+            "Beneficial owner is a national and resident of a jurisdiction that joined CRS only in 2024, with no exchange with Switzerland yet operational",
+            "Client's UBO is resident in a jurisdiction on the EU's list of non-cooperative jurisdictions for tax purposes",
+            "Account held through a trust whose settlor and beneficiaries are nationals of a jurisdiction with identified tax transparency deficiencies",
+        ],
+    },
+
+    {
+        "rf_id": "RF036",
+        "category": "Tax",
+        "title": "Refusal to sign FATCA/CRS self-certification",
+        "description": (
+            "A client refuses or persistently delays signing the FATCA and/or CRS "
+            "self-certification form required for account maintenance and regulatory "
+            "reporting compliance. Refusal to self-certify is a significant indicator "
+            "of potential undisclosed tax status and triggers specific regulatory "
+            "obligations for the bank."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Track all outstanding self-certification requests in the tax compliance "
+            "management system with escalation alerts at 30 and 60 days. Compliance "
+            "must assess all refusal cases for account restriction necessity and, "
+            "where applicable, FATCA presumption rules (treat account as US reportable "
+            "absent valid certification) or CRS undocumented account treatment."
+        ),
+        "regulatory_reference": "FATCA (IRS 1471–1474); CRS OECD Standard; AMLA Art. 7",
+        "private_banking_context": (
+            "In private banking, self-certification requests for complex entity structures "
+            "or clients with multi-jurisdictional tax exposure can face genuine legal and "
+            "tax advisory complexity. However, systematic refusal — particularly correlated "
+            "with jurisdictions where CRS reporting would result in disclosure to tax "
+            "authorities — is a significant tax facilitation risk indicator."
+        ),
+        "examples": [
+            "Client with apparent US indicia (address, telephone number, birthplace) refuses to complete W-9 or W-8 self-certification for three consecutive years",
+            "Entity account holder declines to identify its controlling persons for CRS purposes, citing 'confidentiality' — no legal basis provided",
+            "Client annually requests extension of self-certification deadline without engaging substantively with the documentation requirement",
+        ],
+    },
+
+    {
+        "rf_id": "RF037",
+        "category": "Tax",
+        "title": "Sudden change of tax residency",
+        "description": (
+            "A client declares a sudden change of tax residency — particularly to a "
+            "jurisdiction with favourable tax treatment, limited CRS exchange with "
+            "their apparent home country, or recent removal from the OECD's list "
+            "of cooperative jurisdictions — without a plausible personal or business "
+            "rationale for the relocation. Tax residency changes may be genuine but "
+            "require enhanced verification in the private banking context."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Flag all self-certification updates reflecting a change of tax residency "
+            "for compliance review. Request supporting evidence of genuine relocation "
+            "(proof of address, utility bills, residency permit) and cross-reference "
+            "against the client's known lifestyle, business activities, and travel patterns. "
+            "Enhanced due diligence required where the new jurisdiction has materially "
+            "different CRS obligations."
+        ),
+        "regulatory_reference": "CRS Section VI; FATCA IGA; FINMA AML Circular",
+        "private_banking_context": (
+            "HNWI clients are genuinely geographically mobile and may legitimately "
+            "relocate for personal, professional, or family reasons. The red flag "
+            "arises when the declared new tax residency correlates with an imminent "
+            "CRS reporting cycle, when the client has no apparent personal connection "
+            "to the new jurisdiction, or when the relocation is to a jurisdiction "
+            "with known tax information exchange limitations."
+        ),
+        "examples": [
+            "Client declares Portuguese tax residency under NHR regime weeks before the first CRS reporting deadline, having shown no prior connection to Portugal",
+            "Long-standing French-resident client declares UAE tax residency coincident with French CRS exchange effective date",
+            "Client claims to have relocated to a jurisdiction that does not participate in CRS exchange with their apparent home country — no supporting documentation provided",
+        ],
+    },
+
+    {
+        "rf_id": "RF038",
+        "category": "Tax",
+        "title": "Declarations inconsistent with lifestyle",
+        "description": (
+            "The client's declared tax and financial profile — including declared income, "
+            "wealth sources, and tax residency — is materially inconsistent with their "
+            "observable lifestyle indicators: property holdings, travel patterns, "
+            "consumer expenditure, and social profile. The inconsistency raises the "
+            "possibility of undeclared income or assets."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Conduct lifestyle cross-referencing during onboarding and periodic review "
+            "by comparing declared income and wealth against observable indicators "
+            "accessible through open-source research (property registries, press coverage, "
+            "social media). Significant unexplained discrepancies require documented "
+            "RM and compliance assessment."
+        ),
+        "regulatory_reference": "AMLA Art. 6; FINMA AML Circular; CRS Commentaries on Due Diligence",
+        "private_banking_context": (
+            "Private banking clients' lifestyles — luxury real estate, private aviation, "
+            "superyachts, art collections — are often publicly visible and provide "
+            "a valuable cross-reference for the plausibility of declared financial profiles. "
+            "Relationship managers who are embedded in client social networks are "
+            "well-positioned to identify lifestyle-declaration inconsistencies but "
+            "may have limited incentive to escalate them."
+        ),
+        "examples": [
+            "Client declares annual income of EUR 150,000 while maintaining three Swiss properties, a private jet subscription, and a CHF 25 million portfolio",
+            "Tax certificate from client's home country shows modest declared assets — inconsistent with known spending patterns observed by RM",
+            "Client describes themselves as a 'retired teacher' but funds appear to support a lifestyle consistent with significantly higher wealth levels",
+        ],
+    },
+
+    {
+        "rf_id": "RF039",
+        "category": "Tax",
+        "title": "Use of nominee directors/shareholders",
+        "description": (
+            "The client's legal structures employ nominee directors or shareholders — "
+            "professional service providers who appear in corporate records as directors "
+            "or shareholders but have no genuine management authority or economic interest — "
+            "to conceal the true beneficial owner from company registries and due diligence "
+            "processes. Nominee arrangements are a primary vehicle for beneficial ownership "
+            "opacity."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Identify nominee arrangements during UBO mapping through the use of corporate "
+            "registry searches, industry-specific nominee provider databases, and director "
+            "network analysis tools. Require signed nominee declarations confirming the "
+            "identity of the true principal and the scope of the nominee arrangement "
+            "for all entities with identified nominees."
+        ),
+        "regulatory_reference": "FATF Recommendations 24–25; AMLA Art. 4; EU AMLD6",
+        "private_banking_context": (
+            "Nominee arrangements are endemic in offshore wealth structures and are "
+            "frequently encountered in Swiss private banking client onboarding. While "
+            "some nominee arrangements are legitimate (estate planning, privacy), "
+            "they systematically impede UBO identification and are a primary vehicle "
+            "for tax avoidance and AML risk. Enhanced diligence must pierce the "
+            "nominee layer to identify the genuine controlling person."
+        ),
+        "examples": [
+            "All five directors of a BVI holding company are employees of a professional nominee services firm with no independent relationship to the client",
+            "Corporate shareholder appears in five unrelated client structures as a registered shareholder — a classic nominee company pattern",
+            "Nominee director signs all corporate documentation but is unable to describe the company's business activities when contacted independently",
+        ],
+    },
+
+    {
+        "rf_id": "RF040",
+        "category": "Tax",
+        "title": "Absent Tax Identification Number (TIN)",
+        "description": (
+            "A client or beneficial owner is unable or unwilling to provide a valid Tax "
+            "Identification Number (TIN) for their declared tax residency jurisdiction "
+            "as required for CRS and FATCA self-certification. Absence of a TIN may "
+            "indicate undisclosed tax residency, use of a false residency declaration, "
+            "or registration in a jurisdiction that does not issue TINs."
+        ),
+        "risk_level": "Medium",
+        "detection_method": (
+            "Verify TIN format against OECD TIN format databases for each declared "
+            "jurisdiction. Flag accounts where TIN is absent, cannot be validated, "
+            "or where the stated justification for absence does not correspond to "
+            "the jurisdiction's actual TIN issuance practice. Compliance review "
+            "required for all TIN-absent accounts above defined materiality threshold."
+        ),
+        "regulatory_reference": "CRS Standard Section VI; FATCA IRS Form W-8/W-9; OECD TIN Guidance",
+        "private_banking_context": (
+            "In private banking, TIN absence is frequently encountered for clients "
+            "from jurisdictions with non-standard TIN systems, elderly clients "
+            "who have not received a TIN, or clients who have recently relocated. "
+            "The risk arises where TIN absence is not explained by a legitimate "
+            "jurisdiction-specific reason but may reflect deliberate residency "
+            "misrepresentation."
+        ),
+        "examples": [
+            "Client declares UK tax residency but cannot provide a UTR (Unique Taxpayer Reference) — states they have 'never received one'",
+            "Entity self-certifies as resident in Switzerland but cannot provide a UID (Unternehmens-Identifikationsnummer) — entity is not registered in Swiss commercial registry",
+            "Client provides a TIN format inconsistent with the format issued by their declared tax residency jurisdiction according to OECD guidance",
+        ],
+    },
+
+    # ── Conduct (RF041–RF045) ──────────────────────────────────────────────────
+
+    {
+        "rf_id": "RF041",
+        "category": "Conduct",
+        "title": "Abnormal personal advisor–client relationship",
+        "description": (
+            "The relationship between a relationship manager and a client displays "
+            "characteristics that extend beyond professional norms — including personal "
+            "financial entanglement, social dependency, gifts of significant value, "
+            "joint personal investments, or cohabitation. Abnormal personal relationships "
+            "create conflicts of interest, impair professional judgment, and create "
+            "conditions for exploitation or misconduct."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Conduct periodic review of RM–client relationship disclosures and personal "
+            "conflict of interest declarations. Implement annual self-certification "
+            "requiring RMs to disclose personal financial relationships with clients. "
+            "Supervisory oversight of client relationships managed by RMs with flagged "
+            "personal connections should include independent transaction review."
+        ),
+        "regulatory_reference": "FINMA-RS 2017/1; FinSA Art. 25; Swiss Code of Obligations Art. 398",
+        "private_banking_context": (
+            "The long-term, intimate nature of private banking relationships — spanning "
+            "decades, involving shared family milestones, and extending to multiple "
+            "family generations — creates conditions in which personal and professional "
+            "boundaries can erode. The risk is that an RM's personal dependency on a "
+            "client relationship impairs their ability to exercise independent "
+            "professional judgment or to escalate concerning client behaviours."
+        ),
+        "examples": [
+            "RM accepts a 10% stake in a client's privately held company as a 'thank you' for years of service — undisclosed to the bank",
+            "Relationship manager regularly attends client's private family events and holidays — personal relationship has effectively replaced professional distance",
+            "RM has loaned personal funds to a client experiencing a liquidity shortfall while simultaneously managing their CHF 20 million portfolio",
+        ],
+    },
+
+    {
+        "rf_id": "RF042",
+        "category": "Conduct",
+        "title": "Undisclosed gifts or benefits",
+        "description": (
+            "A bank employee — typically a relationship manager or investment advisor — "
+            "receives gifts, hospitality, or other benefits from clients, third-party "
+            "product providers, or external asset managers without disclosing them "
+            "in accordance with the bank's gifts and entertainment policy. Undisclosed "
+            "benefits create conflicts of interest that may impair professional objectivity "
+            "and violate FinSA's inducement provisions."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Require annual gifts and entertainment register self-certification from all "
+            "client-facing employees. Conduct periodic spot-checks of employee social "
+            "media and expense records for indicators of undisclosed hospitality. "
+            "Compliance review of all declared gifts above the bank's materiality "
+            "threshold for acceptance approval."
+        ),
+        "regulatory_reference": "FinSA Art. 25–26; FINMA-RS 2017/1; Swiss Criminal Code Art. 322",
+        "private_banking_context": (
+            "The private banking culture of client entertainment — dinners, sporting events, "
+            "private travel — normalises the receipt of benefits that may, at higher "
+            "values or frequencies, constitute undisclosed inducements. The risk is "
+            "highest where product providers (structured product desks, fund managers) "
+            "provide benefits to RMs who distribute their products, creating undisclosed "
+            "distribution incentives."
+        ),
+        "examples": [
+            "RM accepts a CHF 10,000 watch from a client following a large investment transaction — gift not declared in compliance register",
+            "Product provider hosting an RM and guests at a private event estimated at CHF 5,000 per person — not declared as a potential inducement",
+            "RM regularly receives case lots of wine from a client — cumulative annual value exceeds CHF 3,000 policy threshold without disclosure",
+        ],
+    },
+
+    {
+        "rf_id": "RF043",
+        "category": "Conduct",
+        "title": "Transactions outside business hours without authorisation",
+        "description": (
+            "Significant client transactions — particularly large wire transfers, "
+            "portfolio restructurings, or security sales — are initiated outside "
+            "normal business hours without documented emergency authorisation, "
+            "senior management approval, or client-instructed urgency. Out-of-hours "
+            "transaction initiation outside approved procedures is a conduct and "
+            "fraud risk indicator."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Generate exception reports for all transactions initiated outside defined "
+            "business hours (e.g., before 07:00 or after 20:00 local time) above a "
+            "defined materiality threshold. Require documented authorisation chain for "
+            "all out-of-hours transactions, including client instruction timestamp "
+            "and approving officer identity."
+        ),
+        "regulatory_reference": "FINMA-RS 2023/1; FINMA-RS 2008/21; Internal Control Framework",
+        "private_banking_context": (
+            "Private banking's culture of client responsiveness — including the expectation "
+            "that senior RMs are available outside business hours for high-value client "
+            "needs — creates a grey zone in which out-of-hours transaction processing "
+            "can be normalised without adequate control. The risk is heightened for "
+            "remote access transactions initiated from personal devices or home systems."
+        ),
+        "examples": [
+            "CHF 3 million wire transfer initiated at 02:00 on a Saturday with no documented client instruction or management approval",
+            "RM remotely executes a large portfolio liquidation on a Sunday evening — documented rationale references a 'client phone call' with no callback verification",
+            "Pattern of transactions consistently initiated outside business hours by a single RM for a specific client cluster — not authorised through exception process",
+        ],
+    },
+
+    {
+        "rf_id": "RF044",
+        "category": "Conduct",
+        "title": "Circumvention of four-eyes principle",
+        "description": (
+            "A material transaction, client instruction, or operational action is processed "
+            "by a single employee without the required secondary authorisation (four-eyes "
+            "control). Circumvention may occur through procedural override, shared login "
+            "credentials, retrospective approval, or manipulation of the authorisation "
+            "workflow. Four-eyes circumvention is a primary internal fraud enabler."
+        ),
+        "risk_level": "Critical",
+        "detection_method": (
+            "Implement system-enforced four-eyes controls in the transaction management "
+            "system, preventing single-employee authorisation above defined thresholds. "
+            "Conduct quarterly audit sampling of high-value transactions to verify "
+            "that both authorisers were independently active in the system at the "
+            "time of approval. Investigate all shared login or credential delegation instances."
+        ),
+        "regulatory_reference": "FINMA-RS 2008/21; FINMA-RS 2017/1; Basel Committee on Banking Supervision Principles",
+        "private_banking_context": (
+            "In private banking, the four-eyes principle can be undermined by the "
+            "hierarchical deference afforded to senior relationship managers — "
+            "junior colleagues may provide nominal secondary authorisation without "
+            "genuinely reviewing the transaction. System controls must be designed "
+            "to make genuine independent review a prerequisite, not merely a "
+            "documentation exercise."
+        ),
+        "examples": [
+            "Senior RM uses a junior colleague's login credentials to process a self-authorised transaction while the junior employee is on leave",
+            "Four-eyes approval workflow bypassed for an 'urgent' CHF 2 million transfer through a manual override not subsequently reviewed by compliance",
+            "Audit trail shows both authorisers approved a transaction within 30 seconds of each other — implying rubber-stamp approval without genuine review",
+        ],
+    },
+
+    {
+        "rf_id": "RF045",
+        "category": "Conduct",
+        "title": "Verbal instructions not confirmed in writing",
+        "description": (
+            "Material client instructions — investment transactions, beneficiary changes, "
+            "mandate modifications, or risk profile updates — are acted upon based "
+            "on verbal communication without subsequent written confirmation from the "
+            "client. Acting on unconfirmed verbal instructions creates an evidentiary "
+            "gap that exposes the bank to client disputes, regulatory scrutiny, and "
+            "potential fraud facilitation."
+        ),
+        "risk_level": "High",
+        "detection_method": (
+            "Implement a policy requiring written confirmation — email, signed letter, "
+            "or secure digital channel — for all material transactions and account "
+            "changes above defined thresholds, with a mandatory confirmation window "
+            "before execution. Audit a sample of transaction records quarterly "
+            "to verify that written instruction documentation exists for all "
+            "material actions."
+        ),
+        "regulatory_reference": "FinSA Art. 15; MiFID II Art. 25(6); FINMA AML Circular",
+        "private_banking_context": (
+            "The reliance on verbal instruction in private banking is deeply embedded "
+            "in the relationship model — clients expect their advisor to act on a "
+            "phone call or meeting instruction without bureaucratic confirmation "
+            "requirements. This cultural expectation must be balanced against "
+            "the documented regulatory obligation to maintain a contemporaneous "
+            "record of client instructions, which verbal-only execution systematically fails to meet."
+        ),
+        "examples": [
+            "RM executes a CHF 5 million portfolio reallocation based on a verbal instruction given during a client lunch — no written confirmation obtained",
+            "Beneficiary change processed following a telephone call with the client — no written confirmation secured before account update",
+            "Client claims they never authorised a series of trades — RM has no written instruction on file, only a personal note from a telephone call",
+        ],
+    },
+
+]
