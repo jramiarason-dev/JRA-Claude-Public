@@ -558,6 +558,7 @@ from data import (
     RISK_INDICATORS, PUBLIC_AUDIT_RECOMMENDATIONS,
     CVE_BANKING, IIA_STANDARDS_2024, DATA_ANALYTICS_SCENARIOS,
     AUDIT_TESTS_LIBRARY, TOPIC_THEME_MAP,
+    THEMATIC_BACKGROUND, REGULATORY_CALENDAR, HNWI_RED_FLAGS,
 )
 
 JURISDICTIONS = ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "Bahamas / SCB", "EU / DORA", "UK / FCA+PRA"]
@@ -881,6 +882,248 @@ def _show_da_scenarios(theme: str, search: str = ""):
         <th style="color:#7fa8fb;width:28%">Anomaly Searched</th><th style="color:#7fa8fb;width:11%">Complexity / Tools</th>
       </tr></thead><tbody>{rows}</tbody>
     </table>""", unsafe_allow_html=True)
+
+
+# ── Regulatory Calendar helper ────────────────────────────────────────────────
+def _parse_cal_date(d: str):
+    """Return (date_obj_or_None, display_str) from a date string like '2025-03-31' or '2025-Q2'."""
+    import re
+    from datetime import date
+    if re.match(r"\d{4}-\d{2}-\d{2}$", d):
+        try:
+            return date.fromisoformat(d), d
+        except ValueError:
+            return None, d
+    m = re.match(r"(\d{4})-Q([1-4])$", d)
+    if m:
+        year, q = int(m.group(1)), int(m.group(2))
+        end_month = q * 3
+        import calendar as _cal
+        last_day = _cal.monthrange(year, end_month)[1]
+        try:
+            return date(year, end_month, last_day), f"Q{q} {year}"
+        except ValueError:
+            return None, d
+    return None, d
+
+
+def _show_regulatory_calendar(jur_filter="All", type_filter="All", prio_filter="All", year_filter="All"):
+    """Render REGULATORY_CALENDAR with filters and upcoming-deadline badges."""
+    from datetime import date, timedelta
+    today = date.today()
+    horizon = today + timedelta(days=90)
+
+    _PRIO_C  = {"High": "#ef4444", "Medium": "#f97316", "Low": "#22d3a5"}
+    _PRIO_BG = {"High": "rgba(239,68,68,0.08)", "Medium": "rgba(249,115,22,0.08)", "Low": "rgba(34,211,165,0.06)"}
+    _TYPE_C  = {
+        "Entry into force":      "#7fa8fb",
+        "Implementation deadline": "#ef4444",
+        "Consultation":          "#eab308",
+        "Review":                "#a78bfa",
+    }
+
+    entries = list(REGULATORY_CALENDAR)
+    if jur_filter  != "All": entries = [e for e in entries if e["jurisdiction"] == jur_filter]
+    if type_filter != "All": entries = [e for e in entries if e["type"] == type_filter]
+    if prio_filter != "All": entries = [e for e in entries if e["priority"] == prio_filter]
+    if year_filter != "All":
+        entries = [e for e in entries if str(e["date"]).startswith(year_filter)]
+
+    if not entries:
+        st.caption("No entries match the selected filters.")
+        return
+
+    upcoming_count = 0
+    for e in entries:
+        dt, _ = _parse_cal_date(e["date"])
+        if dt and today <= dt <= horizon:
+            upcoming_count += 1
+
+    if upcoming_count:
+        st.markdown(
+            f'<div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);'
+            f'border-radius:7px;padding:8px 14px;margin-bottom:12px;font-size:12px;color:#ef4444">'
+            f'⚠️ <strong>{upcoming_count} deadline{"s" if upcoming_count>1 else ""}</strong> '
+            f'within the next 90 days</div>',
+            unsafe_allow_html=True,
+        )
+
+    for e in entries:
+        dt, date_display = _parse_cal_date(e["date"])
+        is_upcoming = bool(dt and today <= dt <= horizon)
+        is_past     = bool(dt and dt < today)
+
+        prio    = e.get("priority", "Medium")
+        etype   = e.get("type", "")
+        pcolor  = _PRIO_C.get(prio, "#8392bb")
+        pbg     = _PRIO_BG.get(prio, "transparent")
+        tcolor  = _TYPE_C.get(etype, "#8392bb")
+        border_color = "#ef4444" if is_upcoming else (pcolor + "55")
+        date_color   = "#ef4444" if is_upcoming else ("#5a6488" if is_past else "#c8d0e8")
+
+        upcoming_badge = (
+            '<span style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.4);'
+            'border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">⚠️ Upcoming</span>'
+            if is_upcoming else ""
+        )
+        past_badge = (
+            '<span style="background:rgba(90,100,136,0.12);color:#5a6488;border:1px solid rgba(90,100,136,0.25);'
+            'border-radius:4px;padding:1px 7px;font-size:10px;font-weight:500;margin-left:6px">Past</span>'
+            if is_past else ""
+        )
+
+        examples_html = "".join(
+            f'<li style="margin-bottom:3px;color:#8392bb;font-style:italic">{ex}</li>'
+            for ex in (e.get("examples") or [])
+        )
+
+        st.markdown(f"""
+        <div style="border:1px solid {border_color};border-radius:9px;padding:14px 18px;
+                    margin-bottom:10px;background:{pbg if is_upcoming else 'rgba(19,23,42,0.4)'}">
+          <div style="display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+            <span style="background:{tcolor}22;color:{tcolor};border:1px solid {tcolor}44;
+                  border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;white-space:nowrap">{etype}</span>
+            <span style="background:{pcolor}18;color:{pcolor};border:1px solid {pcolor}33;
+                  border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;white-space:nowrap">{prio}</span>
+            <span style="background:rgba(79,126,248,0.08);color:#7fa8fb;border:1px solid rgba(79,126,248,0.2);
+                  border-radius:4px;padding:2px 8px;font-size:10px;font-weight:600;white-space:nowrap">{e.get("jurisdiction","")}</span>
+            <span style="font-size:13px;font-weight:600;color:#dde3f5;flex:1">{e.get("reg_id","")} — {e.get("regulation","")}</span>
+            <span style="font-size:12px;font-weight:700;color:{date_color};white-space:nowrap">{date_display}{upcoming_badge}{past_badge}</span>
+          </div>
+          <p style="font-size:12px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{e.get("description","")}</p>
+          <details>
+            <summary style="font-size:11.5px;color:#7fa8fb;cursor:pointer;font-weight:500">Impact · Action required · Audit relevance</summary>
+            <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+              <div>
+                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Impact — Private Banking</div>
+                <p style="font-size:11.5px;color:var(--text-secondary);margin:0;line-height:1.65">{e.get("impact_private_banking","")}</p>
+              </div>
+              <div>
+                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Action Required</div>
+                <p style="font-size:11.5px;color:var(--text-secondary);margin:0;line-height:1.65">{e.get("action_required","")}</p>
+              </div>
+              <div>
+                <div style="font-size:10px;font-weight:700;color:#7fa8fb;margin-bottom:4px;text-transform:uppercase">Audit Relevance</div>
+                <p style="font-size:11.5px;color:#a8b4d8;margin:0;line-height:1.65">{e.get("audit_relevance","")}</p>
+              </div>
+            </div>
+          </details>
+        </div>""", unsafe_allow_html=True)
+
+
+# ── HNWI Red Flags helper ─────────────────────────────────────────────────────
+def _show_red_flags(cat_filter="All", level_filter="All", search=""):
+    """Render HNWI_RED_FLAGS with filters, coloured badges, and italic examples."""
+    _RL_C  = {"Critical": "#ef4444", "High": "#f97316", "Medium": "#eab308"}
+    _RL_BG = {"Critical": "rgba(239,68,68,0.07)", "High": "rgba(249,115,22,0.07)", "Medium": "rgba(234,179,8,0.06)"}
+    _CAT_C = {"AML": "#7fa8fb", "Fraud": "#ef4444", "Suitability": "#a78bfa", "Tax": "#22d3a5", "Conduct": "#f97316"}
+
+    entries = list(HNWI_RED_FLAGS)
+    if cat_filter   != "All": entries = [e for e in entries if e["category"] == cat_filter]
+    if level_filter != "All": entries = [e for e in entries if e["risk_level"] == level_filter]
+    if search:
+        q = search.lower()
+        entries = [e for e in entries if q in (e.get("title","") + e.get("description","") + e.get("private_banking_context","")).lower()]
+
+    if not entries:
+        st.caption("No red flags match the selected filters.")
+        return
+
+    for e in entries:
+        rl  = e.get("risk_level", "High")
+        cat = e.get("category", "")
+        rc  = _RL_C.get(rl, "#8392bb")
+        rbg = _RL_BG.get(rl, "transparent")
+        cc  = _CAT_C.get(cat, "#8392bb")
+
+        examples_html = "".join(
+            f'<li style="color:#6b7899;font-style:italic;font-size:11.5px;margin-bottom:2px">{ex}</li>'
+            for ex in (e.get("examples") or [])
+        )
+
+        st.markdown(f"""
+        <div style="border:1px solid {rc}33;border-radius:9px;padding:13px 17px;margin-bottom:10px;background:{rbg}">
+          <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px">
+            <span style="background:{rc}20;color:{rc};border:1px solid {rc}44;border-radius:4px;
+                  padding:2px 8px;font-size:10px;font-weight:700">{rl}</span>
+            <span style="background:{cc}18;color:{cc};border:1px solid {cc}33;border-radius:4px;
+                  padding:2px 8px;font-size:10px;font-weight:600">{cat}</span>
+            <span style="font-size:13px;font-weight:600;color:#dde3f5">{e.get("rf_id","")} — {e.get("title","")}</span>
+          </div>
+          <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{e.get("description","")}</p>
+          <details>
+            <summary style="font-size:11.5px;color:#7fa8fb;cursor:pointer;font-weight:500">Detection · Regulation · PB context · Examples</summary>
+            <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Detection Method</div>
+                <p style="font-size:11.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.65">{e.get("detection_method","")}</p>
+                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Regulatory Reference</div>
+                <p style="font-size:11.5px;color:#a8b4d8;margin:0;line-height:1.65">{e.get("regulatory_reference","")}</p>
+              </div>
+              <div>
+                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Private Banking Context</div>
+                <p style="font-size:11.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.65">{e.get("private_banking_context","")}</p>
+                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Examples</div>
+                <ul style="margin:0;padding-left:15px;line-height:1.8">{examples_html}</ul>
+              </div>
+            </div>
+          </details>
+        </div>""", unsafe_allow_html=True)
+
+
+# ── Thematic Background helper ────────────────────────────────────────────────
+def _show_thematic_background(theme_key: str):
+    """Render a THEMATIC_BACKGROUND card with all subsections."""
+    _SEC_C  = "#7fa8fb"
+    _SEC_BG = "rgba(79,126,248,0.06)"
+
+    card = THEMATIC_BACKGROUND.get(theme_key)
+    if not card:
+        available = ", ".join(k.replace("_", " ").title() for k in THEMATIC_BACKGROUND)
+        st.markdown(
+            f'<div style="background:rgba(234,179,8,0.07);border:1px solid rgba(234,179,8,0.3);'
+            f'border-radius:8px;padding:14px 18px">'
+            f'<p style="color:#eab308;font-size:12.5px;margin:0 0 6px;font-weight:600">'
+            f'⚠️ No thematic profile found for this topic.</p>'
+            f'<p style="color:#c8d0e8;font-size:12px;margin:0">Available themes: '
+            f'<span style="color:#7fa8fb">{available}</span></p></div>',
+            unsafe_allow_html=True,
+        )
+        return
+
+    def _section(icon, label, content, is_list=False):
+        if is_list:
+            items = "".join(
+                f'<li style="margin-bottom:5px;color:var(--text-secondary);font-size:12px;line-height:1.65">{s}</li>'
+                for s in content
+            )
+            body = f'<ul style="margin:0;padding-left:18px">{items}</ul>'
+        else:
+            body = f'<p style="font-size:12.5px;color:var(--text-secondary);margin:0;line-height:1.8;white-space:pre-line">{content}</p>'
+        st.markdown(
+            f'<div style="background:{_SEC_BG};border-left:3px solid {_SEC_C}33;'
+            f'border-radius:0 7px 7px 0;padding:12px 16px;margin-bottom:10px">'
+            f'<div style="font-size:11px;font-weight:700;color:{_SEC_C};text-transform:uppercase;'
+            f'letter-spacing:0.5px;margin-bottom:6px">{icon} {label}</div>'
+            f'{body}</div>',
+            unsafe_allow_html=True,
+        )
+
+    st.markdown(
+        f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'
+        f'<span style="font-size:15px;font-weight:700;color:#dde3f5">{card.get("theme","")}</span>'
+        f'<span style="background:rgba(34,211,165,0.1);color:#22d3a5;border:1px solid rgba(34,211,165,0.25);'
+        f'border-radius:4px;padding:1px 8px;font-size:10px;font-weight:600">Static Intelligence</span>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+    _section("🌍", "Market Context",           card.get("market_context", ""))
+    _section("🏦", "Private Banking Issues",   card.get("private_banking_issues", ""))
+    _section("⚖️", "Regulatory Pressure",       card.get("regulatory_pressure", ""))
+    _section("📈", "Industry Trends",           card.get("industry_trends", ""))
+    _section("⚠️", "Peer Incidents",            card.get("peer_incidents", ""))
+    _section("📊", "Key Statistics",            card.get("key_statistics", []), is_list=True)
+    _section("💡", "Strategic Angle",           card.get("mckinsey_angle", ""))
 
 
 def _show_regulatory_frameworks(jur_filter: str = "All", search: str = ""):
@@ -1724,6 +1967,26 @@ with tab0:
                     st.markdown(f'<div style="font-size:12px;font-weight:600;color:#7fa8fb;margin:10px 0 4px">{_t}</div>', unsafe_allow_html=True)
                 _show_pub_recs(theme=_t, search=_rec_sq)
 
+        with st.expander("📅 D — Regulatory Calendar 2025–2026", expanded=False):
+            _cal_juris  = sorted({e["jurisdiction"] for e in REGULATORY_CALENDAR})
+            _cal_types  = sorted({e["type"] for e in REGULATORY_CALENDAR})
+            _cal_prios  = ["High", "Medium", "Low"]
+            st.markdown(
+                f'<div class="section-title">D. Regulatory Calendar 2025–2026'
+                f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
+                f'{len(REGULATORY_CALENDAR)} entries · CH · EU · UK · SG · HK · Global</span></div>',
+                unsafe_allow_html=True,
+            )
+            _cal_c1, _cal_c2, _cal_c3, _cal_c4 = st.columns([1.4, 2, 1.2, 1.2])
+            _cal_jur  = _cal_c1.selectbox("Jurisdiction", ["All"] + _cal_juris, key="_cal_jur",  label_visibility="collapsed")
+            _cal_type = _cal_c2.selectbox("Type",         ["All"] + _cal_types,  key="_cal_type", label_visibility="collapsed")
+            _cal_prio = _cal_c3.selectbox("Priority",     ["All"] + _cal_prios,  key="_cal_prio", label_visibility="collapsed")
+            _cal_year = _cal_c4.selectbox("Year",         ["All", "2025", "2026"], key="_cal_year", label_visibility="collapsed")
+            _show_regulatory_calendar(
+                jur_filter=_cal_jur, type_filter=_cal_type,
+                prio_filter=_cal_prio, year_filter=_cal_year,
+            )
+
         st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
         _print_button()
         st.markdown("</div>", unsafe_allow_html=True)
@@ -1972,6 +2235,20 @@ with tab1:
             _pr_sq = _pr_c1.text_input("Search recommendations", placeholder="Filter…", key="_pr_sq", label_visibility="collapsed")
             _pr_ssrc = _pr_c2.selectbox("Source", ["All"] + _all_rec_sources, key="_pr_ssrc", label_visibility="collapsed")
             _show_pub_recs(_t1_theme, search=_pr_sq)
+
+        _rf_cats = sorted({e["category"] for e in HNWI_RED_FLAGS})
+        with st.expander("🚨 C — HNWI Red Flags", expanded=False):
+            st.markdown(
+                f'<div class="section-title">C. HNWI Red Flags — Private Banking'
+                f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
+                f'{len(HNWI_RED_FLAGS)} red flags · AML · Fraud · Suitability · Tax · Conduct</span></div>',
+                unsafe_allow_html=True,
+            )
+            _rf_c1, _rf_c2, _rf_c3 = st.columns([3, 1.5, 1.5])
+            _rf_sq   = _rf_c1.text_input("Search red flags", placeholder="Filter red flags…", key="_rf_sq",   label_visibility="collapsed")
+            _rf_scat = _rf_c2.selectbox("Category", ["All"] + _rf_cats,                        key="_rf_scat", label_visibility="collapsed")
+            _rf_slv  = _rf_c3.selectbox("Risk Level", ["All", "Critical", "High", "Medium"],    key="_rf_slv",  label_visibility="collapsed")
+            _show_red_flags(cat_filter=_rf_scat, level_filter=_rf_slv, search=_rf_sq)
 
         st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
         _print_button()
@@ -2235,9 +2512,16 @@ with tab2:
 
         st.markdown(_EXAMPLE_RATIONALE, unsafe_allow_html=True)
 
-        with st.expander("🗂️ A — Audit Tests Library", expanded=True):
+        with st.expander("📖 A — Rationale & Thematic Background", expanded=True):
             st.markdown(
-                f'<div class="section-title">A. Audit Tests Library — {_t2_theme_label}'
+                f'<div class="section-title">A. Rationale &amp; Thematic Background — {_t2_theme_label}</div>',
+                unsafe_allow_html=True,
+            )
+            _show_thematic_background(_t2_theme)
+
+        with st.expander("🗂️ B — Audit Tests Library", expanded=False):
+            st.markdown(
+                f'<div class="section-title">B. Audit Tests Library — {_t2_theme_label}'
                 f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{_n_tests} tests available for this topic</span></div>',
                 unsafe_allow_html=True,
             )
@@ -2248,9 +2532,9 @@ with tab2:
             _tl_stype = _tl_c3.selectbox("Type", ["All", "Standard", "Data Analytics"], key="_tl_stype", label_visibility="collapsed")
             _show_tests_library(_t2_theme, search=_tl_sq, level_filter=_tl_slv, type_filter=_tl_stype)
 
-        with st.expander("📊 B — Data Analytics Scenarios", expanded=False):
+        with st.expander("📊 C — Data Analytics Scenarios", expanded=False):
             st.markdown(
-                f'<div class="section-title">B. Data Analytics Scenarios — {_t2_theme_label}'
+                f'<div class="section-title">C. Data Analytics Scenarios — {_t2_theme_label}'
                 f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{_n_da} scenarios</span></div>',
                 unsafe_allow_html=True,
             )
