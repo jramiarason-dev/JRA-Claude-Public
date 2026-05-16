@@ -46,9 +46,9 @@ _SS_DEFAULTS = {
     # Static data
     "dash_source": "static",   # "static" | "live"
     "ref_search": "",
-    "t1_mode": "live",   # "live" | "static"
-    "t2_mode": "live",
-    "t3_mode": "live",
+    "mode_tab1": "📚 Static Reference Data",
+    "mode_tab2": "📚 Static Reference Data",
+    "mode_tab3": "📚 Static Reference Data",
 }
 for _k, _v in _SS_DEFAULTS.items():
     if _k not in st.session_state:
@@ -492,6 +492,31 @@ st.markdown("""
     .data-table td, .data-table th { border: 1px solid #ccc !important; color: #000 !important; }
     .section-title { color: #000 !important; }
   }
+
+  /* ── Mode toggle radio ── */
+  div[data-testid="stRadio"] > div {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    background: #13172a;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 6px 10px;
+    width: fit-content;
+  }
+  div[data-testid="stRadio"] label {
+    color: #5a6488;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  div[data-testid="stRadio"] label:has(input:checked) {
+    background: #1e2a45;
+    color: #7fa8fb;
+    font-weight: 600;
+  }
 </style>
 """, unsafe_allow_html=True)
 
@@ -930,18 +955,23 @@ def _show_cve_static(search: str = "", sev_filter: str = "All"):
     </table>""", unsafe_allow_html=True)
 
 
-def _mode_toggle(key: str, label_live: str = "⚡ Live Analysis", label_static: str = "📚 Static Reference Data"):
-    """Render a two-button toggle for live vs static mode. Updates session_state[key] on click."""
-    _cur = st.session_state.get(key, "live")
-    _c1, _c2, _ = st.columns([1.4, 1.9, 4])
-    if _c1.button(label_live, key=f"_toggle_{key}_live",
-                  type="primary" if _cur == "live" else "secondary"):
-        st.session_state[key] = "live"
-        st.rerun()
-    if _c2.button(label_static, key=f"_toggle_{key}_static",
-                  type="primary" if _cur == "static" else "secondary"):
-        st.session_state[key] = "static"
-        st.rerun()
+_MODE_STATIC = "📚 Static Reference Data"
+_MODE_LIVE   = "⚡ Live Analysis"
+
+
+def render_mode_toggle(tab_key: str) -> str:
+    """Uniform mode toggle using st.radio(). Returns 'static' or 'live'."""
+    if tab_key not in st.session_state:
+        st.session_state[tab_key] = _MODE_STATIC
+    selected = st.radio(
+        "Mode",
+        options=[_MODE_STATIC, _MODE_LIVE],
+        key=tab_key,
+        horizontal=True,
+        label_visibility="collapsed",
+    )
+    st.divider()
+    return "static" if selected == _MODE_STATIC else "live"
 
 
 def _show_tests_library(theme: str, search: str = "", level_filter: str = "All", type_filter: str = "All"):
@@ -1828,7 +1858,7 @@ with tab0:
 # ─────────────────────────────────────────────────────────────────────────────
 with tab1:
     st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">Risk mapping, applicable regulations, and public audit recommendations by topic.</p>', unsafe_allow_html=True)
-    _mode_toggle("t1_mode")
+    _t1_mode = render_mode_toggle("mode_tab1")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
 
     # Quick Start Template
@@ -1873,7 +1903,7 @@ with tab1:
         st.warning("⚠ Please select at least one jurisdiction.")
         _t1_valid = False
 
-    if st.session_state.t1_mode == "static":
+    if _t1_mode == "static":
         # ── Static Reference Data mode ─────────────────────────────────────────
         _static_label()
         _t1_theme = _topic_to_theme(audit_topic) if audit_topic else "AML_KYC"
@@ -1947,7 +1977,7 @@ with tab1:
         _print_button()
         st.markdown("</div>", unsafe_allow_html=True)
 
-    if st.session_state.t1_mode == "live":
+    if _t1_mode == "live":
         if st.button("Analyze", type="primary", disabled=_disabled or not audit_topic or not _t1_valid, key="t1_run"):
             with st.spinner("Analyzing…"):
                 try:
@@ -2036,7 +2066,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     st.error("An error occurred. Please try again.")
 
     # Results (live mode only)
-    if st.session_state.t1_mode == "live" and (st.session_state.t1_risks or st.session_state.t1_regs):
+    if _t1_mode == "live" and (st.session_state.t1_risks or st.session_state.t1_regs):
         topic_lbl = st.session_state.t1_topic or "audit"
         st.markdown("---")
 
@@ -2135,7 +2165,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
 # ─────────────────────────────────────────────────────────────────────────────
 with tab2:
     st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">Structured audit planning, test programme, and data analytics scenarios.</p>', unsafe_allow_html=True)
-    _mode_toggle("t2_mode")
+    _t2_mode = render_mode_toggle("mode_tab2")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
 
     if st.session_state.t1_topic:
@@ -2194,7 +2224,7 @@ with tab2:
           <div style="margin-top:8px;font-size:11px;color:#5a6488">See Tab 3 → IIA Standards Reference → {_t2_tr_match['standard_id']} for full requirements with framework mapping.</div>
         </div>""", unsafe_allow_html=True)
 
-    if st.session_state.t2_mode == "static":
+    if _t2_mode == "static":
         # ── Static Reference Data mode ─────────────────────────────────────────
         _static_label()
         _t2_theme = _topic_to_theme(topic2) if topic2 else "CYBER_RISK"
@@ -2233,7 +2263,7 @@ with tab2:
         _print_button()
         st.markdown("</div>", unsafe_allow_html=True)
 
-    if st.session_state.t2_mode == "live":
+    if _t2_mode == "live":
         if st.button("Generate Plan", type="primary", disabled=_disabled or not topic2 or not _t2_valid, key="t2_run"):
             with st.spinner("Generating…"):
                 try:
@@ -2349,7 +2379,7 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                     st.error("An error occurred. Please try again.")
 
     # Results (live mode only)
-    if st.session_state.t2_mode == "live" and st.session_state.t2_rationale:
+    if _t2_mode == "live" and st.session_state.t2_rationale:
         topic2_lbl = st.session_state.t1_topic or topic2 or "audit"
         st.markdown("---")
 
@@ -2418,10 +2448,10 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
 # ─────────────────────────────────────────────────────────────────────────────
 with tab3:
     st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">Formal IIA-standard audit report in English.</p>', unsafe_allow_html=True)
-    _mode_toggle("t3_mode")
+    _t3_mode = render_mode_toggle("mode_tab3")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
 
-    if st.session_state.t3_mode == "static":
+    if _t3_mode == "static":
         # ── Static Reference Data mode ─────────────────────────────────────────
         _static_label()
         _t3_jurs = st.session_state.get("t1_jurs") or list(REGULATORY_FRAMEWORKS.keys())[:3]
@@ -2488,7 +2518,7 @@ with tab3:
         _print_button()
         st.markdown("</div>", unsafe_allow_html=True)
 
-    if st.session_state.t3_mode == "live":
+    if _t3_mode == "live":
         ctx_parts = []
         if st.session_state.t1_topic:
             ctx_parts.append(f"✓ Topic: {st.session_state.t1_topic}")
