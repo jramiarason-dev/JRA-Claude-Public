@@ -9771,3 +9771,416 @@ HNWI_RED_FLAGS = [
     },
 
 ]
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# MANAGEMENT_ACTION_TEMPLATES
+# Suggested management actions per audit theme — Swiss private banking context
+# ═══════════════════════════════════════════════════════════════════════════════
+
+MANAGEMENT_ACTION_TEMPLATES = {
+    "AML_KYC": [
+        {
+            "action": "Deploy automated PEP and sanctions screening tool integrated with real-time watchlists (e.g. World-Check, Dow Jones) and configure daily refresh cycles",
+            "owner": "Chief Compliance Officer",
+            "due": "3 months",
+        },
+        {
+            "action": "Review and update the AML/KYC policy framework to ensure full alignment with FATF 40 Recommendations, FINMA-RS 2011/1 and the revised Anti-Money Laundering Act (AMLA)",
+            "owner": "Compliance / Legal",
+            "due": "2 months",
+        },
+        {
+            "action": "Design and deliver mandatory Enhanced Due Diligence (EDD) training for all Relationship Managers, covering red-flag identification, source-of-wealth documentation and escalation procedures",
+            "owner": "HR / Compliance",
+            "due": "1 month",
+        },
+        {
+            "action": "Initiate a 100% retrospective KYC file review for all High-Risk and PEP client relationships, documenting remediation actions and escalating unresolved gaps to the MLRO within 10 business days",
+            "owner": "Compliance / Business Lines",
+            "due": "3 months",
+        },
+        {
+            "action": "Establish a formalised Suspicious Transaction Report (STR) escalation workflow with documented decision trees, mandatory senior Compliance sign-off and Board-level reporting metrics",
+            "owner": "MLRO",
+            "due": "2 months",
+        },
+    ],
+    "CYBER_RISK": [
+        {
+            "action": "Commission an independent penetration test of all internet-facing systems and critical internal infrastructure, with findings tracked to closure in the risk register within agreed remediation SLAs",
+            "owner": "Chief Information Security Officer",
+            "due": "3 months",
+        },
+        {
+            "action": "Implement privileged access management (PAM) controls including just-in-time access provisioning, session recording and quarterly recertification of all privileged accounts",
+            "owner": "IT Security / IT Operations",
+            "due": "3 months",
+        },
+        {
+            "action": "Develop and test a cyber incident response playbook covering ransomware, data exfiltration and DDoS scenarios, with defined FINMA notification timelines in line with DORA Article 19",
+            "owner": "CISO / Business Continuity",
+            "due": "2 months",
+        },
+        {
+            "action": "Roll out mandatory phishing-simulation training for all staff on a quarterly basis, with targeted awareness sessions for employees who fail simulations",
+            "owner": "HR / Information Security",
+            "due": "1 month",
+        },
+        {
+            "action": "Establish a third-party cyber risk assessment process requiring all critical technology vendors to complete an annual security questionnaire aligned to ISO/IEC 27001 and FINMA ICT outsourcing guidelines",
+            "owner": "CISO / Procurement",
+            "due": "3 months",
+        },
+    ],
+    "CREDIT_RISK": [
+        {
+            "action": "Introduce an automated Lombard lending margin-call workflow with real-time collateral valuation feeds, mandatory RM notification within 24 hours and escalation triggers to the Credit Risk Committee",
+            "owner": "Chief Risk Officer / Credit Risk",
+            "due": "3 months",
+        },
+        {
+            "action": "Conduct a full review of the credit concentration framework, setting single-name, sector and asset-class limits consistent with FINMA-RS 2019/1 large-exposure rules and Board-approved risk appetite",
+            "owner": "Credit Risk / Finance",
+            "due": "2 months",
+        },
+        {
+            "action": "Implement an independent annual review cycle for all credit facilities exceeding CHF 5 million, with mandatory reassessment of client financial position, collateral adequacy and covenant compliance",
+            "owner": "Credit Risk Committee",
+            "due": "6 months",
+        },
+        {
+            "action": "Update loan-loss provisioning methodology to align with IFRS 9 expected credit loss (ECL) requirements, including model validation by an independent internal or external reviewer",
+            "owner": "Finance / Risk Management",
+            "due": "3 months",
+        },
+        {
+            "action": "Design and execute stress-test scenarios for the Lombard and mortgage portfolios assuming equity drawdowns of 30%, interest rate rises of 200 bps and currency shocks of 15%, with results reported to the Board Risk Committee",
+            "owner": "CRO / Treasury",
+            "due": "2 months",
+        },
+    ],
+    "OPERATIONAL_RISK": [
+        {
+            "action": "Complete a comprehensive Risk and Control Self-Assessment (RCSA) across all business lines, with risk owners formally attesting to residual risk ratings and control effectiveness on a semi-annual basis",
+            "owner": "Operational Risk / Business Lines",
+            "due": "3 months",
+        },
+        {
+            "action": "Update the Business Continuity Plan (BCP) and IT Disaster Recovery (DR) procedures to reflect current infrastructure, with a full end-to-end simulation exercise validated by senior management",
+            "owner": "Business Continuity Management",
+            "due": "3 months",
+        },
+        {
+            "action": "Establish a centralised operational loss-event database with mandatory reporting thresholds, root-cause analysis requirements and escalation protocols to the Operational Risk Committee",
+            "owner": "Operational Risk",
+            "due": "2 months",
+        },
+        {
+            "action": "Review all material outsourcing arrangements against FINMA-RS 2017/6 requirements, ensuring written contracts include audit rights, business-continuity obligations and exit strategies",
+            "owner": "Compliance / Procurement / Legal",
+            "due": "3 months",
+        },
+        {
+            "action": "Implement an end-to-end process for capturing, assessing and tracking Key Risk Indicators (KRIs) with breach-reporting workflows feeding into quarterly Board Risk Committee reporting",
+            "owner": "CRO / Operational Risk",
+            "due": "2 months",
+        },
+    ],
+    "DATA_PRIVACY": [
+        {
+            "action": "Conduct a gap analysis between current data handling practices and the Swiss nDSG (Federal Act on Data Protection, revised 2023) requirements, producing a remediation roadmap with ownership and target dates",
+            "owner": "Data Protection Officer / Legal",
+            "due": "2 months",
+        },
+        {
+            "action": "Implement a data-subject rights management platform to handle access, rectification and erasure requests within statutory 30-day response deadlines, with audit trails for every request",
+            "owner": "DPO / IT",
+            "due": "3 months",
+        },
+        {
+            "action": "Establish a comprehensive Records of Processing Activities (RoPA) register covering all personal data flows, with annual review and mandatory sign-off by business process owners",
+            "owner": "DPO / Business Lines",
+            "due": "3 months",
+        },
+        {
+            "action": "Embed Privacy by Design review checkpoints into the project delivery lifecycle, requiring a Data Protection Impact Assessment (DPIA) for all new systems processing client personal data",
+            "owner": "DPO / Project Management",
+            "due": "2 months",
+        },
+        {
+            "action": "Review and update all cross-border data transfer agreements (including Standard Contractual Clauses) to ensure compliance with nDSG adequacy requirements and FINMA cross-border data transfer guidance",
+            "owner": "Legal / Compliance",
+            "due": "3 months",
+        },
+    ],
+    "MARKET_RISK": [
+        {
+            "action": "Calibrate and independently validate the Value-at-Risk (VaR) model using a minimum three-year historical data set, with backtesting results reported monthly to the Market Risk Committee",
+            "owner": "Market Risk / Model Validation",
+            "due": "3 months",
+        },
+        {
+            "action": "Define and implement Interest Rate Risk in the Banking Book (IRRBB) limits aligned with BIS Standards (April 2016) and FINMA-RS 2019/2, with sensitivity analysis reviewed quarterly by ALCO",
+            "owner": "Treasury / ALCO",
+            "due": "3 months",
+        },
+        {
+            "action": "Develop a stressed market scenario library covering equity crashes, FX dislocations and credit spread widening, and integrate results into the ICAAP capital planning process",
+            "owner": "Risk Management / Finance",
+            "due": "2 months",
+        },
+        {
+            "action": "Establish real-time trading-desk limit monitoring with automated breach alerts, mandatory RM and desk-head sign-off on breaches and next-day reporting to senior management",
+            "owner": "Market Risk / Front Office",
+            "due": "2 months",
+        },
+        {
+            "action": "Prepare the bank for FRTB (Fundamental Review of the Trading Book) Standardised Approach reporting, including a data-quality remediation programme and parallel-run timeline agreed with the CFO",
+            "owner": "CRO / Finance / IT",
+            "due": "6 months",
+        },
+    ],
+    "THIRD_PARTY_RISK": [
+        {
+            "action": "Develop and implement a Third-Party Risk Management (TPRM) framework covering initial due diligence, ongoing monitoring and annual re-assessment of all critical and non-critical vendors",
+            "owner": "Procurement / Risk Management",
+            "due": "3 months",
+        },
+        {
+            "action": "Ensure all material outsourcing contracts include mandatory audit-rights clauses, data-security requirements, business-continuity obligations and termination/exit strategies in line with FINMA-RS 2017/6",
+            "owner": "Legal / Procurement",
+            "due": "3 months",
+        },
+        {
+            "action": "Establish a vendor concentration risk register identifying single points of failure in critical service supply chains, and define contingency plans for the top-five highest-risk vendors",
+            "owner": "CRO / Procurement",
+            "due": "2 months",
+        },
+        {
+            "action": "Implement a continuous performance and compliance monitoring programme for Tier-1 vendors, including quarterly SLA reporting, on-site review rights and escalation procedures for material breaches",
+            "owner": "Vendor Management / Compliance",
+            "due": "3 months",
+        },
+        {
+            "action": "Conduct an immediate review of fourth-party (sub-contractor) exposure across all critical outsourced functions, documenting concentration risk and presenting findings to the Board Audit Committee",
+            "owner": "Risk Management / Procurement",
+            "due": "2 months",
+        },
+    ],
+    "GOVERNANCE": [
+        {
+            "action": "Formalise a Three Lines of Defence model with clearly documented mandates, escalation paths and accountability matrices, approved by the Board and reviewed annually",
+            "owner": "Board / Chief Risk Officer",
+            "due": "2 months",
+        },
+        {
+            "action": "Strengthen the Internal Audit Charter to reflect IIA International Standards (2024 edition), ensuring organisational independence, unrestricted access and direct reporting line to the Board Audit Committee",
+            "owner": "Chief Audit Executive",
+            "due": "1 month",
+        },
+        {
+            "action": "Implement a Board-level Risk Appetite Statement (RAS) with quantitative thresholds for each material risk category, reviewed and formally approved at least annually and cascaded to business-line risk limits",
+            "owner": "Board / CRO",
+            "due": "3 months",
+        },
+        {
+            "action": "Establish a formal Management Action tracking system for all internal audit, regulatory and external review findings, with mandatory evidence submission, escalation of overdue items and quarterly BAC reporting",
+            "owner": "Internal Audit / Compliance",
+            "due": "2 months",
+        },
+        {
+            "action": "Design and deliver a Board-level financial crime and governance training programme, covering directors' personal liability, FINMA supervisory expectations and the bank's internal risk culture framework",
+            "owner": "Legal / Compliance / HR",
+            "due": "3 months",
+        },
+    ],
+    "CROSS_BORDER": [
+        {
+            "action": "Conduct a jurisdiction-by-jurisdiction mapping of all client bookings to identify markets where the bank lacks a valid licence or local law exemption, and escalate findings to Legal and senior management within 30 days",
+            "owner": "Legal / Compliance",
+            "due": "1 month",
+        },
+        {
+            "action": "Establish a Cross-Border Services Committee with documented approval procedures, country-specific risk assessments and annual renewal of the permitted-activities register for each target market",
+            "owner": "Compliance / Legal / Business",
+            "due": "3 months",
+        },
+        {
+            "action": "Implement mandatory pre-travel compliance clearance for all Relationship Managers undertaking client visits abroad, with documented country risk assessments and records retained for regulatory inspection",
+            "owner": "Compliance / HR",
+            "due": "2 months",
+        },
+        {
+            "action": "Review marketing materials and digital communications sent to foreign clients to ensure compliance with local solicitation rules, with legal sign-off required before dissemination in restricted jurisdictions",
+            "owner": "Legal / Marketing",
+            "due": "2 months",
+        },
+        {
+            "action": "Engage external local counsel in the top-five cross-border booking markets to obtain written opinions on the bank's permitted activities, and incorporate findings into the annual compliance risk assessment",
+            "owner": "Legal / Compliance",
+            "due": "3 months",
+        },
+    ],
+    "INVESTMENT_SUITABILITY": [
+        {
+            "action": "Implement system-level suitability pre-trade checks that block or flag transactions inconsistent with the client's documented risk profile, investment horizon and MiFID II / LSFin appropriateness criteria before order execution",
+            "owner": "Chief Investment Officer / IT",
+            "due": "3 months",
+        },
+        {
+            "action": "Conduct a retrospective review of discretionary mandates over the past 12 months to identify concentration breaches, style drift and undocumented deviations from mandate guidelines, with findings reported to the Investment Committee",
+            "owner": "Investment Risk / Compliance",
+            "due": "2 months",
+        },
+        {
+            "action": "Revise the client risk-profiling questionnaire to capture liquidity needs, sustainability preferences and capacity for loss, with mandatory annual re-assessment and event-driven updates for material life changes",
+            "owner": "Compliance / Business Lines",
+            "due": "2 months",
+        },
+        {
+            "action": "Establish a product-governance framework requiring formal approval of all new investment products through an in-house Product Approval Committee before distribution, incorporating target-market analysis and stress-testing",
+            "owner": "Product Management / Compliance",
+            "due": "3 months",
+        },
+        {
+            "action": "Implement a complaints management and root-cause analysis process for all suitability-related client complaints, with monthly reporting to senior management and regulatory notifications where required under LSFin",
+            "owner": "Compliance / Client Relations",
+            "due": "2 months",
+        },
+    ],
+    "TAX_COMPLIANCE": [
+        {
+            "action": "Conduct a comprehensive review of all client accounts subject to CRS and FATCA reporting to identify gaps in self-certifications, TIN collection and reportable account classification, and remediate prior to the next annual submission deadline",
+            "owner": "Tax / Compliance",
+            "due": "3 months",
+        },
+        {
+            "action": "Implement a systematic QI (Qualified Intermediary) compliance monitoring programme, including annual testing of withholding procedures, Form 1042-S reconciliation and periodic review of the bank's QI agreement obligations",
+            "owner": "Tax / Finance",
+            "due": "3 months",
+        },
+        {
+            "action": "Update the bank's tax-risk policy to explicitly prohibit assistance with tax evasion structures, with mandatory legal and tax sign-off on all complex cross-border arrangements involving onshore/offshore fund flows",
+            "owner": "Legal / Tax / Compliance",
+            "due": "2 months",
+        },
+        {
+            "action": "Design and deliver annual tax-compliance training for all Relationship Managers covering CRS/FATCA self-certification requirements, the prohibition on facilitating tax evasion and escalation procedures for suspicious client requests",
+            "owner": "HR / Tax / Compliance",
+            "due": "1 month",
+        },
+        {
+            "action": "Engage external tax counsel to assess exposure under the OECD Pillar Two global minimum tax rules and DAC6 mandatory disclosure requirements, presenting a remediation plan to the CFO and Board Audit Committee",
+            "owner": "CFO / Tax / Legal",
+            "due": "3 months",
+        },
+    ],
+    "FRAUD": [
+        {
+            "action": "Deploy a real-time transaction fraud-detection engine with machine-learning-based anomaly scoring, integrated with the core banking system and configured to generate alerts for same-day review by the Fraud Operations team",
+            "owner": "Head of Fraud / IT Security",
+            "due": "3 months",
+        },
+        {
+            "action": "Establish a formal fraud-incident response playbook covering internal fraud, payment fraud, identity theft and social engineering, with defined escalation paths, regulatory notification timelines and client communication protocols",
+            "owner": "Compliance / Operations / Legal",
+            "due": "2 months",
+        },
+        {
+            "action": "Implement mandatory dual-authorisation controls for all high-value payments above CHF 500,000 and all changes to beneficiary account details, with system-enforced segregation of duties between initiation and approval",
+            "owner": "Operations / IT",
+            "due": "2 months",
+        },
+        {
+            "action": "Conduct a fraud-risk assessment across all client-facing digital channels, identifying social-engineering vulnerabilities, weak authentication controls and gaps in call-back verification for sensitive account changes",
+            "owner": "Fraud Risk / CISO",
+            "due": "2 months",
+        },
+        {
+            "action": "Introduce an anonymous whistleblowing channel (compliant with nDSG and Swiss employment law) with an independent investigation process, formal non-retaliation policy and quarterly reporting of cases to the Board Audit Committee",
+            "owner": "HR / Legal / Internal Audit",
+            "due": "3 months",
+        },
+    ],
+    "LIQUIDITY_RISK": [
+        {
+            "action": "Strengthen the Liquidity Coverage Ratio (LCR) monitoring framework to produce intraday liquidity positions for all material currencies, with automated breach alerts and same-day reporting to ALCO in stress conditions",
+            "owner": "Treasury / Risk Management",
+            "due": "2 months",
+        },
+        {
+            "action": "Develop a comprehensive Internal Liquidity Adequacy Assessment Process (ILAAP) aligned with FINMA expectations, incorporating multiple stress scenarios including name-specific, market-wide and combined shocks",
+            "owner": "CRO / Treasury / Finance",
+            "due": "3 months",
+        },
+        {
+            "action": "Review and formalise the Contingency Funding Plan (CFP), including identification of contingent liquidity sources, activation triggers, decision-making authorities and communication protocols with FINMA and counterparties",
+            "owner": "Treasury / ALCO",
+            "due": "2 months",
+        },
+        {
+            "action": "Implement funds-transfer pricing (FTP) framework that correctly attributes liquidity costs and benefits to business lines, ensuring incentive alignment and accurate product profitability measurement",
+            "owner": "Finance / Treasury",
+            "due": "6 months",
+        },
+        {
+            "action": "Conduct quarterly liquidity stress tests covering a 30-day severe stress horizon and a 12-month moderate stress scenario, with results reviewed by ALCO and summary reporting to the Board Risk Committee",
+            "owner": "Risk Management / Treasury",
+            "due": "3 months",
+        },
+    ],
+    "ESG": [
+        {
+            "action": "Develop and publish a TCFD-aligned Climate Risk Disclosure report covering physical and transition risk exposures across the investment portfolio and lending book, reviewed by an independent third party before publication",
+            "owner": "CRO / Sustainability / Finance",
+            "due": "6 months",
+        },
+        {
+            "action": "Establish ESG suitability assessment procedures for all discretionary and advisory mandates, integrating client sustainability preferences into the investment proposal process in line with LSFin Article 12 and Swiss Sustainable Finance guidelines",
+            "owner": "Compliance / Investment Management",
+            "due": "3 months",
+        },
+        {
+            "action": "Implement a greenwashing risk framework with pre-publication review of all ESG-labelled product marketing materials, fund fact-sheets and client communications, requiring sign-off by Compliance and the Sustainability team",
+            "owner": "Compliance / Sustainability / Marketing",
+            "due": "2 months",
+        },
+        {
+            "action": "Embed ESG and climate risk factors into the credit risk assessment framework for Lombard and mortgage portfolios, with Relationship Manager guidance on collateral haircuts for stranded-asset exposures",
+            "owner": "Credit Risk / Sustainability",
+            "due": "6 months",
+        },
+        {
+            "action": "Define the bank's net-zero commitment pathway including scope 1, 2 and 3 emissions baseline, interim reduction targets and Board-approved governance structure for annual progress reporting",
+            "owner": "Board / Sustainability / Finance",
+            "due": "12 months",
+        },
+    ],
+    "CRYPTO": [
+        {
+            "action": "Conduct a regulatory classification analysis for each crypto-asset type offered or held in custody, mapping instruments to applicable FINMA guidance (FINMA ICO Guidelines 2018, DLT Act 2021) and identifying any unlicensed activities",
+            "owner": "Legal / Compliance",
+            "due": "2 months",
+        },
+        {
+            "action": "Implement enhanced AML/KYC controls for crypto-asset transactions, including Travel Rule compliance (FATF Recommendation 16) and automated blockchain analytics tools to screen wallet addresses for illicit-fund exposure",
+            "owner": "Compliance / MLRO",
+            "due": "3 months",
+        },
+        {
+            "action": "Establish a crypto-asset custody risk framework covering private key management, cold/hot wallet segregation, multi-signature authorisation, insurance coverage and annual third-party security audit requirements",
+            "owner": "Operations / CISO / Risk Management",
+            "due": "3 months",
+        },
+        {
+            "action": "Develop a crypto-asset market-risk stress-testing methodology reflecting the asset class's extreme volatility (e.g. 80% drawdown scenarios), with results integrated into the ICAAP and reported to the Board Risk Committee",
+            "owner": "Market Risk / CRO",
+            "due": "3 months",
+        },
+        {
+            "action": "Produce a comprehensive client suitability and product-governance framework for crypto-asset services, ensuring appropriateness assessments, risk disclosures and execution-only safeguards comply with LSFin and FINMA expectations",
+            "owner": "Compliance / Product Management",
+            "due": "2 months",
+        },
+    ],
+}
