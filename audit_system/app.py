@@ -1231,6 +1231,14 @@ _STOPWORDS = {"the","a","an","and","or","of","for","in","to","is","are","be","th
               "at","by","as","its","from","it","this","that","if","any","no","each","per","must","will"}
 
 
+def _words(text: str) -> set:
+    """Tokenize text into lowercase words, filtering stopwords and short tokens."""
+    import re
+    if not text or not isinstance(text, str):
+        return set()
+    return {w for w in re.findall(r'[a-zA-Z]{3,}', text.lower()) if w not in _STOPWORDS}
+
+
 def _build_risk_test_map(theme: str, live_risks: list | None = None) -> dict:
     """Build test_id → {risk_id, risk_title, risk_level, control} mapping.
 
@@ -1243,9 +1251,6 @@ def _build_risk_test_map(theme: str, live_risks: list | None = None) -> dict:
 
     tests = AUDIT_TESTS_LIBRARY.get(theme, [])
     risks = live_risks if live_risks is not None else RISK_INDICATORS.get(theme, [])
-
-    def _words(text: str) -> set:
-        return {w for w in text.lower().split() if w not in _STOPWORDS and len(w) > 2}
 
     def _score(test, risk) -> int:
         t_words = _words(test.get("objective", "") + " " + test.get("procedure", ""))
@@ -2157,16 +2162,32 @@ def _classify_opinion(findings: list) -> tuple:
 
 
 def _get_best_risk(finding_text: str, theme: str) -> dict | None:
-    risks = RISK_INDICATORS.get(theme, [])
+    """Match a finding to the best risk in RISK_INDICATORS via keyword overlap."""
+    if not finding_text:
+        return None
+    # Normalise theme key
+    theme_key = theme.upper().replace(" ","_").replace("/","_").replace("-","_")
+    risks = RISK_INDICATORS.get(theme_key, [])
+    # Fallback: search all themes when theme has no risks
+    if not risks:
+        risks = [r for v in RISK_INDICATORS.values() for r in v]
     if not risks:
         return None
     t_words = _words(finding_text)
+    if not t_words:
+        return risks[0]
     best, best_s = risks[0], 0
     for r in risks:
-        s = len(t_words & _words(r.get("title","") + " " + " ".join(r.get("expected_controls",[]))))
-        if s > best_s:
-            best_s, best = s, r
-    return best
+        r_text = (r.get("title","") + " " + r.get("description","") + " " +
+                  " ".join(r.get("expected_controls",[])) + " " +
+                  " ".join(r.get("red_flags",[])))
+        r_words = _words(r_text)
+        if not r_words:
+            continue
+        score = len(t_words & r_words)
+        if score > best_s:
+            best_s, best = score, r
+    return best if best_s > 0 else risks[0]
 
 
 def _get_reg_refs(theme: str, jurisdictions: list) -> list:
@@ -2265,10 +2286,19 @@ def _assemble_report_static(findings_raw, topic, scope, jurisdictions,
     # Enrich each finding
     detailed = []
     for f in findings:
-        risk    = _get_best_risk(f["description"], f["theme"])
-        refs_f  = _get_reg_refs(f["theme"], jurs)
-        actions = (MANAGEMENT_ACTION_TEMPLATES.get(f["theme"]) or
-                   MANAGEMENT_ACTION_TEMPLATES.get("OPERATIONAL_RISK",[]))[:3]
+        try:
+            risk = _get_best_risk(f["description"], f["theme"])
+        except Exception:
+            risk = None
+        try:
+            refs_f = _get_reg_refs(f["theme"], jurs)
+        except Exception:
+            refs_f = []
+        try:
+            actions = (MANAGEMENT_ACTION_TEMPLATES.get(f["theme"]) or
+                       MANAGEMENT_ACTION_TEMPLATES.get("OPERATIONAL_RISK",[]))[:3]
+        except Exception:
+            actions = []
         if risk:
             imp_text = "; ".join(str(x) for x in risk.get("red_flags",[])[:2]) or (
                 "Potential regulatory breach, reputational harm, and financial loss.")
