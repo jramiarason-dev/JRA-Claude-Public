@@ -1,3 +1,5 @@
+# RULE: All HTML content must use st.markdown(..., unsafe_allow_html=True)
+# Never use st.write() or st.text() for HTML strings
 """
 AuditIQ — Streamlit interface — 4 tabs (Intelligence Dashboard + 3 audit tabs)
 Launch: streamlit run app.py (from audit_system/)
@@ -999,9 +1001,17 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
 def _render_iia_standard(s):
     """Render a single IIA standard entry — handles both plain and sectioned (TR) structures."""
     is_tr = s.get("topical_requirement", False) and s.get("sections")
-    badge = ' <span style="background:rgba(79,126,248,0.15);color:#7fa8fb;border:1px solid rgba(79,126,248,0.35);border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;vertical-align:middle">TR</span>' if is_tr else ""
-    src = f' <span style="font-size:10px;color:#5a6488;font-style:italic;margin-left:6px">{s.get("source_guide","")}</span>' if s.get("source_guide") else ""
-    with st.expander(f"**{s['standard_id']}**{badge} — {s['title']}{src}"):
+    tr_marker = " · TR" if is_tr else ""
+    with st.expander(f"**{s['standard_id']}**{tr_marker} — {s['title']}"):
+        if is_tr:
+            src_txt = s.get("source_guide", "")
+            st.markdown(
+                f'<div style="margin-bottom:10px">'
+                f'<span style="background:rgba(79,126,248,0.15);color:#7fa8fb;border:1px solid rgba(79,126,248,0.35);border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">TR — Topical Requirement</span>'
+                + (f' &nbsp;<span style="font-size:11px;color:#5a6488;font-style:italic">{src_txt}</span>' if src_txt else "")
+                + '</div>',
+                unsafe_allow_html=True,
+            )
         st.markdown(f'<p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px">{s["description"]}</p>', unsafe_allow_html=True)
         banking = s.get("banking_application", s.get("relevance_to_banking", ""))
         st.markdown(f"""
@@ -1589,14 +1599,11 @@ with st.sidebar:
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("""
-<div style="display:flex;align-items:center;gap:14px;padding:1.2rem 0 1.8rem">
-  <span style="font-size:28px">🏦</span>
-  <div>
-    <div style="font-size:20px;font-weight:700;color:var(--text-primary);letter-spacing:-0.4px">AuditIQ</div>
-    <div style="font-size:11.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px">
-      Internal Audit System · Private Banking · Multi-Jurisdiction
-    </div>
-  </div>
+<div style="text-align:center;margin-bottom:32px;padding-top:1rem">
+  <h1 style="font-size:42px;font-weight:800;letter-spacing:-1px;margin:0">🏦 AuditIQ</h1>
+  <p style="font-size:16px;color:#8b95b8;font-style:italic;margin-top:4px;margin-bottom:0">
+    From risk to insight — audit intelligence for private banking.
+  </p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -1616,7 +1623,7 @@ _build_progress_bar()
 tab0, tab1, tab2, tab3 = st.tabs([
     "🌐  Intelligence Dashboard",
     "🔍  Risk Analysis",
-    "📋  Audit Plan",
+    "📋  Audit Plan & Testing",
     "📄  Audit Report",
 ])
 
