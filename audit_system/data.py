@@ -4660,15 +4660,125 @@ IIA_STANDARDS_2024 = [
         "standard_id": "TR-2",
         "domain": "Topical Requirements",
         "title": "Cybersecurity",
-        "description": "Internal auditors must evaluate cybersecurity governance, risk management, and controls as a core component of the audit universe. Given the escalating threat landscape, cybersecurity must be assessed with specialist knowledge or co-sourced expertise.",
+        "source_guide": "IIA User Guide, February 2025",
+        "description": "Mandatory for all assurance engagements on cybersecurity. Internal auditors must evaluate cybersecurity governance, risk management, and control processes across the organisation. Specialist knowledge or co-sourced expertise is required. Structured across three sections: Governance (4), Risk Management (6), Control Processes (7).",
         "key_requirements": [
-            "Cybersecurity risk included in audit universe and annual plan",
-            "ICT risk governance: roles, responsibilities, and board oversight",
-            "Technical controls: access management, patch management, encryption",
-            "Incident detection, response, and recovery (DORA / NIS2 alignment)",
-            "Third-party ICT and cloud provider oversight",
+            "G-A: Formal cybersecurity strategy reviewed by Board (generally quarterly)",
+            "RM-A/B: Cyber risk assessment covering all organisational functions",
+            "RM-F: Annual tabletop exercise for incident response and recovery",
+            "CP-D/E: IT asset lifecycle management, MFA, patch management, SDLC",
+            "CP-F/G: Network segmentation, endpoint communication security",
         ],
-        "banking_application": "DORA (effective January 2025) requires Swiss banks with EU operations to implement DORA's ICT risk management framework. Internal audit must assess DORA compliance, including the ICT risk register, major incident reporting process, and third-party ICT contract obligations. FINMA Circular 2023/1 sets parallel requirements for Swiss entities.",
+        "sections": [
+            {
+                "section_id": "governance",
+                "section_title": "Governance",
+                "icon": "🏛️",
+                "requirements": [
+                    {
+                        "id": "G-A",
+                        "text": "Formal cybersecurity strategy and objectives established and periodically updated. Board reviews cybersecurity updates periodically (generally quarterly). Covers strategic objectives monitoring, budget, KPIs, and human resources for cyber personnel.",
+                        "frameworks": ["NIST CSF 2.0 GV.OC-01, GV.OC-02", "COBIT 2019 APO02", "NIST 800-53 PM-2"],
+                    },
+                    {
+                        "id": "G-B",
+                        "text": "Policies and procedures established, periodically updated (at least annually). Reference frameworks: NIST, COBIT. Covers all cybersecurity processes.",
+                        "frameworks": ["NIST CSF 2.0 GV.PO-01, GV.PO-02", "COBIT 2019 APO01", "NIST 800-53 PL-2"],
+                    },
+                    {
+                        "id": "G-C",
+                        "text": "Roles and responsibilities defined. CISO or equivalent reports at sufficient organisational level. Periodic assessment of knowledge, skills, and abilities of cybersecurity personnel.",
+                        "frameworks": ["NIST CSF 2.0 GV.RR-01, GV.RR-02", "COBIT 2019 APO01.02", "NIST 800-53 PS-7"],
+                    },
+                    {
+                        "id": "G-D",
+                        "text": "Stakeholder engagement on vulnerabilities and emerging threats. Includes senior management, operations, risk, HR, legal, compliance, vendors. Evidence: meeting minutes, reports, emails.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-07", "COBIT 2019 EDM02", "NIST 800-53 PL-8"],
+                    },
+                ],
+            },
+            {
+                "section_id": "risk_management",
+                "section_title": "Risk Management",
+                "icon": "⚠️",
+                "requirements": [
+                    {
+                        "id": "RM-A",
+                        "text": "Risk assessment and management process covers identification, analysis, mitigation, and monitoring of cyber threats and their effect on strategic objectives.",
+                        "frameworks": ["NIST CSF 2.0 ID.RA-01, ID.RA-03", "COBIT 2019 APO12", "NIST 800-53 RA-3"],
+                    },
+                    {
+                        "id": "RM-B",
+                        "text": "Cyber risk management conducted across the organisation: IT, ERM, HR, legal, compliance, operations, supply chain, accounting, finance.",
+                        "frameworks": ["NIST CSF 2.0 ID.RA-04", "COBIT 2019 APO12.01", "NIST 800-53 RA-3(1)"],
+                    },
+                    {
+                        "id": "RM-C",
+                        "text": "Accountability assigned to individual or team. Periodic reporting (quarterly/monthly) on cyber risk status including resource requirements.",
+                        "frameworks": ["NIST CSF 2.0 GV.RR-03", "COBIT 2019 APO12.05", "NIST 800-53 PM-9"],
+                    },
+                    {
+                        "id": "RM-D",
+                        "text": "Escalation process for cyber risks reaching unacceptable levels. Covers risk levels definition, financial and non-financial impacts, regulatory compliance requirements.",
+                        "frameworks": ["NIST CSF 2.0 GV.RM-07", "COBIT 2019 APO12.06", "NIST 800-53 RA-7"],
+                    },
+                    {
+                        "id": "RM-E",
+                        "text": "Communication process to management and employees. Annual phishing simulations. Remediation updates with completion dates. Board/senior management reporting on non-compliance.",
+                        "frameworks": ["NIST CSF 2.0 PR.AT-01", "COBIT 2019 APO07", "NIST 800-53 AT-2"],
+                    },
+                    {
+                        "id": "RM-F",
+                        "text": "Incident response and recovery process: detection, containment, recovery, post-incident analysis. Annual tabletop exercise mandatory. Results reported to senior management.",
+                        "frameworks": ["NIST CSF 2.0 RS.MA-01, RC.RP-01", "COBIT 2019 DSS02, DSS04", "NIST 800-53 IR-4, IR-6, IR-8"],
+                    },
+                ],
+            },
+            {
+                "section_id": "control_processes",
+                "section_title": "Control Processes",
+                "icon": "🔒",
+                "requirements": [
+                    {
+                        "id": "CP-A",
+                        "text": "Internal controls and vendor-based controls protect confidentiality, integrity, availability. SOC reports reviewed for vendors. Periodic testing of controls effectiveness. Remediation process for deficiencies.",
+                        "frameworks": ["NIST CSF 2.0 PR.AA-05, GV.SC-07", "COBIT 2019 APO10, DSS05", "NIST 800-53 CA-2, CA-7"],
+                    },
+                    {
+                        "id": "CP-B",
+                        "text": "Talent management for cybersecurity: recruitment, training, certifications (cyber-related). Knowledge sharing groups. Continuing education.",
+                        "frameworks": ["NIST CSF 2.0 PR.AT-02", "COBIT 2019 APO07.03", "NIST 800-53 AT-3"],
+                    },
+                    {
+                        "id": "CP-C",
+                        "text": "Continuous monitoring of emerging threats and vulnerabilities including AI/new technologies. Prioritisation and implementation of improvements.",
+                        "frameworks": ["NIST CSF 2.0 ID.RA-05, DE.AE-03", "COBIT 2019 APO12.02", "NIST 800-53 SI-5, RA-5"],
+                    },
+                    {
+                        "id": "CP-D",
+                        "text": "IT asset lifecycle management (selection, usage, maintenance, decommissioning) for hardware, software, vendor services. Includes encryption, antivirus, MDM, complex passwords, VPN/ZTN, firmware updates, database controls, SDLC, DevSecOps.",
+                        "frameworks": ["NIST CSF 2.0 ID.AM-01 to 07", "COBIT 2019 BAI09, DSS05", "NIST 800-53 CM-8, SA-22"],
+                    },
+                    {
+                        "id": "CP-E",
+                        "text": "Cybersecurity processes: configuration, end-user device administration, encryption, patching, user-access management (MFA, unique IDs, complex passwords), monitoring availability/performance, DevSecOps integration.",
+                        "frameworks": ["NIST CSF 2.0 PR.AA-01 to 06, PR.DS-01", "COBIT 2019 DSS05.03, DSS05.04", "NIST 800-53 AC-2, IA-2, SC-28"],
+                    },
+                    {
+                        "id": "CP-F",
+                        "text": "Network controls: network segmentation, firewalls, limited external/internal connections, VPN/ZTNA, IoT controls, IDS/IPS.",
+                        "frameworks": ["NIST CSF 2.0 PR.IR-01, PR.IR-02", "COBIT 2019 DSS05.02", "NIST 800-53 SC-7, SC-20"],
+                    },
+                    {
+                        "id": "CP-G",
+                        "text": "Endpoint communication security: email, browsers, videoconferencing, messaging (Teams/Zoom), social media, cloud, file-sharing. Controls include file extension restrictions, MFA for file sharing.",
+                        "frameworks": ["NIST CSF 2.0 PR.PS-04", "COBIT 2019 DSS05.07", "NIST 800-53 SC-8, SC-28"],
+                    },
+                ],
+            },
+        ],
+        "framework_mapping": ["NIST CSF 2.0", "NIST SP 800-53 Rev.5", "COBIT 2019"],
+        "banking_application": "DORA (EU, effective Jan 2025): TLPT mandatory, ICT risk management framework, major incident reporting within 4 hours, third-party ICT oversight (Art. 28–30). FINMA RS 2018/3: outsourcing IT controls for Swiss banks. MAS TRM 2021: annual ICT audit requirement (SG). Elevated threat profile: HNWI data and private banker social engineering are prime ransomware targets. Cloud migration across jurisdictions increases attack surface and cross-border data exposure.",
         "topical_requirement": True,
         "effective_date": "January 9, 2024",
     },
@@ -4708,15 +4818,127 @@ IIA_STANDARDS_2024 = [
         "standard_id": "TR-5",
         "domain": "Topical Requirements",
         "title": "Third-Party Relationships",
-        "description": "Internal auditors must assess the risks arising from the organisation's reliance on third parties, including outsourcing arrangements, strategic vendors, and fourth-party (sub-outsourcing) relationships.",
+        "source_guide": "IIA User Guide, September 2025",
+        "description": "Mandatory for all assurance engagements on third parties. Internal auditors must evaluate the organisation's governance, risk management, and control processes across the full third-party lifecycle: Selecting → Contracting → Onboarding → Monitoring → Offboarding. Risk categories: Strategic, Reputational, Ethical, Operational, Financial, Compliance, Cybersecurity/Data Protection, IT, Legal, Sustainability/ESG, Geopolitical. Structured across three sections: Governance (4), Risk Management (4), Control Processes (9).",
         "key_requirements": [
-            "Complete inventory of critical and important third-party relationships",
-            "Due diligence: financial stability, security posture, regulatory compliance",
-            "Contract terms: right-to-audit, SLA, data protection, exit provisions",
-            "Fourth-party risk: sub-outsourcing chains identified and assessed",
-            "Concentration risk: single-vendor dependencies for critical functions",
+            "G-A/B: Risk-based approach and standardised policies for full lifecycle",
+            "RM-B: Regular risk ranking and due diligence across all risk categories",
+            "CP-A: Background checks including cybersecurity, financial, criminal, political",
+            "CP-B: Contract clauses: right-to-audit, NDA, SLA, BCP, AI usage, whistleblowing",
+            "CP-D: Centralised listing of all vendor relationships maintained",
+            "CP-F: Ongoing KPI monitoring, SLA enforcement, quarterly business reviews",
+            "CP-I: Formalised offboarding: access revocation, data return/destruction, asset recovery",
         ],
-        "banking_application": "FINMA Circular 2018/3 requires Swiss banks to maintain a register of all critical outsourcing and ensure right-to-audit clauses. DORA Art. 28-30 adds requirements for ICT third-party risk management. Internal audit must verify both outsourcing governance and the effectiveness of vendor monitoring by Risk/Compliance.",
+        "sections": [
+            {
+                "section_id": "governance",
+                "section_title": "Governance",
+                "icon": "🏛️",
+                "requirements": [
+                    {
+                        "id": "G-A",
+                        "text": "Formalised risk-based approach for determining whether to use a third party. Periodically reviewed. Includes cost-benefit analysis, risk/control evaluation, adequate resources, and stakeholder feedback.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-01", "COBIT 2019 APO10.01", "ISO 27001 A.15.1"],
+                    },
+                    {
+                        "id": "G-B",
+                        "text": "Policies and procedures for third-party lifecycle (all 5 stages). Standardised tools and templates. Periodic review. Criteria for each stage. Regulatory alignment and benchmarking exercises.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-02, GV.SC-03", "COBIT 2019 APO10.02", "ISO 27001 A.15.2"],
+                    },
+                    {
+                        "id": "G-C",
+                        "text": "Roles and responsibilities defined. Values/ethics alignment with third party. Regular training for third-party management roles. Three Lines Model alignment.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-04", "COBIT 2019 APO10.03", "NIST 800-53 SA-9"],
+                    },
+                    {
+                        "id": "G-D",
+                        "text": "Timely stakeholder communication throughout lifecycle. Includes board, senior management, procurement, operations, risk, compliance, legal, IT, HR. Cross-functional meetings on third-party management.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-07", "COBIT 2019 BAI08", "NIST 800-53 PM-9"],
+                    },
+                ],
+            },
+            {
+                "section_id": "risk_management",
+                "section_title": "Risk Management",
+                "icon": "⚠️",
+                "requirements": [
+                    {
+                        "id": "RM-A",
+                        "text": "Standardised and comprehensive risk management processes: Identification → Analysis → Mitigation → Monitoring. Risk management committee with board oversight. Corrective actions for deviations.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-09", "COBIT 2019 APO12.01", "NIST 800-53 RA-3"],
+                    },
+                    {
+                        "id": "RM-B",
+                        "text": "Regular risk identification and assessment throughout lifecycle. Risk ranking and prioritisation. Due diligence process and vendor questionnaires. Factors: criticality, financial materiality, relationship duration, subcontracting.",
+                        "frameworks": ["NIST CSF 2.0 ID.RA-09, GV.SC-06", "COBIT 2019 APO10.04", "NIST 800-53 SA-9(3)"],
+                    },
+                    {
+                        "id": "RM-C",
+                        "text": "Risk responses (mitigation, acceptance, elimination, sharing) commensurate with risk ranking. Documented responses including third-party control environment. Conflicts of interest addressed.",
+                        "frameworks": ["NIST CSF 2.0 GV.RM-06", "COBIT 2019 APO10.05", "NIST 800-53 SA-9(1)"],
+                    },
+                    {
+                        "id": "RM-D",
+                        "text": "Escalation processes for third-party risks. Risk level definitions and escalation procedures. Financial and non-financial impact consideration. Periodic reassessment when risk appetite changes.",
+                        "frameworks": ["NIST CSF 2.0 GV.RM-07, GV.SC-09", "COBIT 2019 APO12.06", "NIST 800-53 RA-7"],
+                    },
+                ],
+            },
+            {
+                "section_id": "control_processes",
+                "section_title": "Control Processes",
+                "icon": "🔒",
+                "requirements": [
+                    {
+                        "id": "CP-A",
+                        "text": "Due diligence for sourcing and selecting: competitive bidding, RFPs, sole sourcing criteria. Background checks: cybersecurity, financial, criminal, legal records, political ties. Cross-functional review teams. SOC reports review. No advance to contracting without completed due diligence.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-06, ID.RA-09", "COBIT 2019 APO10.02", "NIST 800-53 SA-4"],
+                    },
+                    {
+                        "id": "CP-B",
+                        "text": "Contracting policies followed. Key risks in contract clauses. Essential elements: NDA, termination clauses, cybersecurity requirements, breach notification, SLAs, right-to-audit (including downstream subcontractors), AI usage, change management process, sustainability clauses, whistleblowing protocols, BCP requirements.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-10", "COBIT 2019 APO10.03", "NIST 800-53 SA-9(3), SA-12"],
+                    },
+                    {
+                        "id": "CP-C",
+                        "text": "Contracts reviewed/approved by legal and compliance. Signed by authorised individuals. Stored securely. Contract manager assigned.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-10", "COBIT 2019 APO10.03", "NIST 800-53 SA-9"],
+                    },
+                    {
+                        "id": "CP-D",
+                        "text": "Centralised listing of all third-party relationships maintained (contract management system). Processes for adding/removing contracts. Tracking system for issues with vendors.",
+                        "frameworks": ["NIST CSF 2.0 ID.AM-07, GV.SC-03", "COBIT 2019 APO10.01", "NIST 800-53 SA-9(6)"],
+                    },
+                    {
+                        "id": "CP-E",
+                        "text": "Documented onboarding processes. System integration assessment. Technology compatibility and security. BCP assessment of third party. Complementary user entity controls (SOC reporting).",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-05", "COBIT 2019 BAI07", "NIST 800-53 SA-9(1)"],
+                    },
+                    {
+                        "id": "CP-F",
+                        "text": "Ongoing monitoring of vendor performance vs contract objectives. KPIs evaluation, payment controls, cost-benefit analysis, SLA penalty enforcement, periodic risk ranking reevaluation. Quarterly business reviews. Additional monitoring: financial stability, complaints, ISO certifications, media inquiries, AI/cybersecurity protocols, segregation of duties.",
+                        "frameworks": ["NIST CSF 2.0 ID.RA-09, DE.CM-06", "COBIT 2019 APO10.05", "NIST 800-53 SA-9(4)"],
+                    },
+                    {
+                        "id": "CP-G",
+                        "text": "Corrective action protocols when third party fails to meet contract or increases risk. Escalation based on severity. Post-incident review with root cause analysis.",
+                        "frameworks": ["NIST CSF 2.0 RS.CO-04", "COBIT 2019 APO10.05", "NIST 800-53 IR-4"],
+                    },
+                    {
+                        "id": "CP-H",
+                        "text": "Contract expiration and renewal monitoring. Auto-renewal review: performance, terms, risk factors.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-10", "COBIT 2019 APO10.04", "NIST 800-53 SA-9"],
+                    },
+                    {
+                        "id": "CP-I",
+                        "text": "Formalised offboarding plan. Termination process. Replacement if necessary. Data return or destruction. Access revocation (systems, tools, facilities). Asset return (devices, licenses, IP, documentation). Escalation to board when terminated for cause.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-05, PR.AA-04", "COBIT 2019 APO10.06", "NIST 800-53 SA-9, PS-4"],
+                    },
+                ],
+            },
+        ],
+        "framework_mapping": ["NIST CSF 2.0", "NIST SP 800-53 Rev.5", "COBIT 2019", "ISO 27001"],
+        "banking_application": "FINMA RS 2018/3: outsourcing register mandatory for Swiss banks, right-to-audit clause required in all material contracts, FINMA notification for critical outsourcing. DORA Art. 28–44: ICT third-party risk management framework, Register of Information for all ICT providers, mandatory notification to EBA for concentration risk. MAS Notice 655 / SS2/21 (PRA): outsourcing requirements. Fourth-party risk is critical for custody, core banking (Temenos, Avaloq), portfolio management (Murex, Bloomberg), and cloud providers — concentration risk in private banking technology. Right-to-audit must flow down to sub-contractors in all material outsourcing contracts.",
         "topical_requirement": True,
         "effective_date": "January 9, 2024",
     },
@@ -4774,6 +4996,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All privileged accounts (IT admin, DB admin, SWIFT operators) — typically 50-150",
             "sample_size": "100% of privileged accounts (full population)",
             "failure_criteria": "Any admin or remote-access account without MFA enrolled and enforced",
+            "tr_reference": "TR-Cyber CP-E",
         },
         {
             "id": "T012", "level": "Critical", "category": "Standard",
@@ -4782,6 +5005,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All systems in scope: servers, network devices, endpoints (typically 200-500 assets)",
             "sample_size": "100% of Critical CVEs + random 25 High CVEs",
             "failure_criteria": "Any Critical CVE not patched within 24h or High CVE within 7 days",
+            "tr_reference": "TR-Cyber CP-D, CP-E",
         },
         {
             "id": "T013", "level": "High", "category": "Data Analytics",
@@ -4790,6 +5014,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All privileged account activity logs for 6-month period",
             "sample_size": "100% population (data analytics)",
             "failure_criteria": "Unexplained after-hours logins or foreign-IP logins without approved change record",
+            "tr_reference": "TR-Cyber RM-C, CP-E",
         },
         {
             "id": "T014", "level": "High", "category": "Standard",
@@ -4798,6 +5023,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "IRP documentation set + last 3 incident records",
             "sample_size": "Full documentation review + interview IT Security and Compliance",
             "failure_criteria": "IRP not tested in 12 months, DORA notification timelines missing, or escalation list outdated",
+            "tr_reference": "TR-Cyber RM-F",
         },
         {
             "id": "T015", "level": "Moderate", "category": "Standard",
@@ -4806,6 +5032,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All vendors with active system access (typically 20-80)",
             "sample_size": "100% active vendor review + 10 terminated vendor access checks",
             "failure_criteria": "Vendor with broader access than justified, or active credentials post-termination",
+            "tr_reference": "TR-Cyber CP-A · TR-Third CP-E, CP-F",
         },
     ],
     "CREDIT_RISK": [
@@ -4984,6 +5211,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All Tier 1 (critical) vendors — typically 5-15",
             "sample_size": "100% of Tier 1 vendors",
             "failure_criteria": "Missing ISO 27001 / SOC 2 report, outdated financial review, or no incident notification clause",
+            "tr_reference": "TR-Third CP-A",
         },
         {
             "id": "T062", "level": "High", "category": "Standard",
@@ -4992,6 +5220,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All vendors with active system/network access",
             "sample_size": "10 active vendors + 5 terminated vendor access checks",
             "failure_criteria": "Vendor with access beyond contractual scope, shared/generic credentials, or active access post-termination",
+            "tr_reference": "TR-Third CP-E, CP-F",
         },
         {
             "id": "T063", "level": "High", "category": "Data Analytics",
@@ -5000,6 +5229,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "Full vendor register (all active vendors)",
             "sample_size": "100% population (data analytics)",
             "failure_criteria": "Single-vendor dependency for a critical function with no documented contingency, or undisclosed sub-outsourcing",
+            "tr_reference": "TR-Third RM-B, CP-F",
         },
         {
             "id": "T064", "level": "Moderate", "category": "Standard",
@@ -5008,6 +5238,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All vendor contracts for critical/important services",
             "sample_size": "10 contracts (judgmental — highest value and criticality)",
             "failure_criteria": "Missing right-to-audit, no data protection clause, or exit plan not documented",
+            "tr_reference": "TR-Third CP-B, CP-C",
         },
         {
             "id": "T065", "level": "Moderate", "category": "Standard",
@@ -5016,6 +5247,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All critical/important vendor performance reports for 12-month period",
             "sample_size": "Full review + investigation of all SLA breaches",
             "failure_criteria": "No formal performance review in 12 months, SLA breach without penalty applied, or KPIs not aligned to contractual obligations",
+            "tr_reference": "TR-Third CP-F",
         },
     ],
     "GOVERNANCE": [

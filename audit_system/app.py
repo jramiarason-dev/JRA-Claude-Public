@@ -967,6 +967,8 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
         bg  = _LEVEL_BG.get(lv, "transparent")
         da  = _DA_BADGE if t.get("category") == "Data Analytics" else ""
         lv_badge = f'<span style="background:{bg};color:{col};border:1px solid {col}44;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">{lv}</span>'
+        tr_ref = t.get("tr_reference", "")
+        tr_cell = f'<span style="background:rgba(79,126,248,0.09);color:#7fa8fb;border:1px solid rgba(79,126,248,0.25);border-radius:3px;padding:1px 5px;font-size:10px;white-space:nowrap">{tr_ref}</span>' if tr_ref else ""
         rows += (
             f'<tr style="background:{bg}">'
             f'<td style="padding:9px 12px;color:#7fa8fb;font-weight:700;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("id","")} {da}</td>'
@@ -976,43 +978,62 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
             f'<td style="padding:9px 12px;color:var(--text-muted);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("population","")}</td>'
             f'<td style="padding:9px 12px;color:var(--text-muted);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("sample_size","")}</td>'
             f'<td style="padding:9px 12px;color:#ef4444;font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("failure_criteria","")}</td>'
+            f'<td style="padding:9px 12px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{tr_cell}</td>'
             f'</tr>'
         )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
       <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
-        <th style="color:#7fa8fb;width:8%">ID</th>
-        <th style="color:#7fa8fb;width:8%">Level</th>
-        <th style="color:#7fa8fb;width:20%">Objective</th>
-        <th style="color:#7fa8fb;width:26%">Procedure</th>
-        <th style="color:#7fa8fb;width:16%">Population</th>
-        <th style="color:#7fa8fb;width:12%">Sample Size</th>
-        <th style="color:#7fa8fb;width:10%">Failure Criteria</th>
+        <th style="color:#7fa8fb;width:7%">ID</th>
+        <th style="color:#7fa8fb;width:7%">Level</th>
+        <th style="color:#7fa8fb;width:18%">Objective</th>
+        <th style="color:#7fa8fb;width:24%">Procedure</th>
+        <th style="color:#7fa8fb;width:14%">Population</th>
+        <th style="color:#7fa8fb;width:11%">Sample Size</th>
+        <th style="color:#7fa8fb;width:11%">Failure Criteria</th>
+        <th style="color:#7fa8fb;width:8%">TR Ref</th>
       </tr></thead><tbody>{rows}</tbody>
     </table>""", unsafe_allow_html=True)
+
+
+def _render_iia_standard(s):
+    """Render a single IIA standard entry — handles both plain and sectioned (TR) structures."""
+    is_tr = s.get("topical_requirement", False) and s.get("sections")
+    badge = ' <span style="background:rgba(79,126,248,0.15);color:#7fa8fb;border:1px solid rgba(79,126,248,0.35);border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;vertical-align:middle">TR</span>' if is_tr else ""
+    src = f' <span style="font-size:10px;color:#5a6488;font-style:italic;margin-left:6px">{s.get("source_guide","")}</span>' if s.get("source_guide") else ""
+    with st.expander(f"**{s['standard_id']}**{badge} — {s['title']}{src}"):
+        st.markdown(f'<p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px">{s["description"]}</p>', unsafe_allow_html=True)
+        banking = s.get("banking_application", s.get("relevance_to_banking", ""))
+        st.markdown(f"""
+        <div style="background:rgba(34,211,165,0.06);border:1px solid rgba(34,211,165,0.18);border-radius:8px;padding:12px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#22d3a5;margin-bottom:6px">🏦 Banking Application</div>
+          <p style="margin:0;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{banking}</p>
+        </div>""", unsafe_allow_html=True)
+        if is_tr:
+            for sec in s["sections"]:
+                sec_icon = sec.get("icon", "")
+                with st.expander(f"{sec_icon} {sec['section_title']} — {len(sec['requirements'])} requirements", expanded=False):
+                    for req in sec["requirements"]:
+                        fw_badges = " &nbsp;".join(f'<span style="background:rgba(79,126,248,0.09);color:#7fa8fb;border:1px solid rgba(79,126,248,0.25);border-radius:3px;padding:1px 5px;font-size:10px">{f}</span>' for f in req.get("frameworks", []))
+                        st.markdown(f"""
+                        <div style="border-left:3px solid rgba(79,126,248,0.4);padding:10px 14px;margin-bottom:10px;background:rgba(79,126,248,0.04);border-radius:0 6px 6px 0">
+                          <div style="font-size:11.5px;font-weight:700;color:#7fa8fb;margin-bottom:4px">{req['id']}</div>
+                          <p style="margin:0 0 8px;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{req['text']}</p>
+                          <div style="font-size:10.5px;color:#5a6488">{fw_badges}</div>
+                        </div>""", unsafe_allow_html=True)
+        else:
+            reqs = "".join(f"<li>{r}</li>" for r in s.get("key_requirements", []))
+            st.markdown(f"""
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#7fa8fb;margin-bottom:6px">Key Requirements</div>
+              <ul style="margin:0;padding-left:16px;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{reqs}</ul>
+            </div>""", unsafe_allow_html=True)
 
 
 def _show_iia_standards():
     """Display IIA_STANDARDS_2024 in expandable cards."""
     for s in IIA_STANDARDS_2024:
-        reqs = "".join(f"<li>{r}</li>" for r in s.get("key_requirements", []))
-        with st.expander(f"**{s['standard_id']}** — {s['title']}"):
-            st.markdown(f"""
-            <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px">{s['description']}</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-              <div>
-                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;
-                     color:#7fa8fb;margin-bottom:6px">Key Requirements</div>
-                <ul style="margin:0;padding-left:16px;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{reqs}</ul>
-              </div>
-              <div style="background:rgba(34,211,165,0.06);border:1px solid rgba(34,211,165,0.18);
-                          border-radius:8px;padding:12px">
-                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;
-                     color:#22d3a5;margin-bottom:6px">🏦 Banking Relevance</div>
-                <p style="margin:0;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{s.get('banking_application', s.get('relevance_to_banking',''))}</p>
-              </div>
-            </div>
-            """, unsafe_allow_html=True)
+        _render_iia_standard(s)
 
 
 # ── UX helpers ────────────────────────────────────────────────────────────────
@@ -2142,6 +2163,30 @@ with tab2:
         st.warning("⚠ Please define the audit scope before generating the plan.")
         _t2_valid = False
 
+    # IIA Topical Requirement banner
+    _t2_topic_upper = (topic2 or "").upper()
+    _t2_tr_match = None
+    if any(k in _t2_topic_upper for k in ("CYBER", "ICT", "INFORMATION SECURITY", "DORA", "RANSOMWARE")):
+        _t2_tr_match = next((s for s in IIA_STANDARDS_2024 if s["standard_id"] == "TR-2"), None)
+        _t2_tr_label = "🔒 TR-Cyber"
+    elif any(k in _t2_topic_upper for k in ("THIRD", "VENDOR", "OUTSOURC", "SUPPLY CHAIN")):
+        _t2_tr_match = next((s for s in IIA_STANDARDS_2024 if s["standard_id"] == "TR-5"), None)
+        _t2_tr_label = "🤝 TR-Third"
+    if _t2_tr_match:
+        _tr_src = _t2_tr_match.get("source_guide", "IIA User Guide 2025")
+        _tr_keys = "".join(f"<li style='margin-bottom:3px'>{k}</li>" for k in _t2_tr_match.get("key_requirements", []))
+        st.markdown(f"""
+        <div style="background:rgba(234,179,8,0.07);border:1px solid rgba(234,179,8,0.35);border-left:4px solid #eab308;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="background:rgba(234,179,8,0.18);color:#eab308;border:1px solid rgba(234,179,8,0.45);border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">⚠️ IIA TOPICAL REQUIREMENT APPLICABLE</span>
+            <span style="font-size:12.5px;font-weight:600;color:#dde3f5">{_t2_tr_label} — {_t2_tr_match['title']}</span>
+            <span style="font-size:11px;color:#5a6488;font-style:italic">{_tr_src} · Mandatory</span>
+          </div>
+          <p style="font-size:12px;color:#c8d0e8;margin:0 0 8px;line-height:1.8">This audit topic triggers a mandatory IIA Topical Requirement. All assurance engagements must cover the following key areas:</p>
+          <ul style="margin:0;padding-left:16px;font-size:12px;color:#c8d0e8;line-height:1.9">{_tr_keys}</ul>
+          <div style="margin-top:8px;font-size:11px;color:#5a6488">See Tab 3 → IIA Standards Reference → {_t2_tr_match['standard_id']} for full requirements with framework mapping.</div>
+        </div>""", unsafe_allow_html=True)
+
     if st.session_state.t2_mode == "static":
         # ── Static Reference Data mode ─────────────────────────────────────────
         _static_label()
@@ -2392,20 +2437,7 @@ with tab3:
                 _qi = _iia_sq.lower()
                 _iia_filtered = [s for s in IIA_STANDARDS_2024 if _qi in (s.get("title","") + s.get("description","") + s.get("standard_id","")).lower()]
             for _s in _iia_filtered:
-                _reqs = "".join(f"<li>{r}</li>" for r in _s.get("key_requirements", []))
-                with st.expander(f"**{_s['standard_id']}** — {_s['title']}"):
-                    st.markdown(f"""
-                    <p style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px">{_s['description']}</p>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-                      <div>
-                        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#7fa8fb;margin-bottom:6px">Key Requirements</div>
-                        <ul style="margin:0;padding-left:16px;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{_reqs}</ul>
-                      </div>
-                      <div style="background:rgba(34,211,165,0.06);border:1px solid rgba(34,211,165,0.18);border-radius:8px;padding:12px">
-                        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#22d3a5;margin-bottom:6px">🏦 Banking Relevance</div>
-                        <p style="margin:0;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{_s.get('banking_application', _s.get('relevance_to_banking',''))}</p>
-                      </div>
-                    </div>""", unsafe_allow_html=True)
+                _render_iia_standard(_s)
 
         with st.expander("⚖️ B — Regulatory Reference Panel", expanded=False):
             _selected_jurs_display = " · ".join(_t3_jurs[:4])
