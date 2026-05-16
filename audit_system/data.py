@@ -5293,3 +5293,1331 @@ AUDIT_TESTS_LIBRARY = {
         },
     ],
 }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# REGULATORY_CALENDAR
+# 2025-2026 regulatory events relevant to Swiss private banks.
+# Each entry is self-contained; used by app.py Tab 0 intelligence feeds.
+# ══════════════════════════════════════════════════════════════════════════════
+REGULATORY_CALENDAR = [
+
+    {
+        "reg_id": "RC001",
+        "authority": "European Commission / ESAs",
+        "regulation": "DORA — Digital Operational Resilience Act",
+        "jurisdiction": "EU",
+        "type": "Entry into force",
+        "date": "2025-01-17",
+        "description": (
+            "Full application of DORA (Regulation (EU) 2022/2554). All financial entities "
+            "in scope — including EU-licensed entities of Swiss private banking groups — "
+            "must comply with ICT risk management framework, incident classification and "
+            "reporting (major ICT incidents within 4 hours initial report, 72 hours "
+            "intermediate, 1 month final), digital operational resilience testing (TLPT "
+            "for significant institutions), and ICT third-party risk management requirements "
+            "including mandatory contractual clauses and register of critical ICT providers."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks with EU entities (branches, subsidiaries) face full DORA "
+            "obligations. FINMA circular 2023/1 aligns broadly for Swiss-only banks. "
+            "Dual compliance required for cross-border structures. TLPT (threat-led "
+            "penetration testing) mandatory for institutions above significance thresholds. "
+            "ICT third-party register with risk assessments required for all vendors."
+        ),
+        "action_required": (
+            "Complete ICT risk management framework gap assessment; establish incident "
+            "classification and reporting workflows with <4 hour initial notification "
+            "capability; finalise ICT third-party register with contractual clause review; "
+            "schedule TLPT if in scope; board approval of DORA compliance programme."
+        ),
+        "audit_relevance": (
+            "High priority audit topic: DORA readiness assessment, ICT incident management "
+            "testing, third-party ICT risk register completeness, TLPT programme adequacy. "
+            "Aligns with IIA TR-2 (Cybersecurity) and TR-5 (Third-Party Relationships)."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC002",
+        "authority": "Basel Committee / FINMA / EU (CRR3)",
+        "regulation": "Basel IV / CRR III — Output Floor and Revised Capital Framework",
+        "jurisdiction": "CH / EU",
+        "type": "Entry into force",
+        "date": "2025-01-01",
+        "description": (
+            "EU CRR3 (Capital Requirements Regulation 3) implementing Basel IV enters "
+            "application on 1 January 2025. Key changes: output floor at 50% of "
+            "standardised approach RWAs (rising to 72.5% by 2030), revised credit risk "
+            "standardised approach, new operational risk SMA replacing AMA, FRTB "
+            "trading book capital framework, revised CVA framework. Switzerland is "
+            "implementing through FINMA capital ordinance amendments on aligned timeline."
+        ),
+        "impact_private_banking": (
+            "RWA increases expected across Lombard lending, structured products (market "
+            "risk FRTB), and operational risk (SMA replaces internal models). Output "
+            "floor creates capital pressure for banks with sophisticated internal models. "
+            "CET1 ratio impact estimated at -0.5 to -2pp for mid-tier private banks. "
+            "FRTB requires fundamental trading book reclassification and new capital "
+            "model approval."
+        ),
+        "action_required": (
+            "QIS (Quantitative Impact Study) on capital ratios under new framework; "
+            "trading book boundary review; FRTB model development or SA adoption "
+            "decision; capital planning update for output floor phase-in to 2030; "
+            "ICAAP refresh reflecting new RWA densities."
+        ),
+        "audit_relevance": (
+            "Audit of capital adequacy framework, RWA calculation accuracy, FRTB "
+            "implementation readiness, output floor monitoring, ICAAP process quality. "
+            "Relevant to credit risk, market risk, and operational risk audit programmes."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC003",
+        "authority": "European Parliament / Council",
+        "regulation": "MiCA Phase 2 — Crypto-Asset Service Providers (CASPs)",
+        "jurisdiction": "EU",
+        "type": "Entry into force",
+        "date": "2024-12-30",
+        "description": (
+            "Markets in Crypto-Assets Regulation (MiCA) full application from "
+            "30 December 2024 for crypto-asset service providers (CASPs). Requires "
+            "CASP authorisation from national competent authorities, capital requirements, "
+            "consumer protection measures, market abuse rules for crypto-assets, "
+            "and disclosure requirements. Stablecoin provisions (ART/EMT) entered "
+            "into force June 2024. EU passporting available only for MiCA-licensed entities."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks offering crypto custody, trading, or advisory services "
+            "to EU clients via EU entities require CASP authorisation. Passporting "
+            "creates competitive advantage for EU-licensed entities vs. Swiss-only banks. "
+            "Product governance and disclosure requirements for crypto-asset instruments "
+            "distributed to EU clients. AML/KYC requirements integrated with AMLD."
+        ),
+        "action_required": (
+            "Map crypto-asset services offered to EU clients; determine CASP authorisation "
+            "requirement for EU entities; prepare authorisation application if required; "
+            "update product governance framework for crypto instruments; review "
+            "client documentation and risk disclosure standards."
+        ),
+        "audit_relevance": (
+            "Audit of CASP authorisation status, crypto custody controls, MiCA product "
+            "governance compliance, client classification for crypto services, "
+            "AML/KYC adequacy for crypto onboarding (FATF Travel Rule compliance)."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC004",
+        "authority": "FINMA",
+        "regulation": "FINMA Circular 2023/1 — Operational Risks and Resilience",
+        "jurisdiction": "CH",
+        "type": "Implementation deadline",
+        "date": "2025-01-01",
+        "description": (
+            "FINMA Circular 2023/1 on operational risks and resilience became mandatory "
+            "for all FINMA-supervised institutions from 1 January 2024, with a transition "
+            "period for certain provisions extending to January 2025. The circular "
+            "consolidates ICT risk, business continuity, crisis management, and "
+            "outsourcing requirements. Key obligations: documented critical service "
+            "mapping, board-approved impact tolerance definitions, annual resilience "
+            "testing, and FINMA incident reporting timelines."
+        ),
+        "impact_private_banking": (
+            "All Swiss private banks must have completed: critical services inventory, "
+            "impact tolerance definitions (maximum tolerable disruption per service), "
+            "BCP testing under realistic scenarios, and ICT incident reporting procedures "
+            "aligned with FINMA expectations. Third-party outsourcing arrangements "
+            "must be fully documented and risk-assessed."
+        ),
+        "action_required": (
+            "Verify critical services mapping is complete and board-approved; confirm "
+            "impact tolerance definitions are documented; schedule annual resilience "
+            "test if not already completed; review outsourcing register for completeness; "
+            "test FINMA incident reporting workflow."
+        ),
+        "audit_relevance": (
+            "Core operational resilience audit: critical services mapping accuracy, "
+            "impact tolerance definition adequacy, BCP test results, outsourcing "
+            "governance completeness. High priority given FINMA supervisory focus."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC005",
+        "authority": "European Parliament / EU Member States",
+        "regulation": "AMLD6 — 6th Anti-Money Laundering Directive Transposition",
+        "jurisdiction": "EU",
+        "type": "Implementation deadline",
+        "date": "2025-07-10",
+        "description": (
+            "EU Member States must transpose the 6th Anti-Money Laundering Directive "
+            "(AMLD6) into national law by 10 July 2025. AMLD6 establishes: harmonised "
+            "list of predicate offences for money laundering (22 categories including "
+            "cybercrime and environmental crime), extended criminal liability to legal "
+            "persons, minimum 4-year imprisonment for ML conviction, and enhanced "
+            "cross-border cooperation provisions. Accompanied by AML Regulation "
+            "(directly applicable without transposition) from 2027."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks with EU entities must update AML risk frameworks to "
+            "reflect expanded predicate offence list (cybercrime and environmental "
+            "crime as ML predicates require enhanced monitoring). Legal person "
+            "liability increases institutional risk for compliance failures. "
+            "Enhanced beneficial ownership transparency requirements."
+        ),
+        "action_required": (
+            "Update AML risk typologies to include cybercrime and environmental crime "
+            "as predicate offences; review transaction monitoring rules for new "
+            "predicate categories; update legal person beneficial ownership procedures; "
+            "brief compliance and front-office on enhanced obligations."
+        ),
+        "audit_relevance": (
+            "AML audit scope expansion: predicate offence coverage in transaction "
+            "monitoring, beneficial ownership procedures for legal entities, "
+            "staff training adequacy on extended predicate offences."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC006",
+        "authority": "EU Anti-Money Laundering Authority (AMLA)",
+        "regulation": "AMLA — Direct Supervision Launch",
+        "jurisdiction": "EU",
+        "type": "Entry into force",
+        "date": "2025-07-01",
+        "description": (
+            "The EU Anti-Money Laundering Authority (AMLA) becomes operational, "
+            "headquartered in Frankfurt. AMLA will directly supervise the highest-risk "
+            "obliged entities across the EU — approximately 40 institutions selected "
+            "based on cross-border presence, risk profile, and AUM. Full supervisory "
+            "powers (inspections, sanctions, binding measures) operative from 2028. "
+            "2025–2027: AMLA builds capabilities and coordinates with national supervisors "
+            "through joint supervisory teams. Swiss banks with EU operations will be "
+            "subject to AMLA coordination even if not directly supervised."
+        ),
+        "impact_private_banking": (
+            "Swiss private banking groups with significant EU AML/CFT footprint face "
+            "potential direct AMLA supervision. AMLA establishes common AML/CFT "
+            "supervisory standards across EU — raising minimum expectations for "
+            "all institutions serving EU clients. Enhanced cross-border enforcement "
+            "coordination increases extraterritorial risk for AML failures."
+        ),
+        "action_required": (
+            "Assess likelihood of direct AMLA supervision (cross-border presence, "
+            "risk profile); strengthen AML/CFT framework to AMLA's expected standards; "
+            "monitor AMLA guidance publications; ensure EU entity AML governance "
+            "aligned with emerging AMLA supervisory expectations."
+        ),
+        "audit_relevance": (
+            "AML governance audit: EU entity AML framework quality, cross-border "
+            "AML coordination, preparation for potential AMLA inspection methodology."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC007",
+        "authority": "FCA (UK)",
+        "regulation": "FCA Consumer Duty — Annual Board Report Requirement",
+        "jurisdiction": "UK",
+        "type": "Implementation deadline",
+        "date": "2025-07-31",
+        "description": (
+            "FCA Consumer Duty (PS22/9), effective July 2023, requires firms to produce "
+            "annual Board reports assessing consumer outcomes. By 31 July 2025, all "
+            "FCA-authorised firms must have completed their second annual Consumer Duty "
+            "Board report, demonstrating evidence-based assessment of consumer outcomes "
+            "across the four outcome areas: products/services, price/value, consumer "
+            "understanding, and consumer support. FCA has signalled enhanced supervisory "
+            "scrutiny of report quality in 2025."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks with UK FCA authorisation (wealth management, "
+            "private banking licences) must produce compliant Board reports. "
+            "Consumer Duty extends to distribution chain — banks distributing "
+            "products through FCA-authorised intermediaries must evidence value "
+            "assessment. Private banking 'professional clients' partially exempt "
+            "but retail-classified HNWI clients fully in scope."
+        ),
+        "action_required": (
+            "Complete Consumer Duty outcomes monitoring data collection by Q2 2025; "
+            "draft Board report with evidence across four outcome areas; Board "
+            "approval by 31 July 2025; FCA MI pack for regulatory review if requested. "
+            "Update distribution chain assessments for third-party products."
+        ),
+        "audit_relevance": (
+            "Consumer Duty audit: outcomes monitoring data quality, Board report "
+            "completeness, value assessment methodology, distribution chain oversight, "
+            "complaints and vulnerability data integration."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC008",
+        "authority": "MAS (Singapore)",
+        "regulation": "MAS Technology Risk Management Guidelines — Revised Edition",
+        "jurisdiction": "SG",
+        "type": "Review",
+        "date": "2025-Q2",
+        "description": (
+            "MAS is consulting on an updated Technology Risk Management (TRM) Guidelines "
+            "framework in 2025, expected to publish final version H1 2025. Updates "
+            "expected to cover: AI/ML model risk governance, cloud risk management "
+            "(critical deployment scenarios), software supply chain security, "
+            "and cyber resilience metrics. MAS Notice 655 (Technology Risk — "
+            "Banks) will be updated in alignment. Singapore private banks must "
+            "implement within 12 months of final publication."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks with Singapore operations must update TRM governance "
+            "to incorporate AI/ML risk, enhanced cloud provider assessment, "
+            "and software supply chain security. Overlap with DORA principles "
+            "for EU-exposed institutions enables consolidated compliance approach."
+        ),
+        "action_required": (
+            "Monitor MAS consultation response; gap assess current TRM against "
+            "proposed revisions; plan AI/ML risk governance framework enhancements; "
+            "review cloud provider contracts for new MAS requirements; "
+            "update incident reporting procedures to MAS timelines."
+        ),
+        "audit_relevance": (
+            "Technology risk audit for Singapore entities: TRM compliance gap, "
+            "AI/ML model inventory, cloud risk assessment, cyber incident "
+            "reporting capability."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC009",
+        "authority": "FATF",
+        "regulation": "FATF Mutual Evaluation — Switzerland 4th Round Follow-Up",
+        "jurisdiction": "CH",
+        "type": "Review",
+        "date": "2025-Q3",
+        "description": (
+            "FATF's fourth round mutual evaluation of Switzerland (published 2016, "
+            "follow-up reviews ongoing) continues with a 2025 enhanced follow-up "
+            "assessment focusing on Switzerland's progress on key deficiencies: "
+            "beneficial ownership transparency, STR filing rates, and effectiveness "
+            "of AML supervision. FATF's updated methodology (2024) places greater "
+            "emphasis on outcomes/effectiveness over technical compliance. "
+            "Adverse ratings could impact Switzerland's standing and trigger "
+            "enhanced due diligence by correspondent banks."
+        ),
+        "impact_private_banking": (
+            "Adverse FATF finding on Switzerland would increase international "
+            "correspondent banking friction, trigger enhanced due diligence "
+            "requirements from EU and US banks, and could prompt FINMA enforcement "
+            "of specific deficiencies. Beneficial ownership transparency requirements "
+            "likely to be tightened following FATF feedback."
+        ),
+        "action_required": (
+            "Benchmark STR filing rates against industry and FATF expectations; "
+            "audit beneficial ownership identification completeness; review "
+            "MROS reporting quality and timeliness; assess correspondent bank "
+            "relationship risk if Swiss FATF rating deteriorates."
+        ),
+        "audit_relevance": (
+            "AML effectiveness audit: STR quality and quantity, beneficial ownership "
+            "coverage, high-risk jurisdiction controls — aligned with FATF effectiveness "
+            "assessment methodology."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC010",
+        "authority": "EBA",
+        "regulation": "EBA EU-Wide Stress Test 2025",
+        "jurisdiction": "EU",
+        "type": "Review",
+        "date": "2025-Q3",
+        "description": (
+            "EBA biennial EU-wide stress test exercise for significant institutions. "
+            "2025 exercise will test bank resilience under adverse macroeconomic scenarios "
+            "designed by the ESRB. Scenarios expected to incorporate: higher-for-longer "
+            "interest rate environment, commercial real estate correction, geopolitical "
+            "stress (trade fragmentation), and climate transition risks. "
+            "Results publication expected Q3 2025. Swiss banks with EU subsidiaries "
+            "above EUR 30B threshold participate; FINMA conducts parallel domestic stress test."
+        ),
+        "impact_private_banking": (
+            "Swiss private banking groups with large EU entities participate directly. "
+            "Stress test results influence Pillar 2 capital requirements and supervisory "
+            "intensity. FINMA uses parallel exercise results for Swiss entities. "
+            "Climate scenario inclusion raises bar for climate risk quantification."
+        ),
+        "action_required": (
+            "Prepare stress test data submission infrastructure; model climate "
+            "transition scenarios; validate credit, market, and operational risk "
+            "stress models against EBA adverse scenario; engage with supervisors "
+            "on model assumptions. Internal parallel run recommended Q1 2025."
+        ),
+        "audit_relevance": (
+            "Stress testing audit: model documentation, data quality, scenario "
+            "coverage, governance of stress test results, climate risk integration."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC011",
+        "authority": "ECB / SSM",
+        "regulation": "ECB Supervisory Priorities 2025–2027",
+        "jurisdiction": "EU",
+        "type": "Review",
+        "date": "2025-Q1",
+        "description": (
+            "ECB Banking Supervision published its supervisory priorities for 2025–2027 "
+            "covering three strategic themes: (1) resilience to macro-financial and "
+            "geopolitical shocks — credit quality, IRRBB, capital adequacy; "
+            "(2) timely remediation of deficiencies — governance, risk data aggregation "
+            "(BCBS 239), and IT/cyber; (3) progress on digital transformation and "
+            "climate risk. Banks under SSM supervision (including Swiss banking groups "
+            "with significant EU subsidiaries) will receive supervisor-specific "
+            "engagement letters based on these priorities."
+        ),
+        "impact_private_banking": (
+            "ECB-supervised entities within Swiss banking groups face targeted "
+            "on-site inspections and model investigations aligned with these priorities. "
+            "Credit quality, IRRBB, governance, and cyber/IT are highest-probability "
+            "inspection topics. BCBS 239 risk data aggregation deficiencies "
+            "specifically targeted."
+        ),
+        "action_required": (
+            "Gap assess credit portfolio quality against ECB expectations; "
+            "test IRRBB models under ECB-specified scenarios; advance BCBS 239 "
+            "data aggregation remediation; prepare for cyber inspection using "
+            "TIBER-EU framework. Align internal audit plan with ECB priority areas."
+        ),
+        "audit_relevance": (
+            "Direct alignment opportunity: Internal Audit can provide pre-inspection "
+            "assurance on ECB priority areas — credit quality, IRRBB, governance, "
+            "IT/cyber, and climate risk — creating regulatory value from audit planning."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC012",
+        "authority": "European Commission / EFRAG",
+        "regulation": "CSRD — Corporate Sustainability Reporting Directive",
+        "jurisdiction": "EU",
+        "type": "Implementation deadline",
+        "date": "2025-01-01",
+        "description": (
+            "CSRD reporting obligations expand in 2025: large EU companies (>500 employees "
+            "OR >EUR 40M revenue OR >EUR 20M assets) report on FY2024 under ESRS standards, "
+            "with first reports published 2025. Swiss companies with EU-listed securities "
+            "or large EU subsidiaries included. ESRS (European Sustainability Reporting "
+            "Standards) require double materiality assessment, TCFD-aligned climate "
+            "disclosures, biodiversity, social, and governance reporting. "
+            "Limited assurance from auditors required from first year."
+        ),
+        "impact_private_banking": (
+            "Swiss private banking groups with EU-listed entities or large EU subsidiaries "
+            "face CSRD reporting. Double materiality assessment requires new process. "
+            "TCFD climate metrics (Scope 1/2/3 GHG, PCAF-based financed emissions) "
+            "require data collection from client portfolios. Private bank as reporter "
+            "AND as data provider to corporate clients subject to CSRD."
+        ),
+        "action_required": (
+            "Complete double materiality assessment if not done; align ESRS data "
+            "collection with reporting calendar; implement PCAF methodology for "
+            "financed emissions; engage external assurance provider; integrate "
+            "CSRD reporting into existing annual report process."
+        ),
+        "audit_relevance": (
+            "Sustainability reporting audit: double materiality assessment quality, "
+            "ESRS data completeness, financed emissions calculation methodology, "
+            "assurance readiness, greenwashing risk in disclosures."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC013",
+        "authority": "FCA (UK)",
+        "regulation": "UK TCFD Mandatory Climate Disclosure — Annual Review",
+        "jurisdiction": "UK",
+        "type": "Review",
+        "date": "2025-Q2",
+        "description": (
+            "UK TCFD-aligned climate disclosures became mandatory for premium-listed "
+            "companies and large asset managers from 2022, with scope extended to "
+            "additional categories in 2023–2024. FCA is conducting a 2025 review "
+            "of disclosure quality across regulated firms, with particular focus on "
+            "scenario analysis quality, Scope 3/financed emissions reporting, and "
+            "transition plan credibility. FCA has indicated enforcement action "
+            "for misleading climate disclosures under the Market Abuse framework."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks with UK FCA-regulated asset management entities "
+            "face TCFD disclosure obligations and FCA quality review. Financed "
+            "emissions reporting (Scope 3 Category 15) requires client portfolio "
+            "data collection. Transition plan commitments must be credible and "
+            "evidenced — vague net-zero pledges will attract FCA scrutiny."
+        ),
+        "action_required": (
+            "Update TCFD disclosure with 2024 data; enhance scenario analysis "
+            "(minimum 2 scenarios: Paris-aligned and 'current policies'); "
+            "strengthen financed emissions methodology (PCAF alignment); "
+            "document transition plan milestones with measurable targets."
+        ),
+        "audit_relevance": (
+            "Climate risk and TCFD audit: scenario analysis methodology, financed "
+            "emissions data quality, transition plan implementation, greenwashing "
+            "risk in UK disclosures."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC014",
+        "authority": "European Parliament / Council",
+        "regulation": "EU AI Act — Financial Services Application",
+        "jurisdiction": "EU",
+        "type": "Entry into force",
+        "date": "2025-08-01",
+        "description": (
+            "EU AI Act (Regulation 2024/1689) enters application progressively: "
+            "prohibited AI practices banned from 2 February 2025; high-risk AI "
+            "system requirements (Annex III) applying to financial services from "
+            "August 2026; GPAI model obligations from August 2025. Financial services "
+            "AI applications classified as high-risk include: creditworthiness assessment, "
+            "insurance risk scoring, and AI in employment decisions. "
+            "The European AI Office is developing sector-specific guidance for "
+            "financial services institutions (expected 2025)."
+        ),
+        "impact_private_banking": (
+            "AI models used in credit scoring (Lombard LTV assessment), client "
+            "risk profiling (suitability), AML transaction monitoring, and "
+            "fraud detection may be classified as high-risk under Annex III. "
+            "High-risk classification requires: conformity assessment, registration "
+            "in EU AI database, technical documentation, human oversight mechanisms, "
+            "and post-market monitoring."
+        ),
+        "action_required": (
+            "Inventory all AI/ML models in use; classify against EU AI Act risk "
+            "categories; implement AI governance framework for high-risk systems; "
+            "document model cards and technical documentation; plan conformity "
+            "assessment process; monitor European AI Office sector guidance."
+        ),
+        "audit_relevance": (
+            "AI governance audit: model inventory completeness, risk classification "
+            "accuracy, high-risk system documentation, human oversight controls, "
+            "explainability and bias testing for client-facing AI models."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC015",
+        "authority": "OECD / SECO / Swiss Federal Tax Administration",
+        "regulation": "CRS / FATCA Annual Reporting Deadline 2025",
+        "jurisdiction": "CH",
+        "type": "Implementation deadline",
+        "date": "2025-06-30",
+        "description": (
+            "Annual CRS (Common Reporting Standard) and FATCA reporting deadline "
+            "for Swiss Reporting Financial Institutions. CRS data for calendar year "
+            "2024 must be submitted to the Swiss Federal Tax Administration (ESTV) "
+            "by 30 June 2025 for transmission to 105+ partner jurisdictions. "
+            "FATCA data (IDES submission) follows US IRS deadline of 31 July 2025. "
+            "ESTV has increased audit activity on reporting quality, including "
+            "self-certification staleness and account classification accuracy."
+        ),
+        "impact_private_banking": (
+            "All Swiss private banks are Reporting Financial Institutions. "
+            "Accuracy of account holder classification (tax residency, entity "
+            "classification), self-certification currency, and reportable account "
+            "identification are key compliance metrics. ESTV spot audits of "
+            "classification methodology are increasing."
+        ),
+        "action_required": (
+            "Complete self-certification refresh campaign for stale certifications "
+            "(>3 years without update); validate account classification logic; "
+            "run pre-submission data quality checks; confirm IDES registration "
+            "and FATCA reporting infrastructure is operational; file by deadlines."
+        ),
+        "audit_relevance": (
+            "Tax compliance audit: CRS/FATCA self-certification completeness and "
+            "currency, account classification accuracy, reportable account "
+            "identification, submission timeliness and data quality."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC016",
+        "authority": "Basel Committee on Banking Supervision (BCBS)",
+        "regulation": "FRTB — Fundamental Review of the Trading Book",
+        "jurisdiction": "EU / CH",
+        "type": "Entry into force",
+        "date": "2025-01-01",
+        "description": (
+            "FRTB (BCBS 457) enters EU application via CRR3 on 1 January 2025 "
+            "(with full capital requirements phased). Trading book boundary rules "
+            "become mandatory: instruments must be assigned to trading or banking "
+            "book with strict transfer limitations. Standardised Approach (SA-FRTB) "
+            "mandatory as floor; IMA (Internal Model Approach) requires per-desk "
+            "approval. Expected Shortfall replaces VaR; non-modellable risk factors "
+            "(NMRFs) create capital add-ons for illiquid instruments. "
+            "Switzerland aligns FINMA capital ordinance with EU CRR3 timeline."
+        ),
+        "impact_private_banking": (
+            "Structured product hedging desks and FX/rates treasury operations "
+            "face fundamental capital model changes. SA-FRTB increases capital "
+            "for complex derivatives and illiquid positions common in private "
+            "bank treasury. IMA approval requires per-desk backtesting and P&L "
+            "attribution tests. NMRFs create capital charges for bespoke structured "
+            "product components."
+        ),
+        "action_required": (
+            "Complete trading book classification exercise; implement SA-FRTB "
+            "calculation engine; submit IMA application for eligible desks "
+            "if applicable; adapt risk systems to Expected Shortfall; establish "
+            "NMRF identification and capital charge process; update ICAAP."
+        ),
+        "audit_relevance": (
+            "Market risk audit: FRTB trading book boundary compliance, SA-FRTB "
+            "calculation accuracy, IMA model adequacy (if applicable), NMRF "
+            "identification completeness, capital reporting accuracy."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC017",
+        "authority": "FINMA",
+        "regulation": "FINMA Supervisory Priorities 2025",
+        "jurisdiction": "CH",
+        "type": "Review",
+        "date": "2025-Q1",
+        "description": (
+            "FINMA published its supervisory priorities for 2025 focusing on: "
+            "(1) credit and real estate risk — Lombard and mortgage concentration; "
+            "(2) operational and cyber resilience — DORA/FINMA 2023/1 implementation; "
+            "(3) AML/CFT — beneficial ownership quality and STR effectiveness; "
+            "(4) sustainable finance — greenwashing risk and FinSA ESG integration; "
+            "(5) digital assets — FINMA guidance on tokenisation and crypto custody. "
+            "On-site inspections and document reviews will be concentrated in these areas."
+        ),
+        "impact_private_banking": (
+            "All FINMA-supervised private banks should align internal audit plans "
+            "with FINMA priorities to provide pre-inspection assurance. Credit "
+            "risk, cyber resilience, and AML are highest-probability inspection "
+            "topics. ESG and digital assets signal growing supervisory expectations "
+            "in these areas."
+        ),
+        "action_required": (
+            "Align internal audit plan 2025 with FINMA priority areas; ensure "
+            "documentation readiness for potential FINMA on-site inspection; "
+            "brief Board and senior management on supervisory focus areas; "
+            "conduct self-assessment against FINMA inspection methodology."
+        ),
+        "audit_relevance": (
+            "Direct audit planning input: FINMA priorities define the highest-value "
+            "audit topics for 2025. Internal audit providing assurance on FINMA "
+            "priority areas maximises regulatory value and manages inspection risk."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC018",
+        "authority": "SFC (Hong Kong)",
+        "regulation": "SFC — Virtual Asset Regulatory Framework Expansion",
+        "jurisdiction": "HK",
+        "type": "Review",
+        "date": "2025-Q2",
+        "description": (
+            "Hong Kong's SFC is expanding the virtual asset (VA) regulatory framework "
+            "following VASP licensing regime implementation (June 2023). 2025 developments: "
+            "VA OTC derivatives regulation (SFC-HKMA joint guidelines expected Q1 2025), "
+            "enhanced stablecoin licensing regime (HKMA Bills progressing), "
+            "tokenised securities framework updates, and retail VA product distribution "
+            "requirements. SFC has signalled increased VA enforcement activity. "
+            "Swiss banks with Hong Kong operations or SFC licences are affected."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks with HK entities offering VA custody, trading, "
+            "or advisory services must maintain VASP licence compliance and "
+            "adapt to OTC derivatives and stablecoin rule changes. "
+            "Tokenised securities distribution requires SFC product authorisation. "
+            "Retail distribution of VA products subject to enhanced suitability requirements."
+        ),
+        "action_required": (
+            "Monitor SFC/HKMA VA regulatory updates; review VASP licence conditions "
+            "for compliance with expanding requirements; assess stablecoin exposure "
+            "against HKMA licensing regime; update VA product governance framework."
+        ),
+        "audit_relevance": (
+            "HK entity VA audit: VASP licence compliance, VA custody controls, "
+            "OTC VA derivatives risk management, stablecoin exposure assessment."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC019",
+        "authority": "PRA (UK)",
+        "regulation": "PRA Operational Resilience — Implementation Deadline",
+        "jurisdiction": "UK",
+        "type": "Implementation deadline",
+        "date": "2025-03-31",
+        "description": (
+            "PRA/FCA Operational Resilience Policy (PS6/21) requires all PRA-regulated "
+            "firms to be fully within impact tolerances for all important business "
+            "services by 31 March 2025. From this date, firms must not only have "
+            "defined impact tolerances but must demonstrate they can stay within them "
+            "during severe but plausible disruption scenarios. Three-year build-out "
+            "period (2022–2025) ends; supervisory intensity increases post-deadline. "
+            "Firms failing to meet deadline must immediately notify supervisors."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks with PRA-regulated UK entities face the March 2025 "
+            "deadline as a hard regulatory obligation. Important business service "
+            "mapping, impact tolerance testing, and scenario testing must be "
+            "complete. Post-March 2025, firms will be expected to demonstrate "
+            "within-tolerance performance in live disruption events."
+        ),
+        "action_required": (
+            "Complete important business service mapping and impact tolerance testing; "
+            "document scenario test results demonstrating within-tolerance performance; "
+            "ensure Board attestation of operational resilience compliance; "
+            "establish continuous monitoring of important business services; "
+            "prepare for PRA supervisory engagement on resilience evidence."
+        ),
+        "audit_relevance": (
+            "Operational resilience audit (UK): important business service mapping "
+            "completeness, impact tolerance test evidence, scenario testing rigour, "
+            "Board attestation process, continuous monitoring capability."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC020",
+        "authority": "FINMA",
+        "regulation": "FINMA RS 2023/1 — Climate and Nature-Related Financial Risks",
+        "jurisdiction": "CH",
+        "type": "Implementation deadline",
+        "date": "2025-01-01",
+        "description": (
+            "FINMA is developing climate risk supervisory expectations (building on "
+            "TCFD and NGFS frameworks) to be published as guidance in 2025. "
+            "Expectation: banks integrate physical and transition climate risks "
+            "into ICAAP, risk appetite, and stress testing. FINMA's 2024 survey "
+            "identified significant gaps in Swiss banks' climate risk quantification "
+            "and scenario analysis capabilities. Formal circular expected 2025–2026; "
+            "supervisory reviews of climate risk integration underway in 2025."
+        ),
+        "impact_private_banking": (
+            "Private banks must demonstrate climate risk integration in credit "
+            "portfolio assessment (physical risk on real estate collateral, "
+            "transition risk on carbon-intensive sectors), IRRBB (green asset "
+            "repricing), and operational risk (physical climate impacts on "
+            "infrastructure). TCFD reporting aligned with FINMA expectations required."
+        ),
+        "action_required": (
+            "Complete TCFD-aligned climate risk assessment; integrate physical risk "
+            "into real estate collateral valuation; assess transition risk in "
+            "credit portfolio (sector-level); run climate scenario analysis in "
+            "ICAAP; establish climate risk data infrastructure for ongoing monitoring."
+        ),
+        "audit_relevance": (
+            "Climate risk audit: TCFD disclosure quality, physical risk integration "
+            "in credit assessment, transition risk scenario analysis, ICAAP climate "
+            "risk chapter adequacy, financed emissions data quality."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC021",
+        "authority": "MAS (Singapore)",
+        "regulation": "MAS Notice 626 — AML/CFT for Banks (Amendment) 2025",
+        "jurisdiction": "SG",
+        "type": "Review",
+        "date": "2025-Q1",
+        "description": (
+            "MAS is reviewing and amending Notice 626 (Prevention of Money Laundering "
+            "and Countering the Financing of Terrorism — Banks) in 2025. Expected "
+            "amendments include: enhanced beneficial ownership requirements for "
+            "legal arrangement clients (trusts, foundations), updated high-risk "
+            "country lists, enhanced correspondent banking due diligence, and "
+            "strengthened virtual asset-related AML provisions. Singapore's "
+            "2024 FATF mutual evaluation results are driving specific amendments."
+        ),
+        "impact_private_banking": (
+            "Singapore private banking entities of Swiss groups must update "
+            "AML procedures for trust/foundation clients, high-risk jurisdictions, "
+            "and crypto-related client activities. Correspondent banking relationships "
+            "require enhanced due diligence documentation. Staff training update required."
+        ),
+        "action_required": (
+            "Monitor MAS Notice 626 consultation outcome; gap assess procedures "
+            "against expected amendments; update trust/foundation KYC procedures; "
+            "review high-risk country list and exposure; update correspondent "
+            "banking risk assessment. Implementation within MAS transition period."
+        ),
+        "audit_relevance": (
+            "Singapore AML audit: Notice 626 compliance, trust/foundation KYC "
+            "quality, correspondent banking due diligence, high-risk jurisdiction "
+            "controls, virtual asset AML procedures."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC022",
+        "authority": "EBA / European Commission",
+        "regulation": "EBA AML/CFT Package — Single Rulebook",
+        "jurisdiction": "EU",
+        "type": "Consultation",
+        "date": "2025-Q2",
+        "description": (
+            "The EU AML/CFT Single Rulebook — the AML Regulation (AMLR, directly "
+            "applicable from 2027) complementing AMLD6 — is being developed through "
+            "EBA Level 2 measures and guidelines throughout 2025. EBA will publish "
+            "consultation papers on: customer due diligence standards, beneficial "
+            "ownership verification methods, transaction monitoring calibration "
+            "expectations, and PEP identification methodologies. These will become "
+            "binding EU-wide standards from 2027."
+        ),
+        "impact_private_banking": (
+            "EU AML regulation creates harmonised, directly applicable AML standards "
+            "superseding national transpositions. Higher floor for beneficial ownership "
+            "verification, CDD standards, and transaction monitoring will require "
+            "framework updates by 2027. Early adoption of AMLR standards reduces "
+            "transition risk. Swiss banks must align EU entities."
+        ),
+        "action_required": (
+            "Engage with EBA consultations on key provisions; assess current AML "
+            "framework against draft AMLR standards; identify gaps requiring "
+            "remediation by 2027; consider early adoption for EU entities to "
+            "reduce transition risk. Engage industry body responses."
+        ),
+        "audit_relevance": (
+            "Future audit scope: AMLR compliance readiness, beneficial ownership "
+            "verification quality, transaction monitoring calibration against "
+            "EBA expectations, PEP programme adequacy."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC023",
+        "authority": "HKMA",
+        "regulation": "HKMA Stablecoin Regulation — Legislative Framework",
+        "jurisdiction": "HK",
+        "type": "Entry into force",
+        "date": "2025-Q2",
+        "description": (
+            "Hong Kong's Stablecoins Ordinance is progressing through LegCo (expected "
+            "enactment H1 2025). The HKMA will license fiat-referenced stablecoin (FRS) "
+            "issuers. Banks wishing to issue or hold FRS as principal must comply with "
+            "licensing requirements. Custody of licensed FRS for clients will be "
+            "regulated. Unlicensed FRS will be prohibited for use in HK financial "
+            "markets. HKMA sandbox participants (including bank-affiliated stablecoin "
+            "projects) must transition to full licensing regime."
+        ),
+        "impact_private_banking": (
+            "HK entities of Swiss banks holding stablecoins in client portfolios "
+            "must assess licensing status of each stablecoin. Unlicensed stablecoin "
+            "exposure must be managed. Banks considering stablecoin issuance "
+            "partnerships must assess HKMA licensing requirements. Client "
+            "stablecoin product offering requires product governance update."
+        ),
+        "action_required": (
+            "Inventory client stablecoin holdings; assess licensing status under "
+            "HK regime; update product governance for stablecoin instruments; "
+            "review custody arrangements; monitor HKMA sandbox and licensing "
+            "timeline; brief HK entity Board on regulatory change."
+        ),
+        "audit_relevance": (
+            "Digital assets audit (HK): stablecoin client exposure assessment, "
+            "product governance compliance, custody control adequacy, "
+            "HKMA licensing compliance for any stablecoin activities."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC024",
+        "authority": "FSB (Financial Stability Board)",
+        "regulation": "FSB Crypto-Asset Recommendations — Implementation Monitoring",
+        "jurisdiction": "Global",
+        "type": "Review",
+        "date": "2025-Q3",
+        "description": (
+            "FSB published final high-level recommendations for crypto-asset "
+            "activity regulation and global stablecoin oversight in October 2023. "
+            "2025: FSB monitoring review of jurisdictional implementation progress. "
+            "Recommendations cover: regulatory perimeter for crypto, cross-border "
+            "cooperation, stablecoin reserve and governance standards, and "
+            "DeFi risks. FSB report will assess gaps and may escalate to G20 "
+            "for further policy action. MiCA (EU), FIT21 (US under consideration), "
+            "and HK stablecoin framework are key jurisdictional responses."
+        ),
+        "impact_private_banking": (
+            "FSB implementation review creates risk of additional regulatory "
+            "requirements in key jurisdictions (US, Asia) beyond MiCA. Banks "
+            "with global crypto-asset services should monitor FSB findings "
+            "for advance indication of regulatory direction. Cross-border "
+            "crypto supervision coordination implications for compliance frameworks."
+        ),
+        "action_required": (
+            "Monitor FSB implementation review findings; assess regulatory "
+            "landscape in all jurisdictions where crypto services are offered; "
+            "scenario plan for US crypto regulation (FIT21 or alternative); "
+            "maintain adaptable compliance framework for global crypto operations."
+        ),
+        "audit_relevance": (
+            "Crypto risk audit: regulatory compliance across jurisdictions, "
+            "cross-border crypto governance consistency, preparedness for "
+            "regulatory change in non-MiCA jurisdictions."
+        ),
+        "priority": "Low",
+    },
+
+    {
+        "reg_id": "RC025",
+        "authority": "Basel Committee on Banking Supervision (BCBS)",
+        "regulation": "BCBS 239 — Risk Data Aggregation and Reporting (Supervisory Reviews)",
+        "jurisdiction": "Global",
+        "type": "Review",
+        "date": "2025-Q2",
+        "description": (
+            "BCBS published its 10-year progress report on Principles for Effective "
+            "Risk Data Aggregation and Risk Reporting (BCBS 239) in 2023, finding "
+            "that G-SIBs remain substantially non-compliant. In 2025, supervisors "
+            "(ECB, FINMA, PRA, BIS) are conducting targeted reviews of BCBS 239 "
+            "implementation at significant institutions. Key deficiencies: "
+            "data lineage documentation, aggregation accuracy for complex portfolios, "
+            "timeliness of management reporting in stress conditions, and "
+            "IT architecture supporting single authoritative data sources."
+        ),
+        "impact_private_banking": (
+            "Swiss private banking groups designated as G-SIBs or D-SIBs face "
+            "direct supervisory review. Mid-tier private banks face indirect "
+            "pressure through correspondent bank reporting requirements and "
+            "FINMA data reporting expectations. Data aggregation weakness is "
+            "the most common finding in FINMA and ECB on-site inspections."
+        ),
+        "action_required": (
+            "Conduct BCBS 239 gap assessment against all 11 principles; "
+            "prioritise data lineage documentation and single-source-of-truth "
+            "architecture for key risk metrics; establish board-approved BCBS 239 "
+            "remediation roadmap; demonstrate stress-condition reporting capability."
+        ),
+        "audit_relevance": (
+            "Risk data audit: BCBS 239 principles compliance, data lineage, "
+            "aggregation accuracy, management information quality, IT architecture "
+            "supporting authoritative data sources. High regulatory exposure topic."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC026",
+        "authority": "European AI Office / EBA",
+        "regulation": "EU AI Act — Financial Services Sector Guidance",
+        "jurisdiction": "EU",
+        "type": "Consultation",
+        "date": "2025-Q3",
+        "description": (
+            "The European AI Office (established under the AI Act) is developing "
+            "sector-specific guidance for financial services, expected for consultation "
+            "Q3 2025 and finalisation H1 2026. Guidance will clarify: classification "
+            "of financial services AI use cases as high-risk, conformity assessment "
+            "methodology for credit and AML models, human oversight requirements "
+            "for automated client-facing decisions, and GPAI model obligations "
+            "for large language model deployments in financial services."
+        ),
+        "impact_private_banking": (
+            "Clarification of AI Act scope will determine which AI/ML models require "
+            "full high-risk conformity assessment (potentially credit scoring, "
+            "AML monitoring, suitability engines, fraud detection models). "
+            "GPAI model obligations affect banks using large LLMs for internal "
+            "productivity or client communication. Timeline and cost of compliance "
+            "will crystallise from guidance."
+        ),
+        "action_required": (
+            "Engage with consultation process; complete preliminary AI model "
+            "inventory and risk classification; develop AI governance framework "
+            "proportional to anticipated guidance; assess LLM use cases against "
+            "GPAI model obligations. Do not wait for final guidance — "
+            "draft governance framework now to reduce implementation timeline."
+        ),
+        "audit_relevance": (
+            "AI governance pre-implementation audit: model inventory completeness, "
+            "preliminary risk classification, governance framework adequacy, "
+            "human oversight controls for automated decisions."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC027",
+        "authority": "FATF",
+        "regulation": "FATF Guidance on Virtual Assets and VASPs — 2025 Update",
+        "jurisdiction": "Global",
+        "type": "Review",
+        "date": "2025-Q2",
+        "description": (
+            "FATF is updating its guidance on virtual assets and Virtual Asset Service "
+            "Providers (VASPs) in 2025, following the 2023 targeted update. Focus areas: "
+            "DeFi AML obligations, NFT regulatory perimeter, Travel Rule implementation "
+            "progress review (only 50% of jurisdictions have implemented), "
+            "and updated guidance on crypto-asset risk assessment methodologies. "
+            "FATF will publish a Travel Rule implementation status report, "
+            "potentially triggering enhanced due diligence requirements for "
+            "institutions in non-compliant jurisdictions."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks with crypto services must comply with FATF Travel "
+            "Rule (originator/beneficiary information for crypto transfers >USD/EUR 1,000). "
+            "Updated guidance on DeFi and NFTs may expand AML perimeter. "
+            "Travel Rule implementation assessment affects correspondent banking "
+            "relationships with VASP counterparties in non-compliant jurisdictions."
+        ),
+        "action_required": (
+            "Assess Travel Rule implementation completeness (SREA, OpenVASP, or "
+            "proprietary solution); review DeFi exposure in client portfolios "
+            "for AML implications; update VA AML procedures against updated FATF "
+            "guidance; monitor non-compliant jurisdiction list for EDD implications."
+        ),
+        "audit_relevance": (
+            "Crypto AML audit: Travel Rule compliance, VASP due diligence, "
+            "chain analytics integration, DeFi exposure assessment, "
+            "NFT AML procedures."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC028",
+        "authority": "FINMA / Swiss Federal Council",
+        "regulation": "Swiss FMIA — OTC Derivatives Reporting and Clearing Obligations",
+        "jurisdiction": "CH",
+        "type": "Review",
+        "date": "2025-Q2",
+        "description": (
+            "The Swiss Financial Market Infrastructure Act (FMIA) derivatives framework "
+            "is under review in 2025, with the Federal Council expected to propose "
+            "amendments to align reporting requirements with EU EMIR Refit standards. "
+            "Key changes under consideration: expanded reporting fields (ISO 20022 "
+            "alignment), enhanced counterparty identifier requirements (LEI mandatory "
+            "for all derivatives), and updated clearing thresholds. Current FMIA "
+            "reporting obligations already cover FX, rates, equity, credit, and "
+            "commodity derivatives for banks above thresholds."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks above FMIA clearing/reporting thresholds must "
+            "maintain compliant trade reporting to registered trade repositories. "
+            "EMIR Refit alignment changes require system updates (new fields, "
+            "ISO 20022 message formats). LEI mandatory for all counterparties "
+            "requires client LEI collection programme."
+        ),
+        "action_required": (
+            "Monitor FMIA amendment consultation; assess reporting infrastructure "
+            "against expected EMIR Refit-aligned changes; complete client LEI "
+            "collection for derivatives counterparties; plan system updates "
+            "for new reporting fields. Engage with trade repository on "
+            "transition timeline."
+        ),
+        "audit_relevance": (
+            "Derivatives reporting audit: FMIA reporting completeness, LEI "
+            "coverage, reporting accuracy and timeliness, clearing threshold "
+            "monitoring, trade repository reconciliation."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC029",
+        "authority": "EBA",
+        "regulation": "EBA Guidelines on Outsourcing Arrangements — 2025 Review",
+        "jurisdiction": "EU",
+        "type": "Review",
+        "date": "2025-Q3",
+        "description": (
+            "EBA is reviewing its Guidelines on Outsourcing Arrangements (EBA/GL/2019/02) "
+            "in 2025 to align with DORA's third-party ICT risk requirements and "
+            "incorporate learnings from supervisory practice. Expected revisions: "
+            "enhanced cloud outsourcing provisions (data location, exit strategy), "
+            "strengthened intragroup outsourcing standards, updated concentration "
+            "risk management expectations, and alignment of outsourcing register "
+            "requirements with DORA ICT third-party register. "
+            "Consultation expected Q2 2025, final guidelines Q4 2025."
+        ),
+        "impact_private_banking": (
+            "EU entities of Swiss private banks must align outsourcing governance "
+            "with updated EBA guidelines. DORA-EBA alignment reduces dual compliance "
+            "burden for ICT outsourcing but may increase requirements for "
+            "non-ICT outsourcing. Concentration risk management expectations "
+            "for core banking platform providers are expected to tighten."
+        ),
+        "action_required": (
+            "Monitor EBA consultation; gap assess current outsourcing register "
+            "and governance against expected revisions; strengthen cloud "
+            "outsourcing documentation; develop vendor concentration risk framework; "
+            "update exit strategy documentation for critical vendors."
+        ),
+        "audit_relevance": (
+            "Outsourcing governance audit: EBA guideline compliance, cloud "
+            "outsourcing controls, exit strategy adequacy, concentration risk "
+            "assessment, intragroup outsourcing documentation."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC030",
+        "authority": "FINMA",
+        "regulation": "FINMA — FinSA/FinIA Implementation Review 2025",
+        "jurisdiction": "CH",
+        "type": "Review",
+        "date": "2025-Q2",
+        "description": (
+            "FINMA is conducting a structured review of Financial Services Act (FinSA) "
+            "and Financial Institutions Act (FinIA) implementation quality across "
+            "supervised institutions in 2025. Focus areas: client segmentation accuracy, "
+            "suitability assessment process quality, documentation completeness for "
+            "advisory mandates, inducement/retrocession disclosure, and ESG preference "
+            "integration (mandatory since January 2024). The review may result in "
+            "enforcement actions or enhanced supervisory requirements for institutions "
+            "with material deficiencies."
+        ),
+        "impact_private_banking": (
+            "All Swiss private banks providing investment services must demonstrate "
+            "FinSA compliance across the full client lifecycle. Client segmentation, "
+            "suitability documentation, and ESG preference integration are highest "
+            "deficiency-rate areas based on FINMA pre-review indications. "
+            "Retrocession disclosure completeness is a specific focus area."
+        ),
+        "action_required": (
+            "Conduct internal FinSA compliance self-assessment; audit sample of "
+            "advisory mandate documentation for completeness; verify ESG preference "
+            "assessment is captured for all relevant client interactions since "
+            "January 2024; review retrocession disclosure processes; "
+            "correct identified deficiencies before FINMA review."
+        ),
+        "audit_relevance": (
+            "Investment suitability audit: FinSA documentation quality, "
+            "client segmentation accuracy, ESG preference integration, "
+            "retrocession disclosure, mandate drift monitoring. "
+            "High-value audit given FINMA supervisory focus."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC031",
+        "authority": "Swiss Federal Council / FINMA",
+        "regulation": "Swiss 'Too Big to Fail' (TBTF) Framework — Post-CS Revision",
+        "jurisdiction": "CH",
+        "type": "Consultation",
+        "date": "2025-Q2",
+        "description": (
+            "Following the Credit Suisse emergency rescue, the Swiss Federal Council "
+            "commissioned a comprehensive review of the TBTF framework. Key proposals "
+            "under consultation: enhanced gone-concern capital requirements for "
+            "systemically important banks, strengthened FINMA early intervention powers, "
+            "revised Emergency Liquidity Assistance (ELA) framework including Public "
+            "Liquidity Backstop (PLB) legislation, and enhanced senior management "
+            "accountability provisions. UBS — now the only Swiss G-SIB — faces "
+            "potentially significant capital surcharges under revised framework."
+        ),
+        "impact_private_banking": (
+            "Directly affects UBS and systemically important Swiss cantonal banks. "
+            "Indirectly affects private banks: enhanced FINMA powers create "
+            "potential for broader intervention authority; PLB framework may "
+            "affect interbank funding costs; senior manager accountability "
+            "provisions may be extended to non-TBTF institutions in revised "
+            "FINMA governance guidelines."
+        ),
+        "action_required": (
+            "Monitor consultation outcome; assess implications of enhanced FINMA "
+            "powers for own supervisory relationship; review senior manager "
+            "accountability framework in anticipation of broader application; "
+            "brief Board on TBTF reform implications for sector."
+        ),
+        "audit_relevance": (
+            "Governance and capital audit: senior manager accountability "
+            "framework adequacy, capital planning under potential revised "
+            "requirements, recovery plan adequacy, liquidity backstop arrangements."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC032",
+        "authority": "Swiss Banking Act / FINMA",
+        "regulation": "FINMA Beneficial Ownership Transparency Requirements",
+        "jurisdiction": "CH",
+        "type": "Review",
+        "date": "2025-Q3",
+        "description": (
+            "Following FATF's 4th round Switzerland evaluation and EU AMLA pressure, "
+            "Switzerland is enhancing beneficial ownership transparency requirements. "
+            "Proposals under consultation: expanded shareholder register obligations "
+            "for unlisted Swiss companies, enhanced beneficial owner identification "
+            "for complex legal structures (foundations, collective investment schemes), "
+            "and strengthened FINMA authority to verify beneficial ownership data "
+            "quality. FINMA has made beneficial ownership a specific 2025 "
+            "inspection priority for private banks."
+        ),
+        "impact_private_banking": (
+            "Private banks onboarding clients through complex structures "
+            "(Swiss and foreign foundations, trusts, SPVs) must demonstrate "
+            "enhanced beneficial owner verification procedures. FINMA on-site "
+            "inspections will specifically test quality of beneficial ownership "
+            "evidence files. Remediation of legacy accounts with inadequate "
+            "documentation is a time-sensitive priority."
+        ),
+        "action_required": (
+            "Audit sample of complex structure accounts for beneficial ownership "
+            "documentation quality; remediate gaps in legacy accounts; "
+            "update procedures for foundation and trust onboarding; "
+            "implement periodic beneficial ownership re-verification triggers; "
+            "prepare for FINMA beneficial ownership inspection."
+        ),
+        "audit_relevance": (
+            "AML beneficial ownership audit: documentation quality for complex "
+            "structures, re-verification processes, foundation/trust KYC "
+            "procedures, FATF FATF-aligned assessment methodology."
+        ),
+        "priority": "High",
+    },
+
+    {
+        "reg_id": "RC033",
+        "authority": "European Commission / ESMA",
+        "regulation": "ESMA MiFID II Suitability Guidelines — 2025 Review",
+        "jurisdiction": "EU",
+        "type": "Review",
+        "date": "2025-Q3",
+        "description": (
+            "ESMA is reviewing its Guidelines on MiFID II Suitability Requirements "
+            "(ESMA35-43-3172) in 2025, with particular focus on: AI and automation "
+            "in suitability assessments, sustainability (ESG) preference integration "
+            "quality, appropriateness testing for complex products, and "
+            "portfolio management mandate suitability monitoring frequency. "
+            "Updated guidelines expected Q4 2025 with 12-month implementation period. "
+            "National supervisors (NCAs) are already conducting suitability "
+            "reviews based on ESMA's 2023 supervisory briefing."
+        ),
+        "impact_private_banking": (
+            "EU entities of Swiss private banks must update suitability frameworks "
+            "to reflect revised ESMA guidelines. ESG preference integration — "
+            "already mandatory but inconsistently implemented — will face enhanced "
+            "scrutiny. AI-assisted suitability engines require human oversight "
+            "and explainability documentation. Portfolio drift monitoring "
+            "frequency standards may increase."
+        ),
+        "action_required": (
+            "Monitor ESMA consultation; audit current suitability process against "
+            "draft revised guidelines; assess AI/automation tools for "
+            "explainability requirements; implement ESG preference recording "
+            "audit trail; review portfolio monitoring frequency for mandates."
+        ),
+        "audit_relevance": (
+            "MiFID suitability audit: ESG preference integration quality, "
+            "AI model oversight documentation, portfolio drift monitoring, "
+            "appropriateness test coverage for complex products."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC034",
+        "authority": "BCBS",
+        "regulation": "BCBS Climate Risk Principles — Supervisory Implementation Review",
+        "jurisdiction": "Global",
+        "type": "Review",
+        "date": "2025-Q4",
+        "description": (
+            "BCBS published Principles for the Effective Management and Supervision "
+            "of Climate-Related Financial Risks in June 2022. In 2025, BCBS is "
+            "conducting a global supervisory implementation review to assess "
+            "banks' progress across 18 principles. Areas of focus: "
+            "climate risk integration in ICAAP, scenario analysis and stress testing, "
+            "credit risk assessment (physical and transition), and disclosure quality. "
+            "Review findings will inform potential BCBS capital treatment for "
+            "climate risk (Pillar 1 or Pillar 2 add-on) — a key policy question "
+            "expected to be resolved 2025–2026."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks with significant real estate lending (physical risk) "
+            "or carbon-intensive sector exposure (transition risk) face material "
+            "capital implications if BCBS moves to Pillar 1 climate capital charge. "
+            "Supervisory review findings from peer banks will set the bar "
+            "for expected practices, influencing FINMA and ECB expectations."
+        ),
+        "action_required": (
+            "Assess compliance with all 18 BCBS climate risk principles; "
+            "enhance ICAAP climate scenario analysis; develop physical risk "
+            "assessment for real estate collateral portfolios; brief Board "
+            "on potential capital implications of BCBS Pillar 1 climate charge."
+        ),
+        "audit_relevance": (
+            "Climate risk audit: BCBS principles compliance, ICAAP climate "
+            "integration, physical risk assessment methodology, transition risk "
+            "framework, disclosure alignment."
+        ),
+        "priority": "Medium",
+    },
+
+    {
+        "reg_id": "RC035",
+        "authority": "Swiss Federal Tax Administration (ESTV)",
+        "regulation": "DAC8 Preparation — Crypto-Asset Reporting Framework",
+        "jurisdiction": "CH / EU",
+        "type": "Implementation deadline",
+        "date": "2026-01-01",
+        "description": (
+            "EU DAC8 Directive (extending AEoI to crypto-assets) requires EU member "
+            "states to collect and exchange data on crypto-asset accounts from 1 January 2026. "
+            "Switzerland is implementing equivalent CARF (Crypto-Asset Reporting Framework, "
+            "OECD) standards on aligned timeline. Financial institutions and CASPs "
+            "holding or trading crypto-assets for clients must: identify reportable "
+            "accounts, collect self-certifications for crypto holders, and report "
+            "transaction data and account balances annually from 2026."
+        ),
+        "impact_private_banking": (
+            "Swiss private banks offering crypto custody or trading services must "
+            "implement CARF/DAC8 reporting infrastructure by end-2025 for first "
+            "reporting cycle in 2026. Client self-certification collection for "
+            "crypto-asset accounts required. Integration with existing CRS/FATCA "
+            "reporting infrastructure. Significant data collection challenge for "
+            "banks with legacy crypto service implementations."
+        ),
+        "action_required": (
+            "Inventory crypto-asset accounts requiring CARF reporting; design "
+            "self-certification workflow for crypto clients; build or procure "
+            "CARF reporting capability; integrate with existing CRS reporting "
+            "infrastructure; test reporting system ahead of January 2026 deadline; "
+            "client communication programme."
+        ),
+        "audit_relevance": (
+            "Tax compliance audit (forward-looking): CARF implementation readiness, "
+            "crypto account inventory completeness, self-certification collection "
+            "process, reporting infrastructure testing."
+        ),
+        "priority": "High",
+    },
+
+]
