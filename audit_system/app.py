@@ -435,6 +435,28 @@ st.markdown("""
     .data-table td, .data-table th { border: 1px solid #ccc !important; color: #000 !important; }
     .section-title { color: #000 !important; }
   }
+
+  /* ── Mode toggle radio ── */
+  div[data-testid="stRadio"] > div {
+    background: #1a1f35;
+    border: 1px solid rgba(127,168,251,0.25);
+    border-radius: 8px;
+    padding: 6px 10px;
+    width: fit-content;
+  }
+  div[data-testid="stRadio"] label {
+    color: #c8d0e8 !important;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  div[data-testid="stRadio"] label:has(input:checked) {
+    background: #1e2a45;
+    color: #ffffff !important;
+    font-weight: 700;
+  }
 </style>
 """, unsafe_allow_html=True)
 
