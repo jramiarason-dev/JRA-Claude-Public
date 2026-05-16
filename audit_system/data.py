@@ -4331,254 +4331,616 @@ DATA_ANALYTICS_SCENARIOS = {
 
 IIA_STANDARDS_2024 = [
     {
-        "standard_id": "Global Internal Audit Standards — Overview",
-        "title": "New Global Internal Audit Standards (GIAS) — Effective 9 January 2024",
-        "description": (
-            "The IIA released the Global Internal Audit Standards on 9 January 2024, replacing the "
-            "2017 International Standards for the Professional Practice of Internal Auditing. "
-            "The new framework is organised into 15 Domains, 52 Standards, and 170 Principles. "
-            "Financial institutions must implement the new standards by 9 January 2025."
-        ),
+        "standard_id": "Overview",
+        "domain": "Framework",
+        "title": "Global Internal Audit Standards (GIAS) 2024",
+        "description": "The GIAS 2024, effective January 9, 2024, replace the 2017 Standards. They establish mandatory requirements across five Domains, introduce Topical Requirements for specialised areas, and elevate the CAE's accountability to governing bodies. They apply to all internal audit functions globally.",
         "key_requirements": [
-            "All internal audit functions must adopt the new Standards by January 2025",
-            "Quality assurance programme must be updated to assess conformance with new Standards",
-            "Internal audit charter must reference the new Global Internal Audit Standards",
-            "CAE must communicate adoption plan to Audit Committee and senior management",
-            "Training plan for internal audit staff on new Standards requirements must be documented",
+            "Mandatory for all IIA member functions globally from January 9, 2024",
+            "Five Domains covering Purpose, Ethics, Governance, Management, and Services",
+            "Topical Requirements for Fraud, Cyber, Culture, ESG, and Third-Party Risk",
+            "Enhanced independence and objectivity requirements",
+            "Stronger quality assurance and reporting to governing bodies",
         ],
-        "relevance_to_banking": (
-            "Immediate relevance: all bank internal audit functions must update their charters, "
-            "quality assurance programmes, and audit methodologies to conform by January 2025. "
-            "Regulators in key jurisdictions (FINMA, FCA, MAS) have indicated they will use the "
-            "new Standards as the reference framework for evaluating internal audit quality."
-        ),
+        "banking_application": "Swiss private banks must align their internal audit charters, methodologies, and reporting frameworks with GIAS 2024 to satisfy FINMA Circular 2017/1 and IIA membership obligations.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
     },
+    # Domain I
     {
-        "standard_id": "Domain I",
+        "standard_id": "Standard 1",
+        "domain": "Domain I — Purpose of Internal Auditing",
         "title": "Purpose of Internal Auditing",
-        "description": (
-            "Establishes the fundamental purpose of internal auditing: to enhance and protect "
-            "organisational value by providing risk-based and objective assurance, advice, insight, "
-            "and foresight. The Standards now explicitly include 'insight' and 'foresight' as "
-            "internal audit responsibilities alongside traditional assurance."
-        ),
+        "description": "Internal auditing strengthens the organization's ability to create, protect, and sustain value by providing the governing body and senior management with independent, risk-based, and objective assurance, advice, insight, and foresight.",
         "key_requirements": [
-            "Internal audit must provide assurance, advice, insight, AND foresight — all four",
-            "Internal audit must assess and contribute to improving governance processes",
-            "Internal audit must evaluate and improve risk management and control effectiveness",
-            "The purpose must be reflected in the internal audit charter",
-            "Foresight requires internal audit to identify and communicate emerging risks proactively",
+            "Internal audit must provide assurance, advice, insight, and foresight",
+            "Activities must strengthen value creation and protection",
+            "Scope covers governance, risk management, and internal controls",
+            "Must serve both the governing body and senior management",
+            "Independence is non-negotiable in all engagements",
         ],
-        "relevance_to_banking": (
-            "Private bank internal audit functions that restrict themselves to backward-looking "
-            "compliance testing are no longer conforming. The Standards now require proactive "
-            "identification of emerging risks — AI adoption, geopolitical risk, climate transition, "
-            "DORA compliance — as part of the audit mandate."
-        ),
+        "banking_application": "In private banking, internal audit must cover all three lines of defence: front office (1L), risk and compliance (2L), and audit itself (3L). Value protection includes client assets, regulatory licence, and reputational capital.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
     },
     {
-        "standard_id": "Standard 1.1",
-        "title": "Accountability of the Board",
-        "description": (
-            "The Board is ultimately accountable for internal audit. The Board — through the Audit "
-            "Committee — must approve the internal audit charter, ensure the CAE reports functionally "
-            "to the Audit Committee, approve the audit plan, and receive periodic communications "
-            "on the results of internal audit activity."
-        ),
+        "standard_id": "Standard 2",
+        "domain": "Domain I — Purpose of Internal Auditing",
+        "title": "Ethics and Professional Conduct",
+        "description": "Internal auditors must demonstrate integrity, objectivity, and respect for others. They must comply with the IIA Code of Ethics and avoid conflicts of interest in all professional activities.",
         "key_requirements": [
-            "Board must approve the internal audit charter annually",
-            "CAE must have an unobstructed reporting line to the Audit Committee",
-            "Board must approve or concur with the appointment or dismissal of the CAE",
-            "Audit Committee must assess the performance of the CAE at least annually",
-            "Board must ensure internal audit has sufficient resources to fulfil its mandate",
+            "Compliance with the IIA Code of Ethics at all times",
+            "Integrity in all findings, reporting, and communications",
+            "Objectivity: no subordination of judgement to others",
+            "Confidentiality of information obtained during engagements",
+            "Disclosure of actual and potential conflicts of interest",
         ],
-        "relevance_to_banking": (
-            "Common finding at private banks: CAE reports to CEO administratively AND functionally, "
-            "compromising independence. Regulators increasingly ask Audit Committees to confirm "
-            "the functional independence of internal audit from executive management."
-        ),
+        "banking_application": "Auditors reviewing private banking operations must maintain strict confidentiality regarding HNWI client data, declare conflicts if they hold accounts at the audited entity, and report findings without influence from senior management.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
     },
+    # Domain II
     {
-        "standard_id": "Standard 2.1",
+        "standard_id": "Standard 3",
+        "domain": "Domain II — Ethics and Professionalism",
         "title": "Independence and Objectivity",
-        "description": (
-            "Internal audit must be independent of the activities it audits. The organisational "
-            "independence of internal audit must be reflected in the reporting structure, and "
-            "individual internal auditors must maintain objectivity in performing their work. "
-            "Threats to independence must be identified, documented, and managed."
-        ),
+        "description": "The internal audit function must be independent of the activities it audits. Individual auditors must be objective in performing their work, ensuring that assessments are based on evidence rather than personal interest or external influence.",
         "key_requirements": [
-            "CAE must report functionally to the Board/Audit Committee; any administrative reporting to senior management must not impair independence",
-            "Internal auditors must not audit activities for which they previously had responsibility within the past 12 months",
-            "Independence impairments must be disclosed to the Board",
-            "Consulting engagements must not compromise audit objectivity",
-            "Rotation of audit staff on engagements with long-term personal relationships recommended",
+            "Organizational independence: CAE reports functionally to the governing body",
+            "No dual-hat arrangements between 1L/2L and 3L",
+            "Individual objectivity: auditor free from bias and conflict",
+            "Impairments to independence must be disclosed immediately",
+            "Annual declaration of independence for CAE and audit staff",
         ],
-        "relevance_to_banking": (
-            "Significant issue in smaller private banks where audit staff may combine 2LoD and 3LoD "
-            "roles, or where the head of internal audit has pre-existing management relationships "
-            "with business line heads. FINMA and MAS have cited independence deficiencies at "
-            "private banks as a recurring finding."
-        ),
+        "banking_application": "The CAE of a Swiss private bank must report functionally to the Audit Committee (not the CEO or CFO). Auditors who previously worked in the front office cannot audit their former team without a 12-month cooling-off period.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
     },
     {
-        "standard_id": "Standard 4.1",
-        "title": "Quality Assurance and Improvement Programme (QAIP)",
-        "description": (
-            "The CAE must establish a Quality Assurance and Improvement Programme covering all "
-            "aspects of internal audit activity. The QAIP must include both ongoing monitoring "
-            "and periodic self-assessments, as well as independent external assessments at "
-            "least every 5 years."
-        ),
+        "standard_id": "Standard 4",
+        "domain": "Domain II — Ethics and Professionalism",
+        "title": "Competency",
+        "description": "Internal auditors must possess or develop the knowledge, skills, and other competencies needed to fulfil their responsibilities. The CAE must ensure the function collectively possesses the competencies required to cover the audit universe.",
         "key_requirements": [
-            "Ongoing monitoring: regular supervision and review of each audit engagement",
-            "Periodic internal assessment: at minimum annual self-assessment against the Standards",
-            "External assessment: independent review by qualified assessor at least every 5 years",
-            "Results of QAIP must be communicated to the Board and senior management",
-            "CAE must confirm to the Board annually that the function conforms to the Standards",
+            "Collective competency across all audit universe areas",
+            "Professional qualifications: CIA, CPA, CISA, CFE as appropriate",
+            "Continuous professional development (CPD) mandatory",
+            "Use of specialists for technology, forensics, or actuarial work",
+            "Competency gaps must be disclosed in the audit plan",
         ],
-        "relevance_to_banking": (
-            "External quality assessment is required for any internal audit function making a "
-            "statement of conformance with the Standards. Regulatory expectations are increasing — "
-            "FINMA has signalled that it will review whether Swiss banks' internal audit functions "
-            "maintain current external quality assessments."
-        ),
+        "banking_application": "Private banking audit teams must include auditors with expertise in AML, wealth management products, credit risk (Lombard lending), technology/cybersecurity, and applicable regulations (FINMA, MAS, FCA). External specialists may be engaged for complex quantitative model reviews.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
     },
     {
-        "standard_id": "Standard 9.1",
-        "title": "Risk-Based Audit Planning",
-        "description": (
-            "The CAE must establish a risk-based audit plan that identifies the audit universe, "
-            "assesses risks and risk management maturity across auditable entities, and prioritises "
-            "audit engagements based on risk. The plan must be approved by the Board annually "
-            "and refreshed when significant changes in risk profile occur."
-        ),
+        "standard_id": "Standard 5",
+        "domain": "Domain II — Ethics and Professionalism",
+        "title": "Due Professional Care",
+        "description": "Internal auditors must apply the care and skill expected of a reasonably prudent and competent internal auditor. Due professional care does not imply infallibility.",
         "key_requirements": [
-            "Audit universe must cover all significant activities, processes, and risk areas",
-            "Risk assessment must use multiple inputs: management input, risk registers, regulatory themes, external events",
-            "Audit plan must be presented to the Audit Committee for approval at least annually",
-            "Material changes to the audit plan must be approved by the Audit Committee",
-            "Coverage of the audit universe must be tracked; significant gaps in coverage must be reported",
+            "Reasonable assurance standard: not absolute certainty",
+            "Adequate testing based on risk — sampling must be justified",
+            "Professional scepticism in evaluating management representations",
+            "Consideration of fraud risk in all engagements",
+            "Documentation sufficient to support conclusions",
         ],
-        "relevance_to_banking": (
-            "Private bank audit plans that rely solely on a pre-set 3-year rolling cycle without "
-            "dynamic risk reassessment are no longer conforming. The 2024 Standards explicitly "
-            "require that the plan be updated when significant risk changes occur — e.g. DORA "
-            "implementation, M&A, new technology platform deployment."
-        ),
+        "banking_application": "In private banking, due care means applying sufficient sample sizes for client file testing, not accepting management assertions without evidence, and maintaining working paper standards sufficient for FINMA regulatory examination.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
+    },
+    # Domain III
+    {
+        "standard_id": "Standard 6",
+        "domain": "Domain III — Governing the Internal Audit Function",
+        "title": "Chief Audit Executive Leadership",
+        "description": "The CAE is responsible for directing the internal audit function, promoting a culture of integrity, and managing the function to meet its mandate. The CAE must be a senior leader who communicates effectively with the governing body.",
+        "key_requirements": [
+            "CAE accountable for the internal audit function's performance",
+            "Direct access to the governing body without management interference",
+            "Champion ethical culture across the organisation",
+            "Manage function to deliver the approved audit plan",
+            "Escalate significant risk and control issues without delay",
+        ],
+        "banking_application": "The CAE of a private bank must have direct access to the Board Audit Committee, receive invitations to all AC meetings, and be empowered to raise concerns about regulatory breaches or significant control failures directly to the AC Chair.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
     },
     {
-        "standard_id": "Standard 10.2",
-        "title": "Engagement Planning",
-        "description": (
-            "For each audit engagement, the internal auditor must develop a planning document "
-            "that identifies: objectives, scope, timing, resource requirements, and the risk "
-            "and control framework for the area under review. Planning must include a preliminary "
-            "assessment of the risk and controls in the area."
-        ),
+        "standard_id": "Standard 7",
+        "domain": "Domain III — Governing the Internal Audit Function",
+        "title": "Organisational Independence",
+        "description": "The internal audit function must be positioned within the organisation to enable it to fulfil its mandate with independence and objectivity. The CAE must report functionally to the governing body.",
         "key_requirements": [
-            "Engagement objectives must align to the identified risks in the area",
-            "Scope must be clearly defined and agreed with engagement management",
-            "Timing must allow for adequate fieldwork without impairing objectivity",
-            "Staffing must ensure the team has competence for the subject matter",
-            "Pre-engagement briefing with auditee management must be documented",
+            "Functional reporting to governing body (Audit Committee or Board)",
+            "Administrative reporting may be to CEO — but must not impair independence",
+            "CAE appointment and removal requires governing body approval",
+            "Budget and resources approved by governing body",
+            "Annual independence assessment reported to governing body",
         ],
-        "relevance_to_banking": (
-            "Audit planning quality is a primary differentiator between high- and low-performing "
-            "internal audit functions at financial institutions. Regulators reviewing audit workpapers "
-            "will assess whether engagement planning was substantive and whether it linked risks "
-            "identified in the planning phase to testing procedures."
-        ),
+        "banking_application": "Under FINMA Circular 2017/1, the CAE of a Swiss bank must report to the Board Audit Committee. The AC must approve the audit plan and budget independently of senior management.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
     },
     {
-        "standard_id": "Standard 11.1",
-        "title": "Engagement Work Programme",
-        "description": (
-            "Internal auditors must develop and document a work programme for each engagement "
-            "that identifies the procedures to be performed, the information to be gathered, "
-            "and the testing approach to be applied. The programme must be approved by the CAE "
-            "or designee before fieldwork commences."
-        ),
+        "standard_id": "Standard 8",
+        "domain": "Domain III — Governing the Internal Audit Function",
+        "title": "Internal Audit Charter",
+        "description": "The internal audit function must have a formal charter approved by the governing body that defines its purpose, authority, and responsibilities. The charter must be reviewed and reaffirmed annually.",
         "key_requirements": [
-            "Work programme must link each procedure to a specific risk or control objective",
-            "Procedures must include both design assessment and operating effectiveness testing",
-            "Data analytics and automated testing techniques should be embedded in the work programme",
-            "Work programme must be approved before fieldwork begins",
-            "Deviations from the approved work programme must be documented and approved",
+            "Charter approved by the governing body (not management)",
+            "Defines purpose, authority, scope, and independence",
+            "Unrestricted access to people, records, and systems",
+            "Annual review and reaffirmation by the governing body",
+            "Charter publicly disclosed or available on request",
         ],
-        "relevance_to_banking": (
-            "Work programme quality is directly assessed in FINMA, MAS, and FCA supervisory reviews "
-            "of internal audit files. The requirement to approve work programmes before fieldwork "
-            "starts is frequently violated in smaller private bank audit teams under time pressure."
-        ),
+        "banking_application": "The private banking audit charter must explicitly cover all legal entities, branches (CH, SG, HK, Bahamas), and material subsidiaries. It must grant access to client files, trading systems, and HR records without management gatekeeping.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
     },
     {
-        "standard_id": "Standard 13.1",
-        "title": "Communicating Engagement Results",
-        "description": (
-            "Internal audit must communicate the results of each engagement in a timely manner. "
-            "The communication must include: the engagement objectives, scope, conclusions, "
-            "findings, root causes, criteria, impact, and recommendations. "
-            "Final reports must be distributed to appropriate parties."
-        ),
+        "standard_id": "Standard 9",
+        "domain": "Domain III — Governing the Internal Audit Function",
+        "title": "Audit Strategy and Planning",
+        "description": "The CAE must develop and maintain a risk-based audit strategy and annual plan that aligns with the organisation's risk profile and strategic priorities. The plan must be approved by the governing body.",
         "key_requirements": [
-            "Findings must include: condition, criteria, cause (root cause), and consequence (impact)",
-            "Recommendations must be actionable, specific, and risk-proportionate",
-            "Draft reports must be shared with auditee management for factual accuracy review",
-            "Final reports must be issued within a defined timeframe after fieldwork completion",
-            "Reports must be distributed to the Audit Committee and appropriate senior management",
+            "Risk-based audit universe covering all significant activities",
+            "Annual plan approved by the Audit Committee",
+            "Plan updated dynamically for emerging risks",
+            "Resource allocation matched to risk and coverage",
+            "Rationale for unaudited areas disclosed to governing body",
         ],
-        "relevance_to_banking": (
-            "Report quality — particularly root cause analysis and actionable recommendations — "
-            "is the primary measure by which Audit Committees assess internal audit value in banking. "
-            "Findings that describe symptoms without root cause analysis fail to support systemic "
-            "control improvement."
-        ),
+        "banking_application": "Private banking audit plans must prioritise AML/KYC, cyber risk, credit risk (Lombard lending), cross-border compliance, and ESG in line with FINMA and MAS supervisory priorities. Unaudited high-risk areas must be formally disclosed to the AC.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
     },
     {
-        "standard_id": "Standard 14.1",
-        "title": "Monitoring Engagement Outcomes",
-        "description": (
-            "The CAE must establish a process for monitoring and verifying the adequate and timely "
-            "implementation of management actions arising from audit findings. The status of "
-            "management actions must be reported to the Audit Committee periodically."
-        ),
+        "standard_id": "Standard 10",
+        "domain": "Domain III — Governing the Internal Audit Function",
+        "title": "Resource Management",
+        "description": "The CAE must ensure the internal audit function has adequate human, financial, and technological resources to fulfil its mandate. Resource gaps must be disclosed to the governing body.",
         "key_requirements": [
-            "Formal follow-up process for all open findings with target dates",
-            "Verification of management action implementation must be evidence-based — not reliance on management assertion",
-            "Overdue or inadequately addressed findings must be escalated to the Audit Committee",
-            "Repeat findings (prior recommendations not implemented) must be highlighted in subsequent reports",
-            "Closure of critical findings must be verified by internal audit within 30 days of target date",
+            "Budget sufficient to deliver the approved audit plan",
+            "Staffing levels commensurate with audit universe complexity",
+            "Technology tools for data analytics and workflow management",
+            "Disclosure of resource constraints that limit plan delivery",
+            "Use of co-sourcing or outsourcing where gaps exist",
         ],
-        "relevance_to_banking": (
-            "Finding closure tracking is a leading indicator of audit function effectiveness. "
-            "Regulators assess not only the quality of findings raised, but whether the bank's "
-            "management and board are driving timely remediation. Repeat findings with missed "
-            "deadlines are a direct FINMA and MAS supervisory concern."
-        ),
+        "banking_application": "Private banks with operations in multiple jurisdictions must ensure audit staffing in key locations (CH, SG, HK) or demonstrate alternative coverage through group audit. Co-sourcing with Big 4 or specialist firms is common for complex areas (model risk, cyber).",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
     },
     {
-        "standard_id": "Standard 15.1",
-        "title": "External Service Providers",
-        "description": (
-            "When external service providers perform internal audit work, the CAE remains responsible "
-            "for the quality and conformance of all engagements. The CAE must ensure that external "
-            "providers are competent, objective, and adhere to the Standards. Independence of "
-            "the external provider from the auditee must be confirmed."
-        ),
+        "standard_id": "Standard 11",
+        "domain": "Domain III — Governing the Internal Audit Function",
+        "title": "Quality Assurance and Improvement Programme",
+        "description": "The CAE must establish and maintain a quality assurance and improvement programme (QAIP) that covers all aspects of the internal audit function. Results must be communicated to the governing body.",
         "key_requirements": [
-            "CAE must review and approve work programmes for all externally co-sourced engagements",
-            "External provider must not perform work in areas where they have advisory conflicts",
-            "Quality review of external provider's workpapers must be performed by CAE or designee",
-            "External provider must sign a representation on compliance with the Standards",
-            "CAE must communicate to the Board when external providers are used for significant engagements",
+            "Internal assessments: ongoing monitoring and periodic self-assessment",
+            "External quality assessment every 5 years by qualified independent assessor",
+            "Conformance declaration in annual report to governing body",
+            "Action plans to address identified deficiencies",
+            "Disclosure of non-conformance with GIAS 2024",
         ],
-        "relevance_to_banking": (
-            "Widespread in private banking: co-sourcing or fully outsourcing internal audit to "
-            "Big 4 or specialist firms. The new Standards clarify that the CAE cannot delegate "
-            "responsibility for quality to the external provider — active oversight is mandatory "
-            "regardless of the outsourcing model."
-        ),
+        "banking_application": "FINMA expects Swiss bank audit functions to demonstrate GIAS conformance. External QAR every 5 years should be conducted by an IIA-certified assessor. Results must be reported to the Audit Committee, not just filed internally.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
+    },
+    # Domain IV
+    {
+        "standard_id": "Standard 12",
+        "domain": "Domain IV — Managing the Internal Audit Function",
+        "title": "Planning Engagements",
+        "description": "Internal auditors must plan each engagement to assess the relevant risks, controls, and governance processes. A preliminary risk assessment must be performed and the engagement objectives, scope, and criteria must be defined before fieldwork begins.",
+        "key_requirements": [
+            "Preliminary risk assessment before each engagement",
+            "Clear engagement objectives and scope defined upfront",
+            "Criteria for evaluating controls established in advance",
+            "Planning documented in engagement work programme",
+            "Management briefed on objectives and timing before fieldwork",
+        ],
+        "banking_application": "For a private banking AML audit, engagement planning must include a preliminary risk assessment of jurisdiction, client risk profile mix, TMS alert volumes, and prior findings. The scope must cover all relevant legal entities, not just the Swiss parent.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
+    },
+    {
+        "standard_id": "Standard 13",
+        "domain": "Domain IV — Managing the Internal Audit Function",
+        "title": "Performing Engagements",
+        "description": "Internal auditors must identify sufficient, reliable, and relevant information to achieve the engagement objectives. Conclusions must be based on analysis and evaluation of evidence, not assumptions.",
+        "key_requirements": [
+            "Evidence must be sufficient, reliable, relevant, and useful",
+            "Working papers must support conclusions and be properly retained",
+            "Supervision by experienced auditor throughout fieldwork",
+            "Identified issues communicated to management during fieldwork",
+            "Anomalies and fraud indicators must be escalated promptly",
+        ],
+        "banking_application": "Sampling methodology must be risk-based (judgmental or statistical). Client file samples must cover the full risk spectrum (high, medium, low risk). Anomalies in TMS or credit data discovered during fieldwork must be escalated to the CAE before the report is issued.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
+    },
+    {
+        "standard_id": "Standard 14",
+        "domain": "Domain IV — Managing the Internal Audit Function",
+        "title": "Communicating Results",
+        "description": "Internal auditors must communicate the results of each engagement, including the opinion, findings, recommendations, and action plans, to appropriate parties. Reports must be accurate, objective, clear, concise, and timely.",
+        "key_requirements": [
+            "Written report for every assurance engagement",
+            "Overall audit opinion (Satisfactory/Needs Improvement/Unsatisfactory)",
+            "Each finding: criteria, condition, cause, consequence, recommendation",
+            "Management action plans with owners and due dates",
+            "Distribution to governing body for significant findings",
+        ],
+        "banking_application": "Private banking audit reports must include an overall rating, individual finding ratings (Critical/High/Moderate/Low), and be issued within 30 days of fieldwork completion. Significant findings (Critical/High) must be reported to the Audit Committee at the next meeting.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
+    },
+    {
+        "standard_id": "Standard 15",
+        "domain": "Domain IV — Managing the Internal Audit Function",
+        "title": "Monitoring Actions",
+        "description": "The CAE must establish and maintain a follow-up process to monitor and ensure that management actions have been effectively implemented. Open findings must be tracked and reported to the governing body.",
+        "key_requirements": [
+            "Formal tracking system for all open findings",
+            "Verification that management actions are effectively implemented (not just attested)",
+            "Past-due findings escalated to senior management and governing body",
+            "Repeat findings identified and root cause analysis required",
+            "Quarterly status report of open findings to Audit Committee",
+        ],
+        "banking_application": "In a private bank, the CAE must maintain a live findings register in a GRC system, evidence actual remediation (not just management attestation), escalate overdue Critical/High findings to the AC Chair, and identify repeat findings as an indicator of systemic control weakness.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
+    },
+    # Domain V
+    {
+        "standard_id": "Standard 16",
+        "domain": "Domain V — Performing Internal Audit Services",
+        "title": "Assurance Services",
+        "description": "Assurance services provide an independent, objective assessment of the adequacy and effectiveness of governance, risk management, and internal control processes. The audit opinion must be based on sufficient evidence.",
+        "key_requirements": [
+            "Risk-based scope covering governance, risk, and control",
+            "Independent opinion on control effectiveness",
+            "Criteria (regulations, policies, best practice) clearly stated",
+            "Findings include root cause and business impact",
+            "Overall assurance opinion (not just individual findings)",
+        ],
+        "banking_application": "Assurance engagements in private banking typically cover AML/KYC controls, Lombard credit process, IT security controls, and compliance with FINMA/MAS/FCA regulations. The overall opinion must be risk-rated (Satisfactory, Needs Improvement, or Unsatisfactory).",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
+    },
+    {
+        "standard_id": "Standard 17",
+        "domain": "Domain V — Performing Internal Audit Services",
+        "title": "Advisory Services",
+        "description": "Advisory services are consulting activities designed to add value and improve the organisation's governance, risk management, and control processes. The nature and scope must be agreed with the client and must not impair independence.",
+        "key_requirements": [
+            "Scope and objectives agreed with the engagement client",
+            "Independence must not be impaired by advisory work",
+            "Advisory findings do not carry the same weight as assurance",
+            "Significant risks identified during advisory must be communicated",
+            "Advisory work documented to the same standard as assurance",
+        ],
+        "banking_application": "Private banking audit teams may advise on new product development controls, digital transformation programmes, or regulatory change implementations (e.g., DORA readiness). However, auditors must not assume ownership of the controls they advise on.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
+    },
+    {
+        "standard_id": "Standard 18",
+        "domain": "Domain V — Performing Internal Audit Services",
+        "title": "Investigation Services",
+        "description": "Investigation services involve examining allegations of fraud, misconduct, or regulatory violations. Investigations must be conducted with objectivity, appropriate expertise, and in compliance with legal requirements.",
+        "key_requirements": [
+            "Investigation mandate and scope approved by governing body",
+            "Appropriate forensic and legal expertise engaged",
+            "Chain of custody maintained for all evidence",
+            "Findings communicated to appropriate parties including regulators if required",
+            "Lessons learned fed back into audit plan risk assessment",
+        ],
+        "banking_application": "In private banking, investigations may cover suspected money laundering (client or employee), unauthorized trading, data theft, or senior management misconduct. FINMA must be notified of material fraud within regulatory timeframes. External forensic specialists are typically required.",
+        "topical_requirement": False,
+        "effective_date": "January 9, 2024",
+    },
+    # Topical Requirements
+    {
+        "standard_id": "TR-1",
+        "domain": "Topical Requirements",
+        "title": "Fraud and Misconduct",
+        "description": "Internal auditors must incorporate fraud risk assessment into the audit universe and individual engagements. They must be alert to fraud indicators throughout all audit work and escalate suspicions promptly.",
+        "key_requirements": [
+            "Fraud risk assessment mandatory in all assurance engagements",
+            "Auditors trained to recognise fraud red flags and indicators",
+            "Imminent or suspected fraud escalated to CAE and governing body immediately",
+            "Cooperation with legal, compliance, and law enforcement as required",
+            "Lessons learned from fraud events incorporated into future audit plans",
+        ],
+        "banking_application": "Private banking fraud risks include: client impersonation (identity fraud), front-office misconduct (churning, unauthorised transactions), AML facilitation, and cyber-enabled fraud (BEC, CEO fraud). Each audit must assess relevant fraud scenarios, not just general controls.",
+        "topical_requirement": True,
+        "effective_date": "January 9, 2024",
+    },
+    {
+        "standard_id": "TR-2",
+        "domain": "Topical Requirements",
+        "title": "Cybersecurity",
+        "source_guide": "IIA User Guide, February 2025",
+        "description": "Mandatory for all assurance engagements on cybersecurity. Internal auditors must evaluate cybersecurity governance, risk management, and control processes across the organisation. Specialist knowledge or co-sourced expertise is required. Structured across three sections: Governance (4), Risk Management (6), Control Processes (7).",
+        "key_requirements": [
+            "G-A: Formal cybersecurity strategy reviewed by Board (generally quarterly)",
+            "RM-A/B: Cyber risk assessment covering all organisational functions",
+            "RM-F: Annual tabletop exercise for incident response and recovery",
+            "CP-D/E: IT asset lifecycle management, MFA, patch management, SDLC",
+            "CP-F/G: Network segmentation, endpoint communication security",
+        ],
+        "sections": [
+            {
+                "section_id": "governance",
+                "section_title": "Governance",
+                "icon": "🏛️",
+                "requirements": [
+                    {
+                        "id": "G-A",
+                        "text": "Formal cybersecurity strategy and objectives established and periodically updated. Board reviews cybersecurity updates periodically (generally quarterly). Covers strategic objectives monitoring, budget, KPIs, and human resources for cyber personnel.",
+                        "frameworks": ["NIST CSF 2.0 GV.OC-01, GV.OC-02", "COBIT 2019 APO02", "NIST 800-53 PM-2"],
+                    },
+                    {
+                        "id": "G-B",
+                        "text": "Policies and procedures established, periodically updated (at least annually). Reference frameworks: NIST, COBIT. Covers all cybersecurity processes.",
+                        "frameworks": ["NIST CSF 2.0 GV.PO-01, GV.PO-02", "COBIT 2019 APO01", "NIST 800-53 PL-2"],
+                    },
+                    {
+                        "id": "G-C",
+                        "text": "Roles and responsibilities defined. CISO or equivalent reports at sufficient organisational level. Periodic assessment of knowledge, skills, and abilities of cybersecurity personnel.",
+                        "frameworks": ["NIST CSF 2.0 GV.RR-01, GV.RR-02", "COBIT 2019 APO01.02", "NIST 800-53 PS-7"],
+                    },
+                    {
+                        "id": "G-D",
+                        "text": "Stakeholder engagement on vulnerabilities and emerging threats. Includes senior management, operations, risk, HR, legal, compliance, vendors. Evidence: meeting minutes, reports, emails.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-07", "COBIT 2019 EDM02", "NIST 800-53 PL-8"],
+                    },
+                ],
+            },
+            {
+                "section_id": "risk_management",
+                "section_title": "Risk Management",
+                "icon": "⚠️",
+                "requirements": [
+                    {
+                        "id": "RM-A",
+                        "text": "Risk assessment and management process covers identification, analysis, mitigation, and monitoring of cyber threats and their effect on strategic objectives.",
+                        "frameworks": ["NIST CSF 2.0 ID.RA-01, ID.RA-03", "COBIT 2019 APO12", "NIST 800-53 RA-3"],
+                    },
+                    {
+                        "id": "RM-B",
+                        "text": "Cyber risk management conducted across the organisation: IT, ERM, HR, legal, compliance, operations, supply chain, accounting, finance.",
+                        "frameworks": ["NIST CSF 2.0 ID.RA-04", "COBIT 2019 APO12.01", "NIST 800-53 RA-3(1)"],
+                    },
+                    {
+                        "id": "RM-C",
+                        "text": "Accountability assigned to individual or team. Periodic reporting (quarterly/monthly) on cyber risk status including resource requirements.",
+                        "frameworks": ["NIST CSF 2.0 GV.RR-03", "COBIT 2019 APO12.05", "NIST 800-53 PM-9"],
+                    },
+                    {
+                        "id": "RM-D",
+                        "text": "Escalation process for cyber risks reaching unacceptable levels. Covers risk levels definition, financial and non-financial impacts, regulatory compliance requirements.",
+                        "frameworks": ["NIST CSF 2.0 GV.RM-07", "COBIT 2019 APO12.06", "NIST 800-53 RA-7"],
+                    },
+                    {
+                        "id": "RM-E",
+                        "text": "Communication process to management and employees. Annual phishing simulations. Remediation updates with completion dates. Board/senior management reporting on non-compliance.",
+                        "frameworks": ["NIST CSF 2.0 PR.AT-01", "COBIT 2019 APO07", "NIST 800-53 AT-2"],
+                    },
+                    {
+                        "id": "RM-F",
+                        "text": "Incident response and recovery process: detection, containment, recovery, post-incident analysis. Annual tabletop exercise mandatory. Results reported to senior management.",
+                        "frameworks": ["NIST CSF 2.0 RS.MA-01, RC.RP-01", "COBIT 2019 DSS02, DSS04", "NIST 800-53 IR-4, IR-6, IR-8"],
+                    },
+                ],
+            },
+            {
+                "section_id": "control_processes",
+                "section_title": "Control Processes",
+                "icon": "🔒",
+                "requirements": [
+                    {
+                        "id": "CP-A",
+                        "text": "Internal controls and vendor-based controls protect confidentiality, integrity, availability. SOC reports reviewed for vendors. Periodic testing of controls effectiveness. Remediation process for deficiencies.",
+                        "frameworks": ["NIST CSF 2.0 PR.AA-05, GV.SC-07", "COBIT 2019 APO10, DSS05", "NIST 800-53 CA-2, CA-7"],
+                    },
+                    {
+                        "id": "CP-B",
+                        "text": "Talent management for cybersecurity: recruitment, training, certifications (cyber-related). Knowledge sharing groups. Continuing education.",
+                        "frameworks": ["NIST CSF 2.0 PR.AT-02", "COBIT 2019 APO07.03", "NIST 800-53 AT-3"],
+                    },
+                    {
+                        "id": "CP-C",
+                        "text": "Continuous monitoring of emerging threats and vulnerabilities including AI/new technologies. Prioritisation and implementation of improvements.",
+                        "frameworks": ["NIST CSF 2.0 ID.RA-05, DE.AE-03", "COBIT 2019 APO12.02", "NIST 800-53 SI-5, RA-5"],
+                    },
+                    {
+                        "id": "CP-D",
+                        "text": "IT asset lifecycle management (selection, usage, maintenance, decommissioning) for hardware, software, vendor services. Includes encryption, antivirus, MDM, complex passwords, VPN/ZTN, firmware updates, database controls, SDLC, DevSecOps.",
+                        "frameworks": ["NIST CSF 2.0 ID.AM-01 to 07", "COBIT 2019 BAI09, DSS05", "NIST 800-53 CM-8, SA-22"],
+                    },
+                    {
+                        "id": "CP-E",
+                        "text": "Cybersecurity processes: configuration, end-user device administration, encryption, patching, user-access management (MFA, unique IDs, complex passwords), monitoring availability/performance, DevSecOps integration.",
+                        "frameworks": ["NIST CSF 2.0 PR.AA-01 to 06, PR.DS-01", "COBIT 2019 DSS05.03, DSS05.04", "NIST 800-53 AC-2, IA-2, SC-28"],
+                    },
+                    {
+                        "id": "CP-F",
+                        "text": "Network controls: network segmentation, firewalls, limited external/internal connections, VPN/ZTNA, IoT controls, IDS/IPS.",
+                        "frameworks": ["NIST CSF 2.0 PR.IR-01, PR.IR-02", "COBIT 2019 DSS05.02", "NIST 800-53 SC-7, SC-20"],
+                    },
+                    {
+                        "id": "CP-G",
+                        "text": "Endpoint communication security: email, browsers, videoconferencing, messaging (Teams/Zoom), social media, cloud, file-sharing. Controls include file extension restrictions, MFA for file sharing.",
+                        "frameworks": ["NIST CSF 2.0 PR.PS-04", "COBIT 2019 DSS05.07", "NIST 800-53 SC-8, SC-28"],
+                    },
+                ],
+            },
+        ],
+        "framework_mapping": ["NIST CSF 2.0", "NIST SP 800-53 Rev.5", "COBIT 2019"],
+        "banking_application": "DORA (EU, effective Jan 2025): TLPT mandatory, ICT risk management framework, major incident reporting within 4 hours, third-party ICT oversight (Art. 28–30). FINMA RS 2018/3: outsourcing IT controls for Swiss banks. MAS TRM 2021: annual ICT audit requirement (SG). Elevated threat profile: HNWI data and private banker social engineering are prime ransomware targets. Cloud migration across jurisdictions increases attack surface and cross-border data exposure.",
+        "topical_requirement": True,
+        "effective_date": "January 9, 2024",
+    },
+    {
+        "standard_id": "TR-3",
+        "domain": "Topical Requirements",
+        "title": "Organisational Culture and Ethics",
+        "description": "Internal auditors must evaluate whether the organisation's culture supports ethical behaviour, sound risk management, and compliance with laws and regulations. Tone at the top, middle management conduct, and speak-up mechanisms must be assessed.",
+        "key_requirements": [
+            "Culture assessment methodology defined in the audit plan",
+            "Tone at the top: Board and senior management behaviours assessed",
+            "Speak-up/whistleblowing mechanism tested for accessibility and independence",
+            "Ethical failures and near-misses tracked and trended",
+            "Culture findings reported to the Audit Committee",
+        ],
+        "banking_application": "Private banking culture assessments should cover: RM compensation incentives vs. suitability obligations, pressure on compliance team independence, treatment of whistleblowers, and Board effectiveness. Poor culture was a root cause in multiple private banking regulatory enforcement cases (2015-2023).",
+        "topical_requirement": True,
+        "effective_date": "January 9, 2024",
+    },
+    {
+        "standard_id": "TR-4",
+        "domain": "Topical Requirements",
+        "title": "Environmental, Social and Governance (ESG)",
+        "description": "Internal auditors must include ESG risks in the audit universe and assess the adequacy of ESG governance, data quality, and regulatory compliance. ESG risks are increasingly material for financial institutions.",
+        "key_requirements": [
+            "ESG risk universe defined and included in audit plan",
+            "Climate risk assessment: physical and transition risk measurement",
+            "ESG data quality and integrity (non-financial reporting accuracy)",
+            "Regulatory compliance: CSRD (EU), TCFD, SFDR (for funds)",
+            "Greenwashing risk in marketed ESG products assessed",
+        ],
+        "banking_application": "Swiss private banks managing ESG-labelled investment products must have internal audit cover: ESG product classification process, greenwashing risk controls, regulatory compliance with FINMA sustainability disclosures, and climate risk integration in credit assessments. FINMA circular on sustainability is expected in 2025.",
+        "topical_requirement": True,
+        "effective_date": "January 9, 2024",
+    },
+    {
+        "standard_id": "TR-5",
+        "domain": "Topical Requirements",
+        "title": "Third-Party Relationships",
+        "source_guide": "IIA User Guide, September 2025",
+        "description": "Mandatory for all assurance engagements on third parties. Internal auditors must evaluate the organisation's governance, risk management, and control processes across the full third-party lifecycle: Selecting → Contracting → Onboarding → Monitoring → Offboarding. Risk categories: Strategic, Reputational, Ethical, Operational, Financial, Compliance, Cybersecurity/Data Protection, IT, Legal, Sustainability/ESG, Geopolitical. Structured across three sections: Governance (4), Risk Management (4), Control Processes (9).",
+        "key_requirements": [
+            "G-A/B: Risk-based approach and standardised policies for full lifecycle",
+            "RM-B: Regular risk ranking and due diligence across all risk categories",
+            "CP-A: Background checks including cybersecurity, financial, criminal, political",
+            "CP-B: Contract clauses: right-to-audit, NDA, SLA, BCP, AI usage, whistleblowing",
+            "CP-D: Centralised listing of all vendor relationships maintained",
+            "CP-F: Ongoing KPI monitoring, SLA enforcement, quarterly business reviews",
+            "CP-I: Formalised offboarding: access revocation, data return/destruction, asset recovery",
+        ],
+        "sections": [
+            {
+                "section_id": "governance",
+                "section_title": "Governance",
+                "icon": "🏛️",
+                "requirements": [
+                    {
+                        "id": "G-A",
+                        "text": "Formalised risk-based approach for determining whether to use a third party. Periodically reviewed. Includes cost-benefit analysis, risk/control evaluation, adequate resources, and stakeholder feedback.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-01", "COBIT 2019 APO10.01", "ISO 27001 A.15.1"],
+                    },
+                    {
+                        "id": "G-B",
+                        "text": "Policies and procedures for third-party lifecycle (all 5 stages). Standardised tools and templates. Periodic review. Criteria for each stage. Regulatory alignment and benchmarking exercises.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-02, GV.SC-03", "COBIT 2019 APO10.02", "ISO 27001 A.15.2"],
+                    },
+                    {
+                        "id": "G-C",
+                        "text": "Roles and responsibilities defined. Values/ethics alignment with third party. Regular training for third-party management roles. Three Lines Model alignment.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-04", "COBIT 2019 APO10.03", "NIST 800-53 SA-9"],
+                    },
+                    {
+                        "id": "G-D",
+                        "text": "Timely stakeholder communication throughout lifecycle. Includes board, senior management, procurement, operations, risk, compliance, legal, IT, HR. Cross-functional meetings on third-party management.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-07", "COBIT 2019 BAI08", "NIST 800-53 PM-9"],
+                    },
+                ],
+            },
+            {
+                "section_id": "risk_management",
+                "section_title": "Risk Management",
+                "icon": "⚠️",
+                "requirements": [
+                    {
+                        "id": "RM-A",
+                        "text": "Standardised and comprehensive risk management processes: Identification → Analysis → Mitigation → Monitoring. Risk management committee with board oversight. Corrective actions for deviations.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-09", "COBIT 2019 APO12.01", "NIST 800-53 RA-3"],
+                    },
+                    {
+                        "id": "RM-B",
+                        "text": "Regular risk identification and assessment throughout lifecycle. Risk ranking and prioritisation. Due diligence process and vendor questionnaires. Factors: criticality, financial materiality, relationship duration, subcontracting.",
+                        "frameworks": ["NIST CSF 2.0 ID.RA-09, GV.SC-06", "COBIT 2019 APO10.04", "NIST 800-53 SA-9(3)"],
+                    },
+                    {
+                        "id": "RM-C",
+                        "text": "Risk responses (mitigation, acceptance, elimination, sharing) commensurate with risk ranking. Documented responses including third-party control environment. Conflicts of interest addressed.",
+                        "frameworks": ["NIST CSF 2.0 GV.RM-06", "COBIT 2019 APO10.05", "NIST 800-53 SA-9(1)"],
+                    },
+                    {
+                        "id": "RM-D",
+                        "text": "Escalation processes for third-party risks. Risk level definitions and escalation procedures. Financial and non-financial impact consideration. Periodic reassessment when risk appetite changes.",
+                        "frameworks": ["NIST CSF 2.0 GV.RM-07, GV.SC-09", "COBIT 2019 APO12.06", "NIST 800-53 RA-7"],
+                    },
+                ],
+            },
+            {
+                "section_id": "control_processes",
+                "section_title": "Control Processes",
+                "icon": "🔒",
+                "requirements": [
+                    {
+                        "id": "CP-A",
+                        "text": "Due diligence for sourcing and selecting: competitive bidding, RFPs, sole sourcing criteria. Background checks: cybersecurity, financial, criminal, legal records, political ties. Cross-functional review teams. SOC reports review. No advance to contracting without completed due diligence.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-06, ID.RA-09", "COBIT 2019 APO10.02", "NIST 800-53 SA-4"],
+                    },
+                    {
+                        "id": "CP-B",
+                        "text": "Contracting policies followed. Key risks in contract clauses. Essential elements: NDA, termination clauses, cybersecurity requirements, breach notification, SLAs, right-to-audit (including downstream subcontractors), AI usage, change management process, sustainability clauses, whistleblowing protocols, BCP requirements.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-10", "COBIT 2019 APO10.03", "NIST 800-53 SA-9(3), SA-12"],
+                    },
+                    {
+                        "id": "CP-C",
+                        "text": "Contracts reviewed/approved by legal and compliance. Signed by authorised individuals. Stored securely. Contract manager assigned.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-10", "COBIT 2019 APO10.03", "NIST 800-53 SA-9"],
+                    },
+                    {
+                        "id": "CP-D",
+                        "text": "Centralised listing of all third-party relationships maintained (contract management system). Processes for adding/removing contracts. Tracking system for issues with vendors.",
+                        "frameworks": ["NIST CSF 2.0 ID.AM-07, GV.SC-03", "COBIT 2019 APO10.01", "NIST 800-53 SA-9(6)"],
+                    },
+                    {
+                        "id": "CP-E",
+                        "text": "Documented onboarding processes. System integration assessment. Technology compatibility and security. BCP assessment of third party. Complementary user entity controls (SOC reporting).",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-05", "COBIT 2019 BAI07", "NIST 800-53 SA-9(1)"],
+                    },
+                    {
+                        "id": "CP-F",
+                        "text": "Ongoing monitoring of vendor performance vs contract objectives. KPIs evaluation, payment controls, cost-benefit analysis, SLA penalty enforcement, periodic risk ranking reevaluation. Quarterly business reviews. Additional monitoring: financial stability, complaints, ISO certifications, media inquiries, AI/cybersecurity protocols, segregation of duties.",
+                        "frameworks": ["NIST CSF 2.0 ID.RA-09, DE.CM-06", "COBIT 2019 APO10.05", "NIST 800-53 SA-9(4)"],
+                    },
+                    {
+                        "id": "CP-G",
+                        "text": "Corrective action protocols when third party fails to meet contract or increases risk. Escalation based on severity. Post-incident review with root cause analysis.",
+                        "frameworks": ["NIST CSF 2.0 RS.CO-04", "COBIT 2019 APO10.05", "NIST 800-53 IR-4"],
+                    },
+                    {
+                        "id": "CP-H",
+                        "text": "Contract expiration and renewal monitoring. Auto-renewal review: performance, terms, risk factors.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-10", "COBIT 2019 APO10.04", "NIST 800-53 SA-9"],
+                    },
+                    {
+                        "id": "CP-I",
+                        "text": "Formalised offboarding plan. Termination process. Replacement if necessary. Data return or destruction. Access revocation (systems, tools, facilities). Asset return (devices, licenses, IP, documentation). Escalation to board when terminated for cause.",
+                        "frameworks": ["NIST CSF 2.0 GV.SC-05, PR.AA-04", "COBIT 2019 APO10.06", "NIST 800-53 SA-9, PS-4"],
+                    },
+                ],
+            },
+        ],
+        "framework_mapping": ["NIST CSF 2.0", "NIST SP 800-53 Rev.5", "COBIT 2019", "ISO 27001"],
+        "banking_application": "FINMA RS 2018/3: outsourcing register mandatory for Swiss banks, right-to-audit clause required in all material contracts, FINMA notification for critical outsourcing. DORA Art. 28–44: ICT third-party risk management framework, Register of Information for all ICT providers, mandatory notification to EBA for concentration risk. MAS Notice 655 / SS2/21 (PRA): outsourcing requirements. Fourth-party risk is critical for custody, core banking (Temenos, Avaloq), portfolio management (Murex, Bloomberg), and cloud providers — concentration risk in private banking technology. Right-to-audit must flow down to sub-contractors in all material outsourcing contracts.",
+        "topical_requirement": True,
+        "effective_date": "January 9, 2024",
     },
 ]
 
@@ -4634,6 +4996,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All privileged accounts (IT admin, DB admin, SWIFT operators) — typically 50-150",
             "sample_size": "100% of privileged accounts (full population)",
             "failure_criteria": "Any admin or remote-access account without MFA enrolled and enforced",
+            "tr_reference": "TR-Cyber CP-E",
         },
         {
             "id": "T012", "level": "Critical", "category": "Standard",
@@ -4642,6 +5005,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All systems in scope: servers, network devices, endpoints (typically 200-500 assets)",
             "sample_size": "100% of Critical CVEs + random 25 High CVEs",
             "failure_criteria": "Any Critical CVE not patched within 24h or High CVE within 7 days",
+            "tr_reference": "TR-Cyber CP-D, CP-E",
         },
         {
             "id": "T013", "level": "High", "category": "Data Analytics",
@@ -4650,6 +5014,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All privileged account activity logs for 6-month period",
             "sample_size": "100% population (data analytics)",
             "failure_criteria": "Unexplained after-hours logins or foreign-IP logins without approved change record",
+            "tr_reference": "TR-Cyber RM-C, CP-E",
         },
         {
             "id": "T014", "level": "High", "category": "Standard",
@@ -4658,6 +5023,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "IRP documentation set + last 3 incident records",
             "sample_size": "Full documentation review + interview IT Security and Compliance",
             "failure_criteria": "IRP not tested in 12 months, DORA notification timelines missing, or escalation list outdated",
+            "tr_reference": "TR-Cyber RM-F",
         },
         {
             "id": "T015", "level": "Moderate", "category": "Standard",
@@ -4666,6 +5032,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All vendors with active system access (typically 20-80)",
             "sample_size": "100% active vendor review + 10 terminated vendor access checks",
             "failure_criteria": "Vendor with broader access than justified, or active credentials post-termination",
+            "tr_reference": "TR-Cyber CP-A · TR-Third CP-E, CP-F",
         },
     ],
     "CREDIT_RISK": [
@@ -4844,6 +5211,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All Tier 1 (critical) vendors — typically 5-15",
             "sample_size": "100% of Tier 1 vendors",
             "failure_criteria": "Missing ISO 27001 / SOC 2 report, outdated financial review, or no incident notification clause",
+            "tr_reference": "TR-Third CP-A",
         },
         {
             "id": "T062", "level": "High", "category": "Standard",
@@ -4852,6 +5220,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All vendors with active system/network access",
             "sample_size": "10 active vendors + 5 terminated vendor access checks",
             "failure_criteria": "Vendor with access beyond contractual scope, shared/generic credentials, or active access post-termination",
+            "tr_reference": "TR-Third CP-E, CP-F",
         },
         {
             "id": "T063", "level": "High", "category": "Data Analytics",
@@ -4860,6 +5229,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "Full vendor register (all active vendors)",
             "sample_size": "100% population (data analytics)",
             "failure_criteria": "Single-vendor dependency for a critical function with no documented contingency, or undisclosed sub-outsourcing",
+            "tr_reference": "TR-Third RM-B, CP-F",
         },
         {
             "id": "T064", "level": "Moderate", "category": "Standard",
@@ -4868,6 +5238,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All vendor contracts for critical/important services",
             "sample_size": "10 contracts (judgmental — highest value and criticality)",
             "failure_criteria": "Missing right-to-audit, no data protection clause, or exit plan not documented",
+            "tr_reference": "TR-Third CP-B, CP-C",
         },
         {
             "id": "T065", "level": "Moderate", "category": "Standard",
@@ -4876,6 +5247,7 @@ AUDIT_TESTS_LIBRARY = {
             "population": "All critical/important vendor performance reports for 12-month period",
             "sample_size": "Full review + investigation of all SLA breaches",
             "failure_criteria": "No formal performance review in 12 months, SLA breach without penalty applied, or KPIs not aligned to contractual obligations",
+            "tr_reference": "TR-Third CP-F",
         },
     ],
     "GOVERNANCE": [
