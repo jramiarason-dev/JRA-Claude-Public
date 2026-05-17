@@ -6,6 +6,7 @@ Fully bilingual FR/EN — no external APIs — single-file Streamlit app
 
 import streamlit as st
 import random
+import plotly.graph_objects as go
 
 # ──────────────────────────────────────────────────────────────────────────────
 # PAGE CONFIG  (must be first Streamlit call)
@@ -364,6 +365,70 @@ COUNTRIES = [
 EASY_CAPITALS = {"France","Japan","Brazil","United States","United Kingdom",
                  "Germany","Italy","Spain","Canada","Mexico","Australia","China","India"}
 
+# ── Geographic coordinates for the World Spotter map ─────────────────────────
+# Each entry: country lat/lon centre + capital lat/lon
+GEO_DATA = {
+    # Europe
+    "France":         {"lat": 46.23, "lon":   2.21, "cap_lat": 48.86, "cap_lon":   2.35},
+    "Germany":        {"lat": 51.17, "lon":  10.45, "cap_lat": 52.52, "cap_lon":  13.40},
+    "Italy":          {"lat": 41.87, "lon":  12.57, "cap_lat": 41.90, "cap_lon":  12.50},
+    "Spain":          {"lat": 40.46, "lon":  -3.75, "cap_lat": 40.42, "cap_lon":  -3.70},
+    "United Kingdom": {"lat": 55.38, "lon":  -3.44, "cap_lat": 51.51, "cap_lon":  -0.13},
+    "Portugal":       {"lat": 39.40, "lon":  -8.22, "cap_lat": 38.72, "cap_lon":  -9.14},
+    "Netherlands":    {"lat": 52.13, "lon":   5.29, "cap_lat": 52.37, "cap_lon":   4.90},
+    "Belgium":        {"lat": 50.50, "lon":   4.47, "cap_lat": 50.85, "cap_lon":   4.35},
+    "Switzerland":    {"lat": 46.82, "lon":   8.23, "cap_lat": 46.95, "cap_lon":   7.45},
+    "Sweden":         {"lat": 60.13, "lon":  18.64, "cap_lat": 59.33, "cap_lon":  18.07},
+    "Greece":         {"lat": 39.07, "lon":  21.82, "cap_lat": 37.98, "cap_lon":  23.73},
+    "Iceland":        {"lat": 64.96, "lon": -19.02, "cap_lat": 64.13, "cap_lon": -21.82},
+    # Asia
+    "Japan":          {"lat": 36.20, "lon": 138.25, "cap_lat": 35.69, "cap_lon": 139.69},
+    "China":          {"lat": 35.86, "lon": 104.20, "cap_lat": 39.91, "cap_lon": 116.39},
+    "India":          {"lat": 20.59, "lon":  78.96, "cap_lat": 28.61, "cap_lon":  77.21},
+    "South Korea":    {"lat": 35.91, "lon": 127.77, "cap_lat": 37.57, "cap_lon": 126.98},
+    "Thailand":       {"lat": 15.87, "lon": 100.99, "cap_lat": 13.75, "cap_lon": 100.52},
+    "Vietnam":        {"lat": 14.06, "lon": 108.28, "cap_lat": 21.03, "cap_lon": 105.85},
+    "Saudi Arabia":   {"lat": 23.89, "lon":  45.08, "cap_lat": 24.69, "cap_lon":  46.72},
+    "Turkey":         {"lat": 38.96, "lon":  35.24, "cap_lat": 39.92, "cap_lon":  32.85},
+    "Philippines":    {"lat": 12.88, "lon": 121.77, "cap_lat": 14.60, "cap_lon": 120.98},
+    "Indonesia":      {"lat":  -0.79,"lon": 113.92, "cap_lat": -6.21, "cap_lon": 106.85},
+    "Iran":           {"lat": 32.43, "lon":  53.69, "cap_lat": 35.69, "cap_lon":  51.42},
+    "Afghanistan":    {"lat": 33.94, "lon":  67.71, "cap_lat": 34.52, "cap_lon":  69.18},
+    # Americas
+    "United States":  {"lat": 37.09, "lon": -95.71, "cap_lat": 38.91, "cap_lon": -77.04},
+    "Brazil":         {"lat":-14.24, "lon": -51.93, "cap_lat":-15.78, "cap_lon": -47.93},
+    "Canada":         {"lat": 56.13, "lon":-106.35, "cap_lat": 45.42, "cap_lon": -75.70},
+    "Mexico":         {"lat": 23.63, "lon":-102.55, "cap_lat": 19.43, "cap_lon": -99.13},
+    "Argentina":      {"lat":-38.42, "lon": -63.62, "cap_lat":-34.60, "cap_lon": -58.38},
+    "Colombia":       {"lat":  4.57, "lon": -74.30, "cap_lat":  4.71, "cap_lon": -74.07},
+    "Peru":           {"lat": -9.19, "lon": -75.02, "cap_lat":-12.05, "cap_lon": -77.05},
+    "Chile":          {"lat":-35.68, "lon": -71.54, "cap_lat":-33.46, "cap_lon": -70.65},
+    "Cuba":           {"lat": 21.52, "lon": -77.78, "cap_lat": 23.11, "cap_lon": -82.37},
+    "Venezuela":      {"lat":  6.42, "lon": -66.59, "cap_lat": 10.50, "cap_lon": -66.92},
+    # Africa
+    "South Africa":   {"lat":-30.56, "lon":  22.94, "cap_lat":-33.93, "cap_lon":  18.42},
+    "Nigeria":        {"lat":  9.08, "lon":   8.68, "cap_lat":  9.07, "cap_lon":   7.40},
+    "Kenya":          {"lat":  0.02, "lon":  37.91, "cap_lat": -1.29, "cap_lon":  36.82},
+    "Egypt":          {"lat": 26.82, "lon":  30.80, "cap_lat": 30.04, "cap_lon":  31.24},
+    "Morocco":        {"lat": 31.79, "lon":  -7.09, "cap_lat": 34.02, "cap_lon":  -6.84},
+    "Ghana":          {"lat":  7.95, "lon":  -1.02, "cap_lat":  5.56, "cap_lon":  -0.20},
+    "Ethiopia":       {"lat":  9.15, "lon":  40.49, "cap_lat":  9.03, "cap_lon":  38.74},
+    "Tanzania":       {"lat": -6.37, "lon":  34.89, "cap_lat": -6.18, "cap_lon":  35.74},
+    # Oceania
+    "Australia":      {"lat":-25.27, "lon": 133.78, "cap_lat":-35.28, "cap_lon": 149.13},
+    "New Zealand":    {"lat":-40.90, "lon": 174.89, "cap_lat":-41.29, "cap_lon": 174.78},
+    "Fiji":           {"lat":-17.71, "lon": 178.07, "cap_lat":-18.14, "cap_lon": 178.44},
+}
+
+# Continent-level zoom: (center_lat, center_lon, projection_scale)
+CONTINENT_ZOOM = {
+    "Europe":   (54.0,  15.0, 3.0),
+    "Asia":     (32.0,  95.0, 1.8),
+    "Americas": ( 5.0, -80.0, 1.4),
+    "Africa":   ( 5.0,  20.0, 1.8),
+    "Oceania":  (-25.0, 145.0, 2.5),
+}
+
 # ── Tab 3 · Math Arena ────────────────────────────────────────────────────────
 
 COUNTING_EMOJIS = ["🍎","🐱","⭐","🌸","🎈","🐶","🍕","🦋","🚀","🍓"]
@@ -410,11 +475,14 @@ _STATE_DEFAULTS = {
     "ls_hint": False, "ls_feedback": None,
     # English — Sentence Builder
     "sb_sentence": None, "sb_opts": [], "sb_score": 0, "sb_feedback": None,
+    # Geo — World Spotter map state
+    "geo_markers": [],
+    "geo_zoom_lat": 20.0, "geo_zoom_lon": 0.0, "geo_zoom_scale": 1.0,
     # Geo — Flag Finder
-    "ff_country": None, "ff_score": 0, "ff_feedback": None,
+    "ff_country": None, "ff_score": 0, "ff_feedback": None, "ff_answered": False,
     # Geo — Capital Challenge
     "cc_country": None, "cc_opts": [], "cc_score": 0,
-    "cc_streak": 0, "cc_hard": False, "cc_feedback": None,
+    "cc_streak": 0, "cc_hard": False, "cc_feedback": None, "cc_answered": False,
     # Geo — Continent Sorter
     "cs_countries": [], "cs_feedback": None, "cs_score": 0,
     # Math — Number Blaster
@@ -707,10 +775,152 @@ def game_sentence_builder():
 # ════════════════════  TAB 2 — GEO EXPLORER  ════════════════════
 # ──────────────────────────────────────────────────────────────────────────────
 
+# ── Map helpers ───────────────────────────────────────────────────────────────
+
+def _country_continent(name: str) -> str:
+    for c in COUNTRIES:
+        if c["en"] == name:
+            return c["cont"]
+    return ""
+
+
+def _set_map_country(name: str, color: str = "#FFD93D",
+                     show_capital: bool = False, cap_label: str = ""):
+    """Place a single country star on the map, zoom to its continent region."""
+    if name not in GEO_DATA:
+        return
+    geo  = GEO_DATA[name]
+    cont = _country_continent(name)
+
+    markers = [{
+        "lat": geo["lat"], "lon": geo["lon"],
+        "color": color, "size": 20, "symbol": "star",
+        "label": name, "is_cap": False,
+    }]
+    if show_capital and cap_label:
+        markers.append({
+            "lat": geo["cap_lat"], "lon": geo["cap_lon"],
+            "color": "#FFD93D", "size": 14, "symbol": "diamond",
+            "label": f"🏛 {cap_label}", "is_cap": True,
+        })
+
+    st.session_state.geo_markers = markers
+
+    if cont in CONTINENT_ZOOM:
+        zlat, zlon, zsc = CONTINENT_ZOOM[cont]
+        # Blend country centre with continent centre for a focused but contextual zoom
+        st.session_state.geo_zoom_lat   = geo["lat"] * 0.55 + zlat * 0.45
+        st.session_state.geo_zoom_lon   = geo["lon"] * 0.55 + zlon * 0.45
+        st.session_state.geo_zoom_scale = zsc
+    else:
+        st.session_state.geo_zoom_lat   = geo["lat"]
+        st.session_state.geo_zoom_lon   = geo["lon"]
+        st.session_state.geo_zoom_scale = 3.0
+
+
+def _set_map_countries(pairs: list):
+    """Place multiple country markers (for Continent Sorter CHECK result).
+
+    pairs: list of (country_name, is_correct)
+    """
+    markers = []
+    for name, ok in pairs:
+        if name not in GEO_DATA:
+            continue
+        geo = GEO_DATA[name]
+        markers.append({
+            "lat": geo["lat"], "lon": geo["lon"],
+            "color": "#2ecc71" if ok else "#e74c3c",
+            "size": 18, "symbol": "star",
+            "label": name, "is_cap": False,
+        })
+    st.session_state.geo_markers    = markers
+    st.session_state.geo_zoom_lat   = 20.0
+    st.session_state.geo_zoom_lon   = 0.0
+    st.session_state.geo_zoom_scale = 1.0
+
+
+def render_world_map():
+    """Render the persistent World Spotter Plotly map at the top of the Geo tab."""
+    markers   = st.session_state.get("geo_markers", [])
+    zoom_lat  = st.session_state.get("geo_zoom_lat",   20.0)
+    zoom_lon  = st.session_state.get("geo_zoom_lon",    0.0)
+    zoom_sc   = st.session_state.get("geo_zoom_scale",  1.0)
+
+    fig = go.Figure()
+
+    country_m = [m for m in markers if not m.get("is_cap")]
+    capital_m = [m for m in markers if     m.get("is_cap")]
+
+    if country_m:
+        fig.add_trace(go.Scattergeo(
+            lat=[m["lat"]   for m in country_m],
+            lon=[m["lon"]   for m in country_m],
+            text=[m["label"] for m in country_m],
+            mode="markers+text",
+            marker=dict(
+                size=[m["size"]  for m in country_m],
+                symbol="star",
+                color=[m["color"] for m in country_m],
+                line=dict(width=2, color="white"),
+            ),
+            textposition="bottom center",
+            textfont=dict(size=11, color="white"),
+            hoverinfo="text",
+            showlegend=False,
+        ))
+
+    if capital_m:
+        fig.add_trace(go.Scattergeo(
+            lat=[m["lat"]   for m in capital_m],
+            lon=[m["lon"]   for m in capital_m],
+            text=[m["label"] for m in capital_m],
+            mode="markers+text",
+            marker=dict(
+                size=[m["size"]  for m in capital_m],
+                symbol="diamond",
+                color=[m["color"] for m in capital_m],
+                line=dict(width=2, color="white"),
+            ),
+            textposition="top center",
+            textfont=dict(size=10, color="#FFD93D"),
+            hoverinfo="text",
+            showlegend=False,
+        ))
+
+    fig.update_layout(
+        height=370,
+        margin=dict(l=0, r=0, t=0, b=0),
+        paper_bgcolor="#1a1a2e",
+        geo=dict(
+            projection=dict(type="natural earth", scale=zoom_sc),
+            center=dict(lat=zoom_lat, lon=zoom_lon),
+            bgcolor="#1a1a2e",
+            landcolor="#e8f4f8",
+            oceancolor="#1a1a2e",
+            showocean=True,
+            showland=True,
+            showlakes=False,
+            showcountries=True,
+            countrycolor="#8899aa",
+            countrywidth=0.5,
+            showcoastlines=True,
+            coastlinecolor="#8899aa",
+            coastlinewidth=0.5,
+        ),
+        font=dict(color="white"),
+    )
+
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
 # ── Game A · Flag Finder ──────────────────────────────────────────────────────
 
 def _load_ff():
-    st.session_state.ff_country = random.choice(COUNTRIES)
+    c = random.choice(COUNTRIES)
+    st.session_state.ff_country  = c
+    st.session_state.ff_answered = False
+    _set_map_country(c["en"], color="#FFD93D")  # yellow = pending question
 
 
 def game_flag_finder():
@@ -728,13 +938,22 @@ def game_flag_finder():
     st.markdown(f'<div class="score-line">⭐ Score: {st.session_state.ff_score}</div>',
                 unsafe_allow_html=True)
 
+    # Large flag display — 80 px font per spec
     st.markdown(
-        f'<div class="q-card q-card-teal">'
-        f'<span style="font-size:1.4em;">{c["flag"]}</span><br>'
-        f'<span style="color:#4ECDC4; font-size:0.7em;">{c["en"]} / {c["fr"]}</span>'
-        f'</div>',
+        f'<div style="text-align:center; font-size:80px; line-height:1.1; margin:10px 0;">'
+        f'{c["flag"]}</div>'
+        f'<div style="text-align:center; font-size:1.3em; font-family:Fredoka One,cursive; '
+        f'color:#4ECDC4; margin-bottom:14px;">{c["en"]} / {c["fr"]}</div>',
         unsafe_allow_html=True,
     )
+
+    if st.session_state.ff_answered:
+        # Show colored map + feedback, then a Next button
+        show_feedback(st.session_state.ff_feedback)
+        if st.button("▶️ Suivant / Next", key="ff_next", use_container_width=True):
+            _load_ff()
+            st.rerun()
+        return
 
     cols = st.columns(3)
     for i, cont in enumerate(CONTINENTS):
@@ -747,19 +966,19 @@ def game_flag_finder():
                 if cont == c["cont"]:
                     st.session_state.ff_score += 1
                     add_stars(1, "geo")
+                    _set_map_country(c["en"], color="#2ecc71")   # flash green
                     st.session_state.ff_feedback = ("ok",
                         f"Oui! {c['en']} est en {cont}! {CONTINENT_EMOJI[cont]}",
                         f"Yes! {c['en']} is in {cont}! {CONTINENT_EMOJI[cont]}")
-                    _load_ff()
+                    st.session_state.ff_answered = True
                     st.balloons()
                 else:
+                    _set_map_country(c["en"], color="#e74c3c")   # flash red
                     st.session_state.ff_feedback = ("err",
                         f"Non! {c['en']} est en {c['cont']}!",
                         f"No! {c['en']} is in {c['cont']}!")
-                    _load_ff()
+                    st.session_state.ff_answered = True
                 st.rerun()
-
-    show_feedback(st.session_state.ff_feedback)
 
 
 # ── Game B · Capital City Challenge ──────────────────────────────────────────
@@ -776,8 +995,12 @@ def _load_cc():
     wrongs = random.sample([cap for cap in all_caps if cap != country["cap"]], 3)
     opts = wrongs + [country["cap"]]
     random.shuffle(opts)
-    st.session_state.cc_country = country
-    st.session_state.cc_opts    = opts
+    st.session_state.cc_country  = country
+    st.session_state.cc_opts     = opts
+    st.session_state.cc_answered = False
+    # Show both country star (yellow) + capital diamond (gold) on the map
+    _set_map_country(country["en"], color="#FFD93D",
+                     show_capital=True, cap_label=country["cap"])
 
 
 def game_capital_challenge():
@@ -795,13 +1018,15 @@ def game_capital_challenge():
     with col_str:
         flames = "🔥" * min(st.session_state.cc_streak, 5)
         st.markdown(
-            f'<div class="score-line" style="text-align:left;">Serie / Streak: {flames} ({st.session_state.cc_streak})</div>',
+            f'<div class="score-line" style="text-align:left;">'
+            f'Serie / Streak: {flames} ({st.session_state.cc_streak})</div>',
             unsafe_allow_html=True,
         )
 
     if st.session_state.cc_hard:
         st.markdown(
-            '<div style="text-align:center; color:#4ECDC4; font-size:1.1em;">🔓 Mode Expert / Expert Mode!</div>',
+            '<div style="text-align:center; color:#4ECDC4; font-size:1.1em;">'
+            '🔓 Mode Expert / Expert Mode!</div>',
             unsafe_allow_html=True,
         )
 
@@ -809,10 +1034,18 @@ def game_capital_challenge():
         f'<div class="q-card q-card-teal">'
         f'{c["flag"]}<br>'
         f'<span style="color:#4ECDC4; font-size:0.7em;">{c["en"]} / {c["fr"]}</span><br>'
-        f'<span style="font-size:0.4em; color:#999;">Quelle est la capitale? / What is the capital?</span>'
+        f'<span style="font-size:0.4em; color:#999;">'
+        f'Quelle est la capitale? / What is the capital?</span>'
         f'</div>',
         unsafe_allow_html=True,
     )
+
+    if st.session_state.cc_answered:
+        show_feedback(st.session_state.cc_feedback)
+        if st.button("▶️ Suivant / Next", key="cc_next", use_container_width=True):
+            _load_cc()
+            st.rerun()
+        return
 
     cols = st.columns(2)
     for i, opt in enumerate(st.session_state.cc_opts):
@@ -822,6 +1055,8 @@ def game_capital_challenge():
                     st.session_state.cc_score  += 1
                     st.session_state.cc_streak += 1
                     add_stars(1, "geo")
+                    _set_map_country(c["en"], color="#2ecc71",
+                                     show_capital=True, cap_label=c["cap"])
                     if st.session_state.cc_streak >= 5 and not st.session_state.cc_hard:
                         st.session_state.cc_hard = True
                         st.session_state.cc_feedback = ("ok",
@@ -831,17 +1066,17 @@ def game_capital_challenge():
                         st.session_state.cc_feedback = ("ok",
                             f"Correct! {c['en']} → {c['cap']}!",
                             f"Correct! {c['en']} → {c['cap']}!")
-                    _load_cc()
+                    st.session_state.cc_answered = True
                     st.balloons()
                 else:
+                    _set_map_country(c["en"], color="#e74c3c",
+                                     show_capital=True, cap_label=c["cap"])
                     st.session_state.cc_streak  = 0
                     st.session_state.cc_feedback = ("err",
                         f"Non! La capitale: {c['cap']}",
                         f"No! The capital: {c['cap']}")
-                    _load_cc()
+                    st.session_state.cc_answered = True
                 st.rerun()
-
-    show_feedback(st.session_state.cc_feedback)
 
 
 # ── Game C · Continent Sorter ─────────────────────────────────────────────────
@@ -849,6 +1084,19 @@ def game_capital_challenge():
 def _load_cs():
     st.session_state.cs_countries = random.sample(COUNTRIES, 5)
     st.session_state.cs_feedback  = None
+    # Show all 5 as neutral yellow markers on the global map
+    pairs = [(c["en"], None) for c in st.session_state.cs_countries]
+    markers = []
+    for name, _ in pairs:
+        if name in GEO_DATA:
+            geo = GEO_DATA[name]
+            markers.append({"lat": geo["lat"], "lon": geo["lon"],
+                            "color": "#FFD93D", "size": 18, "symbol": "star",
+                            "label": name, "is_cap": False})
+    st.session_state.geo_markers    = markers
+    st.session_state.geo_zoom_lat   = 20.0
+    st.session_state.geo_zoom_lon   = 0.0
+    st.session_state.geo_zoom_scale = 1.0
 
 
 def game_continent_sorter():
@@ -872,8 +1120,10 @@ def game_continent_sorter():
     for country in countries:
         c1, c2, c3 = st.columns([1, 2, 3])
         with c1:
-            st.markdown(f'<div style="font-size:2.2em; text-align:center;">{country["flag"]}</div>',
-                        unsafe_allow_html=True)
+            st.markdown(
+                f'<div style="font-size:2.2em; text-align:center;">{country["flag"]}</div>',
+                unsafe_allow_html=True,
+            )
         with c2:
             st.markdown(
                 f'<div style="font-size:1.05em; font-family:Fredoka One,cursive; padding-top:8px;">'
@@ -894,18 +1144,19 @@ def game_continent_sorter():
 
     with col_check:
         if st.button("🚀 CHECK / VERIFIER", key="cs_check", use_container_width=True):
-            results = []
-            correct_count = 0
+            results, correct_count = [], 0
             for country in countries:
                 user_ans = st.session_state.get(f"cs_{country['en']}", CONTINENTS[0])
                 right    = country["cont"]
-                ok = user_ans == right
+                ok       = user_ans == right
                 if ok:
                     correct_count += 1
                 results.append((country["en"], country["flag"], user_ans, right, ok))
             add_stars(correct_count, "geo")
-            st.session_state.cs_score    += correct_count
-            st.session_state.cs_feedback  = results
+            st.session_state.cs_score   += correct_count
+            st.session_state.cs_feedback = results
+            # Update map: color each country green/red
+            _set_map_countries([(name, ok) for name, _, _, _, ok in results])
             if correct_count == 5:
                 st.balloons()
             st.rerun()
@@ -1288,6 +1539,9 @@ def main():
             '</div>',
             unsafe_allow_html=True,
         )
+        # ── Persistent World Spotter map — always rendered first ──
+        render_world_map()
+
         game = st.radio(
             "🎮 Choisis un jeu / Choose a game:",
             ["🏳️ Flag Finder", "🏛️ Capital Challenge", "🗺️ Continent Sorter"],
