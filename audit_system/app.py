@@ -48,6 +48,10 @@ _SS_DEFAULTS = {
     "history": [],
     "_tpl_applied": False,
     "_tpl_name": "",
+    # Help
+    "help_open": False,
+    "help_lang": "Français",
+    "active_tab": 0,
     # Static data
     "dash_source": "static",   # "static" | "live"
     "ref_search": "",
@@ -2032,8 +2036,202 @@ with st.sidebar:
                 st.caption("No matches found.")
 
 
+# ── Help content ──────────────────────────────────────────────────────────────
+
+_HELP = {
+    0: {  # Intelligence Dashboard
+        "Français": """**🌐 Tableau de bord Intelligence**
+
+**À quoi ça sert ?**
+→ Rester informé avant de lancer un audit.
+
+**Comment l'utiliser ?**
+- 📚 **Données statiques** : référentiel intégré, disponible sans connexion
+- ⚡ **Live** : données en temps réel depuis sources publiques
+
+**Les sections :**
+- 🔴 **CVEs** : vulnérabilités cyber bancaires récentes
+- 📰 **Réglementation** : publications FINMA, MAS, FCA, EBA…
+- 🏦 **Recommandations** : bonnes pratiques publiques d'audit bancaire
+- 📋 **Snapshot** : résumé de votre dernier rapport généré
+
+💡 *Astuce : commencez ici pour identifier votre prochain sujet d'audit.*""",
+
+        "English": """**🌐 Intelligence Dashboard**
+
+**What is it for?**
+→ Stay informed before launching an audit.
+
+**How to use it?**
+- 📚 **Static data**: built-in knowledge base, no internet required
+- ⚡ **Live**: real-time data from public sources
+
+**Sections:**
+- 🔴 **CVEs**: recent banking cyber vulnerabilities
+- 📰 **Regulatory**: FINMA, MAS, FCA, EBA publications
+- 🏦 **Recommendations**: public banking audit best practices
+- 📋 **Snapshot**: summary of your last generated report
+
+💡 *Tip: start here to identify your next audit topic.*""",
+    },
+    1: {  # Risk Analysis
+        "Français": """**🔍 Analyse des Risques**
+
+**À quoi ça sert ?**
+→ Identifier les risques et réglementations applicables à votre sujet d'audit.
+
+**Comment remplir les champs ?**
+- **Audit Topic** : saisissez le thème — ex. AML/KYC, Cyber Risk, Credit Risk
+  → Ou choisissez un template dans *Quick Start Template*
+- **Jurisdictions** : sélectionnez tous les pays applicables à l'entité auditée
+
+**Résultats obtenus :**
+- Cartographie des risques par niveau
+- Réglementations applicables
+- Recommandations publiques sur ce thème
+
+💡 *Astuce : les données statiques suffisent pour 80% des missions. Utilisez Live uniquement pour les sujets très récents.*""",
+
+        "English": """**🔍 Risk Analysis**
+
+**What is it for?**
+→ Identify risks and applicable regulations for your audit topic.
+
+**How to fill in the fields?**
+- **Audit Topic**: enter the theme — e.g. AML/KYC, Cyber Risk, Credit Risk
+  → Or pick a template from *Quick Start Template*
+- **Jurisdictions**: select all countries applicable to the audited entity
+
+**Results:**
+- Risk map by severity level
+- Applicable regulations
+- Public recommendations on this topic
+
+💡 *Tip: static data covers 80% of missions. Use Live only for very recent topics.*""",
+    },
+    2: {  # Audit Plan & Testing
+        "Français": """**📋 Plan d'Audit & Tests**
+
+**À quoi ça sert ?**
+→ Construire le plan d'audit et la liste des tests à réaliser.
+
+**Comment remplir les champs ?**
+- **Audit Topic** : pré-rempli depuis l'onglet 1, modifiable
+- **Audit Scope** : décrivez le périmètre — ex. *"Processus KYC, entités CH et SG, période 2024"*
+
+**Résultats obtenus :**
+- **Rationale** : pourquoi cet audit
+- **Background** : contexte et enjeux
+- **Tests** : liste détaillée avec lien vers les risques associés
+- **Data Analytics** : scénarios d'analyse possibles
+
+💡 *Astuce : vérifiez le "Risk Coverage Summary" — tout risque Critical doit avoir au moins 1 test.*""",
+
+        "English": """**📋 Audit Plan & Testing**
+
+**What is it for?**
+→ Build the audit plan and test list.
+
+**How to fill in the fields?**
+- **Audit Topic**: pre-filled from tab 1, editable
+- **Audit Scope**: describe the perimeter — e.g. *"KYC process, CH and SG entities, FY2024"*
+
+**Results:**
+- **Rationale**: why this audit
+- **Background**: context and issues
+- **Tests**: detailed list linked to associated risks
+- **Data Analytics**: possible analysis scenarios
+
+💡 *Tip: check the "Risk Coverage Summary" — every Critical risk must have at least 1 test.*""",
+    },
+    3: {  # Audit Report
+        "Français": """**📄 Rapport d'Audit**
+
+**À quoi ça sert ?**
+→ Générer le rapport final à partir de vos observations terrain.
+
+**Comment remplir les champs ?**
+- **Observations & Findings** : saisissez vos observations de terrain, une par ligne
+  — ex. *"8 dossiers sur 30 sans documentation SoW à jour"*
+- Le rapport reprend automatiquement le contexte des onglets 1 et 2
+
+**Résultats obtenus :**
+- Executive Summary avec opinion (Unsatisfactory / Partially / Satisfactory)
+- Fiches détaillées par observation : risque associé, réglementation, impact, recommandations
+- Tableau récapitulatif des actions management
+
+**Exports :** 📄 Word &nbsp; 📊 Excel &nbsp; 📑 PPT &nbsp; 🖨️ PDF
+
+💡 *Astuce : complétez d'abord les onglets 1 et 2 pour un rapport plus riche.*""",
+
+        "English": """**📄 Audit Report**
+
+**What is it for?**
+→ Generate the final report from your field observations.
+
+**How to fill in the fields?**
+- **Observations & Findings**: enter your field observations, one per line
+  — e.g. *"8 out of 30 files missing updated SoW documentation"*
+- Report automatically pulls context from tabs 1 and 2
+
+**Results:**
+- Executive Summary with opinion (Unsatisfactory / Partially / Satisfactory)
+- Detailed finding cards: associated risk, regulation, impact, recommendations
+- Action plan summary table
+
+**Exports:** 📄 Word &nbsp; 📊 Excel &nbsp; 📑 PPT &nbsp; 🖨️ PDF
+
+💡 *Tip: complete tabs 1 and 2 first for a richer, more contextualised report.*""",
+    },
+}
+
+_TAB_NAMES = {
+    "Français": ["Tableau de bord", "Analyse des Risques", "Plan & Tests", "Rapport d'Audit"],
+    "English":  ["Dashboard", "Risk Analysis", "Audit Plan", "Audit Report"],
+}
+
+
+def _show_help_panel():
+    """Render the contextual help panel below the header."""
+    lang = st.session_state.get("help_lang", "Français")
+    tab_idx = st.session_state.get("active_tab", 0)
+
+    # Language selector
+    lcol1, lcol2 = st.columns([1, 5])
+    with lcol1:
+        new_lang = st.radio(
+            "Language", ["🇫🇷 Français", "🇬🇧 English"],
+            index=0 if lang == "Français" else 1,
+            horizontal=True, label_visibility="collapsed",
+            key="_help_lang_radio",
+        )
+        st.session_state["help_lang"] = "English" if "English" in new_lang else "Français"
+        lang = st.session_state["help_lang"]
+
+    # Tab selector inside panel
+    tab_labels = _TAB_NAMES[lang]
+    selected_tab = st.radio(
+        "Section", tab_labels,
+        index=tab_idx,
+        horizontal=True, label_visibility="collapsed",
+        key="_help_tab_radio",
+    )
+    selected_idx = tab_labels.index(selected_tab)
+
+    # Render content
+    content = _HELP.get(selected_idx, {}).get(lang, "")
+    st.markdown('<hr style="border:0;border-top:1px solid rgba(127,168,251,0.2);margin:8px 0 14px"/>', unsafe_allow_html=True)
+    st.markdown(content)
+
+    if st.button("✕ Close", key="_help_close"):
+        st.session_state["help_open"] = False
+        st.rerun()
+
+
 # ── Header ────────────────────────────────────────────────────────────────────
-st.markdown("""
+_hdr_col1, _hdr_col2 = st.columns([8, 1])
+with _hdr_col1:
+    st.markdown("""
 <div style="text-align:center;margin-bottom:32px;padding-top:1rem">
   <h1 style="font-size:42px;font-weight:800;letter-spacing:-1px;margin:0">🏦 AuditIQ</h1>
   <p style="font-size:16px;color:#8b95b8;font-style:italic;margin-top:4px;margin-bottom:0">
@@ -2041,6 +2239,14 @@ st.markdown("""
   </p>
 </div>
 """, unsafe_allow_html=True)
+with _hdr_col2:
+    st.markdown("<div style='padding-top:1.4rem'>", unsafe_allow_html=True)
+    if st.button("❓", key="_help_toggle_btn", help="Help / Aide"):
+        st.session_state["help_open"] = not st.session_state.get("help_open", False)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+if st.session_state.get("help_open", False):
+    _show_help_panel()
 
 if not _api_key:
     st.error("Access not configured. Please contact your administrator.")
@@ -2644,6 +2850,7 @@ tab0, tab1, tab2, tab3 = st.tabs([
 # TAB 0 — INTELLIGENCE DASHBOARD
 # ─────────────────────────────────────────────────────────────────────────────
 with tab0:
+    st.session_state["active_tab"] = 0
     # Source selector
     _src_c1, _src_c2, _ = st.columns([1.3, 1.5, 4])
     _t0_static = st.session_state.dash_source == "static"
@@ -2868,6 +3075,7 @@ with tab0:
 # TAB 1 — RISK ANALYSIS
 # ─────────────────────────────────────────────────────────────────────────────
 with tab1:
+    st.session_state["active_tab"] = 1
     st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">Risk mapping, applicable regulations, and public audit recommendations by topic.</p>', unsafe_allow_html=True)
     _t1_mode = render_mode_toggle("mode_tab1")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
@@ -3192,6 +3400,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
 # TAB 2 — AUDIT PLAN
 # ─────────────────────────────────────────────────────────────────────────────
 with tab2:
+    st.session_state["active_tab"] = 2
     st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">Structured audit planning, test programme, and data analytics scenarios.</p>', unsafe_allow_html=True)
     _t2_mode = render_mode_toggle("mode_tab2")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
@@ -3512,6 +3721,7 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
 # TAB 3 — AUDIT REPORT
 # ─────────────────────────────────────────────────────────────────────────────
 with tab3:
+    st.session_state["active_tab"] = 3
     st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">IIA-standard audit report — assembled from Risk Analysis and Audit Plan context.</p>', unsafe_allow_html=True)
     _t3_mode = render_mode_toggle("mode_tab3")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
