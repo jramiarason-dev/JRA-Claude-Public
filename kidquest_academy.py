@@ -11,7 +11,14 @@ import json
 import time
 import base64
 import pathlib
+import re
+import datetime
 from datetime import date as _date
+
+try:
+    import anthropic as _anthropic
+except ImportError:
+    _anthropic = None
 
 st.set_page_config(
     page_title="KidQuest Academy 🎓",
@@ -646,12 +653,24 @@ def save_profile():
         "session_time_total": st.session_state.get("session_time_total", 0),
         "last_session":    str(_date.today()),
         "discovery_mode_seen": st.session_state.get("discovery_mode_seen", {}),
+        "stories":         _load_existing_stories(name),
+        "geo_countries_seen":  list(st.session_state.get("geo_countries_seen", [])),
+        "english_words_seen":  list(st.session_state.get("english_words_seen", [])),
+        "math_last_correct":   st.session_state.get("math_last_correct", ""),
     }
     try:
         with open(_profile_path(name), "w") as fh:
             json.dump(data, fh, ensure_ascii=False, indent=2)
     except Exception:
         pass
+
+
+def _load_existing_stories(name: str) -> list:
+    try:
+        with open(_profile_path(name)) as fh:
+            return json.load(fh).get("stories", [])
+    except Exception:
+        return []
 
 
 def load_profile(name: str) -> dict:
@@ -682,6 +701,30 @@ def restore_from_profile(data: dict):
     av    = next((a for a in AVATAR_LIST if a["id"] == av_id), AVATAR_LIST[0])
     st.session_state.avatar        = av
     st.session_state.avatar_chosen = True
+    st.session_state.geo_countries_seen  = data.get("geo_countries_seen", [])
+    st.session_state.english_words_seen  = data.get("english_words_seen", [])
+    st.session_state.math_last_correct   = data.get("math_last_correct", "")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CROSS-TAB TRACKING HELPERS
+# ─────────────────────────────────────────────────────────────────────────────
+def _track_english_word(word: str):
+    seen = list(st.session_state.get("english_words_seen", []))
+    if word not in seen:
+        seen = ([word] + seen)[:5]
+    st.session_state.english_words_seen = seen
+
+
+def _track_geo_country(name_fr: str):
+    seen = list(st.session_state.get("geo_countries_seen", []))
+    if name_fr not in seen:
+        seen = seen + [name_fr]
+    st.session_state.geo_countries_seen = seen
+
+
+def _track_math(fact: str):
+    st.session_state.math_last_correct = fact
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -764,6 +807,11 @@ _STATE_DEFAULTS: dict = {
     # Math — Pattern Puzzle
     "pp_pat":None,"pp_score":0,"pp_feedback":None,
     "pp_rq":0,"pp_rs":0,"pp_rdone":False,
+    # Story tracking (cross-tab context)
+    "geo_countries_seen":[],"english_words_seen":[],"math_last_correct":"",
+    # Story tab state
+    "story_generated":False,"story_cooldown":0.0,
+    "current_story_raw":"","current_story_title":"","current_story_body":"",
 }
 
 
@@ -1399,6 +1447,7 @@ def game_word_match():
                     st.session_state.wm_score += 1
                     st.session_state.wm_rs += 1
                     add_stars(0, "english")
+                    _track_english_word(w["en"])
                     st.session_state.session_items_this_round["words"] = \
                         st.session_state.session_items_this_round.get("words",0) + 1
                     msg = get_feedback("word_match", True)
@@ -1464,6 +1513,7 @@ def game_listen_spell():
                     st.session_state.ls_score += 1
                     st.session_state.ls_rs += 1
                     add_stars(0, "english")
+                    _track_english_word(item["name"])
                     msg = get_feedback("listen_spell", True)
                     st.session_state.ls_feedback = ("ok", msg, msg)
                     st.balloons()
@@ -1528,6 +1578,7 @@ def game_sentence_builder():
                     st.session_state.sb_score += 1
                     st.session_state.sb_rs += 1
                     add_stars(0, "english")
+                    _track_english_word(ans)
                     msg = get_feedback("sentence_builder", True)
                     st.session_state.sb_feedback = ("ok", msg, msg)
                     st.balloons()
@@ -1614,6 +1665,7 @@ def game_flag_finder():
                     st.session_state.ff_rs    += 1
                     add_stars(0, "geo")
                     st.session_state.collectibles.add(c.get("alpha2",""))
+                    _track_geo_country(c.get("name_fr") or c["name_en"])
                     st.session_state.session_items_this_round["countries"] = \
                         st.session_state.session_items_this_round.get("countries",0) + 1
                     _set_map_country(c, color="#2ecc71")
@@ -1715,6 +1767,7 @@ def game_capital_challenge():
                     st.session_state.cc_streak += 1
                     add_stars(0, "geo")
                     st.session_state.collectibles.add(c.get("alpha2",""))
+                    _track_geo_country(c.get("name_fr") or c["name_en"])
                     st.session_state.session_items_this_round["countries"] = \
                         st.session_state.session_items_this_round.get("countries",0) + 1
                     _set_map_country(c, color="#2ecc71", show_capital=True)
@@ -1913,6 +1966,7 @@ def game_number_blaster():
                 st.session_state.nb_round_score += 1
                 st.session_state.nb_rs          += 1
                 add_stars(0, "math")
+                _track_math(st.session_state.nb_q)
                 st.session_state.session_items_this_round["maths"] = \
                     st.session_state.session_items_this_round.get("maths",0) + 1
                 msg = get_feedback("number_blaster", True)
@@ -2000,6 +2054,7 @@ def game_count_objects():
                     st.session_state.co_score += 1
                     st.session_state.co_rs    += 1
                     add_stars(0, "math")
+                    _track_math(f"{count} {emoji} = {count}")
                     st.session_state.session_items_this_round["maths"] = \
                         st.session_state.session_items_this_round.get("maths",0) + 1
                     msg = get_feedback("count_objects", True)
@@ -2065,6 +2120,7 @@ def game_pattern_puzzle():
                     st.session_state.pp_score += 1
                     st.session_state.pp_rs    += 1
                     add_stars(0, "math")
+                    _track_math(f"suite {pat['rule']} → {pat['ans']}")
                     st.session_state.session_items_this_round["maths"] = \
                         st.session_state.session_items_this_round.get("maths",0) + 1
                     msg = get_feedback("pattern_puzzle", True)
@@ -2252,6 +2308,287 @@ def render_sidebar():
                 st.code(api_err, language=None)
 
 # ─────────────────────────────────────────────────────────────────────────────
+# HISTOIRE DU SOIR — STORY TAB CONSTANTS
+# ─────────────────────────────────────────────────────────────────────────────
+STORY_SYSTEM_PROMPT = """Tu es Conteur des Rêves, un narrateur bienveillant et chaleureux pour enfants de 4 à 7 ans.
+Tu crées des histoires du soir douces, apaisantes et éducatives.
+
+Règles absolues :
+- L'histoire dure exactement 250 à 320 mots.
+- Elle se termine TOUJOURS par le héros qui s'endort paisiblement.
+- Le ton est doux, lent, rassurant — comme un câlin en mots.
+- La narration est principalement en français, simple (niveau CE1).
+- Intègre naturellement 2 à 4 mots anglais du contexte, toujours traduits juste après entre parenthèses.
+- Mentionne au moins 1 pays ou lieu géographique du contexte de façon poétique.
+- Glisse une notion mathématique légère (compter, forme, taille) de façon ludique.
+- Le héros est l'avatar de l'enfant — utilise son nom ET son emoji.
+- Pas de suspense effrayant, pas de vilains, pas de danger réel.
+- Structure : TITRE: [titre poétique sur une ligne]\n---\n[corps de l'histoire]
+- Le titre est court (3 à 6 mots), poétique, en français.
+
+Format de sortie STRICT :
+TITRE: [titre]
+---
+[corps de l'histoire en 250-320 mots, se terminant par l'endormissement du héros]"""
+
+FALLBACK_STORIES = {
+    "fox": ("Le Renard et les Étoiles Dorées",
+            "Dans la forêt silencieuse, le petit Renard 🦊 compta les étoiles — une, deux, trois… bientôt ses yeux se fermèrent tout doucement."),
+    "cat": ("La Chatte et la Lune Argentée",
+            "La petite Chatte 🐱 regarda la lune monter haut dans le ciel. Elle murmura *good night* (bonne nuit) à chaque étoile, puis s'endormit."),
+    "dog": ("Le Chien et le Nuage Moelleux",
+            "Le petit Chien 🐶 trouva un nuage doux comme un oreiller. Il s'y coucha, ferma les yeux, et rêva de prés verts et de papillons."),
+    "bear": ("L'Ours et la Forêt Enchantée",
+            "L'Ours 🐻 se promena dans la forêt magique jusqu'à trouver sa grotte parfaite. Il compta trois feuilles dorées et s'endormit."),
+    "bunny": ("Le Lapin et les Carottes d'Or",
+            "Le Lapin 🐰 rangea ses cinq carottes dans son terrier. Dehors, la nuit tombait. Il ferma les yeux en souriant doucement."),
+    "owl": ("La Chouette et les Secrets de la Nuit",
+            "La Chouette 🦉 gardienne de la nuit chuchota *sleep tight* (dors bien) à tous les animaux, puis posa la tête sur son aile."),
+    "dino": ("Le Dinosaure et les Montagnes Roses",
+            "Le petit Dino 🦕 traversa trois grandes montagnes roses au coucher du soleil. Épuisé et heureux, il s'allongea et s'endormit."),
+    "robot": ("Le Robot et les Étoiles Binaires",
+            "Le Robot 🤖 compta les étoiles : un, zéro, un, zéro… Ses circuits se mirent en veille, et il fit de beaux rêves électriques."),
+    "princess": ("La Princesse et le Jardin Secret",
+            "La Princesse 👸 cueillit sept fleurs magiques dans son jardin secret. Elle les compta, sourit, et s'endormit dans ses draps de soie."),
+    "knight": ("Le Chevalier et le Dragon Gentil",
+            "Le Chevalier 🧙 et son ami dragon firent la paix au bord du lac. Ensemble, ils s'endormirent sous un ciel étoilé."),
+    "mermaid": ("La Sirène et les Perles Bleues",
+            "La Sirène 🧜 plongea dans les eaux calmes et trouva cinq perles bleues. Elle les serra contre son cœur et s'endormit sous les vagues."),
+    "astronaut": ("L'Astronaute et la Planète des Rêves",
+            "L'Astronaute 👨‍🚀 flotta jusqu'à une petite planète bleue. Il dit *good night* (bonne nuit) à la Terre et ferma les yeux dans son vaisseau."),
+}
+
+
+def get_story_context() -> dict:
+    return {
+        "avatar":       st.session_state.get("avatar", AVATAR_LIST[0]),
+        "child_name":   st.session_state.get("child_name", "ami"),
+        "countries":    st.session_state.get("geo_countries_seen", [])[-3:],
+        "eng_words":    st.session_state.get("english_words_seen", [])[:4],
+        "math_fact":    st.session_state.get("math_last_correct", ""),
+        "stars":        st.session_state.get("total_stars", 0),
+    }
+
+
+def build_user_prompt(ctx: dict) -> str:
+    av   = ctx["avatar"]
+    name = ctx["child_name"]
+    parts = [f"Héros : {name}, avatar {av['emoji']} ({av['id']})."]
+    if ctx["countries"]:
+        parts.append(f"Pays vus aujourd'hui : {', '.join(ctx['countries'])}.")
+    if ctx["eng_words"]:
+        parts.append(f"Mots anglais appris : {', '.join(ctx['eng_words'])}.")
+    if ctx["math_fact"]:
+        parts.append(f"Dernière réussite maths : {ctx['math_fact']}.")
+    parts.append(f"{name} a gagné {ctx['stars']} étoiles aujourd'hui.")
+    parts.append("Crée une histoire du soir douce et apaisante.")
+    return " ".join(parts)
+
+
+def parse_story(raw: str) -> tuple[str, str]:
+    if "---" in raw:
+        header, _, body = raw.partition("---")
+        title = header.replace("TITRE:", "").strip().strip('"').strip("'")
+        return title, body.strip()
+    lines = raw.strip().splitlines()
+    title = lines[0].replace("TITRE:", "").strip() if lines else "Histoire du Soir"
+    body  = "\n".join(lines[1:]).strip()
+    return title, body
+
+
+def highlight_story(body: str, ctx: dict) -> str:
+    result = body
+    for w in ctx.get("eng_words", []):
+        result = re.sub(
+            rf"\b({re.escape(w)})\b",
+            r'<span style="color:#f59e0b;font-weight:700">\1</span>',
+            result, flags=re.IGNORECASE
+        )
+    for c in ctx.get("countries", []):
+        result = re.sub(
+            rf"\b({re.escape(c)})\b",
+            r'<span style="color:#0d9488;font-weight:700">\1</span>',
+            result, flags=re.IGNORECASE
+        )
+    result = re.sub(
+        r"\b(\d+)\b",
+        r'<span style="color:#16a34a;font-weight:700">\1</span>',
+        result
+    )
+    return result.replace("\n", "<br>")
+
+
+def render_book_card(title: str, body_html: str, cursor: bool = False):
+    cursor_html = '<span class="story-cursor">▌</span>' if cursor else ""
+    st.markdown(f"""
+<div style="background:linear-gradient(135deg,#1e1b4b,#312e81);
+            border-radius:16px;padding:24px 28px;margin:12px 0;
+            border:2px solid #6366f1;box-shadow:0 4px 20px rgba(99,102,241,0.3)">
+  <div style="color:#fbbf24;font-size:1.2em;font-weight:700;
+              margin-bottom:14px;text-align:center">📖 {title}</div>
+  <div style="color:#e0e7ff;line-height:1.9;font-size:1.05em">{body_html}{cursor_html}</div>
+</div>
+""", unsafe_allow_html=True)
+
+
+def generate_story_streaming(ctx: dict):
+    if _anthropic is None:
+        st.error("📦 Package `anthropic` manquant. Installe : `pip install anthropic`")
+        return
+    try:
+        api_key = st.secrets["ANTHROPIC_API_KEY"]
+    except Exception:
+        st.error("🔑 Clé API Anthropic manquante dans `.streamlit/secrets.toml`.")
+        return
+
+    client = _anthropic.Anthropic(api_key=api_key)
+    prompt = build_user_prompt(ctx)
+
+    placeholder = st.empty()
+    full_text   = ""
+    try:
+        with client.messages.stream(
+            model="claude-sonnet-4-20250514",
+            max_tokens=600,
+            system=STORY_SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": prompt}],
+        ) as stream:
+            for chunk in stream.text_stream:
+                full_text += chunk
+                title_live, body_live = parse_story(full_text)
+                body_html = highlight_story(body_live, ctx)
+                with placeholder:
+                    render_book_card(title_live, body_html, cursor=True)
+    except Exception as e:
+        st.error(f"❌ Erreur génération : {e}")
+        return
+
+    title, body = parse_story(full_text)
+    with placeholder:
+        render_book_card(title, highlight_story(body, ctx), cursor=False)
+
+    st.session_state.current_story_raw   = full_text
+    st.session_state.current_story_title = title
+    st.session_state.current_story_body  = body
+    st.session_state.story_generated     = True
+    st.session_state.story_cooldown      = time.time()
+
+    # Persist to profile (max 10 stories)
+    child_name = ctx["child_name"]
+    existing   = _load_existing_stories(child_name)
+    new_entry  = {
+        "date":  str(_date.today()),
+        "title": title,
+        "body":  body,
+        "avatar": ctx["avatar"].get("emoji", "🦊"),
+    }
+    updated = ([new_entry] + existing)[:10]
+    try:
+        path = _profile_path(child_name)
+        with open(path) as fh:
+            prof = json.load(fh)
+    except Exception:
+        prof = {}
+    prof["stories"] = updated
+    try:
+        _ensure_profiles_dir()
+        with open(_profile_path(child_name), "w") as fh:
+            json.dump(prof, fh, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
+
+def tab_histoire_du_soir():
+    st.markdown('<div class="tab-header-orange">🌙 Histoire du Soir — Dors bien ! / Sleep tight!</div>',
+                unsafe_allow_html=True)
+
+    av   = st.session_state.get("avatar", AVATAR_LIST[0])
+    name = st.session_state.get("child_name", "ami")
+    ctx  = get_story_context()
+
+    st.markdown(f"### {av['emoji']} Bonsoir, **{name}** ! Prêt·e pour ton histoire ?")
+
+    # Show context summary
+    with st.expander("🎒 Ton aventure d'aujourd'hui / Today's adventure", expanded=False):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("🌍 Pays explorés", len(ctx["countries"]))
+            if ctx["countries"]:
+                st.caption(", ".join(ctx["countries"]))
+        with col2:
+            st.metric("🦊 Mots anglais", len(ctx["eng_words"]))
+            if ctx["eng_words"]:
+                st.caption(", ".join(ctx["eng_words"]))
+        with col3:
+            st.metric("⭐ Étoiles", ctx["stars"])
+            if ctx["math_fact"]:
+                st.caption(ctx["math_fact"])
+
+    st.divider()
+
+    # Cooldown check
+    cooldown_left = 0
+    last_gen = st.session_state.get("story_cooldown", 0.0)
+    if last_gen:
+        elapsed = time.time() - last_gen
+        cooldown_left = max(0, 30 - int(elapsed))
+
+    col_gen, col_read = st.columns([2, 1])
+    with col_gen:
+        if cooldown_left > 0:
+            st.info(f"⏳ Attends encore {cooldown_left}s avant une nouvelle histoire…")
+            gen_disabled = True
+        else:
+            gen_disabled = False
+
+        if st.button("✨ Génère mon histoire du soir !", disabled=gen_disabled,
+                     use_container_width=True, type="primary"):
+            st.session_state.story_generated = False
+            generate_story_streaming(ctx)
+            st.rerun()
+
+    with col_read:
+        if st.session_state.get("story_generated") and st.session_state.get("current_story_body"):
+            if st.button("🔊 Lire à voix haute", use_container_width=True):
+                speak(st.session_state.current_story_body, lang="fr")
+        else:
+            # Fallback story button
+            av_id = av.get("id", "fox")
+            fb = FALLBACK_STORIES.get(av_id, list(FALLBACK_STORIES.values())[0])
+            if st.button("📖 Histoire surprise !", use_container_width=True):
+                st.session_state.current_story_title = fb[0]
+                st.session_state.current_story_body  = fb[1]
+                st.session_state.story_generated     = True
+                st.rerun()
+
+    # Display current story
+    if st.session_state.get("story_generated") and st.session_state.get("current_story_body"):
+        render_book_card(
+            st.session_state.current_story_title,
+            highlight_story(st.session_state.current_story_body, ctx),
+            cursor=False,
+        )
+        if st.button("🌟 Nouvelle histoire", use_container_width=False):
+            st.session_state.story_generated     = False
+            st.session_state.current_story_raw   = ""
+            st.session_state.current_story_title = ""
+            st.session_state.current_story_body  = ""
+            st.rerun()
+
+    st.divider()
+
+    # Saved stories library
+    saved = _load_existing_stories(name)
+    if saved:
+        st.markdown("### 📚 Tes histoires sauvegardées / Your saved stories")
+        for s in saved:
+            with st.expander(f"{s.get('avatar','📖')} {s.get('title','Histoire')} — {s.get('date','')}"):
+                st.markdown(highlight_story(s.get("body",""), ctx), unsafe_allow_html=True)
+                if st.button("🔊 Écouter", key=f"listen_{s.get('date','')}_{s.get('title','')}"):
+                    speak(s.get("body",""), lang="fr")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # MAIN
 # ─────────────────────────────────────────────────────────────────────────────
 def main():
@@ -2314,7 +2651,7 @@ def main():
         unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
 
-    tab1, tab2, tab3 = st.tabs(["🦊 English Quest", "🌍 Geo Explorer", "🔢 Math Arena"])
+    tab1, tab2, tab3, tab4 = st.tabs(["🦊 English Quest", "🌍 Geo Explorer", "🔢 Math Arena", "🌙 Histoire du Soir"])
 
     with tab1:
         st.markdown('<div class="tab-header-orange">🦊 English Quest — Apprends l\'anglais ! / Learn English!</div>',
@@ -2356,6 +2693,9 @@ def main():
             game_count_objects()
         else:
             game_pattern_puzzle()
+
+    with tab4:
+        tab_histoire_du_soir()
 
 
 if __name__ == "__main__":
