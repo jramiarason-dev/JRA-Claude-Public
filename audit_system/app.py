@@ -576,8 +576,11 @@ OUTPUT_DIR = str(_HERE / "outputs")
 Path(OUTPUT_DIR).mkdir(exist_ok=True)
 
 # ── Templates ─────────────────────────────────────────────────────────────────
+_TPL_SEPARATORS = {"— Select a template —", "── CORE AUDIT TOPICS ──", "── SPECIALIZED TOPICS ──"}
+
 TEMPLATES = {
     "— Select a template —": {},
+    "── CORE AUDIT TOPICS ──": {},
     "AML / KYC & Transaction Monitoring": {
         "topic": "AML/KYC & Transaction Monitoring",
         "jurisdictions": ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "EU / DORA", "UK / FCA+PRA"],
@@ -617,6 +620,69 @@ TEMPLATES = {
         "topic": "Governance & Internal Controls",
         "jurisdictions": ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "Bahamas / SCB", "EU / DORA", "UK / FCA+PRA"],
         "scope": "Board oversight, three lines of defence, risk committee effectiveness, and control framework assessment.",
+    },
+    "── SPECIALIZED TOPICS ──": {},
+    "Artificial Intelligence & Model Risk": {
+        "topic": "Artificial Intelligence & Model Risk",
+        "jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA", "SG / MAS"],
+        "scope": (
+            "AI and machine learning models used in investment decisions, credit scoring, "
+            "AML transaction monitoring, client onboarding and risk management. "
+            "Includes third-party AI tools and internally developed models."
+        ),
+    },
+    "Cloud Risk & Infrastructure": {
+        "topic": "Cloud Risk & Infrastructure",
+        "jurisdictions": ["CH / FINMA", "EU / DORA", "SG / MAS", "UK / FCA+PRA"],
+        "scope": (
+            "Cloud infrastructure and services (IaaS, PaaS, SaaS) including public cloud "
+            "providers (AWS, Azure, GCP), hybrid environments and cloud-hosted critical "
+            "applications (core banking, CRM, data analytics)."
+        ),
+    },
+    "Resilience & Business Continuity": {
+        "topic": "Resilience & Business Continuity",
+        "jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA", "SG / MAS"],
+        "scope": (
+            "Business continuity and disaster recovery arrangements for critical business "
+            "services, IT systems and third-party dependencies. Includes BCP testing, "
+            "RTO/RPO definitions and crisis management framework."
+        ),
+    },
+    "Change Management & IT Development": {
+        "topic": "Change Management & IT Development",
+        "jurisdictions": ["CH / FINMA", "EU / DORA", "SG / MAS", "UK / FCA+PRA"],
+        "scope": (
+            "IT change management processes including SDLC, release management, patch "
+            "management, emergency changes and DevSecOps practices across all critical "
+            "banking systems."
+        ),
+    },
+    "Access Management & Identity": {
+        "topic": "Access Management & Identity",
+        "jurisdictions": ["CH / FINMA", "EU / DORA", "SG / MAS", "UK / FCA+PRA"],
+        "scope": (
+            "Logical access management including PAM, IAM, MFA, active directory, "
+            "and access recertification processes across all critical banking systems."
+        ),
+    },
+    "Procurement & Sourcing": {
+        "topic": "Procurement & Sourcing",
+        "jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA", "SG / MAS"],
+        "scope": (
+            "End-to-end procurement including sourcing strategy, vendor selection, "
+            "contract negotiation, purchase-to-pay cycle and supplier relationship "
+            "management across all spend categories."
+        ),
+    },
+    "Wealth Management Advisory & Suitability": {
+        "topic": "Wealth Management Advisory & Suitability",
+        "jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA", "HK / SFC+HKMA", "SG / MAS"],
+        "scope": (
+            "Investment advisory and discretionary portfolio management for HNWI clients. "
+            "Includes suitability assessment, investment recommendations, conflicts of "
+            "interest management, product governance and client reporting."
+        ),
     },
 }
 
@@ -3086,8 +3152,9 @@ with tab1:
         options=list(TEMPLATES.keys()),
         key="t1_tpl_select",
         help="Pre-fill topic, jurisdictions and scope with a predefined audit template.",
+        format_func=lambda x: x,
     )
-    if tpl_name != "— Select a template —" and tpl_name != st.session_state._tpl_name:
+    if tpl_name not in _TPL_SEPARATORS and tpl_name != st.session_state._tpl_name:
         tpl = TEMPLATES[tpl_name]
         st.session_state["t1_topic_in"] = tpl.get("topic", "")
         st.session_state["t1_jurs_in"]  = tpl.get("jurisdictions", JURISDICTIONS[:4])

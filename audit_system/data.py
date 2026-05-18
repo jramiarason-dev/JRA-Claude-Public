@@ -946,6 +946,403 @@ AUDIT_TEMPLATES = {
             "risk-based planning, and quality assurance, making a governance audit timely and necessary."
         ),
     },
+
+    # ── SPECIALIZED TOPICS ────────────────────────────────────────────────────
+
+    "Artificial Intelligence & Model Risk": {
+        "topic": "Artificial Intelligence & Model Risk",
+        "default_jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA", "SG / MAS"],
+        "suggested_scope": (
+            "AI and machine learning models used in investment decisions, credit scoring, "
+            "AML transaction monitoring, client onboarding and risk management. "
+            "Includes third-party AI tools and internally developed models."
+        ),
+        "key_risks": [
+            "Model bias and discrimination",
+            "Lack of explainability (XAI)",
+            "Training data quality and integrity",
+            "Model drift and degradation",
+            "Inadequate model validation framework",
+            "AI in regulated decisions without human oversight",
+            "Third-party AI black-box dependency",
+            "Adversarial attacks on AI systems",
+            "Non-compliance with EU AI Act",
+            "Absence of AI governance framework",
+        ],
+        "recommended_tests": [
+            "Model inventory completeness review",
+            "Validation independence assessment",
+            "Training data quality and bias testing",
+            "Model performance monitoring review",
+            "Human oversight controls testing",
+            "Explainability documentation review",
+            "AI vendor due diligence assessment",
+            "Stress testing and scenario analysis",
+            "EU AI Act compliance gap assessment",
+            "Model risk policy adequacy review",
+        ],
+        "typical_findings": [
+            "No formal model inventory maintained",
+            "Validation performed by model owners — independence not ensured",
+            "No explainability documentation for client-facing AI decisions",
+            "Third-party AI used without adequate due diligence",
+            "No model drift monitoring in place",
+        ],
+        "rationale": (
+            "AI adoption in private banking is accelerating. EU AI Act, MAS FEAT principles "
+            "and FINMA guidance create new compliance obligations. Model risk in investment "
+            "advisory and AML monitoring represents material regulatory and reputational "
+            "exposure. EBA and BCBS have both issued guidance on model risk management "
+            "requiring formal validation, governance, and ongoing monitoring frameworks."
+        ),
+        "regulatory_refs": [
+            "EU AI Act (2024) — High-risk systems",
+            "MAS FEAT Principles",
+            "FINMA AI guidance (2024)",
+            "EBA guidelines on internal models",
+            "BCBS principles on model risk",
+            "SR 11-7 Model Risk Management",
+        ],
+    },
+
+    "Cloud Risk & Infrastructure": {
+        "topic": "Cloud Risk & Infrastructure",
+        "default_jurisdictions": ["CH / FINMA", "EU / DORA", "SG / MAS", "UK / FCA+PRA"],
+        "suggested_scope": (
+            "Cloud infrastructure and services (IaaS, PaaS, SaaS) including public cloud "
+            "providers (AWS, Azure, GCP), hybrid environments and cloud-hosted critical "
+            "applications (core banking, CRM, data analytics)."
+        ),
+        "key_risks": [
+            "Data sovereignty and residency violations",
+            "Inadequate cloud security configuration",
+            "Concentration risk on single cloud provider",
+            "Lack of exit strategy",
+            "Shared responsibility model gaps",
+            "Insufficient access controls in cloud",
+            "Unencrypted data at rest or in transit",
+            "Shadow IT and unmanaged cloud usage",
+            "Vendor lock-in risk",
+            "FINMA/DORA notification gaps",
+        ],
+        "recommended_tests": [
+            "Cloud inventory and classification review",
+            "Security configuration review (CIS benchmarks)",
+            "Data residency compliance testing",
+            "Access management in cloud review",
+            "Encryption controls assessment",
+            "Exit strategy and portability test",
+            "FINMA RS 2018/3 notification check",
+            "BCP for cloud services assessment",
+            "Third-party cloud SOC2 review",
+            "Shadow IT detection procedures review",
+        ],
+        "typical_findings": [
+            "No formal cloud risk assessment performed",
+            "Data residency not documented per jurisdiction",
+            "FINMA not notified for material cloud outsourcing",
+            "No tested exit strategy for critical cloud provider",
+            "Misconfigured storage buckets with public access enabled",
+        ],
+        "rationale": (
+            "DORA Art.28 mandates strict ICT third-party risk management including cloud. "
+            "FINMA RS 2018/3 requires prior notification for material outsourcing. "
+            "Concentration on hyperscalers creates systemic risk for private banks. "
+            "CSA CCM and CIS benchmarks provide the technical baseline against which "
+            "cloud configurations must be assessed in regulatory inspections."
+        ),
+        "regulatory_refs": [
+            "DORA Art.28-44 (ICT third-party risk)",
+            "FINMA RS 2018/3 (Outsourcing)",
+            "MAS TRM 2021 (Cloud)",
+            "FCA PS21/3 (Operational resilience)",
+            "BCBS Sound Practices Cyber 2018",
+            "CSA Cloud Controls Matrix (CCM)",
+        ],
+    },
+
+    "Resilience & Business Continuity": {
+        "topic": "Resilience & Business Continuity",
+        "default_jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA", "SG / MAS"],
+        "suggested_scope": (
+            "Business continuity and disaster recovery arrangements for critical business "
+            "services, IT systems and third-party dependencies. Includes BCP testing, "
+            "RTO/RPO definitions and crisis management framework."
+        ),
+        "key_risks": [
+            "Critical services without tested BCP",
+            "RTO/RPO not defined or not met",
+            "Inadequate crisis management framework",
+            "Single points of failure not identified",
+            "Third-party BCP not assessed",
+            "BCP not tested annually",
+            "Staff awareness of BCP insufficient",
+            "Data backup integrity not verified",
+            "No lessons learned process post-incident",
+            "Regulatory resilience requirements not met (DORA, FCA, MAS)",
+        ],
+        "recommended_tests": [
+            "Critical business services mapping",
+            "BCP documentation completeness review",
+            "RTO/RPO definition and testing evidence",
+            "Annual BCP test results review",
+            "Crisis management exercise assessment",
+            "Third-party BCP review",
+            "Data backup and recovery testing",
+            "Staff training and awareness check",
+            "Single point of failure identification",
+            "DORA resilience testing compliance assessment",
+        ],
+        "typical_findings": [
+            "BCP not tested in last 12 months; last test was tabletop only",
+            "RTO/RPO not defined for all critical systems",
+            "Third-party BCP not reviewed for critical vendors",
+            "Lessons learned not documented post-incident or post-test",
+            "Crisis communication plan outdated — contact details stale",
+        ],
+        "rationale": (
+            "DORA introduces mandatory digital operational resilience testing for financial "
+            "entities. FCA PS21/3 and MAS BCM guidelines require annual testing of operational "
+            "resilience. Private banks with cross-border operations face elevated continuity "
+            "risk. Increasing reliance on cloud providers creates new concentration and exit "
+            "risk concerns requiring board-level attention and annual test evidence."
+        ),
+        "regulatory_refs": [
+            "DORA Art.11-16 (ICT BCP)",
+            "FINMA RS 2008/21 (OpRisk / BCP)",
+            "FCA PS21/3 (Operational resilience)",
+            "MAS BCM Guidelines 2012",
+            "BCBS Principles for OpRisk 2021",
+            "ISO 22301 (BCMS)",
+        ],
+    },
+
+    "Change Management & IT Development": {
+        "topic": "Change Management & IT Development",
+        "default_jurisdictions": ["CH / FINMA", "EU / DORA", "SG / MAS", "UK / FCA+PRA"],
+        "suggested_scope": (
+            "IT change management processes including software development lifecycle (SDLC), "
+            "release management, patch management, emergency changes and DevSecOps practices "
+            "across all critical banking systems."
+        ),
+        "key_risks": [
+            "Unauthorized or untested changes deployed to production",
+            "Inadequate segregation of duties in SDLC",
+            "Security not integrated in development (DevSecOps gaps)",
+            "Emergency change process routinely bypassed",
+            "Insufficient regression testing before release",
+            "No rollback procedure defined for critical changes",
+            "Third-party software changes not controlled",
+            "Change Advisory Board (CAB) not functioning effectively",
+            "Legacy system changes poorly managed",
+            "Patch management delays creating vulnerability windows",
+        ],
+        "recommended_tests": [
+            "Change management policy review",
+            "Unauthorized change detection (production vs approved)",
+            "Segregation of duties in SDLC assessment",
+            "Emergency change sample testing",
+            "DevSecOps integration assessment",
+            "Regression testing evidence review",
+            "Rollback procedure testing",
+            "CAB effectiveness assessment",
+            "Patch management timeliness review",
+            "Third-party change control review",
+        ],
+        "typical_findings": [
+            "Emergency changes used routinely to bypass standard approval process",
+            "Developers have direct access to production environment",
+            "No mandatory security testing required before release",
+            "Rollback procedure not defined for critical system changes",
+            "Critical patch management SLA consistently breached",
+        ],
+        "rationale": (
+            "Change management failures are a leading cause of operational incidents in banking. "
+            "DORA Art.9 requires robust ICT change management. DevSecOps adoption without "
+            "adequate controls increases cyber exposure significantly. COBIT BAI06 and BAI07 "
+            "provide the control framework most regulators reference during inspections of "
+            "change management processes at financial institutions."
+        ),
+        "regulatory_refs": [
+            "DORA Art.9 (ICT change management)",
+            "FINMA RS 2008/21 (OpRisk)",
+            "MAS TRM 2021 (Change management)",
+            "COBIT 2019 (BAI06, BAI07)",
+            "ITIL v4 — Change Enablement",
+            "NIST SP 800-128",
+        ],
+    },
+
+    "Access Management & Identity": {
+        "topic": "Access Management & Identity",
+        "default_jurisdictions": ["CH / FINMA", "EU / DORA", "SG / MAS", "UK / FCA+PRA"],
+        "suggested_scope": (
+            "Logical access management across all banking systems including privileged access "
+            "management (PAM), identity and access management (IAM), multi-factor authentication "
+            "(MFA), active directory, and access recertification processes."
+        ),
+        "key_risks": [
+            "Excessive privileged access rights",
+            "Orphaned accounts not removed on leavers",
+            "MFA not enforced on critical systems",
+            "Access recertification not performed",
+            "Shared accounts in use",
+            "Segregation of duties violations",
+            "Third-party and vendor access not controlled",
+            "Privileged account monitoring gaps",
+            "Joiners/movers/leavers process failures",
+            "Password policy non-compliance",
+        ],
+        "recommended_tests": [
+            "Privileged account inventory review",
+            "MFA enforcement testing on critical systems",
+            "Orphaned account detection",
+            "Access recertification evidence review",
+            "Segregation of duties matrix review",
+            "Shared account identification",
+            "Third-party access controls review",
+            "PAM system effectiveness assessment",
+            "Joiners/movers/leavers process test",
+            "Password policy compliance check",
+        ],
+        "typical_findings": [
+            "Former employees with active accounts in critical systems",
+            "Administrative accounts without MFA enforced",
+            "Access recertification overdue (>12 months) for key systems",
+            "Shared administrative accounts in active use",
+            "Vendors with permanent access instead of just-in-time provisioning",
+            "No formal SoD matrix maintained or enforced",
+        ],
+        "rationale": (
+            "Access management is the #1 vector for both cyber attacks and insider fraud "
+            "in private banking. DORA, MAS TRM and FINMA require strict privileged access "
+            "controls. PAM failures are consistently cited in regulatory inspections. "
+            "CIS Controls v8 positions identity as the foundational layer of cyber defence, "
+            "making access management a priority audit topic across all regulatory frameworks."
+        ),
+        "regulatory_refs": [
+            "DORA Art.9 (Access controls)",
+            "FINMA RS 2008/21 (Logical access)",
+            "MAS TRM 2021 (Access management)",
+            "IIA TR-Cyber CP-E (User access)",
+            "NIST SP 800-53 (AC controls)",
+            "CIS Controls v8 (Controls 5 & 6)",
+        ],
+    },
+
+    "Procurement & Sourcing": {
+        "topic": "Procurement & Sourcing",
+        "default_jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA", "SG / MAS"],
+        "suggested_scope": (
+            "End-to-end procurement process including sourcing strategy, vendor selection, "
+            "contract negotiation, purchase-to-pay cycle and supplier relationship management "
+            "across all spend categories."
+        ),
+        "key_risks": [
+            "Conflicts of interest in vendor selection",
+            "Sole sourcing without documented justification",
+            "Contract terms unfavorable or incomplete (no right-to-audit)",
+            "Purchase-to-pay fraud risk",
+            "Maverick spending bypassing procurement policy",
+            "Supplier concentration risk",
+            "Invoice fraud and payment fraud",
+            "Kickbacks and corruption risk",
+            "No competitive bidding process",
+            "Fourth-party risk not assessed",
+        ],
+        "recommended_tests": [
+            "Vendor selection process review",
+            "Conflicts of interest declaration completeness",
+            "Sole sourcing justification review",
+            "Contract completeness assessment (right-to-audit, SLAs)",
+            "Purchase-to-pay controls testing",
+            "Duplicate payment detection analysis",
+            "Maverick spend analysis",
+            "Supplier concentration assessment",
+            "Invoice fraud controls review",
+            "Fourth-party risk identification",
+        ],
+        "typical_findings": [
+            "Vendors selected without competitive bidding process",
+            "Conflicts of interest not formally declared by evaluators",
+            "Contracts missing right-to-audit clause",
+            "Duplicate invoices paid without detection",
+            "Procurement policy routinely bypassed for urgent purchases",
+            "No supplier concentration analysis performed",
+        ],
+        "rationale": (
+            "Procurement fraud and conflicts of interest represent significant risk in private "
+            "banking where high-value contracts are common. IIA TR-Third Party (2025) mandates "
+            "robust sourcing controls. Regulators expect strong governance over vendor selection "
+            "especially for outsourcing arrangements subject to FINMA RS 2018/3 and DORA Art.28."
+        ),
+        "regulatory_refs": [
+            "IIA TR-Third Party (2025) CP-A, CP-B",
+            "FINMA RS 2018/3 (Outsourcing governance)",
+            "DORA Art.28 (Third-party selection)",
+            "BCBS Sound Practices OpRisk 2021",
+            "ISO 20400 (Sustainable procurement)",
+            "UK Bribery Act / Swiss CPC",
+        ],
+    },
+
+    "Wealth Management Advisory & Suitability": {
+        "topic": "Wealth Management Advisory & Suitability",
+        "default_jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA", "HK / SFC+HKMA", "SG / MAS"],
+        "suggested_scope": (
+            "Investment advisory and discretionary portfolio management services for HNWI clients. "
+            "Includes suitability assessment process, investment recommendations, conflicts of "
+            "interest management, product governance and client reporting."
+        ),
+        "key_risks": [
+            "Suitability assessment not performed or outdated (>24 months)",
+            "Investment recommendations not aligned with client risk profile",
+            "Conflicts of interest not disclosed",
+            "Churning — excessive portfolio rotation to generate fees",
+            "Discretionary mandates breaching investment guidelines",
+            "Product governance failures (inappropriate products sold)",
+            "Inadequate client reporting",
+            "Front-running by relationship managers",
+            "Unsolicited advice on complex products",
+            "ESG suitability not assessed",
+        ],
+        "recommended_tests": [
+            "Suitability assessment completeness review",
+            "Risk profile vs portfolio alignment analysis",
+            "Conflicts of interest disclosure review",
+            "Churning detection analysis",
+            "Discretionary mandate compliance check",
+            "Product governance documentation review",
+            "Client reporting accuracy test",
+            "Trade surveillance for front-running",
+            "Complex product suitability review",
+            "ESG preference documentation check",
+        ],
+        "typical_findings": [
+            "Client risk profiles not updated in over 24 months",
+            "Structured products sold to clients classified as non-sophisticated",
+            "Churning detected in sample of advisory accounts",
+            "Conflicts of interest not disclosed in writing before transaction",
+            "ESG preferences not captured despite regulatory requirement",
+        ],
+        "rationale": (
+            "MiFID II, FINMA and MAS requirements on suitability are increasingly scrutinised. "
+            "Private banks face growing regulatory pressure on product governance and conflicts "
+            "of interest. ESG suitability is now mandatory in multiple jurisdictions following "
+            "MiFID II amendment. This is consistently a top finding in regulatory inspections "
+            "of private banks — FINMA RS 2012/3 on duties of care and loyalty applies to "
+            "virtually all advisory mandates in Switzerland."
+        ),
+        "regulatory_refs": [
+            "MiFID II Art.25 (Suitability)",
+            "FINMA RS 2012/3 (Duties of care and loyalty)",
+            "MAS FAA (Financial Advisers Act)",
+            "SFC Code of Conduct HK",
+            "FCA COBS (Suitability rules)",
+            "ESMA Suitability Guidelines 2023",
+            "EU Sustainable Finance — ESG suitability (MiFID amendment)",
+        ],
+    },
 }
 
 
