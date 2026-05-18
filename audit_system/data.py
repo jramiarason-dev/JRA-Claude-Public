@@ -2837,6 +2837,1520 @@ RISK_INDICATORS = {
             ),
         },
     ],
+
+    # ── AI / Model Risk ────────────────────────────────────────────────────────
+    "AI_MODEL_RISK": [
+        {
+            "id": "R-AI-001",
+            "title": "Unvalidated AI Model in Production",
+            "description": (
+                "AI/ML model deployed without independent validation, creating risk of biased or inaccurate "
+                "outputs in client-facing decisions (credit scoring, suitability, AML monitoring)."
+            ),
+            "level": "Critical",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Independent model validation before production deployment",
+                "Model risk policy covering all AI/ML models",
+                "Performance monitoring dashboard with alerts",
+                "Human override mechanism for AI decisions",
+            ],
+            "red_flags": [
+                "No formal model inventory maintained",
+                "Validation performed by model developers",
+                "No performance monitoring in place",
+                "Client complaints on AI-driven decisions",
+            ],
+            "private_banking_specifics": (
+                "Private banks increasingly use AI for client segmentation, credit scoring, "
+                "and AML monitoring. Unvalidated models in these areas create material regulatory "
+                "and reputational risk. EU AI Act classifies credit scoring and AML as high-risk AI."
+            ),
+        },
+        {
+            "id": "R-AI-002",
+            "title": "AI Decision Without Human Oversight",
+            "description": (
+                "Automated AI decisions impacting clients — credit approvals, suitability assessments, "
+                "AML alert dispositions — without mandatory human review, violating EU AI Act requirements."
+            ),
+            "level": "Critical",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Human-in-the-loop for all regulated decisions",
+                "Audit trail of AI recommendations vs human decisions",
+                "Override documentation required",
+                "Override rate monitored as a KRI",
+            ],
+            "red_flags": [
+                "100% automated credit decisions without human review",
+                "No override rate tracked",
+                "No audit trail of AI outputs vs final decisions",
+            ],
+            "private_banking_specifics": (
+                "HNWI clients expect personalised service; fully automated decisions are incompatible "
+                "with private banking standards. EU AI Act Art.14 mandates human oversight for all "
+                "high-risk AI systems including those used in financial services."
+            ),
+        },
+        {
+            "id": "R-AI-003",
+            "title": "Model Bias and Discrimination",
+            "description": (
+                "AI model producing systematically biased outputs against specific client segments, "
+                "creating regulatory exposure under EU AI Act and reputational risk."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Bias testing before deployment",
+                "Fairness metrics monitoring post-deployment",
+                "Regular model audits by independent team",
+                "Diverse training data validation",
+            ],
+            "red_flags": [
+                "No fairness testing performed before deployment",
+                "Training data demographics unknown or undocumented",
+                "No bias monitoring after deployment",
+            ],
+            "private_banking_specifics": (
+                "Models trained on historical HNWI data may embed biases related to geography, "
+                "nationality or wealth source. Regulators are increasingly scrutinising fair lending "
+                "and non-discrimination in AI-assisted credit and advisory decisions."
+            ),
+        },
+        {
+            "id": "R-AI-004",
+            "title": "Model Drift and Degradation",
+            "description": (
+                "AI model performance deteriorating over time due to changing market conditions "
+                "or data patterns, without adequate detection mechanism in place."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Automated performance monitoring with drift alerts",
+                "Scheduled model revalidation (at least annually)",
+                "Champion/challenger framework",
+                "Performance baseline documented at deployment",
+            ],
+            "red_flags": [
+                "No performance baseline defined at model deployment",
+                "No monitoring in place after model goes live",
+                "Model not revalidated in over 12 months",
+            ],
+            "private_banking_specifics": (
+                "Market regime changes — interest rate cycles, geopolitical shocks — cause rapid "
+                "model drift in credit, market risk and AML models. Private banks with smaller "
+                "portfolios are especially vulnerable as statistical significance diminishes faster."
+            ),
+        },
+        {
+            "id": "R-AI-005",
+            "title": "Third-Party AI Black-Box Dependency",
+            "description": (
+                "Dependency on external AI vendors without transparency on model methodology, "
+                "creating inability to explain decisions to clients or regulators."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Explainability requirements mandated in vendor contracts",
+                "XAI documentation reviewed before deployment",
+                "Right-to-audit AI vendor included in contract",
+                "Alternative model identified for business continuity",
+            ],
+            "red_flags": [
+                "Vendor refuses to explain model methodology",
+                "No XAI documentation available",
+                "Single vendor dependency with no alternative",
+            ],
+            "private_banking_specifics": (
+                "FinTech AI vendors targeting private banking often provide black-box models. "
+                "FINMA and MAS expect banks to understand and explain all models used in "
+                "regulated decisions, regardless of whether developed internally or externally."
+            ),
+        },
+        {
+            "id": "R-AI-006",
+            "title": "Training Data Quality Failures",
+            "description": (
+                "AI model trained on incomplete, biased or non-representative data leading to "
+                "unreliable outputs in production decisions."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Data quality framework for AI training datasets",
+                "Training data lineage documentation",
+                "Regular data refresh and validation process",
+                "Data quality gates in model development pipeline",
+            ],
+            "red_flags": [
+                "Training data source unknown or undocumented",
+                "No data quality checks performed on training data",
+                "Historical data used without bias assessment",
+            ],
+            "private_banking_specifics": (
+                "Private banking datasets are typically small and historically homogeneous, "
+                "amplifying data quality issues. Models trained on pre-2020 client data may "
+                "not reflect current risk profiles of HNWI clients from emerging markets."
+            ),
+        },
+        {
+            "id": "R-AI-007",
+            "title": "Inadequate AI Governance Framework",
+            "description": (
+                "Absence of formal AI governance framework covering model lifecycle, "
+                "accountability, ethics and board oversight."
+            ),
+            "level": "Moderate",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Board-approved AI governance policy",
+                "AI ethics committee or equivalent oversight body",
+                "Model lifecycle management process documented",
+                "Clear accountability for each AI model assigned",
+            ],
+            "red_flags": [
+                "No AI governance policy exists",
+                "No ownership assigned for AI models in production",
+                "Board not informed of scope of AI usage",
+            ],
+            "private_banking_specifics": (
+                "Many private banks have adopted AI tools without establishing governance frameworks. "
+                "FINMA expects AI usage to be disclosed and governed. MAS FEAT principles require "
+                "AI governance to be embedded in the bank's overall risk management framework."
+            ),
+        },
+        {
+            "id": "R-AI-008",
+            "title": "EU AI Act Non-Compliance",
+            "description": (
+                "High-risk AI systems used without compliance with EU AI Act mandatory requirements "
+                "effective 2024-2026, creating regulatory breach and enforcement risk."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "EU AI Act gap assessment completed",
+                "High-risk AI systems identified and registered",
+                "Conformity assessment documentation maintained",
+                "Technical documentation kept current",
+            ],
+            "red_flags": [
+                "No EU AI Act assessment performed",
+                "AI systems not classified by risk level",
+                "No conformity assessment documentation",
+            ],
+            "private_banking_specifics": (
+                "EU AI Act classifies credit scoring, AML monitoring, and investment suitability "
+                "AI as high-risk. Banks with EU operations or EU clients must comply. Swiss banks "
+                "servicing EU clients are subject to extraterritorial application."
+            ),
+        },
+        {
+            "id": "R-AI-009",
+            "title": "Adversarial Attack Vulnerability",
+            "description": (
+                "AI models susceptible to adversarial inputs designed to manipulate outputs "
+                "(e.g. AML evasion techniques, fraud detection bypass), creating exploitation risk."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "Medium",
+            "expected_controls": [
+                "Adversarial robustness testing before deployment",
+                "Input validation controls on model APIs",
+                "Anomaly detection on model inputs",
+                "Red team testing of critical AI systems annually",
+            ],
+            "red_flags": [
+                "No adversarial testing performed on production models",
+                "No input validation on AI model interfaces",
+                "AML transaction monitoring model never red-teamed",
+            ],
+            "private_banking_specifics": (
+                "Sophisticated financial criminals specifically target AI-based AML systems with "
+                "transaction structuring designed to evade detection thresholds. Private banks "
+                "serving HNWI clients are attractive targets given transaction volumes."
+            ),
+        },
+        {
+            "id": "R-AI-010",
+            "title": "AI Competency Gap in Audit and Risk",
+            "description": (
+                "Internal audit and risk functions lack competency to effectively oversee "
+                "AI models, creating a governance blind spot."
+            ),
+            "level": "Moderate",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "AI training programme for internal audit and risk staff",
+                "External expertise engaged for model audits",
+                "Competency assessment framework",
+                "Knowledge sharing with data science function",
+            ],
+            "red_flags": [
+                "Internal audit function has never audited an AI model",
+                "No AI expertise within risk management function",
+                "External model validation never commissioned",
+            ],
+            "private_banking_specifics": (
+                "Traditional banking auditors lack data science skills. Without AI competency, "
+                "internal audit cannot effectively challenge model developers or identify model "
+                "governance failures. IIA guidance on auditing AI is still emerging."
+            ),
+        },
+    ],
+
+    # ── Cloud Risk ─────────────────────────────────────────────────────────────
+    "CLOUD_RISK": [
+        {
+            "id": "R-CL-001",
+            "title": "Data Sovereignty Violation",
+            "description": (
+                "Client or regulated data stored in jurisdictions not permitted by FINMA or applicable "
+                "regulations, creating legal and regulatory exposure under RS 2018/3."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Data residency policy enforced with technical controls",
+                "Contractual data location guarantees from cloud provider",
+                "Data classification with residency requirements mapped",
+                "Annual data residency compliance audit",
+            ],
+            "red_flags": [
+                "Data residency not documented per service",
+                "No contractual data location guarantee from provider",
+                "FINMA not informed of data storage location",
+            ],
+            "private_banking_specifics": (
+                "FINMA RS 2018/3 requires banks to ensure data remains accessible from Switzerland "
+                "and that foreign regulatory access does not compromise Swiss banking secrecy. "
+                "HNWI client data has heightened sensitivity requiring strict residency controls."
+            ),
+        },
+        {
+            "id": "R-CL-002",
+            "title": "Cloud Security Misconfiguration",
+            "description": (
+                "Improperly configured cloud resources — public storage buckets, open security groups, "
+                "overly permissive IAM — exposing sensitive banking data to unauthorized access."
+            ),
+            "level": "Critical",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Cloud Security Posture Management (CSPM) tool deployed",
+                "CIS Benchmark compliance monitoring automated",
+                "Automated misconfiguration alerts with SLA for remediation",
+                "Regular manual configuration review by security team",
+            ],
+            "red_flags": [
+                "No CSPM tool in place",
+                "Public storage buckets or open security groups exist",
+                "No automated compliance checks on cloud configurations",
+            ],
+            "private_banking_specifics": (
+                "Misconfigured cloud storage exposing HNWI client data would trigger FINMA notification "
+                "requirements and cause severe reputational damage. Financial institutions are among "
+                "the most targeted by automated cloud misconfiguration scanning tools."
+            ),
+        },
+        {
+            "id": "R-CL-003",
+            "title": "FINMA Notification Non-Compliance",
+            "description": (
+                "Material cloud outsourcing not notified to FINMA as required by RS 2018/3, "
+                "creating a direct regulatory breach."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Outsourcing register maintained and current",
+                "Materiality assessment process documented",
+                "FINMA notification workflow with tracking",
+                "Annual outsourcing register review",
+            ],
+            "red_flags": [
+                "No outsourcing register maintained",
+                "FINMA never notified for any cloud service",
+                "No documented materiality assessment process",
+            ],
+            "private_banking_specifics": (
+                "Swiss banks must notify FINMA before entering material outsourcing arrangements. "
+                "Many banks have adopted cloud services without performing materiality assessments, "
+                "creating widespread notification gaps that regulators have identified in inspections."
+            ),
+        },
+        {
+            "id": "R-CL-004",
+            "title": "Cloud Provider Concentration Risk",
+            "description": (
+                "Critical banking operations concentrated on a single cloud provider without a "
+                "viable exit strategy, creating systemic operational and continuity risk."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Multi-cloud or hybrid strategy defined",
+                "Tested exit plan documented per critical provider",
+                "Alternative provider identified for each critical service",
+                "Concentration risk assessment reviewed by Board",
+            ],
+            "red_flags": [
+                "100% critical dependency on one cloud provider",
+                "No exit strategy documented",
+                "Exit plan never tested or reviewed",
+            ],
+            "private_banking_specifics": (
+                "Many private banks have migrated core banking to a single hyperscaler. A major "
+                "outage — as experienced by AWS, Azure and GCP in 2023 — could render the bank "
+                "unable to serve clients. DORA Art.28 requires documented exit strategies."
+            ),
+        },
+        {
+            "id": "R-CL-005",
+            "title": "Shared Responsibility Model Gap",
+            "description": (
+                "Security responsibilities between bank and cloud provider not clearly defined, "
+                "leading to unprotected areas where neither party applies controls."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Shared responsibility matrix documented per service type",
+                "Controls coverage mapping validated with provider",
+                "SOC2 Type II reports reviewed annually",
+                "Annual review meeting with cloud provider security team",
+            ],
+            "red_flags": [
+                "No shared responsibility matrix documented",
+                "SOC2 reports not reviewed by bank security team",
+                "Unclear ownership of encryption keys",
+            ],
+            "private_banking_specifics": (
+                "Banks often assume cloud providers handle all security. In reality, IaaS models "
+                "place significant responsibility on the customer. This misunderstanding has led to "
+                "data breaches at several financial institutions using major cloud providers."
+            ),
+        },
+        {
+            "id": "R-CL-006",
+            "title": "Shadow IT Cloud Usage",
+            "description": (
+                "Unauthorized cloud services used by business units without IT or security approval, "
+                "creating uncontrolled data exposure and regulatory risk."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Cloud Access Security Broker (CASB) deployed",
+                "Approved cloud services catalogue maintained",
+                "Regular shadow IT scanning",
+                "Employee awareness training on approved services",
+            ],
+            "red_flags": [
+                "No CASB deployed to detect unauthorized cloud usage",
+                "No approved cloud services list published",
+                "Business units subscribe directly to cloud services without IT approval",
+            ],
+            "private_banking_specifics": (
+                "Relationship managers and investment teams routinely use unauthorized tools "
+                "(file sharing, AI writing, CRM) that process HNWI client data. This creates "
+                "data privacy violations and uncontrolled data exfiltration risk."
+            ),
+        },
+        {
+            "id": "R-CL-007",
+            "title": "Inadequate Cloud Access Controls",
+            "description": (
+                "Insufficient IAM controls in cloud environment allowing excessive or unauthorized "
+                "access to cloud resources and sensitive data."
+            ),
+            "level": "Moderate",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Least privilege principle enforced in cloud IAM",
+                "MFA mandatory for all cloud console access",
+                "Just-in-time privileged access for cloud administration",
+                "Regular cloud access recertification",
+            ],
+            "red_flags": [
+                "Root/admin account used operationally",
+                "No MFA enforced on cloud administration consoles",
+                "No access recertification performed for cloud accounts",
+            ],
+            "private_banking_specifics": (
+                "Cloud IAM is more complex than on-premises access management. Misconfigured "
+                "cloud IAM roles are a leading cause of cloud data breaches in financial services. "
+                "Cloud-native access patterns differ significantly from traditional AD-based controls."
+            ),
+        },
+        {
+            "id": "R-CL-008",
+            "title": "Data Encryption Gaps",
+            "description": (
+                "Sensitive data stored or transmitted in cloud without adequate encryption, "
+                "creating confidentiality risk for HNWI client information."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Encryption at rest for all sensitive data (AES-256)",
+                "Encryption in transit enforced (TLS 1.2 minimum)",
+                "Customer-managed encryption keys (CMEK)",
+                "Key management process with rotation schedule",
+            ],
+            "red_flags": [
+                "Unencrypted storage buckets or blob storage containing client data",
+                "TLS 1.0 or 1.1 still permitted for data in transit",
+                "Cloud provider manages all encryption keys without bank control",
+            ],
+            "private_banking_specifics": (
+                "HNWI client data has exceptional sensitivity. Many jurisdictions require encryption "
+                "of banking data at rest and in transit. Customer-managed keys ensure data remains "
+                "inaccessible to cloud providers and foreign authorities."
+            ),
+        },
+        {
+            "id": "R-CL-009",
+            "title": "DORA ICT Third-Party Non-Compliance",
+            "description": (
+                "Cloud arrangements not compliant with DORA Art.28-44 mandatory requirements "
+                "for ICT third-party risk management."
+            ),
+            "level": "Moderate",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "DORA gap assessment completed for all cloud arrangements",
+                "Cloud contracts updated to include DORA-required clauses",
+                "ICT concentration risk assessment performed",
+                "Register of cloud arrangements maintained",
+            ],
+            "red_flags": [
+                "No DORA gap assessment performed",
+                "Cloud contracts not updated for DORA requirements",
+                "No ICT concentration risk analysis done",
+            ],
+            "private_banking_specifics": (
+                "DORA applies from January 2025 to EU financial entities. Swiss banks with "
+                "EU operations or EU clients face extraterritorial obligations. DORA mandates "
+                "specific contractual provisions and concentration risk monitoring for cloud."
+            ),
+        },
+        {
+            "id": "R-CL-010",
+            "title": "Cloud Incident Response Gap",
+            "description": (
+                "Incident response plan does not cover cloud-specific scenarios, delaying "
+                "detection and recovery from cloud service incidents."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "Medium",
+            "expected_controls": [
+                "Cloud-specific IR playbooks developed and tested",
+                "Cloud provider escalation contacts and procedures defined",
+                "Cloud logging integrated with SIEM",
+                "Annual cloud-specific IR tabletop exercise",
+            ],
+            "red_flags": [
+                "IR plan not updated to include cloud scenarios",
+                "No cloud-specific response playbooks",
+                "Cloud logs not integrated into SIEM",
+            ],
+            "private_banking_specifics": (
+                "Cloud incidents require different response procedures — coordination with providers, "
+                "understanding shared responsibility — that traditional IR plans do not address. "
+                "Detection and response delays in cloud environments can be materially longer."
+            ),
+        },
+    ],
+
+    # ── Resilience & BCP ───────────────────────────────────────────────────────
+    "RESILIENCE_BCP": [
+        {
+            "id": "R-BC-001",
+            "title": "Critical Service Without Tested BCP",
+            "description": (
+                "One or more critical business services have no documented or tested business "
+                "continuity plan, creating complete service outage risk."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Critical business service mapping documented",
+                "BCP for each critical service approved",
+                "Annual BCP testing with documented results",
+                "Board approval of BCP framework",
+            ],
+            "red_flags": [
+                "BCP documentation incomplete or missing for critical services",
+                "Critical services not formally mapped",
+                "BCP has never been tested",
+            ],
+            "private_banking_specifics": (
+                "Private banking client service continuity is critical for reputational reasons. "
+                "HNWI clients expect uninterrupted access to portfolio information and advisory "
+                "services. DORA and FINMA RS 2008/21 both require documented and tested BCPs."
+            ),
+        },
+        {
+            "id": "R-BC-002",
+            "title": "RTO/RPO Not Met in Testing",
+            "description": (
+                "Recovery Time Objectives and Recovery Point Objectives defined but consistently "
+                "not achieved during BCP/DR tests, indicating inadequate recovery capability."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Formal RTO/RPO definition per critical system",
+                "Regular DR testing against RTO/RPO targets",
+                "Gap remediation tracking with deadlines",
+                "Management reporting on test results vs targets",
+            ],
+            "red_flags": [
+                "RTO/RPO objectives never formally tested",
+                "Test failures not remediated between test cycles",
+                "No management reporting on BCP test outcomes",
+            ],
+            "private_banking_specifics": (
+                "Core banking RTO is typically 4 hours for private banks. In practice, "
+                "untested recovery procedures and cloud dependencies create actual RTOs of "
+                "24-72 hours. DORA TLPT requirements will expose these gaps to regulators."
+            ),
+        },
+        {
+            "id": "R-BC-003",
+            "title": "Third-Party BCP Not Assessed",
+            "description": (
+                "Critical third-party providers have not demonstrated adequate BCP capability, "
+                "creating concentration and dependency risk in operational resilience."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "BCP requirements included in vendor contracts",
+                "Annual BCP evidence requested from critical vendors",
+                "Concentration risk assessment for critical providers",
+                "Alternative provider identified for each critical service",
+            ],
+            "red_flags": [
+                "No BCP requirements in critical vendor contracts",
+                "Vendor BCP capability never reviewed",
+                "No alternative provider identified for critical services",
+            ],
+            "private_banking_specifics": (
+                "Private banks depend heavily on core banking vendors, custodians and fund "
+                "administrators. A failure at a critical vendor — as seen with several fintech "
+                "banking platforms in 2023 — creates immediate client service and regulatory risk."
+            ),
+        },
+        {
+            "id": "R-BC-004",
+            "title": "Single Points of Failure",
+            "description": (
+                "Critical infrastructure or processes with no redundancy, creating complete "
+                "service outage risk from a single failure event."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "SPOF identification and documented registry",
+                "Redundancy implemented for all critical SPOFs",
+                "Annual SPOF reassessment",
+                "Investment roadmap for SPOF remediation",
+            ],
+            "red_flags": [
+                "No formal SPOF analysis ever performed",
+                "Known SPOFs with no remediation plan",
+                "Network or infrastructure not redundant for critical services",
+            ],
+            "private_banking_specifics": (
+                "Small private banks often have key person dependencies — single IT administrators, "
+                "key relationship managers — alongside infrastructure SPOFs. Both human and technical "
+                "single points of failure require documentation and remediation plans."
+            ),
+        },
+        {
+            "id": "R-BC-005",
+            "title": "DORA Resilience Testing Non-Compliance",
+            "description": (
+                "Digital operational resilience testing requirements under DORA Art.11-16 not "
+                "implemented, including Threat-Led Penetration Testing (TLPT) for significant institutions."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "DORA resilience testing programme documented",
+                "Basic digital resilience testing for all ICT systems annually",
+                "TLPT for institutions meeting significance thresholds",
+                "Test results reported to management and regulators",
+            ],
+            "red_flags": [
+                "No DORA resilience testing programme established",
+                "TLPT not performed for qualifying institutions",
+                "Testing results not formally reported to board",
+            ],
+            "private_banking_specifics": (
+                "DORA applies from January 2025. Significant private banks must conduct TLPT "
+                "every three years using TIBER-EU methodology. Non-compliance creates direct "
+                "regulatory breach with potential enforcement by national competent authorities."
+            ),
+        },
+        {
+            "id": "R-BC-006",
+            "title": "Crisis Management Framework Inadequate",
+            "description": (
+                "Absence of effective crisis management structure including clear roles, "
+                "escalation paths, and communication protocols for major incidents."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "Medium",
+            "expected_controls": [
+                "Crisis management policy documented and approved",
+                "Crisis team with clear roles and decision authority",
+                "Escalation matrix with contact details current",
+                "Annual crisis simulation exercise",
+            ],
+            "red_flags": [
+                "No crisis management team formally defined",
+                "Escalation matrix outdated with stale contacts",
+                "Crisis plan never simulated or tested",
+            ],
+            "private_banking_specifics": (
+                "Private banking crises often involve reputational dimensions — media coverage, "
+                "client defection risk — requiring coordinated communications beyond IT recovery. "
+                "HNWI clients expect personal outreach from senior management during major incidents."
+            ),
+        },
+        {
+            "id": "R-BC-007",
+            "title": "Staff BCP Awareness Insufficient",
+            "description": (
+                "Key staff unaware of BCP procedures or unable to execute them during an actual "
+                "incident, undermining recovery capability."
+            ),
+            "level": "Moderate",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Annual BCP training for all relevant staff",
+                "BCP awareness included in onboarding",
+                "BCP contact list updated quarterly",
+                "Periodic awareness testing and exercises",
+            ],
+            "red_flags": [
+                "No formal BCP training programme",
+                "Staff unaware of their specific BCP role",
+                "Contact lists outdated by more than 6 months",
+            ],
+            "private_banking_specifics": (
+                "High staff turnover in private banking — particularly at RM level — means BCP "
+                "knowledge deteriorates rapidly. Remote working arrangements post-COVID have made "
+                "staff awareness and contact list currency even more critical."
+            ),
+        },
+        {
+            "id": "R-BC-008",
+            "title": "Data Backup Integrity Not Verified",
+            "description": (
+                "Data backup procedures in place but restoration never tested, creating "
+                "risk of unrecoverable data loss in a disaster scenario."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Regular backup restoration testing (at least quarterly)",
+                "Backup integrity monitoring automated",
+                "Offsite or cloud backup storage separate from primary",
+                "Backup results reported to IT management",
+            ],
+            "red_flags": [
+                "Backups never restored and tested",
+                "No backup integrity monitoring",
+                "Backup stored in same location as primary data",
+            ],
+            "private_banking_specifics": (
+                "Portfolio management and client data are critical assets. Unverified backups "
+                "have led to complete data loss at several financial institutions following "
+                "ransomware attacks. Regulatory records retention requirements amplify the risk."
+            ),
+        },
+    ],
+
+    # ── Change Management ──────────────────────────────────────────────────────
+    "CHANGE_MANAGEMENT": [
+        {
+            "id": "R-CM-001",
+            "title": "Unauthorized Changes to Production",
+            "description": (
+                "Changes deployed to production systems without proper authorization, testing "
+                "or documentation, creating operational and cyber risk."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Change Advisory Board (CAB) approval mandatory",
+                "Testing evidence required before deployment",
+                "Change documentation requirements enforced",
+                "Emergency change process clearly defined and monitored",
+            ],
+            "red_flags": [
+                "Changes found in production without CAB approval",
+                "No testing evidence required before deployment",
+                "Developers with direct production write access",
+            ],
+            "private_banking_specifics": (
+                "Unauthorized changes to core banking systems can affect client balances, "
+                "valuations and regulatory reports. FINMA expects strong change governance. "
+                "DORA Art.9 requires documented ICT change management procedures."
+            ),
+        },
+        {
+            "id": "R-CM-002",
+            "title": "Segregation of Duties Failure in SDLC",
+            "description": (
+                "Developers have direct access to production environment, enabling unauthorized "
+                "modifications and creating insider threat risk."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Strict SoD between development, test, and production environments",
+                "No developer direct production access",
+                "Deployment automation through CI/CD pipeline",
+                "Privileged access monitoring for production",
+            ],
+            "red_flags": [
+                "Developers access production environment directly",
+                "No SoD controls enforced in SDLC",
+                "Production changes not logged or monitored",
+            ],
+            "private_banking_specifics": (
+                "Developer access to production creates risk of data exfiltration of HNWI "
+                "client information. Several high-profile financial fraud cases have involved "
+                "developers exploiting production access for financial gain."
+            ),
+        },
+        {
+            "id": "R-CM-003",
+            "title": "Emergency Change Process Abuse",
+            "description": (
+                "Emergency change process routinely used to bypass standard controls, "
+                "undermining change governance and creating unreviewed production changes."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Clearly defined criteria for emergency change classification",
+                "Post-implementation review mandatory for all emergency changes",
+                "Emergency change ratio monitored monthly",
+                "CAB retrospective review of emergency changes quarterly",
+            ],
+            "red_flags": [
+                "Emergency changes represent >20% of all changes",
+                "Emergency changes not reviewed post-implementation",
+                "No defined criteria for what qualifies as an emergency",
+            ],
+            "private_banking_specifics": (
+                "Time pressure in trading environments creates incentive to classify routine "
+                "changes as emergency. IT teams under pressure from business stakeholders may "
+                "systematically abuse the emergency change path to avoid CAB delays."
+            ),
+        },
+        {
+            "id": "R-CM-004",
+            "title": "Inadequate Security Testing in SDLC",
+            "description": (
+                "Security testing not integrated in software development lifecycle, allowing "
+                "vulnerabilities to reach production systems."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "SAST/DAST tools integrated in CI/CD pipeline",
+                "Security review gate before production release",
+                "Penetration testing for all major releases",
+                "DevSecOps framework formally implemented",
+            ],
+            "red_flags": [
+                "No security testing integrated in SDLC",
+                "Vulnerabilities discovered post-release regularly",
+                "No penetration testing of new application releases",
+            ],
+            "private_banking_specifics": (
+                "Internet-facing banking applications — client portals, mobile banking — developed "
+                "without security testing create immediate cyber risk. DORA requires security "
+                "testing as part of digital operational resilience."
+            ),
+        },
+        {
+            "id": "R-CM-005",
+            "title": "Patch Management Delays",
+            "description": (
+                "Critical security patches not applied within defined timeframes, creating "
+                "known vulnerability exposure that attackers can exploit."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Patch management policy with tiered SLAs by severity",
+                "Critical patches applied within 72 hours",
+                "Automated patch deployment where possible",
+                "Monthly patch compliance reporting to CISO",
+            ],
+            "red_flags": [
+                "Critical patches consistently delayed beyond 72 hours",
+                "No patch management SLA formally defined",
+                "Patch compliance rate not monitored or reported",
+            ],
+            "private_banking_specifics": (
+                "Legacy core banking systems often require extensive testing before patching, "
+                "creating extended exposure windows. MAS Notice 655 and FINMA guidance require "
+                "timely patching as a fundamental cyber hygiene control."
+            ),
+        },
+        {
+            "id": "R-CM-006",
+            "title": "Rollback Procedures Not Defined",
+            "description": (
+                "Failed changes cannot be reversed quickly due to absence of documented "
+                "rollback procedures, extending system outage duration."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "Medium",
+            "expected_controls": [
+                "Rollback plan mandatory for all major changes",
+                "Rollback procedure tested before production deployment",
+                "Maximum acceptable downtime defined per system",
+                "Rollback responsibility clearly assigned",
+            ],
+            "red_flags": [
+                "No rollback plan required for major changes",
+                "Rollback procedures never tested",
+                "No maximum downtime target defined for critical systems",
+            ],
+            "private_banking_specifics": (
+                "Core banking system failures without rollback procedures can result in extended "
+                "client service outages. Regulators expect evidence of rollback capability testing "
+                "as part of change management maturity assessment."
+            ),
+        },
+    ],
+
+    # ── Access Management ──────────────────────────────────────────────────────
+    "ACCESS_MANAGEMENT": [
+        {
+            "id": "R-AM-001",
+            "title": "Excessive Privileged Access",
+            "description": (
+                "Users holding administrative or privileged access beyond what is required for "
+                "their role, creating elevated insider threat and cyber attack impact risk."
+            ),
+            "level": "Critical",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Least privilege principle formally enforced",
+                "Privileged Access Management (PAM) solution deployed",
+                "Just-in-time privileged access for admin tasks",
+                "Privileged account usage monitored and alerted",
+            ],
+            "red_flags": [
+                "Large number of active administrative accounts relative to IT headcount",
+                "Generic or shared administrative accounts in use",
+                "No PAM solution deployed for privileged access",
+            ],
+            "private_banking_specifics": (
+                "Privileged access to core banking systems provides access to client portfolios, "
+                "valuations and transaction history. Insider abuse of admin access in private banks "
+                "has led to data theft and financial fraud targeting HNWI clients."
+            ),
+        },
+        {
+            "id": "R-AM-002",
+            "title": "MFA Not Enforced on Critical Systems",
+            "description": (
+                "Multi-factor authentication not mandatory for access to critical banking systems, "
+                "creating account compromise and unauthorized access risk."
+            ),
+            "level": "Critical",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "MFA mandatory for all critical system access",
+                "MFA required for all remote access (VPN, RDP)",
+                "Phishing-resistant MFA for privileged accounts",
+                "MFA enrollment rate monitored — target 100%",
+            ],
+            "red_flags": [
+                "Password-only access permitted to core banking systems",
+                "MFA not required for remote access",
+                "MFA enrollment below 100% for administrators",
+            ],
+            "private_banking_specifics": (
+                "MAS Notice 655, FINMA guidance and DORA all require MFA for access to critical "
+                "financial systems. Credential theft via phishing is the leading initial access "
+                "vector in financial sector cyber incidents globally."
+            ),
+        },
+        {
+            "id": "R-AM-003",
+            "title": "Orphaned Accounts",
+            "description": (
+                "Active accounts belonging to former employees or contractors not deactivated "
+                "on departure, creating unauthorized access risk."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Automated account deactivation triggered on HR termination",
+                "Monthly orphaned account reconciliation",
+                "HR-IT integration for leaver processing",
+                "Regular access recertification to catch missed terminations",
+            ],
+            "red_flags": [
+                "Former employee accounts active in production systems",
+                "No automated termination process connected to HR",
+                "Leaver checklist not consistently followed",
+            ],
+            "private_banking_specifics": (
+                "Former relationship managers with client data access pose a specific risk in "
+                "private banking — competitor intelligence and client poaching via retained access. "
+                "High RM turnover rates make rapid account deactivation critical."
+            ),
+        },
+        {
+            "id": "R-AM-004",
+            "title": "Access Recertification Failures",
+            "description": (
+                "Periodic access reviews not performed or completed as rubber-stamp exercises "
+                "without genuine verification, allowing excessive access to accumulate."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Quarterly recertification for privileged accounts",
+                "Annual recertification for all user accounts",
+                "Business owner responsible for recertification decisions",
+                "Evidence of genuine review required (not auto-approve)",
+            ],
+            "red_flags": [
+                "Recertification overdue by more than 12 months",
+                "All approvals completed in minutes (rubber stamp)",
+                "No business owner involvement in recertification decisions",
+            ],
+            "private_banking_specifics": (
+                "Role creep is common in private banking where staff rotate across client portfolios. "
+                "Accumulated access across multiple systems creates broad attack surface and "
+                "segregation of duties violations that are not visible without recertification."
+            ),
+        },
+        {
+            "id": "R-AM-005",
+            "title": "Joiners/Movers/Leavers Process Failures",
+            "description": (
+                "Access not appropriately updated when employees join, change roles, or leave, "
+                "leading to access accumulation or unauthorized access."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Automated access provisioning on joining",
+                "Role change triggers immediate access review",
+                "Same-day deactivation on termination",
+                "Regular JML process audit",
+            ],
+            "red_flags": [
+                "Access from previous roles not removed on internal moves",
+                "Termination deactivation takes more than 24 hours",
+                "JML process relies entirely on manual steps",
+            ],
+            "private_banking_specifics": (
+                "Private banking has high internal mobility — RMs move between desks, "
+                "teams and entities — creating frequent access change requirements. Manual "
+                "JML processes cannot keep pace, leading to systematic access accumulation."
+            ),
+        },
+        {
+            "id": "R-AM-006",
+            "title": "Third-Party Vendor Access Not Controlled",
+            "description": (
+                "External vendors with permanent, unmonitored access to banking systems creating "
+                "insider threat and data exfiltration risk."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Just-in-time vendor access provisioning",
+                "Session recording for all vendor access sessions",
+                "Vendor access reviewed at least quarterly",
+                "PAM solution covers vendor accounts",
+            ],
+            "red_flags": [
+                "Vendors with permanent always-on system access",
+                "Vendor sessions not recorded or monitored",
+                "No inventory of active vendor access accounts",
+            ],
+            "private_banking_specifics": (
+                "IT support vendors, software providers and banking platform administrators "
+                "require regular access to systems containing HNWI client data. Permanent "
+                "access without monitoring creates data exfiltration risk that is hard to detect."
+            ),
+        },
+        {
+            "id": "R-AM-007",
+            "title": "Segregation of Duties Violations",
+            "description": (
+                "Same individual can perform conflicting functions — initiate and approve payments, "
+                "trade and value positions — creating fraud and error risk."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "SoD matrix documented and formally approved",
+                "System-level controls enforcing SoD rules",
+                "Regular SoD conflict reporting to management",
+                "Compensating controls documented for approved exceptions",
+            ],
+            "red_flags": [
+                "No formal SoD matrix exists for key processes",
+                "System technically allows SoD conflicts",
+                "SoD exceptions not tracked or approved",
+            ],
+            "private_banking_specifics": (
+                "Small private banks often have limited headcount, making strict SoD difficult. "
+                "However, regulators require compensating controls where SoD cannot be achieved. "
+                "Payment initiation and approval SoD failures are a frequent regulatory finding."
+            ),
+        },
+        {
+            "id": "R-AM-008",
+            "title": "Shared Accounts in Use",
+            "description": (
+                "Multiple users sharing single credentials, preventing individual accountability "
+                "and making audit trail investigations impossible."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "Medium",
+            "expected_controls": [
+                "Policy explicitly prohibiting shared accounts",
+                "Unique user ID assigned to every individual",
+                "Technical controls preventing credential sharing",
+                "Regular shared account detection scanning",
+            ],
+            "red_flags": [
+                "Generic accounts in use (admin, test, service)",
+                "Shared credentials used in production systems",
+                "No technical controls preventing credential sharing",
+            ],
+            "private_banking_specifics": (
+                "Service accounts and administrator accounts are often shared in private banking "
+                "IT environments. Shared accounts make forensic investigation of incidents "
+                "impossible and create individual accountability failures unacceptable to regulators."
+            ),
+        },
+    ],
+
+    # ── Procurement ────────────────────────────────────────────────────────────
+    "PROCUREMENT": [
+        {
+            "id": "R-PR-001",
+            "title": "Conflict of Interest in Vendor Selection",
+            "description": (
+                "Procurement decisions influenced by undisclosed personal relationships or "
+                "financial interests, creating fraud and corruption risk in vendor awards."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Mandatory COI declaration for all procurement participants",
+                "Independent review of high-value and sole-source awards",
+                "Whistleblowing channel accessible to all staff",
+                "Regular COI attestation updated annually",
+            ],
+            "red_flags": [
+                "No COI declaration process for procurement staff",
+                "Vendor awards to parties connected to decision-makers",
+                "No independent review of sole-source decisions",
+            ],
+            "private_banking_specifics": (
+                "Private banking procurement involves high-value contracts for IT, advisory, "
+                "and operational services. Personal networks are common in the industry, making "
+                "COI disclosure critical. Swiss CPC and UK Bribery Act create legal exposure."
+            ),
+        },
+        {
+            "id": "R-PR-002",
+            "title": "Procurement Policy Bypass",
+            "description": (
+                "Purchases made outside the approved procurement process, undermining controls "
+                "and value-for-money assurance."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "System controls enforcing purchase order requirements",
+                "Maverick spend monitoring with monthly reporting",
+                "Management reporting on policy exceptions",
+                "Consequences defined for unauthorized purchases",
+            ],
+            "red_flags": [
+                "High proportion of non-PO purchases above threshold",
+                "Frequent policy exceptions approved retrospectively",
+                "No monitoring of maverick spending",
+            ],
+            "private_banking_specifics": (
+                "Time pressure in financial services drives procurement bypasses. Business lines "
+                "often procure directly from vendors to avoid approval delays, creating uncontrolled "
+                "spending and outsourcing arrangements not reviewed under RS 2018/3."
+            ),
+        },
+        {
+            "id": "R-PR-003",
+            "title": "Invoice and Payment Fraud",
+            "description": (
+                "Fraudulent invoices processed or payments redirected to unauthorized accounts "
+                "through manipulation of payment details or fictitious invoices."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Dual approval required for changes to vendor bank details",
+                "Vendor bank account verification at onboarding and on change",
+                "Automated duplicate invoice detection",
+                "Regular vendor master file review",
+            ],
+            "red_flags": [
+                "Vendor bank details changed without independent verification",
+                "Duplicate invoices paid in sample testing",
+                "No regular vendor master file review",
+            ],
+            "private_banking_specifics": (
+                "Business Email Compromise targeting AP functions is a major threat in financial "
+                "services. High-value payments in private banking — to prime brokers, custodians, "
+                "IT vendors — make payment fraud particularly damaging."
+            ),
+        },
+        {
+            "id": "R-PR-004",
+            "title": "Contract Without Right-to-Audit",
+            "description": (
+                "Material supplier contracts lacking right-to-audit clause, preventing internal "
+                "audit from obtaining assurance over critical outsourced services."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Standard contract template with right-to-audit clause",
+                "Legal review of all material contracts",
+                "Right-to-audit exercised at least every 3 years",
+                "Supplier audit programme maintained",
+            ],
+            "red_flags": [
+                "Material contracts missing right-to-audit clause",
+                "Right-to-audit never actually exercised",
+                "No supplier audit programme in place",
+            ],
+            "private_banking_specifics": (
+                "FINMA RS 2018/3 and DORA Art.28 both require contractual right-to-audit for "
+                "material outsourcing. Banks cannot provide adequate regulatory assurance over "
+                "outsourced services without exercising audit rights regularly."
+            ),
+        },
+        {
+            "id": "R-PR-005",
+            "title": "No Competitive Bidding Process",
+            "description": (
+                "Suppliers selected without competitive tendering, reducing value for money "
+                "assurance and increasing corruption risk."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "Medium",
+            "expected_controls": [
+                "Competitive bidding mandatory above defined thresholds",
+                "Documented justification required for sole sourcing",
+                "Procurement committee approval for sole source awards",
+                "Regular review of sole source award frequency",
+            ],
+            "red_flags": [
+                "High proportion of sole-source awards without justification",
+                "Competitive bidding thresholds not consistently enforced",
+                "No documented justification for sole-source decisions",
+            ],
+            "private_banking_specifics": (
+                "Private banks frequently use preferred vendor relationships inherited from "
+                "parent groups or historical partnerships. Without competitive challenge, "
+                "pricing and service quality deteriorate over time without detection."
+            ),
+        },
+    ],
+
+    # ── Wealth Advisory ────────────────────────────────────────────────────────
+    "WEALTH_ADVISORY": [
+        {
+            "id": "R-WA-001",
+            "title": "Suitability Assessment Not Performed",
+            "description": (
+                "Investment recommendations made without completing mandatory suitability "
+                "assessment, violating MiFID II Art.25, FINMA RS 2012/3, and MAS FAA requirements."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Suitability assessment mandatory before any recommendation",
+                "System controls preventing bypassing suitability process",
+                "Regular suitability compliance review by compliance team",
+                "Suitability assessment documented and retained",
+            ],
+            "red_flags": [
+                "Investment recommendations without suitability assessment documented",
+                "Assessment bypassed for 'well-known' or long-standing clients",
+                "No system controls enforcing suitability before recommendation",
+            ],
+            "private_banking_specifics": (
+                "Swiss private banks subject to FinSA since 2020 must document suitability "
+                "for all investment services. MiFID II applies to EU clients. Suitability "
+                "failures are consistently the top conduct finding in private banking supervision."
+            ),
+        },
+        {
+            "id": "R-WA-002",
+            "title": "Churning Detected",
+            "description": (
+                "Excessive portfolio turnover generating transaction fees for the bank at "
+                "the expense of client returns, constituting a conduct violation."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Portfolio turnover monitoring with automated alerts",
+                "Churning detection algorithm run monthly",
+                "High-turnover accounts requiring documented justification",
+                "Independent compliance review of flagged accounts",
+            ],
+            "red_flags": [
+                "Portfolio turnover >100% per annum without documented client instruction",
+                "Fee income disproportionately high relative to client returns",
+                "No portfolio turnover monitoring in place",
+            ],
+            "private_banking_specifics": (
+                "Churning is particularly difficult to detect in private banking where "
+                "relationship managers have significant discretion. FCA, FINMA and MAS have "
+                "all taken enforcement action for churning at wealth management firms."
+            ),
+        },
+        {
+            "id": "R-WA-003",
+            "title": "Conflict of Interest Not Disclosed",
+            "description": (
+                "Undisclosed conflicts of interest in investment recommendations — in-house "
+                "products, retrocessions, third-party inducements — violating conduct requirements."
+            ),
+            "level": "Critical",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "COI policy with disclosure requirements",
+                "Written disclosure to client before execution",
+                "Retrocession disclosure process documented",
+                "Independent monitoring of COI disclosure compliance",
+            ],
+            "red_flags": [
+                "No written COI disclosure provided to clients",
+                "High proportion of in-house product recommendations",
+                "Retrocessions received but not disclosed to clients",
+            ],
+            "private_banking_specifics": (
+                "Swiss banks receiving retrocessions must disclose them under FinSA and earlier "
+                "Federal Court rulings. MiFID II bans inducements in advisory services or requires "
+                "disclosure and quality enhancement. Non-disclosure creates civil liability risk."
+            ),
+        },
+        {
+            "id": "R-WA-004",
+            "title": "Client Risk Profile Outdated",
+            "description": (
+                "Investment decisions made on the basis of client risk profiles not updated "
+                "in over 24 months, creating suitability assessment failures."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Automated alert when risk profile exceeds 24 months",
+                "Mandatory refresh before major investment decisions",
+                "Annual review for all active advisory clients",
+                "System controls preventing recommendation with stale profile",
+            ],
+            "red_flags": [
+                "Client risk profiles last updated more than 24 months ago",
+                "No automated alert system for stale risk profiles",
+                "Reviews not systematically completed as evidenced by completion rates",
+            ],
+            "private_banking_specifics": (
+                "HNWI clients undergo major life changes — retirement, divorce, inheritance — "
+                "that alter risk capacity. Annual reviews are a minimum regulatory expectation "
+                "in all major private banking jurisdictions. Stale profiles are a top FINMA finding."
+            ),
+        },
+        {
+            "id": "R-WA-005",
+            "title": "Complex Products Sold to Non-Sophisticated Clients",
+            "description": (
+                "Structured products, derivatives or alternative investments recommended to "
+                "clients classified below the required sophistication threshold."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Product classification framework covering all products",
+                "Client sophistication assessment documented",
+                "System controls matching product to client eligibility",
+                "Pre-sale compliance review for complex products",
+            ],
+            "red_flags": [
+                "Structured products sold to retail-classified clients",
+                "No formal product classification framework",
+                "No system control preventing ineligible product access",
+            ],
+            "private_banking_specifics": (
+                "Private banks frequently deal in complex products — structured notes, alternative "
+                "funds, private equity. Client classification errors — particularly misclassifying "
+                "retail clients as professional — are a major source of regulatory enforcement action."
+            ),
+        },
+        {
+            "id": "R-WA-006",
+            "title": "Discretionary Mandate Guideline Breach",
+            "description": (
+                "Portfolio managed outside agreed investment guidelines without client notification, "
+                "violating the contractual mandate and regulatory requirements."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Automated portfolio guideline monitoring in real-time",
+                "Breach alert and resolution process defined",
+                "Client notification required for unremediated breaches",
+                "Monthly portfolio compliance reporting",
+            ],
+            "red_flags": [
+                "Guideline breaches not detected promptly",
+                "No automated portfolio guideline monitoring",
+                "Clients not informed of mandate breaches",
+            ],
+            "private_banking_specifics": (
+                "Discretionary mandate breaches expose banks to client claims and regulatory "
+                "enforcement. FINMA expects real-time or daily guideline monitoring. Manual "
+                "monitoring processes are insufficient for the volume of discretionary portfolios."
+            ),
+        },
+        {
+            "id": "R-WA-007",
+            "title": "ESG Preferences Not Captured",
+            "description": (
+                "Client ESG preferences not systematically collected or reflected in investment "
+                "recommendations, violating MiFID II sustainability amendments."
+            ),
+            "level": "Moderate",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "ESG preference questionnaire included in suitability assessment",
+                "ESG product mapping to investment universe",
+                "Recommendation alignment to ESG preferences verified",
+                "Annual ESG preference review as part of client review",
+            ],
+            "red_flags": [
+                "No ESG questions included in suitability assessment form",
+                "ESG preferences not documented in client file",
+                "No ESG product mapping available to advisors",
+            ],
+            "private_banking_specifics": (
+                "MiFID II sustainability amendment (August 2022) makes ESG preference collection "
+                "mandatory for EU clients. HNWI clients increasingly expect ESG integration. "
+                "Swiss FinSA does not yet require ESG collection but FINMA expects best practice."
+            ),
+        },
+        {
+            "id": "R-WA-008",
+            "title": "Inadequate Client Reporting",
+            "description": (
+                "Portfolio reports inaccurate, incomplete or not provided at required frequency, "
+                "violating MiFID II and FINMA client information requirements."
+            ),
+            "level": "Moderate",
+            "probability": "Medium",
+            "impact": "Medium",
+            "expected_controls": [
+                "Automated reporting system with quality controls",
+                "Reporting frequency meeting regulatory minimums",
+                "Client complaint monitoring for reporting issues",
+                "Regulatory reporting checklist reviewed quarterly",
+            ],
+            "red_flags": [
+                "Client portfolio reports containing errors or omissions",
+                "Reporting frequency below regulatory minimum",
+                "No quality check performed on client reports before dispatch",
+            ],
+            "private_banking_specifics": (
+                "HNWI clients are sophisticated and scrutinise reports carefully. Reporting "
+                "errors damage trust disproportionately in private banking. MiFID II requires "
+                "quarterly reporting for advisory mandates and monthly for discretionary."
+            ),
+        },
+    ],
 }
 
 
@@ -5859,6 +7373,484 @@ AUDIT_TESTS_LIBRARY = {
             "population": "Whistleblowing policy + case log for 12-month period",
             "sample_size": "Full policy review + 100% of cases (typically 0-10)",
             "failure_criteria": "Channel managed by HR without independent oversight, case unresolved >60 days, or no non-retaliation policy",
+        },
+    ],
+
+    # ── AI / Model Risk Tests ──────────────────────────────────────────────────
+    "AI_MODEL_RISK": [
+        {
+            "id": "T-AI-001", "level": "Critical", "category": "Data Analytics",
+            "objective": "Verify model inventory completeness",
+            "procedure": "Obtain list of all AI/ML models in production from IT and data science teams. Cross-reference with the model risk register. Identify models in production not recorded in the formal inventory.",
+            "population": "All AI/ML models in production",
+            "sample_size": "100% (full population review)",
+            "failure_criteria": "Any production AI model not recorded in the formal model risk inventory",
+            "linked_risk_id": "R-AI-001, R-AI-007",
+        },
+        {
+            "id": "T-AI-002", "level": "Critical", "category": "Standard",
+            "objective": "Assess model validation independence",
+            "procedure": "For all models validated in the last 24 months, review validation documentation. Verify validator is independent from the model development team. Check sign-off authority level and whether validation conclusions were accepted or overridden.",
+            "population": "All AI/ML models validated in last 24 months",
+            "sample_size": "100% of Critical-rated models; sample of 5 High-rated models",
+            "failure_criteria": "Any Critical-rated model validated by its own developers without independent oversight",
+            "linked_risk_id": "R-AI-001",
+        },
+        {
+            "id": "T-AI-003", "level": "Critical", "category": "Standard",
+            "objective": "Verify human oversight for regulated AI decisions",
+            "procedure": "Select a sample of AI-driven decisions in regulated contexts (credit approvals, suitability assessments, AML alert dispositions). For each, verify that documented human review exists prior to final decision. Check override rate and documentation.",
+            "population": "All AI-driven regulated decisions in last 3 months",
+            "sample_size": "30 decisions across all regulated decision types",
+            "failure_criteria": "Any regulated decision with no documented human review",
+            "linked_risk_id": "R-AI-002",
+        },
+        {
+            "id": "T-AI-004", "level": "High", "category": "Data Analytics",
+            "objective": "Test model performance monitoring effectiveness",
+            "procedure": "Review model monitoring dashboard or reporting. Verify performance metrics are defined, thresholds set, and alerts are configured and actioned. Request last 6 months of performance monitoring reports. Check response to any threshold breaches.",
+            "population": "All AI/ML models in production",
+            "sample_size": "All Critical and High-rated models (100%)",
+            "failure_criteria": "No performance monitoring in place for any Critical-rated model, or monitoring alerts not actioned within defined SLA",
+            "linked_risk_id": "R-AI-004",
+        },
+        {
+            "id": "T-AI-005", "level": "High", "category": "Standard",
+            "objective": "Assess bias testing coverage for client-facing models",
+            "procedure": "Review bias testing reports for all client-facing AI models (credit scoring, suitability, client segmentation). Verify testing methodology, results, and remediation of identified bias. Confirm testing performed before deployment and periodically post-deployment.",
+            "population": "All client-facing AI models",
+            "sample_size": "100%",
+            "failure_criteria": "Any client-facing model deployed without documented bias testing",
+            "linked_risk_id": "R-AI-003",
+        },
+        {
+            "id": "T-AI-006", "level": "High", "category": "Standard",
+            "objective": "Review third-party AI vendor due diligence",
+            "procedure": "For each external AI vendor, review due diligence documentation. Verify explainability requirements are included in contracts, right-to-audit clause is present and exercisable, and regular performance reporting is received.",
+            "population": "All external AI vendor relationships",
+            "sample_size": "All material AI vendors (>CHF 100k annual contract value)",
+            "failure_criteria": "Any material AI vendor contract without explicit explainability requirements and right-to-audit",
+            "linked_risk_id": "R-AI-005",
+        },
+        {
+            "id": "T-AI-007", "level": "High", "category": "Standard",
+            "objective": "Assess EU AI Act compliance readiness",
+            "procedure": "Review EU AI Act gap assessment documentation. Verify all AI systems have been classified by risk level. For systems classified as high-risk, confirm conformity assessment documentation exists and is current. Review registration status where required.",
+            "population": "All AI systems in scope",
+            "sample_size": "100% classification review; detailed review of all High-risk systems",
+            "failure_criteria": "Any AI system classified as high-risk under EU AI Act without completed conformity assessment",
+            "linked_risk_id": "R-AI-008",
+        },
+        {
+            "id": "T-AI-008", "level": "Moderate", "category": "Standard",
+            "objective": "Review AI governance framework adequacy",
+            "procedure": "Obtain the AI governance policy. Verify board or senior management approval, scope covers all AI/ML models, accountability is assigned for each model, and review frequency is defined and adhered to. Assess whether an AI ethics review process exists.",
+            "population": "AI governance documentation and model ownership registry",
+            "sample_size": "N/A — document and interview review",
+            "failure_criteria": "No board or senior management-approved AI governance policy exists",
+            "linked_risk_id": "R-AI-007",
+        },
+    ],
+
+    # ── Cloud Risk Tests ───────────────────────────────────────────────────────
+    "CLOUD_RISK": [
+        {
+            "id": "T-CL-001", "level": "Critical", "category": "Data Analytics",
+            "objective": "Verify data residency compliance for all cloud services",
+            "procedure": "Obtain the complete cloud services inventory. For each service, verify documented data residency. Cross-reference with FINMA RS 2018/3 requirements and applicable data protection regulations. Identify any services where data residency is unknown or non-compliant.",
+            "population": "All cloud services in use (IaaS, PaaS, SaaS)",
+            "sample_size": "100%",
+            "failure_criteria": "Any cloud service with client or regulated data stored in a non-compliant jurisdiction, or data residency not documented",
+            "linked_risk_id": "R-CL-001",
+        },
+        {
+            "id": "T-CL-002", "level": "Critical", "category": "Data Analytics",
+            "objective": "Detect critical cloud security misconfigurations",
+            "procedure": "Review Cloud Security Posture Management (CSPM) tool reports for the last quarter. Identify critical and high-severity misconfigurations (public storage, open security groups, missing encryption). Verify remediation SLA compliance and root cause analysis for repeated findings.",
+            "population": "All cloud resources across all cloud environments",
+            "sample_size": "All Critical and High severity findings",
+            "failure_criteria": "Any Critical misconfiguration open for more than 72 hours; any repeated Critical finding without root cause remediation",
+            "linked_risk_id": "R-CL-002",
+        },
+        {
+            "id": "T-CL-003", "level": "High", "category": "Standard",
+            "objective": "Verify FINMA outsourcing notification compliance",
+            "procedure": "Review the outsourcing register and compare against all cloud services in use. For each cloud service identified as material, verify FINMA notification was submitted prior to commencement. Review materiality assessment documentation and completeness.",
+            "population": "All cloud services meeting materiality threshold",
+            "sample_size": "100%",
+            "failure_criteria": "Any material cloud outsourcing arrangement commenced without prior FINMA notification",
+            "linked_risk_id": "R-CL-003",
+        },
+        {
+            "id": "T-CL-004", "level": "High", "category": "Standard",
+            "objective": "Assess exit strategy adequacy for critical cloud providers",
+            "procedure": "For each critical cloud provider, review the documented exit strategy. Verify: alternative provider identified, data portability confirmed, exit RTO defined, and exit plan tested. Interview IT management on last test date and outcomes.",
+            "population": "All critical cloud provider relationships",
+            "sample_size": "100%",
+            "failure_criteria": "Any critical cloud provider without a documented and tested exit strategy",
+            "linked_risk_id": "R-CL-004",
+        },
+        {
+            "id": "T-CL-005", "level": "High", "category": "Data Analytics",
+            "objective": "Detect unauthorized shadow IT cloud usage",
+            "procedure": "Review CASB tool reports and network egress logs for cloud service traffic. Cross-reference identified services against the approved cloud services catalogue. Investigate unauthorized services — particularly those handling client or sensitive data.",
+            "population": "Network egress traffic logs for last 3 months",
+            "sample_size": "All flagged unauthorized cloud service connections",
+            "failure_criteria": "Unauthorized cloud services confirmed to be handling client or regulated data",
+            "linked_risk_id": "R-CL-006",
+        },
+        {
+            "id": "T-CL-006", "level": "Moderate", "category": "Standard",
+            "objective": "Review cloud encryption controls",
+            "procedure": "For all cloud environments handling sensitive data, verify encryption at rest is enforced (AES-256 minimum). Verify TLS 1.2 or higher is enforced for all data in transit. Confirm customer-managed keys are used for sensitive data. Review key rotation schedule.",
+            "population": "All cloud storage and compute resources handling client data",
+            "sample_size": "All production cloud environments",
+            "failure_criteria": "Any sensitive data stored without encryption, TLS version below 1.2, or encryption keys entirely managed by provider",
+            "linked_risk_id": "R-CL-008",
+        },
+        {
+            "id": "T-CL-007", "level": "Moderate", "category": "Standard",
+            "objective": "Verify DORA ICT third-party risk compliance for cloud",
+            "procedure": "Review DORA gap assessment for cloud arrangements. Verify cloud contracts contain DORA-required provisions (exit rights, data portability, audit rights, incident notification). Check ICT concentration risk assessment has been completed and reviewed by senior management.",
+            "population": "All cloud contracts and DORA gap assessment documentation",
+            "sample_size": "All cloud contracts above materiality threshold",
+            "failure_criteria": "Material cloud contracts missing DORA-required provisions; no ICT concentration risk assessment",
+            "linked_risk_id": "R-CL-009",
+        },
+    ],
+
+    # ── Resilience & BCP Tests ─────────────────────────────────────────────────
+    "RESILIENCE_BCP": [
+        {
+            "id": "T-BC-001", "level": "Critical", "category": "Standard",
+            "objective": "Verify BCP documentation completeness for critical services",
+            "procedure": "Obtain the critical business services register. For each service, verify a documented BCP exists, covering recovery procedures, responsible parties, RTO/RPO targets, and contact details. Verify board or senior management approval.",
+            "population": "All critical business services",
+            "sample_size": "100%",
+            "failure_criteria": "Any critical business service without a documented and approved BCP",
+            "linked_risk_id": "R-BC-001",
+        },
+        {
+            "id": "T-BC-002", "level": "Critical", "category": "Standard",
+            "objective": "Review BCP test results and RTO/RPO achievement",
+            "procedure": "Obtain results of the last annual BCP/DR test. Verify the test covered all critical services. Measure actual recovery time against defined RTO and recovery point against RPO for each system. Review remediation plans for missed targets.",
+            "population": "Last annual BCP test results",
+            "sample_size": "All critical systems tested",
+            "failure_criteria": "BCP not tested in last 12 months; any critical system RTO/RPO consistently not met without remediation plan",
+            "linked_risk_id": "R-BC-002",
+        },
+        {
+            "id": "T-BC-003", "level": "High", "category": "Standard",
+            "objective": "Assess third-party BCP capability",
+            "procedure": "For each critical third-party provider, review evidence of BCP capability (BCP documentation, test results, SOC reports covering availability). Verify contractual BCP requirements. Identify providers with no BCP evidence on file.",
+            "population": "All critical third-party service providers",
+            "sample_size": "100%",
+            "failure_criteria": "Any critical provider without documented BCP evidence reviewed in last 12 months",
+            "linked_risk_id": "R-BC-003",
+        },
+        {
+            "id": "T-BC-004", "level": "High", "category": "Data Analytics",
+            "objective": "Identify single points of failure",
+            "procedure": "Review the SPOF analysis documentation. Cross-reference with infrastructure architecture diagrams. Identify critical systems or processes with no redundancy. Verify remediation roadmap for known SPOFs. Assess whether key person dependencies are documented.",
+            "population": "All critical infrastructure and processes",
+            "sample_size": "Full SPOF register review",
+            "failure_criteria": "No formal SPOF analysis; known Critical SPOFs with no remediation plan",
+            "linked_risk_id": "R-BC-004",
+        },
+        {
+            "id": "T-BC-005", "level": "High", "category": "Standard",
+            "objective": "Verify DORA resilience testing programme compliance",
+            "procedure": "Review the digital operational resilience testing programme. Verify basic testing is performed annually for all ICT systems. For institutions meeting TLPT significance thresholds, confirm TLPT has been performed using TIBER-EU methodology within the required cycle.",
+            "population": "All ICT systems in scope for DORA",
+            "sample_size": "Testing programme documentation + all TLPT results",
+            "failure_criteria": "No DORA resilience testing programme; TLPT overdue for qualifying institutions",
+            "linked_risk_id": "R-BC-005",
+        },
+        {
+            "id": "T-BC-006", "level": "Moderate", "category": "Standard",
+            "objective": "Test data backup integrity",
+            "procedure": "Review backup restoration test results for last 12 months. Verify backups cover all critical data. Confirm restoration was actually performed and recovery time documented. Check backup storage is geographically separate from primary. Review backup monitoring reports.",
+            "population": "All data backup processes for critical systems",
+            "sample_size": "All critical system backup restoration tests",
+            "failure_criteria": "Backups not restoration-tested in last 12 months; backups stored co-located with primary data",
+            "linked_risk_id": "R-BC-008",
+        },
+        {
+            "id": "T-BC-007", "level": "Moderate", "category": "Standard",
+            "objective": "Assess crisis management framework effectiveness",
+            "procedure": "Review crisis management policy and team structure. Verify roles and decision authorities are defined. Review escalation matrix for currency (contacts updated within 6 months). Assess last crisis simulation exercise — date, scenario, participants, and lessons learned.",
+            "population": "Crisis management documentation and last simulation records",
+            "sample_size": "Full document review + interviews with crisis team members",
+            "failure_criteria": "No crisis management team defined; no simulation in last 12 months; escalation contacts outdated",
+            "linked_risk_id": "R-BC-006",
+        },
+    ],
+
+    # ── Change Management Tests ────────────────────────────────────────────────
+    "CHANGE_MANAGEMENT": [
+        {
+            "id": "T-CM-001", "level": "Critical", "category": "Data Analytics",
+            "objective": "Detect unauthorized changes to production systems",
+            "procedure": "Extract all production changes deployed in the last 3 months from the ITSM tool. Cross-reference with approved change records in the CAB log. Identify changes without prior approval. Review rollback and incident records to identify change-related failures.",
+            "population": "All production changes in last 3 months",
+            "sample_size": "100% (automated cross-reference)",
+            "failure_criteria": "Any production change deployed without documented CAB approval",
+            "linked_risk_id": "R-CM-001",
+        },
+        {
+            "id": "T-CM-002", "level": "Critical", "category": "Data Analytics",
+            "objective": "Verify SoD between developers and production",
+            "procedure": "Extract all developer user accounts from Active Directory. Cross-reference with the production system access list. Identify any developers with write access to production environments. Verify through access logs whether this access has been used.",
+            "population": "All developer accounts",
+            "sample_size": "100%",
+            "failure_criteria": "Any developer with direct write access to production systems",
+            "linked_risk_id": "R-CM-002",
+        },
+        {
+            "id": "T-CM-003", "level": "High", "category": "Data Analytics",
+            "objective": "Monitor emergency change ratio",
+            "procedure": "Extract all change records classified by type (Standard/Normal/Emergency) for last 6 months. Calculate monthly emergency change ratio. Compare against industry benchmark and internal target. Review justification for emergency classification in sample of emergency changes.",
+            "population": "All change records last 6 months",
+            "sample_size": "100% classification (automated); 10 emergency changes for justification review",
+            "failure_criteria": "Emergency change ratio consistently above 15%; or emergency changes used without meeting defined emergency criteria",
+            "linked_risk_id": "R-CM-003",
+        },
+        {
+            "id": "T-CM-004", "level": "High", "category": "Standard",
+            "objective": "Verify security testing integration in SDLC",
+            "procedure": "For a sample of major releases in the last 6 months, review security testing documentation. Verify SAST/DAST scans were performed, results reviewed, and critical vulnerabilities resolved before deployment. Check penetration testing evidence for internet-facing applications.",
+            "population": "All major releases in last 6 months",
+            "sample_size": "10 releases (largest by scope/risk)",
+            "failure_criteria": "Any major release deployed without security testing documentation; any critical vulnerability not resolved before deployment",
+            "linked_risk_id": "R-CM-004",
+        },
+        {
+            "id": "T-CM-005", "level": "High", "category": "Data Analytics",
+            "objective": "Test patch management timeliness",
+            "procedure": "Extract patch deployment data for last 6 months. Calculate time elapsed between vendor patch release and bank deployment for all Critical and High patches. Compare against patch management policy SLA. Identify breaches and root causes.",
+            "population": "All Critical and High security patches released last 6 months",
+            "sample_size": "100% (automated)",
+            "failure_criteria": "Any Critical patch not deployed within 72 hours without documented risk acceptance by CISO",
+            "linked_risk_id": "R-CM-005",
+        },
+        {
+            "id": "T-CM-006", "level": "Moderate", "category": "Standard",
+            "objective": "Verify rollback procedure definition",
+            "procedure": "For a sample of major changes, verify that a documented rollback plan was part of the change request. Confirm rollback plan was reviewed by CAB. Where possible, verify rollback was tested in a non-production environment before the change was applied.",
+            "population": "All major changes (change category: Normal/Major) last 3 months",
+            "sample_size": "15 changes",
+            "failure_criteria": "More than 20% of major changes without a documented rollback plan",
+            "linked_risk_id": "R-CM-006",
+        },
+    ],
+
+    # ── Access Management Tests ────────────────────────────────────────────────
+    "ACCESS_MANAGEMENT": [
+        {
+            "id": "T-AM-001", "level": "Critical", "category": "Data Analytics",
+            "objective": "Detect orphaned accounts of former employees",
+            "procedure": "Extract all active user accounts from Active Directory. Cross-reference with current HR employee list including termination dates. Identify accounts belonging to individuals no longer employed. Verify whether accounts have been used since termination date.",
+            "population": "All active accounts in Active Directory",
+            "sample_size": "100% (automated cross-reference with HR data)",
+            "failure_criteria": "Any active account belonging to a terminated employee, regardless of last use date",
+            "linked_risk_id": "R-AM-003",
+        },
+        {
+            "id": "T-AM-002", "level": "Critical", "category": "Data Analytics",
+            "objective": "Verify MFA enforcement on critical systems",
+            "procedure": "Extract MFA enrollment status for all user accounts from the identity platform. Identify accounts without MFA, with particular focus on privileged accounts. Cross-reference against critical systems login logs to identify password-only authentications.",
+            "population": "All user accounts across all systems",
+            "sample_size": "100% (automated)",
+            "failure_criteria": "Any privileged account without MFA enrolled; password-only access to critical banking systems permitted",
+            "linked_risk_id": "R-AM-002",
+        },
+        {
+            "id": "T-AM-003", "level": "Critical", "category": "Data Analytics",
+            "objective": "Identify excessive privileged access",
+            "procedure": "Extract all privileged accounts (admin, service, elevated). Cross-reference with role-based access model and job function. Identify accounts with privileges beyond their defined role requirements. Focus on core banking and payments system admin access.",
+            "population": "All privileged accounts",
+            "sample_size": "100%",
+            "failure_criteria": "Any account with system administrator privileges beyond what their role requires",
+            "linked_risk_id": "R-AM-001",
+        },
+        {
+            "id": "T-AM-004", "level": "High", "category": "Standard",
+            "objective": "Test access recertification quality",
+            "procedure": "Obtain recertification documentation for last completed cycle. Review sample of approval decisions. Assess whether approvals show evidence of genuine review (varying decisions, comments) vs rubber-stamp (all approved, completed in seconds). Check recertification completion rate and timeliness.",
+            "population": "Last completed access recertification cycle",
+            "sample_size": "30 account recertification decisions",
+            "failure_criteria": "Recertification cycle overdue by more than 3 months; evidence of rubber-stamp approvals (all approved within seconds)",
+            "linked_risk_id": "R-AM-004",
+        },
+        {
+            "id": "T-AM-005", "level": "High", "category": "Data Analytics",
+            "objective": "Test joiners/movers/leavers process effectiveness",
+            "procedure": "Select sample of recent leavers from HR termination records. For each, identify their system accounts and verify deactivation date vs termination date. Calculate average deactivation lag. Test sample of internal movers for whether prior role access was removed.",
+            "population": "All leavers in last 6 months",
+            "sample_size": "25 leavers; 15 internal movers",
+            "failure_criteria": "Any account active more than 24 hours after termination; any internal mover retaining full prior role access after more than 30 days",
+            "linked_risk_id": "R-AM-005",
+        },
+        {
+            "id": "T-AM-006", "level": "High", "category": "Data Analytics",
+            "objective": "Detect segregation of duties violations",
+            "procedure": "Run SoD conflict analysis across key systems (core banking, payment initiation, general ledger). Cross-reference user roles against the SoD matrix to identify users with conflicting role combinations. Review compensating controls for approved exceptions.",
+            "population": "All active users across key financial systems",
+            "sample_size": "100% (automated SoD analysis)",
+            "failure_criteria": "Any user with a Critical SoD conflict (e.g. payment initiation and approval) without approved compensating controls",
+            "linked_risk_id": "R-AM-007",
+        },
+        {
+            "id": "T-AM-007", "level": "Moderate", "category": "Data Analytics",
+            "objective": "Identify shared accounts in production systems",
+            "procedure": "Extract all accounts with generic or shared naming conventions (admin, service, test, shared). Review account usage logs to identify concurrent sessions from different IP addresses, indicating sharing. Interview IT team on use of generic accounts.",
+            "population": "All production system accounts",
+            "sample_size": "100% naming convention scan; concurrent session log review",
+            "failure_criteria": "Any shared or generic accounts used to access production systems containing client data",
+            "linked_risk_id": "R-AM-008",
+        },
+        {
+            "id": "T-AM-008", "level": "Moderate", "category": "Standard",
+            "objective": "Review third-party vendor access controls",
+            "procedure": "Obtain inventory of all active vendor accounts. Verify each is just-in-time (not always-on). Review session recording coverage for vendor access. Test sample of vendor access — confirm sessions were recorded and reviewed. Check vendor access review frequency.",
+            "population": "All active vendor accounts",
+            "sample_size": "100% inventory; 10 vendor access sessions reviewed",
+            "failure_criteria": "Any critical vendor with permanent always-on access; vendor sessions not recorded in PAM",
+            "linked_risk_id": "R-AM-006",
+        },
+    ],
+
+    # ── Procurement Tests ──────────────────────────────────────────────────────
+    "PROCUREMENT": [
+        {
+            "id": "T-PR-001", "level": "Critical", "category": "Data Analytics",
+            "objective": "Detect duplicate payments to vendors",
+            "procedure": "Extract all vendor payments for the last 12 months. Run automated duplicate detection algorithm searching for same vendor, same or near-same amount (+-5%), and same invoice number or reference within a rolling 60-day window. Investigate all matches identified.",
+            "population": "All vendor payments last 12 months",
+            "sample_size": "100% (automated duplicate detection)",
+            "failure_criteria": "Any confirmed duplicate payment that was not identified and recovered",
+            "linked_risk_id": "R-PR-003",
+        },
+        {
+            "id": "T-PR-002", "level": "Critical", "category": "Data Analytics",
+            "objective": "Identify conflicts of interest in vendor selection",
+            "procedure": "Cross-reference all vendor awards in the last 12 months against employee COI declaration register. Identify instances where award decisions were made by individuals with declared or suspected connections to winning vendors. Review high-value and sole-source awards independently.",
+            "population": "All vendor awards last 12 months",
+            "sample_size": "100% cross-reference; detailed review of all sole-source and awards >CHF 500k",
+            "failure_criteria": "Any vendor award to a connected party where COI was not formally declared and managed",
+            "linked_risk_id": "R-PR-001",
+        },
+        {
+            "id": "T-PR-003", "level": "High", "category": "Data Analytics",
+            "objective": "Detect maverick spending bypassing procurement",
+            "procedure": "Extract all purchase transactions for last 6 months. Identify purchases above the purchase order threshold without a corresponding purchase order. Calculate maverick spend ratio (non-PO spend / total spend). Review top 20 maverick transactions for justification.",
+            "population": "All purchase transactions last 6 months",
+            "sample_size": "100% (automated); detail review of top 20 maverick transactions",
+            "failure_criteria": "Maverick spend ratio above 10%; purchases above CHF 50k without purchase order",
+            "linked_risk_id": "R-PR-002",
+        },
+        {
+            "id": "T-PR-004", "level": "High", "category": "Standard",
+            "objective": "Verify right-to-audit clauses in material contracts",
+            "procedure": "Obtain the vendor register and identify all material contracts (above CHF 1M annual value or critical outsourcing). Review a sample for presence of right-to-audit clause, its scope and exercisability. Verify the right-to-audit has been exercised or that an exercise plan exists.",
+            "population": "All material vendor contracts (>CHF 1M annual value)",
+            "sample_size": "20 contracts",
+            "failure_criteria": "Any material contract without a right-to-audit clause; right-to-audit never exercised for critical vendors",
+            "linked_risk_id": "R-PR-004",
+        },
+        {
+            "id": "T-PR-005", "level": "High", "category": "Data Analytics",
+            "objective": "Verify competitive bidding process compliance",
+            "procedure": "Extract all vendor awards above the competitive bidding threshold in the last 12 months. Verify each has documented competitive tender evidence or approved sole-source justification signed by procurement committee. Calculate sole-source rate.",
+            "population": "All vendor awards above competitive bidding threshold",
+            "sample_size": "100% above threshold",
+            "failure_criteria": "Any award above threshold without competitive bidding evidence or approved sole-source justification",
+            "linked_risk_id": "R-PR-005",
+        },
+        {
+            "id": "T-PR-006", "level": "Moderate", "category": "Data Analytics",
+            "objective": "Review vendor master file change controls",
+            "procedure": "Extract all changes to vendor master file (new vendors, bank detail changes) in last 6 months. Verify dual approval for all bank detail changes. Identify changes made outside business hours or by users with unusual patterns. Confirm vendor bank verification process.",
+            "population": "All vendor master file changes last 6 months",
+            "sample_size": "100% bank detail changes; 30 new vendor additions",
+            "failure_criteria": "Any bank detail change without dual approval; new vendor added without verification process",
+            "linked_risk_id": "R-PR-003",
+        },
+    ],
+
+    # ── Wealth Advisory Tests ──────────────────────────────────────────────────
+    "WEALTH_ADVISORY": [
+        {
+            "id": "T-WA-001", "level": "Critical", "category": "Standard",
+            "objective": "Verify suitability assessment completeness",
+            "procedure": "Select sample of investment recommendations from the last 6 months. For each, verify that a suitability assessment is documented in the client file prior to the recommendation, that it covers knowledge/experience, risk tolerance, financial situation, and investment objectives, and that it is current.",
+            "population": "All investment recommendations last 6 months",
+            "sample_size": "30 recommendations",
+            "failure_criteria": "Any investment recommendation without a documented, current suitability assessment",
+            "linked_risk_id": "R-WA-001",
+        },
+        {
+            "id": "T-WA-002", "level": "Critical", "category": "Data Analytics",
+            "objective": "Detect churning in advisory accounts",
+            "procedure": "Extract portfolio turnover data for all advisory accounts in the last 12 months. Calculate annualised portfolio turnover ratio for each account. Flag accounts with turnover exceeding 100% per year. For flagged accounts, review whether high turnover is documented as client-instructed.",
+            "population": "All advisory client accounts",
+            "sample_size": "100% (automated); detailed review of all accounts above 100% turnover threshold",
+            "failure_criteria": "Any account with annualised turnover above 100% without documented client instruction or justification",
+            "linked_risk_id": "R-WA-002",
+        },
+        {
+            "id": "T-WA-003", "level": "Critical", "category": "Standard",
+            "objective": "Verify conflict of interest disclosure",
+            "procedure": "Select sample of transactions involving potential conflicts (in-house products, products generating retrocessions, transactions with affiliated counterparties). For each, verify written COI disclosure was provided to the client before execution. Check disclosure register completeness.",
+            "population": "All transactions with potential COI in last 6 months",
+            "sample_size": "25 transactions",
+            "failure_criteria": "Any transaction with an identified conflict where no written disclosure to the client is evidenced",
+            "linked_risk_id": "R-WA-003",
+        },
+        {
+            "id": "T-WA-004", "level": "High", "category": "Data Analytics",
+            "objective": "Identify clients with outdated risk profiles",
+            "procedure": "Extract all active advisory client files with last risk profile update date. Identify clients with profiles not updated in more than 24 months. Cross-reference with clients who have had transactions in the last 12 months — those are priority for remediation.",
+            "population": "All active advisory clients",
+            "sample_size": "100% (automated data extraction)",
+            "failure_criteria": "Active clients with transactions in last 12 months and risk profiles older than 24 months representing more than 5% of the advisory book",
+            "linked_risk_id": "R-WA-004",
+        },
+        {
+            "id": "T-WA-005", "level": "High", "category": "Standard",
+            "objective": "Test product suitability controls for complex products",
+            "procedure": "Select sample of structured product and alternative investment transactions from the last 6 months. For each, verify the client's sophistication classification, the product risk classification, and that there is a system or documented control preventing sale to ineligible clients.",
+            "population": "All structured product and alternative investment transactions last 6 months",
+            "sample_size": "20 transactions",
+            "failure_criteria": "Any structured product or alternative investment sold to a client below the required sophistication threshold",
+            "linked_risk_id": "R-WA-005",
+        },
+        {
+            "id": "T-WA-006", "level": "High", "category": "Data Analytics",
+            "objective": "Monitor discretionary mandate compliance",
+            "procedure": "Extract portfolio holdings for all discretionary mandates. Cross-reference each holding against the investment guidelines for that mandate (asset allocation limits, prohibited instruments, concentration limits). Calculate breach rate and time-to-detection for identified breaches.",
+            "population": "All discretionary mandate portfolios",
+            "sample_size": "100% (automated guideline check)",
+            "failure_criteria": "Any mandate breach not detected within the defined monitoring SLA; any breach where client was not notified within the required timeframe",
+            "linked_risk_id": "R-WA-006",
+        },
+        {
+            "id": "T-WA-007", "level": "Moderate", "category": "Standard",
+            "objective": "Verify ESG preference capture and portfolio alignment",
+            "procedure": "Select sample of clients onboarded or reviewed since the MiFID II ESG amendment. Verify ESG preferences are documented in the suitability form. For those with expressed ESG preferences, verify that portfolio ESG characteristics are aligned with stated preferences.",
+            "population": "All clients onboarded or reviewed since August 2022",
+            "sample_size": "25 client files",
+            "failure_criteria": "Any client without ESG preference documentation in their suitability assessment; material misalignment between stated ESG preferences and portfolio",
+            "linked_risk_id": "R-WA-007",
+        },
+        {
+            "id": "T-WA-008", "level": "Moderate", "category": "Standard",
+            "objective": "Verify client reporting accuracy and frequency",
+            "procedure": "Select sample of advisory and discretionary clients. Verify portfolio reports were issued at the required regulatory frequency. Check a sample of reports for accuracy — portfolio valuation, performance attribution, costs and charges disclosure. Review client complaint log for reporting issues.",
+            "population": "All advisory and discretionary clients",
+            "sample_size": "20 clients (10 advisory, 10 discretionary)",
+            "failure_criteria": "Reporting frequency below regulatory minimum; more than 5% of sampled reports containing material errors",
+            "linked_risk_id": "R-WA-008",
         },
     ],
 }
