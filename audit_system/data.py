@@ -5878,6 +5878,421 @@ PUBLIC_AUDIT_RECOMMENDATIONS = [
             "board-level AI governance that many private bank boards have not yet established."
         ),
     },
+
+    # ── AI / Model Risk ────────────────────────────────────────────────────────
+    {
+        "source": "EBA",
+        "year": "2023",
+        "theme": "AI_MODEL_RISK",
+        "recommendation": (
+            "Financial institutions must maintain a comprehensive inventory of all AI and ML models "
+            "used in regulated decisions. Each model must have a designated owner, documented validation "
+            "status, and performance monitoring in place. Models used in credit, AML, and suitability "
+            "decisions require independent validation before deployment."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "Directly applicable: private banks using AI for credit scoring, suitability assessment, "
+            "and AML transaction monitoring must establish model risk governance frameworks meeting "
+            "EBA expectations. EBA supervisory priorities 2024 explicitly include AI model risk."
+        ),
+    },
+    {
+        "source": "MAS",
+        "year": "2023",
+        "theme": "AI_MODEL_RISK",
+        "recommendation": (
+            "Financial institutions deploying AI in client-facing decisions must be able to explain "
+            "those decisions to affected clients and regulators. The FEAT (Fairness, Ethics, "
+            "Accountability, Transparency) principles require that AI systems be tested for bias, "
+            "that outputs are explainable, and that human oversight mechanisms are documented."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "MAS FEAT principles apply to all Singapore-regulated financial institutions using AI. "
+            "Private banks using AI for investment recommendations or client segmentation must "
+            "demonstrate compliance with all four FEAT dimensions."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2024",
+        "theme": "AI_MODEL_RISK",
+        "recommendation": (
+            "FINMA expects supervised institutions to manage AI risk within their existing risk "
+            "management frameworks. Banks must assess AI systems for model risk, operational risk, "
+            "and reputational risk dimensions. The use of AI in regulated decisions must be disclosed "
+            "to FINMA as part of the risk reporting framework."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FINMA's 2024 risk monitor specifically identifies AI as an emerging risk for Swiss banks. "
+            "Private banks must integrate AI risk management into ICAAP and ORSA processes."
+        ),
+    },
+    {
+        "source": "IIA",
+        "year": "2024",
+        "theme": "AI_MODEL_RISK",
+        "recommendation": (
+            "Internal audit functions must develop competency to audit AI systems, including model "
+            "validation processes, training data quality, performance monitoring, and governance frameworks. "
+            "External expertise should be engaged where internal competency is insufficient. AI auditing "
+            "should be included in the annual audit plan based on risk assessment."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "IIA Global Internal Audit Standards 2024 require audit functions to keep pace with "
+            "emerging technology risks. AI model auditing is a new capability requirement for "
+            "private banking internal audit teams."
+        ),
+    },
+
+    # ── Cloud Risk ─────────────────────────────────────────────────────────────
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "CLOUD_RISK",
+        "recommendation": (
+            "Banks must notify FINMA before entering material cloud outsourcing arrangements. "
+            "Materiality must be formally assessed using documented criteria. Data residency "
+            "must be contractually guaranteed and technically enforced. Exit strategies must "
+            "be documented and tested before full migration to cloud services."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FINMA RS 2018/3 directly applicable to all Swiss private banks. FINMA supervisory "
+            "reviews in 2023 found widespread non-notification and inadequate exit strategy "
+            "documentation at Swiss banks that had migrated to cloud."
+        ),
+    },
+    {
+        "source": "EBA",
+        "year": "2024",
+        "theme": "CLOUD_RISK",
+        "recommendation": (
+            "Financial institutions must maintain a complete register of all cloud service providers "
+            "and assess ICT concentration risk across their cloud portfolio. Contractual arrangements "
+            "must include audit rights, data portability guarantees, and incident notification "
+            "obligations. Concentration on a single hyperscaler must be subject to board-level review."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "EBA Cloud Outsourcing Guidelines (2019, updated for DORA 2024) apply to EU-regulated "
+            "entities. Swiss private banks with EU subsidiaries or EU clients must meet these standards "
+            "in addition to FINMA RS 2018/3 requirements."
+        ),
+    },
+    {
+        "source": "MAS",
+        "year": "2021",
+        "theme": "CLOUD_RISK",
+        "recommendation": (
+            "Financial institutions must conduct thorough risk assessments before migrating to cloud, "
+            "covering data classification, access controls, encryption standards, and incident response. "
+            "Cloud security configurations must be reviewed against industry benchmarks (CIS, CSA CCM) "
+            "at least annually. Shared responsibility gaps must be explicitly documented and addressed."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "MAS Technology Risk Management Guidelines (2021) apply to all MAS-regulated entities. "
+            "Singapore private banks using cloud must demonstrate compliance across all TRM cloud "
+            "requirements in MAS regulatory examinations."
+        ),
+    },
+
+    # ── Resilience & BCP ───────────────────────────────────────────────────────
+    {
+        "source": "DORA",
+        "year": "2025",
+        "theme": "RESILIENCE_BCP",
+        "recommendation": (
+            "Financial entities must establish, maintain, and annually test business continuity "
+            "plans for all critical or important functions. ICT business continuity must include "
+            "crisis management procedures, communication plans, and recovery objectives (RTO/RPO) "
+            "that are formally defined, tested, and reported to management. TLPT is mandatory "
+            "for significant institutions every three years."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "DORA applies from January 2025 to EU financial entities. Swiss private banks with "
+            "EU operations must comply. FINMA has aligned Swiss expectations with DORA principles "
+            "through RS 2008/21 updates, making DORA best practice for all Swiss private banks."
+        ),
+    },
+    {
+        "source": "FCA",
+        "year": "2022",
+        "theme": "RESILIENCE_BCP",
+        "recommendation": (
+            "Firms must identify their important business services, set impact tolerances for the "
+            "maximum disruption they will tolerate, and carry out mapping and testing to ensure "
+            "they can remain within those tolerances. Annual self-assessment against operational "
+            "resilience requirements must be documented and made available to the FCA on request."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FCA PS21/3 applies to all FCA-regulated firms with significant UK operations. "
+            "UK-regulated private banks and branches must complete impact tolerance definitions "
+            "and annual testing documentation."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "RESILIENCE_BCP",
+        "recommendation": (
+            "Swiss banks must maintain tested business continuity arrangements for all critical "
+            "business processes. BCP must cover IT disaster recovery, key person dependencies, "
+            "and outsourced critical functions. Annual testing with documented results is required. "
+            "Third-party BCP capability must be contractually required and periodically verified."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FINMA RS 2008/21 on operational risks requires Swiss private banks to maintain "
+            "adequate BCP. FINMA supervisory reviews include BCP testing evidence as a standard "
+            "assessment criterion for operational risk maturity."
+        ),
+    },
+
+    # ── Change Management ──────────────────────────────────────────────────────
+    {
+        "source": "DORA",
+        "year": "2025",
+        "theme": "CHANGE_MANAGEMENT",
+        "recommendation": (
+            "Financial entities must implement ICT change management policies that define the "
+            "classification of changes, approval requirements, testing standards, rollback procedures, "
+            "and post-implementation reviews. Changes to critical ICT systems require enhanced "
+            "controls including mandatory security testing and segregation between deployment "
+            "and development environments."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "DORA Art.9 change management requirements apply from January 2025. Swiss private "
+            "banks with EU operations must implement compliant change management. FINMA RS 2008/21 "
+            "imposes equivalent requirements on all Swiss-regulated banks."
+        ),
+    },
+    {
+        "source": "MAS",
+        "year": "2021",
+        "theme": "CHANGE_MANAGEMENT",
+        "recommendation": (
+            "Financial institutions must establish formal IT change management processes with clear "
+            "approval workflows, mandatory testing in non-production environments, and documented "
+            "rollback procedures. Emergency change procedures must require post-implementation review "
+            "and emergency change ratios must be monitored. DevSecOps practices should include "
+            "automated security scanning as a gate in the deployment pipeline."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "MAS TRM 2021 Section 8 covers change management requirements for Singapore-regulated "
+            "financial institutions. Singapore private banks must demonstrate compliance in MAS "
+            "Technology Risk Management examinations."
+        ),
+    },
+    {
+        "source": "IIA",
+        "year": "2023",
+        "theme": "CHANGE_MANAGEMENT",
+        "recommendation": (
+            "Internal audit should include IT change management in the annual risk assessment and "
+            "conduct data-driven testing using automated cross-referencing of production deployments "
+            "against approved change records. Emergency change abuse — defined as using emergency "
+            "process to bypass standard controls — should be a specific audit objective."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "IIA Technology Audit Guide on IT Change Management provides the methodology baseline. "
+            "Private bank internal audit teams should adopt data analytics-enabled testing to "
+            "achieve 100% population coverage for unauthorized change detection."
+        ),
+    },
+
+    # ── Access Management ──────────────────────────────────────────────────────
+    {
+        "source": "DORA",
+        "year": "2025",
+        "theme": "ACCESS_MANAGEMENT",
+        "recommendation": (
+            "Financial entities must implement access controls based on the principle of least "
+            "privilege with multi-factor authentication mandatory for all users accessing critical "
+            "systems. Privileged access must be managed through dedicated PAM tools with session "
+            "recording. Access rights must be reviewed at least annually and immediately upon "
+            "role changes or departure."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "DORA Art.9 access control requirements apply from January 2025. MFA and PAM "
+            "are explicit DORA requirements for critical ICT systems. Regulatory inspections "
+            "will verify implementation from 2025 onwards."
+        ),
+    },
+    {
+        "source": "MAS",
+        "year": "2021",
+        "theme": "ACCESS_MANAGEMENT",
+        "recommendation": (
+            "Financial institutions must implement privileged access management controls including "
+            "just-in-time privileged access, session monitoring, and regular recertification. MFA "
+            "must be enforced for all remote access and privileged accounts. Joiners, movers, and "
+            "leavers processes must be automated where possible with same-day deactivation on termination."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "MAS TRM 2021 access management requirements are among the most prescriptive in the "
+            "region. Singapore private banks have faced MAS enforcement actions for access control "
+            "weaknesses including delayed account deactivation and excessive privileged access."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "ACCESS_MANAGEMENT",
+        "recommendation": (
+            "Swiss banks must implement logical access management covering role-based access control, "
+            "privileged account monitoring, and regular access recertification. MFA is required for "
+            "remote access and administrator accounts. Account deactivation on termination must occur "
+            "on the same day. Segregation of duties must be enforced through system controls, "
+            "not relying solely on policy."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FINMA RS 2008/21 section on logical access controls applies to all Swiss private banks. "
+            "Access management weaknesses — particularly delayed leaver deactivation and excessive "
+            "admin accounts — are among the most frequently cited findings in FINMA inspections."
+        ),
+    },
+
+    # ── Procurement ────────────────────────────────────────────────────────────
+    {
+        "source": "IIA",
+        "year": "2025",
+        "theme": "PROCUREMENT",
+        "recommendation": (
+            "Internal audit must assess the adequacy of procurement controls including vendor "
+            "selection, conflict of interest management, competitive bidding compliance, and "
+            "purchase-to-pay cycle controls. The IIA Third Party Practice Guide recommends "
+            "data analytics for duplicate payment detection and maverick spend analysis as "
+            "standard procedures in procurement audits."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "IIA TR-Third Party (2025) is the primary methodology reference for procurement audits "
+            "in private banking. Right-to-audit clause verification and vendor COI review are "
+            "mandatory procedures per IIA standards."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "PROCUREMENT",
+        "recommendation": (
+            "Banks must ensure that procurement of critical and material services follows a documented "
+            "governance process including competitive selection, conflict of interest management, "
+            "and contract review. All material outsourcing contracts must include right-to-audit, "
+            "data protection, and exit provisions as required by RS 2018/3."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FINMA RS 2018/3 outsourcing requirements directly govern procurement of critical "
+            "services. Contract completeness — particularly right-to-audit clauses — is a standard "
+            "FINMA examination requirement."
+        ),
+    },
+    {
+        "source": "BCBS",
+        "year": "2021",
+        "theme": "PROCUREMENT",
+        "recommendation": (
+            "Banks must assess and manage the risks arising from third-party and vendor relationships "
+            "throughout the full lifecycle from selection to termination. Procurement controls must "
+            "address conflict of interest, competitive selection, performance monitoring, and "
+            "concentration risk. Internal audit should provide independent assurance over procurement "
+            "governance at least every three years for material vendor categories."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "BCBS Sound Practices for OpRisk (2021) Principle 7 covers third-party risk including "
+            "procurement. Swiss and Singapore private banks are expected to align procurement "
+            "governance with BCBS standards as a minimum baseline."
+        ),
+    },
+
+    # ── Wealth Advisory ────────────────────────────────────────────────────────
+    {
+        "source": "ESMA",
+        "year": "2023",
+        "theme": "WEALTH_ADVISORY",
+        "recommendation": (
+            "Investment firms must perform suitability assessments before providing investment "
+            "advice or portfolio management. Suitability reports must be provided to retail clients "
+            "before conclusion of the transaction. Client risk profiles must be refreshed at least "
+            "every 24 months. Firms must detect and manage conflicts of interest including "
+            "retrocessions through written disclosure before execution."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "ESMA Suitability Guidelines 2023 apply to all MiFID II-regulated entities including "
+            "private banks serving EU clients. EU clients of Swiss private banks trigger MiFID II "
+            "obligations regardless of booking location."
+        ),
+    },
+    {
+        "source": "FINMA",
+        "year": "2023",
+        "theme": "WEALTH_ADVISORY",
+        "recommendation": (
+            "Swiss financial service providers must perform and document suitability and "
+            "appropriateness assessments under FinSA for all advisory and discretionary mandates. "
+            "Conflicts of interest — including retrocessions and inducements — must be disclosed "
+            "in writing before execution. Portfolio churning must be detected through systematic "
+            "turnover monitoring and is subject to FINMA enforcement."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FinSA has applied since January 2020 to all Swiss financial service providers. "
+            "FINMA supervisory reviews include suitability documentation, COI disclosure, "
+            "and churning monitoring as standard examination areas for private banks."
+        ),
+    },
+    {
+        "source": "MAS",
+        "year": "2022",
+        "theme": "WEALTH_ADVISORY",
+        "recommendation": (
+            "Financial advisers must ensure that investment recommendations are suitable for "
+            "clients based on current and complete know-your-client information. Client profiles "
+            "must be updated when there are material changes in client circumstances and at least "
+            "annually for active advisory clients. Discretionary portfolio managers must monitor "
+            "compliance with investment mandates on a continuous basis."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "MAS FAA and SFA suitability requirements apply to all Singapore-licensed financial "
+            "advisers. MAS thematic inspections of private banks in 2022 cited outdated client "
+            "profiles and inadequate churning monitoring as top findings."
+        ),
+    },
+    {
+        "source": "FCA",
+        "year": "2023",
+        "theme": "WEALTH_ADVISORY",
+        "recommendation": (
+            "Under Consumer Duty, firms must demonstrate that investment products and advice deliver "
+            "good outcomes for retail clients including fair value, appropriate suitability, and "
+            "adequate client understanding. ESG preference collection is mandatory for all clients "
+            "under the MiFID II sustainability amendment. Portfolio turnover must be monitored and "
+            "high-turnover accounts reviewed for evidence of churning."
+        ),
+        "priority": "High",
+        "private_banking_relevance": (
+            "FCA Consumer Duty (August 2023) applies to all FCA-regulated wealth management firms. "
+            "UK-regulated private banks face enhanced conduct obligations including ESG suitability "
+            "and active portfolio monitoring under Consumer Duty."
+        ),
+    },
 ]
 
 
@@ -6403,6 +6818,419 @@ DATA_ANALYTICS_SCENARIOS = {
             "anomaly_searched": "Staff with mandatory AML, data privacy, or cyber awareness training completion overdue >30 days past deadline; senior management with lower completion rates than general staff.",
             "tools": ["Excel", "SQL"],
             "complexity": "Low",
+        },
+    ],
+
+    # ── AI / Model Risk ────────────────────────────────────────────────────────
+    "AI_MODEL_RISK": [
+        {
+            "id": "DA-AI-001",
+            "theme": "AI_MODEL_RISK",
+            "title": "Model Performance Drift Detection",
+            "objective": "Detect degradation in AI model performance over time by comparing current output distributions against baseline metrics established at deployment.",
+            "data_sources": ["Model monitoring logs", "Model output database", "Ground truth labels (where available)", "Performance baseline documentation"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Statistical deviation in model output distribution exceeding 2 standard deviations from baseline; precision/recall degradation >10% vs deployment benchmark; increase in override rate by business users.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-AI-002",
+            "theme": "AI_MODEL_RISK",
+            "title": "AI Decision Override Pattern Analysis",
+            "objective": "Identify patterns in human overrides of AI recommendations to detect systematic model failures or bias.",
+            "data_sources": ["AI decision logs", "Human override records", "Final decision outcomes", "User identity and role data"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Override rate above 30% for specific model, client segment, or relationship manager; correlation between override frequency and model output confidence scores; systematic over-ride in specific product categories.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-AI-003",
+            "theme": "AI_MODEL_RISK",
+            "title": "Training Data Representativeness Audit",
+            "objective": "Assess whether training data used for AI models is representative of the current client population and free from systematic bias.",
+            "data_sources": ["Training dataset metadata", "Current client population database", "Model documentation", "Data lineage records"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Significant demographic or geographic over/under-representation in training data vs current client population; training data more than 24 months old without refresh; missing data rates exceeding 15% for key features.",
+            "tools": ["Python", "Excel"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA-AI-004",
+            "theme": "AI_MODEL_RISK",
+            "title": "AI Model Inventory Completeness Check",
+            "objective": "Cross-reference all AI/ML models in production IT infrastructure against the formal model risk register to identify unregistered models.",
+            "data_sources": ["IT application inventory", "Model risk register", "API gateway logs", "Data science team documentation"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "AI/ML scoring endpoints or batch jobs present in production IT not recorded in model risk register; models with no assigned owner or last validation date.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-AI-005",
+            "theme": "AI_MODEL_RISK",
+            "title": "Fairness and Bias Testing Across Client Segments",
+            "objective": "Test whether AI model outputs (credit scores, suitability assessments) show statistically significant differences across protected client characteristics.",
+            "data_sources": ["Model output database", "Client demographic data (anonymised)", "Credit or suitability decision records"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Statistically significant difference (p<0.05) in model output distributions across client nationality, age group, or gender; approval rates diverging more than 15% between segments with similar risk profiles.",
+            "tools": ["Python"],
+            "complexity": "High",
+        },
+    ],
+
+    # ── Cloud Risk ─────────────────────────────────────────────────────────────
+    "CLOUD_RISK": [
+        {
+            "id": "DA-CL-001",
+            "theme": "CLOUD_RISK",
+            "title": "Cloud Asset Inventory and Residency Mapping",
+            "objective": "Build a complete inventory of cloud resources and map each to its physical data storage region to verify regulatory data residency compliance.",
+            "data_sources": ["Cloud provider API (AWS Config, Azure Resource Graph, GCP Asset Inventory)", "Data classification register", "FINMA outsourcing register"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Cloud resources storing classified data located in regions not approved for that data classification; resources with unknown or undocumented data residency; resources not present in FINMA outsourcing register.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-CL-002",
+            "theme": "CLOUD_RISK",
+            "title": "Cloud Misconfiguration Trend Analysis",
+            "objective": "Analyse CSPM tool findings over time to identify recurring misconfigurations and assess whether remediation is effective.",
+            "data_sources": ["CSPM tool export (Prisma Cloud, AWS Security Hub, Defender for Cloud)", "Change management records", "Vulnerability remediation tracking system"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Critical misconfigurations recurring within 30 days of remediation; time-to-remediation exceeding SLA (Critical: 72h, High: 7d); new critical findings spike following cloud deployments.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-CL-003",
+            "theme": "CLOUD_RISK",
+            "title": "Shadow IT Cloud Usage Detection",
+            "objective": "Detect unauthorised cloud services accessed from corporate networks by analysing DNS and network egress logs.",
+            "data_sources": ["DNS query logs", "Firewall/proxy egress logs", "CASB tool reports", "Approved cloud services catalogue"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "DNS queries to cloud service domains not in approved catalogue; data upload volumes to unapproved cloud storage (>10MB); use of personal file-sharing or AI services from corporate endpoints.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-CL-004",
+            "theme": "CLOUD_RISK",
+            "title": "Cloud IAM Privilege Analysis",
+            "objective": "Identify overly permissive IAM roles and policies in cloud environments that violate least-privilege principles.",
+            "data_sources": ["Cloud IAM policy export (AWS IAM Access Analyzer, Azure AD, GCP IAM)", "Role assignment records", "Service account usage logs"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "IAM roles with wildcard permissions (*:*) in production; service accounts with human user permissions; inactive privileged accounts not deactivated within 30 days; root/owner account used for routine operations.",
+            "tools": ["Python", "SQL"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA-CL-005",
+            "theme": "CLOUD_RISK",
+            "title": "Cloud Cost Anomaly as Crypto-Mining Indicator",
+            "objective": "Detect unexpected cloud compute cost spikes that may indicate compromise and unauthorised crypto-mining activity.",
+            "data_sources": ["Cloud billing data", "Compute resource utilisation logs", "Security alerts", "Network egress logs"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Compute cost increase >50% month-over-month without corresponding workload change; new GPU instances in environments that do not use GPU compute; high outbound data transfer to unknown IP ranges.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Low",
+        },
+    ],
+
+    # ── Resilience & BCP ───────────────────────────────────────────────────────
+    "RESILIENCE_BCP": [
+        {
+            "id": "DA-BC-001",
+            "theme": "RESILIENCE_BCP",
+            "title": "BCP Test Coverage and RTO Achievement Tracking",
+            "objective": "Track BCP test completion rates and actual RTO/RPO achievement across all critical systems over time to identify persistent recovery gaps.",
+            "data_sources": ["BCP test results database", "System criticality register", "Incident and recovery logs"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Critical systems not tested in last 12 months; actual RTO exceeding defined target by >50% in two or more consecutive tests; RPO targets consistently missed for specific system categories.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-BC-002",
+            "theme": "RESILIENCE_BCP",
+            "title": "Third-Party BCP Evidence Currency Analysis",
+            "objective": "Identify critical vendors who have not provided BCP evidence within the required timeframe.",
+            "data_sources": ["Vendor register", "BCP evidence receipt log", "Contract terms database", "Criticality classification"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Critical vendors with no BCP evidence on file, or evidence more than 12 months old; vendors classified as critical without BCP requirements in contract; vendors whose BCP coverage excludes services used by the bank.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-BC-003",
+            "theme": "RESILIENCE_BCP",
+            "title": "Incident Recovery Time Analysis",
+            "objective": "Analyse actual recovery times from historical incidents to benchmark against RTO targets and identify systemic recovery weaknesses.",
+            "data_sources": ["Incident management system", "Change records (restoration activities)", "System availability logs", "RTO register"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Average actual recovery time exceeding defined RTO for any critical service; recovery time variance is high (std dev >2x mean) indicating inconsistent procedures; incidents requiring >3 escalation steps before resolution.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-BC-004",
+            "theme": "RESILIENCE_BCP",
+            "title": "Single Point of Failure Infrastructure Scan",
+            "objective": "Identify infrastructure components without redundancy by analysing network topology and system dependency maps.",
+            "data_sources": ["Network topology diagrams", "CMDB (Configuration Management Database)", "Application dependency maps", "Infrastructure cost records"],
+            "analysis_type": "Network",
+            "anomaly_searched": "Infrastructure nodes with more than 5 dependent critical systems and no failover equivalent; network segments with single routing path; applications with single database instance and no replication.",
+            "tools": ["Python", "SQL"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA-BC-005",
+            "theme": "RESILIENCE_BCP",
+            "title": "Backup Restoration Success Rate Monitoring",
+            "objective": "Track backup restoration test outcomes to identify failing backup processes before a real disaster exposes the gap.",
+            "data_sources": ["Backup management system logs", "Restoration test records", "Data integrity check results"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Backup restoration success rate below 98% for critical systems; restoration tests not completed for any critical system in last 90 days; backup job failures not investigated within 24 hours.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+    ],
+
+    # ── Change Management ──────────────────────────────────────────────────────
+    "CHANGE_MANAGEMENT": [
+        {
+            "id": "DA-CM-001",
+            "theme": "CHANGE_MANAGEMENT",
+            "title": "Unauthorized Production Change Detection",
+            "objective": "Identify changes deployed to production without corresponding approved change records.",
+            "data_sources": ["Production deployment logs (CI/CD pipeline)", "ITSM change management tool", "Infrastructure configuration history (e.g. AWS CloudTrail, Azure Activity Log)"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Production deployments with no matching approved change request in ITSM; changes deployed outside approved maintenance windows; infrastructure configuration changes not triggered through CI/CD pipeline.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-CM-002",
+            "theme": "CHANGE_MANAGEMENT",
+            "title": "Emergency Change Ratio and Abuse Detection",
+            "objective": "Monitor emergency change frequency and identify patterns suggesting routine use of emergency process to bypass standard controls.",
+            "data_sources": ["ITSM change records", "Change type classification", "CAB meeting minutes", "Incident correlation records"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Emergency change ratio exceeding 15% of total changes monthly; emergency changes by same requester accounting for >30% of all emergency changes; emergency changes with no corresponding incident or problem record.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-CM-003",
+            "theme": "CHANGE_MANAGEMENT",
+            "title": "Patch Compliance Timeliness Analysis",
+            "objective": "Measure time-to-patch for all critical and high security patches against policy SLAs to quantify exposure window.",
+            "data_sources": ["Patch management system (SCCM, Ansible, Qualys)", "Vulnerability scanner results", "Vendor security advisory publication dates"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Critical patches (CVSS ≥9.0) not deployed within 72 hours; High patches (CVSS 7.0-8.9) not deployed within 7 days; patch compliance rate below 95% for any critical system at month end.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-CM-004",
+            "theme": "CHANGE_MANAGEMENT",
+            "title": "Developer Production Access Detection",
+            "objective": "Identify developer accounts with active production system access to detect SoD violations in the SDLC.",
+            "data_sources": ["Active Directory / IAM system", "Production access control lists", "Development team HR roster", "CI/CD service account registry"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Developer user accounts present in production system access lists with write or admin permissions; developer accounts with production login activity in the last 30 days; CI/CD service accounts with broader permissions than deployment scope.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-CM-005",
+            "theme": "CHANGE_MANAGEMENT",
+            "title": "Change-Related Incident Correlation",
+            "objective": "Correlate production incidents with recent changes to quantify the incident rate caused by change failures and identify high-risk change types.",
+            "data_sources": ["Incident management system", "Change management records", "System availability logs", "Post-incident review reports"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Incidents occurring within 2 hours of a production change exceeding 20% of all incidents; specific change types (database, network) with disproportionately high incident correlation; changes by specific teams with consistently higher failure rates.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+    ],
+
+    # ── Access Management ──────────────────────────────────────────────────────
+    "ACCESS_MANAGEMENT": [
+        {
+            "id": "DA-AM-001",
+            "theme": "ACCESS_MANAGEMENT",
+            "title": "Orphaned Account Detection",
+            "objective": "Identify active user accounts belonging to terminated employees or contractors by cross-referencing HR termination records with active directory.",
+            "data_sources": ["Active Directory / LDAP", "HR termination records", "Contractor register", "Last login timestamp logs"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Active accounts with employee ID matching terminated HR records; accounts with last login date before employment end date still marked active; accounts created for contractors past contract end date.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-AM-002",
+            "theme": "ACCESS_MANAGEMENT",
+            "title": "Privileged Account Usage Pattern Analysis",
+            "objective": "Detect anomalous privileged account usage patterns that may indicate insider threat or compromised administrator credentials.",
+            "data_sources": ["PAM system session logs", "SIEM privileged account events", "Active Directory admin group membership", "Login timestamp and source IP data"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Privileged account logins outside business hours or from unusual geographic locations; privileged sessions lasting longer than 4 hours without documented change activity; admin account used from endpoints not in approved admin workstation list.",
+            "tools": ["Python", "SQL"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA-AM-003",
+            "theme": "ACCESS_MANAGEMENT",
+            "title": "Leaver Process Timeliness Analysis",
+            "objective": "Measure time from employment termination to account deactivation to identify JML process failures.",
+            "data_sources": ["HR termination records with effective dates", "Active Directory account disable timestamps", "Email system deactivation logs", "VPN and remote access logs"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Account deactivation occurring more than 24 hours after termination date; any account with post-termination login activity; remote access credentials not revoked within termination day.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-AM-004",
+            "theme": "ACCESS_MANAGEMENT",
+            "title": "SoD Conflict Detection in Payment Systems",
+            "objective": "Identify users with conflicting role combinations that allow both initiation and approval of payments or account changes.",
+            "data_sources": ["Core banking system role assignments", "Payment initiation system access logs", "Approval workflow records", "SoD matrix"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Users with both payment initiation and payment approval roles in core banking; users who both created and approved the same payment in sample period; system administrators who also perform accounting adjustments.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-AM-005",
+            "theme": "ACCESS_MANAGEMENT",
+            "title": "MFA Enforcement Gap Analysis",
+            "objective": "Identify user accounts and systems where MFA is not enforced, prioritised by system criticality.",
+            "data_sources": ["Identity provider MFA enrollment data (Azure AD, Okta)", "System criticality register", "VPN authentication logs", "Remote access connection records"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Accounts without MFA enrolled accessing critical systems; successful authentications to critical systems using password-only; MFA enrollment rate below 100% for privileged accounts; legacy authentication protocols (Basic Auth) still in use.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Low",
+        },
+    ],
+
+    # ── Procurement ────────────────────────────────────────────────────────────
+    "PROCUREMENT": [
+        {
+            "id": "DA-PR-001",
+            "theme": "PROCUREMENT",
+            "title": "Duplicate Payment Detection",
+            "objective": "Detect duplicate payments to vendors using automated matching of invoice attributes.",
+            "data_sources": ["Accounts payable transaction ledger", "Invoice register", "Vendor master file", "Bank payment records"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Same vendor code + same invoice amount ± 5% + overlapping invoice reference within 60-day window; multiple payments to same IBAN within same period for same invoice period; payments to vendors with recent bank detail changes.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-PR-002",
+            "theme": "PROCUREMENT",
+            "title": "Maverick Spending Analysis",
+            "objective": "Quantify spending outside approved procurement channels and identify top maverick spend categories and requestors.",
+            "data_sources": ["Purchase order system", "General ledger expense transactions", "Cost centre data", "Procurement policy thresholds"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Expense transactions above procurement threshold with no corresponding purchase order; recurring small purchases below threshold from same vendor suggesting split purchasing to avoid approval; cost centre managers with consistently high maverick spend rates.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-PR-003",
+            "theme": "PROCUREMENT",
+            "title": "Vendor Master File Change Analysis",
+            "objective": "Detect suspicious changes to vendor master data including bank detail amendments that could indicate payment fraud.",
+            "data_sources": ["Vendor master file change log", "Approval workflow records", "Bank payment records", "Vendor communication records"],
+            "analysis_type": "Anomaly",
+            "anomaly_searched": "Bank detail changes followed by payments within 30 days without independent verification; changes made by accounts payable staff outside business hours; new vendors added and paid within 5 days; vendor addresses matching employee addresses.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-PR-004",
+            "theme": "PROCUREMENT",
+            "title": "Sole Source Award Concentration Analysis",
+            "objective": "Identify disproportionate concentration of contract awards to single vendors without competitive process.",
+            "data_sources": ["Contract award register", "Procurement justification records", "Vendor spend data", "Competitive tender records"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Single vendor receiving >40% of category spend without competitive tender documentation; sole-source awards exceeding policy thresholds without required justification; increase in sole-source award frequency for specific procurement categories year-over-year.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-PR-005",
+            "theme": "PROCUREMENT",
+            "title": "Conflict of Interest Pattern Detection",
+            "objective": "Cross-reference vendor award decisions with employee COI declarations and personal relationship indicators to identify undisclosed conflicts.",
+            "data_sources": ["Vendor award register", "Employee COI declaration database", "HR employee records", "Director and officer filings"],
+            "analysis_type": "Network",
+            "anomaly_searched": "Vendor directors sharing surname or address with bank employees involved in award decision; employees with procurement authority who declared no COIs despite awarding contracts to entities connected to known personal networks; vendors awarded contracts in same period as undisclosed COI.",
+            "tools": ["Python", "SQL"],
+            "complexity": "High",
+        },
+    ],
+
+    # ── Wealth Advisory ────────────────────────────────────────────────────────
+    "WEALTH_ADVISORY": [
+        {
+            "id": "DA-WA-001",
+            "theme": "WEALTH_ADVISORY",
+            "title": "Churning Detection by Portfolio Turnover Analysis",
+            "objective": "Identify advisory accounts with excessive portfolio turnover indicative of churning.",
+            "data_sources": ["Portfolio management system", "Trade execution records", "Client mandate agreements", "Fee and commission records"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Advisory accounts with annualised portfolio turnover above 100% without documented client instruction; correlation between high turnover and high commission income for specific relationship managers; turnover spikes coinciding with product promotions or incentive periods.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-WA-002",
+            "theme": "WEALTH_ADVISORY",
+            "title": "Suitability Profile Currency Analysis",
+            "objective": "Identify clients whose risk profiles are stale relative to their transaction activity.",
+            "data_sources": ["Client suitability database", "Last review date records", "Portfolio transaction log", "AUM data"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Clients with transactions in last 6 months and suitability profiles last updated more than 24 months ago; clients whose portfolio risk level has shifted materially from their stated risk tolerance without profile update; advisory clients with no suitability record at all.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-WA-003",
+            "theme": "WEALTH_ADVISORY",
+            "title": "Product Suitability Mismatch Detection",
+            "objective": "Identify transactions where products sold appear inconsistent with the client's recorded risk profile or sophistication classification.",
+            "data_sources": ["Trade execution records", "Client classification database", "Product risk classification register", "Suitability assessment records"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Structured products or alternative investments sold to clients classified below required sophistication level; product risk rating exceeding client's maximum risk tolerance as recorded in suitability assessment; complex products recommended by RMs with no structured product training certification.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-WA-004",
+            "theme": "WEALTH_ADVISORY",
+            "title": "In-House Product Concentration Analysis",
+            "objective": "Detect disproportionate recommendation of proprietary or affiliated products that may indicate undisclosed conflicts of interest.",
+            "data_sources": ["Portfolio holdings data", "Product classification (proprietary vs third-party)", "Trade recommendation records", "Fee and retrocession disclosure records"],
+            "analysis_type": "Statistical",
+            "anomaly_searched": "Advisory accounts where in-house or affiliated products represent >60% of portfolio value without documented client preference; relationship managers with proprietary product recommendation rates materially above team average; retrocession-generating products predominant in portfolios without disclosure records.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-WA-005",
+            "theme": "WEALTH_ADVISORY",
+            "title": "Discretionary Mandate Guideline Breach Monitoring",
+            "objective": "Continuously monitor discretionary portfolios against investment guidelines to detect breaches and measure time-to-detection.",
+            "data_sources": ["Portfolio management system", "Investment mandate guidelines database", "Trade records", "Compliance breach log"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Portfolio holdings outside asset class allocation bands defined in mandate; concentration limits exceeded for single issuer, sector, or geography; prohibited instruments present in portfolios; breaches not logged in compliance system within 24 hours of occurrence.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
         },
     ],
 }
@@ -10642,6 +11470,549 @@ THEMATIC_BACKGROUND = {
             "private banking is ultimately a function of client trust — and the institutions "
             "that manage it most effectively are those that combine technical liquidity "
             "infrastructure with a relentless focus on client relationship quality."
+        ),
+        "tone": "professional",
+    },
+
+
+    # ── AI / Model Risk ────────────────────────────────────────────────────────
+    "AI_MODEL_RISK": {
+        "theme": "Artificial Intelligence & Model Risk",
+        "market_context": (
+            "Artificial intelligence has moved from experimental to operational across Swiss private banking between 2022 and 2026. "
+            "Models are now deployed in client segmentation, investment recommendations, AML transaction monitoring, credit scoring, "
+            "and compliance surveillance. The pace of adoption has outrun governance: many institutions have dozens of AI/ML models "
+            "in production with no formal inventory, no independent validation, and no performance monitoring. "
+            "The regulatory landscape has crystallised rapidly. The EU AI Act — the world\'s first comprehensive AI regulation — entered "
+            "into force in August 2024, with high-risk AI system requirements phasing in through 2025-2026. Financial services AI used "
+            "in credit scoring, AML, and suitability assessments is explicitly classified as high-risk, triggering conformity assessment "
+            "and transparency obligations. MAS published updated FEAT principles and EBA issued guidelines on internal model management "
+            "covering ML models for the first time. FINMA\'s 2024 risk monitor identified AI as an emerging risk category requiring "
+            "explicit board-level attention from supervised institutions."
+        ),
+        "private_banking_issues": (
+            "Private banking faces a specific AI risk profile distinct from retail banking. The client base — HNWI and UHNWI — "
+            "is small, making training datasets statistically thin and bias risks amplified. Models trained on historical client data "
+            "may embed geographic, demographic, or wealth-source biases incompatible with fair treatment obligations. "
+            "The relationship manager model — where human judgment has traditionally governed client decisions — is being disrupted "
+            "by AI-assisted recommendations, creating ambiguity around accountability: when an AI suggests a portfolio reallocation "
+            "that proves unsuitable, the question of whether the RM or the model bears responsibility is legally unresolved in most jurisdictions. "
+            "Third-party AI tools — for client profiling, trade idea generation, and AML screening — are proliferating rapidly, "
+            "creating black-box dependencies where the bank cannot explain decisions to clients or regulators."
+        ),
+        "regulatory_pressure": (
+            "The EU AI Act creates direct obligations for private banks using AI in regulated decisions. High-risk AI systems must "
+            "undergo conformity assessment, maintain technical documentation, implement human oversight, and be registered in the EU database. "
+            "Non-compliance carries fines of up to EUR 30 million or 6% of global annual turnover. "
+            "MAS FEAT principles and the EBA\'s model risk management guidelines create equivalent expectations in Singapore and the EU. "
+            "FINMA has not yet issued AI-specific guidance but expects AI risk to be managed within existing operational risk and "
+            "model risk frameworks, with disclosure in the ICAAP. Enforcement actions for AI-related failures — particularly in AML "
+            "monitoring and credit scoring — are expected to emerge from 2025 onwards as regulators complete their supervisory frameworks."
+        ),
+        "industry_trends": (
+            "Four trends are defining AI risk management evolution in private banking. First, the shift to explainable AI (XAI): "
+            "regulators and clients increasingly require interpretable models rather than black boxes. SHAP values and LIME frameworks "
+            "are becoming standard for explaining individual AI decisions in regulated contexts. "
+            "Second, the emergence of generative AI in client-facing tools: GPT-based systems are being deployed for client communication, "
+            "investment research summarisation, and regulatory document analysis, creating new risks around hallucination, data leakage, "
+            "and inappropriate advice. Third, AI model risk industrialisation: leading institutions are building dedicated model risk "
+            "management functions with dedicated AI governance teams separate from traditional model risk. "
+            "Fourth, third-party AI due diligence: banks are beginning to require AI vendors to provide model cards, fairness testing "
+            "results, and explainability documentation as part of procurement — a practice that will become standard."
+        ),
+        "peer_incidents": (
+            "AI-related failures in financial services have accelerated global regulatory attention. The UK\'s FCA investigated "
+            "several wealth managers in 2023-2024 for using AI-assisted investment recommendations without adequate suitability controls, "
+            "finding that automated recommendations were applied without human review in a material proportion of cases. "
+            "Multiple US banks faced scrutiny from the CFPB for algorithmic bias in credit scoring systems that produced disparate "
+            "outcomes for minority client segments. In AML, several European banks discovered that AI-based transaction monitoring "
+            "models had developed drift that materially reduced detection rates for specific transaction typologies over 18-24 months "
+            "without triggering any monitoring alerts. These incidents have driven regulatory focus on model performance monitoring "
+            "and ongoing validation requirements that will directly affect private banking AI deployments."
+        ),
+        "key_statistics": [
+            "EU AI Act: fines up to EUR 30 million or 6% of global turnover for non-compliant high-risk AI systems",
+            "Credit scoring, AML monitoring, and suitability AI are explicitly classified as high-risk under EU AI Act",
+            "Only 23% of financial institutions surveyed by McKinsey (2024) have a formal AI model inventory covering all production models",
+            "AI-related operational incidents in financial services increased 340% between 2021 and 2024 (IBM X-Force)",
+            "MAS FEAT assessment: fewer than 40% of Singapore financial institutions had completed formal AI fairness testing as of 2023",
+        ],
+        "mckinsey_angle": (
+            "The strategic imperative for private banking leadership is to treat AI governance not as a compliance overhead but as "
+            "a prerequisite for sustainable AI value capture. Institutions that invest in model risk infrastructure — inventory, "
+            "validation, monitoring, and explainability — will be able to deploy AI at scale with regulatory confidence. "
+            "Those that do not will face either enforcement action as regulation matures, or the reputational and legal risk "
+            "of AI-driven decisions that cannot be explained to clients or defended before regulators. "
+            "The competitive moat in AI-driven private banking will be built on trusted, explainable, and auditable AI — not "
+            "on raw capability alone."
+        ),
+        "tone": "professional",
+    },
+
+    # ── Cloud Risk ─────────────────────────────────────────────────────────────
+    "CLOUD_RISK": {
+        "theme": "Cloud Risk & Infrastructure",
+        "market_context": (
+            "Cloud adoption in Swiss private banking has accelerated dramatically since 2020. Major institutions have migrated "
+            "core banking platforms, CRM systems, and data analytics infrastructure to hyperscalers — predominantly AWS, Microsoft Azure, "
+            "and Google Cloud. By 2025, an estimated 60-70% of Swiss private banks have at least one material cloud dependency, "
+            "yet regulatory compliance with FINMA RS 2018/3 notification requirements remains inconsistently implemented. "
+            "DORA — applicable from January 2025 — has raised the bar materially: mandatory ICT third-party registers, "
+            "contractual requirements for cloud providers, concentration risk monitoring, and tested exit strategies are now "
+            "minimum standards for EU-regulated entities. The European Systemic Risk Board (ESRB) identified cloud concentration "
+            "risk — particularly dependence on US hyperscalers — as a systemic financial stability risk in 2022 and 2024 reports."
+        ),
+        "private_banking_issues": (
+            "Private banking cloud risk has unique characteristics compared to retail or wholesale banking. HNWI client data — "
+            "portfolio holdings, transaction history, beneficial ownership structures, and wealth information — is among the most "
+            "sensitive data processed by any financial institution. Storage or processing of this data in non-compliant jurisdictions "
+            "creates exposure under Swiss banking secrecy law, GDPR/nDSG, and banking confidentiality obligations. "
+            "Shadow IT is a particularly acute risk in private banking: relationship managers and investment teams routinely use "
+            "unauthorised cloud tools — file sharing, AI writing assistants, research platforms — that process HNWI data without "
+            "IT oversight. The small size of many private banks means cloud security expertise is often insufficient to manage "
+            "complex multi-cloud environments or evaluate shared responsibility boundaries."
+        ),
+        "regulatory_pressure": (
+            "FINMA RS 2018/3 requires prior notification for all material outsourcing, including cloud. FINMA\'s 2023 thematic "
+            "review found that a significant proportion of Swiss banks had cloud arrangements that should have been notified but "
+            "were not, resulting in supervisory follow-up requirements. "
+            "DORA Art.28-44 creates binding requirements for ICT third-party risk management including cloud: annual ICT register "
+            "reporting, mandatory contract provisions, concentration risk assessment, and exit strategies. "
+            "The Swiss Federal Council is expected to update the Banking Ordinance to align with DORA principles for "
+            "domestically-focused institutions, progressively tightening cloud governance requirements across all Swiss banks."
+        ),
+        "industry_trends": (
+            "Three cloud risk trends are defining the 2024-2026 landscape in private banking. First, cloud security posture "
+            "management (CSPM) adoption: leading institutions are deploying automated CSPM tools (Prisma Cloud, Defender for Cloud) "
+            "to continuously monitor cloud configurations against CIS benchmarks, reducing misconfiguration exposure. "
+            "Second, sovereign cloud emergence: FINMA and EU regulators are pushing financial institutions toward sovereign cloud "
+            "solutions — data centres physically located in jurisdiction with local management — as an alternative to standard "
+            "hyperscaler deployments. Third, cloud exit strategy testing: driven by DORA requirements, banks are for the first time "
+            "actually testing their exit strategies from critical cloud providers, revealing that theoretical exit plans are "
+            "frequently technically impractical due to data format lock-in and application dependencies."
+        ),
+        "peer_incidents": (
+            "The financial sector has experienced several material cloud incidents that have defined regulatory expectations. "
+            "The AWS US-EAST-1 outage in December 2021 disrupted operations at multiple financial institutions simultaneously, "
+            "demonstrating the systemic risk of hyperscaler concentration. The Capital One data breach — resulting from an AWS "
+            "S3 misconfiguration — led to a USD 190 million settlement and drove CSPM adoption across the sector. "
+            "In Switzerland, FINMA\'s 2023 supervisory communication cited specific instances of Swiss banks with unnotified "
+            "material cloud outsourcing arrangements, without naming institutions. "
+            "The Microsoft Azure outage in July 2024 — affecting multiple financial services firms globally — further reinforced "
+            "DORA concentration risk requirements and drove board-level attention to multi-cloud and exit strategy planning."
+        ),
+        "key_statistics": [
+            "60-70% of Swiss private banks have at least one material cloud dependency as of 2025",
+            "FINMA RS 2018/3: mandatory prior notification required for all material outsourcing including cloud",
+            "DORA fines: up to 1% of average daily global turnover per day for systemic ICT third-party risk failures",
+            "ESRB: top 3 cloud providers (AWS, Azure, GCP) account for >65% of EU financial sector cloud spend",
+            "Capital One breach settlement: USD 190 million — largest cloud misconfiguration penalty in financial services history",
+        ],
+        "mckinsey_angle": (
+            "Cloud strategy in private banking requires reframing from cost optimisation to risk-adjusted value. "
+            "Institutions that have adopted cloud without adequate governance — no CSPM, no data residency controls, "
+            "no exit strategy — face regulatory remediation costs that dwarf the efficiency gains from migration. "
+            "The strategic winners will be banks that treat cloud governance as a first-class risk discipline, "
+            "investing in CSPM tooling, data sovereignty controls, and multi-cloud resilience. "
+            "This positions cloud not as a vulnerability but as a competitive differentiator: faster innovation cycles, "
+            "lower infrastructure costs, and demonstrable regulatory compliance."
+        ),
+        "tone": "professional",
+    },
+
+    # ── Resilience & BCP ───────────────────────────────────────────────────────
+    "RESILIENCE_BCP": {
+        "theme": "Resilience & Business Continuity",
+        "market_context": (
+            "Operational resilience has become a top regulatory priority globally following the COVID-19 pandemic and a series "
+            "of high-profile operational failures at financial institutions. DORA — effective January 2025 — represents the most "
+            "comprehensive resilience regulation in financial services history, requiring EU entities to define critical functions, "
+            "test recovery capabilities, and conduct threat-led penetration testing (TLPT). FCA PS21/3 in the UK and MAS BCM "
+            "guidelines in Singapore impose similar requirements. "
+            "For Swiss private banks, FINMA RS 2008/21 has long required documented BCP frameworks, but annual testing evidence "
+            "has often been superficial — tabletop exercises rather than full failover tests. DORA\'s more prescriptive testing "
+            "requirements are now the de facto benchmark for all Swiss institutions with EU operations or EU clients, "
+            "driving a significant uplift in resilience testing investment across the sector."
+        ),
+        "private_banking_issues": (
+            "Private banking resilience risk is shaped by three structural characteristics. First, the personalised service model: "
+            "HNWI clients expect immediate access to relationship managers and portfolio information. Even a 4-hour system outage "
+            "creates disproportionate reputational and client relationship damage compared to retail banking. "
+            "Second, key person dependency: private banking relationships are often highly concentrated on individual RMs. "
+            "A key person absence — illness, departure, or unavailability during a crisis — can create a de facto service "
+            "continuity failure even when systems are operational. Third, third-party concentration: private banks depend heavily "
+            "on core banking vendors, custodians, fund administrators, and technology providers. A failure at a critical vendor — "
+            "particularly a shared banking platform — creates simultaneous continuity risk across multiple clients and counterparties."
+        ),
+        "regulatory_pressure": (
+            "DORA Art.11-16 mandates comprehensive digital operational resilience testing including basic testing for all ICT "
+            "systems annually and TLPT every three years for significant institutions. Results must be reported to senior management "
+            "and shared with competent authorities on request. "
+            "FCA PS21/3 requires UK-regulated firms to complete impact tolerance definitions for all important business services "
+            "and to demonstrate through annual testing that tolerances can be maintained. The FCA has begun requesting "
+            "self-assessment documentation and may take enforcement action for firms that cannot demonstrate adequate resilience. "
+            "FINMA has aligned supervisory expectations with DORA principles through updated guidance on RS 2008/21, "
+            "making annual full-failover BCP testing the expected standard for all Swiss private banks by 2026."
+        ),
+        "industry_trends": (
+            "The resilience landscape is evolving along four dimensions. First, TLPT industrialisation: institutions are "
+            "building in-house red team capabilities or engaging specialist TIBER-EU providers to conduct threat-led penetration "
+            "testing at the scale and frequency DORA requires. Second, resilience as a board topic: major operational failures — "
+            "Credit Suisse, Silicon Valley Bank — have demonstrated that resilience failures have board-level consequences, "
+            "driving direct board engagement with BCP and recovery capability. Third, third-party resilience requirements: "
+            "banks are now including BCP capability evidence requirements in vendor contracts and conducting annual third-party "
+            "BCP reviews as a standard procurement and vendor management activity. Fourth, cyber-resilience convergence: "
+            "BCP and cybersecurity frameworks are merging as ransomware attacks become the primary resilience threat, "
+            "requiring integrated cyber-resilience rather than separate IT and business continuity programmes."
+        ),
+        "peer_incidents": (
+            "Several high-profile resilience failures have defined regulatory expectations. TSB Bank\'s 2018 IT migration failure "
+            "— stranding 1.9 million customers from their accounts for weeks — resulted in a GBP 48 million FCA fine and remains "
+            "the benchmark for inadequate BCP governance. "
+            "The Credit Suisse liquidity crisis in March 2023 exposed the inadequacy of private banking resilience frameworks "
+            "under extreme stress, with client outflows reaching CHF 61.2 billion in a single quarter demonstrating that "
+            "financial resilience and operational resilience must be planned together. "
+            "Multiple ransomware attacks on banking sector suppliers in 2023-2024 — including attacks on ION Trading "
+            "and several core banking platform providers — disrupted operations at dozens of financial institutions simultaneously, "
+            "demonstrating systemic third-party resilience risk that individual bank BCP frameworks had not anticipated."
+        ),
+        "key_statistics": [
+            "DORA TLPT: mandatory every 3 years for significant financial entities with expert facilitator using TIBER-EU methodology",
+            "FCA PS21/3: all important business service impact tolerances must be defined and tested annually from March 2022",
+            "TSB IT migration failure: GBP 48 million FCA fine (2019) — largest UK operational resilience enforcement action",
+            "ION Trading ransomware (2023): disrupted derivatives clearing at 40+ financial institutions simultaneously",
+            "FINMA RS 2008/21: annual BCP testing with documented results is required for all licensed Swiss banks",
+        ],
+        "mckinsey_angle": (
+            "Operational resilience is transitioning from a compliance exercise to a strategic capability. "
+            "Institutions that invest in genuine resilience — tested recovery procedures, redundant infrastructure, "
+            "third-party resilience requirements, and cyber-integrated BCP — gain a competitive advantage in client trust "
+            "and regulatory credibility. The financial cost of a major operational failure — client attrition, regulatory fines, "
+            "remediation investment — routinely exceeds the cumulative cost of resilience investment over a decade. "
+            "Board-level attention to resilience, driven by DORA and FCA requirements, creates an opportunity to build "
+            "resilience as a genuine differentiator in private banking client relationships."
+        ),
+        "tone": "professional",
+    },
+
+    # ── Change Management ──────────────────────────────────────────────────────
+    "CHANGE_MANAGEMENT": {
+        "theme": "Change Management & IT Development",
+        "market_context": (
+            "IT change management has emerged as a critical risk domain as private banks accelerate digital transformation. "
+            "Core banking platform migrations, digital client portal launches, and cloud migrations are creating unprecedented "
+            "volumes of system changes — many executed under time pressure with inadequate controls. The adoption of "
+            "DevOps and DevSecOps methodologies has fundamentally changed the change management landscape: deployment "
+            "frequencies that once occurred monthly now occur daily or continuously, requiring automated governance "
+            "rather than manual CAB approvals. "
+            "DORA Art.9 — effective January 2025 — explicitly requires documented ICT change management policies covering "
+            "classification, approval, testing, rollback, and post-implementation review. MAS TRM 2021 and FINMA RS 2008/21 "
+            "impose equivalent requirements. Regulators are increasingly requesting evidence of change management maturity "
+            "as part of technology risk examinations, moving from policy review to evidence of actual change governance."
+        ),
+        "private_banking_issues": (
+            "Change management in private banking faces specific tensions absent in other financial sectors. "
+            "Business pressure — particularly from investment teams requiring rapid technology adaptation to market conditions — "
+            "creates systematic incentives to bypass standard change controls through emergency change processes. "
+            "Legacy core banking systems — many dating from the 1980s and 1990s — require extensive regression testing before "
+            "any change, creating delays that business units find unacceptable and that incentivise shadow changes. "
+            "The proliferation of SaaS tools in private banking — CRM, portfolio management, client reporting — creates "
+            "shadow change management: vendors push updates without bank involvement, potentially changing regulated functionality "
+            "without the bank\'s knowledge or testing. Small private banks often lack dedicated change management functions, "
+            "relying on IT generalists who simultaneously develop, test, and deploy changes — a structural SoD failure."
+        ),
+        "regulatory_pressure": (
+            "DORA creates binding change management requirements for the first time at the EU level. "
+            "ICT change management policies must cover classification, approval workflows, testing standards, rollback, "
+            "and post-implementation review. Emergency changes must be defined with specific criteria. "
+            "The regulation\'s emphasis on ICT operational security (Art.9) explicitly requires segregation between "
+            "development and production environments — a direct prohibition of the developer production access "
+            "common in smaller private banks. "
+            "Patch management is an explicit DORA requirement: critical vulnerabilities must be addressed without delay. "
+            "MAS Notice 655 and FINMA guidance set similar patch management expectations, with regulators increasingly "
+            "requesting evidence of patch compliance rates in technology risk examinations."
+        ),
+        "industry_trends": (
+            "Four trends are reshaping change management in private banking. First, CI/CD adoption: continuous integration "
+            "and continuous deployment pipelines are replacing manual change management for application layers, with "
+            "automated testing gates and security scanning embedded in deployment pipelines. "
+            "Second, infrastructure as code (IaC): cloud infrastructure changes managed through code (Terraform, Ansible) "
+            "provide automatic audit trails but require new governance models that traditional CAB processes cannot handle. "
+            "Third, automated SoD enforcement: leading institutions are implementing automated controls in CI/CD pipelines "
+            "that technically prevent developers from deploying directly to production, replacing policy controls with "
+            "system-enforced SoD. Fourth, AI-assisted patch prioritisation: ML models are being used to prioritise "
+            "patches based on exploitability, asset criticality, and compensating controls — accelerating critical patch "
+            "deployment while managing patching resource constraints."
+        ),
+        "peer_incidents": (
+            "Change management failures have been responsible for some of the most significant operational incidents in "
+            "recent financial services history. Knight Capital\'s 2012 trading algorithm deployment error — caused by "
+            "a failed software update — resulted in USD 440 million loss in 45 minutes from an incorrect production deployment. "
+            "The TSB core banking migration failure in 2018 demonstrated the catastrophic consequences of inadequate "
+            "change testing and rollback planning at scale. "
+            "In 2023-2024, multiple private banks experienced client-facing system outages caused by failed core banking "
+            "updates that lacked tested rollback procedures, requiring extended manual workarounds and client compensation. "
+            "Ransomware attacks exploiting unpatched vulnerabilities — Log4Shell (2021), MOVEit (2023), Confluence (2023) — "
+            "have demonstrated that patch management delays directly translate into material cyber incidents."
+        ),
+        "key_statistics": [
+            "Knight Capital change management failure: USD 440 million loss in 45 minutes (2012) — benchmark for change control risk",
+            "DORA Art.9: binding ICT change management policy requirements including mandatory segregation dev/production",
+            "Emergency change process: industry benchmark is <5% of total changes; rates above 15% indicate systematic control bypass",
+            "Patch compliance: MAS Notice 655 and DORA expect critical patches within 72 hours; industry average is 16 days",
+            "Log4Shell: financial sector patch deployment took average 12 days vs CISA recommended 24-hour remediation window",
+        ],
+        "mckinsey_angle": (
+            "Change management maturity is a prerequisite for digital transformation in private banking. "
+            "Institutions that invest in automated CI/CD pipelines with embedded security gates, automated SoD enforcement, "
+            "and continuous patch management will deploy changes faster and more safely than those relying on manual, "
+            "committee-based governance. The strategic case for change management investment is not risk reduction alone: "
+            "it is the unlocking of deployment velocity that digital banking requires. "
+            "Banks that cannot change their systems rapidly and safely cannot compete with digital wealth management platforms "
+            "that deploy new features weekly. Change management is the foundation of digital competitive advantage."
+        ),
+        "tone": "professional",
+    },
+
+    # ── Access Management ──────────────────────────────────────────────────────
+    "ACCESS_MANAGEMENT": {
+        "theme": "Access Management & Identity",
+        "market_context": (
+            "Access management has become the most tactically important domain in financial services cybersecurity. "
+            "The shift to remote working, cloud adoption, and the proliferation of third-party access has expanded "
+            "the identity attack surface dramatically. Verizon\'s 2024 Data Breach Investigations Report found that "
+            "74% of all breaches involve a human element — credential theft, privilege abuse, or social engineering — "
+            "making identity the dominant attack vector in financial services. "
+            "Regulatory requirements have tightened significantly: DORA Art.9, MAS TRM 2021, FINMA RS 2008/21, and "
+            "NIST SP 800-53 all require MFA, PAM, least privilege, and recertification. The CIS Controls v8 place "
+            "identity management as the first two controls — Account Management and Access Control Management — "
+            "reflecting the consensus that identity is the foundational layer of cyber defence."
+        ),
+        "private_banking_issues": (
+            "Private banking access management is complicated by several sector-specific factors. "
+            "High staff turnover — particularly at relationship manager level — creates a continuous volume of "
+            "joiners, movers, and leavers that manual processes struggle to handle, resulting in systematic orphaned "
+            "account accumulation. Client-facing staff require broad access across multiple systems — core banking, "
+            "portfolio management, CRM, document management — creating large access footprints that are difficult "
+            "to scope to least privilege without detailed role definition. "
+            "Third-party access is an acute risk: IT vendors, software providers, custodians, and fund administrators "
+            "all require system access that must be provisioned, monitored, and revoked. In practice, vendor access "
+            "is often permanent rather than just-in-time, and vendor sessions are rarely monitored. "
+            "Small private banks often lack PAM tools, relying on shared admin credentials that make individual "
+            "accountability and forensic investigation impossible."
+        ),
+        "regulatory_pressure": (
+            "DORA Art.9 mandates MFA for all critical system access and PAM for privileged accounts as binding requirements "
+            "from January 2025. Recertification is required at least annually. Account deactivation on termination must occur "
+            "promptly — regulators consider same-day deactivation the expected standard. "
+            "FINMA has cited access management weaknesses — particularly delayed leaver deactivation and excessive admin accounts — "
+            "in multiple enforcement proceedings and supervisory communications. The regulator specifically expects "
+            "SoD to be enforced at the system level, not merely through policy. "
+            "MAS Notice 655 requires MFA for all remote access and administrative accounts. MAS thematic inspections of "
+            "Singapore private banks in 2022-2024 identified access management — specifically orphaned accounts and "
+            "recertification failures — as the most frequently cited IT control deficiency across the sector."
+        ),
+        "industry_trends": (
+            "Access management is undergoing fundamental architectural change driven by three trends. "
+            "First, Zero Trust adoption: the principle of \'never trust, always verify\' is replacing perimeter-based security. "
+            "All access — internal and external — is treated as untrusted and requires continuous authentication and authorisation. "
+            "Private banks are implementing Zero Trust Network Access (ZTNA) to replace VPN for remote access. "
+            "Second, just-in-time (JIT) privileged access: rather than assigning permanent admin rights, JIT systems provision "
+            "elevated access for specific tasks with time limits and session recording, then automatically revoke it. "
+            "Third, Identity Governance and Administration (IGA): automated platforms combining access request, "
+            "approval workflow, recertification, and SoD analysis are replacing manual spreadsheet-based access management. "
+            "Fourth, passwordless authentication: FIDO2 and hardware security keys are replacing password-based MFA "
+            "for privileged accounts, eliminating phishing risk."
+        ),
+        "peer_incidents": (
+            "Access management failures have enabled several major financial sector incidents. "
+            "The 2020 SolarWinds supply chain attack — which compromised access at hundreds of organisations including "
+            "financial institutions — demonstrated how privileged access from a third-party tool can bypass all "
+            "perimeter controls. The 2023 Microsoft Exchange ProxyShell attacks exploited service accounts with "
+            "excessive privilege to move laterally across banking networks. "
+            "In private banking specifically, several institutions in 2022-2024 discovered that former senior relationship "
+            "managers retained active access to client portfolio data weeks or months after departure — in some cases "
+            "accessing data for competitive intelligence. These incidents resulted in FINMA supervisory communications "
+            "and, in one case, a formal enforcement proceeding for inadequate logical access controls."
+        ),
+        "key_statistics": [
+            "74% of all data breaches involve a human element — credential theft, privilege abuse, or social engineering (Verizon DBIR 2024)",
+            "DORA Art.9: MFA and PAM are binding requirements for all EU financial entities from January 2025",
+            "MAS thematic inspection 2022-2024: access management was the most frequently cited IT control deficiency in Singapore private banks",
+            "Average time to deactivate leaver accounts in financial services: 4.7 days (industry survey 2023) vs same-day regulatory expectation",
+            "Privileged account compromise: 80% of advanced attacks involve privileged credential abuse (CyberArk 2024 threat report)",
+        ],
+        "mckinsey_angle": (
+            "Identity is the new perimeter in private banking cybersecurity. As cloud adoption eliminates the traditional "
+            "network perimeter, access management becomes the primary defence layer. Institutions that invest in modern "
+            "IGA platforms, Zero Trust architecture, and PAM tooling gain both security and operational efficiency: "
+            "automated provisioning reduces onboarding time, JIT access reduces admin overhead, and recertification "
+            "automation replaces time-consuming manual campaigns. "
+            "The business case for access management investment is increasingly compelling: the average cost of a "
+            "financial services data breach — USD 5.9 million (IBM 2024) — dwarfs the cost of a modern IGA and PAM stack. "
+            "Access management is not a technical control: it is a board-level risk management priority."
+        ),
+        "tone": "professional",
+    },
+
+    # ── Procurement ────────────────────────────────────────────────────────────
+    "PROCUREMENT": {
+        "theme": "Procurement & Sourcing",
+        "market_context": (
+            "Procurement governance in private banking has gained regulatory and audit attention as the sector\'s "
+            "dependence on third-party services has intensified. The average private bank now outsources more than "
+            "60% of its technology, operations, and administrative functions to external providers — a dramatic "
+            "increase from a decade ago. This creates procurement risk across an unprecedented scale of vendor relationships. "
+            "The intersection of procurement and outsourcing risk is particularly acute: FINMA RS 2018/3 and DORA Art.28 "
+            "impose governance requirements on vendor selection and contracting for material outsourcing. "
+            "Procurement failures — conflicts of interest, invoice fraud, maverick spending, and contract weaknesses — "
+            "represent both direct financial loss and regulatory risk for banks that cannot demonstrate adequate "
+            "governance over third-party selection and contracting."
+        ),
+        "private_banking_issues": (
+            "Private banking procurement has specific risk characteristics driven by sector structure. "
+            "Many private banks are organised as boutique institutions where personal networks are the primary "
+            "source of vendor relationships, creating endemic conflict of interest risk. Senior executives "
+            "often maintain personal relationships with service providers that influence procurement decisions "
+            "without formal disclosure. "
+            "High-value professional services — legal, consulting, technology advisory — are frequently procured "
+            "through informal channels rather than competitive processes, reducing value for money and creating "
+            "corruption risk. Invoice fraud — particularly business email compromise targeting accounts payable "
+            "functions — is a material threat in private banking given the high value of legitimate vendor payments "
+            "to prime brokers, technology providers, and professional firms. "
+            "The right-to-audit clause gap is particularly acute: many private banks have entered major technology "
+            "and outsourcing contracts without right-to-audit provisions, leaving internal audit unable to obtain "
+            "direct assurance over critical outsourced services."
+        ),
+        "regulatory_pressure": (
+            "FINMA RS 2018/3 imposes governance requirements on the selection and contracting of outsourced service "
+            "providers, explicitly requiring documented vendor selection processes, right-to-audit clauses, and "
+            "exit provisions in all material outsourcing contracts. "
+            "DORA Art.28 extends similar requirements to ICT third-party arrangements, requiring documented selection "
+            "criteria, risk assessments before engagement, and specific contractual provisions including audit rights, "
+            "data portability, and concentration risk disclosure. "
+            "IIA Practice Guide: Third Party Relationship Management (2025) provides detailed methodology for "
+            "auditing procurement processes including recommended data analytics for duplicate payment detection "
+            "and COI screening. Anti-corruption legislation — UK Bribery Act, Swiss CPC — creates personal liability "
+            "for senior management in procurement fraud cases."
+        ),
+        "industry_trends": (
+            "Procurement governance is evolving in three directions. First, procurement digitisation: "
+            "source-to-pay platforms (SAP Ariba, Coupa) are being adopted to replace manual procurement processes, "
+            "providing automated controls for competitive bidding, approval workflows, and duplicate payment detection. "
+            "Second, third-party risk platform integration: procurement and vendor risk management are converging "
+            "in platforms that combine contract management, COI screening, performance monitoring, and concentration risk. "
+            "Third, fourth-party risk awareness: banks are beginning to require material suppliers to disclose their "
+            "own critical sub-contractors, creating visibility into the fourth-party risk that has previously been invisible. "
+            "Fourth, ESG procurement standards: sustainable procurement — environmental and social criteria in vendor "
+            "selection — is gaining traction driven by investor expectations and emerging regulatory requirements."
+        ),
+        "peer_incidents": (
+            "Procurement fraud and governance failures have resulted in significant losses and reputational damage "
+            "across financial services. Several tier-two European banks disclosed procurement fraud losses "
+            "of EUR 5-20 million in 2022-2024, primarily from invoice fraud and fictitious vendor schemes "
+            "exploiting weak purchase-to-pay controls. "
+            "COI-related procurement failures at financial institutions have triggered regulatory enforcement: "
+            "the FCA issued fines to three asset managers in 2023 for undisclosed conflicts of interest in "
+            "third-party technology procurement decisions. "
+            "Business email compromise targeting accounts payable functions remains the highest-frequency "
+            "procurement fraud type in financial services, with the FBI\'s Internet Crime Complaint Center "
+            "reporting USD 2.7 billion in BEC losses in the financial sector in 2022 alone."
+        ),
+        "key_statistics": [
+            "Average private bank outsources >60% of technology and operations to third parties (Deloitte Global Outsourcing Survey 2024)",
+            "FBI BEC losses in financial sector: USD 2.7 billion in 2022 (Internet Crime Complaint Center)",
+            "FINMA RS 2018/3: right-to-audit clause mandatory in all material outsourcing contracts",
+            "DORA Art.28: documented vendor selection process with risk assessment required before engagement",
+            "IIA TR-Third Party (2025): duplicate payment detection and COI cross-referencing are standard recommended audit procedures",
+        ],
+        "mckinsey_angle": (
+            "Procurement governance is a value creation opportunity as much as a risk control. "
+            "Banks with mature procurement functions — competitive bidding, COI management, contract discipline — "
+            "consistently achieve 8-12% lower total third-party spending than peers with informal procurement governance. "
+            "In an environment of margin pressure on private banking profitability, procurement discipline directly "
+            "supports the bottom line. Beyond cost, supplier relationship quality — performance monitoring, right-to-audit "
+            "exercise, concentration risk management — reduces operational risk exposure that uncontrolled vendor "
+            "relationships create. The investment case for procurement governance is direct and quantifiable."
+        ),
+        "tone": "professional",
+    },
+
+    # ── Wealth Advisory ────────────────────────────────────────────────────────
+    "WEALTH_ADVISORY": {
+        "theme": "Wealth Management Advisory & Suitability",
+        "market_context": (
+            "Investment suitability and conduct regulation is undergoing its most significant tightening cycle since MiFID I. "
+            "MiFID II suitability requirements — in force since 2018 — have been supplemented by ESMA\'s updated Suitability "
+            "Guidelines (2023), the MiFID II sustainability amendment requiring ESG preference collection (2022), and "
+            "the FCA\'s Consumer Duty (2023) raising the standard from \'fair treatment\' to \'good outcomes\'. "
+            "Swiss private banks face a parallel tightening under FinSA (Financial Services Act) — in force since January 2020 — "
+            "which brought MiFID II-equivalent suitability, appropriateness, and conflict of interest requirements to Switzerland "
+            "for the first time. The confluence of these regulatory changes means virtually every private bank advisory process "
+            "has required significant redesign in the last five years."
+        ),
+        "private_banking_issues": (
+            "Private banking conduct risk is structurally elevated relative to other financial services segments. "
+            "The relationship manager model — where individual bankers exercise significant discretion over client portfolios — "
+            "creates inherent suitability risk: RM judgment must be systematically bounded by documented suitability frameworks "
+            "and system controls that prevent inappropriate product sales. "
+            "Churning — excessive portfolio turnover generating transaction fees at clients\' expense — is particularly "
+            "difficult to detect in private banking where client relationships are long-term and RM discretion is broad. "
+            "Conflict of interest management is complicated by the proliferation of product structures that generate "
+            "retrocessions, inducements, and fee sharing arrangements. Complex products — structured notes, private credit, "
+            "hedge funds, private equity — are routinely offered to clients whose sophistication classification and "
+            "documented suitability may not justify the recommendation."
+        ),
+        "regulatory_pressure": (
+            "FINMA has materially increased conduct supervision of Swiss private banks following FinSA implementation. "
+            "Supervisory reviews in 2022-2024 found widespread deficiencies in suitability documentation, COI disclosure, "
+            "and risk profile currency. FINMA RS 2012/3 (duties of care) is now enforced with the same rigour as AML requirements. "
+            "ESMA\'s Suitability Guidelines 2023 update requires firms to demonstrate that AI-assisted suitability tools "
+            "are appropriately governed and explainable. ESG suitability collection — mandatory under MiFID II since August 2022 "
+            "— has been inconsistently implemented, with ESMA identifying compliance gaps across the EU and UK private banking sector. "
+            "MAS thematic inspections (2022-2024) of Singapore private banks cited suitability failures and outdated client "
+            "profiles as top conduct findings, resulting in supervisory requirements for remediation programmes."
+        ),
+        "industry_trends": (
+            "Four trends are reshaping private banking conduct and suitability management. "
+            "First, digital suitability: banks are replacing paper-based suitability questionnaires with digital onboarding "
+            "platforms that collect, validate, and automatically apply client profiles to investment decisions, "
+            "reducing documentation gaps and system bypass. "
+            "Second, continuous suitability monitoring: rather than point-in-time suitability checks at recommendation, "
+            "leading institutions are implementing ongoing portfolio suitability monitoring that flags drift from client "
+            "risk tolerance in real-time as market conditions change. "
+            "Third, ESG suitability integration: MiFID II sustainability requirements are driving development of ESG "
+            "preference questionnaires, product ESG rating databases, and portfolio-level ESG alignment tools. "
+            "Fourth, churning analytics: automated turnover monitoring with machine learning-based churning detection "
+            "is replacing manual review, enabling compliance teams to identify at-risk accounts before regulators do."
+        ),
+        "peer_incidents": (
+            "Conduct enforcement in private banking has accelerated significantly. Julius Bär received a CHF 26 million "
+            "FINMA fine in 2023 partly related to conduct governance weaknesses in its investment advisory framework. "
+            "The FCA fined Hargreaves Lansdown GBP 306 million in 2024 for failures in its Woodford fund conduct review, "
+            "setting a benchmark for investor harm enforcement. "
+            "Multiple European private banks were subject to MiFID II enforcement actions in 2022-2024 for suitability "
+            "documentation gaps, with total fines across the sector exceeding EUR 200 million. "
+            "ESG mis-selling — recommending funds labelled as sustainable that do not meet the stated criteria — "
+            "has resulted in regulatory investigations across the EU and US, with DWS paying USD 25 million to settle "
+            "SEC charges in 2023 for greenwashing. ESG conduct risk is now a top supervisory priority in all major jurisdictions."
+        ),
+        "key_statistics": [
+            "FinSA: in force since January 2020 — MiFID II equivalent suitability requirements apply to all Swiss financial service providers",
+            "ESMA Suitability Guidelines 2023: updated requirements for digital suitability tools, ESG integration, and documentation",
+            "DWS greenwashing settlement: USD 25 million SEC settlement (2023) — first major ESG mis-selling enforcement action",
+            "Julius Bär CHF 26 million FINMA fine (2023): partly attributed to conduct governance weaknesses",
+            "MAS thematic inspection 2022-2024: outdated client risk profiles cited as top conduct finding across Singapore private banks",
+        ],
+        "mckinsey_angle": (
+            "Conduct excellence is a competitive differentiator in private banking, not merely a compliance requirement. "
+            "Institutions that invest in genuine suitability governance — documented profiles, systematic monitoring, "
+            "conflict management, and ESG integration — build client trust that is the foundation of long-term AUM growth. "
+            "The reputational and financial cost of conduct failures — client litigation, regulatory fines, AUM outflows — "
+            "consistently exceeds the investment required for adequate conduct governance. "
+            "The ESG suitability requirement is a particular opportunity: banks that build genuine ESG integration capabilities "
+            "will be positioned to capture the growing segment of HNWI clients who demand values-aligned investment management. "
+            "Conduct governance is where private banking\'s relationship model and regulatory compliance converge."
         ),
         "tone": "professional",
     },
