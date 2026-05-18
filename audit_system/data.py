@@ -13979,3 +13979,1304 @@ MANAGEMENT_ACTION_TEMPLATES = {
         },
     ],
 }
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ENTITY_CONTEXT
+# Adapts audit content by entity type across 4 regulated entity categories.
+# ══════════════════════════════════════════════════════════════════════════════
+
+ENTITY_CONTEXT = {
+
+    # ── 🏦 Private Banking ─────────────────────────────────────────────────────
+    "🏦 Private Banking": {
+        "short_label": "Private Banking",
+        "regulatory_focus": [
+            "FINMA RS 2011/1",
+            "MiFID II Art.25",
+            "FATF R.10-12",
+            "MAS Notice 626",
+            "FINMA RS 2017/1",
+            "FinSA/FinIA",
+            "FINMA RS 2008/21",
+        ],
+        "typical_findings": [
+            "PEP screening gaps in HNWI onboarding",
+            "Outdated client risk profiles not refreshed at required frequency",
+            "Undisclosed cross-border advisory activities",
+            "Insufficient documentation of suitability rationale for complex products",
+            "Related-party conflicts not identified or managed in discretionary mandates",
+        ],
+        "topics": {
+            "AML_KYC": {
+                "scope_suggestion": "KYC and onboarding process for HNWI clients, EDD for PEPs and high-risk clients, transaction monitoring for private banking accounts.",
+                "regulatory_refs": [
+                    "FATF Recommendations R.10-12 (CDD / EDD)",
+                    "FINMA RS 2011/1 (Due Diligence Banks)",
+                    "MAS Notice 626 (Prevention of Money Laundering)",
+                    "AMLA Art.3-8 (Swiss Anti-Money Laundering Act)",
+                ],
+                "risk_emphasis": [
+                    "PEP / high-risk client EDD gaps",
+                    "Beneficial ownership of complex offshore structures",
+                    "Transaction monitoring calibration for HNWI behaviour",
+                    "Cross-border account opening without proper documentation",
+                ],
+                "typical_findings": [
+                    "EDD files for PEP clients lack source-of-wealth substantiation",
+                    "Transaction monitoring thresholds not calibrated for HNWI activity patterns, generating excessive false positives or missing alerts",
+                    "Periodic client review cycle not enforced; high-risk profiles overdue for re-assessment",
+                ],
+            },
+            "CYBER_RISK": {
+                "scope_suggestion": "IT systems supporting private banking operations, client portal, CRM and portfolio management systems.",
+                "regulatory_refs": [
+                    "FINMA RS 2023/1 (ICT and Cyber Risk)",
+                    "FINMA RS 2017/1 (Corporate Governance — Banks)",
+                    "MAS TRM Guidelines (Technology Risk Management)",
+                    "ISO/IEC 27001:2022",
+                ],
+                "risk_emphasis": [
+                    "Client portal security and multi-factor authentication",
+                    "CRM and portfolio system privileged access controls",
+                    "Phishing and social engineering targeting HNWI advisors",
+                    "Data exfiltration risk from relationship managers",
+                ],
+                "typical_findings": [
+                    "Multi-factor authentication not enforced on client-facing portals",
+                    "Privileged access to CRM and portfolio management systems not reviewed quarterly",
+                    "Security awareness training not completed by all relationship managers",
+                ],
+            },
+            "CREDIT_RISK": {
+                "scope_suggestion": "Lombard lending and collateralised lending against HNWI portfolios, margin call processes, and counterparty credit risk in structured product issuance.",
+                "regulatory_refs": [
+                    "FINMA RS 2019/1 (Credit Risk — Banks)",
+                    "Basel III / CRR2 — credit risk framework",
+                    "MiFID II — product governance for structured products",
+                    "FINMA RS 2017/1 (Corporate Governance)",
+                ],
+                "risk_emphasis": [
+                    "Lombard loan LTV ratio monitoring and margin call triggers",
+                    "Concentration risk in collateral portfolios",
+                    "Structured product issuer credit risk",
+                    "Intra-group credit exposure management",
+                ],
+                "typical_findings": [
+                    "Lombard loan LTV thresholds not monitored in real time; margin calls delayed",
+                    "Credit approval process bypassed for key clients at relationship manager discretion",
+                    "Collateral valuation methodology not reviewed annually",
+                ],
+            },
+            "OPERATIONAL_RISK": {
+                "scope_suggestion": "Operational risk framework for private banking operations, key person risk among relationship managers, and error rates in client instructions.",
+                "regulatory_refs": [
+                    "FINMA RS 2008/21 (Operational Risks — Banks)",
+                    "FINMA RS 2023/1 (ICT and Cyber Risk / BCP)",
+                    "Basel III Pillar 2 — operational risk",
+                    "FINMA RS 2017/1 (Corporate Governance)",
+                ],
+                "risk_emphasis": [
+                    "Key person dependency on senior relationship managers",
+                    "Instruction errors in client order execution",
+                    "Operational losses from manual process failure",
+                    "Fraud risk from rogue employee access to client accounts",
+                ],
+                "typical_findings": [
+                    "RCSA not updated following organisational restructuring",
+                    "Operational loss events not systematically captured below materiality threshold",
+                    "Key person risk not mitigated for top revenue-generating relationship managers",
+                ],
+            },
+            "DATA_PRIVACY": {
+                "scope_suggestion": "Client data handling, GDPR/nDSG compliance for cross-border data transfers of HNWI client information, and data retention controls.",
+                "regulatory_refs": [
+                    "GDPR Art.6, 9, 44-49 (lawful basis and cross-border transfers)",
+                    "Swiss nDSG (revised Federal Act on Data Protection, 2023)",
+                    "MAS PDPA guidelines (Singapore clients)",
+                    "FINMA RS 2018/3 (Outsourcing — data processor clauses)",
+                ],
+                "risk_emphasis": [
+                    "Cross-border transfer of HNWI client data without SCCs",
+                    "Retention periods for closed account records",
+                    "Data subject rights fulfilment for international clients",
+                    "Third-party CRM vendor data processing compliance",
+                ],
+                "typical_findings": [
+                    "Data retention schedule not aligned with nDSG requirements; client files retained beyond permissible period",
+                    "Standard Contractual Clauses (SCCs) not updated following EU SCCs revision",
+                    "Data protection impact assessments not conducted for new CRM onboarding modules",
+                ],
+            },
+            "MARKET_RISK": {
+                "scope_suggestion": "Market risk in discretionary and advisory mandates, FX risk management for multi-currency HNWI portfolios, and structured product risk controls.",
+                "regulatory_refs": [
+                    "FINMA RS 2019/1 (Market Risk)",
+                    "Basel III FRTB — market risk capital",
+                    "MiFID II Art.25 — suitability and product risk classification",
+                    "FINMA RS 2017/1 (Corporate Governance / risk appetite)",
+                ],
+                "risk_emphasis": [
+                    "FX concentration risk in multi-currency portfolios",
+                    "Structured product mark-to-model valuation risk",
+                    "Mandate drift from agreed investment policy",
+                    "Market risk limit breaches not escalated timely",
+                ],
+                "typical_findings": [
+                    "Discretionary mandates breaching agreed risk limits not escalated within required timeframe",
+                    "FX exposure reporting for HNWI portfolios not aggregated at client group level",
+                    "Structured product pricing model validation not performed annually",
+                ],
+            },
+            "THIRD_PARTY_RISK": {
+                "scope_suggestion": "Outsourced custody, portfolio management systems, and data providers used in private banking; sub-custodian oversight and correspondent bank relationships.",
+                "regulatory_refs": [
+                    "FINMA RS 2018/3 (Outsourcing — Banks)",
+                    "MAS Guidelines on Outsourcing (2021)",
+                    "MiFID II Art.16(5) — outsourcing requirements",
+                    "FINMA RS 2023/1 (ICT third-party risk)",
+                ],
+                "risk_emphasis": [
+                    "Sub-custodian concentration and credit risk",
+                    "Portfolio management system vendor lock-in",
+                    "Correspondent bank due diligence",
+                    "Data provider continuity risk",
+                ],
+                "typical_findings": [
+                    "Sub-custodian due diligence not performed annually for all material custodians",
+                    "Outsourcing register incomplete; critical IT vendors not classified as material",
+                    "Exit strategy not documented for core portfolio management system vendor",
+                ],
+            },
+            "GOVERNANCE": {
+                "scope_suggestion": "Three lines of defence in a private banking context, board oversight, conflicts of interest in discretionary mandates and advisory.",
+                "regulatory_refs": [
+                    "FINMA RS 2017/1 (Corporate Governance — Banks)",
+                    "MiFID II Art.9 (management body requirements)",
+                    "FinSA/FinIA — conduct and organisational requirements",
+                    "FINMA RS 2008/21 (Operational Risk governance)",
+                ],
+                "risk_emphasis": [
+                    "Conflicts of interest in discretionary mandate management",
+                    "Board oversight of HNWI client risk",
+                    "3LoD clarity between RM, compliance, and internal audit",
+                    "Remuneration incentives misaligned with client interest",
+                ],
+                "typical_findings": [
+                    "Conflicts of interest register not comprehensive; undisclosed gifts and entertainment",
+                    "Risk Committee receives insufficient granularity on HNWI client risk concentration",
+                    "Second-line compliance review of relationship manager files not conducted at required frequency",
+                ],
+            },
+            "AI_MODEL_RISK": {
+                "scope_suggestion": "AI-driven tools used in private banking such as client risk profiling engines, portfolio optimisation models, and automated suitability checks.",
+                "regulatory_refs": [
+                    "EU AI Act 2024 — risk classification of AI systems in financial services",
+                    "FINMA guidance on model risk (2021 supervisory communication)",
+                    "MiFID II Art.25 — automated suitability assessments",
+                    "SR 11-7 (Model Risk Management — applicable as best practice)",
+                ],
+                "risk_emphasis": [
+                    "Model bias in client risk profiling algorithms",
+                    "Automated suitability recommendation explainability",
+                    "Model validation independence",
+                    "AI vendor black-box risk in outsourced tools",
+                ],
+                "typical_findings": [
+                    "AI-based suitability tool not subject to formal model validation before deployment",
+                    "Model performance monitoring not documented; drift detection absent",
+                    "AI vendor contract lacks audit rights and explainability obligations",
+                ],
+            },
+            "CLOUD_RISK": {
+                "scope_suggestion": "Cloud infrastructure hosting private banking client data, portfolio management systems, and client portals; cloud security configuration and data residency compliance.",
+                "regulatory_refs": [
+                    "FINMA RS 2018/3 (Outsourcing — cloud as material outsourcing)",
+                    "FINMA RS 2023/1 (ICT Risk — cloud infrastructure)",
+                    "MAS TRM Guidelines — cloud risk",
+                    "nDSG — data residency for Swiss client data",
+                ],
+                "risk_emphasis": [
+                    "HNWI client data residency and sovereignty",
+                    "Cloud misconfiguration exposing client portfolios",
+                    "Shared responsibility model clarity",
+                    "Cloud vendor lock-in for core banking systems",
+                ],
+                "typical_findings": [
+                    "Cloud security posture management (CSPM) tool not deployed; misconfiguration risk undetected",
+                    "Data residency controls not validated; client data stored in non-approved regions",
+                    "Cloud incident response runbook not tested in the past 12 months",
+                ],
+            },
+            "RESILIENCE_BCP": {
+                "scope_suggestion": "Business continuity for private banking operations, recovery time objectives for client-facing systems, and pandemic/key-person resilience scenarios.",
+                "regulatory_refs": [
+                    "FINMA RS 2023/1 (ICT Risk — business continuity)",
+                    "FINMA RS 2008/21 (BCP framework)",
+                    "MAS TRM Guidelines — business continuity management",
+                    "ISO 22301:2019 — Business Continuity Management",
+                ],
+                "risk_emphasis": [
+                    "RTO/RPO for client portal and order management",
+                    "Key relationship manager succession plans",
+                    "Crisis communication to HNWI clients",
+                    "Dependency on single data centre",
+                ],
+                "typical_findings": [
+                    "BCP not tested end-to-end for client-facing systems in the past 12 months",
+                    "Recovery time objectives for portfolio management systems not validated in last test",
+                    "Key person plans absent for top-tier relationship managers with concentrated client books",
+                ],
+            },
+            "CHANGE_MANAGEMENT": {
+                "scope_suggestion": "IT change management for private banking core systems, CRM upgrades, and regulatory-driven system changes (e.g. MiFID II reporting updates).",
+                "regulatory_refs": [
+                    "FINMA RS 2023/1 (ICT Risk — change management)",
+                    "MAS TRM Guidelines — change management",
+                    "ISO/IEC 27001:2022 — change management controls",
+                    "ISAE 3402 / SOC 2 — change management for outsourced systems",
+                ],
+                "risk_emphasis": [
+                    "Untested regulatory-driven system changes",
+                    "CRM version upgrades impacting suitability logic",
+                    "Emergency change governance",
+                    "Change rollback capability",
+                ],
+                "typical_findings": [
+                    "Emergency changes implemented without post-implementation review",
+                    "User acceptance testing for regulatory reporting changes performed by system owners, not independent testers",
+                    "Change freeze periods not observed around critical regulatory reporting deadlines",
+                ],
+            },
+            "ACCESS_MANAGEMENT": {
+                "scope_suggestion": "Access controls to private banking systems including portfolio management, CRM, and client data repositories; privileged access governance for relationship managers and IT administrators.",
+                "regulatory_refs": [
+                    "FINMA RS 2023/1 (ICT Risk — access management)",
+                    "MAS TRM Guidelines — access control",
+                    "ISO/IEC 27001:2022 A.9 — access control",
+                    "FinSA/FinIA — segregation of duties in client advisory",
+                ],
+                "risk_emphasis": [
+                    "Privileged access to client portfolio data",
+                    "Orphan accounts for departed relationship managers",
+                    "Segregation of duties between advisory and execution",
+                    "Excessive access rights accumulation over time",
+                ],
+                "typical_findings": [
+                    "Access recertification not completed within required cycle; stale accounts remain active",
+                    "Former relationship managers' accounts not disabled within 24 hours of departure",
+                    "Privileged admin access to CRM not subject to Privileged Access Management (PAM) controls",
+                ],
+            },
+            "PROCUREMENT": {
+                "scope_suggestion": "Procurement of financial data vendors, technology platforms, and professional services in private banking; vendor selection governance and contract management.",
+                "regulatory_refs": [
+                    "FINMA RS 2018/3 (Outsourcing — procurement of material services)",
+                    "MAS Guidelines on Outsourcing (2021)",
+                    "Swiss Code of Obligations — contract requirements",
+                    "FINMA RS 2023/1 (third-party ICT procurement)",
+                ],
+                "risk_emphasis": [
+                    "Financial data vendor concentration",
+                    "Contract review for regulatory compliance clauses",
+                    "Conflict of interest in vendor selection",
+                    "SLA monitoring for critical data providers",
+                ],
+                "typical_findings": [
+                    "Vendor due diligence not conducted before onboarding critical data providers",
+                    "Contracts with key IT vendors lack FINMA-required audit access clauses",
+                    "Renewal of material vendor contracts not subject to formal re-evaluation",
+                ],
+            },
+            "WEALTH_ADVISORY": {
+                "scope_suggestion": "Suitability assessments for HNWI clients, ESG integration in investment advice, MiFID II / FinSA compliance.",
+                "regulatory_refs": [
+                    "MiFID II Art.25 — suitability and appropriateness",
+                    "FinSA Art.10-15 — suitability and appropriateness (Swiss)",
+                    "FINMA RS 2011/1 — client documentation",
+                    "ESMA Guidelines on MiFID II suitability (2018/EBA/GL/2018/19)",
+                ],
+                "risk_emphasis": [
+                    "Suitability documentation completeness for complex products",
+                    "ESG preference elicitation and product matching",
+                    "Cross-border advisory without local authorisation",
+                    "Periodic suitability re-assessment enforcement",
+                ],
+                "typical_findings": [
+                    "Suitability reports not generated for all discretionary mandate reviews",
+                    "ESG preferences captured but not documented in the advisory file or reflected in product recommendations",
+                    "Periodic suitability re-assessment overdue for clients with significant life events",
+                ],
+            },
+        },
+    },
+
+    # ── 📊 Asset Management ────────────────────────────────────────────────────
+    "📊 Asset Management": {
+        "short_label": "Asset Management",
+        "regulatory_focus": [
+            "UCITS V Directive 2014/91/EU",
+            "AIFMD 2011/61/EU (AIFMD II 2024)",
+            "SFDR EU 2019/2088",
+            "ESMA Liquidity Stress Testing Guidelines 2019",
+            "MiFID II best execution",
+            "FINMA CISA/CISO",
+            "IOSCO asset management principles",
+        ],
+        "typical_findings": [
+            "Liquidity stress tests not performed at required frequency",
+            "Valuation committee not independent from portfolio management",
+            "Best execution policy not reviewed annually",
+            "SFDR disclosures inaccurate or incomplete",
+            "Sub-manager oversight insufficient — no formal review framework",
+        ],
+        "topics": {
+            "AML_KYC": {
+                "scope_suggestion": "AML controls for fund distribution, investor onboarding, beneficial ownership of fund investors and distributors.",
+                "regulatory_refs": [
+                    "FATF Recommendations R.10-12 (CDD for investors)",
+                    "AMLD5/AMLD6 — beneficial ownership of fund investors",
+                    "ESMA Guidelines on fund distribution AML (2020)",
+                    "FINMA RS 2011/1 — investor due diligence",
+                ],
+                "risk_emphasis": [
+                    "Beneficial ownership of complex investor structures",
+                    "Distributor AML standards equivalence assessment",
+                    "Omnibus account investor look-through",
+                    "Nominee and trust investor identification",
+                ],
+                "typical_findings": [
+                    "Look-through to underlying investors in omnibus accounts not performed for high-risk distributors",
+                    "Distributor AML standards not assessed against home-jurisdiction equivalence",
+                    "Investor periodic review cycle not enforced for institutional subscriptions",
+                ],
+            },
+            "CYBER_RISK": {
+                "scope_suggestion": "Cybersecurity for fund management platforms, order management systems, and investment research systems; protection of non-public material investment information.",
+                "regulatory_refs": [
+                    "DORA Regulation (EU) 2022/2554 — ICT risk for fund managers",
+                    "ESMA AIFMD Art.18 — organisational requirements (ICT)",
+                    "FINMA RS 2023/1 (ICT and Cyber Risk)",
+                    "ISO/IEC 27001:2022",
+                ],
+                "risk_emphasis": [
+                    "Protection of material non-public information (MNPI)",
+                    "Order management system integrity and availability",
+                    "Cyber resilience of trading infrastructure",
+                    "Ransomware targeting fund NAV calculation systems",
+                ],
+                "typical_findings": [
+                    "MNPI controls — information barriers between investment teams not technically enforced",
+                    "OMS connectivity to trading counterparties not subject to regular penetration testing",
+                    "Cyber incident response plan not updated following DORA entry into force",
+                ],
+            },
+            "CREDIT_RISK": {
+                "scope_suggestion": "Issuer concentration limits, counterparty exposure in derivatives and repo transactions, and credit risk in fixed-income fund portfolios.",
+                "regulatory_refs": [
+                    "UCITS V — concentration limits (Art.52-57)",
+                    "EMIR — derivative counterparty risk and collateral",
+                    "AIFMD Art.25 — leverage and counterparty risk reporting",
+                    "ESMA Guidelines on ETFs and UCITS (counterparty risk)",
+                ],
+                "risk_emphasis": [
+                    "Issuer concentration",
+                    "Counterparty exposure in derivatives",
+                    "Credit risk in bond funds",
+                    "Repo counterparty collateral quality",
+                ],
+                "typical_findings": [
+                    "UCITS issuer concentration limits breached intra-day without timely remediation",
+                    "Derivative counterparty exposure not aggregated at fund level across multiple instruments",
+                    "Collateral eligibility criteria for repo transactions not reviewed following market stress",
+                ],
+            },
+            "OPERATIONAL_RISK": {
+                "scope_suggestion": "Operational risk in fund administration, NAV calculation controls, trade settlement fails, and fund launch operational readiness.",
+                "regulatory_refs": [
+                    "UCITS V Art.12 — organisational requirements",
+                    "AIFMD Art.18 — organisational requirements",
+                    "ESMA Guidelines on sound remuneration policies (UCITS V)",
+                    "FINMA CISA Art.28 — operational requirements",
+                ],
+                "risk_emphasis": [
+                    "NAV calculation error risk",
+                    "Trade settlement fail rate",
+                    "Corporate action processing errors",
+                    "Fund launch operational readiness",
+                ],
+                "typical_findings": [
+                    "NAV error correction policy not formalised; threshold for investor reimbursement not defined",
+                    "Corporate action processing relies on manual intervention without compensating controls",
+                    "Operational risk incidents not reported to fund board within required timeframe",
+                ],
+            },
+            "DATA_PRIVACY": {
+                "scope_suggestion": "Personal data of fund investors, distributor data sharing arrangements, and GDPR compliance for investor reporting and marketing activities.",
+                "regulatory_refs": [
+                    "GDPR Art.6, 28 — lawful basis and data processor agreements",
+                    "AIFMD Art.22 — investor reporting data requirements",
+                    "MiFID II — investor data retention requirements",
+                    "nDSG — Swiss investor data protection",
+                ],
+                "risk_emphasis": [
+                    "Investor data sharing with sub-distributors",
+                    "Marketing data consent management",
+                    "Investor reporting data accuracy",
+                    "Retention of investor subscription records",
+                ],
+                "typical_findings": [
+                    "Data processing agreements with fund administrators not updated following GDPR Art.28 requirements",
+                    "Investor marketing data not subject to consent management; opt-out mechanism absent",
+                    "Personal data in investor reports retained beyond defined retention schedule",
+                ],
+            },
+            "MARKET_RISK": {
+                "scope_suggestion": "Portfolio risk management, liquidity risk, VaR limits, stress testing for UCITS and AIF funds.",
+                "regulatory_refs": [
+                    "UCITS V / ESMA Guidelines on risk measurement (2010/788)",
+                    "ESMA Liquidity Stress Testing Guidelines (ESMA34-39-897)",
+                    "AIFMD Art.15-16 — risk management and liquidity",
+                    "FINMA CISA Art.35 — risk management for Swiss funds",
+                ],
+                "risk_emphasis": [
+                    "Liquidity mismatch UCITS",
+                    "Swing pricing gaps",
+                    "Leverage monitoring",
+                    "VaR model backtesting failures",
+                ],
+                "typical_findings": [
+                    "Liquidity stress tests not performed at required frequency for UCITS funds",
+                    "Swing pricing mechanism not calibrated following redemption spike events",
+                    "VaR model backtesting exceptions not escalated to Risk Committee",
+                ],
+            },
+            "THIRD_PARTY_RISK": {
+                "scope_suggestion": "Sub-investment manager oversight, fund administrator, transfer agent and distributor due diligence.",
+                "regulatory_refs": [
+                    "AIFMD Art.20 — delegation requirements",
+                    "UCITS V Art.13 — delegation framework",
+                    "ESMA ManCo Guidelines (2012/832) — delegation oversight",
+                    "FINMA CISA Art.31 — delegation of investment management",
+                ],
+                "risk_emphasis": [
+                    "Fund board independence",
+                    "Delegation oversight",
+                    "Letter-box entity risk",
+                    "Sub-manager performance and compliance monitoring",
+                ],
+                "typical_findings": [
+                    "Sub-investment manager oversight framework does not include on-site reviews",
+                    "Fund administrator SLA breaches not escalated to management committee",
+                    "Transfer agent due diligence not refreshed following ownership change",
+                ],
+            },
+            "GOVERNANCE": {
+                "scope_suggestion": "Fund board governance, management company oversight, delegation framework, investment committee.",
+                "regulatory_refs": [
+                    "UCITS V Art.7 — management company requirements",
+                    "AIFMD Art.18-20 — governance and delegation",
+                    "ESMA ManCo Guidelines 2012/832",
+                    "FINMA CISA Art.28-36 — governance requirements",
+                ],
+                "risk_emphasis": [
+                    "Fund board independence",
+                    "Delegation oversight",
+                    "Letter-box entity risk",
+                    "Investment committee mandate adherence",
+                ],
+                "typical_findings": [
+                    "Fund board lacks independent director with relevant expertise",
+                    "Investment committee minutes do not evidence challenge of portfolio manager proposals",
+                    "Conflicts of interest policy not reviewed following launch of new fund strategies",
+                ],
+            },
+            "AI_MODEL_RISK": {
+                "scope_suggestion": "Quantitative models used in systematic fund strategies, AI-driven portfolio construction tools, and automated trade execution algorithms.",
+                "regulatory_refs": [
+                    "EU AI Act 2024 — AI in financial product management",
+                    "ESMA Algorithmic Trading Guidelines (MiFID II)",
+                    "SR 11-7 — Model Risk Management (best practice)",
+                    "IOSCO Principles on algorithmic trading",
+                ],
+                "risk_emphasis": [
+                    "Quantitative model overfitting to historical data",
+                    "Algorithm behaviour in stressed market conditions",
+                    "Model validation independence from portfolio managers",
+                    "Explainability of AI-driven investment decisions",
+                ],
+                "typical_findings": [
+                    "Quantitative models not subject to independent validation before live deployment",
+                    "Algorithm kill-switch procedures not tested under simulated stressed conditions",
+                    "Model change governance process not applied to incremental model updates",
+                ],
+            },
+            "CLOUD_RISK": {
+                "scope_suggestion": "Cloud hosting of order management, risk management, and fund accounting systems; data sovereignty for fund investor information.",
+                "regulatory_refs": [
+                    "DORA Regulation (EU) 2022/2554 — cloud risk for investment managers",
+                    "ESMA Cloud Guidelines (ESMA50-157-2456)",
+                    "FINMA RS 2018/3 (Outsourcing — cloud)",
+                    "FINMA RS 2023/1 (ICT risk)",
+                ],
+                "risk_emphasis": [
+                    "OMS and risk system cloud availability SLAs",
+                    "Fund investor data sovereignty",
+                    "Cloud provider concentration across fund platforms",
+                    "Real-time risk data latency in cloud environments",
+                ],
+                "typical_findings": [
+                    "DORA ICT concentration risk assessment not completed for cloud providers",
+                    "Fund accounting system cloud migration not notified to regulator as material outsourcing",
+                    "Cloud vendor exit strategy not tested or documented for critical systems",
+                ],
+            },
+            "RESILIENCE_BCP": {
+                "scope_suggestion": "Business continuity for fund management operations, NAV calculation recovery, and regulatory reporting continuity.",
+                "regulatory_refs": [
+                    "UCITS V Art.12 — organisational resilience",
+                    "AIFMD Art.18 — business continuity requirements",
+                    "DORA Regulation (EU) 2022/2554 — digital operational resilience",
+                    "FINMA RS 2023/1 (BCP for supervised entities)",
+                ],
+                "risk_emphasis": [
+                    "NAV calculation continuity",
+                    "Regulatory reporting recovery",
+                    "Fund board decision-making continuity",
+                    "Trade execution continuity during market stress",
+                ],
+                "typical_findings": [
+                    "NAV calculation BCP not tested with fund administrator; RTOs not agreed",
+                    "DORA threat-led penetration testing not yet planned",
+                    "Business continuity plan does not address key person loss for portfolio managers",
+                ],
+            },
+            "CHANGE_MANAGEMENT": {
+                "scope_suggestion": "Change management for risk management systems, fund accounting platforms, and regulatory reporting systems.",
+                "regulatory_refs": [
+                    "DORA Regulation (EU) 2022/2554 — ICT change management",
+                    "ESMA AIFMD Art.18 — organisational requirements",
+                    "FINMA RS 2023/1 (ICT change management)",
+                    "ISO/IEC 27001:2022 — change management",
+                ],
+                "risk_emphasis": [
+                    "Risk model changes without validation sign-off",
+                    "SFDR disclosure system updates",
+                    "Regulatory reporting changes tested in production",
+                    "Fund accounting system patch management",
+                ],
+                "typical_findings": [
+                    "Risk model updates deployed without independent validation sign-off",
+                    "SFDR disclosure calculation logic changes not subject to user acceptance testing",
+                    "Post-implementation review not performed for regulatory reporting system upgrades",
+                ],
+            },
+            "ACCESS_MANAGEMENT": {
+                "scope_suggestion": "Access controls to investment management platforms, order management systems, and fund data; information barriers between investment teams.",
+                "regulatory_refs": [
+                    "AIFMD Art.18 — organisational requirements (information barriers)",
+                    "MiFID II — information barriers and conflict management",
+                    "FINMA RS 2023/1 (ICT access management)",
+                    "ISO/IEC 27001:2022 A.9 — access control",
+                ],
+                "risk_emphasis": [
+                    "Information barriers between fund strategies",
+                    "OMS privileged access",
+                    "Segregation of duties in trade execution",
+                    "Portfolio data access for external distributors",
+                ],
+                "typical_findings": [
+                    "Information barriers between long-only and alternatives teams not technically enforced in shared systems",
+                    "OMS admin access shared among multiple users without individual accountability",
+                    "Quarterly access recertification for portfolio management systems not completed on schedule",
+                ],
+            },
+            "PROCUREMENT": {
+                "scope_suggestion": "Procurement of data vendors, risk systems, and fund service providers; vendor selection governance for material fund service providers.",
+                "regulatory_refs": [
+                    "AIFMD Art.20 — delegation and outsourcing governance",
+                    "DORA Regulation — ICT vendor procurement requirements",
+                    "FINMA RS 2018/3 (Outsourcing procurement)",
+                    "ESMA Guidelines on outsourcing to cloud service providers",
+                ],
+                "risk_emphasis": [
+                    "Data vendor concentration for investment research",
+                    "Fund service provider financial stability assessment",
+                    "ESG data provider quality and greenwashing risk",
+                    "Contract audit rights for material service providers",
+                ],
+                "typical_findings": [
+                    "ESG data providers procured without assessment of data methodology and coverage gaps",
+                    "Vendor risk assessment not refreshed following material change in service provider ownership",
+                    "Procurement for fund administration services bypassed standard due diligence for legacy providers",
+                ],
+            },
+            "WEALTH_ADVISORY": {
+                "scope_suggestion": "MiFID II product governance, SFDR disclosure accuracy, ESG classification and greenwashing risk.",
+                "regulatory_refs": [
+                    "MiFID II Art.24 — product governance",
+                    "SFDR EU 2019/2088 — sustainability disclosure",
+                    "EU Taxonomy Regulation 2020/852",
+                    "ESMA Guidelines on MiFID II product governance (2017/935)",
+                ],
+                "risk_emphasis": [
+                    "SFDR disclosure accuracy",
+                    "Greenwashing risk in ESG fund classification",
+                    "Target market definition completeness",
+                    "Distributor product governance oversight",
+                ],
+                "typical_findings": [
+                    "SFDR disclosures inaccurate or incomplete — Article 8/9 classification not supported by underlying investment policy",
+                    "Product target market not defined at sufficient granularity; negative target market absent",
+                    "ESG data used for SFDR reporting not validated against primary source disclosures",
+                ],
+            },
+        },
+    },
+
+    # ── 🏢 Management Company (ManCo) ──────────────────────────────────────────
+    "🏢 Management Company (ManCo)": {
+        "short_label": "ManCo",
+        "regulatory_focus": [
+            "UCITS V Art.60-67",
+            "AIFMD Art.6-8 and Annex I",
+            "ESMA ManCo Guidelines 2012/832",
+            "CSSF Circular 18/698",
+            "Central Bank of Ireland UCITS regulations",
+            "FINMA CISA Art.28-36",
+            "MAS CMS licence requirements",
+        ],
+        "typical_findings": [
+            "Insufficient substance — conducting officers not genuinely active in day-to-day management",
+            "Delegation oversight framework inadequate — no SLA, no periodic monitoring",
+            "Risk management function not independent from portfolio management",
+            "Board meets less than required frequency; decisions taken by circular resolution",
+            "Remuneration policy not UCITS/AIFMD compliant — variable pay not aligned with risk",
+        ],
+        "topics": {
+            "AML_KYC": {
+                "scope_suggestion": "ManCo AML programme, investor onboarding controls, and oversight of delegated distribution channels for AML compliance.",
+                "regulatory_refs": [
+                    "AMLD5/AMLD6 — ManCo AML obligations",
+                    "FATF Recommendation 10-12 — CDD for fund investors",
+                    "CSSF Circular 20/758 (Luxembourg AML obligations)",
+                    "Central Bank of Ireland AML guidance for fund management companies",
+                ],
+                "risk_emphasis": [
+                    "Investor CDD oversight across delegated distribution",
+                    "Politically exposed persons in institutional investor base",
+                    "AML governance within ManCo board",
+                    "Sub-distributor AML standards verification",
+                ],
+                "typical_findings": [
+                    "ManCo MLRO role delegated without documented oversight framework",
+                    "AML policy not updated following AMLD6 transposition",
+                    "Investor AML files not reviewed when distribution moved to new sub-distributor",
+                ],
+            },
+            "CYBER_RISK": {
+                "scope_suggestion": "Cybersecurity posture of ManCo IT infrastructure, reliance on IT systems of the investment manager delegate, and ICT risk oversight responsibilities.",
+                "regulatory_refs": [
+                    "DORA Regulation (EU) 2022/2554 — ICT risk for ManCos",
+                    "ESMA ManCo Guidelines 2012/832 — organisational requirements",
+                    "FINMA RS 2023/1 (ICT risk for CISA-regulated entities)",
+                    "CSSF Circular 17/655 — ICT risk management",
+                ],
+                "risk_emphasis": [
+                    "ManCo reliance on delegate IT infrastructure",
+                    "ICT oversight of delegated functions",
+                    "DORA compliance gap assessment",
+                    "ManCo-level cyber incident response",
+                ],
+                "typical_findings": [
+                    "ManCo has no independent ICT risk assessment; wholly reliant on delegate's documentation",
+                    "DORA ICT risk management framework not adapted for ManCo size and complexity",
+                    "Cyber incident escalation procedure from delegate to ManCo board not defined",
+                ],
+            },
+            "CREDIT_RISK": {
+                "scope_suggestion": "ManCo oversight of credit risk within managed funds, counterparty risk in derivatives positions, and credit risk in money market fund portfolios.",
+                "regulatory_refs": [
+                    "UCITS V — issuer concentration and counterparty limits",
+                    "AIFMD Art.15 — risk management framework",
+                    "ESMA MMF Regulation — credit quality requirements",
+                    "FINMA CISA Art.35 — risk management oversight",
+                ],
+                "risk_emphasis": [
+                    "Counterparty exposure oversight by ManCo",
+                    "Credit risk limit monitoring independence",
+                    "Money market fund credit quality",
+                    "Delegate credit risk reporting timeliness",
+                ],
+                "typical_findings": [
+                    "ManCo risk function does not independently verify credit risk limits reported by delegate",
+                    "Counterparty exposure breaches reported by delegate not escalated to ManCo board within required timeframe",
+                    "Credit risk methodology review not included in annual risk management framework assessment",
+                ],
+            },
+            "OPERATIONAL_RISK": {
+                "scope_suggestion": "ManCo operational setup, key person risk, business continuity, IT infrastructure adequacy for regulated activities.",
+                "regulatory_refs": [
+                    "UCITS V Art.12 — ManCo organisational requirements",
+                    "AIFMD Art.18 — operational requirements",
+                    "ESMA ManCo Guidelines 2012/832 — substance requirements",
+                    "CSSF Circular 18/698 — ManCo governance and operational requirements",
+                ],
+                "risk_emphasis": [
+                    "Key person dependency on conducting officers",
+                    "Operational substance adequacy",
+                    "Business continuity for regulated activities",
+                    "Operational risk oversight of delegated functions",
+                ],
+                "typical_findings": [
+                    "ManCo headcount insufficient relative to number and complexity of funds managed",
+                    "Operational risk incidents at delegate level not systematically reported to ManCo",
+                    "BCP does not address conducting officer unavailability scenario",
+                ],
+            },
+            "DATA_PRIVACY": {
+                "scope_suggestion": "ManCo data controller obligations, investor personal data shared with delegates, and GDPR compliance for cross-border data flows.",
+                "regulatory_refs": [
+                    "GDPR Art.26 — joint controller arrangements with delegates",
+                    "GDPR Art.28 — data processor agreements with fund administrator",
+                    "Luxembourg data protection law (CNPD)",
+                    "Irish DPC guidance for financial services firms",
+                ],
+                "risk_emphasis": [
+                    "Joint controller clarity with investment manager delegate",
+                    "Investor data flows to sub-administrators",
+                    "Consent management for investor marketing",
+                    "Data breach notification to regulator",
+                ],
+                "typical_findings": [
+                    "Joint controller agreement with investment manager delegate not in place",
+                    "Data processing agreement with transfer agent not reviewed following service scope expansion",
+                    "Investor data breach response procedure not tested",
+                ],
+            },
+            "MARKET_RISK": {
+                "scope_suggestion": "ManCo oversight of market risk within managed funds, review of risk reports from delegates, and independent risk monitoring function.",
+                "regulatory_refs": [
+                    "UCITS V ESMA risk measurement guidelines",
+                    "AIFMD Art.15 — risk management independence",
+                    "ESMA Liquidity Stress Testing Guidelines 2019",
+                    "FINMA CISA Art.35 — independent risk management",
+                ],
+                "risk_emphasis": [
+                    "Risk management independence from portfolio management",
+                    "Market risk report challenge by ManCo",
+                    "Liquidity mismatch oversight",
+                    "VaR limit breach escalation",
+                ],
+                "typical_findings": [
+                    "ManCo risk function does not independently challenge market risk reports submitted by delegate",
+                    "Liquidity stress test results reviewed by ManCo board only annually, not quarterly",
+                    "VaR limit breaches not escalated to ManCo board within agreed timeframe",
+                ],
+            },
+            "THIRD_PARTY_RISK": {
+                "scope_suggestion": "Delegation framework, oversight of delegated investment management, administration and distribution functions, SLA monitoring.",
+                "regulatory_refs": [
+                    "AIFMD Art.20 — delegation requirements and oversight",
+                    "UCITS V Art.13 — delegation framework",
+                    "ESMA ManCo Guidelines 2012/832 — delegation oversight",
+                    "CSSF Circular 18/698 — substance and delegation",
+                ],
+                "risk_emphasis": [
+                    "Delegation without oversight",
+                    "No SLA or performance monitoring",
+                    "Sub-manager not validated",
+                    "Letter-box entity risk from excessive delegation",
+                ],
+                "typical_findings": [
+                    "Delegation agreements lack performance and compliance SLAs",
+                    "Annual on-site review of investment manager delegate not performed",
+                    "Fund administrator oversight: no formal exception reporting mechanism",
+                ],
+            },
+            "GOVERNANCE": {
+                "scope_suggestion": "ManCo governance framework, conducting officers responsibilities, board oversight, substance assessment against ESMA letter-box entity criteria.",
+                "regulatory_refs": [
+                    "ESMA ManCo Guidelines 2012/832 — substance requirements",
+                    "CSSF Circular 18/698 — conducting officers",
+                    "AIFMD Art.8 — authorisation requirements",
+                    "Central Bank of Ireland CP86 — fund management company effectiveness",
+                ],
+                "risk_emphasis": [
+                    "Substance requirements",
+                    "Letter-box entity risk",
+                    "Conducting officers passivity",
+                    "Board independence and challenge",
+                ],
+                "typical_findings": [
+                    "Conducting officers not demonstrably active in day-to-day management decisions",
+                    "Board meeting minutes do not evidence genuine challenge of delegate reports",
+                    "ManCo substance assessment not performed against ESMA letter-box entity criteria",
+                ],
+            },
+            "AI_MODEL_RISK": {
+                "scope_suggestion": "ManCo oversight of AI models used by delegated investment managers, model risk governance framework at ManCo level.",
+                "regulatory_refs": [
+                    "EU AI Act 2024 — AI governance obligations for financial entities",
+                    "ESMA AIFMD Art.18 — organisational requirements (technology risk)",
+                    "CSSF guidance on technology governance",
+                    "SR 11-7 — Model Risk Management best practice",
+                ],
+                "risk_emphasis": [
+                    "ManCo oversight of delegate AI models",
+                    "AI model risk in investment decision support",
+                    "EU AI Act compliance for high-risk AI systems",
+                    "Model validation assurance from delegates",
+                ],
+                "typical_findings": [
+                    "ManCo delegation agreement does not require delegate to disclose AI model usage in investment management",
+                    "EU AI Act inventory of AI systems used by ManCo or its delegates not completed",
+                    "Model risk governance not addressed in ManCo risk management framework",
+                ],
+            },
+            "CLOUD_RISK": {
+                "scope_suggestion": "ManCo ICT infrastructure in the cloud, cloud services used by delegates, and DORA compliance for ICT concentration risk.",
+                "regulatory_refs": [
+                    "DORA Regulation (EU) 2022/2554 — ICT concentration risk",
+                    "ESMA Cloud Guidelines (ESMA50-157-2456)",
+                    "CSSF Circular 17/655 — outsourcing and cloud",
+                    "FINMA RS 2018/3 — cloud as outsourcing",
+                ],
+                "risk_emphasis": [
+                    "Cloud provider concentration at ManCo and delegate level",
+                    "DORA ICT third-party risk register completeness",
+                    "Fund data sovereignty in cloud environments",
+                    "ManCo oversight of delegate cloud infrastructure",
+                ],
+                "typical_findings": [
+                    "ICT third-party register does not include cloud providers used by delegates",
+                    "DORA concentration risk assessment not performed across ManCo and delegate cloud usage",
+                    "ManCo board not informed of delegate's material cloud infrastructure changes",
+                ],
+            },
+            "RESILIENCE_BCP": {
+                "scope_suggestion": "ManCo business continuity programme, conducting officer succession, and recovery from IT or operational disruptions affecting regulated activities.",
+                "regulatory_refs": [
+                    "UCITS V Art.12 — ManCo BCP requirements",
+                    "AIFMD Art.18 — business continuity",
+                    "DORA Regulation — digital operational resilience",
+                    "CSSF Circular 18/698 — ManCo operational continuity",
+                ],
+                "risk_emphasis": [
+                    "Conducting officer succession and continuity",
+                    "Regulatory activity continuity during disruption",
+                    "Delegate BCP oversight",
+                    "Board decision continuity",
+                ],
+                "typical_findings": [
+                    "ManCo BCP not updated to reflect DORA requirements",
+                    "Conducting officer succession plan not documented or tested",
+                    "ManCo does not verify delegate BCP test results as part of oversight programme",
+                ],
+            },
+            "CHANGE_MANAGEMENT": {
+                "scope_suggestion": "System changes to fund accounting not controlled, inadequate testing before go-live. ManCo oversight of technology changes at delegates.",
+                "regulatory_refs": [
+                    "DORA Regulation — ICT change management",
+                    "ESMA ManCo Guidelines — operational requirements",
+                    "CSSF Circular 17/655 — ICT governance",
+                    "FINMA RS 2023/1 — change management",
+                ],
+                "risk_emphasis": [
+                    "System changes to fund accounting not controlled",
+                    "Inadequate testing before go-live",
+                    "Change oversight of delegates",
+                    "Regulatory reporting impacted by untested changes",
+                ],
+                "typical_findings": [
+                    "ManCo not notified of material system changes at fund administrator affecting NAV calculation",
+                    "Change management policy not adapted for ManCo's reliance on delegate IT infrastructure",
+                    "Emergency changes by delegate not subject to ManCo ex-post review",
+                ],
+            },
+            "ACCESS_MANAGEMENT": {
+                "scope_suggestion": "ManCo access controls, privileged access to fund management systems, segregation of duties between conducting officers.",
+                "regulatory_refs": [
+                    "DORA Regulation — ICT access management",
+                    "ESMA ManCo Guidelines — operational controls",
+                    "CSSF Circular 17/655 — access management",
+                    "ISO/IEC 27001:2022 A.9 — access control",
+                ],
+                "risk_emphasis": [
+                    "Segregation of duties between conducting officers",
+                    "Privileged access to fund management systems",
+                    "Shared credentials in small ManCo teams",
+                    "Delegate system access rights for ManCo staff",
+                ],
+                "typical_findings": [
+                    "Shared administrative credentials used by conducting officers in fund management systems",
+                    "Access recertification not performed for ManCo staff with access to delegate systems",
+                    "Segregation of duties between risk management and portfolio management not enforced technically",
+                ],
+            },
+            "PROCUREMENT": {
+                "scope_suggestion": "ManCo procurement of service providers, delegate selection governance, and compliance with AIFMD/UCITS outsourcing requirements.",
+                "regulatory_refs": [
+                    "AIFMD Art.20 — delegation and service provider selection",
+                    "UCITS V Art.13 — ManCo delegation governance",
+                    "DORA Regulation — ICT vendor procurement",
+                    "CSSF Circular 18/698 — service provider oversight",
+                ],
+                "risk_emphasis": [
+                    "Delegate selection due diligence",
+                    "Service provider conflict of interest",
+                    "Procurement governance with board oversight",
+                    "Contract terms compliance with AIFMD/UCITS",
+                ],
+                "typical_findings": [
+                    "Delegate selection process not documented; no competitive tender for material functions",
+                    "Contracts with delegates do not include required AIFMD Art.20 provisions",
+                    "ManCo board not involved in approval of new material service providers",
+                ],
+            },
+            "WEALTH_ADVISORY": {
+                "scope_suggestion": "ManCo oversight of MiFID II product governance obligations, SFDR entity-level disclosures, and suitability of fund products for target markets.",
+                "regulatory_refs": [
+                    "MiFID II Art.24 — product governance (manufacturer obligations)",
+                    "SFDR EU 2019/2088 — entity-level and product disclosures",
+                    "EU Taxonomy Regulation — product sustainability claims",
+                    "ESMA Guidelines on MiFID II product governance 2017/935",
+                ],
+                "risk_emphasis": [
+                    "Product governance manufacturer obligations",
+                    "SFDR entity-level disclosure accuracy",
+                    "ESG investment policy alignment",
+                    "Target market oversight for fund range",
+                ],
+                "typical_findings": [
+                    "ManCo SFDR entity-level Principal Adverse Impacts statement not published within required deadline",
+                    "Product governance target market definition not communicated to distributors",
+                    "SFDR product classification decisions not reviewed by ManCo board annually",
+                ],
+            },
+        },
+    },
+
+    # ── 🔀 Alternative Investment (PE/RE/HF) ───────────────────────────────────
+    "🔀 Alternative Investment (PE/RE/HF)": {
+        "short_label": "Alternative Investment",
+        "regulatory_focus": [
+            "AIFMD II Directive 2024/927/EU",
+            "ESMA AIFMD Q&A and guidelines",
+            "FINMA CISA/CISO for AIFs",
+            "ESMA Valuation Guidelines for AIFs",
+            "IOSCO Hedge Fund principles",
+            "ILPA Private Equity Principles",
+            "AIFMD Art.22-24 investor reporting",
+        ],
+        "typical_findings": [
+            "Valuation committee not independent from portfolio management",
+            "Co-investment conflicts not managed or disclosed to LPs",
+            "AIFMD Annex IV reporting errors or late submission",
+            "Depositary oversight insufficient — no periodic review of depositary activities",
+            "Side pocket governance inadequate — no clear criteria for asset designation",
+            "Leverage limits breached without escalation to governing body",
+        ],
+        "topics": {
+            "AML_KYC": {
+                "scope_suggestion": "Investor KYC for alternative fund subscriptions, beneficial ownership of complex investor structures (SPVs, trusts, foundations).",
+                "regulatory_refs": [
+                    "FATF Recommendation 10-12 — CDD for alternative fund investors",
+                    "AMLD5/AMLD6 — beneficial ownership of complex structures",
+                    "AIFMD Art.12 — investor due diligence obligations",
+                    "FINMA RS 2011/1 — KYC for AIF investors",
+                ],
+                "risk_emphasis": [
+                    "Beneficial ownership of SPVs and trust structures",
+                    "Source of funds for PE capital calls",
+                    "High-risk jurisdiction investor exposure",
+                    "Re-KYC triggers at fund restructuring",
+                ],
+                "typical_findings": [
+                    "Beneficial ownership of LP structures (SPVs, foundations) not verified beyond first tier",
+                    "KYC refresh not triggered by material change in LP structure or ownership",
+                    "Source of funds not adequately documented for capital call drawdowns above threshold",
+                ],
+            },
+            "CYBER_RISK": {
+                "scope_suggestion": "Cybersecurity for alternative investment management platforms, deal pipeline systems, and LP reporting portals; protection of material non-public deal information.",
+                "regulatory_refs": [
+                    "DORA Regulation (EU) 2022/2554 — ICT risk for AIFMs",
+                    "AIFMD Art.18 — organisational requirements",
+                    "FINMA RS 2023/1 (ICT and Cyber Risk)",
+                    "ISO/IEC 27001:2022",
+                ],
+                "risk_emphasis": [
+                    "MNPI protection for PE deal pipelines",
+                    "LP reporting portal security",
+                    "Ransomware risk to portfolio company data",
+                    "Insider threat from deal team access to MNPI",
+                ],
+                "typical_findings": [
+                    "Deal pipeline data classified as MNPI not subject to need-to-know access controls",
+                    "LP reporting portal not subject to annual penetration testing",
+                    "Cybersecurity due diligence not integrated into PE portfolio company acquisition process",
+                ],
+            },
+            "CREDIT_RISK": {
+                "scope_suggestion": "Leverage covenant monitoring, portfolio company debt monitoring (PE), tenant concentration risk (RE).",
+                "regulatory_refs": [
+                    "AIFMD Art.15 — leverage and risk management",
+                    "AIFMD II — enhanced leverage reporting",
+                    "ESMA Valuation Guidelines for AIFs",
+                    "ILPA Principles — portfolio company financial monitoring",
+                ],
+                "risk_emphasis": [
+                    "Leverage covenant monitoring",
+                    "Portfolio company debt monitoring (PE)",
+                    "Tenant concentration risk (RE)",
+                    "Fund-level subscription credit facility risk",
+                ],
+                "typical_findings": [
+                    "Portfolio company leverage covenant breaches not escalated to investment committee",
+                    "Tenant concentration in RE funds exceeds internal limits without documented board approval",
+                    "Subscription credit facility usage not included in leverage calculation for AIFMD Annex IV reporting",
+                ],
+            },
+            "OPERATIONAL_RISK": {
+                "scope_suggestion": "Operational risk in alternative fund management, deal execution operational controls, and valuation process integrity.",
+                "regulatory_refs": [
+                    "AIFMD Art.18 — operational requirements for AIFMs",
+                    "ESMA Valuation Guidelines for AIFs",
+                    "FINMA CISA Art.28 — operational requirements",
+                    "ILPA Principles — operational due diligence",
+                ],
+                "risk_emphasis": [
+                    "Deal execution operational errors",
+                    "Valuation process integrity",
+                    "Key person dependency on investment professionals",
+                    "LP capital call and distribution operational controls",
+                ],
+                "typical_findings": [
+                    "Capital call and distribution process relies on manual spreadsheets without maker-checker controls",
+                    "Key person clause triggers not monitored against investment team changes",
+                    "Valuation process documentation insufficient; external valuer instructions not formalised",
+                ],
+            },
+            "DATA_PRIVACY": {
+                "scope_suggestion": "LP personal data management, GDPR compliance for investor reporting, and data sharing with portfolio companies.",
+                "regulatory_refs": [
+                    "GDPR Art.6, 28 — LP data processing",
+                    "AIFMD Art.22 — investor reporting data",
+                    "nDSG — Swiss LP data protection",
+                    "CCPA — California LP data privacy",
+                ],
+                "risk_emphasis": [
+                    "LP personal data in fund management systems",
+                    "Data sharing with portfolio companies",
+                    "Investor reporting data retention",
+                    "Data subject rights for institutional LPs with named individuals",
+                ],
+                "typical_findings": [
+                    "GDPR data processing inventory does not include LP personal data flows to fund administrator",
+                    "Data retention for LP subscription documents not aligned with regulatory requirements",
+                    "AIFMD Art.22 investor reports include LP personal data not subject to data minimisation",
+                ],
+            },
+            "MARKET_RISK": {
+                "scope_suggestion": "Leverage monitoring and limits, liquidity management, stress testing, derivatives counterparty risk, side pockets governance.",
+                "regulatory_refs": [
+                    "AIFMD Art.15-16 — risk management and liquidity",
+                    "AIFMD II — enhanced liquidity management tools",
+                    "ESMA Liquidity Stress Testing Guidelines 2019",
+                    "FINMA CISA Art.35 — risk management",
+                ],
+                "risk_emphasis": [
+                    "Leverage monitoring",
+                    "Redemption vs liquidity mismatch (HF)",
+                    "Side pockets governance",
+                    "Derivatives counterparty concentration (HF)",
+                ],
+                "typical_findings": [
+                    "Leverage limits for hedge fund strategies breached without timely escalation",
+                    "Side pocket designation criteria not defined ex ante; applied inconsistently",
+                    "Liquidity stress testing for open-ended RE funds not performed at required frequency",
+                ],
+            },
+            "THIRD_PARTY_RISK": {
+                "scope_suggestion": "Depositary oversight, prime broker management (HF), fund administrator oversight, AIFMD depositary independence.",
+                "regulatory_refs": [
+                    "AIFMD Art.21 — depositary requirements and oversight",
+                    "AIFMD II — enhanced depositary oversight",
+                    "ESMA Guidelines on depositary (ESMA34-32-352)",
+                    "FINMA CISA Art.73-76 — custodian bank requirements",
+                ],
+                "risk_emphasis": [
+                    "Depositary independence",
+                    "Prime broker concentration (HF)",
+                    "Administrator oversight",
+                    "Depositary liability chain for sub-custody",
+                ],
+                "typical_findings": [
+                    "Annual depositary oversight review not performed by AIFM",
+                    "Prime broker concentration not assessed; single prime broker for all fund strategies",
+                    "Fund administrator oversight: no KPI/SLA monitoring dashboard",
+                ],
+            },
+            "GOVERNANCE": {
+                "scope_suggestion": "AIFM governance framework, AIFMD compliance, investment committee, valuation committee independence from portfolio management.",
+                "regulatory_refs": [
+                    "AIFMD Art.8, 18 — authorisation and governance",
+                    "AIFMD II — enhanced governance and delegation requirements",
+                    "ESMA AIFMD Q&A — governance expectations",
+                    "ILPA Principles — PE governance best practice",
+                ],
+                "risk_emphasis": [
+                    "Valuation independence",
+                    "Carried interest conflicts",
+                    "Co-investment governance",
+                    "Investment committee independence and challenge",
+                ],
+                "typical_findings": [
+                    "Valuation committee members overlap with deal team; independence not demonstrated",
+                    "Co-investment allocation policy not documented; allocations subject to investor complaint",
+                    "Carried interest calculations not independently verified by CFO or external party",
+                ],
+            },
+            "AI_MODEL_RISK": {
+                "scope_suggestion": "AI and quantitative models used in alternative investment strategies, including systematic HF strategies, AI-driven deal sourcing in PE, and automated valuation models in RE.",
+                "regulatory_refs": [
+                    "EU AI Act 2024 — AI in financial management",
+                    "AIFMD Art.18 — organisational requirements (model governance)",
+                    "ESMA Valuation Guidelines — model-based valuations",
+                    "SR 11-7 — Model Risk Management best practice",
+                ],
+                "risk_emphasis": [
+                    "Systematic HF model validation",
+                    "AI deal sourcing bias in PE",
+                    "Automated valuation model (AVM) governance in RE",
+                    "Model transparency for LP reporting",
+                ],
+                "typical_findings": [
+                    "Automated valuation models for RE assets not independently validated annually",
+                    "Systematic HF strategy models not subject to model risk governance framework",
+                    "AI deal sourcing tools deployed without bias assessment or model documentation",
+                ],
+            },
+            "CLOUD_RISK": {
+                "scope_suggestion": "Cloud infrastructure for deal management, LP reporting, and fund accounting; data security for sensitive portfolio company and investor information.",
+                "regulatory_refs": [
+                    "DORA Regulation (EU) 2022/2554 — ICT risk for AIFMs",
+                    "AIFMD Art.18 — technology risk management",
+                    "FINMA RS 2018/3 — cloud outsourcing",
+                    "ESMA Cloud Guidelines (ESMA50-157-2456)",
+                ],
+                "risk_emphasis": [
+                    "Deal pipeline data sovereignty",
+                    "LP data in cloud environments",
+                    "Portfolio company data hosted in AIFM cloud",
+                    "Cloud provider exit strategy for fund lifecycle",
+                ],
+                "typical_findings": [
+                    "Deal management system migrated to cloud without formal outsourcing notification to regulator",
+                    "LP personal data stored in cloud without data residency controls",
+                    "Cloud exit strategy not documented for fund management platform",
+                ],
+            },
+            "RESILIENCE_BCP": {
+                "scope_suggestion": "Business continuity for alternative investment management, investment team continuity, and LP reporting resilience during fund lifecycle.",
+                "regulatory_refs": [
+                    "AIFMD Art.18 — business continuity requirements",
+                    "DORA Regulation — digital operational resilience",
+                    "FINMA CISA Art.28 — operational resilience",
+                    "ILPA Principles — key person and continuity governance",
+                ],
+                "risk_emphasis": [
+                    "Key investment professional continuity",
+                    "Fund lifecycle resilience (10+ year horizon)",
+                    "LP reporting continuity",
+                    "Portfolio company support during AIFM disruption",
+                ],
+                "typical_findings": [
+                    "Key person succession plan not documented for managing partners",
+                    "BCP does not address fund management continuity over multi-year fund lifecycle",
+                    "LP reporting process has no documented business continuity procedure",
+                ],
+            },
+            "CHANGE_MANAGEMENT": {
+                "scope_suggestion": "Change management for fund management systems, valuation model updates, and regulatory reporting system changes.",
+                "regulatory_refs": [
+                    "DORA Regulation — ICT change management",
+                    "AIFMD Art.18 — organisational requirements",
+                    "FINMA RS 2023/1 — change management",
+                    "ISO/IEC 27001:2022 — change management",
+                ],
+                "risk_emphasis": [
+                    "Valuation model changes without governance",
+                    "AIFMD Annex IV reporting system updates",
+                    "Fund accounting system changes",
+                    "Portfolio monitoring tool upgrades",
+                ],
+                "typical_findings": [
+                    "Valuation model updates not subject to formal change control and validation sign-off",
+                    "AIFMD Annex IV reporting system changes not tested before regulatory submission deadline",
+                    "Portfolio monitoring tool changes made without change advisory board review",
+                ],
+            },
+            "ACCESS_MANAGEMENT": {
+                "scope_suggestion": "Access management for deal management systems, valuation models, and LP data; information barriers between deal teams and fund administrators.",
+                "regulatory_refs": [
+                    "AIFMD Art.18 — organisational controls",
+                    "DORA Regulation — ICT access management",
+                    "FINMA RS 2023/1 — access controls",
+                    "ISO/IEC 27001:2022 A.9 — access control",
+                ],
+                "risk_emphasis": [
+                    "Deal team MNPI access controls",
+                    "Valuation model access integrity",
+                    "LP data access segregation",
+                    "Privileged access to fund accounting",
+                ],
+                "typical_findings": [
+                    "Deal team members retain access to MNPI from closed transactions without periodic access review",
+                    "Valuation model inputs accessible to portfolio managers without compensating controls",
+                    "Quarterly access recertification not performed for fund management systems",
+                ],
+            },
+            "PROCUREMENT": {
+                "scope_suggestion": "Procurement of fund service providers, depositary selection, and prime broker governance for alternative investment funds.",
+                "regulatory_refs": [
+                    "AIFMD Art.20-21 — service provider and depositary selection",
+                    "AIFMD II — enhanced depositary and service provider governance",
+                    "DORA Regulation — ICT vendor procurement",
+                    "ILPA Principles — service provider due diligence",
+                ],
+                "risk_emphasis": [
+                    "Depositary selection independence",
+                    "Prime broker due diligence (HF)",
+                    "Valuation agent selection governance",
+                    "Fund administrator competitive selection",
+                ],
+                "typical_findings": [
+                    "Depositary selection not subject to competitive tender or documented independence assessment",
+                    "Prime broker due diligence not refreshed following material change in broker's financial position",
+                    "External valuation agent contract lacks independence provisions required by ESMA guidelines",
+                ],
+            },
+            "WEALTH_ADVISORY": {
+                "scope_suggestion": "AIFMD Art.22 investor reporting, LP suitability (professional investor qualification), ESG due diligence in investments.",
+                "regulatory_refs": [
+                    "AIFMD Art.22-24 — investor reporting obligations",
+                    "AIFMD II — enhanced investor reporting",
+                    "SFDR EU 2019/2088 — AIF sustainability disclosures",
+                    "ILPA ESG Assessment Framework",
+                ],
+                "risk_emphasis": [
+                    "LP professional investor qualification",
+                    "AIFMD Art.22 reporting accuracy",
+                    "ESG due diligence in deal process",
+                    "Greenwashing risk in ESG-labelled AIFs",
+                ],
+                "typical_findings": [
+                    "AIFMD Art.22 annual investor reports contain errors in leverage and risk metrics",
+                    "ESG due diligence not systematically integrated into PE deal process",
+                    "LP professional investor re-qualification not performed at required intervals",
+                ],
+            },
+        },
+    },
+}

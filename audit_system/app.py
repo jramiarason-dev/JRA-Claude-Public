@@ -52,6 +52,7 @@ _SS_DEFAULTS = {
     "help_open": False,
     "help_lang": "Français",
     "active_tab": 0,
+    "entity_type": "🏦 Private Banking",
     # Static data
     "dash_source": "static",   # "static" | "live"
     "ref_search": "",
@@ -568,7 +569,7 @@ from data import (
     CVE_BANKING, IIA_STANDARDS_2024, DATA_ANALYTICS_SCENARIOS,
     AUDIT_TESTS_LIBRARY, TOPIC_THEME_MAP, TOPIC_KEY_MAPPING,
     THEMATIC_BACKGROUND, REGULATORY_CALENDAR, HNWI_RED_FLAGS,
-    MANAGEMENT_ACTION_TEMPLATES,
+    MANAGEMENT_ACTION_TEMPLATES, ENTITY_CONTEXT,
 )
 
 JURISDICTIONS = ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "Bahamas / SCB", "EU / DORA", "UK / FCA+PRA"]
@@ -2041,6 +2042,23 @@ with st.sidebar:
 
     st.markdown("---")
 
+    # Entity Type selector
+    st.markdown(f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--sidebar-header-color);margin-bottom:6px">Entity Type</div>', unsafe_allow_html=True)
+    _entity_opts = list(_ENTITY_COLORS.keys())
+    _entity_idx  = _entity_opts.index(st.session_state.get("entity_type", "🏦 Private Banking"))
+    _new_entity  = st.selectbox(
+        "Entity Type",
+        options=_entity_opts,
+        index=_entity_idx,
+        key="_sidebar_entity_select",
+        label_visibility="collapsed",
+    )
+    if _new_entity != st.session_state.get("entity_type"):
+        st.session_state["entity_type"] = _new_entity
+        st.rerun()
+
+    st.markdown("---")
+
     # Current audit summary
     st.markdown(f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--sidebar-header-color);margin-bottom:8px">Current Audit</div>', unsafe_allow_html=True)
 
@@ -2060,8 +2078,10 @@ with st.sidebar:
     t2_done = bool(st.session_state.t2_rationale)
     t3_done = bool(st.session_state.t3_report)
 
+    _sb_entity = st.session_state.get("entity_type", "🏦 Private Banking")
     st.markdown(
         f'<div style="font-size:12.5px;color:var(--text-secondary);line-height:2">'
+        f'Entity: {_entity_badge_html(_sb_entity, "11px")}<br>'
         f'{_status_icon(t1_done)} Risk Analysis<br>'
         f'{_status_icon(t2_done)} Audit Plan<br>'
         f'{_status_icon(t3_done)} Audit Report'
@@ -2280,6 +2300,36 @@ _TAB_NAMES = {
     "English":  ["Dashboard", "Risk Analysis", "Audit Plan", "Audit Report"],
 }
 
+TAB_TITLES = {
+    0: "🌐 Intelligence Dashboard",
+    1: "🔍 Risk Analysis",
+    2: "📋 Audit Plan & Testing",
+    3: "📄 Audit Report",
+}
+
+TAB_SUBTITLES = {
+    0: "Stay informed before launching an audit",
+    1: "Identify risks and applicable regulations for your audit topic",
+    2: "Build your audit plan and test programme",
+    3: "Generate your formal audit report",
+}
+
+_ENTITY_COLORS = {
+    "🏦 Private Banking":                   ("#0a2540", "#7fa8fb"),
+    "📊 Asset Management":                  ("#0a2a12", "#4ade80"),
+    "🏢 Management Company (ManCo)":        ("#2a1f0a", "#f59e0b"),
+    "🔀 Alternative Investment (PE/RE/HF)": ("#1e0a2a", "#c084fc"),
+}
+
+
+def _entity_badge_html(entity_type: str, size: str = "13px") -> str:
+    bg, col = _ENTITY_COLORS.get(entity_type, ("#0a2540", "#7fa8fb"))
+    return (
+        f'<span style="background:{bg};color:{col};border:1px solid {col}55;'
+        f'border-radius:6px;padding:2px 10px;font-size:{size};font-weight:600">'
+        f'{entity_type}</span>'
+    )
+
 
 def _show_help_panel():
     """Render the contextual help panel below the header."""
@@ -2321,12 +2371,21 @@ def _show_help_panel():
 # ── Header ────────────────────────────────────────────────────────────────────
 _hdr_col1, _hdr_col2 = st.columns([8, 1])
 with _hdr_col1:
-    st.markdown("""
-<div style="text-align:center;margin-bottom:32px;padding-top:1rem">
+    _active_tab   = st.session_state.get("active_tab", 0)
+    _tab_title_txt = TAB_TITLES.get(_active_tab, "")
+    _tab_sub_txt   = TAB_SUBTITLES.get(_active_tab, "")
+    _tab_line = (
+        f'<p style="color:#7fa8fb;font-size:13px;font-weight:600;margin:6px 0 4px">'
+        f'{_tab_title_txt} &mdash; {_tab_sub_txt}</p>'
+        if _tab_title_txt else ""
+    )
+    st.markdown(f"""
+<div style="text-align:center;margin-bottom:24px;padding-top:1rem">
   <h1 style="font-size:42px;font-weight:800;letter-spacing:-1px;margin:0">🏦 AuditIQ</h1>
   <p style="font-size:16px;color:#8b95b8;font-style:italic;margin-top:4px;margin-bottom:0">
     From risk to insight — audit intelligence for private banking.
   </p>
+  {_tab_line}
 </div>
 """, unsafe_allow_html=True)
 with _hdr_col2:
@@ -2941,6 +3000,10 @@ tab0, tab1, tab2, tab3 = st.tabs([
 # ─────────────────────────────────────────────────────────────────────────────
 with tab0:
     st.session_state["active_tab"] = 0
+    st.markdown(
+        f'<div style="margin-bottom:8px">{_entity_badge_html(st.session_state.get("entity_type","🏦 Private Banking"))}</div>',
+        unsafe_allow_html=True,
+    )
     # Source selector
     _src_c1, _src_c2, _ = st.columns([1.3, 1.5, 4])
     _t0_static = st.session_state.dash_source == "static"
@@ -3007,6 +3070,14 @@ with tab0:
             _cal_juris  = sorted({e["jurisdiction"] for e in REGULATORY_CALENDAR})
             _cal_types  = sorted({e["type"] for e in REGULATORY_CALENDAR})
             _cal_prios  = ["High", "Medium", "Low"]
+            # Entity-aware jurisdiction pre-filter suggestion
+            _t0_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
+            _ENTITY_JUR_HINT = {
+                "🏦 Private Banking":                   "Filtered for Private Banking regulators",
+                "📊 Asset Management":                  "Filtered for Asset Management regulators (ESMA, FINMA, FCA, MAS)",
+                "🏢 Management Company (ManCo)":        "Filtered for ManCo regulators (ESMA, CSSF, CBI, FINMA)",
+                "🔀 Alternative Investment (PE/RE/HF)": "Filtered for Alternative Investment regulators (ESMA, SEC, FCA)",
+            }
             st.markdown(
                 f'<div class="section-title">D. Regulatory Calendar 2025–2026'
                 f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
@@ -3166,6 +3237,10 @@ with tab0:
 # ─────────────────────────────────────────────────────────────────────────────
 with tab1:
     st.session_state["active_tab"] = 1
+    st.markdown(
+        f'<div style="margin-bottom:8px">{_entity_badge_html(st.session_state.get("entity_type","🏦 Private Banking"))}</div>',
+        unsafe_allow_html=True,
+    )
     st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">Risk mapping, applicable regulations, and public audit recommendations by topic.</p>', unsafe_allow_html=True)
     _t1_mode = render_mode_toggle("mode_tab1")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
@@ -3180,10 +3255,17 @@ with tab1:
     )
     if tpl_name not in _TPL_SEPARATORS and tpl_name != st.session_state._tpl_name:
         tpl = TEMPLATES[tpl_name]
+        _cur_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
+        _tpl_topic_key = (TOPIC_KEY_MAPPING.get(tpl_name) or [None])[0]
+        _entity_ctx  = ENTITY_CONTEXT.get(_cur_entity, {})
+        _entity_scope = (
+            _entity_ctx.get("topics", {}).get(_tpl_topic_key, {}).get("scope_suggestion", "")
+            if _tpl_topic_key else ""
+        )
         st.session_state["t1_topic_in"] = tpl.get("topic", "")
         st.session_state["t1_jurs_in"]  = tpl.get("jurisdictions", JURISDICTIONS[:4])
         st.session_state._tpl_name = tpl_name
-        st.session_state._tpl_scope = tpl.get("scope", "")
+        st.session_state._tpl_scope = _entity_scope or tpl.get("scope", "")
         st.rerun()
 
     _tpl_scope_default = st.session_state.get("_tpl_scope", "")
@@ -3205,7 +3287,23 @@ with tab1:
         help="Select one or more jurisdictions. Each adds regulatory and risk context specific to that regulator.",
     )
 
-    st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
+
+    # Entity context hint
+    _t1_entity   = st.session_state.get("entity_type", "🏦 Private Banking")
+    _t1_ent_ctx  = ENTITY_CONTEXT.get(_t1_entity, {})
+    _t1_reg_focus = _t1_ent_ctx.get("regulatory_focus", [])
+    if _t1_reg_focus:
+        _bg, _col = _ENTITY_COLORS.get(_t1_entity, ("#0a2540", "#7fa8fb"))
+        st.markdown(
+            f'<div style="background:{_bg};border-left:3px solid {_col};border-radius:0 6px 6px 0;'
+            f'padding:8px 12px;margin-bottom:12px;font-size:12px;color:#c8d0e8">'
+            f'<span style="font-weight:700;color:{_col}">{_t1_entity} — regulatory focus:</span> '
+            f'{" · ".join(_t1_reg_focus[:5])}</div>',
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<div style='margin-top:0.4rem'></div>", unsafe_allow_html=True)
 
     # Input validation
     _t1_valid = True
@@ -3492,6 +3590,10 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
 # ─────────────────────────────────────────────────────────────────────────────
 with tab2:
     st.session_state["active_tab"] = 2
+    st.markdown(
+        f'<div style="margin-bottom:8px">{_entity_badge_html(st.session_state.get("entity_type","🏦 Private Banking"))}</div>',
+        unsafe_allow_html=True,
+    )
     st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">Structured audit planning, test programme, and data analytics scenarios.</p>', unsafe_allow_html=True)
     _t2_mode = render_mode_toggle("mode_tab2")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
@@ -3513,6 +3615,22 @@ with tab2:
     if st.session_state.get("topic_tab1"):
         st.markdown(
             '<p style="color:#5a6488;font-size:11px;margin:-8px 0 8px">ℹ️ Pre-filled from Risk Analysis. You can modify it freely.</p>',
+            unsafe_allow_html=True,
+        )
+
+    # Entity context hint for Tab 2
+    _t2_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
+    _t2_ent_ctx = ENTITY_CONTEXT.get(_t2_entity, {})
+    _t2_theme   = _topic_to_theme(topic2 or "") or _topic_to_theme(st.session_state.get("topic_tab1", "") or "")
+    _t2_topic_data = _t2_ent_ctx.get("topics", {}).get(_t2_theme or "", {}) if _t2_theme else {}
+    _t2_test_emphasis = _t2_topic_data.get("risk_emphasis", [])
+    if _t2_test_emphasis:
+        _bg2, _col2 = _ENTITY_COLORS.get(_t2_entity, ("#0a2540", "#7fa8fb"))
+        st.markdown(
+            f'<div style="background:{_bg2};border-left:3px solid {_col2};border-radius:0 6px 6px 0;'
+            f'padding:8px 12px;margin:4px 0 10px;font-size:12px;color:#c8d0e8">'
+            f'<span style="font-weight:700;color:{_col2}">{_t2_entity} — key risk areas:</span> '
+            f'{" · ".join(_t2_test_emphasis)}</div>',
             unsafe_allow_html=True,
         )
 
@@ -3813,6 +3931,10 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
 # ─────────────────────────────────────────────────────────────────────────────
 with tab3:
     st.session_state["active_tab"] = 3
+    st.markdown(
+        f'<div style="margin-bottom:8px">{_entity_badge_html(st.session_state.get("entity_type","🏦 Private Banking"))}</div>',
+        unsafe_allow_html=True,
+    )
     st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">IIA-standard audit report — assembled from Risk Analysis and Audit Plan context.</p>', unsafe_allow_html=True)
     _t3_mode = render_mode_toggle("mode_tab3")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
@@ -3831,6 +3953,21 @@ with tab3:
     if _t3_rat:     _t3_ctx.append("✓ Rationale from Tab 2")
     if _t3_ctx:
         st.markdown(f'<div class="ctx-pill">{" &nbsp;·&nbsp; ".join(_t3_ctx)}</div>', unsafe_allow_html=True)
+
+    # Entity context hint for Tab 3
+    _t3_entity    = st.session_state.get("entity_type", "🏦 Private Banking")
+    _t3_ent_ctx   = ENTITY_CONTEXT.get(_t3_entity, {})
+    _t3_findings  = _t3_ent_ctx.get("typical_findings", [])
+    if _t3_findings:
+        _bg3, _col3 = _ENTITY_COLORS.get(_t3_entity, ("#0a2540", "#7fa8fb"))
+        st.markdown(
+            f'<div style="background:{_bg3};border-left:3px solid {_col3};border-radius:0 6px 6px 0;'
+            f'padding:8px 12px;margin:4px 0 12px;font-size:12px;color:#c8d0e8">'
+            f'<span style="font-weight:700;color:{_col3}">{_t3_entity} — typical findings:</span><br>'
+            + "".join(f'<span style="margin-right:14px">• {f}</span>' for f in _t3_findings[:4])
+            + '</div>',
+            unsafe_allow_html=True,
+        )
 
     # ── Shared inputs (both modes) ─────────────────────────────────────────────
     # Persist findings across interactions
