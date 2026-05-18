@@ -563,14 +563,62 @@ except ImportError as e:
     _ERR = str(e)
 
 # ── Static data (always available, zero API calls) ────────────────────────────
-from data import (
-    REGULATORY_FRAMEWORKS, AUDIT_TEMPLATES as _DATA_TEMPLATES,
-    RISK_INDICATORS, PUBLIC_AUDIT_RECOMMENDATIONS,
-    CVE_BANKING, IIA_STANDARDS_2024, DATA_ANALYTICS_SCENARIOS,
-    AUDIT_TESTS_LIBRARY, TOPIC_THEME_MAP, TOPIC_KEY_MAPPING,
-    THEMATIC_BACKGROUND, REGULATORY_CALENDAR, HNWI_RED_FLAGS,
-    MANAGEMENT_ACTION_TEMPLATES, ENTITY_CONTEXT,
-)
+try:
+    from data import (
+        REGULATORY_FRAMEWORKS, AUDIT_TEMPLATES as _DATA_TEMPLATES,
+        RISK_INDICATORS, PUBLIC_AUDIT_RECOMMENDATIONS,
+        CVE_BANKING, IIA_STANDARDS_2024, DATA_ANALYTICS_SCENARIOS,
+        AUDIT_TESTS_LIBRARY, TOPIC_THEME_MAP, TOPIC_KEY_MAPPING,
+        THEMATIC_BACKGROUND, REGULATORY_CALENDAR, HNWI_RED_FLAGS,
+        MANAGEMENT_ACTION_TEMPLATES, ENTITY_CONTEXT,
+    )
+except ImportError as _data_err:
+    st.error(f"Failed to load data module: {_data_err}")
+    st.stop()
+
+# ── Global constants ───────────────────────────────────────────────────────────
+
+_ENTITY_COLORS = {
+    "🏦 Private Banking":                   ("#0a2540", "#7fa8fb"),
+    "📊 Asset Management":                  ("#0a2a12", "#4ade80"),
+    "🏢 Management Company (ManCo)":        ("#2a1f0a", "#f59e0b"),
+    "🔀 Alternative Investment (PE/RE/HF)": ("#1e0a2a", "#c084fc"),
+}
+
+_ENTITY_KEYS = {
+    "🏦 Private Banking":                   "PRIVATE_BANKING",
+    "📊 Asset Management":                  "ASSET_MANAGEMENT",
+    "🏢 Management Company (ManCo)":        "MANAGEMENT_COMPANY",
+    "🔀 Alternative Investment (PE/RE/HF)": "ALTERNATIVE_INVESTMENT",
+}
+
+TAB_TITLES = {
+    0: "🌐 Intelligence Dashboard",
+    1: "🔍 Risk Analysis",
+    2: "📋 Audit Plan & Testing",
+    3: "📄 Audit Report",
+}
+
+TAB_SUBTITLES = {
+    0: "Stay informed before launching an audit",
+    1: "Identify risks and applicable regulations for your audit topic",
+    2: "Build your audit plan and test programme",
+    3: "Generate your formal audit report",
+}
+
+_TAB_NAMES = {
+    "Français": ["Tableau de bord", "Analyse des Risques", "Plan & Tests", "Rapport d'Audit"],
+    "English":  ["Dashboard", "Risk Analysis", "Audit Plan", "Audit Report"],
+}
+
+
+def _entity_badge_html(entity_type: str, size: str = "13px") -> str:
+    bg, col = _ENTITY_COLORS.get(entity_type, ("#0a2540", "#7fa8fb"))
+    return (
+        f'<span style="background:{bg};color:{col};border:1px solid {col}55;'
+        f'border-radius:6px;padding:2px 10px;font-size:{size};font-weight:600">'
+        f'{entity_type}</span>'
+    )
 
 JURISDICTIONS = ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "Bahamas / SCB", "EU / DORA", "UK / FCA+PRA"]
 OUTPUT_DIR = str(_HERE / "outputs")
@@ -2294,42 +2342,6 @@ _HELP = {
 💡 *Tip: complete tabs 1 and 2 first for a richer, more contextualised report.*""",
     },
 }
-
-_TAB_NAMES = {
-    "Français": ["Tableau de bord", "Analyse des Risques", "Plan & Tests", "Rapport d'Audit"],
-    "English":  ["Dashboard", "Risk Analysis", "Audit Plan", "Audit Report"],
-}
-
-TAB_TITLES = {
-    0: "🌐 Intelligence Dashboard",
-    1: "🔍 Risk Analysis",
-    2: "📋 Audit Plan & Testing",
-    3: "📄 Audit Report",
-}
-
-TAB_SUBTITLES = {
-    0: "Stay informed before launching an audit",
-    1: "Identify risks and applicable regulations for your audit topic",
-    2: "Build your audit plan and test programme",
-    3: "Generate your formal audit report",
-}
-
-_ENTITY_COLORS = {
-    "🏦 Private Banking":                   ("#0a2540", "#7fa8fb"),
-    "📊 Asset Management":                  ("#0a2a12", "#4ade80"),
-    "🏢 Management Company (ManCo)":        ("#2a1f0a", "#f59e0b"),
-    "🔀 Alternative Investment (PE/RE/HF)": ("#1e0a2a", "#c084fc"),
-}
-
-
-def _entity_badge_html(entity_type: str, size: str = "13px") -> str:
-    bg, col = _ENTITY_COLORS.get(entity_type, ("#0a2540", "#7fa8fb"))
-    return (
-        f'<span style="background:{bg};color:{col};border:1px solid {col}55;'
-        f'border-radius:6px;padding:2px 10px;font-size:{size};font-weight:600">'
-        f'{entity_type}</span>'
-    )
-
 
 def _show_help_panel():
     """Render the contextual help panel below the header."""
