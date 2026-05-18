@@ -566,7 +566,7 @@ from data import (
     REGULATORY_FRAMEWORKS, AUDIT_TEMPLATES as _DATA_TEMPLATES,
     RISK_INDICATORS, PUBLIC_AUDIT_RECOMMENDATIONS,
     CVE_BANKING, IIA_STANDARDS_2024, DATA_ANALYTICS_SCENARIOS,
-    AUDIT_TESTS_LIBRARY, TOPIC_THEME_MAP,
+    AUDIT_TESTS_LIBRARY, TOPIC_THEME_MAP, TOPIC_KEY_MAPPING,
     THEMATIC_BACKGROUND, REGULATORY_CALENDAR, HNWI_RED_FLAGS,
     MANAGEMENT_ACTION_TEMPLATES,
 )
@@ -813,14 +813,38 @@ def _agentic_loop(client, sys_prompt, tools, messages, tool_fn):
 # ── Static data helpers ───────────────────────────────────────────────────────
 
 def _topic_to_theme(topic: str) -> str | None:
-    """Map a free-text audit topic to a THEME key used in RISK_INDICATORS etc."""
+    """Map a free-text audit topic to a THEME key used in RISK_INDICATORS etc.
+    Checks TOPIC_KEY_MAPPING for exact template name match first,
+    then falls back to keyword matching via TOPIC_THEME_MAP.
+    """
     if not topic:
         return None
+    # Exact match against template names
+    keys = TOPIC_KEY_MAPPING.get(topic)
+    if keys:
+        return keys[0]
+    # Fuzzy keyword match
     up = topic.upper()
     for kw, theme in TOPIC_THEME_MAP.items():
         if kw in up:
             return theme
     return None
+
+
+def get_data_for_topic(topic: str) -> dict:
+    """Return aggregated risks, tests, and DA scenarios for a given topic.
+    Uses TOPIC_KEY_MAPPING for exact-match lookup, then keyword fallback.
+    """
+    keys = TOPIC_KEY_MAPPING.get(topic, [])
+    if not keys:
+        theme = _topic_to_theme(topic)
+        keys = [theme] if theme else []
+    risks, tests, da_scenarios = [], [], []
+    for key in keys:
+        risks.extend(RISK_INDICATORS.get(key, []))
+        tests.extend(AUDIT_TESTS_LIBRARY.get(key, []))
+        da_scenarios.extend(DATA_ANALYTICS_SCENARIOS.get(key, []))
+    return {"risks": risks, "tests": tests, "da_scenarios": da_scenarios, "keys": keys}
 
 
 def _static_label():

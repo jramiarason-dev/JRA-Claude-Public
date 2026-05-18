@@ -22,6 +22,41 @@ TOPIC_THEME_MAP = {
     "THIRD-PARTY": "THIRD_PARTY_RISK", "SUPPLY CHAIN": "THIRD_PARTY_RISK",
     "GOVERNANCE": "GOVERNANCE", "INTERNAL CONTROLS": "GOVERNANCE",
     "THREE LINES": "GOVERNANCE", "BOARD": "GOVERNANCE", "SMCR": "GOVERNANCE",
+    # Specialized topics
+    "ARTIFICIAL INTELLIGENCE": "AI_MODEL_RISK",
+    "AI RISK": "AI_MODEL_RISK", "MODEL RISK": "AI_MODEL_RISK",
+    "MACHINE LEARNING": "AI_MODEL_RISK", "AI MODEL": "AI_MODEL_RISK",
+    "CLOUD RISK": "CLOUD_RISK", "CLOUD INFRASTRUCTURE": "CLOUD_RISK",
+    "CLOUD SECURITY": "CLOUD_RISK", "CLOUD": "CLOUD_RISK",
+    "RESILIENCE": "RESILIENCE_BCP", "DISASTER RECOVERY": "RESILIENCE_BCP",
+    "OPERATIONAL RESILIENCE": "RESILIENCE_BCP", "RTO": "RESILIENCE_BCP",
+    "CHANGE MANAGEMENT": "CHANGE_MANAGEMENT", "IT DEVELOPMENT": "CHANGE_MANAGEMENT",
+    "SDLC": "CHANGE_MANAGEMENT", "DEVOPS": "CHANGE_MANAGEMENT",
+    "ACCESS MANAGEMENT": "ACCESS_MANAGEMENT", "IDENTITY": "ACCESS_MANAGEMENT",
+    "IAM": "ACCESS_MANAGEMENT", "PAM": "ACCESS_MANAGEMENT", "MFA": "ACCESS_MANAGEMENT",
+    "PROCUREMENT": "PROCUREMENT", "SOURCING": "PROCUREMENT",
+    "VENDOR SELECTION": "PROCUREMENT", "PURCHASE TO PAY": "PROCUREMENT",
+    "WEALTH MANAGEMENT": "WEALTH_ADVISORY", "SUITABILITY": "WEALTH_ADVISORY",
+    "ADVISORY": "WEALTH_ADVISORY", "INVESTMENT ADVISORY": "WEALTH_ADVISORY",
+    "CHURNING": "WEALTH_ADVISORY", "MIFID": "WEALTH_ADVISORY",
+}
+
+TOPIC_KEY_MAPPING = {
+    "AML / KYC & Transaction Monitoring":       ["AML_KYC"],
+    "Cyber Risk & IT Security":                  ["CYBER_RISK"],
+    "Credit Risk & Lending":                     ["CREDIT_RISK"],
+    "Operational Risk & Business Continuity":    ["OPERATIONAL_RISK"],
+    "Data Privacy & GDPR/nDSG":                  ["DATA_PRIVACY"],
+    "Market Risk & Trading":                     ["MARKET_RISK"],
+    "Third Party & Vendor Risk":                 ["THIRD_PARTY_RISK"],
+    "Governance & Internal Controls":            ["GOVERNANCE"],
+    "Artificial Intelligence & Model Risk":      ["AI_MODEL_RISK"],
+    "Cloud Risk & Infrastructure":               ["CLOUD_RISK"],
+    "Resilience & Business Continuity":          ["RESILIENCE_BCP"],
+    "Change Management & IT Development":        ["CHANGE_MANAGEMENT"],
+    "Access Management & Identity":              ["ACCESS_MANAGEMENT"],
+    "Procurement & Sourcing":                    ["PROCUREMENT"],
+    "Wealth Management Advisory & Suitability":  ["WEALTH_ADVISORY"],
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
