@@ -13990,6 +13990,7 @@ ENTITY_CONTEXT = {
     # ── 🏦 Private Banking ─────────────────────────────────────────────────────
     "🏦 Private Banking": {
         "short_label": "Private Banking",
+        "background_angle": "private banking and wealth management",
         "regulatory_focus": [
             "FINMA RS 2011/1",
             "MiFID II Art.25",
@@ -14026,6 +14027,8 @@ ENTITY_CONTEXT = {
                     "Transaction monitoring thresholds not calibrated for HNWI activity patterns, generating excessive false positives or missing alerts",
                     "Periodic client review cycle not enforced; high-risk profiles overdue for re-assessment",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CYBER_RISK": {
                 "scope_suggestion": "IT systems supporting private banking operations, client portal, CRM and portfolio management systems.",
@@ -14046,6 +14049,8 @@ ENTITY_CONTEXT = {
                     "Privileged access to CRM and portfolio management systems not reviewed quarterly",
                     "Security awareness training not completed by all relationship managers",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CREDIT_RISK": {
                 "scope_suggestion": "Lombard lending and collateralised lending against HNWI portfolios, margin call processes, and counterparty credit risk in structured product issuance.",
@@ -14066,6 +14071,8 @@ ENTITY_CONTEXT = {
                     "Credit approval process bypassed for key clients at relationship manager discretion",
                     "Collateral valuation methodology not reviewed annually",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "OPERATIONAL_RISK": {
                 "scope_suggestion": "Operational risk framework for private banking operations, key person risk among relationship managers, and error rates in client instructions.",
@@ -14086,6 +14093,8 @@ ENTITY_CONTEXT = {
                     "Operational loss events not systematically captured below materiality threshold",
                     "Key person risk not mitigated for top revenue-generating relationship managers",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "DATA_PRIVACY": {
                 "scope_suggestion": "Client data handling, GDPR/nDSG compliance for cross-border data transfers of HNWI client information, and data retention controls.",
@@ -14106,6 +14115,8 @@ ENTITY_CONTEXT = {
                     "Standard Contractual Clauses (SCCs) not updated following EU SCCs revision",
                     "Data protection impact assessments not conducted for new CRM onboarding modules",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "MARKET_RISK": {
                 "scope_suggestion": "Market risk in discretionary and advisory mandates, FX risk management for multi-currency HNWI portfolios, and structured product risk controls.",
@@ -14126,6 +14137,8 @@ ENTITY_CONTEXT = {
                     "FX exposure reporting for HNWI portfolios not aggregated at client group level",
                     "Structured product pricing model validation not performed annually",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "THIRD_PARTY_RISK": {
                 "scope_suggestion": "Outsourced custody, portfolio management systems, and data providers used in private banking; sub-custodian oversight and correspondent bank relationships.",
@@ -14146,6 +14159,8 @@ ENTITY_CONTEXT = {
                     "Outsourcing register incomplete; critical IT vendors not classified as material",
                     "Exit strategy not documented for core portfolio management system vendor",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "GOVERNANCE": {
                 "scope_suggestion": "Three lines of defence in a private banking context, board oversight, conflicts of interest in discretionary mandates and advisory.",
@@ -14166,6 +14181,8 @@ ENTITY_CONTEXT = {
                     "Risk Committee receives insufficient granularity on HNWI client risk concentration",
                     "Second-line compliance review of relationship manager files not conducted at required frequency",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "AI_MODEL_RISK": {
                 "scope_suggestion": "AI-driven tools used in private banking such as client risk profiling engines, portfolio optimisation models, and automated suitability checks.",
@@ -14186,6 +14203,8 @@ ENTITY_CONTEXT = {
                     "Model performance monitoring not documented; drift detection absent",
                     "AI vendor contract lacks audit rights and explainability obligations",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CLOUD_RISK": {
                 "scope_suggestion": "Cloud infrastructure hosting private banking client data, portfolio management systems, and client portals; cloud security configuration and data residency compliance.",
@@ -14206,6 +14225,8 @@ ENTITY_CONTEXT = {
                     "Data residency controls not validated; client data stored in non-approved regions",
                     "Cloud incident response runbook not tested in the past 12 months",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "RESILIENCE_BCP": {
                 "scope_suggestion": "Business continuity for private banking operations, recovery time objectives for client-facing systems, and pandemic/key-person resilience scenarios.",
@@ -14226,6 +14247,8 @@ ENTITY_CONTEXT = {
                     "Recovery time objectives for portfolio management systems not validated in last test",
                     "Key person plans absent for top-tier relationship managers with concentrated client books",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CHANGE_MANAGEMENT": {
                 "scope_suggestion": "IT change management for private banking core systems, CRM upgrades, and regulatory-driven system changes (e.g. MiFID II reporting updates).",
@@ -14246,6 +14269,8 @@ ENTITY_CONTEXT = {
                     "User acceptance testing for regulatory reporting changes performed by system owners, not independent testers",
                     "Change freeze periods not observed around critical regulatory reporting deadlines",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "ACCESS_MANAGEMENT": {
                 "scope_suggestion": "Access controls to private banking systems including portfolio management, CRM, and client data repositories; privileged access governance for relationship managers and IT administrators.",
@@ -14266,6 +14291,8 @@ ENTITY_CONTEXT = {
                     "Former relationship managers' accounts not disabled within 24 hours of departure",
                     "Privileged admin access to CRM not subject to Privileged Access Management (PAM) controls",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "PROCUREMENT": {
                 "scope_suggestion": "Procurement of financial data vendors, technology platforms, and professional services in private banking; vendor selection governance and contract management.",
@@ -14286,6 +14313,8 @@ ENTITY_CONTEXT = {
                     "Contracts with key IT vendors lack FINMA-required audit access clauses",
                     "Renewal of material vendor contracts not subject to formal re-evaluation",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "WEALTH_ADVISORY": {
                 "scope_suggestion": "Suitability assessments for HNWI clients, ESG integration in investment advice, MiFID II / FinSA compliance.",
@@ -14306,6 +14335,8 @@ ENTITY_CONTEXT = {
                     "ESG preferences captured but not documented in the advisory file or reflected in product recommendations",
                     "Periodic suitability re-assessment overdue for clients with significant life events",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
         },
     },
@@ -14313,6 +14344,7 @@ ENTITY_CONTEXT = {
     # ── 📊 Asset Management ────────────────────────────────────────────────────
     "📊 Asset Management": {
         "short_label": "Asset Management",
+        "background_angle": "asset management and fund management",
         "regulatory_focus": [
             "UCITS V Directive 2014/91/EU",
             "AIFMD 2011/61/EU (AIFMD II 2024)",
@@ -14349,6 +14381,8 @@ ENTITY_CONTEXT = {
                     "Distributor AML standards not assessed against home-jurisdiction equivalence",
                     "Investor periodic review cycle not enforced for institutional subscriptions",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CYBER_RISK": {
                 "scope_suggestion": "Cybersecurity for fund management platforms, order management systems, and investment research systems; protection of non-public material investment information.",
@@ -14369,6 +14403,8 @@ ENTITY_CONTEXT = {
                     "OMS connectivity to trading counterparties not subject to regular penetration testing",
                     "Cyber incident response plan not updated following DORA entry into force",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CREDIT_RISK": {
                 "scope_suggestion": "Issuer concentration limits, counterparty exposure in derivatives and repo transactions, and credit risk in fixed-income fund portfolios.",
@@ -14389,6 +14425,8 @@ ENTITY_CONTEXT = {
                     "Derivative counterparty exposure not aggregated at fund level across multiple instruments",
                     "Collateral eligibility criteria for repo transactions not reviewed following market stress",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "OPERATIONAL_RISK": {
                 "scope_suggestion": "Operational risk in fund administration, NAV calculation controls, trade settlement fails, and fund launch operational readiness.",
@@ -14409,6 +14447,8 @@ ENTITY_CONTEXT = {
                     "Corporate action processing relies on manual intervention without compensating controls",
                     "Operational risk incidents not reported to fund board within required timeframe",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "DATA_PRIVACY": {
                 "scope_suggestion": "Personal data of fund investors, distributor data sharing arrangements, and GDPR compliance for investor reporting and marketing activities.",
@@ -14429,6 +14469,8 @@ ENTITY_CONTEXT = {
                     "Investor marketing data not subject to consent management; opt-out mechanism absent",
                     "Personal data in investor reports retained beyond defined retention schedule",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "MARKET_RISK": {
                 "scope_suggestion": "Portfolio risk management, liquidity risk, VaR limits, stress testing for UCITS and AIF funds.",
@@ -14449,6 +14491,8 @@ ENTITY_CONTEXT = {
                     "Swing pricing mechanism not calibrated following redemption spike events",
                     "VaR model backtesting exceptions not escalated to Risk Committee",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "THIRD_PARTY_RISK": {
                 "scope_suggestion": "Sub-investment manager oversight, fund administrator, transfer agent and distributor due diligence.",
@@ -14469,6 +14513,8 @@ ENTITY_CONTEXT = {
                     "Fund administrator SLA breaches not escalated to management committee",
                     "Transfer agent due diligence not refreshed following ownership change",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "GOVERNANCE": {
                 "scope_suggestion": "Fund board governance, management company oversight, delegation framework, investment committee.",
@@ -14489,6 +14535,8 @@ ENTITY_CONTEXT = {
                     "Investment committee minutes do not evidence challenge of portfolio manager proposals",
                     "Conflicts of interest policy not reviewed following launch of new fund strategies",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "AI_MODEL_RISK": {
                 "scope_suggestion": "Quantitative models used in systematic fund strategies, AI-driven portfolio construction tools, and automated trade execution algorithms.",
@@ -14509,6 +14557,8 @@ ENTITY_CONTEXT = {
                     "Algorithm kill-switch procedures not tested under simulated stressed conditions",
                     "Model change governance process not applied to incremental model updates",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CLOUD_RISK": {
                 "scope_suggestion": "Cloud hosting of order management, risk management, and fund accounting systems; data sovereignty for fund investor information.",
@@ -14529,6 +14579,8 @@ ENTITY_CONTEXT = {
                     "Fund accounting system cloud migration not notified to regulator as material outsourcing",
                     "Cloud vendor exit strategy not tested or documented for critical systems",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "RESILIENCE_BCP": {
                 "scope_suggestion": "Business continuity for fund management operations, NAV calculation recovery, and regulatory reporting continuity.",
@@ -14549,6 +14601,8 @@ ENTITY_CONTEXT = {
                     "DORA threat-led penetration testing not yet planned",
                     "Business continuity plan does not address key person loss for portfolio managers",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CHANGE_MANAGEMENT": {
                 "scope_suggestion": "Change management for risk management systems, fund accounting platforms, and regulatory reporting systems.",
@@ -14569,6 +14623,8 @@ ENTITY_CONTEXT = {
                     "SFDR disclosure calculation logic changes not subject to user acceptance testing",
                     "Post-implementation review not performed for regulatory reporting system upgrades",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "ACCESS_MANAGEMENT": {
                 "scope_suggestion": "Access controls to investment management platforms, order management systems, and fund data; information barriers between investment teams.",
@@ -14589,6 +14645,8 @@ ENTITY_CONTEXT = {
                     "OMS admin access shared among multiple users without individual accountability",
                     "Quarterly access recertification for portfolio management systems not completed on schedule",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "PROCUREMENT": {
                 "scope_suggestion": "Procurement of data vendors, risk systems, and fund service providers; vendor selection governance for material fund service providers.",
@@ -14609,6 +14667,8 @@ ENTITY_CONTEXT = {
                     "Vendor risk assessment not refreshed following material change in service provider ownership",
                     "Procurement for fund administration services bypassed standard due diligence for legacy providers",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "WEALTH_ADVISORY": {
                 "scope_suggestion": "MiFID II product governance, SFDR disclosure accuracy, ESG classification and greenwashing risk.",
@@ -14629,6 +14689,8 @@ ENTITY_CONTEXT = {
                     "Product target market not defined at sufficient granularity; negative target market absent",
                     "ESG data used for SFDR reporting not validated against primary source disclosures",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
         },
     },
@@ -14636,6 +14698,7 @@ ENTITY_CONTEXT = {
     # ── 🏢 Management Company (ManCo) ──────────────────────────────────────────
     "🏢 Management Company (ManCo)": {
         "short_label": "ManCo",
+        "background_angle": "management company operations and fund governance",
         "regulatory_focus": [
             "UCITS V Art.60-67",
             "AIFMD Art.6-8 and Annex I",
@@ -14672,6 +14735,8 @@ ENTITY_CONTEXT = {
                     "AML policy not updated following AMLD6 transposition",
                     "Investor AML files not reviewed when distribution moved to new sub-distributor",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CYBER_RISK": {
                 "scope_suggestion": "Cybersecurity posture of ManCo IT infrastructure, reliance on IT systems of the investment manager delegate, and ICT risk oversight responsibilities.",
@@ -14692,6 +14757,8 @@ ENTITY_CONTEXT = {
                     "DORA ICT risk management framework not adapted for ManCo size and complexity",
                     "Cyber incident escalation procedure from delegate to ManCo board not defined",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CREDIT_RISK": {
                 "scope_suggestion": "ManCo oversight of credit risk within managed funds, counterparty risk in derivatives positions, and credit risk in money market fund portfolios.",
@@ -14712,6 +14779,8 @@ ENTITY_CONTEXT = {
                     "Counterparty exposure breaches reported by delegate not escalated to ManCo board within required timeframe",
                     "Credit risk methodology review not included in annual risk management framework assessment",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "OPERATIONAL_RISK": {
                 "scope_suggestion": "ManCo operational setup, key person risk, business continuity, IT infrastructure adequacy for regulated activities.",
@@ -14732,6 +14801,8 @@ ENTITY_CONTEXT = {
                     "Operational risk incidents at delegate level not systematically reported to ManCo",
                     "BCP does not address conducting officer unavailability scenario",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "DATA_PRIVACY": {
                 "scope_suggestion": "ManCo data controller obligations, investor personal data shared with delegates, and GDPR compliance for cross-border data flows.",
@@ -14752,6 +14823,8 @@ ENTITY_CONTEXT = {
                     "Data processing agreement with transfer agent not reviewed following service scope expansion",
                     "Investor data breach response procedure not tested",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "MARKET_RISK": {
                 "scope_suggestion": "ManCo oversight of market risk within managed funds, review of risk reports from delegates, and independent risk monitoring function.",
@@ -14772,6 +14845,8 @@ ENTITY_CONTEXT = {
                     "Liquidity stress test results reviewed by ManCo board only annually, not quarterly",
                     "VaR limit breaches not escalated to ManCo board within agreed timeframe",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "THIRD_PARTY_RISK": {
                 "scope_suggestion": "Delegation framework, oversight of delegated investment management, administration and distribution functions, SLA monitoring.",
@@ -14792,6 +14867,8 @@ ENTITY_CONTEXT = {
                     "Annual on-site review of investment manager delegate not performed",
                     "Fund administrator oversight: no formal exception reporting mechanism",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "GOVERNANCE": {
                 "scope_suggestion": "ManCo governance framework, conducting officers responsibilities, board oversight, substance assessment against ESMA letter-box entity criteria.",
@@ -14812,6 +14889,8 @@ ENTITY_CONTEXT = {
                     "Board meeting minutes do not evidence genuine challenge of delegate reports",
                     "ManCo substance assessment not performed against ESMA letter-box entity criteria",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "AI_MODEL_RISK": {
                 "scope_suggestion": "ManCo oversight of AI models used by delegated investment managers, model risk governance framework at ManCo level.",
@@ -14832,6 +14911,8 @@ ENTITY_CONTEXT = {
                     "EU AI Act inventory of AI systems used by ManCo or its delegates not completed",
                     "Model risk governance not addressed in ManCo risk management framework",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CLOUD_RISK": {
                 "scope_suggestion": "ManCo ICT infrastructure in the cloud, cloud services used by delegates, and DORA compliance for ICT concentration risk.",
@@ -14852,6 +14933,8 @@ ENTITY_CONTEXT = {
                     "DORA concentration risk assessment not performed across ManCo and delegate cloud usage",
                     "ManCo board not informed of delegate's material cloud infrastructure changes",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "RESILIENCE_BCP": {
                 "scope_suggestion": "ManCo business continuity programme, conducting officer succession, and recovery from IT or operational disruptions affecting regulated activities.",
@@ -14872,6 +14955,8 @@ ENTITY_CONTEXT = {
                     "Conducting officer succession plan not documented or tested",
                     "ManCo does not verify delegate BCP test results as part of oversight programme",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CHANGE_MANAGEMENT": {
                 "scope_suggestion": "System changes to fund accounting not controlled, inadequate testing before go-live. ManCo oversight of technology changes at delegates.",
@@ -14892,6 +14977,8 @@ ENTITY_CONTEXT = {
                     "Change management policy not adapted for ManCo's reliance on delegate IT infrastructure",
                     "Emergency changes by delegate not subject to ManCo ex-post review",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "ACCESS_MANAGEMENT": {
                 "scope_suggestion": "ManCo access controls, privileged access to fund management systems, segregation of duties between conducting officers.",
@@ -14912,6 +14999,8 @@ ENTITY_CONTEXT = {
                     "Access recertification not performed for ManCo staff with access to delegate systems",
                     "Segregation of duties between risk management and portfolio management not enforced technically",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "PROCUREMENT": {
                 "scope_suggestion": "ManCo procurement of service providers, delegate selection governance, and compliance with AIFMD/UCITS outsourcing requirements.",
@@ -14932,6 +15021,8 @@ ENTITY_CONTEXT = {
                     "Contracts with delegates do not include required AIFMD Art.20 provisions",
                     "ManCo board not involved in approval of new material service providers",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "WEALTH_ADVISORY": {
                 "scope_suggestion": "ManCo oversight of MiFID II product governance obligations, SFDR entity-level disclosures, and suitability of fund products for target markets.",
@@ -14952,6 +15043,8 @@ ENTITY_CONTEXT = {
                     "Product governance target market definition not communicated to distributors",
                     "SFDR product classification decisions not reviewed by ManCo board annually",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
         },
     },
@@ -14959,6 +15052,7 @@ ENTITY_CONTEXT = {
     # ── 🔀 Alternative Investment (PE/RE/HF) ───────────────────────────────────
     "🔀 Alternative Investment (PE/RE/HF)": {
         "short_label": "Alternative Investment",
+        "background_angle": "alternative investment management",
         "regulatory_focus": [
             "AIFMD II Directive 2024/927/EU",
             "ESMA AIFMD Q&A and guidelines",
@@ -14996,6 +15090,8 @@ ENTITY_CONTEXT = {
                     "KYC refresh not triggered by material change in LP structure or ownership",
                     "Source of funds not adequately documented for capital call drawdowns above threshold",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CYBER_RISK": {
                 "scope_suggestion": "Cybersecurity for alternative investment management platforms, deal pipeline systems, and LP reporting portals; protection of material non-public deal information.",
@@ -15016,6 +15112,8 @@ ENTITY_CONTEXT = {
                     "LP reporting portal not subject to annual penetration testing",
                     "Cybersecurity due diligence not integrated into PE portfolio company acquisition process",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CREDIT_RISK": {
                 "scope_suggestion": "Leverage covenant monitoring, portfolio company debt monitoring (PE), tenant concentration risk (RE).",
@@ -15036,6 +15134,8 @@ ENTITY_CONTEXT = {
                     "Tenant concentration in RE funds exceeds internal limits without documented board approval",
                     "Subscription credit facility usage not included in leverage calculation for AIFMD Annex IV reporting",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "OPERATIONAL_RISK": {
                 "scope_suggestion": "Operational risk in alternative fund management, deal execution operational controls, and valuation process integrity.",
@@ -15056,6 +15156,8 @@ ENTITY_CONTEXT = {
                     "Key person clause triggers not monitored against investment team changes",
                     "Valuation process documentation insufficient; external valuer instructions not formalised",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "DATA_PRIVACY": {
                 "scope_suggestion": "LP personal data management, GDPR compliance for investor reporting, and data sharing with portfolio companies.",
@@ -15076,6 +15178,8 @@ ENTITY_CONTEXT = {
                     "Data retention for LP subscription documents not aligned with regulatory requirements",
                     "AIFMD Art.22 investor reports include LP personal data not subject to data minimisation",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "MARKET_RISK": {
                 "scope_suggestion": "Leverage monitoring and limits, liquidity management, stress testing, derivatives counterparty risk, side pockets governance.",
@@ -15096,6 +15200,8 @@ ENTITY_CONTEXT = {
                     "Side pocket designation criteria not defined ex ante; applied inconsistently",
                     "Liquidity stress testing for open-ended RE funds not performed at required frequency",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "THIRD_PARTY_RISK": {
                 "scope_suggestion": "Depositary oversight, prime broker management (HF), fund administrator oversight, AIFMD depositary independence.",
@@ -15116,6 +15222,8 @@ ENTITY_CONTEXT = {
                     "Prime broker concentration not assessed; single prime broker for all fund strategies",
                     "Fund administrator oversight: no KPI/SLA monitoring dashboard",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "GOVERNANCE": {
                 "scope_suggestion": "AIFM governance framework, AIFMD compliance, investment committee, valuation committee independence from portfolio management.",
@@ -15136,6 +15244,8 @@ ENTITY_CONTEXT = {
                     "Co-investment allocation policy not documented; allocations subject to investor complaint",
                     "Carried interest calculations not independently verified by CFO or external party",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "AI_MODEL_RISK": {
                 "scope_suggestion": "AI and quantitative models used in alternative investment strategies, including systematic HF strategies, AI-driven deal sourcing in PE, and automated valuation models in RE.",
@@ -15156,6 +15266,8 @@ ENTITY_CONTEXT = {
                     "Systematic HF strategy models not subject to model risk governance framework",
                     "AI deal sourcing tools deployed without bias assessment or model documentation",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CLOUD_RISK": {
                 "scope_suggestion": "Cloud infrastructure for deal management, LP reporting, and fund accounting; data security for sensitive portfolio company and investor information.",
@@ -15176,6 +15288,8 @@ ENTITY_CONTEXT = {
                     "LP personal data stored in cloud without data residency controls",
                     "Cloud exit strategy not documented for fund management platform",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "RESILIENCE_BCP": {
                 "scope_suggestion": "Business continuity for alternative investment management, investment team continuity, and LP reporting resilience during fund lifecycle.",
@@ -15196,6 +15310,8 @@ ENTITY_CONTEXT = {
                     "BCP does not address fund management continuity over multi-year fund lifecycle",
                     "LP reporting process has no documented business continuity procedure",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "CHANGE_MANAGEMENT": {
                 "scope_suggestion": "Change management for fund management systems, valuation model updates, and regulatory reporting system changes.",
@@ -15216,6 +15332,8 @@ ENTITY_CONTEXT = {
                     "AIFMD Annex IV reporting system changes not tested before regulatory submission deadline",
                     "Portfolio monitoring tool changes made without change advisory board review",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "ACCESS_MANAGEMENT": {
                 "scope_suggestion": "Access management for deal management systems, valuation models, and LP data; information barriers between deal teams and fund administrators.",
@@ -15236,6 +15354,8 @@ ENTITY_CONTEXT = {
                     "Valuation model inputs accessible to portfolio managers without compensating controls",
                     "Quarterly access recertification not performed for fund management systems",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "PROCUREMENT": {
                 "scope_suggestion": "Procurement of fund service providers, depositary selection, and prime broker governance for alternative investment funds.",
@@ -15256,6 +15376,8 @@ ENTITY_CONTEXT = {
                     "Prime broker due diligence not refreshed following material change in broker's financial position",
                     "External valuation agent contract lacks independence provisions required by ESMA guidelines",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
             "WEALTH_ADVISORY": {
                 "scope_suggestion": "AIFMD Art.22 investor reporting, LP suitability (professional investor qualification), ESG due diligence in investments.",
@@ -15276,6 +15398,8 @@ ENTITY_CONTEXT = {
                     "ESG due diligence not systematically integrated into PE deal process",
                     "LP professional investor re-qualification not performed at required intervals",
                 ],
+                "additional_risks": [],
+                "test_emphasis": [],
             },
         },
     },
