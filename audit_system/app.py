@@ -334,7 +334,7 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-* {
+html, body, [class*="css"], .stApp, .stMarkdown, p, span, div, label, input, textarea, select, button {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -343,8 +343,6 @@ h1, h2, h3 {
   font-family: 'Plus Jakarta Sans', sans-serif !important;
   letter-spacing: -0.5px;
 }
-
-html, body, [class*="css"] { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 .stApp { background-color: var(--bg-app) !important; color: var(--text-primary); }
 .main .block-container { padding: 2rem 3rem 4rem; max-width: 1060px; }
 
