@@ -60,6 +60,477 @@ TOPIC_KEY_MAPPING = {
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# ENTITY TYPE CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+_ENTITY_KEYS = {
+    "🏦 Private Banking":        "PRIVATE_BANKING",
+    "📊 Asset Management":       "ASSET_MANAGEMENT",
+    "🏪 Retail Banking":         "RETAIL_BANKING",
+    "🏢 Investment Banking":     "INVESTMENT_BANKING",
+    "🛡️ Insurance":              "INSURANCE",
+    "💱 Payment Institution":    "PAYMENT_INSTITUTION",
+}
+
+_ENTITY_COLORS = {
+    "PRIVATE_BANKING":    "#7fa8fb",
+    "ASSET_MANAGEMENT":   "#22d3a5",
+    "RETAIL_BANKING":     "#f97316",
+    "INVESTMENT_BANKING": "#a78bfa",
+    "INSURANCE":          "#ef4444",
+    "PAYMENT_INSTITUTION":"#eab308",
+}
+
+ENTITY_CONTEXT = {
+    "PRIVATE_BANKING": {
+        "AML / KYC & Transaction Monitoring": {
+            "regulatory_focus": [
+                "FATF Guidance on Risk-Based Approach — Private Banking 2023",
+                "FINMA-RS 2016/7 — Customer Identification",
+                "AMLA (Switzerland) Art. 3-8 — Due Diligence Obligations",
+                "MAS Notice SFA04-N02 — Prevention of Money Laundering",
+                "EU AMLD6 — Enhanced Due Diligence",
+            ],
+            "additional_risks": [
+                {"title": "HNWI Cross-Border Opacity", "level": "Critical",
+                 "description": "High-net-worth clients with multi-jurisdictional assets and complex structures (trusts, foundations) present elevated opacity risk."},
+                {"title": "PEP Family Member Exposure", "level": "High",
+                 "description": "Family members and close associates of PEPs frequently hold accounts without adequate PEP-adjacent screening."},
+            ],
+            "test_emphasis": ["AML-KYC-01", "AML-KYC-02", "AML-KYC-05", "AML-KYC-08"],
+            "typical_findings": [
+                "EDD files incomplete for PEP clients — source of wealth not fully corroborated",
+                "Transaction monitoring thresholds not calibrated to HNWI transaction volumes",
+                "Periodic KYC review cycles not triggered after material wealth events (inheritance, asset sale)",
+                "Beneficial ownership of holding structures not fully identified beyond first layer",
+                "No formal process to handle correspondent banking introduced clients",
+            ],
+            "scope_suggestion": "AML/KYC controls for HNWI client onboarding and periodic review, PEP screening, beneficial ownership identification for complex structures (trusts, foundations, SPVs), transaction monitoring calibration for high-value transactions",
+            "background_angle": "Private banking AML risk is structurally elevated by the complexity of HNWI wealth structures and the cross-border nature of client relationships.",
+        },
+        "Cyber Risk & IT Security": {
+            "regulatory_focus": [
+                "FINMA-RS 2023/1 — Operational Risks and Resilience",
+                "MAS TRM Guidelines 2021",
+                "DORA (EU) 2025 — ICT Risk Management",
+                "NIST CSF v2.0",
+            ],
+            "additional_risks": [
+                {"title": "Client Portal Compromise", "level": "Critical",
+                 "description": "Online banking portals used by HNWI clients are prime targets; a breach can expose concentrated high-value assets."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "MFA not enforced on client-facing e-banking portal for all access levels",
+                "Privileged access reviews not conducted for core banking system administrators",
+                "Patch management SLAs breached for critical vulnerabilities on internet-facing systems",
+            ],
+            "scope_suggestion": "Cybersecurity controls for client-facing systems, core banking infrastructure, privileged access management, and third-party connectivity",
+            "background_angle": "Private banking cyber risk centres on client portal security, data confidentiality of HNWI information, and the high value of targeted attacks.",
+        },
+        "Governance & Internal Controls": {
+            "regulatory_focus": [
+                "FINMA-RS 2017/1 — Corporate Governance",
+                "IIA Global Internal Audit Standards 2024",
+                "MAS Guidelines on Corporate Governance",
+            ],
+            "additional_risks": [],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Conflict of interest policy not applied consistently when relationship managers hold accounts at audited entity",
+                "Three-lines-of-defence model not clearly documented for wealth management activities",
+                "Board risk appetite statement does not address HNWI concentration risk",
+            ],
+            "scope_suggestion": "Governance framework, board oversight, three lines of defence, conflict of interest management, and internal audit independence",
+            "background_angle": "Governance in private banking must address concentration of relationship manager authority and the potential for front-office influence on second-line functions.",
+        },
+    },
+
+    "ASSET_MANAGEMENT": {
+        "AML / KYC & Transaction Monitoring": {
+            "regulatory_focus": [
+                "FATF Guidance — Investment Funds 2023",
+                "AMLD6 — Fund Investor Due Diligence",
+                "FINMA CISA — AML Provisions for Collective Investments",
+                "MAS Notice SFA04-N02 — CIS Manager AML Requirements",
+                "ESMA Guidelines on AML/CFT for Fund Managers 2022",
+            ],
+            "additional_risks": [
+                {"title": "Fund-of-Fund Beneficial Ownership Gap", "level": "Critical",
+                 "description": "Fund investors investing through fund-of-fund structures or intermediate SPVs create beneficial ownership chains that may not be fully traced."},
+                {"title": "Distributor Reliance Risk", "level": "High",
+                 "description": "Reliance on distributors for investor KYC without adequate oversight creates control gaps where AML standards may not be consistently applied."},
+                {"title": "NAV-Triggered Refresh Failure", "level": "High",
+                 "description": "Material increases in net asset value by investors are not systematically triggering AML refresh reviews, enabling value accumulation without re-screening."},
+            ],
+            "test_emphasis": ["AML-KYC-01", "AML-KYC-02", "AML-KYC-06"],
+            "typical_findings": [
+                "Beneficial ownership of fund-of-fund investors not fully identified beyond first investor layer",
+                "AML refresh not triggered on material NAV changes or subscription increases",
+                "Distributor reliance not properly documented — no formal oversight programme over distributor KYC quality",
+                "Transaction monitoring scenarios not calibrated for subscription/redemption patterns specific to fund investors",
+                "No enhanced due diligence process for investors from high-risk jurisdictions subscribing via nominee structures",
+            ],
+            "scope_suggestion": "AML/KYC controls for fund investor onboarding, beneficial ownership identification for complex investor structures (funds of funds, SPVs), subscription process controls, distributor oversight programme, and transaction monitoring for fund flows",
+            "background_angle": "Asset management AML risk centres on investor transparency, the complexity of fund-of-fund structures, and reliance on distributor networks for investor KYC execution.",
+        },
+        "Cyber Risk & IT Security": {
+            "regulatory_focus": [
+                "DORA (EU) 2025 — Applies to UCITS/AIF managers under Article 3",
+                "FINMA-RS 2023/1 — Operational Risks for CISA entities",
+                "MAS TRM Guidelines 2021 — Applicable to Licensed Fund Managers",
+                "IOSCO Principles on Cyber Resilience for Market Infrastructures",
+            ],
+            "additional_risks": [
+                {"title": "Order Management System Integrity", "level": "Critical",
+                 "description": "Compromise of OMS or portfolio management systems could enable unauthorised trades or fund NAV manipulation."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "OMS access not restricted by fund mandate — traders can place orders in any fund",
+                "Change management process for portfolio management system bypasses security testing for hotfixes",
+                "Third-party data providers (pricing, market data) not subject to vendor cyber risk assessment",
+            ],
+            "scope_suggestion": "Cybersecurity controls for order management systems, portfolio management platforms, fund accounting infrastructure, and market data vendor connectivity",
+            "background_angle": "Asset management cyber risk focuses on the integrity of trading and portfolio systems, protection of fund data, and third-party market data provider risk.",
+        },
+        "Credit Risk & Lending": {
+            "regulatory_focus": [
+                "ESMA Guidelines on Liquidity Stress Testing for UCITS/AIF 2019",
+                "FINMA CISA — Leverage and Borrowing Limits",
+                "MAS CIS Code — Permitted Investments and Borrowing",
+                "IOSCO Leverage in Investment Funds — Consultation 2023",
+            ],
+            "additional_risks": [
+                {"title": "Fund Leverage Limit Breach", "level": "Critical",
+                 "description": "Fund borrowing or derivative-implied leverage exceeding regulatory or mandate limits creates investor protection and regulatory risk."},
+                {"title": "Liquidity-Credit Mismatch", "level": "High",
+                 "description": "Funds holding illiquid credit instruments with daily liquidity terms expose investors to redemption risk that cannot be met without fire-sale disposals."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Leverage calculations do not include derivative-implied exposure as required under AIFMD",
+                "Liquidity stress testing does not model redemption scenarios under market stress for credit funds",
+                "Credit concentration limits per issuer not consistently enforced across all sub-funds",
+            ],
+            "scope_suggestion": "Credit risk management for fund portfolios, leverage monitoring, liquidity risk management, counterparty exposure for OTC derivatives, and mandate compliance monitoring",
+            "background_angle": "Asset management credit risk focuses on portfolio-level credit exposure, leverage management, liquidity-credit mismatches, and counterparty risk for derivative-intensive strategies.",
+        },
+        "Governance & Internal Controls": {
+            "regulatory_focus": [
+                "AIFMD Article 18 — General Principles of Risk Management",
+                "UCITS Directive — Management Company Obligations",
+                "FINMA CISA Art. 20 — Duties of Fund Management",
+                "MAS CIS Code — Trustee and Manager Responsibilities",
+                "IIA Global Internal Audit Standards 2024",
+            ],
+            "additional_risks": [],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Independent risk management function not structurally separated from portfolio management",
+                "Conflicts of interest between proprietary funds and third-party mandates not disclosed or managed",
+                "Fund board or supervisory body does not receive granular reporting on mandate compliance breaches",
+            ],
+            "scope_suggestion": "Governance framework for fund management entities, independent risk oversight, conflicts of interest management, board reporting, and compliance function independence",
+            "background_angle": "Asset management governance focuses on fund manager independence, risk management separation from portfolio management, and investor protection obligations.",
+        },
+        "Operational Risk & Business Continuity": {
+            "regulatory_focus": [
+                "DORA (EU) 2025 — Business Continuity for Financial Entities",
+                "FINMA-RS 2023/1 — Operational Resilience for CISA entities",
+                "IOSCO Principles for Operational Resilience — Investment Managers 2022",
+            ],
+            "additional_risks": [],
+            "test_emphasis": [],
+            "typical_findings": [
+                "BCP does not cover fund NAV calculation disruption scenarios",
+                "Outsourced fund administration BCP not tested jointly with fund manager",
+                "Key-person dependency in portfolio management teams not mitigated in continuity plans",
+            ],
+            "scope_suggestion": "Operational resilience for fund management operations, NAV calculation continuity, outsourced administration BCP, and key-person risk",
+            "background_angle": "Operational risk in asset management is concentrated in NAV calculation accuracy, outsourced administration quality, and key-person dependency in investment teams.",
+        },
+        "Third Party & Vendor Risk": {
+            "regulatory_focus": [
+                "DORA (EU) 2025 — ICT Third-Party Risk for Fund Managers",
+                "FINMA CISA — Delegation and Outsourcing Conditions",
+                "AIFMD Art. 20 — Delegation of Portfolio Management",
+                "ESMA Guidelines on Outsourcing to Cloud Service Providers 2021",
+            ],
+            "additional_risks": [
+                {"title": "Sub-Delegation Risk", "level": "High",
+                 "description": "Delegation of portfolio management to sub-advisers without adequate ongoing oversight creates accountability gaps and regulatory exposure."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Sub-adviser delegation agreements do not include audit rights clauses",
+                "Fund administrator SOC 1 reports not reviewed annually by risk function",
+                "Sub-delegation chains not fully mapped — regulator notification obligations may be missed",
+            ],
+            "scope_suggestion": "Third-party risk management for fund administrators, sub-advisers, custodians, and technology providers; delegation framework compliance; and right-to-audit enforcement",
+            "background_angle": "Asset management third-party risk is dominated by fund administration outsourcing, sub-adviser delegation governance, and custodian oversight.",
+        },
+    },
+
+    "RETAIL_BANKING": {
+        "AML / KYC & Transaction Monitoring": {
+            "regulatory_focus": [
+                "AMLD6 — Retail Customer Due Diligence",
+                "FATF Recommendation 10 — Customer Due Diligence",
+                "EBA Guidelines on ML/TF Risk Factors 2021",
+                "FCA MLR 2017 — Simplified Due Diligence Criteria",
+                "FINMA-RS 2016/7 — Digital Onboarding",
+            ],
+            "additional_risks": [
+                {"title": "Mass-Market Digital Onboarding Risk", "level": "High",
+                 "description": "High-volume digital account opening processes may not adequately screen for synthetic identity fraud or document manipulation at scale."},
+                {"title": "Cash-Intensive SME Accounts", "level": "High",
+                 "description": "SME accounts with high cash turnover present elevated AML risk; transaction monitoring models may not adequately distinguish legitimate cash business from laundering."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Transaction monitoring scenarios not differentiated between personal and SME accounts",
+                "SDD applied to customers without adequate risk scoring basis",
+                "PEP screening not triggered at account update events for retail customers",
+                "Digital onboarding biometric liveness check not validated against identity document photograph",
+            ],
+            "scope_suggestion": "AML/KYC controls for retail customer onboarding (digital and branch), transaction monitoring calibration, SDD/EDD segmentation, and SME account AML controls",
+            "background_angle": "Retail banking AML risk is driven by transaction volume, digital onboarding fraud, and the challenge of monitoring diverse customer segments at scale.",
+        },
+        "Credit Risk & Lending": {
+            "regulatory_focus": [
+                "EBA Guidelines on Loan Origination and Monitoring 2020",
+                "Basel III — Consumer Credit Capital Requirements",
+                "FCA Consumer Duty 2023 — Lending Affordability",
+                "FINMA-RS 2019/2 — Residential Mortgage Lending",
+                "MAS Property Loan Rules — LTV and TDSR",
+            ],
+            "additional_risks": [
+                {"title": "Affordability Assessment Failure", "level": "Critical",
+                 "description": "Retail mortgage or personal loan origination without adequate income verification exposes the bank to regulatory action under Consumer Duty/fair lending obligations."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Income verification documentation not retained for all retail mortgage applications",
+                "Automated credit scoring model not validated annually — potential for model drift",
+                "Debt-to-income ratio not recalculated at loan renewal for variable rate mortgages",
+                "Collections escalation process does not differentiate vulnerable customers",
+            ],
+            "scope_suggestion": "Retail credit origination controls, affordability assessment, LTV and TDSR compliance, credit model governance, and collections fair treatment",
+            "background_angle": "Retail banking credit risk is centred on consumer lending affordability, mortgage LTV controls, model-driven origination governance, and fair treatment in collections.",
+        },
+        "Governance & Internal Controls": {
+            "regulatory_focus": [
+                "FCA Consumer Duty 2023 — Board Accountability",
+                "EBA Internal Governance Guidelines 2021",
+                "FINMA-RS 2017/1 — Corporate Governance for Banks",
+                "Basel Principles for Sound Corporate Governance 2015",
+            ],
+            "additional_risks": [],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Branch network oversight not structured — no consistent second-line review of branch AML/sales conduct",
+                "Product approval process does not include retail customer vulnerability impact assessment",
+                "Consumer Duty outcome monitoring not yet operationalised at business-line level",
+            ],
+            "scope_suggestion": "Governance of retail banking operations, Consumer Duty implementation, product approval framework, branch oversight, and compliance function effectiveness",
+            "background_angle": "Retail banking governance is increasingly shaped by Consumer Duty obligations, requiring boards to demonstrate customer outcome monitoring across all product lines.",
+        },
+    },
+
+    "INVESTMENT_BANKING": {
+        "AML / KYC & Transaction Monitoring": {
+            "regulatory_focus": [
+                "FATF Guidance on Securities Sector 2022",
+                "AMLD6 — Institutional Client Due Diligence",
+                "FCA MLR 2017 — Investment Business AML",
+                "MAS Notice SFA04-N02 — Capital Markets AML",
+                "SEC AML Program Rules for Broker-Dealers",
+            ],
+            "additional_risks": [
+                {"title": "Complex Financial Instrument AML", "level": "High",
+                 "description": "Use of structured products, derivatives, and securities financing transactions to layer or integrate illicit funds is a specific IB risk not captured by standard retail AML scenarios."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Correspondent clearing relationships not subject to adequate EDD",
+                "Transaction monitoring for securities financing not calibrated to market manipulation patterns",
+                "Institutional client beneficial ownership chain not traced beyond first-tier entity",
+            ],
+            "scope_suggestion": "AML/KYC for institutional client onboarding, correspondent clearing relationships, beneficial ownership of complex corporate clients, and securities transaction monitoring",
+            "background_angle": "Investment banking AML risk focuses on institutional client complexity, correspondent relationships, and the use of structured instruments for illicit finance.",
+        },
+        "Market Risk & Trading": {
+            "regulatory_focus": [
+                "FRTB (CRR3/Basel III) — Fundamental Review of the Trading Book",
+                "EMIR — OTC Derivatives Reporting and Clearing",
+                "FCA MAR — Market Abuse Regulation",
+                "MAS SFA — Securities and Futures Act Trading Rules",
+                "FINMA-RS 2013/1 — Eligible Capital",
+            ],
+            "additional_risks": [
+                {"title": "Model Risk in Internal Models Approach", "level": "Critical",
+                 "description": "Regulatory capital models under FRTB IMA may embed errors that understate VaR, leading to capital inadequacy not detected until market stress."},
+                {"title": "Market Abuse — Desk-Level Surveillance", "level": "High",
+                 "description": "Front-office communication surveillance and trade reconstruction may not detect coordinated manipulation across multiple desks or venues."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "FRTB boundary allocation between trading book and banking book not consistently documented",
+                "P&L attribution test failures not escalated to risk committee within required timeframe",
+                "Front-office communication surveillance coverage gaps for encrypted messaging platforms",
+            ],
+            "scope_suggestion": "Market risk framework for trading book, FRTB implementation, VaR model validation, market abuse surveillance, and derivatives risk management",
+            "background_angle": "Investment banking market risk is dominated by trading book regulatory capital requirements, FRTB implementation, and market abuse surveillance obligations.",
+        },
+        "Governance & Internal Controls": {
+            "regulatory_focus": [
+                "FCA Senior Managers and Certification Regime (SMCR)",
+                "MAS Guidelines on Individual Accountability and Conduct",
+                "FINMA Senior Management Accountability Framework",
+                "IIF Principles for Conduct Risk Management in Capital Markets",
+            ],
+            "additional_risks": [],
+            "test_emphasis": [],
+            "typical_findings": [
+                "SMCR individual accountability mapping not updated after desk reorganisation",
+                "Conduct risk indicators not systematically aggregated at business-line level",
+                "Conflicts of interest between corporate advisory and trading desks not fully disclosed",
+            ],
+            "scope_suggestion": "Governance framework for investment banking, senior manager accountability, conduct risk management, conflicts of interest between advisory and trading, and remuneration risk",
+            "background_angle": "Investment banking governance is shaped by senior manager accountability regimes and conduct risk obligations arising from the proximity of advisory and trading activities.",
+        },
+    },
+
+    "INSURANCE": {
+        "AML / KYC & Transaction Monitoring": {
+            "regulatory_focus": [
+                "FATF Guidance — Life Insurance Sector 2021",
+                "AMLD6 — Insurance Sector Due Diligence",
+                "FINMA-RS 2017/1 — AML for Insurers",
+                "FCA MLR 2017 — Insurance Business",
+                "MAS Notice MAS-626 — Insurance AML Requirements",
+            ],
+            "additional_risks": [
+                {"title": "Single Premium Life Policy Cash-Out Risk", "level": "Critical",
+                 "description": "Single premium life insurance policies are a known money laundering vehicle; early surrender with penalty acceptance is a key red flag."},
+                {"title": "Beneficiary Change as Placement Mechanism", "level": "High",
+                 "description": "Changes of beneficiary to unrelated third parties on large-value policies without documented rationale are an ML indicator specific to insurance."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Early surrender requests not flagged in transaction monitoring as ML red flag",
+                "Beneficiary change requests on large policies not subject to EDD review",
+                "Premium financing arrangements not treated as higher-risk for AML purposes",
+            ],
+            "scope_suggestion": "AML/KYC for life insurance and investment-linked product distribution, single premium policy monitoring, beneficiary change review, and premium financing controls",
+            "background_angle": "Insurance AML risk is concentrated in single premium life products and investment-linked policies, which can be used for placement and layering through policy surrender and beneficiary changes.",
+        },
+        "Operational Risk & Business Continuity": {
+            "regulatory_focus": [
+                "Solvency II — ORSA (Own Risk and Solvency Assessment)",
+                "FINMA-RS 2017/2 — Insurance Operational Risk",
+                "IAIS ICP 16 — Enterprise Risk Management",
+                "MAS MAS-126 — Business Continuity for Insurers",
+            ],
+            "additional_risks": [
+                {"title": "Claims Handling Process Failure", "level": "High",
+                 "description": "Inadequate claims processing controls lead to fraudulent claims payment, regulatory conduct risk, and reputational damage."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "ORSA process not fully integrated with business planning cycle",
+                "Claims fraud detection controls not updated to reflect new fraud patterns",
+                "BCP for core policy administration system not tested for extended outage scenarios",
+            ],
+            "scope_suggestion": "Operational risk and resilience for insurance core systems, claims processing controls, ORSA framework, and third-party administrator oversight",
+            "background_angle": "Insurance operational risk is shaped by ORSA obligations, claims fraud exposure, and the reliance on third-party administrators for policy servicing.",
+        },
+        "Governance & Internal Controls": {
+            "regulatory_focus": [
+                "Solvency II Pillar 2 — Governance Requirements",
+                "IAIS ICP 7 — Corporate Governance",
+                "FINMA-RS 2017/1 — Corporate Governance for Insurers",
+                "FCA Senior Managers Regime — Insurance",
+            ],
+            "additional_risks": [],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Actuarial function independence from business not structurally documented",
+                "Risk appetite statement does not address underwriting concentration risk",
+                "Board composition does not meet Solvency II requirements for independent directors",
+            ],
+            "scope_suggestion": "Governance framework, actuarial function independence, board composition, risk appetite, and the three lines of defence model in the insurance context",
+            "background_angle": "Insurance governance is governed by Solvency II pillar 2 requirements and IAIS ICPs, with specific emphasis on actuarial function independence.",
+        },
+    },
+
+    "PAYMENT_INSTITUTION": {
+        "AML / KYC & Transaction Monitoring": {
+            "regulatory_focus": [
+                "AMLD6 — Payment Service Provider AML Obligations",
+                "FATF Guidance — Payment Service Providers 2021",
+                "EBA Guidelines on AML/CFT for Payment Institutions 2022",
+                "FCA MLR 2017 — Payment Institution AML",
+                "MAS PS-N01 — Notice on AML for Payment Service Licensees",
+            ],
+            "additional_risks": [
+                {"title": "Instant Payment Fraud", "level": "Critical",
+                 "description": "Real-time payment rails eliminate the window for pre-authorisation fraud checks, increasing exposure to authorised push payment (APP) fraud and mule account activity."},
+                {"title": "Nested Payment Flow Opacity", "level": "High",
+                 "description": "Payment institution processing flows for other payment providers (nested PSPs) creates layering risk where the originator's KYC quality cannot be verified."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "APP fraud detection controls not calibrated to real-time payment patterns",
+                "Nested PSP due diligence not performed for all institutional clients using settlement accounts",
+                "Transaction monitoring velocity rules not updated to reflect product growth (new payment corridors)",
+                "Sanctions screening latency exceeds regulatory tolerance for real-time payments",
+            ],
+            "scope_suggestion": "AML/KYC and transaction monitoring for real-time payment flows, nested PSP oversight, sanctions screening latency, and APP fraud detection",
+            "background_angle": "Payment institution AML risk is driven by real-time payment fraud, nested PSP opacity, and the need for near-instant sanctions screening.",
+        },
+        "Operational Risk & Business Continuity": {
+            "regulatory_focus": [
+                "PSD2 (EU) — Operational and Security Risk Requirements",
+                "DORA (EU) 2025 — Payment Institution Resilience",
+                "FCA PSR — Payment Systems Regulator Resilience Rules",
+                "MAS PS-N01 — Technology Risk for Payment Services",
+            ],
+            "additional_risks": [
+                {"title": "Systemic Payment Rail Dependency", "level": "Critical",
+                 "description": "Single-rail dependency for transaction settlement creates systemic operational risk; outage directly impacts client operations and creates regulatory notification obligations."},
+            ],
+            "test_emphasis": [],
+            "typical_findings": [
+                "BCP does not cover multi-day settlement rail outage scenario",
+                "Incident response playbook not tested for simultaneous fraud surge and system outage",
+                "Regulatory major incident reporting thresholds not aligned with DORA notification timelines",
+            ],
+            "scope_suggestion": "Operational resilience for payment processing infrastructure, settlement rail redundancy, incident response capability, and DORA compliance",
+            "background_angle": "Payment institution operational risk centres on payment rail resilience, real-time incident response, and regulatory reporting timeliness under DORA.",
+        },
+        "Governance & Internal Controls": {
+            "regulatory_focus": [
+                "PSD2 — Payment Institution Licensing and Governance",
+                "EBA Guidelines on Internal Governance for Payment Institutions 2022",
+                "FCA SYSC — Senior Management Arrangements",
+                "MAS PS-N01 — Corporate Governance for Major Payment Institutions",
+            ],
+            "additional_risks": [],
+            "test_emphasis": [],
+            "typical_findings": [
+                "Safeguarding controls for client funds not tested by internal audit",
+                "Product change approval process does not include operational risk assessment for new payment products",
+                "Compliance function not appropriately resourced relative to transaction volume growth",
+            ],
+            "scope_suggestion": "Governance framework for payment institutions, client fund safeguarding, product change approval, and compliance function adequacy",
+            "background_angle": "Payment institution governance focuses on client fund safeguarding, product launch controls, and scaling compliance resources to match rapid business growth.",
+        },
+    },
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # 1. REGULATORY_FRAMEWORKS
 # ═══════════════════════════════════════════════════════════════════════════════
 

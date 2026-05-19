@@ -569,6 +569,7 @@ from data import (
     AUDIT_TESTS_LIBRARY, TOPIC_THEME_MAP, TOPIC_KEY_MAPPING,
     THEMATIC_BACKGROUND, REGULATORY_CALENDAR, HNWI_RED_FLAGS,
     MANAGEMENT_ACTION_TEMPLATES,
+    _ENTITY_KEYS, _ENTITY_COLORS, ENTITY_CONTEXT,
 )
 
 JURISDICTIONS = ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "Bahamas / SCB", "EU / DORA", "UK / FCA+PRA"]
@@ -695,7 +696,7 @@ def _client():
     return _ant.Anthropic(api_key=_api_key)
 
 
-def _call(client, prompt, system="You are an expert audit consultant specialising in private banking and wealth management.", max_tokens=6000):
+def _call(client, prompt, system="You are an expert audit consultant specialising in financial services audit and risk management.", max_tokens=6000):
     resp = client.messages.create(
         model=MODEL,
         max_tokens=max_tokens,
@@ -831,9 +832,9 @@ def _topic_to_theme(topic: str) -> str | None:
     return None
 
 
-def get_data_for_topic(topic: str) -> dict:
-    """Return aggregated risks, tests, and DA scenarios for a given topic.
-    Uses TOPIC_KEY_MAPPING for exact-match lookup, then keyword fallback.
+def get_data_for_topic(topic: str, entity_type: str = "🏦 Private Banking") -> dict:
+    """Return aggregated risks, tests, and DA scenarios for a given topic,
+    enriched with entity-specific context overlay from ENTITY_CONTEXT.
     """
     keys = TOPIC_KEY_MAPPING.get(topic, [])
     if not keys:
@@ -844,7 +845,32 @@ def get_data_for_topic(topic: str) -> dict:
         risks.extend(RISK_INDICATORS.get(key, []))
         tests.extend(AUDIT_TESTS_LIBRARY.get(key, []))
         da_scenarios.extend(DATA_ANALYTICS_SCENARIOS.get(key, []))
-    return {"risks": risks, "tests": tests, "da_scenarios": da_scenarios, "keys": keys}
+
+    entity_key = _ENTITY_KEYS.get(entity_type, "PRIVATE_BANKING")
+    entity_ctx = ENTITY_CONTEXT.get(entity_key, {}).get(topic, {})
+
+    # Entity-specific additional risks go first
+    additional = entity_ctx.get("additional_risks", [])
+
+    reg_focus   = entity_ctx.get("regulatory_focus", [])
+    scope       = entity_ctx.get("scope_suggestion", "")
+    findings    = entity_ctx.get("typical_findings", [])
+    test_emp    = entity_ctx.get("test_emphasis", [])
+    bg_angle    = entity_ctx.get("background_angle", "")
+
+    return {
+        "risks":            additional + risks,
+        "tests":            tests,
+        "da_scenarios":     da_scenarios,
+        "keys":             keys,
+        "entity_key":       entity_key,
+        "entity_type":      entity_type,
+        "regulatory_focus": reg_focus,
+        "scope_suggestion": scope,
+        "typical_findings": findings,
+        "test_emphasis":    test_emp,
+        "background_angle": bg_angle,
+    }
 
 
 def _static_label():
@@ -2325,7 +2351,7 @@ with _hdr_col1:
 <div style="text-align:center;margin-bottom:32px;padding-top:1rem">
   <h1 style="font-size:42px;font-weight:800;letter-spacing:-1px;margin:0">🏦 AuditIQ</h1>
   <p style="font-size:16px;color:#8b95b8;font-style:italic;margin-top:4px;margin-bottom:0">
-    From risk to insight — audit intelligence for private banking.
+    From risk to insight — intelligent audit support for financial institutions.
   </p>
 </div>
 """, unsafe_allow_html=True)
@@ -3205,6 +3231,14 @@ with tab1:
         help="Select one or more jurisdictions. Each adds regulatory and risk context specific to that regulator.",
     )
 
+    entity_type = st.selectbox(
+        "Entity Type",
+        options=list(_ENTITY_KEYS.keys()),
+        index=0,
+        key="t1_entity_type",
+        help="Select the type of financial institution being audited. Risk indicators and regulations will be adapted accordingly.",
+    )
+
     st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
 
     # Input validation
@@ -3219,6 +3253,23 @@ with tab1:
     if _t1_mode == "static":
         # ── Static Reference Data mode ─────────────────────────────────────────
         _static_label()
+        _t1_entity_type = st.session_state.get("t1_entity_type", "🏦 Private Banking")
+        _t1_entity_data = get_data_for_topic(
+            audit_topic if audit_topic else "AML / KYC & Transaction Monitoring",
+            entity_type=_t1_entity_type,
+        )
+        _t1_entity_key   = _t1_entity_data["entity_key"]
+        _t1_entity_color = _ENTITY_COLORS.get(_t1_entity_key, "#7fa8fb")
+        _entity_label    = _t1_entity_type.split(" ", 1)[1] if " " in _t1_entity_type else _t1_entity_type
+        st.markdown(
+            f'<div style="display:flex;align-items:center;gap:12px;margin:8px 0 16px">'
+            f'<span style="background:{_t1_entity_color}22;color:{_t1_entity_color};border:1px solid {_t1_entity_color}44;'
+            f'border-radius:6px;padding:4px 14px;font-size:12px;font-weight:700">📊 {_entity_label} context</span>'
+            f'<span style="font-size:11.5px;color:#5a6488;font-style:italic">'
+            f'Risks and regulations adapted for {_t1_entity_type}</span>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
         _t1_theme = _topic_to_theme(audit_topic) if audit_topic else "AML_KYC"
         _t1_theme = _t1_theme or "AML_KYC"
         _t1_theme_label = _t1_theme.replace("_", " ").title()
@@ -3234,7 +3285,9 @@ with tab1:
             _ri_c1, _ri_c2 = st.columns([3, 1.5])
             _ri_sq = _ri_c1.text_input("Search risks", placeholder="Filter risks…", key="_ri_sq", label_visibility="collapsed")
             _ri_slv = _ri_c2.selectbox("Level", ["All", "Critical", "High", "Moderate"], key="_ri_slv", label_visibility="collapsed")
-            _ri_filtered = RISK_INDICATORS.get(_t1_theme, [])
+            _entity_specific_risks = _t1_entity_data.get("additional_risks", [])
+            _base_risks = RISK_INDICATORS.get(_t1_theme, [])
+            _ri_filtered = _entity_specific_risks + _base_risks
             if _ri_slv != "All":
                 _ri_filtered = [r for r in _ri_filtered if r.get("level") == _ri_slv]
             if _ri_sq:
@@ -3248,6 +3301,12 @@ with tab1:
                     _bg  = _LVLBG.get(_r["level"], "transparent")
                     _pcolor = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(_r.get("probability",""), "#8392bb")
                     _icolor = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(_r.get("impact",""), "#8392bb")
+                    _is_entity_specific = _r in _entity_specific_risks
+                    _entity_badge = (
+                        f'<span style="background:{_t1_entity_color}22;color:{_t1_entity_color};'
+                        f'border:1px solid {_t1_entity_color}44;border-radius:4px;'
+                        f'padding:2px 8px;font-size:10px;font-weight:700;margin-left:6px">★ Entity-specific</span>'
+                    ) if _is_entity_specific else ""
                     _ctrls = "".join(f"<li>{c}</li>" for c in _r.get("expected_controls", []))
                     _flags = "".join(f"<li>{f}</li>" for f in _r.get("red_flags", []))
                     st.markdown(f"""
@@ -3255,6 +3314,7 @@ with tab1:
                       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
                         <span style="background:{_col}22;color:{_col};border:1px solid {_col}44;border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">{_r["level"]}</span>
                         <span style="font-size:13.5px;font-weight:600;color:var(--text-primary)">{_r.get("id","")} — {_r["title"]}</span>
+                        {_entity_badge}
                         <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">Prob: <span style="color:{_pcolor};font-weight:600">{_r.get("probability","")}</span> &nbsp;·&nbsp; Impact: <span style="color:{_icolor};font-weight:600">{_r.get("impact","")}</span></span>
                       </div>
                       <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.7">{_r["description"]}</p>
@@ -3324,7 +3384,7 @@ Respond ONLY with a valid JSON array — no markdown, no preamble:
 Jurisdictions: {jur_str}
 Institution: Swiss private bank / wealth manager (HNWI, wealth management, cross-border)
 
-List applicable regulations specific to private banking and wealth management.
+List applicable regulations for the audited institution type and jurisdictions.
 Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
 [{{"jurisdiction":"<e.g. CH / FINMA>","text":"<law or regulation name>","reference":"<specific article/circular number>","requirement":"<key requirement in 1-2 sentences>"}}]""",
                         max_tokens=5000)
@@ -3516,9 +3576,31 @@ with tab2:
             unsafe_allow_html=True,
         )
 
+    _t2_entity_type = st.session_state.get("t1_entity_type", "🏦 Private Banking")
+    _t2_entity_data = get_data_for_topic(
+        topic2 if topic2 else "AML / KYC & Transaction Monitoring",
+        entity_type=_t2_entity_type,
+    )
+    _t2_scope_default = (
+        st.session_state.get("_tpl_scope", "")
+        or _t2_entity_data.get("scope_suggestion", "")
+    )
+    _t2_entity_key   = _t2_entity_data["entity_key"]
+    _t2_entity_color = _ENTITY_COLORS.get(_t2_entity_key, "#7fa8fb")
+    _t2_entity_label = _t2_entity_type.split(" ", 1)[1] if " " in _t2_entity_type else _t2_entity_type
+    st.markdown(
+        f'<div style="display:flex;align-items:center;gap:12px;margin:0 0 12px">'
+        f'<span style="background:{_t2_entity_color}22;color:{_t2_entity_color};border:1px solid {_t2_entity_color}44;'
+        f'border-radius:6px;padding:4px 14px;font-size:12px;font-weight:700">📊 {_t2_entity_label} context</span>'
+        f'<span style="font-size:11.5px;color:#5a6488;font-style:italic">'
+        f'Scope and tests adapted for {_t2_entity_type}</span>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+    if not st.session_state.get("t2_scope_in") and _t2_scope_default:
+        st.session_state["t2_scope_in"] = _t2_scope_default
     scope = st.text_area(
         "Audit Scope",
-        value=st.session_state.get("_tpl_scope", ""),
         placeholder="e.g. All group entities in CH, SG and HK. Focus on client onboarding and transaction monitoring.",
         height=80,
         key="t2_scope_in",
@@ -3573,12 +3655,40 @@ with tab2:
 
         st.markdown(_EXAMPLE_RATIONALE, unsafe_allow_html=True)
 
+        _t2_static_entity_data = get_data_for_topic(
+            topic2 if topic2 else "AML / KYC & Transaction Monitoring",
+            entity_type=st.session_state.get("t1_entity_type", "🏦 Private Banking"),
+        )
         with st.expander("📖 A — Rationale & Thematic Background", expanded=True):
             st.markdown(
                 f'<div class="section-title">A. Rationale &amp; Thematic Background — {_t2_theme_label}</div>',
                 unsafe_allow_html=True,
             )
+            _bg_angle = _t2_static_entity_data.get("background_angle", "")
+            if _bg_angle:
+                st.markdown(
+                    f'<div style="background:rgba(99,102,241,0.08);border-left:3px solid #6366f1;'
+                    f'border-radius:0 8px 8px 0;padding:10px 16px;margin-bottom:14px;'
+                    f'font-size:12.5px;color:#c8d0e8;font-style:italic">'
+                    f'💡 {_bg_angle}</div>',
+                    unsafe_allow_html=True,
+                )
             _show_thematic_background(_t2_theme)
+            _typical = _t2_static_entity_data.get("typical_findings", [])
+            if _typical:
+                st.markdown(
+                    '<div style="margin-top:14px"><div style="font-size:12px;font-weight:700;'
+                    'color:#7fa8fb;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">'
+                    '★ Typical Findings for this Entity Type</div>',
+                    unsafe_allow_html=True,
+                )
+                for _tf in _typical:
+                    st.markdown(
+                        f'<div style="font-size:12.5px;color:#c8d0e8;padding:4px 0 4px 14px;'
+                        f'border-left:2px solid rgba(127,168,251,0.3)">• {_tf}</div>',
+                        unsafe_allow_html=True,
+                    )
+                st.markdown('</div>', unsafe_allow_html=True)
 
         with st.expander("🗂️ B — Audit Tests Library", expanded=False):
             st.markdown(
@@ -3630,7 +3740,7 @@ with tab2:
                             file_ids2.append(fm)
                     doc_ctx = f"\n{len(file_ids2)} supporting document(s) provided for context." if file_ids2 else ""
 
-                    sys_prompt = "You are a senior audit partner at a Big 4 firm specialising in private banking. Write in English, professional tone, concise and precise."
+                    sys_prompt = "You are a senior audit partner at a Big 4 firm specialising in financial services. Write in English, professional tone, concise and precise."
 
                     rationale = _call(c, f"""Audit topic: {topic2}
 Institution: Swiss private bank (HNWI, cross-border: {jur_str})
@@ -4187,6 +4297,6 @@ with tab3:
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("---")
 st.markdown(
-    '<p class="footer">AuditIQ · Internal Audit System · Private Banking · CH · SG · HK · Bahamas · EU · UK</p>',
+    '<p class="footer">AuditIQ · Internal Audit System · Financial Institutions · CH · SG · HK · EU · UK</p>',
     unsafe_allow_html=True,
 )
