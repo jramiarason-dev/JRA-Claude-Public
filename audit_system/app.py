@@ -724,6 +724,24 @@ TEMPLATES = {
             "management across all spend categories."
         ),
     },
+    "IT Production & Infrastructure": {
+        "topic": "IT Production & Infrastructure",
+        "jurisdictions": ["CH / FINMA", "EU / DORA", "SG / MAS", "UK / FCA+PRA"],
+        "scope": (
+            "IT production environment including server infrastructure, network architecture, "
+            "database management, monitoring, capacity management, patch management, "
+            "and IT operations centre processes."
+        ),
+    },
+    "IT Operating Model & Governance": {
+        "topic": "IT Operating Model & Governance",
+        "jurisdictions": ["CH / FINMA", "EU / DORA", "SG / MAS", "UK / FCA+PRA"],
+        "scope": (
+            "IT governance framework including IT strategy alignment, IT risk management, "
+            "governance committees, IT policy framework, IT budget oversight, "
+            "and IT audit committee reporting."
+        ),
+    },
     "Wealth Management Advisory & Suitability": {
         "topic": "Wealth Management Advisory & Suitability",
         "jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA", "HK / SFC+HKMA", "SG / MAS"],

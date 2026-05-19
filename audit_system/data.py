@@ -57,6 +57,8 @@ TOPIC_KEY_MAPPING = {
     "Access Management & Identity":              ["ACCESS_MANAGEMENT"],
     "Procurement & Sourcing":                    ["PROCUREMENT"],
     "Wealth Management Advisory & Suitability":  ["WEALTH_ADVISORY"],
+    "IT Production & Infrastructure":            ["IT_PRODUCTION"],
+    "IT Operating Model & Governance":           ["IT_OPERATING_MODEL"],
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -1318,6 +1320,121 @@ AUDIT_TEMPLATES = {
             "BCBS Sound Practices OpRisk 2021",
             "ISO 20400 (Sustainable procurement)",
             "UK Bribery Act / Swiss CPC",
+        ],
+    },
+
+    "IT Production & Infrastructure": {
+        "topic": "IT Production & Infrastructure",
+        "default_jurisdictions": ["CH / FINMA", "EU / DORA", "SG / MAS", "UK / FCA+PRA"],
+        "suggested_scope": (
+            "IT production environment including server infrastructure, network architecture, "
+            "database management, storage, monitoring and alerting systems, capacity management, "
+            "patch management and IT operations centre (ITOC/NOC) processes."
+        ),
+        "key_risks": [
+            "Unpatched critical vulnerabilities in production systems",
+            "Insufficient monitoring and alerting for production incidents",
+            "Capacity management failures causing service degradation",
+            "Unsupported end-of-life hardware and software in production",
+            "Configuration management database (CMDB) inaccurate or incomplete",
+            "Production access granted to non-operations staff",
+            "Backup and recovery procedures not tested",
+            "Single points of failure in critical infrastructure",
+            "Network segmentation inadequate between environments",
+            "IT operations procedures undocumented or not followed",
+        ],
+        "recommended_tests": [
+            "Patch management coverage and timeliness review",
+            "Production monitoring alert coverage assessment",
+            "Capacity management process and trending review",
+            "End-of-life asset identification and remediation plan review",
+            "CMDB accuracy validation (sample reconciliation)",
+            "Production access rights review",
+            "Backup and recovery test evidence review",
+            "Single point of failure analysis",
+            "Network segmentation and firewall rules review",
+            "IT operations runbook completeness check",
+        ],
+        "typical_findings": [
+            "Critical security patches more than 30 days overdue on production servers",
+            "Monitoring gaps — key systems not covered by alerting",
+            "CMDB out of date with undocumented shadow IT assets",
+            "Developer accounts with direct production access",
+            "Backups not restored and tested in over 12 months",
+            "End-of-life operating systems running on core banking infrastructure",
+        ],
+        "rationale": (
+            "IT production stability is foundational to banking operations. DORA requires "
+            "financial entities to maintain robust ICT operations management. FINMA RS 2008/21 "
+            "mandates documented IT operations procedures. Production outages or security "
+            "incidents from infrastructure failures create direct regulatory and reputational "
+            "risk. This topic is a perennial priority in bank IT audits across all frameworks."
+        ),
+        "regulatory_refs": [
+            "DORA Art.9 (ICT operations management)",
+            "FINMA RS 2008/21 (IT operations controls)",
+            "MAS TRM 2021 (IT operations management)",
+            "COBIT 2019 (DSS01, DSS03, DSS04)",
+            "ITIL v4 — Service Operation",
+            "CIS Controls v8 (Control 7 — patching)",
+        ],
+    },
+
+    "IT Operating Model & Governance": {
+        "topic": "IT Operating Model & Governance",
+        "default_jurisdictions": ["CH / FINMA", "EU / DORA", "SG / MAS", "UK / FCA+PRA"],
+        "suggested_scope": (
+            "IT governance framework including IT strategy alignment, IT risk management, "
+            "IT organisational structure, vendor management, IT policy framework, IT budget "
+            "oversight, IT audit committee reporting, and IT steering committee effectiveness."
+        ),
+        "key_risks": [
+            "IT strategy not aligned with business strategy",
+            "IT risk management framework not embedded in enterprise risk",
+            "IT governance committees ineffective or inactive",
+            "IT policy framework incomplete or outdated",
+            "IT budget and investment decisions not governed by risk appetite",
+            "IT organisation lacking critical skills (cyber, cloud, data)",
+            "IT vendor governance insufficient for material dependencies",
+            "No IT Key Risk Indicators (KRIs) reported to senior management",
+            "IT audit findings not remediated within agreed timelines",
+            "IT succession planning gaps in critical roles",
+        ],
+        "recommended_tests": [
+            "IT strategy document review and alignment assessment",
+            "IT risk framework documentation and integration review",
+            "IT governance committee minutes and attendance review",
+            "IT policy inventory completeness and currency check",
+            "IT budget governance process review",
+            "IT skills gap analysis and talent management review",
+            "IT vendor contract and governance review",
+            "IT KRI reporting review",
+            "IT audit finding remediation tracking review",
+            "IT succession plan review for critical roles",
+        ],
+        "typical_findings": [
+            "IT strategy document last updated more than 2 years ago",
+            "IT steering committee not meeting at required frequency",
+            "No formal IT risk appetite statement approved by the Board",
+            "IT KRIs not reported to senior management or risk committee",
+            "IT audit findings remediation rate below 70%",
+            "Critical IT roles (CISO, CTO) without succession plan",
+        ],
+        "rationale": (
+            "Effective IT governance is the foundation of sustainable technology risk management. "
+            "DORA requirements on ICT governance (Art.5-7) are directly enforceable for EU entities. "
+            "FINMA expects banks to have a documented IT strategy aligned with business objectives "
+            "under RS 2008/21. COBIT 2019 provides the leading governance framework. Weaknesses "
+            "in IT operating model consistently amplify other IT risks and are a focus of supervisory "
+            "scrutiny across all major banking regulators."
+        ),
+        "regulatory_refs": [
+            "DORA Art.5-7 (ICT governance framework)",
+            "FINMA RS 2008/21 (IT strategy and governance)",
+            "MAS TRM 2021 (IT governance)",
+            "COBIT 2019 (EDM, APO domains)",
+            "IIA GIAS 2024 — Domain III & IV",
+            "BCBS Principles for Sound IT Risk Management",
         ],
     },
 
@@ -4351,6 +4468,283 @@ RISK_INDICATORS = {
             ),
         },
     ],
+
+    "IT_PRODUCTION": [
+        {
+            "id": "R-ITP-001",
+            "title": "Unpatched Critical Vulnerabilities in Production",
+            "description": (
+                "Critical and high-severity security patches not applied within defined timelines, "
+                "leaving production systems exposed to known exploits."
+            ),
+            "level": "Critical",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Automated vulnerability scanning of all production assets",
+                "Patch management SLAs: critical <7 days, high <30 days",
+                "Exception process for systems requiring extended patching windows",
+                "Monthly patching status report to IT management",
+            ],
+            "red_flags": [
+                "Critical CVEs outstanding more than 30 days on production servers",
+                "No centralised patch management tooling in place",
+                "Patching rate below 90% for critical/high vulnerabilities",
+            ],
+            "private_banking_specifics": (
+                "Private banks typically have complex multi-vendor production environments "
+                "where patching requires coordinated change windows. DORA and FINMA both require "
+                "timely patch management as a core ICT risk control."
+            ),
+        },
+        {
+            "id": "R-ITP-002",
+            "title": "Monitoring and Alerting Coverage Gaps",
+            "description": (
+                "Critical production systems not covered by real-time monitoring, resulting in "
+                "delayed detection of incidents and service degradation."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "100% coverage of production systems in monitoring platform",
+                "Defined alerting thresholds for performance and availability",
+                "24/7 NOC coverage for critical systems",
+                "Escalation procedures for P1/P2 incidents",
+            ],
+            "red_flags": [
+                "Key systems not included in monitoring inventory",
+                "Alerting thresholds not defined or tested",
+                "No after-hours incident detection capability",
+            ],
+            "private_banking_specifics": (
+                "Client-facing systems (e-banking, trading platforms) require near-zero "
+                "downtime. DORA requires ICT incident detection capabilities. Monitoring "
+                "gaps directly affect RTO achievement and regulatory reporting obligations."
+            ),
+        },
+        {
+            "id": "R-ITP-003",
+            "title": "End-of-Life Infrastructure in Production",
+            "description": (
+                "Hardware or software past vendor end-of-life/end-of-support dates operating "
+                "in production, receiving no security patches or vendor support."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "IT asset lifecycle register with EoL dates tracked",
+                "Annual EoL assessment and migration roadmap",
+                "Compensating controls documented for EoL exceptions",
+                "Board-level sign-off required for EoL extensions",
+            ],
+            "red_flags": [
+                "Operating systems past Microsoft/vendor EoL still in production",
+                "No formal EoL register maintained",
+                "EoL exceptions approved without compensating controls",
+            ],
+            "private_banking_specifics": (
+                "Legacy core banking systems are a common EoL risk in private banking. "
+                "FINMA expects banks to manage technology obsolescence as an operational risk. "
+                "EoL infrastructure is a consistent finding in DORA readiness assessments."
+            ),
+        },
+        {
+            "id": "R-ITP-004",
+            "title": "Backup and Recovery Not Tested",
+            "description": (
+                "Backup and disaster recovery procedures not regularly tested, creating uncertainty "
+                "about actual recovery capability in a real incident scenario."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "Critical",
+            "expected_controls": [
+                "Annual full recovery test for critical systems",
+                "Quarterly partial restore tests documented with results",
+                "RTO/RPO targets defined and validated through testing",
+                "Test results reported to IT management and risk committee",
+            ],
+            "red_flags": [
+                "No evidence of backup restoration testing in last 12 months",
+                "RTO/RPO targets not defined for critical systems",
+                "Recovery test failures not tracked or remediated",
+            ],
+            "private_banking_specifics": (
+                "Regulators expect demonstrable recovery capability — not just documented procedures. "
+                "DORA Art.12 requires backup testing. FINMA and MAS both require evidence of "
+                "tested recovery for critical banking systems."
+            ),
+        },
+        {
+            "id": "R-ITP-005",
+            "title": "CMDB Inaccuracy and Shadow IT",
+            "description": (
+                "Configuration Management Database inaccurate or incomplete, with undocumented "
+                "assets operating in production ('shadow IT')."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Automated asset discovery reconciled with CMDB monthly",
+                "Change management process requiring CMDB update on every change",
+                "Quarterly CMDB accuracy audit",
+                "Ownership assigned for every production asset",
+            ],
+            "red_flags": [
+                "CMDB not reconciled with automated discovery results",
+                "Unowned assets found in network scans",
+                "Change tickets not linked to CMDB configuration items",
+            ],
+            "private_banking_specifics": (
+                "Incomplete asset inventories undermine every other IT control — patching, "
+                "monitoring, access management. DORA requires maintained and accurate ICT asset "
+                "registers. Shadow IT is particularly prevalent in banks that have grown through acquisition."
+            ),
+        },
+    ],
+
+    "IT_OPERATING_MODEL": [
+        {
+            "id": "R-ITOM-001",
+            "title": "IT Strategy Not Aligned with Business Strategy",
+            "description": (
+                "IT strategy not updated to reflect current business direction, resulting in "
+                "technology investments misaligned with strategic priorities."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "IT strategy reviewed and approved by Board annually",
+                "IT strategy development process includes business stakeholders",
+                "IT investment prioritisation framework aligned with strategic goals",
+                "Annual IT strategy vs delivery gap assessment",
+            ],
+            "red_flags": [
+                "IT strategy document more than 2 years old",
+                "IT investment portfolio not reviewed against business priorities",
+                "No formal process for business-IT strategy alignment",
+            ],
+            "private_banking_specifics": (
+                "Private banking digital transformation requires IT strategy alignment with "
+                "wealth management platform objectives. FINMA expects banks to have a current "
+                "IT strategy addressing digitalisation risk. DORA requires Board-level ICT strategy oversight."
+            ),
+        },
+        {
+            "id": "R-ITOM-002",
+            "title": "IT Governance Committees Ineffective",
+            "description": (
+                "IT steering and risk committees not meeting at required frequency or lacking "
+                "appropriate membership and decision-making authority."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "IT Steering Committee with Board/C-suite representation meeting quarterly",
+                "IT Risk Committee meeting monthly with documented minutes",
+                "Formal terms of reference for all IT governance committees",
+                "KPI/KRI dashboards presented at each committee meeting",
+            ],
+            "red_flags": [
+                "IT committee meetings cancelled or lacking quorum",
+                "Key decisions made outside governance framework",
+                "No formal terms of reference for IT committees",
+            ],
+            "private_banking_specifics": (
+                "DORA Art.5 requires senior management accountable for ICT risk management. "
+                "FINMA and MAS expect IT governance structures to be documented, active, and "
+                "evidenced. Inactive governance committees are a consistent inspection finding."
+            ),
+        },
+        {
+            "id": "R-ITOM-003",
+            "title": "IT Policy Framework Incomplete or Outdated",
+            "description": (
+                "IT policies and standards missing, outdated, or not reviewed at required "
+                "intervals, leaving operational guidance gaps for technology staff."
+            ),
+            "level": "Moderate",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Comprehensive IT policy inventory with review dates tracked",
+                "Annual policy review cycle with owner sign-off",
+                "Policy gaps identified through annual risk assessment",
+                "Mandatory staff acknowledgement of key IT policies",
+            ],
+            "red_flags": [
+                "IT policies with review dates overdue by more than 1 year",
+                "No IT policy inventory maintained",
+                "Policies not communicated or acknowledged by relevant staff",
+            ],
+            "private_banking_specifics": (
+                "Regulators expect a documented IT policy framework as baseline governance. "
+                "DORA Art.6 requires written ICT risk management policy. FINMA RS 2008/21 "
+                "mandates documented IT standards. Policy gaps are frequently cited in audits "
+                "as root cause for operational control failures."
+            ),
+        },
+        {
+            "id": "R-ITOM-004",
+            "title": "IT Audit Finding Remediation Rate Low",
+            "description": (
+                "IT audit findings not remediated within agreed timelines, indicating weak "
+                "accountability and governance over risk closure."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Action tracking system with owner and due date for all findings",
+                "Monthly remediation status report to IT management",
+                "Escalation process for overdue critical/high findings",
+                "Root cause analysis for repeated findings",
+            ],
+            "red_flags": [
+                "IT audit finding remediation rate below 70% at due date",
+                "Critical findings outstanding more than 6 months",
+                "Same findings repeated across consecutive audit cycles",
+            ],
+            "private_banking_specifics": (
+                "FINMA and MAS both monitor audit finding remediation rates. Persistent open "
+                "findings may trigger enhanced supervisory attention. IIA GIAS 2024 (Standard 13.5) "
+                "requires management action plans with owners and timelines."
+            ),
+        },
+        {
+            "id": "R-ITOM-005",
+            "title": "Critical IT Skills and Succession Gaps",
+            "description": (
+                "Key IT roles — CISO, CTO, cloud architects — lacking succession plans or "
+                "replacement capability, creating key-person dependency risk."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Annual skills gap analysis for critical IT competencies",
+                "Succession plan for CISO, CTO, and all critical IT roles",
+                "Training budget and plan addressing identified skills gaps",
+                "Staff retention programme for critical IT personnel",
+            ],
+            "red_flags": [
+                "No documented succession plan for CISO or CTO",
+                "Critical projects dependent on single external consultants",
+                "IT skills gap analysis not performed in last 12 months",
+            ],
+            "private_banking_specifics": (
+                "Cyber, cloud, and data skills are scarce in private banking markets. "
+                "Key-person dependency risk is elevated in boutique private banks with small "
+                "IT teams. FINMA expects operational resilience planning to cover key-person risk."
+            ),
+        },
+    ],
 }
 
 
@@ -7233,6 +7627,78 @@ DATA_ANALYTICS_SCENARIOS = {
             "complexity": "Medium",
         },
     ],
+
+    "IT_PRODUCTION": [
+        {
+            "id": "DA-ITP-001",
+            "theme": "IT_PRODUCTION",
+            "title": "Patch Management Coverage and Ageing Analysis",
+            "objective": "Identify production assets with outstanding critical/high vulnerabilities beyond defined SLA timelines.",
+            "data_sources": ["Vulnerability scanner output (Tenable, Qualys)", "Patch management system", "CMDB / asset inventory", "Change management log"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Production assets with critical CVEs outstanding >7 days or high CVEs >30 days; assets not scanned in last 14 days; patch coverage rate below 90%; EoL systems with no compensating control exception documented.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-ITP-002",
+            "theme": "IT_PRODUCTION",
+            "title": "Monitoring Coverage Gap Detection",
+            "objective": "Identify production systems not covered by real-time monitoring and alerting.",
+            "data_sources": ["CMDB / asset inventory", "Monitoring platform (Dynatrace, Splunk, Datadog) agent inventory", "Network discovery scan", "Production application register"],
+            "analysis_type": "Completeness",
+            "anomaly_searched": "Assets in CMDB without corresponding monitoring agent or synthetic check; critical applications with no performance/availability alert defined; network devices not feeding syslog to SIEM; monitoring coverage rate below 95% of classified production assets.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA-ITP-003",
+            "theme": "IT_PRODUCTION",
+            "title": "CMDB Accuracy Reconciliation",
+            "objective": "Measure CMDB accuracy by comparing automated discovery results against recorded configuration items.",
+            "data_sources": ["CMDB export", "Network discovery tool (Nmap, Lansweeper)", "Cloud inventory API (AWS, Azure)", "Active Directory computer objects"],
+            "analysis_type": "Completeness",
+            "anomaly_searched": "Assets discovered by scanning not present in CMDB (shadow IT); CMDB records with no corresponding discovered asset (ghost assets); CI records with no assigned owner; assets where CMDB attributes (OS version, IP) do not match discovered state.",
+            "tools": ["Python", "SQL"],
+            "complexity": "Medium",
+        },
+    ],
+
+    "IT_OPERATING_MODEL": [
+        {
+            "id": "DA-ITOM-001",
+            "theme": "IT_OPERATING_MODEL",
+            "title": "IT Audit Finding Remediation Rate Analysis",
+            "objective": "Measure audit finding closure rates against agreed timelines and identify persistent or overdue items.",
+            "data_sources": ["Audit management system (TeamMate, Auditboard)", "Finding register", "Management action plan log", "Risk register"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Critical/high findings outstanding beyond agreed due date; findings with more than 2 deadline extensions; same finding recurring across consecutive audit cycles; findings rated critical open more than 90 days; overall closure rate below 70% at 30 days past due date.",
+            "tools": ["SQL", "Excel"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-ITOM-002",
+            "theme": "IT_OPERATING_MODEL",
+            "title": "IT Policy Currency and Coverage Analysis",
+            "objective": "Identify policy gaps and outdated policies in the IT policy framework.",
+            "data_sources": ["IT policy register", "Policy management system", "COBIT/ISO 27001 control inventory", "Staff acknowledgement records"],
+            "analysis_type": "Completeness",
+            "anomaly_searched": "IT policies with review date overdue by more than 12 months; COBIT or ISO 27001 control areas without a covering policy; policies without a named owner; mandatory policies with staff acknowledgement rate below 90%.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+        {
+            "id": "DA-ITOM-003",
+            "theme": "IT_OPERATING_MODEL",
+            "title": "IT Governance Committee Activity Monitoring",
+            "objective": "Assess the frequency, quorum, and decision quality of IT governance committees.",
+            "data_sources": ["Committee minutes register", "Attendance records", "Terms of reference documents", "Action item tracker"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "IT committees meeting less than required frequency (per ToR); meetings failing quorum requirements; committee meetings with no KPI/KRI dashboard presented; action items from committee meetings with no owner or due date assigned; open actions outstanding more than 60 days.",
+            "tools": ["Excel", "SQL"],
+            "complexity": "Low",
+        },
+    ],
 }
 
 
@@ -8679,6 +9145,102 @@ AUDIT_TESTS_LIBRARY = {
             "sample_size": "20 clients (10 advisory, 10 discretionary)",
             "failure_criteria": "Reporting frequency below regulatory minimum; more than 5% of sampled reports containing material errors",
             "linked_risk_id": "R-WA-008",
+        },
+    ],
+
+    "IT_PRODUCTION": [
+        {
+            "id": "T-ITP-001", "level": "Critical", "category": "Data Analytics",
+            "objective": "Assess patch management coverage and SLA compliance",
+            "procedure": "Extract vulnerability scan results for all production assets. For each critical and high CVE, calculate days outstanding since publication and compare against patch SLA (critical: 7 days, high: 30 days). Calculate overall patch coverage rate. Identify EoL assets in scan results.",
+            "population": "All production assets in CMDB",
+            "sample_size": "100% (automated analysis); targeted review of all SLA breaches",
+            "failure_criteria": "Any critical CVE outstanding >7 days on production systems; high CVE outstanding >30 days; patch coverage below 90%",
+            "linked_risk_id": "R-ITP-001",
+        },
+        {
+            "id": "T-ITP-002", "level": "High", "category": "Data Analytics",
+            "objective": "Verify monitoring coverage completeness for production systems",
+            "procedure": "Extract CMDB asset inventory and monitoring platform agent list. Reconcile the two lists to identify production assets without monitoring coverage. For covered assets, verify that alert thresholds are defined for availability and performance. Test a sample of alerts by reviewing recent trigger history.",
+            "population": "All production assets classified as critical or high",
+            "sample_size": "100% reconciliation; sample of 15 alert configurations tested",
+            "failure_criteria": "Any critical production system without monitoring coverage; more than 5% of systems lacking defined alert thresholds",
+            "linked_risk_id": "R-ITP-002",
+        },
+        {
+            "id": "T-ITP-003", "level": "Critical", "category": "Standard",
+            "objective": "Verify backup and recovery testing evidence",
+            "procedure": "Request backup and recovery test evidence for all critical production systems in the last 12 months. Verify tests were performed against documented RTO/RPO targets. Review test results for success/failure and any exceptions. Confirm test results were reported to IT management.",
+            "population": "All systems classified as Tier 1 / critical",
+            "sample_size": "All critical systems (typically 5-10)",
+            "failure_criteria": "Any critical system without documented recovery test in last 12 months; any test where RTO/RPO target was not achieved without documented remediation",
+            "linked_risk_id": "R-ITP-004",
+        },
+        {
+            "id": "T-ITP-004", "level": "High", "category": "Data Analytics",
+            "objective": "Identify CMDB accuracy gaps and shadow IT",
+            "procedure": "Run automated network discovery scan across production subnets. Compare discovered assets against CMDB records. Calculate match rate and identify: (a) assets in CMDB not discovered, (b) assets discovered not in CMDB. For unmatched assets, assess business impact and remediation urgency.",
+            "population": "All production network subnets",
+            "sample_size": "100% (automated reconciliation)",
+            "failure_criteria": "CMDB accuracy rate below 95%; any critical or high-risk shadow IT assets identified",
+            "linked_risk_id": "R-ITP-005",
+        },
+        {
+            "id": "T-ITP-005", "level": "High", "category": "Standard",
+            "objective": "Review production access controls and segregation",
+            "procedure": "Extract list of accounts with direct production system access (OS admin, database admin, application admin). Verify each account has a documented business justification and approval. Confirm developers and testers do not have standing production access. Check PAM tool coverage for privileged accounts.",
+            "population": "All privileged accounts on production systems",
+            "sample_size": "100% account list review; detailed review for accounts without active PAM coverage",
+            "failure_criteria": "Developer or test accounts with standing production access; privileged accounts not managed through PAM; any account without documented justification",
+            "linked_risk_id": "R-ITP-001",
+        },
+    ],
+
+    "IT_OPERATING_MODEL": [
+        {
+            "id": "T-ITOM-001", "level": "High", "category": "Standard",
+            "objective": "Assess IT governance committee effectiveness",
+            "procedure": "Request minutes and attendance records for IT Steering Committee and IT Risk Committee for the last 12 months. Verify meeting frequency meets ToR requirements. Assess quorum achievement. Review agenda and minutes for evidence of KRI/KPI reporting, risk escalations, and documented decisions.",
+            "population": "All IT governance committee meetings in last 12 months",
+            "sample_size": "All meetings (100%)",
+            "failure_criteria": "Committee meeting less than quarterly (Steering) or monthly (Risk); quorum failure rate >20%; KRI dashboard absent from more than 2 consecutive meetings",
+            "linked_risk_id": "R-ITOM-002",
+        },
+        {
+            "id": "T-ITOM-002", "level": "Moderate", "category": "Data Analytics",
+            "objective": "Measure IT audit finding remediation rate and identify overdue items",
+            "procedure": "Extract all open IT audit findings from the tracking system. For each finding, calculate days outstanding vs. agreed due date. Group by severity (critical, high, moderate). Identify findings with >2 deadline extensions. Calculate overall closure rate. Identify root cause themes for repeated findings.",
+            "population": "All open IT audit findings in tracking system",
+            "sample_size": "100% (automated extraction)",
+            "failure_criteria": "Critical findings outstanding >90 days; overall remediation rate below 70%; any finding with more than 2 extended deadlines without Board/Committee escalation",
+            "linked_risk_id": "R-ITOM-004",
+        },
+        {
+            "id": "T-ITOM-003", "level": "Moderate", "category": "Standard",
+            "objective": "Verify IT policy framework completeness and currency",
+            "procedure": "Obtain IT policy inventory. Map each policy to COBIT 2019 control domains or ISO 27001 Annex A. Identify gaps where key control domains have no covering policy. For each policy, verify last review date and confirm it does not exceed 12 months. Verify owner is assigned for each policy.",
+            "population": "Full IT policy inventory",
+            "sample_size": "All policies",
+            "failure_criteria": "Any COBIT/ISO 27001 mandatory domain without a covering policy; policies with review date overdue by >12 months representing more than 20% of the inventory",
+            "linked_risk_id": "R-ITOM-003",
+        },
+        {
+            "id": "T-ITOM-004", "level": "High", "category": "Standard",
+            "objective": "Assess IT strategy alignment and Board approval",
+            "procedure": "Obtain current IT strategy document. Verify Board approval date and review cycle. Compare IT strategy objectives against bank's business strategy priorities for the same period. Interview CTO/CIO to assess alignment process. Review IT investment portfolio and verify alignment with strategic priorities.",
+            "population": "IT strategy document and Board minutes",
+            "sample_size": "N/A (document review)",
+            "failure_criteria": "IT strategy document more than 24 months since last Board approval; no evidence of formal business-IT alignment process; IT investment portfolio not mapped to strategic objectives",
+            "linked_risk_id": "R-ITOM-001",
+        },
+        {
+            "id": "T-ITOM-005", "level": "High", "category": "Standard",
+            "objective": "Assess IT succession planning and skills gap management",
+            "procedure": "Request succession plans for CISO, CTO, and all IT roles designated as critical. Verify plans identify successors, readiness timelines, and development actions. Obtain most recent IT skills gap analysis. Verify training budget and delivery against identified gaps. Identify roles reliant on single external consultants.",
+            "population": "All critical IT roles as designated by HR and IT management",
+            "sample_size": "All critical roles",
+            "failure_criteria": "Critical IT roles without documented succession plan; IT skills gap analysis not performed in last 12 months; critical project delivery dependent on single named external consultant with no backup",
+            "linked_risk_id": "R-ITOM-005",
         },
     ],
 }
@@ -12013,6 +12575,150 @@ THEMATIC_BACKGROUND = {
             "The ESG suitability requirement is a particular opportunity: banks that build genuine ESG integration capabilities "
             "will be positioned to capture the growing segment of HNWI clients who demand values-aligned investment management. "
             "Conduct governance is where private banking\'s relationship model and regulatory compliance converge."
+        ),
+        "tone": "professional",
+    },
+
+    "IT_PRODUCTION": {
+        "theme": "IT Production & Infrastructure",
+        "market_context": (
+            "IT production management in banking has been transformed by three forces: the shift to cloud-hosted "
+            "infrastructure, the DORA regulatory framework requiring demonstrable operational resilience, and the "
+            "increasing sophistication of cyber threats targeting financial sector infrastructure. "
+            "DORA (effective January 2025) imposes specific requirements on ICT operations, patch management, "
+            "backup testing, and incident response for all EU-regulated entities — and indirectly shapes expectations "
+            "for their Swiss and Asia-Pacific parent entities through group-level governance. "
+            "The industry-wide move to hybrid cloud (on-premise core banking + cloud analytics + SaaS applications) "
+            "has created complex production environments that strain traditional IT operations models built around "
+            "single-vendor data centre management."
+        ),
+        "private_banking_issues": (
+            "Private banks face distinctive IT production challenges. Legacy core banking systems — often 20-30 years old — "
+            "are difficult to patch and frequently run end-of-life components that cannot be updated without full migration. "
+            "High SLA expectations for client-facing systems (e-banking, trading platforms, client portals) require near-zero "
+            "downtime during infrastructure maintenance windows. "
+            "The boutique nature of many private banks means small IT operations teams managing disproportionately complex "
+            "environments — multiple banking systems, legacy integrations, and a growing portfolio of SaaS and cloud applications "
+            "without the automation maturity of larger banks. "
+            "CMDB accuracy is structurally challenged in banks that have grown through acquisition, inheriting multiple "
+            "asset registries that have never been consolidated."
+        ),
+        "regulatory_pressure": (
+            "DORA Art.9 requires ICT operations management procedures to be documented and tested. FINMA RS 2008/21 "
+            "has long required banks to document IT operations processes and demonstrate production environment controls. "
+            "MAS TRM 2021 imposes detailed requirements on patch management timelines (critical vulnerabilities within "
+            "one month) and backup testing. Recent FINMA thematic reviews of private banks have consistently cited "
+            "patch management delays, CMDB inaccuracies, and untested backup procedures as material findings. "
+            "DORA's backup requirements (Art.12) are more prescriptive than previous guidance, requiring banks to document "
+            "RTO/RPO targets and provide evidence of tested recovery for all critical ICT systems."
+        ),
+        "industry_trends": (
+            "Three trends are reshaping IT production management in private banking. "
+            "First, infrastructure as code: leading banks are automating infrastructure provisioning and configuration "
+            "management using tools like Terraform and Ansible, improving CMDB accuracy and reducing manual errors. "
+            "Second, cloud-native operations: migration of workloads to AWS, Azure, or GCP shifts operational responsibility "
+            "to cloud-native monitoring (CloudWatch, Azure Monitor) and changes the patching model from manual to automated. "
+            "Third, AI-powered operations (AIOps): predictive monitoring and anomaly detection tools are beginning to replace "
+            "threshold-based alerting, reducing mean time to detect (MTTD) for infrastructure incidents."
+        ),
+        "peer_incidents": (
+            "IT production failures have caused significant disruption in private banking. "
+            "A major European private bank experienced a 6-hour core banking outage in 2023 attributed to an unpatched "
+            "Oracle database vulnerability exploited through a legacy integration layer — with direct FINMA supervisory response. "
+            "Several private banks disclosed DORA-reportable ICT incidents in Q1 2025 related to cloud provider outages, "
+            "highlighting concentration risk from single-provider dependency. "
+            "Industry-wide, the 2021 Log4Shell vulnerability exposed the weakness of patch management in environments "
+            "where legacy Java applications proliferate — a common profile in private banking IT stacks."
+        ),
+        "key_statistics": [
+            "DORA Art.12: mandatory backup testing with documented RTO/RPO for all critical ICT systems — effective January 2025",
+            "MAS TRM 2021: critical vulnerabilities must be patched within 1 month; high within 3 months",
+            "DORA Art.19: major ICT incidents must be reported to competent authority within 4 hours of classification",
+            "Industry average: CMDB accuracy in financial services estimated at 70-80% without automation (Gartner)",
+            "EoL risk: approximately 40% of banking production environments contain at least one end-of-life OS component (industry survey)",
+        ],
+        "mckinsey_angle": (
+            "IT production excellence is a competitive enabler, not merely a cost centre. "
+            "Banks with stable, well-monitored production environments can accelerate feature delivery, "
+            "reduce incident-driven IT spend, and demonstrate operational resilience to regulators — "
+            "increasingly a factor in banking licence conditions under DORA. "
+            "The investment in automation (AIOps, infrastructure as code, automated patching) consistently delivers "
+            "positive ROI through reduced MTTD, faster recovery, and lower operational risk. "
+            "For private banks, the reputational cost of a production outage — client trust in wealth management "
+            "is extraordinarily sensitive to technology reliability — far exceeds the cost of preventive controls."
+        ),
+        "tone": "professional",
+    },
+
+    "IT_OPERATING_MODEL": {
+        "theme": "IT Operating Model & Governance",
+        "market_context": (
+            "IT governance in financial services has been elevated from an internal management function to a "
+            "regulatory obligation. DORA Art.5-7 requires financial entities to have a documented ICT risk management "
+            "framework, approved by the management body, reviewed at least annually. This formalises what FINMA RS 2008/21 "
+            "and MAS TRM 2021 have long required — but adds explicit Board accountability and prescriptive content requirements. "
+            "The CIO and CISO roles have been transformed from technical managers to Board-level risk owners, "
+            "reflecting the recognition that technology is now the primary operational risk vector in banking. "
+            "IT operating model design — how technology capabilities are organised, governed, and aligned with business — "
+            "is a focus of both supervisory attention and management consulting advisory, as banks seek to balance "
+            "innovation velocity with risk control."
+        ),
+        "private_banking_issues": (
+            "Private banking IT governance faces a structural tension. Boutique private banks compete on personalised service "
+            "and innovation speed — qualities that are undermined by heavy governance processes. Yet the regulatory environment "
+            "demands documented governance structures, policy frameworks, and committee oversight that smaller institutions "
+            "struggle to resource adequately. "
+            "Key-person dependency is acute: many private banks have a single CISO or CTO whose departure would create "
+            "material operational risk and regulatory concern. "
+            "IT policy frameworks are frequently inherited from larger parent organisations (for subsidiary banks) or "
+            "copied from public templates without adaptation — creating policies that exist on paper but are not embedded "
+            "in daily IT management."
+        ),
+        "regulatory_pressure": (
+            "DORA requires the management body (Board or equivalent) to approve and take direct accountability for the "
+            "ICT risk management framework. This has prompted regulators across the EU to scrutinise Board-level IT "
+            "governance more closely than ever before. "
+            "FINMA expects documented IT governance structures, active committee oversight, and Board-level IT risk reporting "
+            "as part of its standard supervisory toolkit. Recent FINMA thematic reviews found that smaller private banks "
+            "frequently had incomplete IT governance documentation despite having functioning operational controls. "
+            "MAS TRM 2021 requires IT risk governance to be clearly assigned with accountability at senior management level. "
+            "IIA GIAS 2024 (Standard 9.1-9.3) requires internal audit to have a defined mandate for IT governance assurance."
+        ),
+        "industry_trends": (
+            "Three trends are reshaping IT operating model design in private banking. "
+            "First, DORA-driven governance uplift: private banks are investing in formal ICT governance documentation, "
+            "Board-level reporting, and IT risk appetite statements to meet DORA's explicit requirements. "
+            "Second, IT talent strategy: competition for cyber, cloud, and data engineering skills has elevated the "
+            "IT talent agenda to Board level, with succession planning and skills gap management now governance committee items. "
+            "Third, integrated risk management: IT risk is being integrated into enterprise risk management frameworks, "
+            "with IT KRIs reported alongside credit and operational risk in Board risk committee packs."
+        ),
+        "peer_incidents": (
+            "IT governance failures have attracted direct regulatory action. "
+            "A Swiss private bank received a FINMA supervisory requirement in 2023 following an inspection that found "
+            "the IT steering committee had not met in 18 months and the IT strategy was 3 years out of date — "
+            "illustrating that documentation gaps are treated as governance failures regardless of operational performance. "
+            "Multiple banks subject to DORA preparation assessments found that their existing governance frameworks "
+            "were non-compliant with the explicit Board accountability requirements of Art.5, requiring structural remediation. "
+            "IIA surveys (2023-2024) consistently find IT audit findings remediation rates below 60% in financial services, "
+            "indicating systemic weakness in management accountability for IT risk closure."
+        ),
+        "key_statistics": [
+            "DORA Art.5: management body must define, approve, oversee and be accountable for ICT risk management framework",
+            "DORA Art.6: ICT risk management framework must be reviewed annually and after major ICT incidents",
+            "IIA GIAS 2024: Standard 9.1-9.3 requires explicit mandate for IT governance and risk assurance",
+            "Industry: IT audit finding remediation rates average 55-65% in financial services (IIA 2023 survey)",
+            "Talent: 74% of CISOs in financial services report critical cyber skills gaps in their teams (ISC2 2023)",
+        ],
+        "mckinsey_angle": (
+            "IT governance is the force multiplier for every other technology investment. "
+            "Banks with effective governance — clear strategy, active committees, current policies, accountable management — "
+            "demonstrate faster IT risk remediation, better project delivery outcomes, and lower regulatory scrutiny. "
+            "The investment in governance infrastructure (policy frameworks, committees, KRI reporting) is modest relative "
+            "to the cost of governance failures: DORA non-compliance penalties, supervisory requirements, and the "
+            "compounding effect of unresolved IT audit findings that become systemic weaknesses. "
+            "For private banks, whose competitive positioning depends on client trust, visible governance maturity "
+            "is also a factor in institutional client due diligence and correspondent banking relationships."
         ),
         "tone": "professional",
     },
