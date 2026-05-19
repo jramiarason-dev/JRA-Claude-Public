@@ -324,237 +324,367 @@ else:
     """
 
 st.markdown(f"<style>{_theme_vars}</style>", unsafe_allow_html=True)
+st.markdown("""
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.lucide)lucide.createIcons();});</script>
+""", unsafe_allow_html=True)
 
 # Part 2: Static CSS using var() — no f-string needed
 st.markdown("""
 <style>
-  html, body, [class*="css"] { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-  .stApp { background-color: var(--bg-app) !important; color: var(--text-primary); }
-  .main .block-container { padding: 2rem 3rem 4rem; max-width: 1060px; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-  /* ── Sidebar ── */
-  section[data-testid="stSidebar"] {
-    background-color: var(--bg-sidebar) !important;
-    border-right: 1px solid var(--border-subtle);
-  }
-  section[data-testid="stSidebar"] .stMarkdown p { color: var(--text-secondary); font-size: 13px; }
-  section[data-testid="stSidebar"] button {
-    background: var(--btn-secondary-bg) !important;
-    color: var(--btn-secondary-color) !important;
-    border: 1px solid var(--btn-secondary-border) !important;
-    border-radius: 7px !important; font-size: 12px !important;
-    padding: 4px 10px !important; width: 100%; text-align: left;
-  }
-  section[data-testid="stSidebar"] button:hover { opacity: 0.82; }
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  letter-spacing: -0.5px;
+}
 
-  /* ── Tabs ── */
-  .stTabs [data-baseweb="tab-list"] {
-    background: transparent;
-    border-bottom: 1px solid var(--border-subtle);
-    gap: 0;
-  }
-  .stTabs [data-baseweb="tab"] {
-    font-size: 13.5px !important; font-weight: 500 !important;
-    color: var(--tab-inactive) !important;
-    padding: 10px 22px !important;
-    border-bottom: 2px solid transparent !important;
-  }
-  .stTabs [aria-selected="true"] {
-    color: var(--tab-active) !important;
-    border-bottom: 2px solid var(--tab-active-border) !important;
-    background: transparent !important;
-  }
+html, body, [class*="css"] { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+.stApp { background-color: var(--bg-app) !important; color: var(--text-primary); }
+.main .block-container { padding: 2rem 3rem 4rem; max-width: 1060px; }
 
-  /* ── Inputs ── */
-  .stTextInput input, .stTextArea textarea, .stSelectbox > div > div {
-    background-color: var(--bg-input) !important;
-    border: 1px solid var(--border-input) !important;
-    border-radius: 8px !important;
-    color: var(--text-primary) !important;
-    font-size: 13.5px !important;
-  }
-  .stTextInput input:focus, .stTextArea textarea:focus {
-    border-color: rgba(79,126,248,0.5) !important;
-    box-shadow: 0 0 0 3px rgba(79,126,248,0.08) !important;
-  }
-  label[data-testid="stWidgetLabel"] p {
-    font-size: 13px !important; color: var(--text-label) !important; font-weight: 500;
-  }
+/* ── Sidebar ── */
+section[data-testid="stSidebar"] {
+  background-color: var(--bg-sidebar) !important;
+  border-right: 1px solid var(--border-subtle);
+}
+section[data-testid="stSidebar"] .stMarkdown p { color: var(--text-secondary); font-size: 13px; }
+section[data-testid="stSidebar"] button {
+  background: var(--btn-secondary-bg) !important;
+  color: var(--btn-secondary-color) !important;
+  border: 1px solid var(--btn-secondary-border) !important;
+  border-radius: 7px !important; font-size: 12px !important;
+  padding: 4px 10px !important; width: 100%; text-align: left;
+}
+section[data-testid="stSidebar"] button:hover { opacity: 0.82; }
 
-  /* ── Buttons ── */
-  div[data-testid="stButton"] > button[kind="primary"] {
-    background: var(--btn-primary-bg);
-    border: none; border-radius: 9px; color: #fff;
-    font-size: 13.5px; font-weight: 600; padding: 10px 28px;
-    transition: opacity 0.15s;
-  }
-  div[data-testid="stButton"] > button[kind="primary"]:hover { opacity: 0.88; }
-  div[data-testid="stButton"] > button[kind="primary"]:disabled {
-    background: #1a1f32 !important; color: #3a4566 !important;
-  }
-  div[data-testid="stButton"] > button:not([kind="primary"]) {
-    background: var(--btn-secondary-bg);
-    color: var(--btn-secondary-color);
-    border: 1px solid var(--btn-secondary-border);
-    border-radius: 8px; font-size: 13px; font-weight: 500;
-  }
-  div[data-testid="stDownloadButton"] button {
-    background: var(--btn-secondary-bg); color: var(--btn-secondary-color);
-    border: 1px solid var(--btn-secondary-border); border-radius: 8px;
-    font-size: 13px; font-weight: 500;
-  }
-  div[data-testid="stDownloadButton"] button:hover { opacity: 0.82; }
+/* ── Tabs — glassmorphism pill style ── */
+.stTabs [data-baseweb="tab-list"] {
+  background: var(--bg-card) !important;
+  border-radius: 12px !important;
+  padding: 4px !important;
+  border: 1px solid var(--border-subtle) !important;
+  gap: 2px !important;
+}
+.stTabs [data-baseweb="tab"] {
+  background: transparent !important;
+  border-radius: 8px !important;
+  color: var(--text-muted) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 8px 16px !important;
+  border: none !important;
+  transition: all 0.2s ease !important;
+}
+.stTabs [aria-selected="true"] {
+  background: linear-gradient(135deg, rgba(79,126,248,0.20) 0%, rgba(79,126,248,0.10) 100%) !important;
+  color: var(--accent-hover) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 0 rgba(79,126,248,0.4), inset 0 1px 0 rgba(79,126,248,0.1) !important;
+}
+.stTabs [data-baseweb="tab"]:hover {
+  background: rgba(255,255,255,0.04) !important;
+  color: var(--text-secondary) !important;
+}
+.stTabs [data-baseweb="tab-highlight"] { display: none !important; }
 
-  div[data-testid="stFileUploader"] {
-    border: 1px dashed var(--border-input) !important;
-    border-radius: 10px !important; background: var(--bg-input) !important;
-  }
-  div[data-testid="stAlert"] { border-radius: 9px !important; font-size: 13px !important; }
-  hr { border: none; border-top: 1px solid var(--border-divider) !important; margin: 1.8rem 0; }
+/* ── Inputs ── */
+.stTextInput input, .stTextArea textarea, .stSelectbox > div > div {
+  background-color: var(--bg-input) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 8px !important;
+  color: var(--text-primary) !important;
+  font-size: 13px !important;
+  transition: border-color 0.2s ease !important;
+}
+.stTextInput input:focus, .stTextArea textarea:focus {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+  outline: none !important;
+}
+.stTextInput label, .stTextArea label, .stSelectbox label, .stMultiSelect label,
+label[data-testid="stWidgetLabel"] p {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: var(--text-secondary) !important;
+  letter-spacing: 0.3px !important;
+  text-transform: uppercase !important;
+}
+::placeholder { color: var(--text-muted) !important; font-style: italic; }
 
-  /* ── Content blocks ── */
-  .output-box {
-    background: var(--output-box-bg);
-    border: 1px solid var(--output-box-border);
-    border-radius: 10px; padding: 20px 24px;
-    font-size: 13px; line-height: 1.9; white-space: pre-wrap;
-    color: var(--output-box-text); max-height: 560px; overflow-y: auto;
-  }
-  .section-title {
-    font-size: 15px; font-weight: 600; color: var(--section-title-color);
-    margin: 1.8rem 0 1rem; letter-spacing: -0.2px;
-  }
-  .ctx-pill {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--ctx-pill-bg); border: 1px solid var(--ctx-pill-border);
-    color: var(--ctx-pill-color); border-radius: 8px; padding: 6px 14px;
-    font-size: 12.5px; font-weight: 500; margin-bottom: 1.4rem;
-  }
+/* ── Buttons ── */
+div[data-testid="stButton"] > button[kind="primary"],
+.stButton > button[kind="primary"] {
+  background: linear-gradient(135deg, #4f7ef8 0%, #3b6ef0 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  padding: 8px 20px !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 8px rgba(79,126,248,0.25) !important;
+}
+div[data-testid="stButton"] > button[kind="primary"]:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 16px rgba(79,126,248,0.35) !important;
+  background: linear-gradient(135deg, #6b96fa 0%, #4f7ef8 100%) !important;
+}
+div[data-testid="stButton"] > button[kind="primary"]:active { transform: translateY(0) !important; }
+div[data-testid="stButton"] > button[kind="primary"]:disabled {
+  background: #1a1f32 !important; color: #3a4566 !important;
+}
+div[data-testid="stButton"] > button:not([kind="primary"]) {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-color);
+  border: 1px solid var(--btn-secondary-border);
+  border-radius: 8px; font-size: 13px; font-weight: 500;
+  transition: all 0.2s ease;
+}
+div[data-testid="stButton"] > button:not([kind="primary"]):hover {
+  transform: translateY(-1px);
+  border-color: rgba(79,126,248,0.5);
+}
+div[data-testid="stDownloadButton"] button {
+  background: var(--btn-secondary-bg); color: var(--btn-secondary-color);
+  border: 1px solid var(--btn-secondary-border); border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+}
+div[data-testid="stDownloadButton"] button:hover { opacity: 0.82; }
+div[data-testid="stFileUploader"] {
+  border: 1px dashed var(--border-medium) !important;
+  border-radius: 10px !important; background: var(--bg-input) !important;
+}
+div[data-testid="stAlert"] { border-radius: 9px !important; font-size: 13px !important; }
+hr { border: none; border-top: 1px solid var(--border-divider) !important; margin: 1.8rem 0; }
 
-  /* ── Data table ── */
-  .data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 0.5rem; }
-  .data-table th {
-    padding: 9px 13px; text-align: left; font-weight: 600;
-    font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .data-table td { padding: 10px 13px; vertical-align: top; line-height: 1.6; }
-  .data-table tr:not(:last-child) td { border-bottom: 1px solid var(--tbl-row-border); }
+/* ── Content blocks ── */
+.output-box {
+  background: var(--output-box-bg);
+  border: 1px solid var(--output-box-border);
+  border-radius: 10px; padding: 20px 24px;
+  font-size: 13px; line-height: 1.9; white-space: pre-wrap;
+  color: var(--output-box-text); max-height: 560px; overflow-y: auto;
+}
+.section-title {
+  font-size: 15px; font-weight: 600; color: var(--section-title-color);
+  margin: 1.8rem 0 1rem; letter-spacing: -0.2px;
+}
+.ctx-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--ctx-pill-bg); border: 1px solid var(--ctx-pill-border);
+  color: var(--ctx-pill-color); border-radius: 8px; padding: 6px 14px;
+  font-size: 12.5px; font-weight: 500; margin-bottom: 1.4rem;
+}
 
-  /* ── Badges ── */
-  .badge-critical { display:inline-block; background:rgba(239,68,68,0.15); color:#ef4444;
-    border:1px solid rgba(239,68,68,0.35); border-radius:4px; padding:2px 8px;
-    font-size:11px; font-weight:700; white-space:nowrap; }
-  .badge-high { display:inline-block; background:rgba(249,115,22,0.12); color:#f97316;
-    border:1px solid rgba(249,115,22,0.32); border-radius:4px; padding:2px 8px;
-    font-size:11px; font-weight:700; white-space:nowrap; }
-  .badge-medium { display:inline-block; background:rgba(234,179,8,0.10); color:#eab308;
-    border:1px solid rgba(234,179,8,0.28); border-radius:4px; padding:2px 8px;
-    font-size:11px; font-weight:700; white-space:nowrap; }
-  .badge-open { display:inline-block; background:rgba(34,211,165,0.10); color:#22d3a5;
-    border:1px solid rgba(34,211,165,0.28); border-radius:4px; padding:2px 8px;
-    font-size:11px; font-weight:600; white-space:nowrap; }
-  .badge-info { display:inline-block; background:rgba(79,126,248,0.10); color:#7fa8fb;
-    border:1px solid rgba(79,126,248,0.28); border-radius:4px; padding:2px 8px;
-    font-size:11px; font-weight:600; white-space:nowrap; }
+/* ── Data table ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 0.5rem; }
+.data-table th {
+  padding: 9px 13px; text-align: left; font-weight: 600;
+  font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.data-table td { padding: 10px 13px; vertical-align: top; line-height: 1.6; }
+.data-table tr:not(:last-child) td { border-bottom: 1px solid var(--tbl-row-border); }
 
-  /* ── Progress bar ── */
-  .progress-bar-wrap {
-    display: flex; align-items: center; gap: 0; margin: 0.6rem 0 1.6rem;
-  }
-  .pb-step {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 12.5px; font-weight: 500; padding: 7px 16px;
-    border-radius: 20px; transition: all 0.2s;
-  }
-  .pb-step.done {
-    background: rgba(34,211,165,0.10); color: #22d3a5;
-    border: 1px solid rgba(34,211,165,0.25);
-  }
-  .pb-step.active {
-    background: rgba(79,126,248,0.12); color: #7fa8fb;
-    border: 1px solid rgba(79,126,248,0.30);
-  }
-  .pb-step.pending { color: var(--text-muted); border: 1px solid var(--border-subtle); }
-  .pb-connector { flex: 1; height: 1px; background: var(--border-subtle); margin: 0 4px; min-width: 16px; }
+/* ── Badges ── */
+.badge-critical { display:inline-block; background:rgba(239,68,68,0.15); color:#ef4444;
+  border:1px solid rgba(239,68,68,0.35); border-radius:20px; padding:2px 8px;
+  font-size:11px; font-weight:700; white-space:nowrap; }
+.badge-high { display:inline-block; background:rgba(249,115,22,0.12); color:#f97316;
+  border:1px solid rgba(249,115,22,0.32); border-radius:20px; padding:2px 8px;
+  font-size:11px; font-weight:700; white-space:nowrap; }
+.badge-medium { display:inline-block; background:rgba(234,179,8,0.10); color:#eab308;
+  border:1px solid rgba(234,179,8,0.28); border-radius:20px; padding:2px 8px;
+  font-size:11px; font-weight:700; white-space:nowrap; }
+.badge-open { display:inline-block; background:rgba(34,211,165,0.10); color:#22d3a5;
+  border:1px solid rgba(34,211,165,0.28); border-radius:20px; padding:2px 8px;
+  font-size:11px; font-weight:600; white-space:nowrap; }
+.badge-info { display:inline-block; background:rgba(79,126,248,0.10); color:#7fa8fb;
+  border:1px solid rgba(79,126,248,0.28); border-radius:20px; padding:2px 8px;
+  font-size:11px; font-weight:600; white-space:nowrap; }
 
-  /* ── Gauge ── */
-  .gauge-wrap { display: flex; align-items: center; gap: 32px; margin: 1rem 0 1.4rem; }
-  .gauge-circle {
-    width: 110px; height: 110px; border-radius: 50%; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column; font-weight: 700;
-  }
-  .gauge-score { font-size: 30px; line-height: 1; }
-  .gauge-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 3px; }
-  .gauge-breakdown { flex: 1; }
-  .gbar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; font-size: 12px; }
-  .gbar-label { width: 68px; color: var(--text-secondary); text-align: right; flex-shrink: 0; }
-  .gbar-track { flex: 1; background: var(--border-subtle); border-radius: 4px; height: 8px; overflow: hidden; }
-  .gbar-fill { height: 100%; border-radius: 4px; transition: width 0.4s; }
-  .gbar-count { width: 20px; text-align: right; color: var(--text-secondary); flex-shrink: 0; }
+/* ── Risk cards — glassmorphism ── */
+.risk-card {
+  background: rgba(15,21,32,0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  padding: 16px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.risk-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-accent);
+  box-shadow: 0 8px 32px rgba(79,126,248,0.08);
+}
+.risk-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+}
+.risk-card-critical::before { background: linear-gradient(90deg, #ef4444, transparent); }
+.risk-card-high::before     { background: linear-gradient(90deg, #f97316, transparent); }
+.risk-card-moderate::before { background: linear-gradient(90deg, #eab308, transparent); }
 
-  /* ── History item ── */
-  .hist-item {
-    background: var(--bg-card); border: 1px solid var(--border-subtle);
-    border-radius: 8px; padding: 8px 12px; margin-bottom: 6px; font-size: 12px;
-    cursor: pointer;
-  }
-  .hist-topic { color: var(--text-primary); font-weight: 600; }
-  .hist-meta { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
+/* ── Progress bar ── */
+.progress-bar-wrap { display: flex; align-items: center; gap: 0; margin: 0.6rem 0 1.6rem; }
+.pb-step {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12.5px; font-weight: 500; padding: 7px 16px;
+  border-radius: 20px; transition: all 0.2s;
+}
+.pb-step.done { background: rgba(34,211,165,0.10); color: #22d3a5; border: 1px solid rgba(34,211,165,0.25); }
+.pb-step.active { background: rgba(79,126,248,0.12); color: #7fa8fb; border: 1px solid rgba(79,126,248,0.30); }
+.pb-step.pending { color: var(--text-muted); border: 1px solid var(--border-subtle); }
+.pb-connector { flex: 1; height: 1px; background: var(--border-subtle); margin: 0 4px; min-width: 16px; }
 
-  /* ── Footer ── */
-  .footer { font-size: 11px; color: var(--footer-color); text-align: center; margin-top: 2.5rem; letter-spacing: 0.3px; }
+/* ── Gauge ── */
+.gauge-wrap { display: flex; align-items: center; gap: 32px; margin: 1rem 0 1.4rem; }
+.gauge-circle {
+  width: 110px; height: 110px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; font-weight: 700;
+}
+.gauge-score { font-size: 30px; line-height: 1; }
+.gauge-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 3px; }
+.gauge-breakdown { flex: 1; }
+.gbar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; font-size: 12px; }
+.gbar-label { width: 68px; color: var(--text-secondary); text-align: right; flex-shrink: 0; }
+.gbar-track { flex: 1; background: var(--border-subtle); border-radius: 4px; height: 8px; overflow: hidden; }
+.gbar-fill { height: 100%; border-radius: 4px; transition: width 0.4s; }
+.gbar-count { width: 20px; text-align: right; color: var(--text-secondary); flex-shrink: 0; }
 
-  /* ── Mobile responsive ── */
-  @media (max-width: 768px) {
-    .main .block-container { padding: 1rem 1rem 3rem !important; }
-    .data-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    div[data-testid="stButton"] > button[kind="primary"] { width: 100% !important; }
-    div[data-testid="stDownloadButton"] button { width: 100% !important; }
-    .gauge-wrap { flex-direction: column; align-items: flex-start; }
-    .stColumns { flex-direction: column !important; }
-    .stColumns > div { width: 100% !important; min-width: 100% !important; }
-  }
+/* ── Expanders ── */
+.streamlit-expanderHeader {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--text-secondary) !important;
+  padding: 12px 16px !important;
+  transition: all 0.2s ease !important;
+}
+.streamlit-expanderHeader:hover {
+  border-color: var(--border-accent) !important;
+  color: var(--text-accent) !important;
+  background: var(--bg-card-hover) !important;
+}
+.streamlit-expanderContent {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-top: none !important;
+  border-radius: 0 0 8px 8px !important;
+  padding: 16px !important;
+}
 
-  /* ── Print ── */
-  @media print {
-    section[data-testid="stSidebar"] { display: none !important; }
-    div[data-testid="stButton"], div[data-testid="stDownloadButton"],
-    div[data-testid="stFileUploader"], div[data-testid="stTextInput"],
-    div[data-testid="stTextArea"], div[data-testid="stMultiSelect"],
-    div[data-testid="stSelectbox"], .stTabs [data-baseweb="tab-list"],
-    .no-print { display: none !important; }
-    .stApp { background: #fff !important; color: #000 !important; }
-    .output-box { max-height: none !important; overflow: visible !important;
-      background: #fff !important; color: #000 !important; border-color: #ccc !important; }
-    .data-table td, .data-table th { border: 1px solid #ccc !important; color: #000 !important; }
-    .section-title { color: #000 !important; }
-  }
+/* ── History item ── */
+.hist-item {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: 8px; padding: 8px 12px; margin-bottom: 6px; font-size: 12px; cursor: pointer;
+}
+.hist-topic { color: var(--text-primary); font-weight: 600; }
+.hist-meta { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
 
-  /* ── Mode toggle radio ── */
-  div[data-testid="stRadio"] > div {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    background: #13172a;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 8px;
-    padding: 6px 10px;
-    width: fit-content;
-  }
-  div[data-testid="stRadio"] label {
-    color: #5a6488;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 4px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  div[data-testid="stRadio"] label:has(input:checked) {
-    background: #1e2a45;
-    color: #7fa8fb;
-    font-weight: 600;
-  }
+/* ── Footer ── */
+.footer { font-size: 11px; color: var(--footer-color); text-align: center; margin-top: 2.5rem; letter-spacing: 0.3px; }
+
+/* ── Mode toggle radio ── */
+div[data-testid="stRadio"] > div {
+  display: flex; flex-direction: row; gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px; padding: 6px 10px; width: fit-content;
+}
+div[data-testid="stRadio"] label {
+  color: var(--text-muted); font-size: 13px; font-weight: 500;
+  padding: 4px 12px; border-radius: 6px; cursor: pointer;
+}
+div[data-testid="stRadio"] label:has(input:checked) {
+  background: rgba(79,126,248,0.12); color: var(--text-accent); font-weight: 600;
+}
+
+/* ── Sidebar section cards ── */
+.sidebar-section {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px; padding: 12px; margin-bottom: 12px;
+}
+.sidebar-section-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  color: #334155; text-transform: uppercase; margin-bottom: 10px;
+}
+
+/* ── Section header ── */
+.section-header {
+  display: flex; align-items: center; gap: 10px;
+  margin: 24px 0 16px 0; padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.section-header-icon {
+  width: 32px; height: 32px;
+  background: rgba(79,126,248,0.10);
+  border: 1px solid rgba(79,126,248,0.20);
+  border-radius: 8px; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+}
+.section-count-badge {
+  background: rgba(79,126,248,0.12); color: #4f7ef8;
+  border: 1px solid rgba(79,126,248,0.2); border-radius: 20px;
+  padding: 2px 8px; font-size: 11px; font-weight: 600; margin-left: 8px;
+}
+
+/* ── Loading spinner ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-spinner {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(79,126,248,0.06);
+  border: 1px solid rgba(79,126,248,0.15);
+  border-radius: 10px; padding: 16px 20px; margin: 16px 0;
+}
+.loading-spinner-dot {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(79,126,248,0.2);
+  border-top-color: #4f7ef8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 768px) {
+  .main .block-container { padding: 1rem 1rem 3rem !important; }
+  .data-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  div[data-testid="stButton"] > button[kind="primary"] { width: 100% !important; }
+  div[data-testid="stDownloadButton"] button { width: 100% !important; }
+  .gauge-wrap { flex-direction: column; align-items: flex-start; }
+  .stColumns { flex-direction: column !important; }
+  .stColumns > div { width: 100% !important; min-width: 100% !important; }
+}
+
+/* ── Print ── */
+@media print {
+  section[data-testid="stSidebar"] { display: none !important; }
+  div[data-testid="stButton"], div[data-testid="stDownloadButton"],
+  div[data-testid="stFileUploader"], div[data-testid="stTextInput"],
+  div[data-testid="stTextArea"], div[data-testid="stMultiSelect"],
+  div[data-testid="stSelectbox"], .stTabs [data-baseweb="tab-list"],
+  .no-print { display: none !important; }
+  .stApp { background: #fff !important; color: #000 !important; }
+  .output-box { max-height: none !important; overflow: visible !important;
+    background: #fff !important; color: #000 !important; border-color: #ccc !important; }
+  .data-table td, .data-table th { border: 1px solid #ccc !important; color: #000 !important; }
+  .section-title { color: #000 !important; }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -651,6 +781,177 @@ def _entity_badge_html(entity_type: str, size: str = "13px") -> str:
 JURISDICTIONS = ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "Bahamas / SCB", "EU / DORA", "UK / FCA+PRA"]
 OUTPUT_DIR = str(_HERE / "outputs")
 Path(OUTPUT_DIR).mkdir(exist_ok=True)
+
+# ── UI helpers ────────────────────────────────────────────────────────────────
+
+def lucide_icon(name: str, size: int = 16, color: str = "currentColor") -> str:
+    """Returns a Lucide icon as inline HTML."""
+    return (
+        f'<i data-lucide="{name}" style="width:{size}px;height:{size}px;'
+        f'color:{color};vertical-align:middle;display:inline-block;"></i>'
+    )
+
+
+def severity_badge(level: str, size: str = "normal") -> str:
+    """Returns a styled severity badge HTML span."""
+    _colors = {
+        "Critical": ("#ef4444", "rgba(239,68,68,0.12)"),
+        "High":     ("#f97316", "rgba(249,115,22,0.12)"),
+        "Moderate": ("#eab308", "rgba(234,179,8,0.12)"),
+        "Low":      ("#22c55e", "rgba(34,197,94,0.12)"),
+    }
+    color, bg = _colors.get(level, ("#94a3b8", "rgba(148,163,184,0.12)"))
+    font_size = "10px" if size == "small" else "11px"
+    return (
+        f'<span style="display:inline-flex;align-items:center;gap:4px;'
+        f'background:{bg};color:{color};border:1px solid {color}40;'
+        f'border-radius:20px;padding:2px 8px;font-size:{font_size};'
+        f'font-weight:700;letter-spacing:0.5px;box-shadow:0 0 8px {color}20;">'
+        f'<span style="width:5px;height:5px;border-radius:50%;background:{color};'
+        f'box-shadow:0 0 4px {color};display:inline-block;"></span>'
+        f'{level.upper()}</span>'
+    )
+
+
+def section_header(icon_name: str, title: str, subtitle: str = "", count: int = None) -> str:
+    """Returns a styled section header HTML block with Lucide icon."""
+    count_html = (
+        f'<span class="section-count-badge">{count}</span>'
+        if count is not None else ""
+    )
+    subtitle_html = (
+        f'<div style="font-size:12px;color:#475569;margin-top:2px;">{subtitle}</div>'
+        if subtitle else ""
+    )
+    return f"""
+    <div class="section-header">
+      <div class="section-header-icon">
+        <i data-lucide="{icon_name}" style="width:16px;height:16px;color:#4f7ef8;"></i>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:#e2e8f0;
+                    display:flex;align-items:center;">
+          {title}{count_html}
+        </div>
+        {subtitle_html}
+      </div>
+    </div>
+    <script>if(window.lucide)lucide.createIcons();</script>
+    """
+
+
+def show_loading(message: str) -> None:
+    """Render a styled loading indicator."""
+    st.markdown(f"""
+    <div class="loading-spinner">
+      <div class="loading-spinner-dot"></div>
+      <span style="font-size:13px;color:#7fa8fb;font-weight:500;">{message}</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def render_table(headers: list, rows: list, highlight_col: int = None) -> str:
+    """Render a styled HTML table for use with st.markdown(..., unsafe_allow_html=True)."""
+    header_html = "".join(
+        f'<th style="padding:10px 14px;font-size:11px;font-weight:700;'
+        f'letter-spacing:0.8px;text-transform:uppercase;color:#475569;'
+        f'border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap;">{h}</th>'
+        for h in headers
+    )
+    rows_html = ""
+    for i, row in enumerate(rows):
+        cells = ""
+        for j, cell in enumerate(row):
+            is_hi = (j == highlight_col)
+            cells += (
+                f'<td style="padding:10px 14px;font-size:13px;'
+                f'color:{"#e2e8f0" if is_hi else "#94a3b8"};'
+                f'font-weight:{"600" if is_hi else "400"};'
+                f'border-bottom:1px solid rgba(255,255,255,0.03);">{cell}</td>'
+            )
+        bg = "rgba(255,255,255,0.01)" if i % 2 else "transparent"
+        rows_html += f'<tr style="background:{bg};">{cells}</tr>'
+    return (
+        f'<div style="overflow-x:auto;border-radius:10px;'
+        f'border:1px solid rgba(255,255,255,0.06);">'
+        f'<table style="width:100%;border-collapse:collapse;background:var(--bg-card);">'
+        f'<thead><tr>{header_html}</tr></thead>'
+        f'<tbody>{rows_html}</tbody></table></div>'
+    )
+
+
+def render_risk_cards(risks: list) -> None:
+    """Render risk indicators as glassmorphism cards grouped by severity."""
+    if not risks:
+        st.markdown(
+            '<div style="text-align:center;padding:40px;color:#475569;">'
+            'No risks found for this topic.</div>',
+            unsafe_allow_html=True,
+        )
+        return
+
+    critical = [r for r in risks if r.get("level") == "Critical"]
+    high     = [r for r in risks if r.get("level") == "High"]
+    moderate = [r for r in risks if r.get("level") == "Moderate"]
+
+    for group, color, label in [
+        (critical, "#ef4444", "Critical"),
+        (high,     "#f97316", "High"),
+        (moderate, "#eab308", "Moderate"),
+    ]:
+        if not group:
+            continue
+        st.markdown(f"""
+        <div style="display:flex;align-items:center;gap:8px;margin:20px 0 12px 0;">
+          <div style="width:8px;height:8px;border-radius:50%;background:{color};
+                      box-shadow:0 0 8px {color}88;"></div>
+          <span style="font-size:11px;font-weight:700;letter-spacing:1.5px;
+                        color:{color};">{label.upper()}</span>
+          <span style="font-size:11px;color:#475569;">({len(group)} risks)</span>
+        </div>
+        """, unsafe_allow_html=True)
+
+        ncols = min(len(group), 3)
+        cols = st.columns(ncols)
+        for i, risk in enumerate(group):
+            controls  = risk.get("expected_controls", [])
+            red_flags = risk.get("red_flags", [])
+            desc      = risk.get("description", "")
+            desc_short = desc[:120] + ("..." if len(desc) > 120 else "")
+            with cols[i % ncols]:
+                st.markdown(f"""
+                <div class="risk-card risk-card-{label.lower()}"
+                     style="border:1px solid {color}22;">
+                  <div style="font-size:11px;font-weight:700;color:{color};
+                              letter-spacing:1px;margin-bottom:6px;">{label.upper()}</div>
+                  <div style="font-size:14px;font-weight:600;color:#e2e8f0;
+                              margin-bottom:8px;line-height:1.3;">
+                    {risk.get("title", "")}
+                  </div>
+                  <div style="font-size:12px;color:#64748b;margin-bottom:10px;
+                              line-height:1.5;">{desc_short}</div>
+                  <div style="font-size:11px;color:#475569;margin-bottom:4px;">
+                    PROBABILITY · {risk.get("probability","N/A")}
+                    &nbsp;·&nbsp; IMPACT · {risk.get("impact","N/A")}
+                  </div>
+                  <div style="border-top:1px solid rgba(255,255,255,0.05);
+                              margin-top:10px;padding-top:10px;
+                              font-size:11px;color:#475569;">
+                    {len(controls)} controls expected &nbsp;·&nbsp;
+                    {len(red_flags)} red flags
+                  </div>
+                </div>
+                """, unsafe_allow_html=True)
+                with st.expander("View details", expanded=False):
+                    if controls:
+                        st.markdown("**Expected Controls**")
+                        for c in controls:
+                            st.markdown(f"• {c}")
+                    if red_flags:
+                        st.markdown("**Red Flags**")
+                        for f in red_flags:
+                            st.markdown(f"⚠ {f}")
+
 
 # ── Templates ─────────────────────────────────────────────────────────────────
 _TPL_SEPARATORS = {"— Select a template —", "── CORE AUDIT TOPICS ──", "── SPECIALIZED TOPICS ──"}
@@ -1422,18 +1723,33 @@ _MODE_LIVE   = "⚡ Live Analysis"
 
 
 def render_mode_toggle(tab_key: str) -> str:
-    """Uniform mode toggle using st.radio(). Returns 'static' or 'live'."""
-    if tab_key not in st.session_state:
-        st.session_state[tab_key] = _MODE_STATIC
-    selected = st.radio(
-        "Mode",
-        options=[_MODE_STATIC, _MODE_LIVE],
-        key=tab_key,
-        horizontal=True,
-        label_visibility="collapsed",
-    )
-    st.divider()
-    return "static" if selected == _MODE_STATIC else "live"
+    """Mode toggle using pill buttons. Returns 'static' or 'live'."""
+    key = f"_mode_state_{tab_key}"
+    if key not in st.session_state:
+        st.session_state[key] = "static"
+
+    col1, col2, col3 = st.columns([2, 2, 8])
+    with col1:
+        if st.button(
+            "📚 Static",
+            key=f"_btn_static_{tab_key}",
+            type="primary" if st.session_state[key] == "static" else "secondary",
+        ):
+            st.session_state[key] = "static"
+            # sync legacy key too
+            st.session_state[tab_key] = _MODE_STATIC
+            st.rerun()
+    with col2:
+        if st.button(
+            "⚡ Live",
+            key=f"_btn_live_{tab_key}",
+            type="primary" if st.session_state[key] == "live" else "secondary",
+        ):
+            st.session_state[key] = "live"
+            st.session_state[tab_key] = _MODE_LIVE
+            st.rerun()
+    st.markdown("<div style='margin-bottom:8px'></div>", unsafe_allow_html=True)
+    return st.session_state[key]
 
 
 _LEVEL_COLOR = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308"}
@@ -2197,14 +2513,26 @@ with st.sidebar:
     t3_done = bool(st.session_state.t3_report)
 
     _sb_entity = st.session_state.get("entity_type", "🏦 Private Banking")
-    st.markdown(
-        f'<div style="font-size:12.5px;color:var(--text-secondary);line-height:2">'
-        f'Entity: {_entity_badge_html(_sb_entity, "11px")}<br>'
-        f'{_status_icon(t1_done)} Risk Analysis<br>'
-        f'{_status_icon(t2_done)} Audit Plan<br>'
-        f'{_status_icon(t3_done)} Audit Report'
-        f'</div>',
-        unsafe_allow_html=True,
+    _ent_colors = {
+        "🏦 Private Banking":                   ("#4f7ef8", "rgba(79,126,248,0.12)"),
+        "📊 Asset Management":                  ("#8b5cf6", "rgba(139,92,246,0.12)"),
+        "🏢 Management Company (ManCo)":        ("#06b6d4", "rgba(6,182,212,0.12)"),
+        "🔀 Alternative Investment (PE/RE/HF)": ("#f59e0b", "rgba(245,158,11,0.12)"),
+    }
+    _ec, _ebg = _ent_colors.get(_sb_entity, ("#94a3b8", "rgba(148,163,184,0.12)"))
+    st.markdown(f"""
+    <div style="background:{_ebg};border:1px solid {_ec}40;border-radius:8px;
+                padding:8px 10px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+      <div style="width:6px;height:6px;border-radius:50%;background:{_ec};
+                  box-shadow:0 0 6px {_ec};flex-shrink:0;"></div>
+      <span style="font-size:12px;font-weight:600;color:{_ec};">{_sb_entity}</span>
+    </div>
+    <div style="font-size:12.5px;color:var(--text-secondary);line-height:2;">
+      {_status_icon(t1_done)} Risk Analysis<br>
+      {_status_icon(t2_done)} Audit Plan<br>
+      {_status_icon(t3_done)} Audit Report
+    </div>
+    """, unsafe_allow_html=True,
     )
 
     st.markdown("---")
@@ -2453,21 +2781,28 @@ def _show_help_panel():
 # ── Header ────────────────────────────────────────────────────────────────────
 _hdr_col1, _hdr_col2 = st.columns([8, 1])
 with _hdr_col1:
-    _active_tab   = st.session_state.get("active_tab", 0)
-    _tab_title_txt = TAB_TITLES.get(_active_tab, "")
-    _tab_sub_txt   = TAB_SUBTITLES.get(_active_tab, "")
-    _tab_line = (
-        f'<p style="color:#7fa8fb;font-size:13px;font-weight:600;margin:6px 0 4px">'
-        f'{_tab_title_txt} &mdash; {_tab_sub_txt}</p>'
-        if _tab_title_txt else ""
-    )
-    st.markdown(f"""
-<div style="text-align:center;margin-bottom:24px;padding-top:1rem">
-  <h1 style="font-size:42px;font-weight:800;letter-spacing:-1px;margin:0">🏦 AuditIQ</h1>
-  <p style="font-size:16px;color:#8b95b8;font-style:italic;margin-top:4px;margin-bottom:0">
+    st.markdown("""
+<div style="text-align:center;padding:32px 0 24px 0;position:relative;">
+  <div style="display:inline-flex;align-items:center;justify-content:center;
+              width:48px;height:48px;
+              background:linear-gradient(135deg,#4f7ef8 0%,#7b3fe4 100%);
+              border-radius:12px;margin-bottom:12px;
+              box-shadow:0 0 24px rgba(79,126,248,0.3);">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+         xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            stroke="white" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <h1 style="font-size:36px;font-weight:800;
+             background:linear-gradient(135deg,#e2e8f0 0%,#94a3b8 100%);
+             -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+             margin:0;line-height:1.1;">AuditIQ</h1>
+  <p style="font-size:14px;color:#64748b;font-style:italic;
+            margin:6px 0 0 0;font-weight:400;">
     From risk to insight — intelligent audit support for financial institutions.
   </p>
-  {_tab_line}
 </div>
 """, unsafe_allow_html=True)
 with _hdr_col2:
