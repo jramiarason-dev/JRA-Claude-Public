@@ -1043,6 +1043,211 @@ ANALYSIS = {
     },
 }
 
+# ── Profils entraîneurs Ligue 1 ───────────────────────────────────────────────
+COACHES: dict[str, dict] = {
+    'PSG': {
+        'name': 'Luis Enrique',
+        'nationality': '🇪🇸',
+        'formation': '4-3-3',
+        'style': 'Possession verticale, pressing très haut',
+        'philosophy': 'Jeu de possession avec verticalité rapide. Pressing intensif dès la perte du ballon. Couloirs larges exploités en permanence. Gardien intégré dans la construction. Favorise les joueurs polyvalents capables de presser et jouer en une touche.',
+        'strengths': ['Pressing collectif intense', 'Transitions offensives rapides', 'Variété dans les schémas offensifs', 'Utilisation intelligente des largeurs'],
+        'weaknesses': ['Parfois vulnérable sur les contre-attaques', 'Dépendance aux individualités'],
+        'key_principles': ['Pressing haut immédiat à la perte', 'Sorties de balle structurées', 'Rotations milieu-attaque', 'Surcharges sur les côtés']
+    },
+    'Marseille': {
+        'name': 'Roberto De Zerbi',
+        'nationality': '🇮🇹',
+        'formation': '4-2-3-1',
+        'style': 'Possession élaborée, construction depuis la défense',
+        'philosophy': 'Jeu de possession très structuré depuis le gardien. Sorties de balle codifiées avec le gardien inclus. Pressing organisé par zones. Transitions offensives rapides après récupération. Très exigeant tactiquement, demande une grande maîtrise technique collective.',
+        'strengths': ['Construction propre depuis l\'arrière', 'Pressing par zones très organisé', 'Jeu positionnel élaboré', 'Créativité offensive'],
+        'weaknesses': ['Vulnérable au pressing adverse haut', 'Nécessite des joueurs très techniques'],
+        'key_principles': ['Gardien libéro', 'Supériorité numérique en construction', 'Pressing triggers définis', 'Circuits de passes codifiés']
+    },
+    'Monaco': {
+        'name': 'Adi Hütter',
+        'nationality': '🇦🇹',
+        'formation': '4-2-3-1',
+        'style': 'Pressing intense, jeu direct et vertical',
+        'philosophy': 'Équipe très physique et verticale. Pressing intensif sur tout le terrain. Jeu direct vers l\'avant dès la récupération. Exploitation des espaces en transition. Favorise les joueurs athlétiques et rapides.',
+        'strengths': ['Intensité physique très élevée', 'Efficacité en transition', 'Pressing collectif', 'Vitesse de jeu'],
+        'weaknesses': ['Moins à l\'aise dans la gestion du score', 'Peut manquer de patience en possession'],
+        'key_principles': ['Transition défense-attaque en moins de 6 secondes', 'Pressing immédiat', 'Verticalité maximale', 'Duels physiques assumés']
+    },
+    'Lille': {
+        'name': 'Bruno Genesio',
+        'nationality': '🇫🇷',
+        'formation': '4-4-2',
+        'style': 'Bloc médian compact, contre-attaques rapides',
+        'philosophy': 'Organisation défensive très solide en bloc médian. Contre-attaques rapides sur les côtés. Discipline collective prioritaire. Équilibre défense-attaque soigné. Exploitation des transitions sur les largeurs.',
+        'strengths': ['Solidité défensive collective', 'Efficacité sur les transitions', 'Organisation et discipline', 'Duels remportés au milieu'],
+        'weaknesses': ['Peut manquer de créativité en possession', 'Dépendant du pressing adverse'],
+        'key_principles': ['Bloc médian compact', 'Contre-attaque rapide sur les ailes', 'Duels physiques au milieu', 'Solidité défensive avant tout']
+    },
+    'Lyon': {
+        'name': 'Pierre Sage',
+        'nationality': '🇫🇷',
+        'formation': '4-3-3',
+        'style': 'Possession patient, pressing organisé par zones',
+        'philosophy': 'Jeu de possession patient avec pressing organisé par zones. Exploitation intelligente des couloirs. Construction propre depuis l\'arrière. Équilibre entre solidité défensive et créativité offensive.',
+        'strengths': ['Possession maîtrisée', 'Organisation défensive', 'Utilisation des couloirs', 'Collectif soudé'],
+        'weaknesses': ['Peut manquer de verticalité', 'Dépendance aux individualités offensives'],
+        'key_principles': ['Patience en possession', 'Pressing par zones définis', 'Largeurs exploitées', 'Transitions contrôlées']
+    },
+    'Nice': {
+        'name': 'Franck Haise',
+        'nationality': '🇫🇷',
+        'formation': '4-3-3',
+        'style': 'Pressing haut, jeu direct, largeur maximale',
+        'philosophy': 'Pressing très haut dès la perte du ballon. Jeu direct et vertical. Largeur maximale avec des ailiers qui fixent les défenseurs. Très similaire à son système de Lens. Intensité physique élevée sur toute la durée du match.',
+        'strengths': ['Pressing très haut efficace', 'Largeurs maximales', 'Intensité physique', 'Jeu direct efficace'],
+        'weaknesses': ['Peut s\'exposer sur les espaces dans le dos', 'Fatigue physique en fin de match'],
+        'key_principles': ['Pressing immédiat', 'Ailiers très hauts et larges', 'Jeu direct vers les attaquants', 'Intensité constante']
+    },
+    'Lens': {
+        'name': 'Will Still',
+        'nationality': '🇧🇪',
+        'formation': '4-2-3-1',
+        'style': 'Data-driven, pressing intense par zones',
+        'philosophy': 'Approche très analytique basée sur la data. Pressing intense déclenché par des triggers précis. Jeu de transition rapide. Grande adaptabilité tactique selon les adversaires. Utilise beaucoup la vidéo et l\'analyse de données.',
+        'strengths': ['Adaptabilité tactique', 'Pressing déclenché intelligemment', 'Transitions rapides', 'Analyse adverse poussée'],
+        'weaknesses': ['Peut manquer de spontanéité', 'Dépend de la rigueur collective'],
+        'key_principles': ['Triggers de pressing définis', 'Blocs défensifs adaptables', 'Transition rapide', 'Analyse data intégrée']
+    },
+    'Rennes': {
+        'name': 'Jorge Sampaoli',
+        'nationality': '🇦🇷',
+        'formation': '3-4-3',
+        'style': 'Pressing ultra-offensif, chaos contrôlé',
+        'philosophy': 'Pressing ultra-offensif et intense. Schéma en 3-4-3 très offensif. Chaos contrôlé avec des joueurs très mobiles. Transitions offensives explosives. Très exigeant physiquement. Peut sembler désorganisé mais répond à une logique précise.',
+        'strengths': ['Intensité offensive maximale', 'Pressing très haut', 'Transitions explosives', 'Imprévisibilité'],
+        'weaknesses': ['Vulnérable défensivement', 'Physiquement très exigeant', 'Peut manquer de contrôle'],
+        'key_principles': ['Pressing maximum partout', 'Mobilité constante', 'Transitions offensives immédiates', '3 attaquants très actifs']
+    },
+    'Strasbourg': {
+        'name': 'Liam Rosenior',
+        'nationality': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+        'formation': '4-2-3-1',
+        'style': 'Jeu de possession, organisation défensive',
+        'philosophy': 'Jeu de possession structuré. Organisation défensive solide. Développement des jeunes joueurs. Approche moderne du football avec pressing organisé.',
+        'strengths': ['Organisation collective', 'Possession structurée', 'Solidité défensive'],
+        'weaknesses': ['Manque d\'expérience au haut niveau', 'Effectif limité'],
+        'key_principles': ['Possession maîtrisée', 'Bloc défensif compact', 'Développement collectif']
+    },
+    'Brest': {
+        'name': 'Eric Roy',
+        'nationality': '🇫🇷',
+        'formation': '4-3-3',
+        'style': 'Pressing offensif, jeu direct et efficace',
+        'philosophy': 'Pressing offensif bien organisé. Jeu direct et efficace sans fioritures. Équipe très solidaire et compacte. Exploitation des erreurs adverses. Efficacité maximale avec les ressources disponibles.',
+        'strengths': ['Solidarité collective', 'Efficacité offensive', 'Pressing organisé', 'Mental très fort'],
+        'weaknesses': ['Effectif moins profond', 'Peut manquer de technique sur certains postes'],
+        'key_principles': ['Pressing offensif immédiat', 'Jeu direct efficace', 'Solidarité défensive', 'Exploitation des espaces']
+    },
+    'Toulouse': {
+        'name': 'Carles Martínez Novell',
+        'nationality': '🇪🇸',
+        'formation': '4-2-3-1',
+        'style': 'Jeu de possession, pressing organisé',
+        'philosophy': 'Jeu de possession structuré à l\'espagnole. Pressing organisé par zones. Construction propre depuis la défense. Développement d\'un jeu collectif cohérent.',
+        'strengths': ['Possession structurée', 'Organisation collective', 'Pressing par zones'],
+        'weaknesses': ['Peut manquer de verticalité', 'Effectif en construction'],
+        'key_principles': ['Possession patient', 'Pressing triggers', 'Construction depuis l\'arrière']
+    },
+    'Reims': {
+        'name': 'Luka Elsner',
+        'nationality': '🇸🇮',
+        'formation': '4-4-2',
+        'style': 'Bloc compact, transitions rapides',
+        'philosophy': 'Bloc défensif compact et bien organisé. Transitions rapides vers l\'avant. Efficacité sur les coups de pied arrêtés. Discipline collective très forte.',
+        'strengths': ['Solidité défensive', 'Efficacité sur CPA', 'Organisation collective', 'Mental solide'],
+        'weaknesses': ['Jeu offensif limité', 'Manque de créativité'],
+        'key_principles': ['Bloc compact bas', 'Transitions rapides', 'CPA travaillés', 'Discipline collective']
+    },
+    'Nantes': {
+        'name': 'Antoine Kombouaré',
+        'nationality': '🇫🇷',
+        'formation': '4-4-2',
+        'style': 'Jeu direct, combativité, duels physiques',
+        'philosophy': 'Football direct et combatif. Jeu aérien important. Duels physiques assumés. Passion et mental au cœur du projet. Exploitation des points forts individuels.',
+        'strengths': ['Combativité', 'Jeu aérien', 'Mental compétiteur', 'Duels physiques'],
+        'weaknesses': ['Jeu de possession limité', 'Peut manquer de technique collective'],
+        'key_principles': ['Jeu direct', 'Duels physiques gagnés', 'Mental combatif', 'Efficacité sur les coups de pied arrêtés']
+    },
+    'Montpellier': {
+        'name': 'Jean-Louis Gasset',
+        'nationality': '🇫🇷',
+        'formation': '4-3-3',
+        'style': 'Jeu offensif, possession, technique',
+        'philosophy': 'Football offensif et technique. Jeu de possession avec verticalité. Valorisation des joueurs techniques. Approche offensive assumée.',
+        'strengths': ['Jeu technique', 'Approche offensive', 'Valorisation des talents'],
+        'weaknesses': ['Fragilité défensive', 'Manque de solidité collective'],
+        'key_principles': ['Possession technique', 'Verticalité rapide', 'Valorisation individuelle']
+    },
+    'Le Havre': {
+        'name': 'Didier Digard',
+        'nationality': '🇫🇷',
+        'formation': '4-3-3',
+        'style': 'Jeu propre, développement des jeunes',
+        'philosophy': 'Football propre et structuré. Développement des jeunes talents. Jeu de possession patient. Organisation défensive sérieuse.',
+        'strengths': ['Organisation défensive', 'Développement jeunes', 'Jeu structuré'],
+        'weaknesses': ['Manque d\'expérience', 'Effectif limité offensivement'],
+        'key_principles': ['Possession patient', 'Bloc défensif organisé', 'Développement jeunes']
+    },
+    'Auxerre': {
+        'name': 'Christophe Pélissier',
+        'nationality': '🇫🇷',
+        'formation': '4-4-2',
+        'style': 'Bloc compact, efficacité, pragmatisme',
+        'philosophy': 'Football pragmatique et efficace. Bloc défensif compact. Transitions rapides. Efficacité maximale avec les moyens disponibles.',
+        'strengths': ['Pragmatisme', 'Solidité défensive', 'Efficacité en transition'],
+        'weaknesses': ['Jeu offensif limité', 'Manque de profondeur'],
+        'key_principles': ['Bloc compact', 'Pragmatisme', 'Transitions efficaces']
+    },
+    'Angers': {
+        'name': 'Alexandre Dujeux',
+        'nationality': '🇫🇷',
+        'formation': '4-2-3-1',
+        'style': 'Organisation, solidarité, montée en puissance',
+        'philosophy': 'Football organisé et solidaire. Construction progressive. Développement collectif. Montée en puissance progressive dans la saison.',
+        'strengths': ['Organisation collective', 'Solidarité', 'Progression collective'],
+        'weaknesses': ['Manque d\'expérience Ligue 1', 'Effectif en construction'],
+        'key_principles': ['Organisation défensive', 'Solidarité collective', 'Construction progressive']
+    },
+    'Saint-Etienne': {
+        'name': 'Olivier Dall\'Oglio',
+        'nationality': '🇫🇷',
+        'formation': '4-3-3',
+        'style': 'Pressing, intensité, identité forte',
+        'philosophy': 'Football intense avec pressing organisé. Identité forte et combativité. Jeu direct avec des transitions rapides. Exploitation du soutien populaire.',
+        'strengths': ['Combativité', 'Identité forte', 'Pressing organisé', 'Soutien populaire'],
+        'weaknesses': ['Effectif limité', 'Manque de régularité'],
+        'key_principles': ['Pressing collectif', 'Combativité', 'Jeu direct', 'Identité forte']
+    },
+}
+
+COACH_TEAM_LOOKUP: dict[str, str] = {
+    "Paris Saint-Germain":    "PSG",
+    "Olympique de Marseille": "Marseille",
+    "AS Monaco":              "Monaco",
+    "Olympique Lyonnais":     "Lyon",
+    "LOSC Lille":             "Lille",
+    "OGC Nice":               "Nice",
+    "RC Lens":                "Lens",
+    "Stade Rennais":          "Rennes",
+    "RC Strasbourg":          "Strasbourg",
+    "Stade Brestois 29":      "Brest",
+    "Toulouse FC":            "Toulouse",
+    "Stade de Reims":         "Reims",
+    "FC Nantes":              "Nantes",
+    "Montpellier HSC":        "Montpellier",
+    "Le Havre AC":            "Le Havre",
+    "AJ Auxerre":             "Auxerre",
+    "Angers SCO":             "Angers",
+    "AS Saint-Étienne":       "Saint-Etienne",
+}
+
 # ── Effectifs réels par équipe (11 joueurs football, 5 basket, 9 rugby) ───────
 TEAM_SQUADS: dict[str, list] = {
     # ── Ligue 1 ───────────────────────────────────────────────────────────────
@@ -2217,14 +2422,34 @@ if _sel and _an and _m_sel:
     with t1:
         tac = an["tactique"]
         c1, c2 = st.columns(2)
+        _h_coach = COACHES.get(COACH_TEAM_LOOKUP.get(h["name"], ""))
+        _a_coach = COACHES.get(COACH_TEAM_LOOKUP.get(a["name"], ""))
         with c1:
             st.markdown(f'<p class="bbn" style="font-size:1.2rem;color:#CAFF33;">Formation {h["short"]} — {tac["home_form"]}</p>', unsafe_allow_html=True)
             st.markdown(render_formation(tac.get("home_players", []), h["color"], h["short"]), unsafe_allow_html=True)
             st.markdown(f'<p style="font-size:.85rem;color:#aaa;margin-top:.75rem;">{tac["home_style"]}</p>', unsafe_allow_html=True)
+            if _h_coach:
+                st.markdown(
+                    f'<div style="background:#111;border:1px solid #222;border-left:3px solid {h["color"]};'
+                    f'border-radius:8px;padding:.7rem 1rem;margin-top:.6rem;">'
+                    f'<p style="color:#888;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;">ENTRAÎNEUR</p>'
+                    f'<p style="color:#f0f0f0;font-size:.95rem;font-weight:700;margin:.1rem 0;">{_h_coach["nationality"]} {_h_coach["name"]}</p>'
+                    f'<p style="color:#888;font-size:.78rem;margin:0;">{_h_coach["style"]}</p></div>',
+                    unsafe_allow_html=True,
+                )
         with c2:
             st.markdown(f'<p class="bbn" style="font-size:1.2rem;color:#CAFF33;">Formation {a["short"]} — {tac["away_form"]}</p>', unsafe_allow_html=True)
             st.markdown(render_formation(tac.get("away_players", []), a["color"], a["short"]), unsafe_allow_html=True)
             st.markdown(f'<p style="font-size:.85rem;color:#aaa;margin-top:.75rem;">{tac["away_style"]}</p>', unsafe_allow_html=True)
+            if _a_coach:
+                st.markdown(
+                    f'<div style="background:#111;border:1px solid #222;border-left:3px solid {a["color"]};'
+                    f'border-radius:8px;padding:.7rem 1rem;margin-top:.6rem;">'
+                    f'<p style="color:#888;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;">ENTRAÎNEUR</p>'
+                    f'<p style="color:#f0f0f0;font-size:.95rem;font-weight:700;margin:.1rem 0;">{_a_coach["nationality"]} {_a_coach["name"]}</p>'
+                    f'<p style="color:#888;font-size:.78rem;margin:0;">{_a_coach["style"]}</p></div>',
+                    unsafe_allow_html=True,
+                )
 
         st.markdown('<hr class="div-line">', unsafe_allow_html=True)
         st.markdown('<p class="bbn" style="font-size:1.2rem;color:#CAFF33;">PHASES DE JEU</p>', unsafe_allow_html=True)
@@ -2316,6 +2541,32 @@ if _sel and _an and _m_sel:
                 )
 
         st.markdown('<hr class="div-line">', unsafe_allow_html=True)
+
+        _vc_h = COACHES.get(COACH_TEAM_LOOKUP.get(h["name"], ""))
+        _vc_a = COACHES.get(COACH_TEAM_LOOKUP.get(a["name"], ""))
+        if _vc_h or _vc_a:
+            _pc1, _pc2 = st.columns(2)
+            for _pc, _vc, _team in [(_pc1, _vc_h, h), (_pc2, _vc_a, a)]:
+                with _pc:
+                    if _vc:
+                        _str_pills = "  ".join(f'<span style="background:#1a2a0a;color:#CAFF33;border-radius:4px;padding:.15rem .5rem;font-size:.72rem;">{s}</span>' for s in _vc["strengths"])
+                        _wk_pills  = "  ".join(f'<span style="background:#2a1010;color:#ef4444;border-radius:4px;padding:.15rem .5rem;font-size:.72rem;">{w}</span>' for w in _vc["weaknesses"])
+                        _kp_items  = "".join(f'<li style="margin:.2rem 0;">{kp}</li>' for kp in _vc["key_principles"])
+                        st.markdown(
+                            f'<div style="background:#111;border:1px solid #222;border-radius:10px;padding:1rem 1.1rem;margin-bottom:.8rem;">'
+                            f'<p style="color:#888;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3rem;">PROFIL COACH — {_team["short"]}</p>'
+                            f'<p style="color:#f0f0f0;font-size:1.1rem;font-weight:700;margin:.1rem 0;">{_vc["nationality"]} {_vc["name"]}</p>'
+                            f'<p style="color:#888;font-size:.78rem;margin-bottom:.6rem;">{_vc["formation"]} · {_vc["style"]}</p>'
+                            f'<p style="color:#ccc;font-size:.82rem;line-height:1.6;margin-bottom:.7rem;">{_vc["philosophy"]}</p>'
+                            f'<p style="margin-bottom:.3rem;">{_str_pills}</p>'
+                            f'<p style="margin-bottom:.7rem;">{_wk_pills}</p>'
+                            f'<p style="color:#888;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;">PRINCIPES CLÉS</p>'
+                            f'<ul style="color:#aaa;font-size:.8rem;padding-left:1.2rem;margin:0;">{_kp_items}</ul>'
+                            f'</div>',
+                            unsafe_allow_html=True,
+                        )
+            st.markdown('<hr class="div-line">', unsafe_allow_html=True)
+
         c1, c2 = st.columns(2)
         with c1:
             st.markdown(f'<p class="bbn" style="font-size:1.1rem;color:#CAFF33;">📝 Analyse {h["short"]}</p>', unsafe_allow_html=True)
