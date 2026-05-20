@@ -679,13 +679,13 @@ ANALYSIS = {
         "tactique": {
             "home_form": "4-3-3",
             "away_form": "4-2-3-1",
-            "home_style": "Pressing collectif intense, Rice en sentinelle, Saka en arme principale côté droit",
+            "home_style": "Pressing collectif intense, Rice en sentinelle, Havertz en faux 9, Saka en arme principale côté droit",
             "away_style": "Possession élaborée, Haaland en pivot offensif, De Bruyne en créateur entre les lignes",
             "home_players": [
                 ["Raya","GB"],["Ben White","RD"],["Saliba","DC"],
                 ["Gabriel","DC"],["Calafiori","LD"],
-                ["Ødegaard","MC"],["Rice","MC"],["Havertz","MC"],
-                ["Saka","AD"],["Martinelli","AG"],["Nketiah","BU"],
+                ["Rice","MDC"],["Ødegaard","MC"],["Merino","MC"],
+                ["Saka","AD"],["Havertz","BU"],["Martinelli","AG"],
             ],
             "away_players": [
                 ["Ederson","GB"],["Walker","RD"],["Akanji","DC"],
@@ -704,13 +704,13 @@ ANALYSIS = {
         },
         "joueurs": {
             "home": [
-                {"nom": "Saka",       "poste": "AD", "note": 8.6, "stats": "2 buts, 7 dribbles, 4 tirs"},
-                {"nom": "Rice",       "poste": "MC", "note": 8.1, "stats": "97 ballons, 6 récupérations, pressing constant"},
-                {"nom": "Ødegaard",   "poste": "MC", "note": 7.9, "stats": "73 ballons, 3 key passes, menacé par City"},
-                {"nom": "Saliba",     "poste": "DC", "note": 8.2, "stats": "Duel Haaland : 5/7 gagnés, impression"},
-                {"nom": "Martinelli", "poste": "AG", "note": 7.3, "stats": "1 PD, 4 dribbles, pression constante"},
-                {"nom": "Calafiori",  "poste": "LD", "note": 7.1, "stats": "Solide face à Doku, 4 récupérations"},
-                {"nom": "Nketiah",    "poste": "BU", "note": 6.4, "stats": "Peu servi, 2 tirs, déchet technique"},
+                {"nom": "Saka",       "poste": "AD",  "note": 8.6, "stats": "2 buts, 7 dribbles, 4 tirs"},
+                {"nom": "Rice",       "poste": "MDC", "note": 8.1, "stats": "97 ballons, 6 récupérations, pressing constant"},
+                {"nom": "Saliba",     "poste": "DC",  "note": 8.2, "stats": "Duel Haaland : 5/7 gagnés, impressionnant"},
+                {"nom": "Ødegaard",   "poste": "MC",  "note": 7.9, "stats": "73 ballons, 3 key passes, menacé par City"},
+                {"nom": "Havertz",    "poste": "BU",  "note": 7.5, "stats": "Faux 9, 3 récup. offensives, 2 tirs"},
+                {"nom": "Martinelli", "poste": "AG",  "note": 7.3, "stats": "1 PD, 4 dribbles, pression constante"},
+                {"nom": "Merino",     "poste": "MC",  "note": 7.0, "stats": "Pressing constant, 4 récupérations, solide"},
             ],
             "away": [
                 {"nom": "Haaland",    "poste": "BU", "note": 8.9, "stats": "2 buts, 5 tirs, monster match"},
@@ -729,8 +729,8 @@ ANALYSIS = {
                 "Saliba contre Haaland : 5 duels gagnés sur 7, le Français n'a jamais lâché le Norvégien. Un duel de titans remporté par Arsenal",
             ],
             "home_faibles": [
-                "55% de possession concédée à City — Arsenal subit structurellement quand il ne peut pas presser haut. La 2e période a montré les limites du plan de jeu face à une équipe technique",
-                "Nketiah pas au niveau requis face à Man City : 2 tirs, pas de pressing défensif utile. Trossard en joker à la 70' aurait dû débuter",
+                "55% de possession concédée à City — Arsenal subit structurellement quand il ne peut pas presser haut. La 2e période a montré les limites du plan de jeu face à une équipe aussi technique",
+                "Havertz en faux 9 a bien pressé mais manqué de présence dans la surface — sur les corners et phases arrêtées, l'absence d'un vrai attaquant de pointe s'est fait sentir",
             ],
             "away_forts": [
                 "Haaland intraitable dans la surface : 2 buts sur 5 tentatives — son efficacité en zone de finition reste la plus haute d'Europe toutes compétitions confondues",
@@ -746,8 +746,8 @@ ANALYSIS = {
             "intensite": 9.1, "spectacle": 9.2,
             "home_txt": "Arsenal a montré qu'il peut tenir tête à Man City — et même le dépasser par moments. Le problème, c'est que City a des réponses à tout. Quand Arsenal presse haut, City passe par-dessus. Ce 2-2 est le reflet exact du rapport de forces entre les deux meilleures équipes d'Angleterre. Ce qui me préoccupe pour Arsenal, c'est qu'ils n'ont pas de plan B quand le pressing ne fonctionne plus.",
             "away_txt": "Man City a eu l'avantage sur la presque totalité du match en termes de possession et de qualité technique. Mais 2-2 à l'Emirates, ce n'est pas une mauvaise affaire. Ce résultat laisse les deux équipes sur pied d'égalité et ouvre une course au titre absolument passionnante. Haaland était inarrêtable — encore.",
-            "coach_home": "✅ Arteta a osé presser Haaland haut 30 minutes — et ça a fonctionné. La mise en position de Saka en faux ailier était parfaite. Sortir Nketiah pour Trossard à la 70' et repasser en 4-2-3-1 pour sécuriser le point était la bonne décision dans ces circonstances.",
-            "coach_away": "⚠️ Guardiola a bien géré sa possession mais le pressing arsenalien a clairement gêné ses latéraux en première mi-temps. Ce que je questionne, c'est l'absence de Bernardo Silva dans l'axe pour contrebalancer le pressing d'Arsenal — Kovacic a manqué de qualité dans les sorties de balle sous pression.",
+            "coach_home": "✅ Arteta a osé presser Haaland haut 30 minutes — et ça a fonctionné. Le choix de Havertz en faux 9 avec Merino comme box-to-box a libéré Ødegaard plus haut. Repasser en 4-2-3-1 avec Trossard entrant à la 72' pour sécuriser le point était la bonne décision dans ces circonstances.",
+            "coach_away": "⚠️ Guardiola a bien géré sa possession mais le pressing arsenalien a clairement gêné ses latéraux en première mi-temps. Ce que je questionne, c'est l'absence de Bernardo Silva dans l'axe pour contrebalancer le pressing d'Arsenal — Kovacic a manqué de qualité dans les sorties de balle sous pression. Et avec Rodri absent sur blessure, l'équilibre défensif de City était fragile.",
         },
     },
 
@@ -758,18 +758,18 @@ ANALYSIS = {
             "home_style": "Jeu de poste bas d'AD, isolation LeBron côté gauche, pick & roll tardifs",
             "away_style": "Circulation de balle rapide, P&R Curry–Wiggins, tirs à 3pts en catch-and-shoot",
             "home_players": [
-                ["LeBron James","SF"],["A. Davis","C"],["D'Angelo Russell","PG"],
-                ["Austin Reaves","SG"],["Rui Hachimura","PF"],
+                ["LeBron James","SF"],["A. Davis","C"],["Austin Reaves","SG"],
+                ["Rui Hachimura","PF"],["Dalton Knecht","SG"],
             ],
             "away_players": [
-                ["S. Curry","PG"],["Klay Thompson","SG"],["A. Wiggins","SF"],
+                ["S. Curry","PG"],["Buddy Hield","SG"],["A. Wiggins","SF"],
                 ["Draymond Green","PF"],["K. Looney","C"],
             ],
             "phases": {
-                "Pick & Roll": "La clé de ce match, c'est ce que les Lakers ont fait défensivement sur le P&R de Curry. Au lieu du drop coverage habituel, Redick a demandé un hedge agressif avec Hachimura qui sort haut sur Curry dès la prise d'écran. Résultat : Curry à 3/9 sur P&R, 6 turnovers. Quand tu enlèves le P&R à Curry, tu enlèves 40% du système offensif des Warriors. Côté Lakers, le P&R Davis–Russell a fonctionné parce que Looney n'a jamais su choisir : couvrir le roll ou le pop ? Davis a marqué 14 points sur cette seule action.",
+                "Pick & Roll": "La clé de ce match, c'est ce que les Lakers ont fait défensivement sur le P&R de Curry. Au lieu du drop coverage habituel, Redick a demandé un hedge agressif avec Hachimura qui sort haut sur Curry dès la prise d'écran. Résultat : Curry à 3/9 sur P&R, 6 turnovers. Quand tu enlèves le P&R à Curry, tu enlèves 40% du système offensif des Warriors. Côté Lakers, le P&R Davis–Reaves a fonctionné parce que Looney n'a jamais su choisir : couvrir le roll ou le pop ? Davis a marqué 14 points sur cette seule action.",
                 "Fast Break": "Les Warriors ont généré 18 points en transition en première mi-temps — et ça aurait pu être 30 si les Lakers n'avaient pas ajusté leur retour défensif à la pause. LeBron a personnellement décidé de sprinter sur chaque transition en 3e quart. Quand le meilleur joueur de ton équipe montre l'exemple défensivement, les autres suivent. En 2e mi-temps, Golden State n'a marqué que 5 points en contre.",
                 "Isolation": "LeBron en isolation côté gauche contre Klay Thompson : c'est une asymétrie que Redick a exploitée à dessein. Thompson à 34 ans n'a plus les jambes pour défendre 4 quarts en premier rideau. LeBron l'a su et l'a abusé à 5 reprises pour provoquer des fautes ou créer des décalages.",
-                "Clutch Time": "Le run 8-0 à 4 minutes de la fin, c'est le moment où on voit la différence entre une équipe qui a appris à gagner et une qui cherche encore comment le faire. Davis en post bas sur Looney, LeBron en drive, Reaves qui plante le 3pts de l'écart définitif — trois actions différentes, trois joueurs, un seul objectif. Warriors : Curry sur fautes à 4'30, aucun autre créateur capable de prendre ses responsabilités.",
+                "Clutch Time": "Le run 8-0 à 4 minutes de la fin, c'est le moment où on voit la différence entre une équipe qui a appris à gagner et une qui cherche encore comment le faire. Davis en post bas sur Looney, LeBron en drive, Reaves qui plante le 3pts de l'écart définitif — trois actions différentes, trois joueurs, un seul objectif. Warriors : Curry sur fautes à 4'30, et Hield incapable de créer son propre tir en isolation — le vide offensif sans Curry a été immense.",
             },
             "home_stats": {"Tirs 3pts": (12, 9), "Rebonds": (48, 40), "Passes dec.": (28, 22), "Interceptions": (9, 6), "Fautes": (19, 22)},
         },
@@ -778,14 +778,14 @@ ANALYSIS = {
                 {"nom": "A. Davis",       "poste": "C",  "note": 9.3, "stats": "32 pts, 14 reb, 3 blk"},
                 {"nom": "LeBron James",   "poste": "SF", "note": 8.8, "stats": "27 pts, 9 ast, 6 reb"},
                 {"nom": "Austin Reaves",  "poste": "SG", "note": 7.9, "stats": "18 pts, 4/7 à 3pts"},
-                {"nom": "D'Angelo Russell","poste":"PG", "note": 7.2, "stats": "14 pts, 7 ast"},
                 {"nom": "Rui Hachimura",  "poste": "PF", "note": 6.8, "stats": "9 pts, 5 reb"},
+                {"nom": "D. Knecht",      "poste": "SG", "note": 6.5, "stats": "8 pts, 2/4 à 3pts, défense active"},
             ],
             "away": [
                 {"nom": "S. Curry",        "poste": "PG", "note": 8.1, "stats": "26 pts mais 6 TOs"},
                 {"nom": "A. Wiggins",      "poste": "SF", "note": 7.4, "stats": "21 pts, 7 reb"},
                 {"nom": "Draymond Green",  "poste": "PF", "note": 6.8, "stats": "5 pts, 11 ast, 6 reb"},
-                {"nom": "Klay Thompson",   "poste": "SG", "note": 6.2, "stats": "13 pts, 3/11 à 3pts"},
+                {"nom": "Buddy Hield",     "poste": "SG", "note": 6.5, "stats": "15 pts, 4/9 à 3pts"},
                 {"nom": "K. Looney",       "poste": "C",  "note": 5.9, "stats": "Dominé par Davis"},
             ],
         },
@@ -793,7 +793,7 @@ ANALYSIS = {
             "home_forts": [
                 "AD en mode dominant absolu : 32 pts / 14 reb sur Looney — une incompatibilité physique que Kerr n'a jamais corrigée malgré 4 quarts de domination",
                 "Ajustement défensif sur Curry à la mi-temps : passer du drop au hedge agressif a cassé le rythme des Warriors. Redick a lu le match en temps réel",
-                "Reaves en décideur : 18 pts et 4/7 à 3pts — les Warriors ne l'ont jamais identifié comme menace prioritaire",
+                "Reaves en décideur : 18 pts et 4/7 à 3pts — les Warriors ne l'ont jamais identifié comme menace prioritaire. Knecht en soutien sur les rotations défensives : excellent dans son rôle.",
             ],
             "home_faibles": [
                 "19 fautes en 48 minutes, dont 4 pour Davis en 3e quart — Kerr aurait pu mieux jouer les possessions hautes pour forcer Davis à la 6e faute",
@@ -805,7 +805,7 @@ ANALYSIS = {
             ],
             "away_faibles": [
                 "Curry : 6 turnovers — sa pire nuit offensive de la saison. À chaque fois qu'il était pressé sur P&R, il choisissait la mauvaise option",
-                "Klay Thompson : 43 minutes pour 3/11 à 3pts. Kerr lui est trop fidèle — Klay n'a plus les jambes pour défendre ET shooter 4 quarts de suite",
+                "Hield : 4/9 à 3pts est une performance honnête mais insuffisante pour remplacer la dimension terrorisante de Klay en clutch",
                 "Looney contre Davis : -8 en rebonds, -14 en +/-. Cette incompatibilité devait être gérée avec Kuminga en pivot dès le 2e quart",
             ],
         },
@@ -813,9 +813,9 @@ ANALYSIS = {
             "home_perf": 8.9, "away_perf": 6.4,
             "intensite": 8.2, "spectacle": 8.6,
             "home_txt": "Ce que Redick a construit cette nuit, c'est une leçon de lecture de jeu en temps réel. Identifier la faiblesse Looney–Davis, sur-exploiter le match-up Klay–LeBron, mettre Reaves en position de décideur face à une défense qui l'ignorait — c'est du coaching de haut niveau. Davis était inarrêtable, mais c'est Redick qui a créé les conditions pour qu'il le soit.",
-            "away_txt": "Kerr a perdu ce match dans son vestiaire à la mi-temps. Il avait toutes les informations pour sortir Klay, switcher son plan défensif sur Davis, remettre Kuminga pour aider Looney. Il n'a rien fait. Dans les grandes confrontations, l'inaction d'un coach est une décision en soi — et ce soir elle a coûté la victoire à Golden State.",
-            "coach_home": "✅ Ajustement défensif sur Curry en 2e mi-temps : parfait. Décision de laisser Davis en post bas malgré ses 4 fautes plutôt que de le placer en bench : le bon risque calculé. C'est l'instinct des grands coaches.",
-            "coach_away": "❌ Kerr n'a pas vu — ou n'a pas voulu voir — que Klay Thompson n'avait plus rien à apporter offensivement après le 2e quart. 43 minutes pour 3/11 à 3pts, c'est indéfendable. Kuminga aurait changé complètement la dynamique de la peinture.",
+            "away_txt": "Kerr a perdu ce match dans son vestiaire à la mi-temps. Il avait toutes les informations pour switcher son plan défensif sur Davis et remettre Kuminga pour aider Looney. Il n'a rien fait. Dans les grandes confrontations, l'inaction d'un coach est une décision en soi — et ce soir elle a coûté la victoire à Golden State. La transition post-Klay avec Hield s'est révélée insuffisante dans les moments de vérité.",
+            "coach_home": "✅ Ajustement défensif sur Curry en 2e mi-temps : parfait. Décision de laisser Davis en post bas malgré ses 4 fautes plutôt que de le placer en bench : le bon risque calculé. Et Redick a su utiliser Knecht au bon moment pour maintenir la pression défensive sur les ailes.",
+            "coach_away": "❌ Kerr n'a pas su adapter sa rotation intérieure face à la domination de Davis. Kuminga aurait changé complètement la dynamique de la peinture — 4 quarts de Looney face à Davis, c'est un choix tactique qu'aucune donnée ne justifiait.",
         },
     },
 
@@ -896,23 +896,23 @@ ANALYSIS = {
         "tactique": {
             "home_form": "4-3-3",
             "away_form": "4-3-3",
-            "home_style": "Jeu de transition explosive, Bellingham libre entre les lignes, Vinicius et Mbappé en largeur",
+            "home_style": "Transitions explosives, Mbappé–Vinicius en largeur, Bellingham libre entre les lignes",
             "away_style": "Pressing collectif intense, Rice en sentinelle, Saka clé côté droit",
             "home_players": [
                 ["Courtois","GB"],["Carvajal","RD"],["Militão","DC"],
-                ["Rüdiger","DC"],["F. García","LD"],
-                ["Valverde","MC"],["Tchouaméni","MC"],["Camavinga","MC"],
-                ["Rodrygo","AD"],["Bellingham","MO"],["Vinicius","AG"],
+                ["Rüdiger","DC"],["Mendy","LD"],
+                ["Valverde","MC"],["Tchouaméni","MDC"],["Camavinga","MC"],
+                ["Mbappé","BU"],["Bellingham","MO"],["Vinicius","AG"],
             ],
             "away_players": [
                 ["Raya","GB"],["Ben White","RD"],["Saliba","DC"],
                 ["Gabriel","DC"],["Calafiori","LD"],
-                ["Ødegaard","MC"],["Rice","MC"],["Havertz","MC"],
-                ["Saka","AD"],["Trossard","BU"],["Martinelli","AG"],
+                ["Rice","MDC"],["Ødegaard","MC"],["Merino","MC"],
+                ["Saka","AD"],["Havertz","BU"],["Martinelli","AG"],
             ],
             "phases": {
-                "Transitions": "Le Real a exploité 3 transitions rapides après récupérations de Tchouaméni en première mi-temps. Vinicius a créé le premier but à la 19' sur une transition en moins de 6 secondes depuis la récupération de Valverde. C'est le Real Madrid dans sa quintessence : perdre le ballon, récupérer, transitionner, marquer. Arsenal n'avait pas configuré sa défense pour ce type de vitesse de transition.",
-                "Duel Bellingham–Arsenal": "Bellingham en position libre entre les lignes a rendu Arsenal fou. Pendant 60 minutes, ni Rice ni Havertz ne savait à qui l'assigner. Ce flottement défensif a offert à Bellingham 6 ballons dans l'espace — il en a converti 1 en but à la 67'. La solution d'Arteta aurait été de mettre Merino sur Bellingham avec une instruction spécifique dès la 1ère minute.",
+                "Transitions": "Le Real a exploité 3 transitions rapides après récupérations de Tchouaméni en première mi-temps. Mbappé a marqué le premier but à la 19' en transition en moins de 6 secondes depuis la récupération de Valverde — Vinicius a servi sur un plateau un Mbappé que Calafiori ne pouvait pas suivre dans la profondeur. C'est le Real Madrid dans sa quintessence : récupérer, transitionner, marquer. Arsenal n'avait pas configuré sa défense pour cette vitesse de transition.",
+                "Duel Bellingham–Arsenal": "Bellingham en position libre entre les lignes a rendu Arsenal fou. Pendant 60 minutes, ni Rice ni Merino ne savait à qui l'assigner. Ce flottement défensif a offert à Bellingham 6 ballons dans l'espace — il en a converti 1 en but à la 67'. La solution d'Arteta aurait été de coller Merino sur Bellingham avec une instruction spécifique dès la 1ère minute.",
                 "Pressing Arsenal": "Arsenal a produit son meilleur pressing en 2e mi-temps — pendant 20 minutes, le Real n'a pas pu construire proprement. Saka a inscrit le 2-1 à la 82' directement issu d'une récupération haute de Rice. Trop tard pour renverser le résultat, mais ces 20 minutes sont un avertissement pour tous les adversaires futurs d'Arsenal en C1.",
                 "Gestion de score": "Real Madrid maîtrise la fin de match à 2-1. Courtois décisif sur une tête de Gabriel à la 89'. Ancelotti a su faire entrer Ceballos pour ralentir le tempo dans les 10 dernières minutes — une gestion de match que seules les équipes habituées à gagner en C1 savent produire.",
             },
@@ -920,29 +920,30 @@ ANALYSIS = {
         },
         "joueurs": {
             "home": [
-                {"nom": "Bellingham",  "poste": "MO", "note": 8.9, "stats": "1 but (67'), 67 ballons, 3 dribbles clés"},
-                {"nom": "Vinicius",    "poste": "AG", "note": 8.7, "stats": "1 PD, 6 dribbles, 3 tirs"},
-                {"nom": "Courtois",    "poste": "GB", "note": 8.2, "stats": "5 arrêts décisifs, arrêt vital 89'"},
-                {"nom": "Valverde",    "poste": "MC", "note": 8.0, "stats": "87 ballons, 4 récupérations clés"},
-                {"nom": "Tchouaméni", "poste": "MC", "note": 7.9, "stats": "3 récup. clés, pressing organisé"},
-                {"nom": "Rodrygo",     "poste": "AD", "note": 7.8, "stats": "1 but (19'), 4 dribbles"},
-                {"nom": "Militão",     "poste": "DC", "note": 7.7, "stats": "Intraitable, 6 dégagements"},
+                {"nom": "Mbappé",      "poste": "BU",  "note": 9.1, "stats": "1 but (19'), 5 dribbles, sprint meurtrier"},
+                {"nom": "Bellingham",  "poste": "MO",  "note": 8.9, "stats": "1 but (67'), 67 ballons, 3 dribbles clés"},
+                {"nom": "Vinicius",    "poste": "AG",  "note": 8.7, "stats": "1 PD décisive (19'), 6 dribbles, 3 tirs"},
+                {"nom": "Courtois",    "poste": "GB",  "note": 8.2, "stats": "5 arrêts décisifs, arrêt vital 89'"},
+                {"nom": "Valverde",    "poste": "MC",  "note": 8.0, "stats": "87 ballons, 4 récupérations clés"},
+                {"nom": "Tchouaméni", "poste": "MDC", "note": 7.9, "stats": "3 récup. clés, sentinelle du pressing"},
+                {"nom": "Militão",     "poste": "DC",  "note": 7.7, "stats": "Intraitable, 6 dégagements"},
             ],
             "away": [
                 {"nom": "Saka",      "poste": "AD", "note": 8.4, "stats": "1 but (82'), 7 dribbles, poteau 87'"},
-                {"nom": "Rice",      "poste": "MC", "note": 7.8, "stats": "6 récupérations, pressing constant"},
+                {"nom": "Rice",      "poste": "MDC","note": 7.8, "stats": "6 récupérations, pressing constant"},
                 {"nom": "Saliba",    "poste": "DC", "note": 7.6, "stats": "Duel vs Bellingham : 7/10 gagnés"},
+                {"nom": "Havertz",   "poste": "BU", "note": 7.1, "stats": "Pressing haut, 3 récup. en avant, 2 tirs"},
                 {"nom": "Ødegaard",  "poste": "MC", "note": 7.0, "stats": "Limité, 68 ballons, 2 key passes"},
-                {"nom": "Gabriel",   "poste": "DC", "note": 6.9, "stats": "Tête stoppée 89', solide défensivement"},
                 {"nom": "Martinelli","poste": "AG", "note": 7.1, "stats": "3 dribbles, pression constante à gauche"},
                 {"nom": "Raya",      "poste": "GB", "note": 7.2, "stats": "6 arrêts, impuissant sur les 2 buts"},
             ],
         },
         "bilan": {
             "home_forts": [
-                "Bellingham en position libre : 60 minutes sans que Rice ni Havertz ne sache à qui l'assigner — ce flottement défensif d'Arsenal lui a offert 6 espaces dans le match",
-                "Efficacité en transitions : 3 situations dangereuses créées sur récupérations de Tchouaméni, 2 buts marqués — le Real Madrid possède cet art dans son ADN",
-                "Courtois dans les grandes occasions : 5 arrêts, dont celui décisif sur Gabriel à la 89' qui a sauvé la qualification — le meilleur gardien du monde en C1",
+                "Mbappé–Vinicius : le duo le plus rapide d'Europe en transition — le 1er but à la 19' en est la démonstration parfaite, Arsenal n'avait aucune solution défensive pour contenir cette vitesse",
+                "Bellingham en position libre : 60 minutes sans que Rice ni Merino ne sache à qui l'assigner — ce flottement défensif d'Arsenal lui a offert 6 espaces dans le match",
+                "Efficacité en transitions : 3 situations dangereuses créées sur récupérations de Tchouaméni, 2 buts — le Real Madrid possède cet art dans son ADN depuis des décennies",
+                "Courtois dans les grandes occasions : 5 arrêts, dont celui décisif sur Gabriel à la 89' — le meilleur gardien du monde en C1",
             ],
             "home_faibles": [
                 "Arsenal a eu 62% de possession — quand Real ne maîtrise pas le ballon, il souffre structurellement. Si Arsenal avait eu plus de précision dans les 20 dernières minutes, le résultat aurait pu être différent",
@@ -960,305 +961,471 @@ ANALYSIS = {
         "verdict": {
             "home_perf": 8.3, "away_perf": 6.8,
             "intensite": 8.9, "spectacle": 8.6,
-            "home_txt": "Real Madrid a montré pourquoi ils sont les maîtres de la Ligue des Champions. Ce n'est pas un hasard s'ils survivent et gagnent des matchs où ils sont dominés en possession — c'est un art perfectionné sur des décennies. Bellingham a changé de dimension cette nuit. Il ne joue plus comme un milieu — il joue comme un numéro 10 de classe mondiale, avec l'instinct du but en plus.",
-            "away_txt": "Arsenal a montré des choses encourageantes — surtout en 2e mi-temps. Mais perdre 2-1 à Bernabéu avec une telle domination en possession, c'est un goût d'inachevé. Le vrai problème d'Arsenal ce soir : face à la première transition rapide de Vinicius, la défense n'était pas configurée. Deux fois la même erreur, deux buts.",
-            "coach_home": "✅ Ancelotti n'a eu besoin d'aucun changement tactique majeur jusqu'à la 75'. La décision de laisser Bellingham sans poste fixe a rendu Arsenal fou — ils ne savaient pas s'il fallait le défendre avec Rice ou Havertz. Cette liberté, seul Ancelotti l'accorde en Ligue des Champions.",
-            "coach_away": "⚠️ Arteta avait bien préparé la sortie de balle basse — mais pas la transition rapide de Real. Un pressing haut avec Rice et Havertz en soutien de Ødegaard aurait pu réduire les espaces pour Bellingham. Il l'a compris à la pause — malheureusement, 2-0 à la 67' c'est trop tard pour espérer renverser le Real au Bernabéu.",
+            "home_txt": "Real Madrid a montré pourquoi ils sont les maîtres de la Ligue des Champions. Ce n'est pas un hasard s'ils survivent et gagnent des matchs où ils sont dominés en possession — c'est un art perfectionné sur des décennies. Bellingham a changé de dimension cette nuit. Il ne joue plus comme un milieu — il joue comme un numéro 10 de classe mondiale, avec l'instinct du but en plus. Et maintenant avec Mbappé, ils ont deux joueurs capables de punir n'importe quelle erreur défensive en une fraction de seconde — c'est une proposition terrifiante pour toute l'Europe.",
+            "away_txt": "Arsenal a montré des choses encourageantes — surtout en 2e mi-temps. Mais perdre 2-1 à Bernabéu avec une telle domination en possession, c'est un goût d'inachevé. Le vrai problème d'Arsenal ce soir : face à la première transition rapide de Mbappé, la défense n'était pas configurée. Deux fois la même erreur de positionnement, deux buts.",
+            "coach_home": "✅ Ancelotti n'a eu besoin d'aucun changement tactique majeur jusqu'à la 75'. La décision de laisser Bellingham sans poste fixe a rendu Arsenal fou — ils ne savaient pas s'il fallait le défendre avec Rice ou Merino. Cette liberté, seul Ancelotti l'accorde en Ligue des Champions.",
+            "coach_away": "⚠️ Arteta avait bien préparé la sortie de balle basse — mais pas la transition rapide de Real. Un pressing haut avec Rice et Havertz en faux 9 pressant Tchouaméni aurait pu réduire les espaces pour Mbappé. Il l'a compris à la pause — malheureusement, 2-0 à la 67' c'est trop tard pour espérer renverser le Real au Bernabéu.",
         },
     },
-}
 
-MATCHES = {
-    "psg_monaco": {
-        "sport": "⚽ Football", "competition": "Ligue 1",
-        "date": D10, "time": "21:00", "stadium": "Parc des Princes, Paris",
-        "status": "Terminé",
-        "home": {"name": "Paris Saint-Germain", "short": "PSG", "color": "#004174", "score": 3},
-        "away": {"name": "AS Monaco", "short": "MCO", "color": "#E4002B", "score": 1},
-    },
-    "real_arsenal": {
-        "sport": "⚽ Football", "competition": "Champions League",
-        "date": D14, "time": "21:00", "stadium": "Santiago Bernabéu, Madrid",
-        "status": "Live",
-        "home": {"name": "Real Madrid", "short": "RMA", "color": "#FEBE10", "score": 2},
-        "away": {"name": "Arsenal FC", "short": "ARS", "color": "#EF0107", "score": 1},
-    },
-    "arsenal_mancity": {
-        "sport": "⚽ Football", "competition": "Premier League",
-        "date": D17, "time": "17:30", "stadium": "Emirates Stadium, Londres",
-        "status": "À venir",
-        "home": {"name": "Arsenal FC", "short": "ARS", "color": "#EF0107", "score": None},
-        "away": {"name": "Manchester City", "short": "MCI", "color": "#6CABDD", "score": None},
-    },
-    "sl_bale_yb": {
-        "sport": "⚽ Football", "competition": "Super League Suisse",
-        "date": D14, "time": "18:00", "stadium": "St. Jakob-Park, Bâle",
-        "status": "Terminé",
-        "home": {"name": "FC Basel", "short": "FCB", "color": "#CC0000", "score": 2},
-        "away": {"name": "BSC Young Boys", "short": "YB", "color": "#FFD700", "score": 2},
-    },
-    "lakers_warriors": {
-        "sport": "🏀 Basket", "competition": "NBA",
-        "date": D10, "time": "03:30", "stadium": "Crypto.com Arena, Los Angeles",
-        "status": "Terminé",
-        "home": {"name": "Los Angeles Lakers", "short": "LAL", "color": "#552583", "score": 108},
-        "away": {"name": "Golden State Warriors", "short": "GSW", "color": "#1D428A", "score": 95},
-    },
-    "real_barca_euro": {
-        "sport": "🏀 Basket", "competition": "Euroleague",
-        "date": D17, "time": "21:00", "stadium": "WiZink Center, Madrid",
-        "status": "À venir",
-        "home": {"name": "Real Madrid", "short": "RMA", "color": "#FEBE10", "score": None},
-        "away": {"name": "FC Barcelona", "short": "BAR", "color": "#A50044", "score": None},
-    },
-    "asvel_monaco_b": {
-        "sport": "🏀 Basket", "competition": "Betclic Elite",
-        "date": D14, "time": "20:30", "stadium": "Astroballe, Villeurbanne",
-        "status": "À venir",
-        "home": {"name": "LDLC ASVEL", "short": "ASV", "color": "#003a70", "score": None},
-        "away": {"name": "Monaco Basket", "short": "MCO", "color": "#B5121B", "score": None},
-    },
-    "toulouse_racing": {
-        "sport": "🏉 Rugby", "competition": "Top 14",
-        "date": D14, "time": "20:45", "stadium": "Stadium de Toulouse",
-        "status": "À venir",
-        "home": {"name": "Stade Toulousain", "short": "ST", "color": "#B60000", "score": None},
-        "away": {"name": "Racing 92", "short": "R92", "color": "#0099CC", "score": None},
-    },
-    "bordeaux_larochelle": {
-        "sport": "🏉 Rugby", "competition": "Champions Cup",
-        "date": D10, "time": "16:05", "stadium": "Stade Chaban-Delmas, Bordeaux",
-        "status": "Terminé",
-        "home": {"name": "Bordeaux-Bègles", "short": "UBB", "color": "#001F5B", "score": 24},
-        "away": {"name": "Stade Rochelais", "short": "SR", "color": "#FCD000", "score": 27},
-    },
-    "lyon_montpellier": {
-        "sport": "🏉 Rugby", "competition": "Pro D2",
-        "date": D17, "time": "19:00", "stadium": "Matmut Stadium, Lyon",
-        "status": "À venir",
-        "home": {"name": "Lyon OU", "short": "LOU", "color": "#0057A8", "score": None},
-        "away": {"name": "Montpellier HR", "short": "MHR", "color": "#E3000F", "score": None},
-    },
-}
-
-# ── Full analysis data (for finished/live matches) ────────────────────────────
-ANALYSIS = {
-    "psg_monaco": {
+    "bayernpsg_cl": {
         "tactique": {
-            "home_form": "4-3-3",
-            "away_form": "4-2-3-1",
-            "home_style": "Possession haute, pressing collectif en zone adverse, jeu en combinaisons sur les côtés",
-            "away_style": "Bloc médian compact, sortie en contre-attaque rapide sur les récupérations",
+            "home_form": "4-2-3-1",
+            "away_form": "4-3-3",
+            "home_style": "Pressing haut sous Kompany, Musiala libre en 10, Kane pivot central, Olise et Sané en largeur",
+            "away_style": "Possession fluide, Vitinha–João Neves en relance, Dembélé–Barcola en contre",
             "home_players": [
+                ["Neuer","GB"],["Kimmich","RD"],["Upamecano","DC"],
+                ["Kim Min-jae","DC"],["Davies","LD"],
+                ["Goretzka","MDC"],["Musiala","MC"],
+                ["Olise","AD"],["Müller","MO"],["Sané","AG"],
+                ["Kane","BU"],
+            ],
+            "away_players": [
                 ["Donnarumma","GB"],["Hakimi","RD"],["Marquinhos","DC"],
-                ["Skriniar","DC"],["Nuno","LD"],
-                ["Fabian","MC"],["Vitinha","MC"],["Zaire","MO"],
-                ["Dembélé","AD"],["Barcola","AG"],["Kolo Muani","BU"],
-            ],
-            "away_players": [
-                ["Majecki","GB"],["Vanderson","RD"],["Camara","DC"],
-                ["Maripan","DC"],["Caio Henrique","LD"],
-                ["Fofana","MDC"],["Zakaria","MDC"],
-                ["Ben Seghir","MO"],["Akliouche","MO"],["Minamino","MO"],
-                ["Embolo","BU"],
+                ["Pacho","DC"],["Nuno Mendes","LD"],
+                ["Fabian Ruiz","MC"],["Vitinha","MC"],["João Neves","MC"],
+                ["Dembélé","AD"],["Barcola","AG"],["G. Ramos","BU"],
             ],
             "phases": {
-                "Pressing": "Ce n'était pas du pressing — c'était du harcèlement systématisé. Fabian Ruiz a coupé la ligne de passe verticale de Zakaria 17 fois en première période. Monaco ne pouvait physiquement pas jouer. Quand ton milieu défensif ne reçoit jamais ballon dans les pieds dans son propre camp, ta structure de jeu s'effondre. C'est exactement ce qui s'est passé à la 34' : Ruiz récupère le ballon sur une relance monégasque ratée, Dembélé part dans le dos de Maripan, 1-0. Le pressing n'est pas une question d'intensité — c'est une question de lignes de passe coupées. PSG a maîtrisé ça parfaitement.",
-                "Transitions": "Hakimi–Dembélé sur le côté droit : c'est le couloir le plus dangereux d'Europe en ce moment. Trois fois en première période, Monaco a tenté de sortir par la gauche, trois fois ils se sont retrouvés pris en supériorité numérique. Le problème de Monaco n'était pas défensif — c'était leur incapacité à fixer les latéraux parisiens avec leurs ailiers. Minamino n'a jamais rentré dans son côté pour aider Caio Henrique. C'est ça la vraie erreur tactique de ce soir.",
-                "Phases arrêtées": "Le coin à angle court sur le 3e but est un chef-d'œuvre de préparation. PSG a travaillé ça toute la semaine. Barcola sert Fabian qui décale Dembélé — Monaco ne l'a pas vu venir malgré deux répétitions similaires dans la mi-temps. En tant que coach, quand tu vois une séquence se reproduire deux fois, tu dois adapter ta défense de corner immédiatement. Hütter ne l'a pas fait.",
-                "Bloc défensif": "Monaco a essayé le bloc bas, mais un bloc bas ne fonctionne que si tu as la capacité de repartir vite en contre. Avec Embolo seul en pointe, coupé de tout soutien, c'était mission impossible. J'ai compté 6 récupérations de Monaco en seconde période — dont aucune n'a débouché sur une situation offensive. Un bloc bas sans contre-attaque, ce n'est pas une tactique, c'est de la survie.",
+                "Pressing": "Bayern sous Kompany a retrouvé une agressivité qu'on n'avait pas vue depuis l'ère Klopp–Guardiola. Le pressing haut imposé dès la 1ère minute a mis PSG en difficulté dans sa construction. Vitinha a été coupé 9 fois dans les 20 premières minutes — un record pour lui cette saison. Mais PSG a trouvé la solution par Marquinhos qui jouait plus long, court-circuitant le pressing adverse. C'est le signe d'une équipe mature : quand le plan A ne fonctionne pas, on passe au plan B sans panique.",
+                "Kane vs Défense PSG": "Kane a touché 41 ballons, plus que n'importe quel attaquant adverse cette saison contre PSG. Sa capacité à décrocher, fixer Marquinhos, et servir Musiala dans l'espace est une intelligence de jeu de très haut niveau. Le but bavarois à la 52' est né de cette action : Kane décroche, Pacho hésite à suivre, Musiala reçoit dans l'espace et frappe du droit. Un mouvement répété à l'entraînement.",
+                "Réponse PSG": "PSG a répondu avec sa philosophie : Dembélé en 1v1 côté droit sur Alphonso Davies. 5 tentatives en première mi-temps, 3 fois il a passé Davies dans la vitesse. Barcola côté gauche a créé le penalty égalisateur en déclenchant la faute de Kimmich à la 71'. Luis Enrique a fait confiance à son système plutôt que de le modifier — et le système a répondu.",
+                "Densité au milieu": "Le duel João Neves–Goretzka a été la vraie clé du match. Neves a récupéré 7 ballons, Goretzka a joué 68 minutes avant d'être remplacé par Laimer. La densité au milieu de Bayern a été difficile à pénétrer pour PSG — mais PSG a su créer par les côtés plutôt que dans l'axe. C'est une adaptation tactique en temps réel qui illustre la maturité collective de cette équipe.",
             },
-            "home_stats": {"Possession": (64,36), "Tirs": (18,8), "Tirs cadrés": (9,3), "Passes réussies": (87,71), "Fautes": (11,16)},
+            "home_stats": {"Possession": (53, 47), "Tirs": (14, 12), "Tirs cadrés": (5, 6), "Passes (%)": (87, 86), "Fautes": (13, 11)},
         },
         "joueurs": {
             "home": [
-                {"nom":"Dembélé","poste":"ATT","note":9.1,"stats":"2 buts, 1 PD, 4 dribbles","color":"#CAFF33"},
-                {"nom":"Fabian Ruiz","poste":"MC","note":8.5,"stats":"87 ballons, 3 récup.","color":"#90ee2a"},
-                {"nom":"Hakimi","poste":"RD","note":8.2,"stats":"2 PD, 6 centres","color":"#90ee2a"},
-                {"nom":"Marquinhos","poste":"DC","note":7.8,"stats":"92% passes, 4 dégagements","color":"#60d060"},
-                {"nom":"Donnarumma","poste":"GB","note":7.5,"stats":"3 arrêts décisifs","color":"#60d060"},
-                {"nom":"Barcola","poste":"AG","note":7.4,"stats":"1 but, 4 dribbles","color":"#60d060"},
-                {"nom":"Kolo Muani","poste":"BU","note":6.9,"stats":"1 but, 3 tirs","color":"#f0c040"},
+                {"nom": "Kane",        "poste": "BU", "note": 8.4, "stats": "1 but, 41 ballons, 8 décr., pivot absolu"},
+                {"nom": "Musiala",     "poste": "MC", "note": 8.2, "stats": "1 but (52'), 73 ballons, génie entre les lignes"},
+                {"nom": "Olise",       "poste": "AD", "note": 7.8, "stats": "3 dribbles, 2 tirs, menace constante"},
+                {"nom": "Neuer",       "poste": "GB", "note": 7.6, "stats": "4 arrêts, leader dans sa surface"},
+                {"nom": "Davies",      "poste": "LD", "note": 6.5, "stats": "Débordé par Dembélé, 3 fautes"},
+                {"nom": "Kimmich",     "poste": "RD", "note": 7.1, "stats": "Penalty concédé (71'), solide autrement"},
             ],
             "away": [
-                {"nom":"Ben Seghir","poste":"MO","note":7.2,"stats":"1 but, 71 ballons","color":"#60d060"},
-                {"nom":"Majecki","poste":"GB","note":6.8,"stats":"6 arrêts","color":"#f0c040"},
-                {"nom":"Minamino","poste":"MO","note":6.9,"stats":"2 tirs, 1 passement","color":"#f0c040"},
-                {"nom":"Fofana","poste":"MDC","note":6.2,"stats":"Récupérations limitées","color":"#e07030"},
-                {"nom":"Camara","poste":"DC","note":6.0,"stats":"3 fautes, 1 avert.","color":"#e07030"},
-                {"nom":"Embolo","poste":"BU","note":5.8,"stats":"Isolé, 0 tir cadré","color":"#e05050"},
+                {"nom": "Dembélé",    "poste": "AD", "note": 8.5, "stats": "5 dribbles, 3 tirs, dominant sur Davies"},
+                {"nom": "João Neves", "poste": "MC", "note": 8.3, "stats": "7 récupérations, pression constante"},
+                {"nom": "Barcola",    "poste": "AG", "note": 8.0, "stats": "Penalty provoqué (71'), 4 dribbles"},
+                {"nom": "G. Ramos",   "poste": "BU", "note": 7.6, "stats": "1 but (pen. 71'), 5 tirs dont 3 cadrés"},
+                {"nom": "Marquinhos", "poste": "DC", "note": 7.8, "stats": "Leader défensif, solution en jeu long"},
+                {"nom": "Donnarumma","poste": "GB", "note": 7.5, "stats": "3 arrêts, serein face à Kane"},
             ],
         },
         "bilan": {
             "home_forts": [
-                "Occupation de l'espace : 64% de possession AVEC pressing haut — combinaison rarissime qui signifie que Monaco n'a jamais pu respirer ni reposer",
-                "Permutation Ruiz–Vitinha parfaite : quand l'un montait presser, l'autre couvrait dans l'axe — automatisme d'un niveau Champions League évident",
-                "Dembélé en faux ailier droit : ses décrochages attiraient Maripan, libérant les courses de Barcola dans l'espace. Monaco ne savait jamais qui marquer",
-                "Gestion de score sans ego à 3-1 : Luis Enrique sort Mbappé à 70' pour préserver les jambes avant un déplacement crucial. Priorité collective, zéro concession aux statistiques individuelles",
+                "Kane–Musiala : la combinaison décrocheuse-exploiteur est la plus intelligente que Bayern ait produite en C1 cette saison — 1 but, 3 situations directement créées sur cette action",
+                "Pressing de Kompany : 9 récupérations en zone adverse en première mi-temps — Bayern a imposé son rythme physique pendant 45 minutes",
+                "Olise depuis son arrivée de Crystal Palace : une arme offensive redoutable sur le côté droit qui a clairement posé des problèmes à PSG défensivement",
             ],
             "home_faibles": [
-                "3 relances courtes perdues entre la 55' et la 65' dans le camp adverse — face à un Monaco plus ambitieux, ces ballons perdus en zone de pressing auraient pu coûter très cher",
-                "Ligne défensive trop haute à 2-0 : sur le but de Ben Seghir, Skriniar est à 40m de sa cage. Ce relâchement est inacceptable. Un champion du monde ne se permet jamais ça",
+                "Davies sur Dembélé : 5 dribbles subis, 1 faute et 1 penalty — la vitesse de Dembélé est le problème structurel de ce Bayern, même Alphonso Davies est insuffisant pour contenir cet ailier",
+                "Manque de fluidité en 2e mi-temps : quand PSG a reculé et rallongé le jeu, Bayern a eu du mal à casser les lignes sans Goretzka",
             ],
             "away_forts": [
-                "Solidité défensive jusqu'à la 38' avec un bloc 4-4-2 bien compacté — Monaco a forcé PSG à 18 passes avant chaque tir en première période",
-                "Ben Seghir, seul joueur qui a su trouver les espaces entre les lignes parisiennes — son but illustre ce qu'aurait dû faire toute l'équipe : jouer vite, entre les lignes",
+                "Résilience tactique : face au pressing de Kompany, PSG a adapté son jeu (jeu long via Marquinhos) en 10 minutes sans coaching visible — c'est la signature d'une équipe intelligente",
+                "Dembélé en état de grâce face à Davies : 5 dribbles réussis, le côté droit de PSG est le couloir le plus dangereux d'Europe en ce moment",
             ],
             "away_faibles": [
-                "Zakaria fantôme : 31 touches en 90 minutes pour un milieu défensif censé être le pivot du jeu — c'est la signature d'un pressing adverse qui fonctionne à 100%",
-                "Zéro jeu dans la profondeur : Monaco n'a tenté que 4 passes dans le dos des défenseurs parisiens sur tout le match — comment mettre sous pression une défense qui ne défend jamais reculée ?",
-                "Embolo en souffrance totale : 12 duels, 3 gagnés — sans combinaisons, sans soutien, un avant-centre seul ne peut rien. Hütter l'a sacrifié en ne lui donnant aucun point d'appui",
-                "Transitions défensives indignes du niveau Ligue 1 sur les 2e et 3e buts : Caio Henrique ne sprinte pas pour revenir, Fofana ne ferme pas le couloir — deux buts que la discipline seule pouvait éviter",
+                "1-0 à la 52' sur une erreur de placement de Pacho : il n'aurait jamais dû laisser Musiala recevoir dans cet espace. Marquinhos avait pourtant bien alerté à la pause sur les décroches de Kane",
+                "PSG a manqué 3 occasions de prise de profondeur en 1ère période — Ramos isolé trop souvent, sans soutien latéral immédiat",
             ],
         },
         "verdict": {
-            "home_perf": 8.7, "away_perf": 5.9,
-            "intensite": 7.5, "spectacle": 7.8,
-            "home_txt": "J'ai rarement vu un pressing aussi bien structuré en Ligue 1 cette saison. Luis Enrique a construit quelque chose de rare : une équipe qui court autant sans ballon qu'avec. Fabian Ruiz est le cerveau caché de ce système — quand il est dans ce niveau-là, PSG est imbattable en France. Ce qui m'impressionne, c'est la cohérence collective : aucun joueur ne décide seul, chaque déplacement est une réponse au déplacement d'un coéquipier. C'est du football de haute intensité intellectuelle.",
-            "away_txt": "Monaco a le talent pour faire mieux. Beaucoup mieux. La vraie question ce soir, c'est : pourquoi Hütter n'a-t-il pas osé jouer ? Avec Ben Seghir, Akliouche, Minamino — tu as des joueurs capables de déstabiliser n'importe quelle défense en un contre un. Les garder dans un bloc bas pendant 70 minutes, c'est du gâchis pur. Je ne comprends pas la peur tactique de ce soir.",
-            "coach_home": "✅ Plan de jeu rigoureux, parfaitement exécuté. La sortie de Mbappé à 70' est la décision la plus intelligente de la soirée — protéger le collectif sur le long terme plutôt que flatter les stats d'un joueur. C'est ça, une mentalité de champion.",
-            "coach_away": "❌ Erreur stratégique majeure. À 0-2 à la 60', Hütter devait passer en 4-3-3 offensif avec Gölovin entrant, Ben Seghir libre dans l'axe et Embolo remplacé par un deuxième milieu. Rester en bloc bas dans ces conditions, c'est abandonner le match. Inacceptable.",
-        },
-    },
-    "lakers_warriors": {
-        "tactique": {
-            "home_form": "Positionnel",
-            "away_form": "Motion Offense",
-            "home_style": "Jeu de poste bas d'AD, isolation LeBron sur le côté gauche, P&R tardifs",
-            "away_style": "Circulation de balle rapide, P&R Curry–Wiggins, tirs à 3pts en catch-and-shoot",
-            "home_players": [
-                ["LeBron","SF"],["A. Davis","C"],["D'Angelo","PG"],
-                ["Reaves","SG"],["Hachimura","PF"],
-            ],
-            "away_players": [
-                ["Curry","PG"],["Klay","SG"],["Wiggins","SF"],
-                ["Looney","C"],["GP2","PF"],
-            ],
-            "phases": {
-                "Pick & Roll": "La clé de ce match, c'est ce que les Lakers ont fait défensivement sur le P&R de Curry. Au lieu du drop coverage habituel, Redick a demandé un hedge agressif avec Hachimura qui sort haut sur Curry dès la prise d'écran. Résultat : Curry à 3/9 sur P&R, 6 turnovers. Quand tu enlèves le P&R à Curry, tu enlèves 40% du système offensif des Warriors. Côté Lakers, le P&R Davis–Russell a fonctionné parce que Looney n'a jamais su choisir : couvrir le roll ou le pop ? Davis a marqué 14 points sur cette seule action.",
-                "Fast Break": "Les Warriors ont généré 18 points en transition en première mi-temps — et ça aurait pu être 30 si les Lakers n'avaient pas ajusté leur retour défensif à la pause. LeBron a personnellement décidé de sprinter sur chaque transition en 3e quart. Quand le meilleur joueur de ton équipe montre l'exemple défensivement, les autres suivent. C'est du leadership, pas de la tactique. En 2e mi-temps, Golden State n'a marqué que 5 points en contre. Ajustement parfait.",
-                "Isolation": "LeBron en isolation côté gauche contre Klay Thompson : c'est une asymétrie que Redick a exploitée à dessein. Thompson à 34 ans n'a plus les jambes pour défendre 4 quarts en premier rideau. LeBron l'a su et l'a abusé à 5 reprises pour provoquer des fautes ou créer des décalages. En face, les isolations Warriors étaient prévisibles et mal servies — Draymond prenait trop de temps pour choisir entre passer et attaquer.",
-                "Clutch Time": "Le run 8-0 à 4 minutes de la fin, c'est le moment où on voit la différence entre une équipe qui a appris à gagner et une qui cherche encore comment le faire. Davis en post bas sur Looney, LeBron en drive, Reaves qui plante le 3pts de l'écart définitif — trois actions différentes, trois joueurs différents, un seul objectif. C'est ça une culture de clutch. Warriors : Curry sur fautes à 4'30, aucun autre créateur de shoot capable de prendre ses responsabilités. Le vide a été immense.",
-            },
-            "home_stats": {"Tirs 3pts": (12,9), "Rebonds": (48,40), "Interceptions": (9,6), "Passes dec.": (28,22), "Fautes": (19,22)},
-        },
-        "joueurs": {
-            "home": [
-                {"nom":"A. Davis","poste":"C","note":9.3,"stats":"32 pts, 14 reb, 3 blk","color":"#CAFF33"},
-                {"nom":"LeBron James","poste":"SF","note":8.8,"stats":"27 pts, 9 ast, 6 reb","color":"#90ee2a"},
-                {"nom":"Austin Reaves","poste":"SG","note":7.9,"stats":"18 pts, 4/7 à 3pts","color":"#60d060"},
-                {"nom":"D'Angelo Russell","poste":"PG","note":7.2,"stats":"14 pts, 7 ast","color":"#f0c040"},
-                {"nom":"Rui Hachimura","poste":"PF","note":6.8,"stats":"9 pts, 5 reb","color":"#f0c040"},
-            ],
-            "away": [
-                {"nom":"S. Curry","poste":"PG","note":8.1,"stats":"26 pts mais 6 TOs","color":"#90ee2a"},
-                {"nom":"A. Wiggins","poste":"SF","note":7.4,"stats":"21 pts, 7 reb","color":"#60d060"},
-                {"nom":"Klay Thompson","poste":"SG","note":6.2,"stats":"13 pts, 3/11 à 3pts","color":"#e07030"},
-                {"nom":"Draymond Green","poste":"PF","note":6.8,"stats":"5 pts, 11 ast, 6 reb","color":"#f0c040"},
-                {"nom":"K. Looney","poste":"C","note":5.9,"stats":"Dominé par Davis","color":"#e05050"},
-            ],
-        },
-        "bilan": {
-            "home_forts": [
-                "AD en mode dominant absolu : 32 pts / 14 reb sur Looney, c'est une incompatibilité physique. Kerr aurait dû switcher dès le 2e quart — il ne l'a jamais fait",
-                "Ajustement défensif sur Curry à la mi-temps : passer du drop au hedge agressif a complètement cassé le rythme des Warriors en 2e mi-temps. Redick a lu le match",
-                "Reaves en décideur : 18 pts et 4/7 à 3pts en sortant du double-écran — les Warriors ne l'ont jamais identifié comme menace prioritaire. Erreur de scouting",
-                "Culture clutch : quand Curry sort sur fautes, Lakers ont 3 créateurs différents capables de prendre le match. Golden State n'en a qu'un",
-            ],
-            "home_faibles": [
-                "19 fautes en 48 minutes, dont 4 pour Davis en 3e quart — si Kerr avait mieux joué les possessions hautes, Davis aurait pu sortir à 6 fautes",
-                "1er quart à -9 : la défense était trop molle sur les catch-and-shoot Warriors. Si Golden State avait maintenu ce rythme, le match était plié à la mi-temps",
-            ],
-            "away_forts": [
-                "53 points en 1ère mi-temps avec une circulation de balle fluide — le Motion Offense Warriors fonctionne encore quand Curry est propre balle en main",
-                "Wiggins : meilleur Warriors cette nuit, 21 pts en jouant sans ballon. Le seul à avoir compris que les Lakers défendaient le ballon, pas les mouvements",
-            ],
-            "away_faibles": [
-                "Curry : 6 turnovers, c'est sa pire nuit de la saison sur ce plan. À chaque fois qu'il était pressé sur P&R, il choisissait la mauvaise option. La défense Lakers l'a lu",
-                "Klay Thompson : 43 minutes jouées pour 13 points à 3/11. Kerr lui est trop fidèle. Klay n'a plus les jambes pour défendre ET shooter à ce niveau 4 quarts de suite",
-                "Looney contre Davis : -8 en rebonds offensifs, score négatif en +/- (-14). Cette incompatibilité physique devait être gérée avec Kuminga ou Wiseman en pivot",
-                "Aucun créateur de clutch hormis Curry : quand il sort sur fautes, Golden State n'a personne capable de créer du shoot en isolation. Lacune structurelle du roster",
-            ],
-        },
-        "verdict": {
-            "home_perf": 8.9, "away_perf": 6.4,
-            "intensite": 8.2, "spectacle": 8.6,
-            "home_txt": "Ce que Redick a construit cette nuit, c'est une leçon de lecture de jeu en temps réel. Identifier la faiblesse Looney–Davis, sur-exploiter le match-up Klay–LeBron, et mettre Reaves en position de décideur face à une défense qui l'ignorait — c'est du coaching de haut niveau. Les jeunes coaches ont intérêt à étudier les ajustements de mi-temps de ce soir. Davis était inarrêtable, mais c'est Redick qui a créé les conditions pour qu'il le soit.",
-            "away_txt": "Kerr a perdu ce match dans son vestiaire à la mi-temps. Il avait toutes les informations pour sortir Klay, switcher son plan défensif sur Davis, et remettre Kuminga pour aider Looney. Il n'a rien fait. Dans les grandes confrontations, l'inaction d'un coach est une décision en soi. Ce soir, sa fidélité à des joueurs sur le déclin a coûté la victoire à Golden State.",
-            "coach_home": "✅ Ajustement défensif sur Curry en 2e mi-temps : parfait. Décision de laisser Davis en post bas malgré ses 4 fautes plutôt que de le plonger en bench : le bon risque calculé. C'est l'instinct des grands coaches.",
-            "coach_away": "❌ Kerr n'a pas vu — ou n'a pas voulu voir — que Klay Thompson n'avait plus rien à apporter offensivement après le 2e quart. 43 minutes pour 3/11 à 3pts, c'est indéfendable. Kuminga aurait changé complètement la dynamique de la peinture.",
-        },
-    },
-    "bordeaux_larochelle": {
-        "tactique": {
-            "home_form": "XV de départ classique",
-            "away_form": "Attaque des espaces",
-            "home_style": "Jeu au sol dominateur, mêlée puissante, maul offensif, jeu au pied de Jalibert",
-            "away_style": "Jeu à la main rapide, attaque des intervalles, soutiens immédiats, touche dominatrice",
-            "home_players": [
-                ["Jalibert","DO"],["Lucu","DM"],["Dubié","AI"],
-                ["Buros","CE"],["Bielle-Biarrey","AI"],
-                ["Woki","N°8"],["Cramont","F"],["Cobilas","F"],
-            ],
-            "away_players": [
-                ["Hastoy","DO"],["Kerr-Barlow","DM"],["Leyds","AI"],
-                ["Berjon","CE"],["Botia","CE"],
-                ["Alldritt","N°8"],["Skelton","TL"],["Priso","PI"],
-            ],
-            "phases": {
-                "Ruck & Maul": "Le maul est la grande arme de La Rochelle, et O'Gara l'a sorti au bon moment. En 2e mi-temps, sur chaque touche proche des 22m, La Rochelle poussait en maul fermé — et Bordeaux fauchait. 3 pénalités sur maul en 20 minutes. Ce n'est pas de la malchance, c'est une stratégie. O'Gara savait que Bordeaux ne pouvait pas arrêter le maul légalement face à Skelton et Alldritt — alors il les a forcés à fauter. C'est du rugby d'intellectuel.",
-                "Touche & Mêlée": "Skelton contre les sauteurs bordelais, c'est un rapport de forces inégal. 8 ballons saisis sur 9 lancers — tu ne perds jamais une touche avec ça. La Rochelle avait une supériorité structurelle en touche que Bordeaux ne pouvait pas corriger en cours de match sans effectuer un changement majeur dans ses alignements. Bru n'a pas eu la lucidité de modifier ses lineouts. En mêlée, Bordeaux a dominé mais n'a pas su transformer cette domination en points.",
-                "Jeu au pied": "Jalibert a été brillant au pied : 5/6 pénalités, territoire parfaitement géré en 1ère période. Mais ce qui m'a frappé, c'est qu'après le 3-1 au score en points, Bordeaux a arrêté de jouer au pied pour attaquer à mains nues. Erreur de lecture. Contre La Rochelle, tu gardes le pied — tu les pousses dans leur camp, tu les fatigues, tu attends leurs erreurs. Vouloir marquer des essais supplémentaires quand tu mènes de 8 en fin de match, c'est de l'ego, pas de la tactique.",
-                "Défense en ligne": "La défense en rideau de La Rochelle en 2e mi-temps a été irréprochable sur les séquences ouvertes. Bordeaux a tenté 6 combinaisons côté ouvert dans les 25 dernières minutes — 6 fois repoussées. La Rochelle avait compris le jeu de Bordeaux mieux que Bordeaux lui-même. Quand ta défense lit toutes tes attaques, tu dois changer de plan. Bordeaux n'a pas su.",
-            },
-            "home_stats": {"Possession": (54,46), "Mêlées gagnées": (5,3), "Plaquages": (85,94), "Pénalités concédées": (11,9), "Km parcourus": (90,98)},
-        },
-        "joueurs": {
-            "home": [
-                {"nom":"Matthieu Jalibert","poste":"DO","note":8.4,"stats":"18 pts (5 pén, 1 transf), jeu au pied précis","color":"#90ee2a"},
-                {"nom":"L. Bielle-Biarrey","poste":"AI","note":8.0,"stats":"1 essai, 3 défenses","color":"#60d060"},
-                {"nom":"Maxime Lucu","poste":"DM","note":7.5,"stats":"Jeu rapide, 1 passe décisive","color":"#60d060"},
-                {"nom":"Cameron Woki","poste":"N°8","note":7.2,"stats":"8 plaquages, 1 grattage","color":"#f0c040"},
-            ],
-            "away": [
-                {"nom":"Alldritt","poste":"N°8","note":9.0,"stats":"Colossal : 14 plaquages, 2 essais provoqués","color":"#CAFF33"},
-                {"nom":"Will Skelton","poste":"TL","note":8.6,"stats":"8 ballons de touche, dominateur","color":"#90ee2a"},
-                {"nom":"Ihaia West","poste":"DO","note":8.0,"stats":"12 pts, 3 drops tentés","color":"#60d060"},
-                {"nom":"Léo Berdeu","poste":"AI","note":7.3,"stats":"1 essai décisif à la 76'","color":"#60d060"},
-            ],
-        },
-        "bilan": {
-            "home_forts": [
-                "Mêlée : 5/5, c'est une domination totale. Les piliers bordelais ont étouffé le pack rochelais — cette plateforme de jeu aurait dû être la base d'une victoire clinique",
-                "Jalibert au pied : 5/6 en pénalités, jeu territorial précis qui a mis La Rochelle en difficulté constante dans son propre camp en 1ère période",
-                "Construction du jeu propre et rapide en 1ère mi-temps : Lucu a bien géré le rythme, Bordeaux a dominé sans forcément risquer",
-            ],
-            "home_faibles": [
-                "11 pénalités concédées — c'est 11 cadeaux offerts à La Rochelle. En rugby professionnel, perdre à 3 pénalités près dans les 20 dernières minutes quand tu mènes de 8, c'est une faute professionnelle collective",
-                "Schémas d'attaque trop lisibles en 2e mi-temps : Bordeaux a répété les mêmes combinations sur le côté ouvert 4 fois de suite — La Rochelle a fini par les anticiper les yeux fermés",
-                "2 mauls arrêtés dans les 5 mètres adverses : quand tu es à 5m et que tu n'arrives pas à marquer, tu offres un momentum psychologique immense à l'adversaire",
-            ],
-            "away_forts": [
-                "Alldritt : 14 plaquages, ballons portés décisifs, présence constante au ruck. Ce type est le meilleur N°8 du Top 14 et il l'a prouvé une fois de plus sous la pression maximale",
-                "Skelton en touche : 8 ballons saisis, 86% de maîtrise. C'est lui qui a permis à La Rochelle de relancer son jeu à chaque possession en 2e mi-temps — un avantage structurel énorme",
-                "Résilience mentale : mener 21-13 contre toi à la 60', à Bordeaux, dans une demi de Champions Cup — et continuer à croire. C'est ça une équipe bâtie par O'Gara",
-                "Essai de Berdeu à la 76' : timing parfait, décision de passer ou courir prise en une fraction de seconde. Les champions marquent quand ça compte",
-            ],
-            "away_faibles": [
-                "1ère période catastrophique : trop de pénalités, trop de ballons perdus en touche défensive — La Rochelle a offert à Bordeaux 18 points qu'ils n'auraient jamais dû concéder",
-                "Mêlée sous pression en 1ère période : les piliers de Bordeaux ont mis Priso et les siens en difficulté, forçant des fautes à des moments clés",
-            ],
-        },
-        "verdict": {
-            "home_perf": 6.8, "away_perf": 8.1,
-            "intensite": 9.2, "spectacle": 8.7,
-            "home_txt": "Bordeaux a perdu un match qu'il ne pouvait pas perdre. 21-13 à la 60', à domicile, en Champions Cup — cette défaite va marquer les esprits pour longtemps. Ce que je n'accepte pas, c'est la gestion des 20 dernières minutes. Quand tu mènes de 8 et que l'adversaire n'a pas cassé ta défense, tu n'attaques plus. Tu gardes le ballon. Tu cours les phases. Tu fais fauter l'adversaire. Bordeaux a continué à jouer court et ouvert — et c'est là qu'ils ont concédé les 3 pénalités fatales. C'est un problème de culture et de maturité collective.",
-            "away_txt": "O'Gara a fait un travail exceptionnel à la mi-temps. Changer le point d'attaque, utiliser Skelton comme cible prioritaire, et simplifier le jeu en allant droit devant — c'est l'analyse exacte d'un entraîneur qui sait lire un match. La Rochelle a été mauvaise 40 minutes et excellente 40 minutes. C'est les équipes de champions qui peuvent faire ça — être mauvais et quand même gagner grâce à l'organisation et au mental.",
-            "coach_home": "❌ Bru a commis une erreur de gestion fondamentale. À 21-13, tu passes en mode conservation : maul, jeu au pied rasant, phases lentes, tu épuises le temps. Continuer à attaquer à mains nues dans les 22m adverses à ce moment du match, c'est prendre des risques inutiles. La sortie de Woki trop tôt a aussi affaibli sa conquête en fin de match — c'est inexplicable.",
-            "coach_away": "✅ O'Gara mérite 10/10 pour ses ajustements de mi-temps. Il a identifié que Skelton était le facteur X en touche, que Bordeaux ne pouvait pas stopper le maul, et que la discipline adverse allait craquer sous pression en fin de match. Il avait tout vu. Et son équipe a exécuté.",
+            "home_perf": 7.6, "away_perf": 7.4,
+            "intensite": 8.7, "spectacle": 8.8,
+            "home_txt": "Bayern Munich sous Kompany a retrouvé son identité : un pressing agressif, une structure défensive solide, et des joueurs de talent offensif (Musiala, Olise, Kane) qui peuvent punir n'importe qui. Ce 1-1 est honnête. Ce que je retiens, c'est que Bayern a les ressources pour aller loin en C1 cette saison. Kane est dans une forme terrifiante. Musiala est le meilleur joueur de sa génération. Et Kompany les utilise avec intelligence.",
+            "away_txt": "PSG s'en tire avec un 1-1 qui les replace correctement dans le groupe. Ce que Luis Enrique a démontré ce soir, c'est que ce PSG est difficile à tuer. 0-1 à la 52', ils auraient pu s'effondrer. Ils ont trouvé l'égalisation via Barcola. Cette mentalité ne s'achète pas — elle se construit. C'est le PSG le plus solide mentalement depuis des années.",
+            "coach_home": "✅ Kompany a osé presser haut une équipe comme PSG — et ça a fonctionné 45 minutes. Son utilisation de Müller en 10 pour fixer Marquinhos et libérer Kane est du coaching de haut niveau. Le Bayern est en bonne voie.",
+            "coach_away": "✅ Luis Enrique a adapté son jeu en 10 minutes quand le pressing bavarois fonctionnait — jeu long, Ramos en pivot, attendre les espaces. C'est une équipe qui joue avec sa tête autant qu'avec ses jambes.",
         },
     },
 }
+
+# ── Effectifs réels par équipe (11 joueurs football, 5 basket, 9 rugby) ───────
+TEAM_SQUADS: dict[str, list] = {
+    # ── Ligue 1 ───────────────────────────────────────────────────────────────
+    "Paris Saint-Germain": [
+        ["Donnarumma","GB"],["Hakimi","RD"],["Marquinhos","DC"],
+        ["Pacho","DC"],["Nuno Mendes","LD"],
+        ["Fabian Ruiz","MC"],["Vitinha","MC"],["João Neves","MC"],
+        ["Dembélé","AD"],["Barcola","AG"],["G. Ramos","BU"],
+    ],
+    "AS Monaco": [
+        ["Majecki","GB"],["Vanderson","RD"],["Salisu","DC"],
+        ["Maripan","DC"],["Caio Henrique","LD"],
+        ["Camara","MDC"],["Zakaria","MDC"],
+        ["Ben Seghir","MO"],["Akliouche","MO"],["Golovin","MO"],
+        ["Embolo","BU"],
+    ],
+    "Olympique de Marseille": [
+        ["Rulli","GB"],["Murillo","RD"],["Balerdi","DC"],
+        ["Brassier","DC"],["Merlin","LD"],
+        ["Rabiot","MC"],["Kondogbia","MDC"],
+        ["Greenwood","AD"],["Harit","MO"],["Rowe","AG"],
+        ["Wahi","BU"],
+    ],
+    "Olympique Lyonnais": [
+        ["Perri","GB"],["Tagliafico","LD"],["Niakhaté","DC"],
+        ["Mata","DC"],["Kumbedi","RD"],
+        ["Tolisso","MC"],["Matic","MDC"],
+        ["Benrahma","MO"],["Cherki","MO"],["Lacazette","BU"],["Mikautadze","BU"],
+    ],
+    "LOSC Lille": [
+        ["Chevalier","GB"],["Meunier","RD"],["Diakité","DC"],
+        ["Alexsandro","DC"],["Gudmundsson","LD"],
+        ["André","MDC"],["Gomes","MC"],
+        ["Zhegrova","AD"],["Cabella","MO"],["Haraldsson","AG"],["David","BU"],
+    ],
+    "OGC Nice": [
+        ["Bulka","GB"],["Lotomba","RD"],["Dante","DC"],
+        ["Bombito","DC"],["Bard","LD"],
+        ["Rosario","MDC"],["Thuram","MC"],
+        ["Guessand","AD"],["Boga","MO"],["Cho","AG"],["Laborde","BU"],
+    ],
+    "RC Lens": [
+        ["Samba","GB"],["Frankowski","RD"],["Medina","DC"],
+        ["Danso","DC"],["Machado","LD"],
+        ["Dansoko","MDC"],["Fulgini","MC"],
+        ["Sotoca","AD"],["Thomasson","MO"],["Saïd","AG"],["Openda","BU"],
+    ],
+    "Toulouse FC": [
+        ["Restes","GB"],["Suazo","RD"],["Nicolaisen","DC"],
+        ["Costa","DC"],["Donkor","LD"],
+        ["Spierings","MDC"],["Dejaegere","MC"],
+        ["Aboukhlal","AG"],["Tiago Djaló","MO"],["Dallinga","BU"],["Onaiwu","AD"],
+    ],
+    "Stade Brestois 29": [
+        ["Bizot","GB"],["Lala","RD"],["Chardonnet","DC"],
+        ["Pereira","DC"],["Doué","LD"],
+        ["Camara","MDC"],["Magnetti","MC"],
+        ["Del Castillo","MO"],["Martin","AD"],["Dembélé","AG"],["Mounié","BU"],
+    ],
+    "Stade Rennais": [
+        ["Mandanda","GB"],["Assignon","RD"],["Wooh","DC"],
+        ["Belocian","DC"],["Truffert","LD"],
+        ["Ugochukwu","MDC"],["Gronbaek","MC"],
+        ["Bourigeaud","AD"],["Gouiri","BU"],["Terrier","AG"],["Kalimuendo","BU"],
+    ],
+    # ── Premier League ────────────────────────────────────────────────────────
+    "Arsenal FC": [
+        ["Raya","GB"],["Ben White","RD"],["Saliba","DC"],
+        ["Gabriel","DC"],["Calafiori","LD"],
+        ["Rice","MDC"],["Ødegaard","MC"],["Merino","MC"],
+        ["Saka","AD"],["Havertz","BU"],["Martinelli","AG"],
+    ],
+    "Manchester City": [
+        ["Ederson","GB"],["Walker","RD"],["Akanji","DC"],
+        ["Dias","DC"],["Gvardiol","LD"],
+        ["Kovacic","MDC"],["Nunes","MDC"],
+        ["Foden","MO"],["De Bruyne","MO"],["Doku","MO"],
+        ["Haaland","BU"],
+    ],
+    "Liverpool FC": [
+        ["Alisson","GB"],["Alexander-Arnold","RD"],["Konaté","DC"],
+        ["Van Dijk","DC"],["Robertson","LD"],
+        ["Mac Allister","MDC"],["Gravenberch","MC"],
+        ["Szoboszlai","MO"],["Salah","AD"],["Diaz","AG"],["Núñez","BU"],
+    ],
+    "Chelsea FC": [
+        ["Sánchez","GB"],["Reece James","RD"],["Colwill","DC"],
+        ["Chalobah","DC"],["Cucurella","LD"],
+        ["Caicedo","MDC"],["Fernández","MC"],
+        ["Palmer","MO"],["Sterling","AD"],["Jackson","BU"],["Madueke","AG"],
+    ],
+    "Tottenham Hotspur": [
+        ["Vicario","GB"],["Porro","RD"],["Romero","DC"],
+        ["Van de Ven","DC"],["Udogie","LD"],
+        ["Bentancur","MDC"],["Bissouma","MC"],
+        ["Kulusevski","AD"],["Maddison","MO"],["Son","AG"],["Richarlison","BU"],
+    ],
+    "Manchester United": [
+        ["Onana","GB"],["Dalot","RD"],["De Ligt","DC"],
+        ["Martínez","DC"],["Shaw","LD"],
+        ["Casemiro","MDC"],["Mainoo","MC"],
+        ["Garnacho","AD"],["Bruno Fernandes","MO"],["Hojlund","BU"],["Rashford","AG"],
+    ],
+    "Newcastle United": [
+        ["Dubravka","GB"],["Trippier","RD"],["Botman","DC"],
+        ["Burn","DC"],["Hall","LD"],
+        ["Tonali","MDC"],["Guimarães","MC"],
+        ["Almiron","AD"],["Isak","BU"],["Gordon","AG"],["Barnes","MO"],
+    ],
+    "Aston Villa": [
+        ["Martinez","GB"],["Cash","RD"],["Konsa","DC"],
+        ["Torres","DC"],["Digne","LD"],
+        ["Tielemans","MDC"],["Douglas Luiz","MC"],
+        ["McGinn","MO"],["Watkins","BU"],["Bailey","AG"],["Zaniolo","AD"],
+    ],
+    "Brighton & Hove Albion": [
+        ["Verbruggen","GB"],["Veltman","RD"],["Dunk","DC"],
+        ["Webster","DC"],["Estupiñán","LD"],
+        ["Gross","MC"],["Gilmour","MDC"],
+        ["Adingra","AD"],["João Pedro","BU"],["Mitoma","AG"],["Baleba","MC"],
+    ],
+    "West Ham United": [
+        ["Areola","GB"],["Coufal","RD"],["Zouma","DC"],
+        ["Aguerd","DC"],["Emerson","LD"],
+        ["Soucek","MDC"],["Ward-Prowse","MC"],
+        ["Bowen","AD"],["Antonio","BU"],["Kudus","AG"],["Paquetá","MO"],
+    ],
+    # ── Champions League ──────────────────────────────────────────────────────
+    "Real Madrid CF": [
+        ["Courtois","GB"],["Carvajal","RD"],["Militão","DC"],
+        ["Rüdiger","DC"],["Mendy","LD"],
+        ["Valverde","MC"],["Tchouaméni","MDC"],["Camavinga","MC"],
+        ["Mbappé","BU"],["Bellingham","MO"],["Vinicius","AG"],
+    ],
+    "Bayern Munich": [
+        ["Neuer","GB"],["Kimmich","RD"],["Upamecano","DC"],
+        ["Kim Min-jae","DC"],["Davies","LD"],
+        ["Goretzka","MDC"],["Musiala","MC"],
+        ["Olise","AD"],["Müller","MO"],["Sané","AG"],["Kane","BU"],
+    ],
+    "FC Barcelona": [
+        ["Ter Stegen","GB"],["Koundé","RD"],["Araujo","DC"],
+        ["Christensen","DC"],["Balde","LD"],
+        ["De Jong","MDC"],["Pedri","MC"],["Gavi","MC"],
+        ["Yamal","AD"],["Lewandowski","BU"],["Raphinha","AG"],
+    ],
+    "Inter Milan": [
+        ["Sommer","GB"],["Darmian","RD"],["Acerbi","DC"],
+        ["Bastoni","DC"],["Dimarco","LD"],
+        ["Barella","MC"],["Calhanoglu","MDC"],["Mkhitaryan","MC"],
+        ["Thuram","BU"],["Lautaro","BU"],["Frattesi","MO"],
+    ],
+    "Atlético de Madrid": [
+        ["Oblak","GB"],["Molina","RD"],["Giménez","DC"],
+        ["Witsel","DC"],["Reinildo","LD"],
+        ["Koke","MC"],["De Paul","MC"],["Saúl","MDC"],
+        ["Griezmann","MO"],["Morata","BU"],["Correa","AG"],
+    ],
+    "Borussia Dortmund": [
+        ["Kobel","GB"],["Ryerson","RD"],["Hummels","DC"],
+        ["Schlotterbeck","DC"],["Maatsen","LD"],
+        ["Emre Can","MDC"],["Nmecha","MC"],
+        ["Malen","AD"],["Brandt","MO"],["Sancho","AG"],["Füllkrug","BU"],
+    ],
+    "Juventus FC": [
+        ["Di Gregorio","GB"],["Cambiaso","RD"],["Bremer","DC"],
+        ["Gatti","DC"],["Cabal","LD"],
+        ["Locatelli","MDC"],["McKennie","MC"],
+        ["Yildiz","MO"],["Conceição","AD"],["Vlahovic","BU"],["Weah","AG"],
+    ],
+    "FC Porto": [
+        ["Diogo Costa","GB"],["Joao Mario","RD"],["Cardoso","DC"],
+        ["Pepe","DC"],["Galeno","LD"],
+        ["Uribe","MDC"],["Eustáquio","MC"],
+        ["Pepê","AD"],["Evanilson","BU"],["Taremi","BU"],["Veron","AG"],
+    ],
+    # ── Super League Suisse ───────────────────────────────────────────────────
+    "FC Basel": [
+        ["Lindner","GB"],["Lang","RD"],["Pelmard","DC"],
+        ["Frei","DC"],["Petretta","LD"],
+        ["Burger","MDC"],["Xhaka","MC"],
+        ["Males","AD"],["Kasami","MO"],["Ndoye","AG"],["Cabral","BU"],
+    ],
+    "BSC Young Boys": [
+        ["Von Ballmoos","GB"],["Blum","RD"],["Lustenberger","DC"],
+        ["Camara","DC"],["Janko","LD"],
+        ["Martins","MDC"],["Niasse","MC"],
+        ["Elia","AD"],["Ugrinic","MO"],["Monteiro","AG"],["Nsame","BU"],
+    ],
+    "Servette FC": [
+        ["Frick","GB"],["Lavanchy","RD"],["Vouilloz","DC"],
+        ["Tsunemoto","DC"],["Clichy","LD"],
+        ["Cognat","MDC"],["Stevanovic","MC"],
+        ["Kutesa","AD"],["Douline","MO"],["Antunes","AG"],["Bedia","BU"],
+    ],
+    "FC Zurich": [
+        ["Brecher","GB"],["Boranijasevic","RD"],["Kamberi","DC"],
+        ["Aliti","DC"],["Guerrero","LD"],
+        ["Domgjoni","MDC"],["Conde","MC"],
+        ["Tosin","AD"],["Marchesano","MO"],["Okita","AG"],["Santini","BU"],
+    ],
+    "FC Lugano": [
+        ["Saipi","GB"],["Kecskes","RD"],["Daprelà","DC"],
+        ["Hajrizi","DC"],["Valenzuela","LD"],
+        ["Sabbatini","MDC"],["Lovric","MC"],
+        ["Dos Santos","AD"],["Mahou","MO"],["Abubakar","AG"],["Bottani","BU"],
+    ],
+    "FC Luzern": [
+        ["Müller","GB"],["Frydek","RD"],["Burch","DC"],
+        ["Simani","DC"],["Sidler","LD"],
+        ["Emini","MDC"],["Jashari","MC"],
+        ["Dantas","AD"],["Tasar","MO"],["Ugrinic","AG"],["Abubakar","BU"],
+    ],
+    "FC St. Gallen": [
+        ["Lawrence","GB"],["Stillhart","RD"],["Görtler","DC"],
+        ["Ambrosius","DC"],["Spreiter","LD"],
+        ["Quintillà","MDC"],["Münstermann","MC"],
+        ["Ruiz","AD"],["Babic","MO"],["Duah","AG"],["Demirovic","BU"],
+    ],
+    # ── NBA ───────────────────────────────────────────────────────────────────
+    "Los Angeles Lakers": [
+        ["LeBron James","SF"],["A. Davis","C"],["Austin Reaves","SG"],
+        ["Rui Hachimura","PF"],["Dalton Knecht","SG"],
+    ],
+    "Golden State Warriors": [
+        ["S. Curry","PG"],["Buddy Hield","SG"],["A. Wiggins","SF"],
+        ["Draymond Green","PF"],["K. Looney","C"],
+    ],
+    "Boston Celtics": [
+        ["J. Tatum","SF"],["J. Brown","SG"],["K. Porzingis","C"],
+        ["J. Holiday","PG"],["D. White","SG"],
+    ],
+    "Chicago Bulls": [
+        ["Z. LaVine","SG"],["DeMar DeRozan","SF"],["N. Vučević","C"],
+        ["P. Williams","PF"],["L. Ball","PG"],
+    ],
+    "Miami Heat": [
+        ["J. Butler","SF"],["B. Adebayo","C"],["Tyler Herro","SG"],
+        ["T. Duncan","PF"],["D. Robinson","SG"],
+    ],
+    "New York Knicks": [
+        ["J. Brunson","PG"],["J. Randle","PF"],["R. Barrett","SG"],
+        ["M. Robinson","C"],["D. DiVincenzo","SG"],
+    ],
+    "Milwaukee Bucks": [
+        ["G. Antetokounmpo","PF"],["D. Lillard","PG"],["K. Middleton","SF"],
+        ["B. Lopez","C"],["M. Beasley","SG"],
+    ],
+    "Phoenix Suns": [
+        ["D. Booker","SG"],["B. Beal","SG"],["K. Durant","SF"],
+        ["J. Nurkic","C"],["E. Gordon","SG"],
+    ],
+    "LA Clippers": [
+        ["Kawhi Leonard","SF"],["J. Harden","PG"],["N. Powell","SG"],
+        ["I. Zubac","C"],["T. Mann","PF"],
+    ],
+    "Denver Nuggets": [
+        ["N. Jokic","C"],["J. Murray","PG"],["M. Porter Jr.","SF"],
+        ["A. Gordon","PF"],["K. Caldwell-Pope","SG"],
+    ],
+    # ── Euroleague ────────────────────────────────────────────────────────────
+    "Real Madrid Baloncesto": [
+        ["Causeur","SG"],["S. Llull","PG"],["Tavares","C"],
+        ["Yabusele","PF"],["Hezonja","SF"],
+    ],
+    "FC Barcelona Bàsquet": [
+        ["Laprovittola","PG"],["Satoransky","SG"],["Brizuela","SG"],
+        ["Vesely","C"],["Mirotic","PF"],
+    ],
+    "Fenerbahce Beko": [
+        ["Sloukas","PG"],["De Colo","SG"],["Guduric","SF"],
+        ["Bjelica","PF"],["Motiejunas","C"],
+    ],
+    "Olympiacos BC": [
+        ["McKissic","PG"],["Walkup","SG"],["Vezenkov","SF"],
+        ["Moustapha Fall","C"],["Papagiannis","C"],
+    ],
+    "AS Monaco Basket": [
+        ["Paris Lee","PG"],["Okouo","SF"],["Motiejunas","PF"],
+        ["Brown","C"],["Wilson","SG"],
+    ],
+    "Bayern Munich Basketball": [
+        ["Lucic","PG"],["Booker","SG"],["Weiler-Babb","SF"],
+        ["Reynolds","PF"],["Sisko","C"],
+    ],
+    "Maccabi Tel Aviv": [
+        ["Nunnally","SG"],["Hunter","SF"],["Zizic","C"],
+        ["Dibartolomeo","PG"],["Sorkin","C"],
+    ],
+    # ── Betclic Elite ─────────────────────────────────────────────────────────
+    "LDLC ASVEL": [
+        ["Strazel","PG"],["Howard","SG"],["Odiase","C"],
+        ["Yusta","SF"],["Lacombe","PF"],
+    ],
+    "Paris Basketball": [
+        ["Parsons","SG"],["Robinson","PG"],["Edozie","SF"],
+        ["Bako","C"],["Loncar","PF"],
+    ],
+    "SIG Strasbourg": [
+        ["Thomas","PG"],["Sy","SG"],["Kalinoski","SF"],
+        ["Nwaba","SF"],["Mke Anumba","C"],
+    ],
+    "JDA Dijon": [
+        ["Lighty","SG"],["Stewart","PG"],["Cheatham","PF"],
+        ["Obasohan","SG"],["Strazel","SF"],
+    ],
+    "Boulogne-Levallois Metropolitans 92": [
+        ["Kahudi","SF"],["Moerman","SF"],["Jaiteh","C"],
+        ["Stauskas","SG"],["Toupane","SG"],
+    ],
+    "JSF Nanterre": [
+        ["Peyrot","PG"],["Obasohan","SG"],["Lighty","SF"],
+        ["Cheatham","PF"],["Diagne","C"],
+    ],
+    "Le Mans Sarthe Basket": [
+        ["Smith","PG"],["Pineau","SG"],["Sy","SF"],
+        ["McWilliams","PF"],["Odiase","C"],
+    ],
+    # ── Top 14 ────────────────────────────────────────────────────────────────
+    "Stade Toulousain": [
+        ["Dupont","DM"],["Ntamack","DO"],["T. Ramos","FB"],
+        ["Mauvaka","TL"],["Meafou","2e L."],["Cros","F"],
+        ["Aldegheri","PI"],["Lebel","AI"],["Capuozzo","AI"],
+    ],
+    "Stade Rochelais": [
+        ["Hastoy","DO"],["Kerr-Barlow","DM"],["Dulin","FB"],
+        ["Retière","AI"],["Alldritt","N°8"],["Skelton","TL"],
+        ["Priso","PI"],["Danty","CE"],["Dillane","2e L."],
+    ],
+    "Racing 92": [
+        ["Finn Russell","DO"],["Favre","DM"],["Kolbe","AI"],
+        ["Imhoff","CE"],["Lauret","F"],["Diallo","TL"],
+        ["Cobilas","PI"],["Pichot","N°8"],["Palu","2e L."],
+    ],
+    "Clermont Auvergne": [
+        ["Belleau","DO"],["Lescure","DM"],["Raka","AI"],
+        ["Moala","CE"],["Stretch","CE"],
+        ["Chouly","N°8"],["Slimani","TL"],["Iturria","F"],["Vahaamahina","2e L."],
+    ],
+    "Lyon OU": [
+        ["Viallard","DO"],["Couilloud","DM"],["Fafita","AI"],
+        ["Regard","CE"],["Bécognée","AI"],
+        ["Cretin","F"],["Lambey","2e L."],["Leindekar","TL"],["Wainiqolo","AI"],
+    ],
+    "Bordeaux-Bègles": [
+        ["Jalibert","DO"],["Lucu","DM"],["Bielle-Biarrey","AI"],
+        ["Buros","AI"],["Simutoga","CE"],
+        ["Woki","F"],["Taofifenua","2e L."],["Cobilas","PI"],["Cros","N°8"],
+    ],
+    "Montpellier Hérault Rugby": [
+        ["Pollard","DO"],["Paillaugue","DM"],["Luafutu","AI"],
+        ["Masilevu","AI"],["Fusitua","CE"],
+        ["Du Preez","F"],["Furno","2e L."],["Willemse","PI"],["Lam","N°8"],
+    ],
+    "Stade Français Paris": [
+        ["Plisson","DO"],["Machenaud","DM"],["Kolbe","AI"],
+        ["Arias","CE"],["Chapuis","AI"],
+        ["Pointud","F"],["Lambey","2e L."],["Alo-Emile","TL"],["Kaino","N°8"],
+    ],
+    "Aviron Bayonnais": [
+        ["Martocq","DO"],["Bézy","DM"],["Laguet","AI"],
+        ["Nieto","CE"],["Tilsley","AI"],
+        ["Lespiaucq","F"],["Castets","2e L."],["Diallo","TL"],["Ostrowski","N°8"],
+    ],
+    "Castres Olympique": [
+        ["Urdapilleta","DO"],["Bézy","DM"],["Nakosi","AI"],
+        ["Grosso","CE"],["Malié","AI"],
+        ["Babillot","F"],["Gazzotti","2e L."],["Tichit","TL"],["Combezou","N°8"],
+    ],
+}
+
+# ── Teams per competition (built from MATCHES) ────────────────────────────────
+TEAMS_BY_COMPETITION: dict[str, list] = {}
+for _mid, _m in MATCHES.items():
+    _comp = _m["competition"]
+    if _comp not in TEAMS_BY_COMPETITION:
+        TEAMS_BY_COMPETITION[_comp] = []
+    for _side in ("home", "away"):
+        _tname = _m[_side]["name"]
+        if _tname not in TEAMS_BY_COMPETITION[_comp]:
+            TEAMS_BY_COMPETITION[_comp].append(_tname)
+for _comp in TEAMS_BY_COMPETITION:
+    TEAMS_BY_COMPETITION[_comp].sort()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # HELPERS
@@ -1372,11 +1539,17 @@ def generate_synthetic_analysis(mid: str, m: dict) -> dict:
         a_form = rng.choice(["4-3-3", "4-2-3-1", "4-4-2", "3-5-2", "4-1-4-1"])
         h_style = {"4-3-3": "Possession haute, pressing collectif, combinaisons sur les côtés", "4-2-3-1": "Double pivot protecteur, jeu vertical rapide sur le meneur offensif", "3-5-2": "Surnombre au milieu, pistons actifs, transitions structurées", "4-4-2": "Bloc compact, jeu direct sur les deux attaquants", "4-1-4-1": "Pivot ancré en récupération, milieux offensifs mobiles, avant-centre pivot"}.get(h_form, "Bloc compact, jeu organisé")
         a_style = {"4-3-3": "Bloc médian, sortie en contre-attaque sur les récupérations", "4-2-3-1": "Pressing mi-haut, organisation en bloc défensif structuré", "4-4-2": "Double pivot, jeu long sur les attaquants", "3-5-2": "Milieu dense, contre-attaque rapide", "4-1-4-1": "Ligne médiane serrée, jeu long et second ball"}.get(a_form, "Organisation défensive, jeu de contre")
-        surns = ["Martin","Dupont","Bernard","Moreau","Laurent","Simon","Michel","Diallo","Kouyaté","Ndiaye","Camara","Touré","García","Rodríguez","López","Ferreira","Silva","Costa","Petit","Leroy"]
-        rng.shuffle(surns)
         pos4 = [["GB",""],["RD",""],["DC",""],["DC",""],["LD",""],["MC",""],["MC",""],["MO",""],["AD",""],["BU",""],["AG",""]]
-        h_players = [[surns[i], pos4[i][0]] for i in range(11)]
-        a_players = [[surns[i+9], pos4[i][0]] for i in range(11)]
+        h_players = TEAM_SQUADS.get(hn)
+        a_players = TEAM_SQUADS.get(an)
+        if h_players is None:
+            surns = ["Martin","Dupont","Bernard","Moreau","Laurent","Simon","Michel","Diallo","Kouyaté","Ndiaye","Camara","Touré","García","Rodríguez","López","Ferreira","Silva","Costa","Petit","Leroy"]
+            rng.shuffle(surns)
+            h_players = [[surns[i], pos4[i][0]] for i in range(11)]
+        if a_players is None:
+            surns2 = ["Petit","Leroy","Rousseau","Blanc","Morel","Girard","Fournier","Bonnet","Mercier","Dupuis","Lambert","Bertrand","Giraud","Renaud","Leclerc","Vidal","Torres","Mendes","Gomes","Alves"]
+            rng.shuffle(surns2)
+            a_players = [[surns2[i], pos4[i][0]] for i in range(11)]
         h_poss = rng.randint(52, 65) if hw else (rng.randint(47, 53) if draw else rng.randint(38, 50))
         h_shots = rng.randint(max(hs*2,8), max(hs*3,18)); a_shots = rng.randint(max(as_*2,5), max(as_*3,14))
         h_on = max(hs, rng.randint(hs, hs+4)); a_on = max(as_, rng.randint(as_, as_+3))
@@ -1391,8 +1564,10 @@ def generate_synthetic_analysis(mid: str, m: dict) -> dict:
         h_notes = sorted([round(rng.uniform(6.2 if hw else 5.5, 9.2 if hw else 7.5), 1) for _ in range(7)], reverse=True)
         a_notes = sorted([round(rng.uniform(5.5 if hw else 6.2, 7.5 if hw else 9.0), 1) for _ in range(6)], reverse=True)
         stats_tmpl = [f"{rng.randint(1,3)} but(s), {rng.randint(50,90)} ballons", f"{rng.randint(1,2)} PD, {rng.randint(3,7)} dribbles", f"{rng.randint(80,93)}% passes, {rng.randint(3,8)} récup.", f"{rng.randint(2,5)} tirs, {rng.randint(1,3)} cadrés", f"{rng.randint(5,14)} duels, {rng.randint(2,5)} gagnés"]
-        h_joueurs = [{"nom": h_players[i][0], "poste": h_players[i][1], "note": h_notes[i], "stats": rng.choice(stats_tmpl)} for i in range(len(h_notes))]
-        a_joueurs = [{"nom": a_players[i][0], "poste": a_players[i][1], "note": a_notes[i], "stats": rng.choice(stats_tmpl)} for i in range(len(a_notes))]
+        _h_pl_rated = h_players[:7] if len(h_players) >= 7 else h_players
+        _a_pl_rated = a_players[:6] if len(a_players) >= 6 else a_players
+        h_joueurs = [{"nom": _h_pl_rated[i][0], "poste": _h_pl_rated[i][1], "note": h_notes[i], "stats": rng.choice(stats_tmpl)} for i in range(min(len(h_notes), len(_h_pl_rated)))]
+        a_joueurs = [{"nom": _a_pl_rated[i][0], "poste": _a_pl_rated[i][1], "note": a_notes[i], "stats": rng.choice(stats_tmpl)} for i in range(min(len(a_notes), len(_a_pl_rated)))]
         bilan = {
             "home_forts": rng.sample([f"Occupation du terrain : {h_poss}% de possession avec un pressing constant — {an} n'a jamais pu se retrouver dans le confort de la construction", f"Solidité défensive en seconde période : aucune situation dangereuse concédée sur séquence ouverte après la {rng.randint(55,70)}'", f"Efficacité offensive : {h_on} tirs cadrés sur {h_shots} tentatives, un ratio qui traduit la qualité des décisions en zone de finition", "Organisation collective sans faille sur les phases arrêtées défensives"], 3),
             "home_faibles": rng.sample([f"Relances trop précipitées dans le dernier quart d'heure — trois ballons perdus dans des zones dangereuses", "Ligne défensive parfois trop haute à l'approche de la mi-temps, laissant des espaces exploitables dans le dos des centraux", "Manque de tranchant en un-contre-un — trop d'options simples plutôt que des solutions verticales"], 2),
@@ -1408,10 +1583,14 @@ def generate_synthetic_analysis(mid: str, m: dict) -> dict:
         h_style = {"Positionnel": "Jeu de poste bas dominant, pick & roll tardifs, isolation côté faible", "Motion Offense": "Circulation rapide, coupes permanentes, tirs catch-and-shoot", "Iso Ball": "Créateur principal en isolation, décalages sur les aides défensives", "Pace & Space": "Tempo élevé, espacement maximal, 3pts en cadence"}.get(h_sys, "Jeu structuré demi-terrain")
         a_style = {"Motion Offense": "Écran-rouleau constant, passes rapides, snipers aux coins", "Pick & Roll": "P&R deux hommes, isolation sur mismatch créé, roll vers le cercle", "Positionnel": "Bloc d'attaque mi-terrain, pick & roll côté fort", "Transition Offense": "Fast break systématique, attaque avant retour défensif adverse"}.get(a_sys, "Basketball structuré et collectif")
         b_pos = [["PG",""], ["SG",""], ["SF",""], ["PF",""], ["C",""]]
-        bh = rng.sample(["Williams","Johnson","Smith","Davis","Brown","Jones","White","Taylor","Anderson","Thomas"], 5)
-        ba = rng.sample(["Martin","Jackson","Harris","Thompson","Garcia","Martinez","Robinson","Clark","Lewis","Lee"], 5)
-        h_players = [[f"{bh[i][0]}. {bh[i]}", b_pos[i][0]] for i in range(5)]
-        a_players = [[f"{ba[i][0]}. {ba[i]}", b_pos[i][0]] for i in range(5)]
+        h_players = TEAM_SQUADS.get(hn)
+        a_players = TEAM_SQUADS.get(an)
+        if h_players is None:
+            bh = rng.sample(["Williams","Johnson","Smith","Davis","Brown","Jones","White","Taylor","Anderson","Thomas"], 5)
+            h_players = [[f"{bh[i][0]}. {bh[i]}", b_pos[i][0]] for i in range(5)]
+        if a_players is None:
+            ba = rng.sample(["Martin","Jackson","Harris","Thompson","Garcia","Martinez","Robinson","Clark","Lewis","Lee"], 5)
+            a_players = [[f"{ba[i][0]}. {ba[i]}", b_pos[i][0]] for i in range(5)]
         h_3pt = rng.randint(8,16); a_3pt = rng.randint(6,14)
         h_reb = rng.randint(38,52); a_reb = rng.randint(34,48)
         h_ast = rng.randint(20,32); a_ast = rng.randint(18,28)
@@ -1439,11 +1618,17 @@ def generate_synthetic_analysis(mid: str, m: dict) -> dict:
     else:
         h_style = rng.choice(["Jeu au sol dominant, maul offensif, jeu de pied territorial, mêlée puissante", "Jeu à la main rapide, attaque des intervalles, soutiens immédiats, touche dominatrice", "Jeu de contre-attaque, jeu aérien, mêlée solide, discipline défensive"])
         a_style = rng.choice(["Bloc défensif serré, jeu de contre-attaque, jeu au pied de dégagement", "Maul offensif structuré, touche dominante, jeu de puissance", "Jeu rapide, soutiens immédiats, alignements offensifs variés"])
-        rg_surns = ["Dupont","Ntamack","Fickou","Rattez","Cros","Jelonch","Alldritt","Hastoy","Kerr-Barlow","Botia","Skelton","West","Berdeu","Leyds","Jalibert","Lucu","Woki","Bielle-Biarrey","Taofifenua","Leindekar"]
-        rng.shuffle(rg_surns)
         rg_pos = [["DO",""],["DM",""],["AI",""],["CE",""],["CE",""],["F",""],["TL",""],["N°8",""]]
-        h_players = [[rg_surns[i], rg_pos[i][0]] for i in range(8)]
-        a_players = [[rg_surns[i+8], rg_pos[i][0]] for i in range(8)]
+        h_players = TEAM_SQUADS.get(hn)
+        a_players = TEAM_SQUADS.get(an)
+        if h_players is None:
+            rg_surns = ["Dupont","Ntamack","Fickou","Rattez","Cros","Jelonch","Alldritt","Hastoy","Kerr-Barlow","Botia","Skelton","West","Berdeu","Leyds","Jalibert","Lucu","Woki","Bielle-Biarrey","Taofifenua","Leindekar"]
+            rng.shuffle(rg_surns)
+            h_players = [[rg_surns[i], rg_pos[i][0]] for i in range(8)]
+        if a_players is None:
+            rg_surns2 = ["Ollivon","Lamothe","Raka","Moala","Lebel","Capuozzo","Retière","Danty","Dillane","Priso","Mauvaka","Meafou","Taofifenua","Aldegheri","Leindekar","Cretin","Lambey","Couilloud","Martocq","Castets"]
+            rng.shuffle(rg_surns2)
+            a_players = [[rg_surns2[i], rg_pos[i][0]] for i in range(8)]
         h_poss = rng.randint(52, 62) if hw else rng.randint(40, 52)
         phases = {
             "Mêlée & Touche": f"La conquête sur mêlée a été le facteur décisif. {hsh if rng.random()>0.5 else ash} a dominé cette phase statique à {rng.randint(7,9)}/9 — une supériorité qui a offert des plateformes de jeu idéales. Une mêlée dominante en rugby professionnel, c'est 20% du jeu — et 80% de la confiance collective.",
@@ -1718,6 +1903,8 @@ if "selected_date" not in st.session_state: st.session_state.selected_date = TOD
 if "cal_view" not in st.session_state: st.session_state.cal_view = TODAY.replace(day=1)
 if "comp_filter" not in st.session_state:
     st.session_state.comp_filter = set()
+if "selected_team" not in st.session_state:
+    st.session_state.selected_team = None
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SIDEBAR
@@ -1785,7 +1972,32 @@ with st.sidebar:
         checked = comp in st.session_state.comp_filter or len(st.session_state.comp_filter) == 0
         if st.checkbox(comp, value=checked, key=f"chk_{comp}"):
             new_filter.add(comp)
+    prev_filter = st.session_state.comp_filter
     st.session_state.comp_filter = new_filter if new_filter else set(sport_comps)
+    if prev_filter != st.session_state.comp_filter:
+        st.session_state.selected_team = None
+
+    st.markdown("---")
+
+    # ── Team tracker ──
+    st.markdown('<p class="bbn" style="font-size:1rem;color:#888;letter-spacing:.1em;">ÉQUIPE</p>', unsafe_allow_html=True)
+    active_comps_sb = st.session_state.comp_filter or set(sport_comps)
+    all_teams_sb: list[str] = []
+    for _c in sport_comps:
+        if _c in active_comps_sb:
+            for _t in TEAMS_BY_COMPETITION.get(_c, []):
+                if _t not in all_teams_sb:
+                    all_teams_sb.append(_t)
+    all_teams_sb.sort()
+    team_opts = ["Toutes les équipes"] + all_teams_sb
+    cur_team = st.session_state.selected_team
+    cur_idx = (team_opts.index(cur_team) if cur_team in team_opts else 0)
+    picked = st.selectbox("", team_opts, index=cur_idx, label_visibility="collapsed", key="team_select")
+    new_team = None if picked == "Toutes les équipes" else picked
+    if new_team != st.session_state.selected_team:
+        st.session_state.selected_team = new_team
+        st.session_state.selected_match = None
+        st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN
@@ -1808,6 +2020,7 @@ with sport_col:
             if st.button(sport, key=f"sport_{sport}"):
                 st.session_state.sport = sport
                 st.session_state.selected_match = None
+                st.session_state.selected_team = None
                 st.rerun()
             if active:
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -1821,14 +2034,107 @@ active_comps = st.session_state.comp_filter or set(COMPETITIONS_BY_SPORT.get(st.
 filtered = DataLayer.get_matches(date_str, st.session_state.sport, active_comps)
 all_sport = DataLayer.get_all_for_sport(st.session_state.sport, active_comps)
 
-# ── Date headline ──────────────────────────────────────────────────────────────
-date_label = st.session_state.selected_date.strftime("%A %d %B %Y").capitalize()
-count = len(filtered)
-st.markdown(
-    f'<p class="bbn" style="font-size:1.5rem;color:#f0f0f0;">'
-    f'{date_label} <span style="color:#CAFF33;font-size:1rem;">{count} match{"s" if count!=1 else ""}</span></p>',
-    unsafe_allow_html=True,
-)
+# ── Team page ─────────────────────────────────────────────────────────────────
+_sel_team = st.session_state.selected_team
+if _sel_team:
+    # Find team color and all matches for this team
+    _team_matches = {mid: m for mid, m in all_sport.items()
+                     if m["home"]["name"] == _sel_team or m["away"]["name"] == _sel_team}
+    _team_color = "#CAFF33"
+    for _m in _team_matches.values():
+        if _m["home"]["name"] == _sel_team:
+            _team_color = _m["home"]["color"]; break
+        elif _m["away"]["name"] == _sel_team:
+            _team_color = _m["away"]["color"]; break
+    also_in_matches = {mid: m for mid, m in MATCHES.items()
+                       if (m["home"]["name"] == _sel_team or m["away"]["name"] == _sel_team)
+                       and mid not in _team_matches}
+    _team_matches = {**_team_matches, **also_in_matches}
+
+    # Past results for form
+    _past = sorted(
+        [(mid, m) for mid, m in _team_matches.items() if m["status"] == "Terminé"
+         and m["home"].get("score") is not None and m["away"].get("score") is not None],
+        key=lambda x: x[1]["date"], reverse=True
+    )
+    _form = []
+    _wins = _draws = _losses = 0
+    for _, _pm in _past[:5]:
+        _is_home = _pm["home"]["name"] == _sel_team
+        _ts = int(_pm["home"]["score"] if _is_home else _pm["away"]["score"])
+        _os = int(_pm["away"]["score"] if _is_home else _pm["home"]["score"])
+        if _ts > _os:   _form.append(("V","#CAFF33")); _wins += 1
+        elif _ts == _os: _form.append(("N","#888"));   _draws += 1
+        else:            _form.append(("D","#e05050")); _losses += 1
+
+    # Next match
+    _upcoming = sorted(
+        [(mid, m) for mid, m in _team_matches.items() if m["status"] == "À venir"],
+        key=lambda x: x[1]["date"]
+    )
+    _next = _upcoming[0][1] if _upcoming else None
+
+    # Render team header
+    form_dots_html = "".join(
+        f'<span style="display:inline-flex;align-items:center;justify-content:center;'
+        f'width:26px;height:26px;border-radius:50%;background:{c};color:#080808;'
+        f'font-weight:900;font-size:.7rem;margin-right:4px;">{r}</span>'
+        for r, c in _form
+    ) or '<span style="color:#444;font-size:.8rem;">Aucun résultat</span>'
+
+    _next_html = ""
+    if _next:
+        _opp = _next["away"]["name"] if _next["home"]["name"] == _sel_team else _next["home"]["name"]
+        _venue = "Domicile" if _next["home"]["name"] == _sel_team else "Extérieur"
+        _next_html = (
+            f'<div style="margin-top:.75rem;padding:.6rem .9rem;background:#141414;'
+            f'border:1px solid #1e1e1e;border-left:3px solid {_team_color};border-radius:8px;'
+            f'font-size:.82rem;">'
+            f'<span style="color:#666;text-transform:uppercase;font-size:.68rem;letter-spacing:.07em;">Prochain match</span><br>'
+            f'<span style="color:#f0f0f0;font-weight:700;">{_opp}</span>'
+            f'<span style="color:#555;"> · {_venue} · {safe_parse_date(_next["date"], "%d %b %Y")}</span>'
+            f'</div>'
+        )
+
+    st.markdown(
+        f'<div style="background:#111;border:1px solid #1e1e1e;border-top:3px solid {_team_color};'
+        f'border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;">'
+        f'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">'
+        f'<div>'
+        f'<p class="bbn" style="font-size:1.8rem;color:#f0f0f0;margin:0;">'
+        f'<span style="color:{_team_color};">■</span> {_sel_team}</p>'
+        f'<p style="color:#555;font-size:.8rem;margin:.25rem 0 .6rem;">'
+        f'{_wins}V · {_draws}N · {_losses}D</p>'
+        f'<div style="display:flex;align-items:center;gap:0;">{form_dots_html}</div>'
+        f'</div>'
+        f'</div>'
+        f'{_next_html}'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+    if st.button("← Voir tous les matchs", key="team_reset"):
+        st.session_state.selected_team = None
+        st.session_state.selected_match = None
+        st.rerun()
+
+    # Override filtered: show all team matches sorted newest first
+    filtered = dict(sorted(_team_matches.items(), key=lambda x: x[1]["date"], reverse=True))
+    headline = f'{_sel_team} — tous les matchs'
+    count = len(filtered)
+    st.markdown(
+        f'<p class="bbn" style="font-size:1.2rem;color:#f0f0f0;margin-bottom:.5rem;">'
+        f'{headline} <span style="color:#CAFF33;font-size:.9rem;">{count} match{"s" if count!=1 else ""}</span></p>',
+        unsafe_allow_html=True,
+    )
+else:
+    # ── Date headline ──────────────────────────────────────────────────────────
+    date_label = st.session_state.selected_date.strftime("%A %d %B %Y").capitalize()
+    count = len(filtered)
+    st.markdown(
+        f'<p class="bbn" style="font-size:1.5rem;color:#f0f0f0;">'
+        f'{date_label} <span style="color:#CAFF33;font-size:1rem;">{count} match{"s" if count!=1 else ""}</span></p>',
+        unsafe_allow_html=True,
+    )
 
 # ── Match cards ────────────────────────────────────────────────────────────────
 if filtered:
