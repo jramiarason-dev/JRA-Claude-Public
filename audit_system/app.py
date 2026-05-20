@@ -3732,6 +3732,23 @@ with tab1:
     if _t1_mode == "static":
         # ── Static Reference Data mode ─────────────────────────────────────────
         _static_label()
+        _t1_entity_type = st.session_state.get("t1_entity_type", "🏦 Private Banking")
+        _t1_entity_data = get_data_for_topic(
+            audit_topic if audit_topic else "AML / KYC & Transaction Monitoring",
+            entity_type=_t1_entity_type,
+        )
+        _t1_entity_key   = _t1_entity_data["entity_key"]
+        _t1_entity_color = _ENTITY_COLORS.get(_t1_entity_key, "#7fa8fb")
+        _entity_label    = _t1_entity_type.split(" ", 1)[1] if " " in _t1_entity_type else _t1_entity_type
+        st.markdown(
+            f'<div style="display:flex;align-items:center;gap:12px;margin:8px 0 16px">'
+            f'<span style="background:{_t1_entity_color}22;color:{_t1_entity_color};border:1px solid {_t1_entity_color}44;'
+            f'border-radius:6px;padding:4px 14px;font-size:12px;font-weight:700">📊 {_entity_label} context</span>'
+            f'<span style="font-size:11.5px;color:#5a6488;font-style:italic">'
+            f'Risks and regulations adapted for {_t1_entity_type}</span>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
         _t1_theme = _topic_to_theme(audit_topic) if audit_topic else "AML_KYC"
         _t1_theme = _t1_theme or "AML_KYC"
         _t1_theme_label = _t1_theme.replace("_", " ").title()
@@ -3775,7 +3792,9 @@ with tab1:
             _ri_c1, _ri_c2 = st.columns([3, 1.5])
             _ri_sq = _ri_c1.text_input("Search risks", placeholder="Filter risks…", key="_ri_sq", label_visibility="collapsed")
             _ri_slv = _ri_c2.selectbox("Level", ["All", "Critical", "High", "Moderate"], key="_ri_slv", label_visibility="collapsed")
-            _ri_filtered = RISK_INDICATORS.get(_t1_theme, [])
+            _entity_specific_risks = _t1_entity_data.get("additional_risks", [])
+            _base_risks = RISK_INDICATORS.get(_t1_theme, [])
+            _ri_filtered = _entity_specific_risks + _base_risks
             if _ri_slv != "All":
                 _ri_filtered = [r for r in _ri_filtered if r.get("level") == _ri_slv]
             if _ri_sq:
@@ -4162,12 +4181,40 @@ with tab2:
 
         st.markdown(_EXAMPLE_RATIONALE, unsafe_allow_html=True)
 
+        _t2_static_entity_data = get_data_for_topic(
+            topic2 if topic2 else "AML / KYC & Transaction Monitoring",
+            entity_type=st.session_state.get("t1_entity_type", "🏦 Private Banking"),
+        )
         with st.expander("📖 A — Rationale & Thematic Background", expanded=True):
             st.markdown(
                 f'<div class="section-title">A. Rationale &amp; Thematic Background &mdash; {_t2_theme_label}</div>',
                 unsafe_allow_html=True,
             )
+            _bg_angle = _t2_static_entity_data.get("background_angle", "")
+            if _bg_angle:
+                st.markdown(
+                    f'<div style="background:rgba(99,102,241,0.08);border-left:3px solid #6366f1;'
+                    f'border-radius:0 8px 8px 0;padding:10px 16px;margin-bottom:14px;'
+                    f'font-size:12.5px;color:#c8d0e8;font-style:italic">'
+                    f'💡 {_bg_angle}</div>',
+                    unsafe_allow_html=True,
+                )
             _show_thematic_background(_t2_theme)
+            _typical = _t2_static_entity_data.get("typical_findings", [])
+            if _typical:
+                st.markdown(
+                    '<div style="margin-top:14px"><div style="font-size:12px;font-weight:700;'
+                    'color:#7fa8fb;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">'
+                    '★ Typical Findings for this Entity Type</div>',
+                    unsafe_allow_html=True,
+                )
+                for _tf in _typical:
+                    st.markdown(
+                        f'<div style="font-size:12.5px;color:#c8d0e8;padding:4px 0 4px 14px;'
+                        f'border-left:2px solid rgba(127,168,251,0.3)">• {_tf}</div>',
+                        unsafe_allow_html=True,
+                    )
+                st.markdown('</div>', unsafe_allow_html=True)
 
         with st.expander("🗂️ B — Audit Tests Library", expanded=False):
             st.markdown(
