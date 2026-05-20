@@ -308,7 +308,7 @@ D_P7  = (TODAY + timedelta(days=7)).isoformat()
 SPORTS = ["⚽ Football", "🏀 Basket", "🏉 Rugby"]
 
 COMPETITIONS_BY_SPORT = {
-    "⚽ Football": ["Ligue 1", "Champions League", "Premier League", "Super League Suisse"],
+    "⚽ Football": ["Ligue 1", "La Liga", "Champions League", "Premier League", "Super League Suisse"],
     "🏀 Basket": ["NBA", "Euroleague", "Betclic Elite"],
     "🏉 Rugby": ["Top 14", "Pro D2", "Champions Cup"],
 }
@@ -594,6 +594,97 @@ MATCHES = {
         "date": D_P6, "time": "16:05", "stadium": "Stade Marcel Deflandre, La Rochelle", "status": "À venir",
         "home": {"name": "Stade Rochelais", "short": "SR",  "color": "#FCD000", "score": None},
         "away": {"name": "Lyon OU",          "short": "LOU", "color": "#0057A8", "score": None},
+    },
+    # ── La Liga ──────────────────────────────────────────────────────────────────
+    "real_barca_laliga_j11": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": "2025-10-25", "time": "16:00", "stadium": "Santiago Bernabéu, Madrid", "status": "Terminé",
+        "home": {"name": "Real Madrid CF", "short": "RMA", "color": "#FEBE10", "score": 2},
+        "away": {"name": "FC Barcelona",   "short": "BAR", "color": "#A50044", "score": 1},
+    },
+    "atletico_real_laliga_j15": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": "2025-11-30", "time": "18:30", "stadium": "Cívitas Metropolitano, Madrid", "status": "Terminé",
+        "home": {"name": "Atlético de Madrid", "short": "ATM", "color": "#CC2222", "score": 1},
+        "away": {"name": "Real Madrid CF",     "short": "RMA", "color": "#FEBE10", "score": 1},
+    },
+    "barca_sevilla_laliga_j8": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": "2025-10-04", "time": "16:00", "stadium": "Estadi Olímpic Lluís Companys, Barcelone", "status": "Terminé",
+        "home": {"name": "FC Barcelona", "short": "BAR", "color": "#A50044", "score": 3},
+        "away": {"name": "Sevilla FC",   "short": "SEV", "color": "#CC0000", "score": 0},
+    },
+    "sevilla_betis_laliga": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": "2025-11-08", "time": "21:00", "stadium": "Estadio Ramón Sánchez-Pizjuán, Séville", "status": "Terminé",
+        "home": {"name": "Sevilla FC",  "short": "SEV", "color": "#CC0000", "score": 0},
+        "away": {"name": "Real Betis",  "short": "BET", "color": "#00833E", "score": 1},
+    },
+    "athletic_sociedad_laliga": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": "2026-02-01", "time": "16:15", "stadium": "San Mamés, Bilbao", "status": "Terminé",
+        "home": {"name": "Athletic Club",  "short": "ATH", "color": "#CC0000", "score": 2},
+        "away": {"name": "Real Sociedad",  "short": "RSO", "color": "#0047AB", "score": 0},
+    },
+    "barca_atletico_laliga_j26": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": "2026-03-07", "time": "21:00", "stadium": "Estadi Olímpic Lluís Companys, Barcelone", "status": "Terminé",
+        "home": {"name": "FC Barcelona",       "short": "BAR", "color": "#A50044", "score": 2},
+        "away": {"name": "Atlético de Madrid",  "short": "ATM", "color": "#CC2222", "score": 1},
+    },
+    "barca_real_laliga_j33": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": "2026-04-19", "time": "16:00", "stadium": "Estadi Olímpic Lluís Companys, Barcelone", "status": "Terminé",
+        "home": {"name": "FC Barcelona",   "short": "BAR", "color": "#A50044", "score": 2},
+        "away": {"name": "Real Madrid CF", "short": "RMA", "color": "#FEBE10", "score": 1},
+    },
+    "real_villarreal_laliga": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": D_M7, "time": "21:00", "stadium": "Santiago Bernabéu, Madrid", "status": "Terminé",
+        "home": {"name": "Real Madrid CF",  "short": "RMA", "color": "#FEBE10", "score": 2},
+        "away": {"name": "Villarreal CF",   "short": "VIL", "color": "#FFD700", "score": 0},
+    },
+    "atletico_valencia_laliga": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": D_M5, "time": "18:30", "stadium": "Cívitas Metropolitano, Madrid", "status": "Terminé",
+        "home": {"name": "Atlético de Madrid", "short": "ATM", "color": "#CC2222", "score": 1},
+        "away": {"name": "Valencia CF",        "short": "VCF", "color": "#FF7F00", "score": 0},
+    },
+    "barca_athletic_laliga": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": D_M3, "time": "21:00", "stadium": "Estadi Olímpic Lluís Companys, Barcelone", "status": "Terminé",
+        "home": {"name": "FC Barcelona",  "short": "BAR", "color": "#A50044", "score": 3},
+        "away": {"name": "Athletic Club", "short": "ATH", "color": "#CC0000", "score": 1},
+    },
+    "girona_rayo_laliga": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": D_M2, "time": "14:00", "stadium": "Estadi Municipal de Montilivi, Gérone", "status": "Terminé",
+        "home": {"name": "Girona FC",       "short": "GIR", "color": "#CC0000", "score": 2},
+        "away": {"name": "Rayo Vallecano",  "short": "RVA", "color": "#CC0000", "score": 2},
+    },
+    "real_celta_laliga": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": D_P4, "time": "21:00", "stadium": "Santiago Bernabéu, Madrid", "status": "À venir",
+        "home": {"name": "Real Madrid CF", "short": "RMA", "color": "#FEBE10", "score": None},
+        "away": {"name": "Celta Vigo",     "short": "CEL", "color": "#87CEEB", "score": None},
+    },
+    "barca_osasuna_laliga": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": D_P5, "time": "18:30", "stadium": "Estadi Olímpic Lluís Companys, Barcelone", "status": "À venir",
+        "home": {"name": "FC Barcelona", "short": "BAR", "color": "#A50044", "score": None},
+        "away": {"name": "CA Osasuna",   "short": "OSA", "color": "#D2233E", "score": None},
+    },
+    "atletico_mallorca_laliga": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": D_P6, "time": "16:00", "stadium": "Cívitas Metropolitano, Madrid", "status": "À venir",
+        "home": {"name": "Atlético de Madrid", "short": "ATM", "color": "#CC2222", "score": None},
+        "away": {"name": "RCD Mallorca",       "short": "MAL", "color": "#B22234", "score": None},
+    },
+    "betis_sociedad_laliga": {
+        "sport": "⚽ Football", "competition": "La Liga",
+        "date": D_P7, "time": "14:00", "stadium": "Estadio Benito Villamarín, Séville", "status": "À venir",
+        "home": {"name": "Real Betis",   "short": "BET", "color": "#00833E", "score": None},
+        "away": {"name": "Real Sociedad","short": "RSO", "color": "#0047AB", "score": None},
     },
 }
 
@@ -1039,6 +1130,93 @@ ANALYSIS = {
             "away_txt": "PSG s'en tire avec un 1-1 qui les replace correctement dans le groupe. Ce que Luis Enrique a démontré ce soir, c'est que ce PSG est difficile à tuer. 0-1 à la 52', ils auraient pu s'effondrer. Ils ont trouvé l'égalisation via Barcola. Cette mentalité ne s'achète pas — elle se construit. C'est le PSG le plus solide mentalement depuis des années.",
             "coach_home": "✅ Kompany a osé presser haut une équipe comme PSG — et ça a fonctionné 45 minutes. Son utilisation de Müller en 10 pour fixer Marquinhos et libérer Kane est du coaching de haut niveau. Le Bayern est en bonne voie.",
             "coach_away": "✅ Luis Enrique a adapté son jeu en 10 minutes quand le pressing bavarois fonctionnait — jeu long, Ramos en pivot, attendre les espaces. C'est une équipe qui joue avec sa tête autant qu'avec ses jambes.",
+        },
+    },
+    "barca_real_laliga_j33": {
+        "tactique": {
+            "home_form": "4-3-3",
+            "away_form": "4-3-3",
+            "home_style": "Gegenpressing ultra-haut, récupération haute, Yamal et Raphinha comme déclencheurs du pressing, triangles Pedri–Casado–De Jong dans l'axe",
+            "away_style": "4-3-3 pragmatique, compacité défensive, liberté totale pour Bellingham entre les lignes, transitions rapides via Mbappé et Vinicius",
+            "home_players": [
+                ["Szczesny","GB"],["Koundé","RD"],["Cubarsí","DC"],
+                ["Araujo","DC"],["Balde","LD"],
+                ["Casado","MDC"],["Pedri","MC"],["De Jong","MC"],
+                ["Yamal","AD"],["Lewandowski","BU"],["Raphinha","AG"],
+            ],
+            "away_players": [
+                ["Courtois","GB"],["Carvajal","RD"],["Militão","DC"],
+                ["Rüdiger","DC"],["Mendy","LD"],
+                ["Valverde","MC"],["Tchouaméni","MDC"],["Camavinga","MC"],
+                ["Bellingham","MO"],["Mbappé","BU"],["Vinicius","AG"],
+            ],
+            "phases": {
+                "Pressing Haut Barça": "Le gegenpressing de Flick a été parfait dans les 30 premières minutes. Yamal et Raphinha se placent à hauteur des latéraux de Real Madrid, forçant les erreurs. Koundé et Balde participent activement à la pression haute, créant une surtension dans les zones de construction adverses.",
+                "Construction Real Madrid": "Ancelotti adapte : Carvajal joue plus intérieur pour créer un 3v3 en construction. Camavinga descend pour recevoir face au jeu. Mais le pressing barcelonais est trop bien organisé — Casado coupe les lignes de passe vers Bellingham systématiquement en première mi-temps.",
+                "Transitions Barça": "Les deux buts barcelonais naissent directement de récupérations hautes. Yamal chipe le ballon à Carvajal (23'), joue Lewandowski en profondeur. Raphinha convertit un coup franc obtenu après une faute sur Pedri pressant Tchouaméni (61'). Le gegenpressing transformé en buts — c'est la signature Flick.",
+                "Réaction Real Madrid": "Mbappé réduit le score à la 78' sur penalty après une faute d'Araujo. Real presse en 4-2-4 les 15 dernières minutes — Bellingham, Rodrygo, Mbappé et Vinicius tous offensifs. Szczesny réalise deux arrêts décisifs. La pression de Real a été maximale mais Barça tient.",
+                "Phases Arrêtées": "Barcelona marque sur coup franc direct (61', Raphinha). Real Madrid obtient 2 corners sans danger. La maîtrise barça sur les CPA offensifs est nette — Lewandowski à la baguette sur les coups de pied arrêtés impose sa présence physique.",
+            },
+            "home_stats": {
+                "Possession (%)":   (63, 37),
+                "Tirs cadrés":      (7, 4),
+                "Passes réussies":  (512, 298),
+                "Duels gagnés":     (52, 48),
+                "Km parcourus":     (113, 108),
+                "Occasions nettes": (5, 3),
+            },
+        },
+        "joueurs": {
+            "home": [
+                {"nom": "Szczesny",     "poste": "GB",  "note": 8.1, "stats": {"Arrêts": 4, "Sorties": 2}},
+                {"nom": "Koundé",       "poste": "RD",  "note": 7.8, "stats": {"Duels": "5/6", "Centres": 3}},
+                {"nom": "Araujo",       "poste": "DC",  "note": 7.2, "stats": {"Duels": "7/9", "Fautes": 2}},
+                {"nom": "Cubarsí",      "poste": "DC",  "note": 8.0, "stats": {"Duels": "8/9", "Passes": 62}},
+                {"nom": "Balde",        "poste": "LD",  "note": 7.6, "stats": {"Duels": "4/5", "Centres": 4}},
+                {"nom": "Pedri",        "poste": "MC",  "note": 8.4, "stats": {"Passes": 74, "Dribbles": 5}},
+                {"nom": "Lewandowski",  "poste": "BU",  "note": 8.3, "stats": {"Buts": 1, "Tirs": 4}},
+                {"nom": "Yamal",        "poste": "AD",  "note": 9.0, "stats": {"Buts": 0, "Passes D": 2, "Dribbles": 8}},
+            ],
+            "away": [
+                {"nom": "Courtois",     "poste": "GB",  "note": 7.5, "stats": {"Arrêts": 4, "Sorties": 1}},
+                {"nom": "Bellingham",   "poste": "MO",  "note": 7.0, "stats": {"Tirs": 3, "Passes": 48}},
+                {"nom": "Mbappé",       "poste": "BU",  "note": 7.8, "stats": {"Buts": 1, "Tirs": 5, "Dribbles": 4}},
+                {"nom": "Vinicius",     "poste": "AG",  "note": 7.2, "stats": {"Tirs": 2, "Dribbles": 6}},
+                {"nom": "Tchouaméni",   "poste": "MDC", "note": 6.8, "stats": {"Ballons perdus": 5, "Duels": "4/7"}},
+                {"nom": "Camavinga",    "poste": "MC",  "note": 6.9, "stats": {"Passes": 41, "Duels": "3/5"}},
+            ],
+        },
+        "bilan": {
+            "home_forces": [
+                "Gegenpressing parfaitement exécuté — récupérations hautes converties en buts",
+                "Yamal intouchable sur son couloir droit, Carvajal neutralisé toute la rencontre",
+                "Maîtrise totale du milieu de terrain — Pedri omniprésent dans les transitions",
+                "Szczesny décisif dans les moments chauds : 4 arrêts dont 2 face à Vinicius",
+            ],
+            "home_faibles": [
+                "Araujo a commis la faute sur Mbappé qui a relancé Real Madrid",
+                "Quelques pertes de balle de De Jong sous pression en seconde période",
+            ],
+            "away_forces": [
+                "Mbappé dangereux sur sa seule occasion franche, pénalty transformé avec sang-froid",
+                "Real Madrid a créé des occasions malgré la domination barcelonaise",
+                "Bellingham a tenté de déstabiliser le bloc barça en seconde période",
+            ],
+            "away_faibles": [
+                "Construction trop prévisible — Camavinga et Tchouaméni pressés constamment",
+                "Vinicius n'a jamais passé Koundé en duel direct — match frustrant pour le Brésilien",
+                "Ancelotti a trop tardé à effectuer des changements offensifs (67' au lieu de 55')",
+            ],
+        },
+        "verdict": {
+            "home_perf": 8.5,
+            "away_perf": 6.5,
+            "intensite": 9.0,
+            "spectacle": 8.5,
+            "home_txt": "Barcelona a livré une masterclass de football offensif collectif. Le gegenpressing de Flick a été parfaitement exécuté — Yamal à 17 ans a dominé Carvajal comme si c'était un match amical. Lewandowski à 37 ans reste le finisseur de référence. Ce Barça est en train d'écrire quelque chose de grand.",
+            "away_txt": "Real Madrid a subi sa loi — mais n'a jamais abandonné. Mbappé a montré son caractère en réduisant le score sur penalty. Ancelotti a manqué d'audace tactique en première mi-temps. La défaite est méritée mais le Real reste dangereux jusqu'au bout.",
+            "coach_home": "✅ Flick a réglé son pressing comme une horloge suisse. Décision de lancer Cubarsí titulaire plutôt que Christensen — excellente. L'animation offensive avec Yamal libre de tout marquage était préparée depuis des jours. Barça de haut niveau sous ses ordres.",
+            "coach_away": "⚠️ Ancelotti a trop respecté Barça. Laisser Mbappé isolé sans soutien pendant 60 minutes, c'est gâcher sa meilleure arme. Un 4-3-3 offensif dès la 55' aurait pu changer le match. La gestion des changements reste son seul point faible.",
         },
     },
 }
