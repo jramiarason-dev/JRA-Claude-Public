@@ -1043,6 +1043,390 @@ ANALYSIS = {
     },
 }
 
+# ── Effectifs réels par équipe (11 joueurs football, 5 basket, 9 rugby) ───────
+TEAM_SQUADS: dict[str, list] = {
+    # ── Ligue 1 ───────────────────────────────────────────────────────────────
+    "Paris Saint-Germain": [
+        ["Donnarumma","GB"],["Hakimi","RD"],["Marquinhos","DC"],
+        ["Pacho","DC"],["Nuno Mendes","LD"],
+        ["Fabian Ruiz","MC"],["Vitinha","MC"],["João Neves","MC"],
+        ["Dembélé","AD"],["Barcola","AG"],["G. Ramos","BU"],
+    ],
+    "AS Monaco": [
+        ["Majecki","GB"],["Vanderson","RD"],["Salisu","DC"],
+        ["Maripan","DC"],["Caio Henrique","LD"],
+        ["Camara","MDC"],["Zakaria","MDC"],
+        ["Ben Seghir","MO"],["Akliouche","MO"],["Golovin","MO"],
+        ["Embolo","BU"],
+    ],
+    "Olympique de Marseille": [
+        ["Rulli","GB"],["Murillo","RD"],["Balerdi","DC"],
+        ["Brassier","DC"],["Merlin","LD"],
+        ["Rabiot","MC"],["Kondogbia","MDC"],
+        ["Greenwood","AD"],["Harit","MO"],["Rowe","AG"],
+        ["Wahi","BU"],
+    ],
+    "Olympique Lyonnais": [
+        ["Perri","GB"],["Tagliafico","LD"],["Niakhaté","DC"],
+        ["Mata","DC"],["Kumbedi","RD"],
+        ["Tolisso","MC"],["Matic","MDC"],
+        ["Benrahma","MO"],["Cherki","MO"],["Lacazette","BU"],["Mikautadze","BU"],
+    ],
+    "LOSC Lille": [
+        ["Chevalier","GB"],["Meunier","RD"],["Diakité","DC"],
+        ["Alexsandro","DC"],["Gudmundsson","LD"],
+        ["André","MDC"],["Gomes","MC"],
+        ["Zhegrova","AD"],["Cabella","MO"],["Haraldsson","AG"],["David","BU"],
+    ],
+    "OGC Nice": [
+        ["Bulka","GB"],["Lotomba","RD"],["Dante","DC"],
+        ["Bombito","DC"],["Bard","LD"],
+        ["Rosario","MDC"],["Thuram","MC"],
+        ["Guessand","AD"],["Boga","MO"],["Cho","AG"],["Laborde","BU"],
+    ],
+    "RC Lens": [
+        ["Samba","GB"],["Frankowski","RD"],["Medina","DC"],
+        ["Danso","DC"],["Machado","LD"],
+        ["Dansoko","MDC"],["Fulgini","MC"],
+        ["Sotoca","AD"],["Thomasson","MO"],["Saïd","AG"],["Openda","BU"],
+    ],
+    "Toulouse FC": [
+        ["Restes","GB"],["Suazo","RD"],["Nicolaisen","DC"],
+        ["Costa","DC"],["Donkor","LD"],
+        ["Spierings","MDC"],["Dejaegere","MC"],
+        ["Aboukhlal","AG"],["Tiago Djaló","MO"],["Dallinga","BU"],["Onaiwu","AD"],
+    ],
+    "Stade Brestois 29": [
+        ["Bizot","GB"],["Lala","RD"],["Chardonnet","DC"],
+        ["Pereira","DC"],["Doué","LD"],
+        ["Camara","MDC"],["Magnetti","MC"],
+        ["Del Castillo","MO"],["Martin","AD"],["Dembélé","AG"],["Mounié","BU"],
+    ],
+    "Stade Rennais": [
+        ["Mandanda","GB"],["Assignon","RD"],["Wooh","DC"],
+        ["Belocian","DC"],["Truffert","LD"],
+        ["Ugochukwu","MDC"],["Gronbaek","MC"],
+        ["Bourigeaud","AD"],["Gouiri","BU"],["Terrier","AG"],["Kalimuendo","BU"],
+    ],
+    # ── Premier League ────────────────────────────────────────────────────────
+    "Arsenal FC": [
+        ["Raya","GB"],["Ben White","RD"],["Saliba","DC"],
+        ["Gabriel","DC"],["Calafiori","LD"],
+        ["Rice","MDC"],["Ødegaard","MC"],["Merino","MC"],
+        ["Saka","AD"],["Havertz","BU"],["Martinelli","AG"],
+    ],
+    "Manchester City": [
+        ["Ederson","GB"],["Walker","RD"],["Akanji","DC"],
+        ["Dias","DC"],["Gvardiol","LD"],
+        ["Kovacic","MDC"],["Nunes","MDC"],
+        ["Foden","MO"],["De Bruyne","MO"],["Doku","MO"],
+        ["Haaland","BU"],
+    ],
+    "Liverpool FC": [
+        ["Alisson","GB"],["Alexander-Arnold","RD"],["Konaté","DC"],
+        ["Van Dijk","DC"],["Robertson","LD"],
+        ["Mac Allister","MDC"],["Gravenberch","MC"],
+        ["Szoboszlai","MO"],["Salah","AD"],["Diaz","AG"],["Núñez","BU"],
+    ],
+    "Chelsea FC": [
+        ["Sánchez","GB"],["Reece James","RD"],["Colwill","DC"],
+        ["Chalobah","DC"],["Cucurella","LD"],
+        ["Caicedo","MDC"],["Fernández","MC"],
+        ["Palmer","MO"],["Sterling","AD"],["Jackson","BU"],["Madueke","AG"],
+    ],
+    "Tottenham Hotspur": [
+        ["Vicario","GB"],["Porro","RD"],["Romero","DC"],
+        ["Van de Ven","DC"],["Udogie","LD"],
+        ["Bentancur","MDC"],["Bissouma","MC"],
+        ["Kulusevski","AD"],["Maddison","MO"],["Son","AG"],["Richarlison","BU"],
+    ],
+    "Manchester United": [
+        ["Onana","GB"],["Dalot","RD"],["De Ligt","DC"],
+        ["Martínez","DC"],["Shaw","LD"],
+        ["Casemiro","MDC"],["Mainoo","MC"],
+        ["Garnacho","AD"],["Bruno Fernandes","MO"],["Hojlund","BU"],["Rashford","AG"],
+    ],
+    "Newcastle United": [
+        ["Dubravka","GB"],["Trippier","RD"],["Botman","DC"],
+        ["Burn","DC"],["Hall","LD"],
+        ["Tonali","MDC"],["Guimarães","MC"],
+        ["Almiron","AD"],["Isak","BU"],["Gordon","AG"],["Barnes","MO"],
+    ],
+    "Aston Villa": [
+        ["Martinez","GB"],["Cash","RD"],["Konsa","DC"],
+        ["Torres","DC"],["Digne","LD"],
+        ["Tielemans","MDC"],["Douglas Luiz","MC"],
+        ["McGinn","MO"],["Watkins","BU"],["Bailey","AG"],["Zaniolo","AD"],
+    ],
+    "Brighton & Hove Albion": [
+        ["Verbruggen","GB"],["Veltman","RD"],["Dunk","DC"],
+        ["Webster","DC"],["Estupiñán","LD"],
+        ["Gross","MC"],["Gilmour","MDC"],
+        ["Adingra","AD"],["João Pedro","BU"],["Mitoma","AG"],["Baleba","MC"],
+    ],
+    "West Ham United": [
+        ["Areola","GB"],["Coufal","RD"],["Zouma","DC"],
+        ["Aguerd","DC"],["Emerson","LD"],
+        ["Soucek","MDC"],["Ward-Prowse","MC"],
+        ["Bowen","AD"],["Antonio","BU"],["Kudus","AG"],["Paquetá","MO"],
+    ],
+    # ── Champions League ──────────────────────────────────────────────────────
+    "Real Madrid CF": [
+        ["Courtois","GB"],["Carvajal","RD"],["Militão","DC"],
+        ["Rüdiger","DC"],["Mendy","LD"],
+        ["Valverde","MC"],["Tchouaméni","MDC"],["Camavinga","MC"],
+        ["Mbappé","BU"],["Bellingham","MO"],["Vinicius","AG"],
+    ],
+    "Bayern Munich": [
+        ["Neuer","GB"],["Kimmich","RD"],["Upamecano","DC"],
+        ["Kim Min-jae","DC"],["Davies","LD"],
+        ["Goretzka","MDC"],["Musiala","MC"],
+        ["Olise","AD"],["Müller","MO"],["Sané","AG"],["Kane","BU"],
+    ],
+    "FC Barcelona": [
+        ["Ter Stegen","GB"],["Koundé","RD"],["Araujo","DC"],
+        ["Christensen","DC"],["Balde","LD"],
+        ["De Jong","MDC"],["Pedri","MC"],["Gavi","MC"],
+        ["Yamal","AD"],["Lewandowski","BU"],["Raphinha","AG"],
+    ],
+    "Inter Milan": [
+        ["Sommer","GB"],["Darmian","RD"],["Acerbi","DC"],
+        ["Bastoni","DC"],["Dimarco","LD"],
+        ["Barella","MC"],["Calhanoglu","MDC"],["Mkhitaryan","MC"],
+        ["Thuram","BU"],["Lautaro","BU"],["Frattesi","MO"],
+    ],
+    "Atlético de Madrid": [
+        ["Oblak","GB"],["Molina","RD"],["Giménez","DC"],
+        ["Witsel","DC"],["Reinildo","LD"],
+        ["Koke","MC"],["De Paul","MC"],["Saúl","MDC"],
+        ["Griezmann","MO"],["Morata","BU"],["Correa","AG"],
+    ],
+    "Borussia Dortmund": [
+        ["Kobel","GB"],["Ryerson","RD"],["Hummels","DC"],
+        ["Schlotterbeck","DC"],["Maatsen","LD"],
+        ["Emre Can","MDC"],["Nmecha","MC"],
+        ["Malen","AD"],["Brandt","MO"],["Sancho","AG"],["Füllkrug","BU"],
+    ],
+    "Juventus FC": [
+        ["Di Gregorio","GB"],["Cambiaso","RD"],["Bremer","DC"],
+        ["Gatti","DC"],["Cabal","LD"],
+        ["Locatelli","MDC"],["McKennie","MC"],
+        ["Yildiz","MO"],["Conceição","AD"],["Vlahovic","BU"],["Weah","AG"],
+    ],
+    "FC Porto": [
+        ["Diogo Costa","GB"],["Joao Mario","RD"],["Cardoso","DC"],
+        ["Pepe","DC"],["Galeno","LD"],
+        ["Uribe","MDC"],["Eustáquio","MC"],
+        ["Pepê","AD"],["Evanilson","BU"],["Taremi","BU"],["Veron","AG"],
+    ],
+    # ── Super League Suisse ───────────────────────────────────────────────────
+    "FC Basel": [
+        ["Lindner","GB"],["Lang","RD"],["Pelmard","DC"],
+        ["Frei","DC"],["Petretta","LD"],
+        ["Burger","MDC"],["Xhaka","MC"],
+        ["Males","AD"],["Kasami","MO"],["Ndoye","AG"],["Cabral","BU"],
+    ],
+    "BSC Young Boys": [
+        ["Von Ballmoos","GB"],["Blum","RD"],["Lustenberger","DC"],
+        ["Camara","DC"],["Janko","LD"],
+        ["Martins","MDC"],["Niasse","MC"],
+        ["Elia","AD"],["Ugrinic","MO"],["Monteiro","AG"],["Nsame","BU"],
+    ],
+    "Servette FC": [
+        ["Frick","GB"],["Lavanchy","RD"],["Vouilloz","DC"],
+        ["Tsunemoto","DC"],["Clichy","LD"],
+        ["Cognat","MDC"],["Stevanovic","MC"],
+        ["Kutesa","AD"],["Douline","MO"],["Antunes","AG"],["Bedia","BU"],
+    ],
+    "FC Zurich": [
+        ["Brecher","GB"],["Boranijasevic","RD"],["Kamberi","DC"],
+        ["Aliti","DC"],["Guerrero","LD"],
+        ["Domgjoni","MDC"],["Conde","MC"],
+        ["Tosin","AD"],["Marchesano","MO"],["Okita","AG"],["Santini","BU"],
+    ],
+    "FC Lugano": [
+        ["Saipi","GB"],["Kecskes","RD"],["Daprelà","DC"],
+        ["Hajrizi","DC"],["Valenzuela","LD"],
+        ["Sabbatini","MDC"],["Lovric","MC"],
+        ["Dos Santos","AD"],["Mahou","MO"],["Abubakar","AG"],["Bottani","BU"],
+    ],
+    "FC Luzern": [
+        ["Müller","GB"],["Frydek","RD"],["Burch","DC"],
+        ["Simani","DC"],["Sidler","LD"],
+        ["Emini","MDC"],["Jashari","MC"],
+        ["Dantas","AD"],["Tasar","MO"],["Ugrinic","AG"],["Abubakar","BU"],
+    ],
+    "FC St. Gallen": [
+        ["Lawrence","GB"],["Stillhart","RD"],["Görtler","DC"],
+        ["Ambrosius","DC"],["Spreiter","LD"],
+        ["Quintillà","MDC"],["Münstermann","MC"],
+        ["Ruiz","AD"],["Babic","MO"],["Duah","AG"],["Demirovic","BU"],
+    ],
+    # ── NBA ───────────────────────────────────────────────────────────────────
+    "Los Angeles Lakers": [
+        ["LeBron James","SF"],["A. Davis","C"],["Austin Reaves","SG"],
+        ["Rui Hachimura","PF"],["Dalton Knecht","SG"],
+    ],
+    "Golden State Warriors": [
+        ["S. Curry","PG"],["Buddy Hield","SG"],["A. Wiggins","SF"],
+        ["Draymond Green","PF"],["K. Looney","C"],
+    ],
+    "Boston Celtics": [
+        ["J. Tatum","SF"],["J. Brown","SG"],["K. Porzingis","C"],
+        ["J. Holiday","PG"],["D. White","SG"],
+    ],
+    "Chicago Bulls": [
+        ["Z. LaVine","SG"],["DeMar DeRozan","SF"],["N. Vučević","C"],
+        ["P. Williams","PF"],["L. Ball","PG"],
+    ],
+    "Miami Heat": [
+        ["J. Butler","SF"],["B. Adebayo","C"],["Tyler Herro","SG"],
+        ["T. Duncan","PF"],["D. Robinson","SG"],
+    ],
+    "New York Knicks": [
+        ["J. Brunson","PG"],["J. Randle","PF"],["R. Barrett","SG"],
+        ["M. Robinson","C"],["D. DiVincenzo","SG"],
+    ],
+    "Milwaukee Bucks": [
+        ["G. Antetokounmpo","PF"],["D. Lillard","PG"],["K. Middleton","SF"],
+        ["B. Lopez","C"],["M. Beasley","SG"],
+    ],
+    "Phoenix Suns": [
+        ["D. Booker","SG"],["B. Beal","SG"],["K. Durant","SF"],
+        ["J. Nurkic","C"],["E. Gordon","SG"],
+    ],
+    "LA Clippers": [
+        ["Kawhi Leonard","SF"],["J. Harden","PG"],["N. Powell","SG"],
+        ["I. Zubac","C"],["T. Mann","PF"],
+    ],
+    "Denver Nuggets": [
+        ["N. Jokic","C"],["J. Murray","PG"],["M. Porter Jr.","SF"],
+        ["A. Gordon","PF"],["K. Caldwell-Pope","SG"],
+    ],
+    # ── Euroleague ────────────────────────────────────────────────────────────
+    "Real Madrid Baloncesto": [
+        ["Causeur","SG"],["S. Llull","PG"],["Tavares","C"],
+        ["Yabusele","PF"],["Hezonja","SF"],
+    ],
+    "FC Barcelona Bàsquet": [
+        ["Laprovittola","PG"],["Satoransky","SG"],["Brizuela","SG"],
+        ["Vesely","C"],["Mirotic","PF"],
+    ],
+    "Fenerbahce Beko": [
+        ["Sloukas","PG"],["De Colo","SG"],["Guduric","SF"],
+        ["Bjelica","PF"],["Motiejunas","C"],
+    ],
+    "Olympiacos BC": [
+        ["McKissic","PG"],["Walkup","SG"],["Vezenkov","SF"],
+        ["Moustapha Fall","C"],["Papagiannis","C"],
+    ],
+    "AS Monaco Basket": [
+        ["Paris Lee","PG"],["Okouo","SF"],["Motiejunas","PF"],
+        ["Brown","C"],["Wilson","SG"],
+    ],
+    "Bayern Munich Basketball": [
+        ["Lucic","PG"],["Booker","SG"],["Weiler-Babb","SF"],
+        ["Reynolds","PF"],["Sisko","C"],
+    ],
+    "Maccabi Tel Aviv": [
+        ["Nunnally","SG"],["Hunter","SF"],["Zizic","C"],
+        ["Dibartolomeo","PG"],["Sorkin","C"],
+    ],
+    # ── Betclic Elite ─────────────────────────────────────────────────────────
+    "LDLC ASVEL": [
+        ["Strazel","PG"],["Howard","SG"],["Odiase","C"],
+        ["Yusta","SF"],["Lacombe","PF"],
+    ],
+    "Paris Basketball": [
+        ["Parsons","SG"],["Robinson","PG"],["Edozie","SF"],
+        ["Bako","C"],["Loncar","PF"],
+    ],
+    "SIG Strasbourg": [
+        ["Thomas","PG"],["Sy","SG"],["Kalinoski","SF"],
+        ["Nwaba","SF"],["Mke Anumba","C"],
+    ],
+    "JDA Dijon": [
+        ["Lighty","SG"],["Stewart","PG"],["Cheatham","PF"],
+        ["Obasohan","SG"],["Strazel","SF"],
+    ],
+    "Boulogne-Levallois Metropolitans 92": [
+        ["Kahudi","SF"],["Moerman","SF"],["Jaiteh","C"],
+        ["Stauskas","SG"],["Toupane","SG"],
+    ],
+    "JSF Nanterre": [
+        ["Peyrot","PG"],["Obasohan","SG"],["Lighty","SF"],
+        ["Cheatham","PF"],["Diagne","C"],
+    ],
+    "Le Mans Sarthe Basket": [
+        ["Smith","PG"],["Pineau","SG"],["Sy","SF"],
+        ["McWilliams","PF"],["Odiase","C"],
+    ],
+    # ── Top 14 ────────────────────────────────────────────────────────────────
+    "Stade Toulousain": [
+        ["Dupont","DM"],["Ntamack","DO"],["T. Ramos","FB"],
+        ["Mauvaka","TL"],["Meafou","2e L."],["Cros","F"],
+        ["Aldegheri","PI"],["Lebel","AI"],["Capuozzo","AI"],
+    ],
+    "Stade Rochelais": [
+        ["Hastoy","DO"],["Kerr-Barlow","DM"],["Dulin","FB"],
+        ["Retière","AI"],["Alldritt","N°8"],["Skelton","TL"],
+        ["Priso","PI"],["Danty","CE"],["Dillane","2e L."],
+    ],
+    "Racing 92": [
+        ["Finn Russell","DO"],["Favre","DM"],["Kolbe","AI"],
+        ["Imhoff","CE"],["Lauret","F"],["Diallo","TL"],
+        ["Cobilas","PI"],["Pichot","N°8"],["Palu","2e L."],
+    ],
+    "Clermont Auvergne": [
+        ["Belleau","DO"],["Lescure","DM"],["Raka","AI"],
+        ["Moala","CE"],["Stretch","CE"],
+        ["Chouly","N°8"],["Slimani","TL"],["Iturria","F"],["Vahaamahina","2e L."],
+    ],
+    "Lyon OU": [
+        ["Viallard","DO"],["Couilloud","DM"],["Fafita","AI"],
+        ["Regard","CE"],["Bécognée","AI"],
+        ["Cretin","F"],["Lambey","2e L."],["Leindekar","TL"],["Wainiqolo","AI"],
+    ],
+    "Bordeaux-Bègles": [
+        ["Jalibert","DO"],["Lucu","DM"],["Bielle-Biarrey","AI"],
+        ["Buros","AI"],["Simutoga","CE"],
+        ["Woki","F"],["Taofifenua","2e L."],["Cobilas","PI"],["Cros","N°8"],
+    ],
+    "Montpellier Hérault Rugby": [
+        ["Pollard","DO"],["Paillaugue","DM"],["Luafutu","AI"],
+        ["Masilevu","AI"],["Fusitua","CE"],
+        ["Du Preez","F"],["Furno","2e L."],["Willemse","PI"],["Lam","N°8"],
+    ],
+    "Stade Français Paris": [
+        ["Plisson","DO"],["Machenaud","DM"],["Kolbe","AI"],
+        ["Arias","CE"],["Chapuis","AI"],
+        ["Pointud","F"],["Lambey","2e L."],["Alo-Emile","TL"],["Kaino","N°8"],
+    ],
+    "Aviron Bayonnais": [
+        ["Martocq","DO"],["Bézy","DM"],["Laguet","AI"],
+        ["Nieto","CE"],["Tilsley","AI"],
+        ["Lespiaucq","F"],["Castets","2e L."],["Diallo","TL"],["Ostrowski","N°8"],
+    ],
+    "Castres Olympique": [
+        ["Urdapilleta","DO"],["Bézy","DM"],["Nakosi","AI"],
+        ["Grosso","CE"],["Malié","AI"],
+        ["Babillot","F"],["Gazzotti","2e L."],["Tichit","TL"],["Combezou","N°8"],
+    ],
+}
+
+# ── Teams per competition (built from MATCHES) ────────────────────────────────
+TEAMS_BY_COMPETITION: dict[str, list] = {}
+for _mid, _m in MATCHES.items():
+    _comp = _m["competition"]
+    if _comp not in TEAMS_BY_COMPETITION:
+        TEAMS_BY_COMPETITION[_comp] = []
+    for _side in ("home", "away"):
+        _tname = _m[_side]["name"]
+        if _tname not in TEAMS_BY_COMPETITION[_comp]:
+            TEAMS_BY_COMPETITION[_comp].append(_tname)
+for _comp in TEAMS_BY_COMPETITION:
+    TEAMS_BY_COMPETITION[_comp].sort()
+
 # ══════════════════════════════════════════════════════════════════════════════
 # HELPERS
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1155,11 +1539,17 @@ def generate_synthetic_analysis(mid: str, m: dict) -> dict:
         a_form = rng.choice(["4-3-3", "4-2-3-1", "4-4-2", "3-5-2", "4-1-4-1"])
         h_style = {"4-3-3": "Possession haute, pressing collectif, combinaisons sur les côtés", "4-2-3-1": "Double pivot protecteur, jeu vertical rapide sur le meneur offensif", "3-5-2": "Surnombre au milieu, pistons actifs, transitions structurées", "4-4-2": "Bloc compact, jeu direct sur les deux attaquants", "4-1-4-1": "Pivot ancré en récupération, milieux offensifs mobiles, avant-centre pivot"}.get(h_form, "Bloc compact, jeu organisé")
         a_style = {"4-3-3": "Bloc médian, sortie en contre-attaque sur les récupérations", "4-2-3-1": "Pressing mi-haut, organisation en bloc défensif structuré", "4-4-2": "Double pivot, jeu long sur les attaquants", "3-5-2": "Milieu dense, contre-attaque rapide", "4-1-4-1": "Ligne médiane serrée, jeu long et second ball"}.get(a_form, "Organisation défensive, jeu de contre")
-        surns = ["Martin","Dupont","Bernard","Moreau","Laurent","Simon","Michel","Diallo","Kouyaté","Ndiaye","Camara","Touré","García","Rodríguez","López","Ferreira","Silva","Costa","Petit","Leroy"]
-        rng.shuffle(surns)
         pos4 = [["GB",""],["RD",""],["DC",""],["DC",""],["LD",""],["MC",""],["MC",""],["MO",""],["AD",""],["BU",""],["AG",""]]
-        h_players = [[surns[i], pos4[i][0]] for i in range(11)]
-        a_players = [[surns[i+9], pos4[i][0]] for i in range(11)]
+        h_players = TEAM_SQUADS.get(hn)
+        a_players = TEAM_SQUADS.get(an)
+        if h_players is None:
+            surns = ["Martin","Dupont","Bernard","Moreau","Laurent","Simon","Michel","Diallo","Kouyaté","Ndiaye","Camara","Touré","García","Rodríguez","López","Ferreira","Silva","Costa","Petit","Leroy"]
+            rng.shuffle(surns)
+            h_players = [[surns[i], pos4[i][0]] for i in range(11)]
+        if a_players is None:
+            surns2 = ["Petit","Leroy","Rousseau","Blanc","Morel","Girard","Fournier","Bonnet","Mercier","Dupuis","Lambert","Bertrand","Giraud","Renaud","Leclerc","Vidal","Torres","Mendes","Gomes","Alves"]
+            rng.shuffle(surns2)
+            a_players = [[surns2[i], pos4[i][0]] for i in range(11)]
         h_poss = rng.randint(52, 65) if hw else (rng.randint(47, 53) if draw else rng.randint(38, 50))
         h_shots = rng.randint(max(hs*2,8), max(hs*3,18)); a_shots = rng.randint(max(as_*2,5), max(as_*3,14))
         h_on = max(hs, rng.randint(hs, hs+4)); a_on = max(as_, rng.randint(as_, as_+3))
@@ -1174,8 +1564,10 @@ def generate_synthetic_analysis(mid: str, m: dict) -> dict:
         h_notes = sorted([round(rng.uniform(6.2 if hw else 5.5, 9.2 if hw else 7.5), 1) for _ in range(7)], reverse=True)
         a_notes = sorted([round(rng.uniform(5.5 if hw else 6.2, 7.5 if hw else 9.0), 1) for _ in range(6)], reverse=True)
         stats_tmpl = [f"{rng.randint(1,3)} but(s), {rng.randint(50,90)} ballons", f"{rng.randint(1,2)} PD, {rng.randint(3,7)} dribbles", f"{rng.randint(80,93)}% passes, {rng.randint(3,8)} récup.", f"{rng.randint(2,5)} tirs, {rng.randint(1,3)} cadrés", f"{rng.randint(5,14)} duels, {rng.randint(2,5)} gagnés"]
-        h_joueurs = [{"nom": h_players[i][0], "poste": h_players[i][1], "note": h_notes[i], "stats": rng.choice(stats_tmpl)} for i in range(len(h_notes))]
-        a_joueurs = [{"nom": a_players[i][0], "poste": a_players[i][1], "note": a_notes[i], "stats": rng.choice(stats_tmpl)} for i in range(len(a_notes))]
+        _h_pl_rated = h_players[:7] if len(h_players) >= 7 else h_players
+        _a_pl_rated = a_players[:6] if len(a_players) >= 6 else a_players
+        h_joueurs = [{"nom": _h_pl_rated[i][0], "poste": _h_pl_rated[i][1], "note": h_notes[i], "stats": rng.choice(stats_tmpl)} for i in range(min(len(h_notes), len(_h_pl_rated)))]
+        a_joueurs = [{"nom": _a_pl_rated[i][0], "poste": _a_pl_rated[i][1], "note": a_notes[i], "stats": rng.choice(stats_tmpl)} for i in range(min(len(a_notes), len(_a_pl_rated)))]
         bilan = {
             "home_forts": rng.sample([f"Occupation du terrain : {h_poss}% de possession avec un pressing constant — {an} n'a jamais pu se retrouver dans le confort de la construction", f"Solidité défensive en seconde période : aucune situation dangereuse concédée sur séquence ouverte après la {rng.randint(55,70)}'", f"Efficacité offensive : {h_on} tirs cadrés sur {h_shots} tentatives, un ratio qui traduit la qualité des décisions en zone de finition", "Organisation collective sans faille sur les phases arrêtées défensives"], 3),
             "home_faibles": rng.sample([f"Relances trop précipitées dans le dernier quart d'heure — trois ballons perdus dans des zones dangereuses", "Ligne défensive parfois trop haute à l'approche de la mi-temps, laissant des espaces exploitables dans le dos des centraux", "Manque de tranchant en un-contre-un — trop d'options simples plutôt que des solutions verticales"], 2),
@@ -1191,10 +1583,14 @@ def generate_synthetic_analysis(mid: str, m: dict) -> dict:
         h_style = {"Positionnel": "Jeu de poste bas dominant, pick & roll tardifs, isolation côté faible", "Motion Offense": "Circulation rapide, coupes permanentes, tirs catch-and-shoot", "Iso Ball": "Créateur principal en isolation, décalages sur les aides défensives", "Pace & Space": "Tempo élevé, espacement maximal, 3pts en cadence"}.get(h_sys, "Jeu structuré demi-terrain")
         a_style = {"Motion Offense": "Écran-rouleau constant, passes rapides, snipers aux coins", "Pick & Roll": "P&R deux hommes, isolation sur mismatch créé, roll vers le cercle", "Positionnel": "Bloc d'attaque mi-terrain, pick & roll côté fort", "Transition Offense": "Fast break systématique, attaque avant retour défensif adverse"}.get(a_sys, "Basketball structuré et collectif")
         b_pos = [["PG",""], ["SG",""], ["SF",""], ["PF",""], ["C",""]]
-        bh = rng.sample(["Williams","Johnson","Smith","Davis","Brown","Jones","White","Taylor","Anderson","Thomas"], 5)
-        ba = rng.sample(["Martin","Jackson","Harris","Thompson","Garcia","Martinez","Robinson","Clark","Lewis","Lee"], 5)
-        h_players = [[f"{bh[i][0]}. {bh[i]}", b_pos[i][0]] for i in range(5)]
-        a_players = [[f"{ba[i][0]}. {ba[i]}", b_pos[i][0]] for i in range(5)]
+        h_players = TEAM_SQUADS.get(hn)
+        a_players = TEAM_SQUADS.get(an)
+        if h_players is None:
+            bh = rng.sample(["Williams","Johnson","Smith","Davis","Brown","Jones","White","Taylor","Anderson","Thomas"], 5)
+            h_players = [[f"{bh[i][0]}. {bh[i]}", b_pos[i][0]] for i in range(5)]
+        if a_players is None:
+            ba = rng.sample(["Martin","Jackson","Harris","Thompson","Garcia","Martinez","Robinson","Clark","Lewis","Lee"], 5)
+            a_players = [[f"{ba[i][0]}. {ba[i]}", b_pos[i][0]] for i in range(5)]
         h_3pt = rng.randint(8,16); a_3pt = rng.randint(6,14)
         h_reb = rng.randint(38,52); a_reb = rng.randint(34,48)
         h_ast = rng.randint(20,32); a_ast = rng.randint(18,28)
@@ -1222,11 +1618,17 @@ def generate_synthetic_analysis(mid: str, m: dict) -> dict:
     else:
         h_style = rng.choice(["Jeu au sol dominant, maul offensif, jeu de pied territorial, mêlée puissante", "Jeu à la main rapide, attaque des intervalles, soutiens immédiats, touche dominatrice", "Jeu de contre-attaque, jeu aérien, mêlée solide, discipline défensive"])
         a_style = rng.choice(["Bloc défensif serré, jeu de contre-attaque, jeu au pied de dégagement", "Maul offensif structuré, touche dominante, jeu de puissance", "Jeu rapide, soutiens immédiats, alignements offensifs variés"])
-        rg_surns = ["Dupont","Ntamack","Fickou","Rattez","Cros","Jelonch","Alldritt","Hastoy","Kerr-Barlow","Botia","Skelton","West","Berdeu","Leyds","Jalibert","Lucu","Woki","Bielle-Biarrey","Taofifenua","Leindekar"]
-        rng.shuffle(rg_surns)
         rg_pos = [["DO",""],["DM",""],["AI",""],["CE",""],["CE",""],["F",""],["TL",""],["N°8",""]]
-        h_players = [[rg_surns[i], rg_pos[i][0]] for i in range(8)]
-        a_players = [[rg_surns[i+8], rg_pos[i][0]] for i in range(8)]
+        h_players = TEAM_SQUADS.get(hn)
+        a_players = TEAM_SQUADS.get(an)
+        if h_players is None:
+            rg_surns = ["Dupont","Ntamack","Fickou","Rattez","Cros","Jelonch","Alldritt","Hastoy","Kerr-Barlow","Botia","Skelton","West","Berdeu","Leyds","Jalibert","Lucu","Woki","Bielle-Biarrey","Taofifenua","Leindekar"]
+            rng.shuffle(rg_surns)
+            h_players = [[rg_surns[i], rg_pos[i][0]] for i in range(8)]
+        if a_players is None:
+            rg_surns2 = ["Ollivon","Lamothe","Raka","Moala","Lebel","Capuozzo","Retière","Danty","Dillane","Priso","Mauvaka","Meafou","Taofifenua","Aldegheri","Leindekar","Cretin","Lambey","Couilloud","Martocq","Castets"]
+            rng.shuffle(rg_surns2)
+            a_players = [[rg_surns2[i], rg_pos[i][0]] for i in range(8)]
         h_poss = rng.randint(52, 62) if hw else rng.randint(40, 52)
         phases = {
             "Mêlée & Touche": f"La conquête sur mêlée a été le facteur décisif. {hsh if rng.random()>0.5 else ash} a dominé cette phase statique à {rng.randint(7,9)}/9 — une supériorité qui a offert des plateformes de jeu idéales. Une mêlée dominante en rugby professionnel, c'est 20% du jeu — et 80% de la confiance collective.",
@@ -1501,6 +1903,8 @@ if "selected_date" not in st.session_state: st.session_state.selected_date = TOD
 if "cal_view" not in st.session_state: st.session_state.cal_view = TODAY.replace(day=1)
 if "comp_filter" not in st.session_state:
     st.session_state.comp_filter = set()
+if "selected_team" not in st.session_state:
+    st.session_state.selected_team = None
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SIDEBAR
@@ -1568,7 +1972,32 @@ with st.sidebar:
         checked = comp in st.session_state.comp_filter or len(st.session_state.comp_filter) == 0
         if st.checkbox(comp, value=checked, key=f"chk_{comp}"):
             new_filter.add(comp)
+    prev_filter = st.session_state.comp_filter
     st.session_state.comp_filter = new_filter if new_filter else set(sport_comps)
+    if prev_filter != st.session_state.comp_filter:
+        st.session_state.selected_team = None
+
+    st.markdown("---")
+
+    # ── Team tracker ──
+    st.markdown('<p class="bbn" style="font-size:1rem;color:#888;letter-spacing:.1em;">ÉQUIPE</p>', unsafe_allow_html=True)
+    active_comps_sb = st.session_state.comp_filter or set(sport_comps)
+    all_teams_sb: list[str] = []
+    for _c in sport_comps:
+        if _c in active_comps_sb:
+            for _t in TEAMS_BY_COMPETITION.get(_c, []):
+                if _t not in all_teams_sb:
+                    all_teams_sb.append(_t)
+    all_teams_sb.sort()
+    team_opts = ["Toutes les équipes"] + all_teams_sb
+    cur_team = st.session_state.selected_team
+    cur_idx = (team_opts.index(cur_team) if cur_team in team_opts else 0)
+    picked = st.selectbox("", team_opts, index=cur_idx, label_visibility="collapsed", key="team_select")
+    new_team = None if picked == "Toutes les équipes" else picked
+    if new_team != st.session_state.selected_team:
+        st.session_state.selected_team = new_team
+        st.session_state.selected_match = None
+        st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN
@@ -1591,6 +2020,7 @@ with sport_col:
             if st.button(sport, key=f"sport_{sport}"):
                 st.session_state.sport = sport
                 st.session_state.selected_match = None
+                st.session_state.selected_team = None
                 st.rerun()
             if active:
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -1604,14 +2034,107 @@ active_comps = st.session_state.comp_filter or set(COMPETITIONS_BY_SPORT.get(st.
 filtered = DataLayer.get_matches(date_str, st.session_state.sport, active_comps)
 all_sport = DataLayer.get_all_for_sport(st.session_state.sport, active_comps)
 
-# ── Date headline ──────────────────────────────────────────────────────────────
-date_label = st.session_state.selected_date.strftime("%A %d %B %Y").capitalize()
-count = len(filtered)
-st.markdown(
-    f'<p class="bbn" style="font-size:1.5rem;color:#f0f0f0;">'
-    f'{date_label} <span style="color:#CAFF33;font-size:1rem;">{count} match{"s" if count!=1 else ""}</span></p>',
-    unsafe_allow_html=True,
-)
+# ── Team page ─────────────────────────────────────────────────────────────────
+_sel_team = st.session_state.selected_team
+if _sel_team:
+    # Find team color and all matches for this team
+    _team_matches = {mid: m for mid, m in all_sport.items()
+                     if m["home"]["name"] == _sel_team or m["away"]["name"] == _sel_team}
+    _team_color = "#CAFF33"
+    for _m in _team_matches.values():
+        if _m["home"]["name"] == _sel_team:
+            _team_color = _m["home"]["color"]; break
+        elif _m["away"]["name"] == _sel_team:
+            _team_color = _m["away"]["color"]; break
+    also_in_matches = {mid: m for mid, m in MATCHES.items()
+                       if (m["home"]["name"] == _sel_team or m["away"]["name"] == _sel_team)
+                       and mid not in _team_matches}
+    _team_matches = {**_team_matches, **also_in_matches}
+
+    # Past results for form
+    _past = sorted(
+        [(mid, m) for mid, m in _team_matches.items() if m["status"] == "Terminé"
+         and m["home"].get("score") is not None and m["away"].get("score") is not None],
+        key=lambda x: x[1]["date"], reverse=True
+    )
+    _form = []
+    _wins = _draws = _losses = 0
+    for _, _pm in _past[:5]:
+        _is_home = _pm["home"]["name"] == _sel_team
+        _ts = int(_pm["home"]["score"] if _is_home else _pm["away"]["score"])
+        _os = int(_pm["away"]["score"] if _is_home else _pm["home"]["score"])
+        if _ts > _os:   _form.append(("V","#CAFF33")); _wins += 1
+        elif _ts == _os: _form.append(("N","#888"));   _draws += 1
+        else:            _form.append(("D","#e05050")); _losses += 1
+
+    # Next match
+    _upcoming = sorted(
+        [(mid, m) for mid, m in _team_matches.items() if m["status"] == "À venir"],
+        key=lambda x: x[1]["date"]
+    )
+    _next = _upcoming[0][1] if _upcoming else None
+
+    # Render team header
+    form_dots_html = "".join(
+        f'<span style="display:inline-flex;align-items:center;justify-content:center;'
+        f'width:26px;height:26px;border-radius:50%;background:{c};color:#080808;'
+        f'font-weight:900;font-size:.7rem;margin-right:4px;">{r}</span>'
+        for r, c in _form
+    ) or '<span style="color:#444;font-size:.8rem;">Aucun résultat</span>'
+
+    _next_html = ""
+    if _next:
+        _opp = _next["away"]["name"] if _next["home"]["name"] == _sel_team else _next["home"]["name"]
+        _venue = "Domicile" if _next["home"]["name"] == _sel_team else "Extérieur"
+        _next_html = (
+            f'<div style="margin-top:.75rem;padding:.6rem .9rem;background:#141414;'
+            f'border:1px solid #1e1e1e;border-left:3px solid {_team_color};border-radius:8px;'
+            f'font-size:.82rem;">'
+            f'<span style="color:#666;text-transform:uppercase;font-size:.68rem;letter-spacing:.07em;">Prochain match</span><br>'
+            f'<span style="color:#f0f0f0;font-weight:700;">{_opp}</span>'
+            f'<span style="color:#555;"> · {_venue} · {safe_parse_date(_next["date"], "%d %b %Y")}</span>'
+            f'</div>'
+        )
+
+    st.markdown(
+        f'<div style="background:#111;border:1px solid #1e1e1e;border-top:3px solid {_team_color};'
+        f'border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;">'
+        f'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">'
+        f'<div>'
+        f'<p class="bbn" style="font-size:1.8rem;color:#f0f0f0;margin:0;">'
+        f'<span style="color:{_team_color};">■</span> {_sel_team}</p>'
+        f'<p style="color:#555;font-size:.8rem;margin:.25rem 0 .6rem;">'
+        f'{_wins}V · {_draws}N · {_losses}D</p>'
+        f'<div style="display:flex;align-items:center;gap:0;">{form_dots_html}</div>'
+        f'</div>'
+        f'</div>'
+        f'{_next_html}'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+    if st.button("← Voir tous les matchs", key="team_reset"):
+        st.session_state.selected_team = None
+        st.session_state.selected_match = None
+        st.rerun()
+
+    # Override filtered: show all team matches sorted newest first
+    filtered = dict(sorted(_team_matches.items(), key=lambda x: x[1]["date"], reverse=True))
+    headline = f'{_sel_team} — tous les matchs'
+    count = len(filtered)
+    st.markdown(
+        f'<p class="bbn" style="font-size:1.2rem;color:#f0f0f0;margin-bottom:.5rem;">'
+        f'{headline} <span style="color:#CAFF33;font-size:.9rem;">{count} match{"s" if count!=1 else ""}</span></p>',
+        unsafe_allow_html=True,
+    )
+else:
+    # ── Date headline ──────────────────────────────────────────────────────────
+    date_label = st.session_state.selected_date.strftime("%A %d %B %Y").capitalize()
+    count = len(filtered)
+    st.markdown(
+        f'<p class="bbn" style="font-size:1.5rem;color:#f0f0f0;">'
+        f'{date_label} <span style="color:#CAFF33;font-size:1rem;">{count} match{"s" if count!=1 else ""}</span></p>',
+        unsafe_allow_html=True,
+    )
 
 # ── Match cards ────────────────────────────────────────────────────────────────
 if filtered:
