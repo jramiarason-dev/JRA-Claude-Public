@@ -1225,6 +1225,297 @@ COACHES: dict[str, dict] = {
         'weaknesses': ['Effectif limité', 'Manque de régularité'],
         'key_principles': ['Pressing collectif', 'Combativité', 'Jeu direct', 'Identité forte']
     },
+    # ── NBA ───────────────────────────────────────────────────────────────────
+    'Lakers': {
+        'name': 'JJ Redick',
+        'nationality': '🇺🇸',
+        'formation': 'Drop Coverage / Switch',
+        'style': 'Spacing maximal, jeu de pick and roll',
+        'philosophy': 'Spacing maximal pour libérer LeBron et Davis. Utilisation intensive du pick and roll. Défense en drop coverage sur les porteurs de balle. Jeu rapide en transition. Valorisation des shooteurs extérieurs autour des deux stars.',
+        'strengths': ['Duo LeBron-Davis dominant', 'Spacing offensif', 'Expérience playoff', 'Polyvalence défensive'],
+        'weaknesses': ['Défense parfois poreuse', 'Dépendance aux stars', 'Profondeur de banc limitée'],
+        'key_principles': ['Pick and roll prioritaire', 'Spacing maximal', 'Transition rapide', 'Isolation pour LeBron/AD']
+    },
+    'Warriors': {
+        'name': 'Steve Kerr',
+        'nationality': '🇺🇸',
+        'formation': 'Motion Offense',
+        'style': 'Ball movement, spacing, tirs à 3 points',
+        'philosophy': 'Motion offense basée sur le mouvement collectif du ballon. Spacing maximal avec shooteurs à 3 points. Death lineup avec 5 joueurs polyvalents. Défense commutable sur toutes les actions. Philosophie de partage du ballon.',
+        'strengths': ['Ball movement exceptionnel', 'Tirs à 3 points', 'Défense commutable', 'Expérience collective'],
+        'weaknesses': ['Vieillissement du roster', 'Défense parfois lente', 'Transition générationnelle'],
+        'key_principles': ['Ball movement constant', 'Off-ball movement', 'Spacing 5 extérieurs', 'Switch défensif systématique']
+    },
+    'Celtics': {
+        'name': 'Joe Mazzulla',
+        'nationality': '🇺🇸',
+        'formation': 'Switch Everything',
+        'style': 'Défense élite, attaque polyvalente',
+        'philosophy': 'Défense de niveau élite basée sur le switch systématique. Attaque polyvalente avec multiples créateurs. Tirs à 3 points en grande quantité. Duo Tatum-Brown comme piliers offensifs. Intensité défensive maximale.',
+        'strengths': ['Défense élite', 'Polyvalence offensive', 'Tirs à 3 points', 'Profondeur de roster'],
+        'weaknesses': ['Peut manquer de création en isolation', 'Dépendance au tir extérieur'],
+        'key_principles': ['Switch défensif systématique', 'Tirs à 3 points prioritaires', 'Duo Tatum-Brown', 'Intensité défensive']
+    },
+    'Heat': {
+        'name': 'Erik Spoelstra',
+        'nationality': '🇺🇸',
+        'formation': 'Zone Defense / Man',
+        'style': 'Heat Culture, défense intense, adaptabilité',
+        'philosophy': 'Heat Culture — travail acharné et discipline absolue. Défense intense avec rotations parfaites. Grande adaptabilité tactique. Développement de joueurs non draftés en stars. Zone defense utilisée stratégiquement.',
+        'strengths': ['Culture de travail unique', 'Adaptabilité tactique', 'Défense intense', 'Développement des joueurs'],
+        'weaknesses': ['Peut manquer de talent pur', 'Dépend du système'],
+        'key_principles': ['Heat Culture', 'Défense collective', 'Adaptabilité', 'Rotations parfaites']
+    },
+    'Nuggets': {
+        'name': 'Michael Malone',
+        'nationality': '🇺🇸',
+        'formation': 'Jokic-Centered Offense',
+        'style': 'Jeu centré sur Jokic, passes, intelligence',
+        'philosophy': 'Tout le système est construit autour de Nikola Jokic comme playmaker central. Jeu lent et patient favorisant l\'intelligence de jeu. Passes et mouvements sans ballon. Défense solide mais pas spectaculaire. Efficacité maximale.',
+        'strengths': ['Jokic comme arme ultime', 'Intelligence de jeu collective', 'Efficacité offensive', 'Patience tactique'],
+        'weaknesses': ['Dépendance à Jokic', 'Défense perfectible', 'Manque de vitesse'],
+        'key_principles': ['Jokic comme playmaker', 'Patience en attaque', 'Mouvements sans ballon', 'Intelligence collective']
+    },
+    'Bucks': {
+        'name': 'Doc Rivers',
+        'nationality': '🇺🇸',
+        'formation': 'Giannis-Centered',
+        'style': 'Attaque dans la raquette, Giannis dominant',
+        'philosophy': 'Système centré sur les drives de Giannis vers la raquette. Shooteurs placés autour pour les kick-outs. Défense agressive. Exploitation de la dominance physique de Giannis.',
+        'strengths': ['Giannis dominant', 'Attaque dans la raquette', 'Défense agressive'],
+        'weaknesses': ['Prévisibilité offensive', 'Dépendance à Giannis'],
+        'key_principles': ['Drives de Giannis', 'Kick-out vers les shooteurs', 'Défense agressive', 'Raquette dominée']
+    },
+    'Suns': {
+        'name': 'Mike Budenholzer',
+        'nationality': '🇺🇸',
+        'formation': 'Pick and Roll / Isolation',
+        'style': 'Stars en isolation, pick and roll efficace',
+        'philosophy': 'Exploitation des stars en isolation et pick and roll. Spacing pour Kevin Durant et Devin Booker. Défense bien organisée. Utilisation optimale du talent individuel.',
+        'strengths': ['Talent individuel élite', 'Pick and roll Durant-Booker', 'Spacing offensif'],
+        'weaknesses': ['Cohésion collective', 'Défense parfois insuffisante'],
+        'key_principles': ['Isolation stars', 'Pick and roll KD-Booker', 'Spacing maximal', 'Talent individuel']
+    },
+    'Knicks': {
+        'name': 'Tom Thibodeau',
+        'nationality': '🇺🇸',
+        'formation': 'Man-to-Man Defense',
+        'style': 'Défense intense, jeu physique, dureté',
+        'philosophy': 'Défense man-to-man très intense. Jeu physique et dur. Minutes élevées pour les meilleurs joueurs. Identité défensive avant tout. Culture de dureté et de compétition.',
+        'strengths': ['Défense intense', 'Mentalité compétitive', 'Jeu physique', 'Culture défensive'],
+        'weaknesses': ['Gestion des minutes', 'Jeu offensif parfois limité', 'Fatigue en fin de saison'],
+        'key_principles': ['Défense man-to-man', 'Intensité physique', 'Dureté collective', 'Identité défensive']
+    },
+    'Bulls': {
+        'name': 'Billy Donovan',
+        'nationality': '🇺🇸',
+        'formation': 'Motion Offense',
+        'style': 'Motion offense, LaVine et DeRozan en vedette',
+        'philosophy': 'Motion offense avec LaVine et DeRozan comme créateurs principaux. Jeu en demi-terrain patient. Défense en construction. Développement collectif progressif.',
+        'strengths': ['LaVine athlétisme', 'DeRozan mid-range', 'Motion offense fluide'],
+        'weaknesses': ['Défense insuffisante', 'Manque de présence intérieure', 'Régularité'],
+        'key_principles': ['Motion offense', 'LaVine-DeRozan création', 'Jeu demi-terrain', 'Développement collectif']
+    },
+    'Nets': {
+        'name': 'Jordi Fernandez',
+        'nationality': '🇪🇸',
+        'formation': 'Development System',
+        'style': 'Développement jeunes, construction long terme',
+        'philosophy': 'Phase de reconstruction complète. Développement des jeunes talents. Liberté offensive pour les joueurs en progression. Construction d\'une identité collective sur le long terme.',
+        'strengths': ['Développement jeunes', 'Liberté offensive', 'Construction long terme'],
+        'weaknesses': ['Résultats immédiats limités', 'Roster jeune et inexpérimenté'],
+        'key_principles': ['Développement jeunes', 'Construction identité', 'Liberté créative', 'Long terme']
+    },
+    'Clippers': {
+        'name': 'Tyronn Lue',
+        'nationality': '🇺🇸',
+        'formation': 'Versatile Defense',
+        'style': 'Défense polyvalente, attaque créative',
+        'philosophy': 'Défense polyvalente avec switches fréquents. Attaque créative autour de Kawhi et George. Gestion experte des rotations. Adaptabilité tactique selon les adversaires.',
+        'strengths': ['Défense polyvalente', 'Gestion des rotations', 'Adaptabilité', 'Expérience playoff'],
+        'weaknesses': ['Blessures récurrentes des stars', 'Régularité en saison'],
+        'key_principles': ['Switch défensif', 'Rotation experte', 'Adaptabilité', 'Kawhi en isolation']
+    },
+    'Spurs': {
+        'name': 'Gregg Popovich',
+        'nationality': '🇺🇸',
+        'formation': 'Fundamental Basketball',
+        'style': 'Basket fondamental, développement Wembanyama',
+        'philosophy': 'Basketball fondamental basé sur les principes de base. Développement de Victor Wembanyama comme franchise player. Passes et mouvements sans ballon. Défense organisée. Légende vivante du coaching NBA.',
+        'strengths': ['Développement Wembanyama', 'Principes fondamentaux', 'Expérience coaching', 'Culture gagnante'],
+        'weaknesses': ['Roster en reconstruction', 'Résultats immédiats'],
+        'key_principles': ['Fondamentaux basketball', 'Développement Wembanyama', 'Ball movement', 'Défense organisée']
+    },
+    'Mavericks': {
+        'name': 'Jason Kidd',
+        'nationality': '🇺🇸',
+        'formation': 'Luka-Centered',
+        'style': 'Tout autour de Luka Doncic',
+        'philosophy': 'Système entièrement construit autour de Luka Doncic comme playmaker et scoreur principal. Spacing pour ses drives et pull-up jumpers. Défense en amélioration constante.',
+        'strengths': ['Luka Doncic dominant', 'Créativité offensive', 'Spacing pour Luka'],
+        'weaknesses': ['Dépendance totale à Luka', 'Défense perfectible'],
+        'key_principles': ['Luka comme playmaker central', 'Spacing pour les drives', 'Isolation Luka', 'Soutien collectif']
+    },
+    'Grizzlies': {
+        'name': 'Taylor Jenkins',
+        'nationality': '🇺🇸',
+        'formation': 'Physicality First',
+        'style': 'Jeu physique, Ja Morant explosif, grit',
+        'philosophy': 'Jeu physique et intense centré sur l\'explosivité de Ja Morant. Défense agressive. Culture Grizzlies de dur labeur. Transitions rapides exploitant la vitesse de Morant.',
+        'strengths': ['Ja Morant explosif', 'Défense agressive', 'Physicalité', 'Transitions rapides'],
+        'weaknesses': ['Dépendance à Morant', 'Régularité défensive'],
+        'key_principles': ['Transitions Morant', 'Défense physique', 'Intensité constante', 'Grit culture']
+    },
+    'Hawks': {
+        'name': 'Quin Snyder',
+        'nationality': '🇺🇸',
+        'formation': 'Trae Young Offense',
+        'style': 'Trae Young comme meneur créateur élite',
+        'philosophy': 'Système axé sur Trae Young comme meneur créateur d\'élite. Pick and roll constant. Spacing pour ses passes lobées et tirs longue distance. Défense en reconstruction.',
+        'strengths': ['Trae Young créativité', 'Pick and roll élite', 'Scoring offensif'],
+        'weaknesses': ['Défense insuffisante', 'Dépendance à Trae'],
+        'key_principles': ['Pick and roll Trae', 'Spacing maximal', 'Créativité offensive', 'Scoring prioritaire']
+    },
+    'Pacers': {
+        'name': 'Rick Carlisle',
+        'nationality': '🇺🇸',
+        'formation': 'Up-tempo Offense',
+        'style': 'Jeu rapide, Tyrese Haliburton meneur élite',
+        'philosophy': 'Rythme de jeu très élevé. Haliburton comme meneur d\'élite en transition. Nombreuses passes décisives. Défense en développement. Plaisir de jouer et scoring offensif.',
+        'strengths': ['Haliburton passes', 'Rythme élevé', 'Scoring collectif', 'Jeu rapide'],
+        'weaknesses': ['Défense perfectible', 'Régularité en playoffs'],
+        'key_principles': ['Rythme élevé', 'Haliburton comme meneur', 'Transitions rapides', 'Scoring collectif']
+    },
+    'Cavaliers': {
+        'name': 'Kenny Atkinson',
+        'nationality': '🇺🇸',
+        'formation': 'Team Defense',
+        'style': 'Défense collective, Donovan Mitchell scoreur',
+        'philosophy': 'Défense collective très organisée. Mitchell comme scoreur principal. Jeu d\'équipe cohérent. Construction patiente autour d\'un roster équilibré.',
+        'strengths': ['Défense collective', 'Mitchell scoreur', 'Équilibre roster', 'Organisation'],
+        'weaknesses': ['Manque de star dominante', 'Playoff expérience'],
+        'key_principles': ['Défense collective', 'Mitchell isolation', 'Équilibre offensif', 'Organisation']
+    },
+    'Thunder': {
+        'name': 'Mark Daigneault',
+        'nationality': '🇺🇸',
+        'formation': 'Youth Movement',
+        'style': 'SGA dominant, jeunesse explosive',
+        'philosophy': 'Shai Gilgeous-Alexander comme superstar principale. Équipe jeune et explosive. Défense intense. Culture de développement et de compétition. Futur très prometteur.',
+        'strengths': ['SGA dominant', 'Profondeur exceptionnelle', 'Défense intense', 'Jeunesse explosive'],
+        'weaknesses': ['Expérience playoff limitée', 'Pression des attentes'],
+        'key_principles': ['SGA comme leader', 'Défense collective', 'Jeu d\'équipe', 'Développement jeunes']
+    },
+    'Timberwolves': {
+        'name': 'Chris Finch',
+        'nationality': '🇬🇧',
+        'formation': 'Defense-First',
+        'style': 'Défense élite, Towns et Edwards en attaque',
+        'philosophy': 'Défense de niveau élite comme identité principale. Anthony Edwards comme leader offensif explosif. Karl-Anthony Towns comme pivot polyvalent. Équilibre défense-attaque.',
+        'strengths': ['Défense élite', 'Edwards explosif', 'Polyvalence Towns', 'Intensité'],
+        'weaknesses': ['Cohésion parfois fragile', 'Régularité'],
+        'key_principles': ['Défense prioritaire', 'Edwards en isolation', 'Towns spacing', 'Intensité défensive']
+    },
+    'Rockets': {
+        'name': 'Ime Udoka',
+        'nationality': '🇺🇸',
+        'formation': 'Development + Defense',
+        'style': 'Défense intense, développement Jalen Green',
+        'philosophy': 'Défense très intense comme base. Développement de Jalen Green et Alperen Sengun. Construction d\'une équipe compétitive sur le long terme. Intensité défensive comme identité.',
+        'strengths': ['Défense intense', 'Green et Sengun développement', 'Intensité', 'Futur prometteur'],
+        'weaknesses': ['Roster jeune', 'Régularité offensive'],
+        'key_principles': ['Défense intense', 'Développement stars', 'Intensité constante', 'Construction long terme']
+    },
+    'Jazz': {
+        'name': 'Will Hardy',
+        'nationality': '🇺🇸',
+        'formation': 'Rebuild System',
+        'style': 'Reconstruction, développement jeunes talents',
+        'philosophy': 'Phase de reconstruction complète. Développement des jeunes talents avec liberté offensive. Construction d\'une identité de jeu moderne. Patience et vision long terme.',
+        'strengths': ['Développement jeunes', 'Liberté créative', 'Vision long terme'],
+        'weaknesses': ['Résultats immédiats', 'Roster inexpérimenté'],
+        'key_principles': ['Développement jeunes', 'Liberté offensive', 'Construction identité', 'Long terme']
+    },
+    'Trail Blazers': {
+        'name': 'Chauncey Billups',
+        'nationality': '🇺🇸',
+        'formation': 'Development Focus',
+        'style': 'Développement Scoot Henderson, reconstruction',
+        'philosophy': 'Développement de Scoot Henderson comme futur franchise player. Reconstruction patiente. Jeu ouvert favorisant le développement individuel.',
+        'strengths': ['Henderson développement', 'Jeu ouvert', 'Patience'],
+        'weaknesses': ['Résultats immédiats', 'Roster limité'],
+        'key_principles': ['Henderson priorité', 'Développement individuel', 'Reconstruction patient']
+    },
+    'Kings': {
+        'name': 'Doug Christie',
+        'nationality': '🇺🇸',
+        'formation': 'Up-tempo Offense',
+        'style': 'Jeu rapide, De\'Aaron Fox explosif',
+        'philosophy': 'Rythme de jeu élevé autour de De\'Aaron Fox. Transitions rapides. Scoring offensif élevé. Défense en amélioration.',
+        'strengths': ['Fox explosif', 'Rythme élevé', 'Scoring offensif'],
+        'weaknesses': ['Défense perfectible', 'Cohésion collective'],
+        'key_principles': ['Transitions Fox', 'Rythme élevé', 'Scoring prioritaire']
+    },
+    'Pelicans': {
+        'name': 'Willie Green',
+        'nationality': '🇺🇸',
+        'formation': 'Inside-Out Game',
+        'style': 'Jeu intérieur-extérieur, Zion dominant',
+        'philosophy': 'Exploitation de la dominance physique de Zion Williamson. Jeu intérieur-extérieur. Défense solide. Brandon Ingram comme deuxième option offensive.',
+        'strengths': ['Zion dominant', 'Défense solide', 'Jeu intérieur'],
+        'weaknesses': ['Blessures de Zion', 'Régularité'],
+        'key_principles': ['Zion dans la raquette', 'Jeu intérieur-extérieur', 'Défense solide']
+    },
+    'Wizards': {
+        'name': 'Brian Keefe',
+        'nationality': '🇺🇸',
+        'formation': 'Full Rebuild',
+        'style': 'Reconstruction totale, développement',
+        'philosophy': 'Reconstruction totale de la franchise. Développement des jeunes joueurs. Liberté offensive maximale. Vision long terme exclusive.',
+        'strengths': ['Développement jeunes', 'Liberté créative'],
+        'weaknesses': ['Résultats immédiats', 'Roster très limité'],
+        'key_principles': ['Reconstruction totale', 'Développement jeunes', 'Long terme']
+    },
+    'Pistons': {
+        'name': 'J.B. Bickerstaff',
+        'nationality': '🇺🇸',
+        'formation': 'Development System',
+        'style': 'Développement Cade Cunningham, reconstruction',
+        'philosophy': 'Cade Cunningham comme franchise player en développement. Construction patiente autour des jeunes talents. Défense en développement. Vision long terme.',
+        'strengths': ['Cunningham développement', 'Jeunesse', 'Construction long terme'],
+        'weaknesses': ['Résultats immédiats', 'Expérience limitée'],
+        'key_principles': ['Cunningham priorité', 'Développement collectif', 'Construction patient']
+    },
+    'Magic': {
+        'name': 'Jamahl Mosley',
+        'nationality': '🇺🇸',
+        'formation': 'Defense-First Youth',
+        'style': 'Défense jeune et intense, Paolo Banchero',
+        'philosophy': 'Défense intense comme identité. Paolo Banchero comme franchise player. Équipe jeune et athlétique. Développement collectif rapide.',
+        'strengths': ['Banchero leadership', 'Défense jeune', 'Athlétisme', 'Développement rapide'],
+        'weaknesses': ['Expérience playoff', 'Régularité offensive'],
+        'key_principles': ['Défense intense', 'Banchero comme leader', 'Athlétisme', 'Développement']
+    },
+    'Hornets': {
+        'name': 'Charles Lee',
+        'nationality': '🇺🇸',
+        'formation': 'LaMelo-Centered',
+        'style': 'LaMelo Ball créateur, jeu spectaculaire',
+        'philosophy': 'LaMelo Ball comme meneur créateur spectaculaire. Jeu ouvert et créatif. Passes no-look et créativité maximale. Développement autour de LaMelo.',
+        'strengths': ['LaMelo créativité', 'Jeu spectaculaire', 'Passes élite'],
+        'weaknesses': ['Défense insuffisante', 'Régularité'],
+        'key_principles': ['LaMelo comme meneur', 'Créativité maximale', 'Jeu ouvert', 'Spectacle']
+    },
+    'Raptors': {
+        'name': 'Darko Rajakovic',
+        'nationality': '🇷🇸',
+        'formation': 'Defensive Identity',
+        'style': 'Défense intense, reconstruction avec jeunes',
+        'philosophy': 'Identité défensive forte. Reconstruction autour des jeunes talents. Système défensif bien organisé. Vision long terme pour retrouver le niveau playoff.',
+        'strengths': ['Défense organisée', 'Développement jeunes', 'Identité claire'],
+        'weaknesses': ['Talent offensif limité', 'Transition post-Siakam'],
+        'key_principles': ['Défense prioritaire', 'Développement jeunes', 'Identité défensive']
+    },
 }
 
 COACH_TEAM_LOOKUP: dict[str, str] = {
@@ -1246,6 +1537,36 @@ COACH_TEAM_LOOKUP: dict[str, str] = {
     "AJ Auxerre":             "Auxerre",
     "Angers SCO":             "Angers",
     "AS Saint-Étienne":       "Saint-Etienne",
+    # NBA
+    "Los Angeles Lakers":     "Lakers",
+    "Golden State Warriors":  "Warriors",
+    "Boston Celtics":         "Celtics",
+    "Miami Heat":             "Heat",
+    "Denver Nuggets":         "Nuggets",
+    "Milwaukee Bucks":        "Bucks",
+    "Phoenix Suns":           "Suns",
+    "New York Knicks":        "Knicks",
+    "Chicago Bulls":          "Bulls",
+    "Brooklyn Nets":          "Nets",
+    "LA Clippers":            "Clippers",
+    "San Antonio Spurs":      "Spurs",
+    "Dallas Mavericks":       "Mavericks",
+    "Memphis Grizzlies":      "Grizzlies",
+    "Atlanta Hawks":          "Hawks",
+    "Indiana Pacers":         "Pacers",
+    "Cleveland Cavaliers":    "Cavaliers",
+    "Oklahoma City Thunder":  "Thunder",
+    "Minnesota Timberwolves": "Timberwolves",
+    "Houston Rockets":        "Rockets",
+    "Utah Jazz":              "Jazz",
+    "Portland Trail Blazers": "Trail Blazers",
+    "Sacramento Kings":       "Kings",
+    "New Orleans Pelicans":   "Pelicans",
+    "Washington Wizards":     "Wizards",
+    "Detroit Pistons":        "Pistons",
+    "Orlando Magic":          "Magic",
+    "Charlotte Hornets":      "Hornets",
+    "Toronto Raptors":        "Raptors",
 }
 
 # ── Effectifs réels par équipe (11 joueurs football, 5 basket, 9 rugby) ───────
