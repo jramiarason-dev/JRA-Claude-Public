@@ -1694,6 +1694,127 @@ COACHES: dict[str, dict] = {
         'weaknesses': ['Talent offensif limité', 'Transition post-Siakam'],
         'key_principles': ['Défense prioritaire', 'Développement jeunes', 'Identité défensive']
     },
+    # ── La Liga ───────────────────────────────────────────────────────────────
+    'Real Madrid': {
+        'name': 'Carlo Ancelotti',
+        'nationality': '🇮🇹',
+        'formation': '4-3-3 / 4-4-2',
+        'style': 'Pragmatisme élégant, liberté aux stars',
+        'philosophy': 'Gestionnaire de stars hors pair. Laisse une grande liberté aux joueurs de talent. S\'adapte tactiquement selon les adversaires. Défense solide basée sur la compacité. Transitions rapides exploitant Vinicius et Mbappé. Calme et expérience en toutes circonstances.',
+        'strengths': ['Gestion des stars', 'Adaptabilité tactique', 'Expérience Champions League', 'Calme sous pression'],
+        'weaknesses': ['Peut manquer de pressing organisé', 'Plan B parfois trop conservateur'],
+        'key_principles': ['Liberté créative aux stars', 'Compacité défensive', 'Transitions rapides', 'Pragmatisme']
+    },
+    'Barcelona': {
+        'name': 'Hansi Flick',
+        'nationality': '🇩🇪',
+        'formation': '4-2-3-1 / 4-3-3',
+        'style': 'Gegenpressing très haut, jeu offensif total',
+        'philosophy': 'Pressing très haut inspiré du gegenpressing allemand. Récupération haute du ballon convertie directement en occasions. Jeu offensif total avec participation de tous les joueurs. Yamal et Pedri comme piliers du jeu. Exigence tactique maximale. Retour aux valeurs du jeu barcelonais.',
+        'strengths': ['Gegenpressing ultra-efficace', 'Jeu offensif total', 'Yamal-Pedri comme colonne vertébrale', 'Récupération haute'],
+        'weaknesses': ['Vulnérable aux contres rapides', 'Physiquement exigeant sur la durée'],
+        'key_principles': ['Gegenpressing immédiat', 'Récupération haute', 'Jeu offensif total', 'Pressing coordonné']
+    },
+    'Atletico': {
+        'name': 'Diego Simeone',
+        'nationality': '🇦🇷',
+        'formation': '4-4-2 / 5-3-2',
+        'style': 'Défense ultra-solide, transitions meurtrières',
+        'philosophy': 'Le Cholo system — défense ultra-solide et compacte. Bloc très bas en phase défensive. Transitions offensives meurtrières vers Griezmann et Julián Álvarez. Intensité physique et mentale maximale. Pression psychologique sur les adversaires. L\'un des meilleurs coachs défensifs de l\'histoire.',
+        'strengths': ['Défense légendaire', 'Transitions meurtrières', 'Intensité physique et mentale', 'Mental d\'acier collectif'],
+        'weaknesses': ['Parfois prévisible offensivement', 'Dépendance au bloc bas'],
+        'key_principles': ['Bloc bas compact', 'Transition ultra-rapide', 'Intensité physique maximale', 'Mental collectif']
+    },
+    'Sevilla': {
+        'name': 'García Pimienta',
+        'nationality': '🇪🇸',
+        'formation': '4-2-3-1',
+        'style': 'Possession structurée, organisation défensive',
+        'philosophy': 'Football de possession structuré. Organisation défensive sérieuse. Développement collectif progressif. Reconstruction de Séville après années difficiles. Circuits de passes bien définis.',
+        'strengths': ['Organisation défensive', 'Possession structurée', 'Développement collectif'],
+        'weaknesses': ['Manque de profondeur offensive', 'Résultats irréguliers'],
+        'key_principles': ['Possession patient', 'Organisation défensive', 'Construction collective']
+    },
+    'Betis': {
+        'name': 'Manuel Pellegrini',
+        'nationality': '🇨🇱',
+        'formation': '4-2-3-1 / 4-3-3',
+        'style': 'Possession élégante, football propre et technique',
+        'philosophy': 'Football élégant basé sur la possession. Jeu de passes fluide et agréable à regarder. Organisation défensive solide. Valorisation des joueurs techniques comme Isco et Lo Celso. Patience en possession et création d\'espaces.',
+        'strengths': ['Possession élégante', 'Joueurs techniques valorisés', 'Organisation défensive', 'Jeu fluide'],
+        'weaknesses': ['Peut manquer d\'efficacité offensive', 'Vulnérable sur les contres'],
+        'key_principles': ['Possession technique', 'Jeu fluide et patient', 'Équilibre défensif', 'Valorisation des créateurs']
+    },
+    'Athletic': {
+        'name': 'Ernesto Valverde',
+        'nationality': '🇪🇸',
+        'formation': '4-2-3-1 / 4-3-3',
+        'style': 'Pressing intense, identité basque, physique',
+        'philosophy': 'Identité basque au cœur absolu du projet. Pressing intense et physique. Jeu direct exploitant la vitesse des Williams. Solidarité collective absolue. Fierté et appartenance comme moteurs permanents. L\'exception basque du football mondial.',
+        'strengths': ['Identité basque incomparable', 'Pressing physique intense', 'Solidarité collective', 'Williams Brothers'],
+        'weaknesses': ['Recrutement limité à la Cantera basque', 'Peut manquer de créativité technique'],
+        'key_principles': ['Pressing intense', 'Jeu direct Williams', 'Identité basque', 'Solidarité absolue']
+    },
+    'Villarreal': {
+        'name': 'Marcelino',
+        'nationality': '🇪🇸',
+        'formation': '4-4-2 / 4-3-3',
+        'style': 'Organisation défensive, collectif efficace',
+        'philosophy': 'Organisation défensive très solide comme priorité. Jeu collectif bien rodé. Exploitation des individualités offensives. Efficacité sur les coups de pied arrêtés. Solidité tactique comme arme principale.',
+        'strengths': ['Organisation défensive', 'Efficacité collective', 'CPA bien travaillés'],
+        'weaknesses': ['Manque de star offensive', 'Résultats irréguliers'],
+        'key_principles': ['Organisation défensive', 'Efficacité collective', 'CPA', 'Solidité tactique']
+    },
+    'Real Sociedad': {
+        'name': 'Imanol Alguacil',
+        'nationality': '🇪🇸',
+        'formation': '4-3-3',
+        'style': 'Possession technique, pressing organisé',
+        'philosophy': 'Football de possession technique à l\'espagnole. Pressing bien organisé par zones. Exploitation des couloirs avec des ailiers rapides. Développement des jeunes de la Cantera basque. Jeu offensif propre et agréable.',
+        'strengths': ['Possession technique', 'Pressing organisé', 'Développement jeunes', 'Jeu offensif propre'],
+        'weaknesses': ['Manque de profondeur en playoffs européens', 'Irrégularité défensive'],
+        'key_principles': ['Possession technique', 'Pressing zones', 'Couloirs exploités', 'Cantera valorisée']
+    },
+    'Valencia': {
+        'name': 'Carlos Corberán',
+        'nationality': '🇪🇸',
+        'formation': '4-2-3-1',
+        'style': 'Pressing intense, identité forte, résilience',
+        'philosophy': 'Pressing intense malgré les difficultés du club. Identité forte et résilience collective. Jeu direct et physique. Exploitation de la vitesse de Duro et Dani Gómez. Construction dans l\'adversité.',
+        'strengths': ['Intensité physique', 'Résilience collective', 'Pressing organisé'],
+        'weaknesses': ['Contexte financier difficile', 'Effectif limité'],
+        'key_principles': ['Pressing intense', 'Jeu direct', 'Résilience', 'Identité forte']
+    },
+    'Osasuna': {
+        'name': 'Vicente Moreno',
+        'nationality': '🇪🇸',
+        'formation': '4-4-2',
+        'style': 'Bloc compact, physique, efficacité',
+        'philosophy': 'Bloc défensif très compact et bien organisé. Football physique et direct. Efficacité maximale avec les moyens disponibles. Contre-attaques rapides. Culture de la solidarité collective.',
+        'strengths': ['Solidité défensive', 'Physicalité', 'Contre-attaques', 'Solidarité'],
+        'weaknesses': ['Jeu offensif limité', 'Manque de technique collective'],
+        'key_principles': ['Bloc compact', 'Physicalité', 'Contre-attaques', 'Solidarité']
+    },
+    'Girona': {
+        'name': 'Míchel',
+        'nationality': '🇪🇸',
+        'formation': '4-3-3',
+        'style': 'Pressing haut, jeu offensif, intensité',
+        'philosophy': 'Pressing très haut et jeu offensif courageux. Héritage de la révolution Girona sous Míchel. Équipe compacte et difficile à jouer. Exploitation des espaces en transition rapide.',
+        'strengths': ['Pressing offensif', 'Intensité collective', 'Courage tactique'],
+        'weaknesses': ['Effectif limité', 'Irrégularité en saison longue'],
+        'key_principles': ['Pressing haut', 'Jeu offensif', 'Transitions rapides', 'Intensité']
+    },
+    'Rayo': {
+        'name': 'Íñigo Pérez',
+        'nationality': '🇪🇸',
+        'formation': '4-4-2 / 4-3-3',
+        'style': 'Jeu direct, pressing, identité de quartier',
+        'philosophy': 'Football direct et combat. Identité populaire de Vallecas au cœur du projet. Pressing intense malgré le budget limité. Jeu direct et combatif. Fierté du quartier comme moteur.',
+        'strengths': ['Combativité', 'Identité forte', 'Pressing intense', 'Mental collectif'],
+        'weaknesses': ['Effectif très limité', 'Manque de technique collective'],
+        'key_principles': ['Jeu direct', 'Combativité', 'Identité Vallecas', 'Pressing']
+    },
 }
 
 COACH_TEAM_LOOKUP: dict[str, str] = {
@@ -1745,6 +1866,19 @@ COACH_TEAM_LOOKUP: dict[str, str] = {
     "Orlando Magic":          "Magic",
     "Charlotte Hornets":      "Hornets",
     "Toronto Raptors":        "Raptors",
+    # La Liga
+    "Real Madrid CF":        "Real Madrid",
+    "FC Barcelona":          "Barcelona",
+    "Atlético de Madrid":    "Atletico",
+    "Sevilla FC":            "Sevilla",
+    "Real Betis":            "Betis",
+    "Athletic Club":         "Athletic",
+    "Villarreal CF":         "Villarreal",
+    "Real Sociedad":         "Real Sociedad",
+    "Valencia CF":           "Valencia",
+    "CA Osasuna":            "Osasuna",
+    "Girona FC":             "Girona",
+    "Rayo Vallecano":        "Rayo",
 }
 
 # ── Effectifs réels par équipe (11 joueurs football, 5 basket, 9 rugby) ───────
@@ -1879,7 +2013,7 @@ TEAM_SQUADS: dict[str, list] = {
         ["Courtois","GB"],["Carvajal","RD"],["Militão","DC"],
         ["Rüdiger","DC"],["Mendy","LD"],
         ["Valverde","MC"],["Tchouaméni","MDC"],["Camavinga","MC"],
-        ["Mbappé","BU"],["Bellingham","MO"],["Vinicius","AG"],
+        ["Rodrygo","AD"],["Mbappé","BU"],["Vinicius","AG"],
     ],
     "Bayern Munich": [
         ["Neuer","GB"],["Kimmich","RD"],["Upamecano","DC"],
@@ -1888,9 +2022,9 @@ TEAM_SQUADS: dict[str, list] = {
         ["Olise","AD"],["Müller","MO"],["Sané","AG"],["Kane","BU"],
     ],
     "FC Barcelona": [
-        ["Ter Stegen","GB"],["Koundé","RD"],["Araujo","DC"],
-        ["Christensen","DC"],["Balde","LD"],
-        ["De Jong","MDC"],["Pedri","MC"],["Gavi","MC"],
+        ["Szczesny","GB"],["Koundé","RD"],["Araujo","DC"],
+        ["Cubarsí","DC"],["Balde","LD"],
+        ["Casado","MDC"],["Pedri","MC"],["De Jong","MC"],
         ["Yamal","AD"],["Lewandowski","BU"],["Raphinha","AG"],
     ],
     "Inter Milan": [
@@ -1900,10 +2034,10 @@ TEAM_SQUADS: dict[str, list] = {
         ["Thuram","BU"],["Lautaro","BU"],["Frattesi","MO"],
     ],
     "Atlético de Madrid": [
-        ["Oblak","GB"],["Molina","RD"],["Giménez","DC"],
+        ["Oblak","GB"],["Molina","RD"],["Le Normand","DC"],
         ["Witsel","DC"],["Reinildo","LD"],
-        ["Koke","MC"],["De Paul","MC"],["Saúl","MDC"],
-        ["Griezmann","MO"],["Morata","BU"],["Correa","AG"],
+        ["Barrios","MDC"],["De Paul","MC"],["Koke","MC"],
+        ["Griezmann","MO"],["Gallagher","AD"],["Julián Álvarez","BU"],
     ],
     "Borussia Dortmund": [
         ["Kobel","GB"],["Ryerson","RD"],["Hummels","DC"],
@@ -2115,6 +2249,97 @@ TEAM_SQUADS: dict[str, list] = {
         ["Urdapilleta","DO"],["Bézy","DM"],["Nakosi","AI"],
         ["Grosso","CE"],["Malié","AI"],
         ["Babillot","F"],["Gazzotti","2e L."],["Tichit","TL"],["Combezou","N°8"],
+    ],
+    # ── La Liga ───────────────────────────────────────────────────────────────
+    "Sevilla FC": [
+        ["Nyland","GB"],["Juanlu","RD"],["Nianzou","DC"],
+        ["Gudelj","DC"],["Pedrosa","LD"],
+        ["Sow","MDC"],["Rakitic","MC"],
+        ["Lukebakio","AD"],["Sucic","MO"],["Iheanacho","AG"],["Salas","BU"],
+    ],
+    "Real Betis": [
+        ["Rui Silva","GB"],["Sabaly","RD"],["Bartra","DC"],
+        ["Llorente","DC"],["Perraud","LD"],
+        ["Carvalho","MDC"],["Lo Celso","MC"],
+        ["Fekir","MO"],["Isco","MC"],["Fornals","AG"],["Vitor Roque","BU"],
+    ],
+    "Valencia CF": [
+        ["Mamardashvili","GB"],["T. Correia","RD"],["Mosquera","DC"],
+        ["Guillamón","DC"],["Gayà","LD"],
+        ["Pepelu","MDC"],["Javi Guerra","MC"],
+        ["Diego Lopez","AD"],["Barrenechea","MO"],["Dani Gómez","AG"],["Hugo Duro","BU"],
+    ],
+    "Villarreal CF": [
+        ["Reina","GB"],["Foyth","RD"],["Albiol","DC"],
+        ["Pau Torres","DC"],["Pedraza","LD"],
+        ["Capoue","MDC"],["Comesaña","MC"],
+        ["Yeremy Pino","AD"],["Baena","MO"],["Morales","AG"],["Gerard Moreno","BU"],
+    ],
+    "Athletic Club": [
+        ["Unai Simón","GB"],["De Marcos","RD"],["Vivian","DC"],
+        ["Yeray","DC"],["Berchiche","LD"],
+        ["Vesga","MDC"],["Dani García","MC"],
+        ["Nico Williams","AD"],["Sancet","MO"],["Berenguer","AG"],["Iñaki Williams","BU"],
+    ],
+    "Real Sociedad": [
+        ["Remiro","GB"],["Elustondo","RD"],["Zubeldia","DC"],
+        ["Le Normand","DC"],["Tierney","LD"],
+        ["Zubimendi","MDC"],["Brais Méndez","MC"],
+        ["Take Kubo","AD"],["Merino","MC"],["Oyarzabal","MO"],["Sørloth","BU"],
+    ],
+    "CA Osasuna": [
+        ["Herrera","GB"],["Unai García","RD"],["Catena","DC"],
+        ["Cruz","DC"],["Juan Cruz","LD"],
+        ["Moncayola","MDC"],["Torró","MC"],
+        ["Rubén García","AD"],["Oroz","MO"],["Budimir","BU"],["Ávila","AG"],
+    ],
+    "Girona FC": [
+        ["Gazzaniga","GB"],["Arnau Martínez","RD"],["D. López","DC"],
+        ["Blind","DC"],["M. Gutiérrez","LD"],
+        ["Romeu","MDC"],["Herrera","MC"],
+        ["Tsygankov","AD"],["Iván Martín","MO"],["Stuani","BU"],["Castellanos","AG"],
+    ],
+    "RCD Mallorca": [
+        ["Greif","GB"],["Maffeo","RD"],["Valjent","DC"],
+        ["Raillo","DC"],["Mojica","LD"],
+        ["Mascarell","MDC"],["Dani Rodríguez","MC"],
+        ["Samu Costa","AD"],["Morlanes","MO"],["Muriqi","BU"],["Abdón Prats","AG"],
+    ],
+    "Rayo Vallecano": [
+        ["Dimitrievski","GB"],["Balliu","RD"],["Lejeune","DC"],
+        ["Catena","DC"],["Fran García","LD"],
+        ["Pathé Ciss","MDC"],["Óscar Trejo","MC"],
+        ["Isi Palazón","AD"],["Unai López","MO"],["Álvaro García","AG"],["Nteka","BU"],
+    ],
+    "Celta Vigo": [
+        ["Marchesín","GB"],["Kevin","RD"],["Aidoo","DC"],
+        ["Starfelt","DC"],["Jailson","LD"],
+        ["Beltrán","MDC"],["Tapia","MC"],
+        ["Aspas","MO"],["Sotelo","AD"],["Larsen","AG"],["Swedberg","BU"],
+    ],
+    "Deportivo Alavés": [
+        ["Sivera","GB"],["Tenaglia","RD"],["Laguardia","DC"],
+        ["Abqar","DC"],["Diarra","LD"],
+        ["Blanco","MDC"],["Guridi","MC"],
+        ["Rioja","AD"],["Tomás","MO"],["Villalibre","BU"],["Jon Guridi","AG"],
+    ],
+    "RCD Espanyol": [
+        ["Joan García","GB"],["Cabrera","RD"],["S. Gómez","DC"],
+        ["Ledezma","DC"],["Brian Oliván","LD"],
+        ["Aguado","MDC"],["Aguirre","MC"],
+        ["Javi Puado","AD"],["Cardona","MO"],["Calero","AG"],["Pedrosa","BU"],
+    ],
+    "UD Las Palmas": [
+        ["Cillessen","GB"],["M. Mármol","RD"],["Cardona","DC"],
+        ["Álex Suárez","DC"],["Loiodice","LD"],
+        ["Kirian Rodríguez","MDC"],["Moleiro","MC"],
+        ["Sandro","AD"],["McBurnie","BU"],["Munir","AG"],["Suárez","MO"],
+    ],
+    "CD Leganés": [
+        ["Dmitrovic","GB"],["S. González","RD"],["Tarrega","DC"],
+        ["Nastasic","DC"],["Hernández","LD"],
+        ["Recio","MDC"],["Yvan Neyou","MC"],
+        ["Raba","AD"],["M. de la Fuente","MO"],["En-Nesyri","BU"],["Tanis","AG"],
     ],
 }
 
