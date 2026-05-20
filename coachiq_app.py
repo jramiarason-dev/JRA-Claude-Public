@@ -552,6 +552,30 @@ MATCHES = {
         "home": {"name": "AS Monaco Basket","short": "MCO","color": "#B5121B", "score": None},
         "away": {"name": "Le Mans Sarthe Basket","short": "MSB","color": "#E30613", "score": None},
     },
+    "asvel_monaco_basket": {
+        "sport": "🏀 Basket", "competition": "Betclic Elite",
+        "date": D_M9, "time": "20:00", "stadium": "Astroballe, Villeurbanne", "status": "Terminé",
+        "home": {"name": "LDLC ASVEL",        "short": "ASV", "color": "#C8102E", "score": 88},
+        "away": {"name": "AS Monaco Basket",  "short": "MCB", "color": "#B5121B", "score": 79},
+    },
+    "paris_basket_strasbourg": {
+        "sport": "🏀 Basket", "competition": "Betclic Elite",
+        "date": D_M7, "time": "19:00", "stadium": "Salle Pierre de Coubertin, Paris", "status": "Terminé",
+        "home": {"name": "Paris Basketball", "short": "PAB", "color": "#1A1A1A", "score": 92},
+        "away": {"name": "SIG Strasbourg",   "short": "SIG", "color": "#003C8F", "score": 80},
+    },
+    "asvel_paris_basket": {
+        "sport": "🏀 Basket", "competition": "Betclic Elite",
+        "date": D_P3, "time": "20:00", "stadium": "Astroballe, Villeurbanne", "status": "À venir",
+        "home": {"name": "LDLC ASVEL",       "short": "ASV", "color": "#C8102E", "score": None},
+        "away": {"name": "Paris Basketball", "short": "PAB", "color": "#1A1A1A", "score": None},
+    },
+    "monaco_basket_nanterre": {
+        "sport": "🏀 Basket", "competition": "Betclic Elite",
+        "date": D_P5, "time": "19:30", "stadium": "Salle Gaston Médecin, Monaco", "status": "À venir",
+        "home": {"name": "AS Monaco Basket", "short": "MCB", "color": "#B5121B", "score": None},
+        "away": {"name": "JSF Nanterre",     "short": "NAN", "color": "#CC0000", "score": None},
+    },
     # ── Top 14 ────────────────────────────────────────────────────────────────
     "toulouse_larochelle_top14": {
         "sport": "🏉 Rugby", "competition": "Top 14",
@@ -1815,6 +1839,57 @@ COACHES: dict[str, dict] = {
         'weaknesses': ['Effectif très limité', 'Manque de technique collective'],
         'key_principles': ['Jeu direct', 'Combativité', 'Identité Vallecas', 'Pressing']
     },
+    # ── Betclic Elite ─────────────────────────────────────────────────────────
+    'ASVEL': {
+        'name': 'TJ Parker',
+        'nationality': '🇫🇷',
+        'formation': '2-3 Zone / Man Switch',
+        'style': 'Défense intense, transition rapide, développement jeunes',
+        'philosophy': 'Ancien joueur NBA formé à l\'école Tony Parker. Défense très intense comme identité. Développement des jeunes talents français. Jeu rapide en transition. Culture de l\'excellence héritée de Tony Parker. Exigence permanente.',
+        'strengths': ['Défense intense', 'Développement jeunes', 'Culture gagnante', 'Transition rapide'],
+        'weaknesses': ['Fatigue cumul Euroleague-ProA', 'Pression des attentes élevées'],
+        'key_principles': ['Défense prioritaire', 'Transition rapide', 'Développement jeunes', 'Excellence']
+    },
+    'Monaco Basket': {
+        'name': 'Sasa Obradovic',
+        'nationality': '🇷🇸',
+        'formation': 'Man to Man strict',
+        'style': 'Défense très organisée, jeu européen classique',
+        'philosophy': 'Expérience européenne immense. Défense très organisée et disciplinée. Jeu positionnel européen classique. Exploitation optimale du talent de Mike James. Rigueur tactique absolue.',
+        'strengths': ['Organisation défensive', 'Rigueur tactique', 'Expérience', 'Exploitation Mike James'],
+        'weaknesses': ['Peut manquer de modernité', 'Dépendance à Mike James'],
+        'key_principles': ['Défense organisée', 'Discipline collective', 'Jeu positionnel', 'Rigueur']
+    },
+    'Paris Basket': {
+        'name': 'Tuomas Iisalo',
+        'nationality': '🇫🇮',
+        'formation': 'Switch Everything',
+        'style': 'Jeu moderne, spacing, analytics',
+        'philosophy': 'Coach finlandais très moderne. Approche analytique du basketball. Spacing maximal. Switch défensif systématique. Jeu offensif très créatif autour de TJ Shorts.',
+        'strengths': ['Modernité tactique', 'Spacing offensif', 'TJ Shorts exploitation', 'Analytics'],
+        'weaknesses': ['Roster limité en profondeur', 'Expérience en playoffs'],
+        'key_principles': ['Switch défensif', 'Spacing maximal', 'Analytics', 'Créativité offensive']
+    },
+    'Strasbourg Basket': {
+        'name': 'Vincent Collet',
+        'nationality': '🇫🇷',
+        'formation': 'Man to Man / Zone',
+        'style': 'Défense solide, jeu collectif, formation française',
+        'philosophy': 'Sélectionneur de l\'équipe de France. Défense collective très solide. Développement des joueurs français. Jeu d\'équipe rigoureux. Expérience internationale unique.',
+        'strengths': ['Défense collective', 'Expérience internationale', 'Développement français', 'Rigueur'],
+        'weaknesses': ['Effectif limité', 'Double mission EDF-club'],
+        'key_principles': ['Défense collective', 'Développement français', 'Rigueur tactique']
+    },
+    'Metropolitans': {
+        'name': 'Laurent Foirest',
+        'nationality': '🇫🇷',
+        'formation': 'Motion Offense',
+        'style': 'Jeu rapide, motion offense, développement',
+        'philosophy': 'Motion offense dynamique. Jeu rapide en transition. Développement collectif. Exploitation de Norris Cole comme meneur vétéran.',
+        'strengths': ['Motion offense', 'Transition rapide', 'Cole leadership'],
+        'weaknesses': ['Profondeur limitée', 'Irrégularité défensive'],
+        'key_principles': ['Motion offense', 'Transition', 'Cole meneur', 'Collectif']
+    },
 }
 
 COACH_TEAM_LOOKUP: dict[str, str] = {
@@ -1879,6 +1954,12 @@ COACH_TEAM_LOOKUP: dict[str, str] = {
     "CA Osasuna":            "Osasuna",
     "Girona FC":             "Girona",
     "Rayo Vallecano":        "Rayo",
+    # Betclic Elite
+    "LDLC ASVEL":                             "ASVEL",
+    "AS Monaco Basket":                       "Monaco Basket",
+    "Paris Basketball":                       "Paris Basket",
+    "SIG Strasbourg":                         "Strasbourg Basket",
+    "Boulogne-Levallois Metropolitans 92":    "Metropolitans",
 }
 
 # ── Effectifs réels par équipe (11 joueurs football, 5 basket, 9 rugby) ───────
@@ -2172,32 +2253,64 @@ TEAM_SQUADS: dict[str, list] = {
     ],
     # ── Betclic Elite ─────────────────────────────────────────────────────────
     "LDLC ASVEL": [
-        ["Strazel","PG"],["Howard","SG"],["Odiase","C"],
-        ["Yusta","SF"],["Lacombe","PF"],
+        ["Okobo","PG"],["Strazel","PG"],["De Colo","SG"],
+        ["Cordinier","SF"],["Fofana","PF"],["Fall","C"],
+    ],
+    "AS Monaco Basket": [
+        ["Mike James","PG"],["Loyd","SG"],["Bacon","SF"],
+        ["Blossomgame","SF"],["Alpha Diallo","PF"],["Motiejunas","C"],
     ],
     "Paris Basketball": [
-        ["Parsons","SG"],["Robinson","PG"],["Edozie","SF"],
-        ["Bako","C"],["Loncar","PF"],
+        ["TJ Shorts","PG"],["Fredrick","SG"],["Kahudi","SF"],
+        ["Costello","PF"],["Ajinca","C"],
     ],
     "SIG Strasbourg": [
-        ["Thomas","PG"],["Sy","SG"],["Kalinoski","SF"],
-        ["Nwaba","SF"],["Mke Anumba","C"],
-    ],
-    "JDA Dijon": [
-        ["Lighty","SG"],["Stewart","PG"],["Cheatham","PF"],
-        ["Obasohan","SG"],["Strazel","SF"],
+        ["Andjusic","PG"],["Makoundou","SG"],["Grazulis","SF"],
+        ["Konaté","PF"],["Braun","C"],
     ],
     "Boulogne-Levallois Metropolitans 92": [
-        ["Kahudi","SF"],["Moerman","SF"],["Jaiteh","C"],
-        ["Stauskas","SG"],["Toupane","SG"],
+        ["Cole","PG"],["Chery","SG"],["Tarpey","SF"],
+        ["Ganon","PF"],["Lee","C"],
     ],
     "JSF Nanterre": [
-        ["Peyrot","PG"],["Obasohan","SG"],["Lighty","SF"],
-        ["Cheatham","PF"],["Diagne","C"],
+        ["Harley","PG"],["Davis","SG"],["Invernizzi","SF"],
+        ["Lukovic","PF"],["Jaiteh","C"],
+    ],
+    "JDA Dijon": [
+        ["Holston","PG"],["Paige","SG"],["Eïto","SF"],
+        ["Ballo","C"],["Obasohan","PG"],
+    ],
+    "Gravelines-Dunkerque BCM": [
+        ["Tyree","PG"],["Bluiett","SG"],["Bartley","SF"],
+        ["Ware","PF"],["Mahé","C"],
     ],
     "Le Mans Sarthe Basket": [
-        ["Smith","PG"],["Pineau","SG"],["Sy","SF"],
-        ["McWilliams","PF"],["Odiase","C"],
+        ["Bokolo","PG"],["Howard","SG"],["Roos","SF"],
+        ["Y. Fall","C"],["Adelman Jr","PF"],
+    ],
+    "Cholet Basket": [
+        ["Rigot","PG"],["Tillie","SF"],["Ajinca M.","SF"],
+        ["Camara","PF"],["Senglin","SG"],
+    ],
+    "Limoges CSP": [
+        ["Ginyard","PG"],["Hazer","SG"],["Dessert","SF"],
+        ["Dossou","PF"],["Poirier","C"],
+    ],
+    "Élan Chalon": [
+        ["Noua","PG"],["Bouteille","SG"],["Lauvergne","PF"],
+        ["Giuitta","C"],["Sene","SF"],
+    ],
+    "Fos Provence Basket": [
+        ["Needham","PG"],["Julien","SG"],["Ejim","SF"],
+        ["Gallois","PF"],["Koné","C"],
+    ],
+    "Bourg-en-Bresse Ain Basketball": [
+        ["Cavalière","PG"],["Poirier D.","SG"],["Kabengele","PF"],
+        ["Frederickson","C"],["Soko","SF"],
+    ],
+    "Élan Béarnais Pau-Lacq-Orthez": [
+        ["Wallet","PG"],["Dossou-Yovo","SG"],["Batum","SF"],
+        ["Vucevic","C"],["Porte","PF"],
     ],
     # ── Top 14 ────────────────────────────────────────────────────────────────
     "Stade Toulousain": [
