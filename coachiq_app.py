@@ -2469,6 +2469,637 @@ for _mid, _m in MATCHES.items():
 for _comp in TEAMS_BY_COMPETITION:
     TEAMS_BY_COMPETITION[_comp].sort()
 
+# ── Fiches scouting par équipe ────────────────────────────────────────────────
+SCOUTING_SHEETS: dict[str, dict] = {
+    # ══ BETCLIC ELITE ═══════════════════════════════════════════════════════════
+    "LDLC ASVEL": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Villeurbanne", "arena": "Astroballe", "capacity": 5000,
+        "founded": 1948, "president": "Tony Parker", "coach": "TJ Parker",
+        "budget_rank": 1, "euroleague": True,
+        "season_objective": "Titre Betclic Elite + Euroleague Top 8",
+        "playing_style": "Défense intense, transition rapide, spacing offensif",
+        "offensive_system": "Pick and roll Okobo/Strazel, Fall comme ancre intérieure, spacing 3 points",
+        "defensive_system": "Man to man switch, pressing half-court, aide défensive rapide",
+        "key_players": [
+            {"name": "Elie Okobo",      "pos": "PG", "flag": "🇫🇷", "age": 26, "strengths": "Vitesse, finition, tirs mi-distance",     "role": "Meneur titulaire, créateur principal"},
+            {"name": "Moustapha Fall",  "pos": "C",  "flag": "🇫🇷", "age": 30, "strengths": "Domination raquette, protection cercle",   "role": "Pivot dominant, ancre défensive"},
+            {"name": "Matthew Strazel", "pos": "PG", "flag": "🇫🇷", "age": 22, "strengths": "Tir extérieur, vision jeu, vitesse",        "role": "Meneur backup, shooteur 3 pts"},
+            {"name": "Nando De Colo",   "pos": "SG", "flag": "🇫🇷", "age": 37, "strengths": "Expérience, leadership, tir clutch",        "role": "Leader expérimenté, shooteur clutch"},
+        ],
+        "strengths": ["Profondeur de roster", "Défense élite ProA", "Expérience Euroleague", "Formation jeunes talents"],
+        "weaknesses": ["Pression des attentes", "Fatigue cumulative Euroleague+ProA", "Dépendance à Fall"],
+        "stats_profile": {"Rythme": "Rapide", "Taux 3pts": "Élevé", "Défense": "Élite", "Rebonds": "Dominant"},
+        "rivals": ["AS Monaco Basket", "Paris Basketball"],
+        "recent_titles": ["Champion Betclic Elite 2022", "Champion Betclic Elite 2023"],
+    },
+    "AS Monaco Basket": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Monaco", "arena": "Salle Gaston Médecin", "capacity": 3500,
+        "founded": 1928, "president": "Oleg Petrov", "coach": "Sasa Obradovic",
+        "budget_rank": 2, "euroleague": False,
+        "season_objective": "Top 4 Betclic Elite + EuroCup",
+        "playing_style": "Défense organisée, jeu positionnel européen, Mike James comme game-changer",
+        "offensive_system": "Isolation Mike James, pick and roll Loyd, mouvements sans ballon",
+        "defensive_system": "Man to man strict, bonne organisation défensive, aide anticipée",
+        "key_players": [
+            {"name": "Mike James",        "pos": "PG", "flag": "🇺🇸", "age": 33, "strengths": "Création, scoring, clutch, leadership", "role": "Meneur star, game-changer absolu"},
+            {"name": "Jordan Loyd",       "pos": "SG", "flag": "🇺🇸", "age": 29, "strengths": "Tir extérieur, finition, athléticisme",  "role": "Shooteur titulaire, deuxième option"},
+            {"name": "Donatas Motiejunas","pos": "C",  "flag": "🇱🇹", "age": 34, "strengths": "Technique intérieure, tir extérieur",   "role": "Pivot vétéran, scoring intérieur"},
+            {"name": "Alpha Diallo",      "pos": "PF", "flag": "🇫🇷", "age": 27, "strengths": "Athlétisme, rebonds, défense",          "role": "Ailier fort athlétique, intensité"},
+        ],
+        "strengths": ["Mike James intenable", "Organisation défensive", "Expérience européenne", "Rigueur tactique"],
+        "weaknesses": ["Dépendance totale à Mike James", "Profondeur intérieure limitée"],
+        "stats_profile": {"Rythme": "Modéré", "Taux 3pts": "Moyen", "Défense": "Très bonne", "Rebonds": "Correct"},
+        "rivals": ["LDLC ASVEL", "Paris Basketball"],
+        "recent_titles": [],
+    },
+    "Paris Basketball": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Paris", "arena": "Salle Pierre de Coubertin", "capacity": 4500,
+        "founded": 2015, "president": "David Khelfa", "coach": "Tuomas Iisalo",
+        "budget_rank": 3, "euroleague": False,
+        "season_objective": "Finale Betclic Elite + EuroCup",
+        "playing_style": "Jeu moderne, spacing maximal, analytics, TJ Shorts orchestrateur",
+        "offensive_system": "Spacing 5 extérieurs, Shorts en création, catch and shoot, transition",
+        "defensive_system": "Switch systématique, zone press ponctuelle, intensité collective",
+        "key_players": [
+            {"name": "TJ Shorts",         "pos": "PG", "flag": "🇺🇸", "age": 24, "strengths": "Création, passing, floater, dribble",   "role": "Meneur star, architecte du jeu"},
+            {"name": "Zam Fredrick",      "pos": "SG", "flag": "🇺🇸", "age": 26, "strengths": "Tir extérieur, scoring, off-ball",       "role": "Shooteur élite, deuxième scoreur"},
+            {"name": "Charles Kahudi",    "pos": "SF", "flag": "🇫🇷", "age": 35, "strengths": "Leadership, défense, expérience",        "role": "Vétéran, capitaine, intensité"},
+            {"name": "Matt Costello",     "pos": "PF", "flag": "🇺🇸", "age": 30, "strengths": "Rebonds, défense intérieure, écrans",    "role": "Intérieur défensif, rebondeur"},
+        ],
+        "strengths": ["TJ Shorts exceptionnel", "Modernité tactique", "Spacing offensif élite", "Coach innovant"],
+        "weaknesses": ["Manque d'expérience collective", "Profondeur intérieure limitée"],
+        "stats_profile": {"Rythme": "Très rapide", "Taux 3pts": "Très élevé", "Défense": "Bonne", "Rebonds": "Moyen"},
+        "rivals": ["LDLC ASVEL", "AS Monaco Basket"],
+        "recent_titles": ["Champion Betclic Elite 2024"],
+    },
+    "SIG Strasbourg": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Strasbourg", "arena": "Rhénus Sport", "capacity": 4800,
+        "founded": 1940, "president": "Jean-Pierre Amann", "coach": "Vincent Collet",
+        "budget_rank": 5, "euroleague": False,
+        "season_objective": "Top 6 Betclic Elite",
+        "playing_style": "Défense solide, jeu collectif, formation française",
+        "offensive_system": "Andjusic en création, jeu positionnel, bon spacing",
+        "defensive_system": "Man to man collectif, discipline, aide organisée",
+        "key_players": [
+            {"name": "Danilo Andjusic",   "pos": "PG", "flag": "🇷🇸", "age": 30, "strengths": "Tir, création, clutch",           "role": "Meneur titulaire, créateur"},
+            {"name": "Yoan Makoundou",    "pos": "SG", "flag": "🇫🇷", "age": 28, "strengths": "Défense, athlétisme, intensité",  "role": "Ailier défensif, intensity"},
+            {"name": "Andrejs Grazulis",  "pos": "SF", "flag": "🇱🇻", "age": 24, "strengths": "Tir extérieur, spacing",          "role": "Shooteur, ailier"},
+        ],
+        "strengths": ["Collet expérience internationale", "Défense collective", "Culture club historique"],
+        "weaknesses": ["Effectif moins profond", "Budget contraint"],
+        "stats_profile": {"Rythme": "Modéré", "Taux 3pts": "Moyen", "Défense": "Bonne", "Rebonds": "Correct"},
+        "rivals": ["LDLC ASVEL", "JDA Dijon"],
+        "recent_titles": ["Champion Pro B 2019"],
+    },
+    "Boulogne-Levallois Metropolitans 92": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Levallois-Perret", "arena": "Palais des Sports Marcel Cerdan", "capacity": 4000,
+        "founded": 1952, "president": "Sébastien Rougier", "coach": "Laurent Foirest",
+        "budget_rank": 6, "euroleague": False,
+        "season_objective": "Top 8 Betclic Elite",
+        "playing_style": "Motion offense, jeu rapide, Norris Cole meneur vétéran",
+        "offensive_system": "Cole en transition, motion offense, Lee dans la raquette",
+        "defensive_system": "Man to man, intensité physique, Tarpey spécialiste défensif",
+        "key_players": [
+            {"name": "Norris Cole",   "pos": "PG", "flag": "🇺🇸", "age": 34, "strengths": "Défense, leadership, clutch, expérience",  "role": "Meneur vétéran, leader"},
+            {"name": "Kenny Chery",   "pos": "PG", "flag": "🇨🇦", "age": 31, "strengths": "Vitesse, finition, tir",                   "role": "Backup meneur, scoreur"},
+            {"name": "Terry Tarpey",  "pos": "SF", "flag": "🇺🇸", "age": 30, "strengths": "Défense, intensité, polyvalence",          "role": "Spécialiste défensif"},
+            {"name": "Marcus Lee",    "pos": "C",  "flag": "🇺🇸", "age": 28, "strengths": "Rebonds, protection cercle, athlétisme",   "role": "Pivot athletique, rebondeur"},
+        ],
+        "strengths": ["Cole vétéran indispensable", "Défense collective", "Identité de jeu claire"],
+        "weaknesses": ["Profondeur offensive limitée", "Dépendance à Cole"],
+        "stats_profile": {"Rythme": "Rapide", "Taux 3pts": "Moyen", "Défense": "Bonne", "Rebonds": "Correct"},
+        "rivals": ["Paris Basketball", "JSF Nanterre"],
+        "recent_titles": [],
+    },
+    "JSF Nanterre": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Nanterre", "arena": "Palais des Sports de Nanterre", "capacity": 3500,
+        "founded": 1930, "president": "Pascal Donnadieu", "coach": "Pascal Donnadieu",
+        "budget_rank": 8, "euroleague": False,
+        "season_objective": "Maintien confortable + Top 8",
+        "playing_style": "Jeu collectif, Jaiteh dominant intérieurement",
+        "offensive_system": "Jaiteh en poste bas, Harley en transition, jeu intérieur-extérieur",
+        "defensive_system": "Man to man organisé, Jaiteh protection cercle",
+        "key_players": [
+            {"name": "Mam Jaiteh",     "pos": "C",  "flag": "🇫🇷", "age": 30, "strengths": "Domination intérieure, protection cercle", "role": "Pivot dominant, ancre défensive"},
+            {"name": "Kevin Harley",   "pos": "SG", "flag": "🇫🇷", "age": 29, "strengths": "Athlétisme, défense, transition",          "role": "Ailier athlétique, transition"},
+            {"name": "Hugo Invernizzi","pos": "SF", "flag": "🇫🇷", "age": 25, "strengths": "Tir, polyvalence, jeunesse",               "role": "Ailier shooteur, développement"},
+        ],
+        "strengths": ["Jaiteh domination intérieure", "Formation locale", "Collectif soudé"],
+        "weaknesses": ["Budget limité", "Manque de tireurs extérieurs"],
+        "stats_profile": {"Rythme": "Lent", "Taux 3pts": "Faible", "Défense": "Bonne", "Rebonds": "Très bon"},
+        "rivals": ["Boulogne-Levallois Metropolitans 92", "LDLC ASVEL"],
+        "recent_titles": [],
+    },
+    "JDA Dijon": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Dijon", "arena": "Palais des Sports de Dijon", "capacity": 5800,
+        "founded": 1934, "president": "Sébastien Leloup", "coach": "Laurent Legname",
+        "budget_rank": 9, "euroleague": False,
+        "season_objective": "Top 8 Betclic Elite",
+        "playing_style": "Holston comme catalyseur, jeu rapide, défense intense",
+        "offensive_system": "Holston en création, Ballo dans la raquette, transitions rapides",
+        "defensive_system": "Man to man, intensité physique, Ballo protection cercle",
+        "key_players": [
+            {"name": "David Holston", "pos": "PG", "flag": "🇺🇸", "age": 35, "strengths": "Tir longue distance, clutch, leadership", "role": "Meneur vétéran star"},
+            {"name": "Oumar Ballo",   "pos": "C",  "flag": "🇬🇳", "age": 23, "strengths": "Athlétisme, rebonds, protection cercle", "role": "Pivot athlétique, futur prometteur"},
+        ],
+        "strengths": ["Holston clutch", "Ballo talent brut", "Salle mythique", "Histoire club"],
+        "weaknesses": ["Budget contraint", "Effectif en reconstruction"],
+        "stats_profile": {"Rythme": "Rapide", "Taux 3pts": "Élevé", "Défense": "Moyenne", "Rebonds": "Bon"},
+        "rivals": ["SIG Strasbourg", "Élan Chalon"],
+        "recent_titles": ["Champion Pro A 2016"],
+    },
+    "Gravelines-Dunkerque BCM": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Gravelines", "arena": "Sportica", "capacity": 3300,
+        "founded": 1960, "president": "Jean-Michel Spriet", "coach": "Julien Mahé",
+        "budget_rank": 12, "euroleague": False,
+        "season_objective": "Maintien en Betclic Elite",
+        "playing_style": "Défense collective, jeu d'équipe, combativité",
+        "offensive_system": "Tyree en création, Bluiett scorer, jeu positionnel",
+        "defensive_system": "Man to man collectif, intensité, aide rapide",
+        "key_players": [
+            {"name": "Breein Tyree",   "pos": "PG", "flag": "🇺🇸", "age": 27, "strengths": "Tir, finition, vitesse",    "role": "Meneur scoreur"},
+            {"name": "Trevon Bluiett", "pos": "SG", "flag": "🇺🇸", "age": 28, "strengths": "Scoring, tir extérieur",    "role": "Ailier scoreur"},
+        ],
+        "strengths": ["Combativité collective", "Culture défensive", "Soutien populaire local"],
+        "weaknesses": ["Budget très limité", "Roster court"],
+        "stats_profile": {"Rythme": "Modéré", "Taux 3pts": "Moyen", "Défense": "Bonne", "Rebonds": "Correct"},
+        "rivals": ["JSF Nanterre", "Élan Béarnais Pau-Lacq-Orthez"],
+        "recent_titles": ["Champion Pro A 2011", "Champion Pro A 2013"],
+    },
+    "Le Mans Sarthe Basket": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Le Mans", "arena": "Antarès Arena", "capacity": 5000,
+        "founded": 1949, "president": "Frédéric Gervais", "coach": "Rick Adelman Jr",
+        "budget_rank": 10, "euroleague": False,
+        "season_objective": "Top 8 Betclic Elite",
+        "playing_style": "Jeu collectif, Howard en création, rythme modéré",
+        "offensive_system": "Howard et Bokolo en co-meneurs, Y. Fall intérieur dominant",
+        "defensive_system": "Man to man, Fall protection cercle, collective",
+        "key_players": [
+            {"name": "William Howard",   "pos": "SG", "flag": "🇫🇷", "age": 34, "strengths": "Leadership, tir, expérience",  "role": "Vétéran leader"},
+            {"name": "Youssoupha Fall",  "pos": "C",  "flag": "🇫🇷", "age": 27, "strengths": "Athlétisme, rebonds, défense", "role": "Pivot athlétique"},
+            {"name": "Yannick Bokolo",   "pos": "PG", "flag": "🇫🇷", "age": 36, "strengths": "Expérience, clutch, leadership","role": "Meneur vétéran"},
+        ],
+        "strengths": ["Howard leadership", "Fall dominant intérieurement", "Cohésion collective"],
+        "weaknesses": ["Effectif vieillissant", "Manque de punch extérieur"],
+        "stats_profile": {"Rythme": "Modéré", "Taux 3pts": "Moyen", "Défense": "Correcte", "Rebonds": "Bon"},
+        "rivals": ["Élan Chalon", "Cholet Basket"],
+        "recent_titles": [],
+    },
+    "Cholet Basket": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Cholet", "arena": "Complexe sportif du Lac de Ribou", "capacity": 5000,
+        "founded": 1950, "president": "Pascal Gauthier", "coach": "Erman Kunter",
+        "budget_rank": 11, "euroleague": False,
+        "season_objective": "Maintien + Top 8",
+        "playing_style": "Jeu collectif, formation jeunes, défense intense",
+        "offensive_system": "Rigot en meneur, Tillie spacing, Camara athlétisme",
+        "defensive_system": "Défense collective man to man, Kunter exigeant",
+        "key_players": [
+            {"name": "Killian Tillie", "pos": "SF", "flag": "🇫🇷", "age": 27, "strengths": "Tir extérieur, polyvalence, expérience NBA",  "role": "Ailier shooteur"},
+            {"name": "Paul Rigot",     "pos": "PG", "flag": "🇫🇷", "age": 26, "strengths": "Vision jeu, passes, leadership",             "role": "Meneur créateur"},
+        ],
+        "strengths": ["Tillie expérience NBA", "Formation locale reconnue", "Culture club solide"],
+        "weaknesses": ["Budget modeste", "Profondeur limitée"],
+        "stats_profile": {"Rythme": "Modéré", "Taux 3pts": "Moyen", "Défense": "Bonne", "Rebonds": "Correct"},
+        "rivals": ["Le Mans Sarthe Basket", "Fos Provence Basket"],
+        "recent_titles": [],
+    },
+    "Limoges CSP": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Limoges", "arena": "Palais des Sports de Beaublanc", "capacity": 5738,
+        "founded": 1929, "president": "François Doleyres", "coach": "Gilles Poirier",
+        "budget_rank": 13, "euroleague": False,
+        "season_objective": "Maintien en Betclic Elite",
+        "playing_style": "Jeu collectif, défense organisée, histoire légendaire",
+        "offensive_system": "Ginyard en transition, Hazer scoring, jeu intérieur-extérieur",
+        "defensive_system": "Man to man collectif, aide organisée",
+        "key_players": [
+            {"name": "Marcus Ginyard", "pos": "PG", "flag": "🇺🇸", "age": 35, "strengths": "Leadership, défense, expérience", "role": "Meneur vétéran leader"},
+            {"name": "Sehmus Hazer",   "pos": "SG", "flag": "🇹🇷", "age": 29, "strengths": "Scoring, tir extérieur",          "role": "Arrière scoreur"},
+        ],
+        "strengths": ["Histoire légendaire", "Salle mythique Beaublanc", "Soutien populaire immense"],
+        "weaknesses": ["Budget très limité", "Reconstruction difficile"],
+        "stats_profile": {"Rythme": "Lent", "Taux 3pts": "Faible", "Défense": "Correcte", "Rebonds": "Correct"},
+        "rivals": ["Élan Chalon", "JDA Dijon"],
+        "recent_titles": ["Champion Pro A 2000"],
+    },
+    "Élan Chalon": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Chalon-sur-Saône", "arena": "Axel Champion Arena", "capacity": 4300,
+        "founded": 1936, "president": "Rémi Giuitta", "coach": "Rémi Giuitta",
+        "budget_rank": 14, "euroleague": False,
+        "season_objective": "Maintien en Betclic Elite",
+        "playing_style": "Jeu collectif, Noua leadership, combativité",
+        "offensive_system": "Noua en playmaker, Bouteille scoring, Lauvergne intérieur",
+        "defensive_system": "Man to man, intensité collective",
+        "key_players": [
+            {"name": "Amine Noua",      "pos": "SF", "flag": "🇫🇷", "age": 28, "strengths": "Polyvalence, défense, leadership",  "role": "Capitaine, meneur de jeu"},
+            {"name": "Axel Bouteille",  "pos": "SG", "flag": "🇫🇷", "age": 28, "strengths": "Tir extérieur, scoring",            "role": "Arrière scoreur"},
+            {"name": "Joffrey Lauvergne","pos": "C", "flag": "🇫🇷", "age": 32, "strengths": "Technique intérieure, expérience NBA","role": "Pivot vétéran"},
+        ],
+        "strengths": ["Noua capitaine charismatique", "Lauvergne expérience NBA", "Ambiance salle"],
+        "weaknesses": ["Budget très limité", "Profondeur roster limitée"],
+        "stats_profile": {"Rythme": "Modéré", "Taux 3pts": "Moyen", "Défense": "Correcte", "Rebonds": "Correct"},
+        "rivals": ["Limoges CSP", "JDA Dijon"],
+        "recent_titles": [],
+    },
+    "Fos Provence Basket": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Fos-sur-Mer", "arena": "Amphithéâtre", "capacity": 2000,
+        "founded": 1969, "president": "Kevin Gallois", "coach": "Kevin Gallois",
+        "budget_rank": 15, "euroleague": False,
+        "season_objective": "Maintien en Betclic Elite",
+        "playing_style": "Défense collective, jeu simple, combativité",
+        "offensive_system": "Needham en transition, Ejim spacing, jeu collectif",
+        "defensive_system": "Man to man, intensité, aide organisée",
+        "key_players": [
+            {"name": "Derek Needham", "pos": "PG", "flag": "🇺🇸", "age": 27, "strengths": "Vitesse, finition, défense",    "role": "Meneur titulaire"},
+            {"name": "Melvin Ejim",   "pos": "SF", "flag": "🇨🇦", "age": 31, "strengths": "Défense, rebonds, athlétisme", "role": "Ailier défensif"},
+        ],
+        "strengths": ["Combativité", "Identité claire", "Soudure collective"],
+        "weaknesses": ["Budget minimal", "Plus petit effectif de l'élite", "Salle limitée"],
+        "stats_profile": {"Rythme": "Lent", "Taux 3pts": "Faible", "Défense": "Bonne", "Rebonds": "Moyen"},
+        "rivals": ["Cholet Basket", "Le Mans Sarthe Basket"],
+        "recent_titles": [],
+    },
+    "Bourg-en-Bresse Ain Basketball": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Bourg-en-Bresse", "arena": "Ékinox", "capacity": 5200,
+        "founded": 1960, "president": "Frédéric Plachesi", "coach": "Laurent Pluvy",
+        "budget_rank": 7, "euroleague": False,
+        "season_objective": "Top 6 Betclic Elite",
+        "playing_style": "Jeu rapide, Cavalière en création, athlétisme",
+        "offensive_system": "Cavalière en transition, Kabengele dominant, jeu extérieur-intérieur",
+        "defensive_system": "Man to man, Kabengele protection cercle, intensité",
+        "key_players": [
+            {"name": "Léo Cavalière",      "pos": "PG", "flag": "🇫🇷", "age": 22, "strengths": "Vitesse, finition, développement", "role": "Meneur jeune talent"},
+            {"name": "Christian Kabengele", "pos": "PF", "flag": "🇨🇩", "age": 28, "strengths": "Athlétisme, scoring, rebonds",    "role": "Ailier fort dominant"},
+        ],
+        "strengths": ["Cavalière talent exceptionnel", "Kabengele domination", "Salle excellente"],
+        "weaknesses": ["Manque d'expérience collective", "Jeunesse du roster"],
+        "stats_profile": {"Rythme": "Rapide", "Taux 3pts": "Élevé", "Défense": "Correcte", "Rebonds": "Bon"},
+        "rivals": ["LDLC ASVEL", "SIG Strasbourg"],
+        "recent_titles": [],
+    },
+    "Élan Béarnais Pau-Lacq-Orthez": {
+        "competition": "Betclic Elite", "sport": "🏀 Basket",
+        "city": "Pau", "arena": "Palais des Sports de Pau", "capacity": 4500,
+        "founded": 1949, "president": "Paul-Arnaud Fofana", "coach": "Savo Vucevic",
+        "budget_rank": 4, "euroleague": False,
+        "season_objective": "Top 4 Betclic Elite",
+        "playing_style": "Expérience et talent, Batum si retour, jeu positionnel",
+        "offensive_system": "Batum leadership, Wallet en création, Dossou-Yovo scoring",
+        "defensive_system": "Man to man, expérience, Batum impact défensif",
+        "key_players": [
+            {"name": "Nicolas Batum",       "pos": "SF", "flag": "🇫🇷", "age": 36, "strengths": "Leadership, expérience NBA, IQ basketball", "role": "Légende, captain, leader"},
+            {"name": "Travis Wallet",       "pos": "PG", "flag": "🇺🇸", "age": 29, "strengths": "Scoring, création, vitesse",               "role": "Meneur titulaire"},
+            {"name": "Mathis Dossou-Yovo",  "pos": "SG", "flag": "🇫🇷", "age": 24, "strengths": "Athlétisme, défense, développement",       "role": "Ailier jeune talent"},
+        ],
+        "strengths": ["Batum légende retour", "Budget compétitif", "Ambition affichée"],
+        "weaknesses": ["Dépendance à Batum", "Reconstruction du collectif"],
+        "stats_profile": {"Rythme": "Modéré", "Taux 3pts": "Moyen", "Défense": "Bonne", "Rebonds": "Bon"},
+        "rivals": ["LDLC ASVEL", "AS Monaco Basket"],
+        "recent_titles": ["Champion Pro A 2007", "Champion Pro A 2009"],
+    },
+
+    # ══ LIGUE 1 (condensé) ══════════════════════════════════════════════════════
+    "Paris Saint-Germain": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Paris", "arena": "Parc des Princes", "capacity": 48712,
+        "founded": 1970, "president": "Nasser Al-Khelaifi", "coach": "Luis Enrique",
+        "budget_rank": 1, "euroleague": False,
+        "season_objective": "Ligue 1 + Champions League",
+        "playing_style": "Possession verticale, pressing très haut, jeu collectif",
+        "offensive_system": "Dembélé-Barcola larges, João Neves pivot bas, Ramos en pivot",
+        "defensive_system": "Pressing très haut dès la perte, bloc mi-haut, Donnarumma libéro",
+        "key_players": [
+            {"name": "Dembélé",    "pos": "AD", "flag": "🇫🇷", "age": 27, "strengths": "Vitesse, dribble, finition",      "role": "Ailier droit star"},
+            {"name": "Barcola",    "pos": "AG", "flag": "🇫🇷", "age": 22, "strengths": "Vitesse, dribble, jeunesse",      "role": "Ailier gauche explosif"},
+            {"name": "João Neves", "pos": "MC", "flag": "🇵🇹", "age": 20, "strengths": "Récupération, passe, intelligence","role": "Milieu récupérateur"},
+        ],
+        "strengths": ["Effectif le plus profond de L1", "Pressing collectif élite", "Dembélé-Barcola redoutables"],
+        "weaknesses": ["Pression attentes maximale", "Fatigue si parcours européen"],
+        "stats_profile": {"Possession": "65%", "Pressing PPDA": "7.2", "xG/match": "2.8", "Buts/match": "2.5"},
+        "rivals": ["Olympique de Marseille", "AS Monaco"],
+        "recent_titles": ["Champion Ligue 1 2024", "Champion Ligue 1 2023"],
+    },
+    "Olympique de Marseille": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Marseille", "arena": "Orange Vélodrome", "capacity": 67394,
+        "founded": 1899, "president": "Pablo Longoria", "coach": "Roberto De Zerbi",
+        "budget_rank": 3, "euroleague": False,
+        "season_objective": "Top 3 Ligue 1 + Champions League",
+        "playing_style": "Possession élaborée depuis le gardien, pressing par zones",
+        "offensive_system": "Greenwood-Rowe larges, Wahi en pivot, Harit entre les lignes",
+        "defensive_system": "Pressing organisé par zones, gardien libéro, sortie balle basse",
+        "key_players": [
+            {"name": "Greenwood",  "pos": "AD", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "age": 23, "strengths": "Vitesse, dribble, finition",     "role": "Ailier droit dangereux"},
+            {"name": "Rabiot",     "pos": "MC", "flag": "🇫🇷",     "age": 29, "strengths": "Physique, passes, box-to-box",   "role": "Milieu box-to-box"},
+            {"name": "Harit",      "pos": "MO", "flag": "🇲🇦",     "age": 27, "strengths": "Créativité, dribble, passes",    "role": "Meneur de jeu offensif"},
+        ],
+        "strengths": ["De Zerbi jeu de possession élaboré", "Vélodrome 12ème homme", "Effectif international"],
+        "weaknesses": ["Vulnérable au pressing adverse haut", "Défense parfois fragile"],
+        "stats_profile": {"Possession": "60%", "Pressing PPDA": "9.1", "xG/match": "2.1", "Buts/match": "1.9"},
+        "rivals": ["Paris Saint-Germain", "Olympique Lyonnais"],
+        "recent_titles": ["Champion Ligue 1 2010"],
+    },
+    "AS Monaco": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Monaco", "arena": "Stade Louis II", "capacity": 18523,
+        "founded": 1924, "president": "Dmitry Rybolovlev", "coach": "Adi Hütter",
+        "budget_rank": 2, "euroleague": False,
+        "season_objective": "Top 2 Ligue 1 + Champions League",
+        "playing_style": "Pressing intense, jeu direct et vertical, physique",
+        "offensive_system": "Embolo en pivot, Akliouche-Ben Seghir créateurs, transition rapide",
+        "defensive_system": "Pressing très haut, bloc haut, Camara-Zakaria en sentinelles",
+        "key_players": [
+            {"name": "Akliouche", "pos": "MO", "flag": "🇫🇷", "age": 22, "strengths": "Technique, créativité, jeunesse", "role": "Meneur de jeu offensif"},
+            {"name": "Embolo",    "pos": "BU", "flag": "🇨🇲", "age": 27, "strengths": "Puissance, vitesse, finition",    "role": "Avant-centre physique"},
+            {"name": "Zakaria",   "pos": "MDC","flag": "🇨🇭", "age": 27, "strengths": "Récupération, physique, passe",   "role": "Milieu défensif robuste"},
+        ],
+        "strengths": ["Pressing ultra-intense", "Effectif physique et rapide", "Hütter coach exigeant"],
+        "weaknesses": ["Peut s'exposer sur les contre-attaques", "Salle de petite capacité"],
+        "stats_profile": {"Possession": "52%", "Pressing PPDA": "8.3", "xG/match": "2.0", "Buts/match": "1.8"},
+        "rivals": ["Paris Saint-Germain", "Olympique de Marseille"],
+        "recent_titles": ["Champion Ligue 1 2017", "Champion Ligue 1 2000"],
+    },
+
+    # ══ LA LIGA (condensé) ══════════════════════════════════════════════════════
+    "Real Madrid CF": {
+        "competition": "La Liga", "sport": "⚽ Football",
+        "city": "Madrid", "arena": "Santiago Bernabéu", "capacity": 81044,
+        "founded": 1902, "president": "Florentino Pérez", "coach": "Carlo Ancelotti",
+        "budget_rank": 1, "euroleague": False,
+        "season_objective": "La Liga + Champions League",
+        "playing_style": "Pragmatisme élégant, liberté aux stars, transitions Mbappé-Vinicius",
+        "offensive_system": "Mbappé-Vinicius larges, Bellingham entre les lignes, verticalité",
+        "defensive_system": "Compacité défensive, transitions défensives rapides, Tchouaméni sentinelle",
+        "key_players": [
+            {"name": "Mbappé",     "pos": "BU", "flag": "🇫🇷", "age": 26, "strengths": "Vitesse, finition, puissance",    "role": "Attaquant star, top scorer"},
+            {"name": "Vinicius",   "pos": "AG", "flag": "🇧🇷", "age": 24, "strengths": "Dribble, vitesse, créativité",    "role": "Ailier gauche dévastateur"},
+            {"name": "Bellingham", "pos": "MO", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "age": 21, "strengths": "Box-to-box, tir, leadership", "role": "Milieu offensif box-to-box"},
+        ],
+        "strengths": ["Trio Mbappé-Vinicius-Bellingham", "Expérience C1 légendaire", "Bernabéu forteresse"],
+        "weaknesses": ["Peut manquer de pressing organisé", "Dépendance aux stars"],
+        "stats_profile": {"Possession": "58%", "Pressing PPDA": "10.2", "xG/match": "2.5", "Buts/match": "2.4"},
+        "rivals": ["FC Barcelona", "Atlético de Madrid"],
+        "recent_titles": ["Champions League 2024", "La Liga 2024"],
+    },
+    "FC Barcelona": {
+        "competition": "La Liga", "sport": "⚽ Football",
+        "city": "Barcelone", "arena": "Estadi Olímpic Lluís Companys", "capacity": 55926,
+        "founded": 1899, "president": "Joan Laporta", "coach": "Hansi Flick",
+        "budget_rank": 2, "euroleague": False,
+        "season_objective": "La Liga + Champions League",
+        "playing_style": "Gegenpressing ultra-haut, jeu offensif total, Yamal-Pedri",
+        "offensive_system": "Yamal-Raphinha larges, Lewandowski pivot, pressing haut récupération",
+        "defensive_system": "Gegenpressing immédiat, récupération haute, Casado sentinelle",
+        "key_players": [
+            {"name": "Yamal",        "pos": "AD", "flag": "🇪🇸", "age": 17, "strengths": "Génie technique, dribble, vitesse",  "role": "Ailier prodige, game-changer"},
+            {"name": "Pedri",        "pos": "MC", "flag": "🇪🇸", "age": 22, "strengths": "Technique, vision, intelligence",    "role": "Pilier créatif du milieu"},
+            {"name": "Lewandowski",  "pos": "BU", "flag": "🇵🇱", "age": 37, "strengths": "Finition, technique, expérience",   "role": "9 de référence, buteur élite"},
+        ],
+        "strengths": ["Yamal phénomène mondial", "Flick gegenpressing redoutable", "Pedri cerveau du jeu"],
+        "weaknesses": ["Fragilité défensive sur les contres", "Camp Nou en travaux"],
+        "stats_profile": {"Possession": "63%", "Pressing PPDA": "6.8", "xG/match": "2.7", "Buts/match": "2.6"},
+        "rivals": ["Real Madrid CF", "Atlético de Madrid"],
+        "recent_titles": ["La Liga 2023", "La Liga 2019"],
+    },
+    "Atlético de Madrid": {
+        "competition": "La Liga", "sport": "⚽ Football",
+        "city": "Madrid", "arena": "Cívitas Metropolitano", "capacity": 68456,
+        "founded": 1903, "president": "Enrique Cerezo", "coach": "Diego Simeone",
+        "budget_rank": 3, "euroleague": False,
+        "season_objective": "Top 3 La Liga + C1",
+        "playing_style": "Défense ultra-solide, transitions meurtrières, intensité maximale",
+        "offensive_system": "Transitions Griezmann-Álvarez, bloc bas puis frappe rapide",
+        "defensive_system": "Bloc très bas compact, 4-4-2 défensif, duels physiques",
+        "key_players": [
+            {"name": "Griezmann",       "pos": "MO", "flag": "🇫🇷", "age": 33, "strengths": "Technique, vision, finition, leadership", "role": "Meneur de jeu et finisseur"},
+            {"name": "Julián Álvarez",  "pos": "BU", "flag": "🇦🇷", "age": 25, "strengths": "Travail, finition, puissance",            "role": "Avant-centre travailleur"},
+            {"name": "Oblak",           "pos": "GB", "flag": "🇸🇮", "age": 32, "strengths": "Arrêts, leadership, fiabilité absolue",   "role": "Gardien de référence mondiale"},
+        ],
+        "strengths": ["Simeone génie défensif", "Oblak meilleur gardien", "Griezmann clutch légendaire"],
+        "weaknesses": ["Jeu offensif parfois prévisible", "Dépendance au bloc bas"],
+        "stats_profile": {"Possession": "44%", "Pressing PPDA": "13.5", "xG/match": "1.7", "Buts/match": "1.6"},
+        "rivals": ["Real Madrid CF", "FC Barcelona"],
+        "recent_titles": ["La Liga 2021", "La Liga 2014"],
+    },
+
+    # ══ PREMIER LEAGUE (condensé) ════════════════════════════════════════════════
+    "Arsenal FC": {
+        "competition": "Premier League", "sport": "⚽ Football",
+        "city": "Londres", "arena": "Emirates Stadium", "capacity": 60704,
+        "founded": 1886, "president": "Stan Kroenke", "coach": "Mikel Arteta",
+        "budget_rank": 3, "euroleague": False,
+        "season_objective": "Titre Premier League + C1",
+        "playing_style": "Pressing haut intense, construction propre, largeurs Saka-Martinelli",
+        "offensive_system": "Saka-Martinelli larges, Havertz faux 9, Ødegaard libre",
+        "defensive_system": "Pressing très haut, Rice sentinelle, compacité défensive",
+        "key_players": [
+            {"name": "Saka",      "pos": "AD", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "age": 23, "strengths": "Dribble, finition, vitesse, constance", "role": "Ailier droit indispensable"},
+            {"name": "Ødegaard", "pos": "MO", "flag": "🇳🇴",     "age": 26, "strengths": "Vision, passe, technique, leadership",    "role": "Capitaine, meneur de jeu"},
+            {"name": "Rice",      "pos": "MDC","flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "age": 26, "strengths": "Récupération, passe, physique",         "role": "Sentinelle élite"},
+        ],
+        "strengths": ["Arteta pressing élite", "Saka-Martinelli larges redoutables", "Rice milieu de contrôle"],
+        "weaknesses": ["Parfois stérile en blocage adverse", "Expérience titre manquante"],
+        "stats_profile": {"Possession": "59%", "Pressing PPDA": "7.8", "xG/match": "2.3", "Buts/match": "2.1"},
+        "rivals": ["Manchester City", "Liverpool FC"],
+        "recent_titles": ["FA Cup 2020"],
+    },
+    "Manchester City": {
+        "competition": "Premier League", "sport": "⚽ Football",
+        "city": "Manchester", "arena": "Etihad Stadium", "capacity": 53400,
+        "founded": 1880, "president": "Khaldoon Al Mubarak", "coach": "Pep Guardiola",
+        "budget_rank": 1, "euroleague": False,
+        "season_objective": "Titre Premier League + C1",
+        "playing_style": "Possession totale, circuits de passes codifiés, positional play",
+        "offensive_system": "Haaland pivot, De Bruyne créateur, faux latéraux, possession",
+        "defensive_system": "Pressing haut, position haute défensive, Rodri absent (blessé)",
+        "key_players": [
+            {"name": "Haaland",    "pos": "BU", "flag": "🇳🇴", "age": 25, "strengths": "Finition, vitesse, puissance, efficacité",  "role": "Machine à buts, n°9 de référence"},
+            {"name": "De Bruyne",  "pos": "MO", "flag": "🇧🇪", "age": 33, "strengths": "Vision, passe, tir, intelligence",         "role": "Playmaker mondial"},
+            {"name": "Foden",      "pos": "MO", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "age": 24, "strengths": "Technique, créativité, polyvalence",   "role": "Meneur de jeu créatif"},
+        ],
+        "strengths": ["Guardiola génie tactique", "Haaland machine à buts", "Profondeur roster"],
+        "weaknesses": ["Rodri absent (blessé long terme)", "Vieillissement du noyau dur"],
+        "stats_profile": {"Possession": "65%", "Pressing PPDA": "7.0", "xG/match": "2.6", "Buts/match": "2.5"},
+        "rivals": ["Arsenal FC", "Liverpool FC"],
+        "recent_titles": ["Champion PL 2024", "Champion PL 2023", "Champion PL 2022"],
+    },
+    "Liverpool FC": {
+        "competition": "Premier League", "sport": "⚽ Football",
+        "city": "Liverpool", "arena": "Anfield", "capacity": 61276,
+        "founded": 1892, "president": "Tom Werner", "coach": "Arne Slot",
+        "budget_rank": 2, "euroleague": False,
+        "season_objective": "Titre Premier League + C1",
+        "playing_style": "Pressing intense, jeu rapide, Salah clutch",
+        "offensive_system": "Salah-Diaz larges, Núñez pivot, transitions rapides",
+        "defensive_system": "Pressing très haut, Mac Allister sentinelle, bloc haut",
+        "key_players": [
+            {"name": "Salah",       "pos": "AD", "flag": "🇪🇬", "age": 32, "strengths": "Finition, vitesse, constance légendaire",  "role": "Ailier star, top scorer historique"},
+            {"name": "Van Dijk",    "pos": "DC", "flag": "🇳🇱", "age": 33, "strengths": "Domination aérienne, leadership, passe",   "role": "Capitaine, défenseur central élite"},
+            {"name": "Mac Allister","pos": "MDC","flag": "🇦🇷", "age": 26, "strengths": "Récupération, passe, vision, pressing",    "role": "Sentinelle et distributeur"},
+        ],
+        "strengths": ["Salah légende encore au top", "Anfield forteresse", "Slot transition réussie"],
+        "weaknesses": ["Van Dijk vieillissant", "Núñez parfois décisif ou invisible"],
+        "stats_profile": {"Possession": "58%", "Pressing PPDA": "7.5", "xG/match": "2.4", "Buts/match": "2.2"},
+        "rivals": ["Manchester City", "Arsenal FC"],
+        "recent_titles": ["Champion PL 2020", "Champions League 2019"],
+    },
+
+    # ══ NBA (condensé — Top franchises) ═════════════════════════════════════════
+    "Los Angeles Lakers": {
+        "competition": "NBA", "sport": "🏀 Basket",
+        "city": "Los Angeles", "arena": "Crypto.com Arena", "capacity": 20000,
+        "founded": 1947, "president": "Rob Pelinka", "coach": "JJ Redick",
+        "budget_rank": 3, "euroleague": False,
+        "season_objective": "Titre NBA",
+        "playing_style": "Pick and roll LeBron-AD, spacing, expérience playoff",
+        "offensive_system": "LeBron orchestrateur, Davis dominant intérieur, shooteurs larges",
+        "defensive_system": "Drop coverage, switch sur les pick and roll, LeBron polyvalent",
+        "key_players": [
+            {"name": "LeBron James", "pos": "SF", "flag": "🇺🇸", "age": 40, "strengths": "Vision, leadership, finition, longévité",   "role": "GOAT, orchestrateur, leader"},
+            {"name": "A. Davis",     "pos": "C",  "flag": "🇺🇸", "age": 32, "strengths": "Scoring intérieur, protection cercle",       "role": "Pivot dominant, double menace"},
+            {"name": "Austin Reaves","pos": "SG", "flag": "🇺🇸", "age": 27, "strengths": "Tir clutch, défense, intelligence",          "role": "3ème option, clutch performer"},
+        ],
+        "strengths": ["LeBron à 40 ans encore décisif", "Davis dominant", "Expérience playoff"],
+        "weaknesses": ["Profondeur de banc limitée", "LeBron vieillissement"],
+        "stats_profile": {"Rythme": "Modéré", "Rating offensif": "112.5", "Rating défensif": "110.8", "Taux 3pts": "36%"},
+        "rivals": ["Golden State Warriors", "Boston Celtics"],
+        "recent_titles": ["Champion NBA 2020"],
+    },
+    "Boston Celtics": {
+        "competition": "NBA", "sport": "🏀 Basket",
+        "city": "Boston", "arena": "TD Garden", "capacity": 19156,
+        "founded": 1946, "president": "Brad Stevens", "coach": "Joe Mazzulla",
+        "budget_rank": 2, "euroleague": False,
+        "season_objective": "Titre NBA (repeat)",
+        "playing_style": "Défense élite, tirs à 3 points, Tatum-Brown duo dominant",
+        "offensive_system": "Tatum-Brown isolation, spacing 5 extérieurs, switch offensif",
+        "defensive_system": "Switch systématique élite, intensité maximale, aide rapide",
+        "key_players": [
+            {"name": "Jayson Tatum", "pos": "SF", "flag": "🇺🇸", "age": 27, "strengths": "Scoring, clutch, tir, isolation",       "role": "Franchise player, scoreur principal"},
+            {"name": "Jaylen Brown", "pos": "SG", "flag": "🇺🇸", "age": 28, "strengths": "Athlétisme, défense, scoring, clutch",  "role": "Co-star, deuxième option offensive"},
+        ],
+        "strengths": ["Champion NBA 2024 en titre", "Défense élite switch", "Profondeur roster exceptionnelle"],
+        "weaknesses": ["Dépendance au tir extérieur", "Peuvent manquer de création en isolation"],
+        "stats_profile": {"Rythme": "Modéré", "Rating offensif": "122.2", "Rating défensif": "110.6", "Taux 3pts": "39%"},
+        "rivals": ["Los Angeles Lakers", "Miami Heat"],
+        "recent_titles": ["Champion NBA 2024"],
+    },
+    "Golden State Warriors": {
+        "competition": "NBA", "sport": "🏀 Basket",
+        "city": "San Francisco", "arena": "Chase Center", "capacity": 18064,
+        "founded": 1946, "president": "Joe Lacob", "coach": "Steve Kerr",
+        "budget_rank": 1, "euroleague": False,
+        "season_objective": "Playoffs + Titre possible",
+        "playing_style": "Ball movement, spacing 5 extérieurs, Curry à 3 points",
+        "offensive_system": "Curry off-ball movement, motion offense, death lineup",
+        "defensive_system": "Switch défensif, compacité, Draymond Green conductor",
+        "key_players": [
+            {"name": "S. Curry",       "pos": "PG", "flag": "🇺🇸", "age": 37, "strengths": "Tir légendaire, off-ball, clutch absolu",   "role": "GOAT shooter, franchise player"},
+            {"name": "Draymond Green", "pos": "PF", "flag": "🇺🇸", "age": 34, "strengths": "QI basket, défense, passes, leadership",    "role": "Conductor défensif, IQ élite"},
+            {"name": "Buddy Hield",    "pos": "SG", "flag": "🇧🇸", "age": 35, "strengths": "Tir extérieur, spacing, off-ball",          "role": "Shooteur élite, remplacement Klay"},
+        ],
+        "strengths": ["Curry encore au top absolu", "Kerr expérience titres", "Culture ball movement"],
+        "weaknesses": ["Vieillissement roster", "Transition générationnelle difficile"],
+        "stats_profile": {"Rythme": "Rapide", "Rating offensif": "116.8", "Rating défensif": "113.2", "Taux 3pts": "40%"},
+        "rivals": ["Los Angeles Lakers", "Phoenix Suns"],
+        "recent_titles": ["Champion NBA 2022"],
+    },
+
+    # ══ TOP 14 (condensé) ═══════════════════════════════════════════════════════
+    "Stade Toulousain": {
+        "competition": "Top 14", "sport": "🏉 Rugby",
+        "city": "Toulouse", "arena": "Stade Ernest-Wallon", "capacity": 19500,
+        "founded": 1907, "president": "Didier Lacroix", "coach": "Ugo Mola",
+        "budget_rank": 1, "euroleague": False,
+        "season_objective": "Bouclier de Brennus + Champions Cup",
+        "playing_style": "Jeu de passes fluide, Dupont orchestrateur, vitesse et technique",
+        "offensive_system": "Dupont demi de mêlée, Ntamack à l'ouverture, jeu au large",
+        "defensive_system": "Défense en ligne, ruck rapide, plaquages bas collectifs",
+        "key_players": [
+            {"name": "Antoine Dupont", "pos": "DM", "flag": "🇫🇷", "age": 28, "strengths": "Vitesse, passes, jeu au pied, leadership",  "role": "Meilleur joueur du monde"},
+            {"name": "Romain Ntamack", "pos": "DO", "flag": "🇫🇷", "age": 25, "strengths": "Tir, jeu à la main, créativité",            "role": "Ouvreur de classe mondiale"},
+            {"name": "Thomas Ramos",   "pos": "FB", "flag": "🇫🇷", "age": 27, "strengths": "Tir, relances, polyvalence",                "role": "Arrière, buteur titulaire"},
+        ],
+        "strengths": ["Dupont phénomène mondial", "Effectif le plus profond du Top 14", "Culture gagner"],
+        "weaknesses": ["Pression du titre à défendre", "Fatigue si double compétition"],
+        "stats_profile": {"Possession": "55%", "Mêlées gagnées": "82%", "Mauls": "Très fort", "Jeu au pied": "Excellent"},
+        "rivals": ["Stade Rochelais", "Racing 92"],
+        "recent_titles": ["Bouclier de Brennus 2024", "Bouclier de Brennus 2023", "Champions Cup 2024"],
+    },
+    "Stade Rochelais": {
+        "competition": "Top 14", "sport": "🏉 Rugby",
+        "city": "La Rochelle", "arena": "Stade Marcel Deflandre", "capacity": 18500,
+        "founded": 1901, "president": "Vincent Merling", "coach": "Ronan O'Gara",
+        "budget_rank": 2, "euroleague": False,
+        "season_objective": "Top 4 + Champions Cup",
+        "playing_style": "Puissance physique, jeu aux avants, Alldritt dominant",
+        "offensive_system": "Mauls offensifs, Alldritt porteur, Hastoy à l'ouverture",
+        "defensive_system": "Défense en ligne, pilonnage physique, Skelton dominant",
+        "key_players": [
+            {"name": "Grégory Alldritt", "pos": "N°8", "flag": "🇫🇷", "age": 27, "strengths": "Puissance, portée balle, leadership",  "role": "N°8 de référence mondiale"},
+            {"name": "Will Skelton",     "pos": "TL",  "flag": "🇦🇺", "age": 33, "strengths": "Puissance mêlée, mauls, présence",     "role": "Talonneur dominant, monster"},
+            {"name": "Antoine Hastoy",   "pos": "DO",  "flag": "🇫🇷", "age": 27, "strengths": "Tir, passe, jeu à la main",           "role": "Ouvreur créateur"},
+        ],
+        "strengths": ["Alldritt meilleur N°8 Europe", "Puissance physique exceptionnelle", "O'Gara coach de talent"],
+        "weaknesses": ["Peut manquer de vitesse sur les ailes", "Marcel Deflandre en travaux"],
+        "stats_profile": {"Possession": "51%", "Mêlées gagnées": "79%", "Mauls": "Dominant", "Jeu au pied": "Bon"},
+        "rivals": ["Stade Toulousain", "Racing 92"],
+        "recent_titles": ["Champions Cup 2022", "Champions Cup 2023"],
+    },
+}
+
+# Maps MATCHES team names → SCOUTING_SHEETS keys
+SCOUTING_TEAM_LOOKUP: dict[str, str] = {
+    # Betclic Elite
+    "LDLC ASVEL":                             "LDLC ASVEL",
+    "AS Monaco Basket":                       "AS Monaco Basket",
+    "Paris Basketball":                       "Paris Basketball",
+    "SIG Strasbourg":                         "SIG Strasbourg",
+    "Boulogne-Levallois Metropolitans 92":    "Boulogne-Levallois Metropolitans 92",
+    "JSF Nanterre":                           "JSF Nanterre",
+    "JDA Dijon":                              "JDA Dijon",
+    "Gravelines-Dunkerque BCM":               "Gravelines-Dunkerque BCM",
+    "Le Mans Sarthe Basket":                  "Le Mans Sarthe Basket",
+    "Cholet Basket":                          "Cholet Basket",
+    "Limoges CSP":                            "Limoges CSP",
+    "Élan Chalon":                            "Élan Chalon",
+    "Fos Provence Basket":                    "Fos Provence Basket",
+    "Bourg-en-Bresse Ain Basketball":         "Bourg-en-Bresse Ain Basketball",
+    "Élan Béarnais Pau-Lacq-Orthez":          "Élan Béarnais Pau-Lacq-Orthez",
+    # Ligue 1
+    "Paris Saint-Germain":                    "Paris Saint-Germain",
+    "Olympique de Marseille":                 "Olympique de Marseille",
+    "AS Monaco":                              "AS Monaco",
+    # La Liga
+    "Real Madrid CF":                         "Real Madrid CF",
+    "FC Barcelona":                           "FC Barcelona",
+    "Atlético de Madrid":                     "Atlético de Madrid",
+    # Premier League
+    "Arsenal FC":                             "Arsenal FC",
+    "Manchester City":                        "Manchester City",
+    "Liverpool FC":                           "Liverpool FC",
+    # NBA
+    "Los Angeles Lakers":                     "Los Angeles Lakers",
+    "Boston Celtics":                         "Boston Celtics",
+    "Golden State Warriors":                  "Golden State Warriors",
+    # Top 14
+    "Stade Toulousain":                       "Stade Toulousain",
+    "Stade Rochelais":                        "Stade Rochelais",
+}
+
 # ══════════════════════════════════════════════════════════════════════════════
 # HELPERS
 # ══════════════════════════════════════════════════════════════════════════════
@@ -3154,6 +3785,95 @@ if _sel_team:
         f'</div>',
         unsafe_allow_html=True,
     )
+    # Scouting sheet
+    _scouting = SCOUTING_SHEETS.get(SCOUTING_TEAM_LOOKUP.get(_sel_team, ""))
+    if _scouting:
+        with st.expander("📋 Fiche Scouting", expanded=False):
+            _pos_colors = {"PG": "#3b82f6", "SG": "#22c55e", "SF": "#f97316", "PF": "#ef4444", "C": "#a855f7",
+                           "GB": "#3b82f6", "DC": "#22c55e", "RD": "#f97316", "LD": "#f97316",
+                           "MDC": "#ef4444", "MC": "#a855f7", "MO": "#CAFF33", "AD": "#f97316", "AG": "#f97316", "BU": "#ef4444",
+                           "DM": "#3b82f6", "DO": "#22c55e", "FB": "#f97316", "N°8": "#ef4444", "TL": "#a855f7"}
+            # Header
+            _euro_html = '<div><p style="color:#888;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin:0;">EUROLEAGUE</p><p style="color:#CAFF33;font-size:.85rem;font-weight:700;margin:0;">✅ Participe</p></div>' if _scouting.get("euroleague") else ""
+            st.markdown(
+                f'<div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem;">'
+                f'<div><p style="color:#888;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin:0;">VILLE</p>'
+                f'<p style="color:#f0f0f0;font-size:.9rem;margin:0;">{_scouting.get("city","—")}</p></div>'
+                f'<div><p style="color:#888;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin:0;">SALLE</p>'
+                f'<p style="color:#f0f0f0;font-size:.9rem;margin:0;">{_scouting.get("arena","—")} <span style="color:#555;">({_scouting.get("capacity",0):,})</span></p></div>'
+                f'<div><p style="color:#888;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin:0;">COACH</p>'
+                f'<p style="color:#f0f0f0;font-size:.9rem;margin:0;">{_scouting.get("coach","—")}</p></div>'
+                f'<div><p style="color:#888;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;margin:0;">OBJECTIF</p>'
+                f'<p style="color:#CAFF33;font-size:.85rem;font-weight:700;margin:0;">{_scouting.get("season_objective","—")}</p></div>'
+                f'{_euro_html}'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+            # Style de jeu
+            st.markdown(
+                f'<div style="background:#141414;border:1px solid #1e1e1e;border-left:3px solid #CAFF33;'
+                f'border-radius:8px;padding:.8rem 1rem;margin-bottom:.75rem;">'
+                f'<p style="color:#CAFF33;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3rem;">STYLE DE JEU</p>'
+                f'<p style="color:#ccc;font-size:.82rem;line-height:1.5;margin-bottom:.4rem;">{_scouting.get("playing_style","")}</p>'
+                f'<p style="color:#888;font-size:.75rem;margin-bottom:.2rem;"><b style="color:#aaa;">Attaque :</b> {_scouting.get("offensive_system","")}</p>'
+                f'<p style="color:#888;font-size:.75rem;margin:0;"><b style="color:#aaa;">Défense :</b> {_scouting.get("defensive_system","")}</p>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+            # Joueurs clés
+            _kp = _scouting.get("key_players", [])
+            if _kp:
+                st.markdown('<p style="color:#CAFF33;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem;">JOUEURS CLÉS</p>', unsafe_allow_html=True)
+                _kp_cols = st.columns(min(len(_kp), 2))
+                for _ki, _kpl in enumerate(_kp):
+                    _pc = _pos_colors.get(_kpl.get("pos",""), "#888")
+                    with _kp_cols[_ki % 2]:
+                        st.markdown(
+                            f'<div style="background:#141414;border:1px solid #1e1e1e;border-radius:8px;padding:.7rem .9rem;margin-bottom:.5rem;">'
+                            f'<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem;">'
+                            f'<span style="background:{_pc};color:#fff;border-radius:4px;padding:.1rem .4rem;font-size:.68rem;font-weight:700;">{_kpl.get("pos","")}</span>'
+                            f'<span style="color:#f0f0f0;font-weight:700;font-size:.88rem;">{_kpl.get("flag","")} {_kpl.get("name","")}</span>'
+                            f'<span style="color:#555;font-size:.75rem;">· {_kpl.get("age","")} ans</span>'
+                            f'</div>'
+                            f'<p style="color:#888;font-size:.75rem;margin-bottom:.15rem;"><b style="color:#aaa;">Rôle :</b> {_kpl.get("role","")}</p>'
+                            f'<p style="color:#888;font-size:.75rem;margin:0;"><b style="color:#aaa;">Forces :</b> {_kpl.get("strengths","")}</p>'
+                            f'</div>',
+                            unsafe_allow_html=True,
+                        )
+            # Stats profile
+            _sp = _scouting.get("stats_profile", {})
+            if _sp:
+                _stat_pills = "  ".join(
+                    f'<span style="background:#141414;border:1px solid #222;border-radius:6px;padding:.25rem .6rem;font-size:.72rem;color:#ccc;">'
+                    f'<b style="color:#CAFF33;">{k}</b> {v}</span>'
+                    for k, v in _sp.items()
+                )
+                st.markdown(f'<p style="margin-top:.5rem;line-height:2;">{_stat_pills}</p>', unsafe_allow_html=True)
+            # Forces/Faiblesses
+            _sc1, _sc2 = st.columns(2)
+            with _sc1:
+                st.markdown('<p style="color:#CAFF33;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3rem;">FORCES</p>', unsafe_allow_html=True)
+                for _s in _scouting.get("strengths", []):
+                    st.markdown(f'<div style="background:#0a1a0a;border:1px solid #1a2a1a;border-radius:6px;padding:.3rem .7rem;margin-bottom:.3rem;color:#CAFF33;font-size:.78rem;">✅ {_s}</div>', unsafe_allow_html=True)
+            with _sc2:
+                st.markdown('<p style="color:#ef4444;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3rem;">FAIBLESSES</p>', unsafe_allow_html=True)
+                for _w in _scouting.get("weaknesses", []):
+                    st.markdown(f'<div style="background:#1a0a0a;border:1px solid #2a1a1a;border-radius:6px;padding:.3rem .7rem;margin-bottom:.3rem;color:#ef4444;font-size:.78rem;">⚠️ {_w}</div>', unsafe_allow_html=True)
+            # Rivals + titres
+            _rivals = _scouting.get("rivals", [])
+            _titles = _scouting.get("recent_titles", [])
+            if _rivals or _titles:
+                _rt1, _rt2 = st.columns(2)
+                with _rt1:
+                    if _rivals:
+                        st.markdown(f'<p style="color:#888;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;">RIVAUX</p>'
+                                    + "".join(f'<span style="background:#141414;border:1px solid #222;border-radius:4px;padding:.15rem .5rem;font-size:.72rem;color:#ccc;margin-right:.3rem;">{r}</span>' for r in _rivals),
+                                    unsafe_allow_html=True)
+                with _rt2:
+                    if _titles:
+                        st.markdown(f'<p style="color:#888;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;">PALMARÈS RÉCENT</p>'
+                                    + "".join(f'<div style="color:#CAFF33;font-size:.72rem;margin-bottom:.15rem;">🏆 {t}</div>' for t in _titles),
+                                    unsafe_allow_html=True)
     if st.button("← Voir tous les matchs", key="team_reset"):
         st.session_state.selected_team = None
         st.session_state.selected_match = None
