@@ -284,6 +284,19 @@ html, body,
 </style>
 """, unsafe_allow_html=True)
 
+# ── Sidebar CSS fix ───────────────────────────────────────────────────────────
+st.markdown('''<style>
+section[data-testid="stSidebar"] {
+    width: 320px !important;
+    min-width: 320px !important;
+    overflow-y: auto !important;
+}
+section[data-testid="stSidebar"] > div {
+    overflow-y: auto !important;
+    height: 100vh !important;
+}
+</style>''', unsafe_allow_html=True)
+
 # ══════════════════════════════════════════════════════════════════════════════
 # DATA
 # ══════════════════════════════════════════════════════════════════════════════
@@ -5074,6 +5087,109 @@ with st.sidebar:
         st.session_state.selected_team = new_team
         st.session_state.selected_match = None
         st.rerun()
+
+    # ── Tactical Catalog ──────────────────────────────────────────────────────────
+    _cat_team = st.session_state.get("selected_team", "")
+    if _cat_team:
+        _scout_key = SCOUTING_TEAM_LOOKUP.get(_cat_team, "")
+        _coach_key = COACH_TEAM_LOOKUP.get(_cat_team, "")
+        _scout = SCOUTING_SHEETS.get(_scout_key, {})
+        _coach = COACHES.get(_coach_key, {})
+
+        if _scout:
+            _sport = _scout.get("sport", "")
+            _style = _scout.get("playing_style", "")
+            _off = _scout.get("offensive_system", "")
+            _def = _scout.get("defensive_system", "")
+            _strengths = _scout.get("strengths", [])
+            _coach_name = _scout.get("coach", "")
+            _formation = _coach.get("formation", "—") if _coach else "—"
+            _principles = _coach.get("key_principles", []) if _coach else []
+            _nationality = _coach.get("nationality", "") if _coach else ""
+
+            # Derive indicators from keywords in style/system text
+            def _level(text, low_kw, high_kw):
+                text = text.lower()
+                score = sum(1 for k in high_kw if k in text) - sum(1 for k in low_kw if k in text)
+                if score >= 1: return "High", "#CAFF33"
+                if score <= -1: return "Low", "#ff6b6b"
+                return "Mid", "#ffd93d"
+
+            _all_text = f"{_style} {_off} {_def}".lower()
+            _poss_lvl, _poss_col = _level(_all_text, ["direct","long ball","counter","rapide"], ["possession","positionnel","conservation","contrôle"])
+            _press_lvl, _press_col = _level(_all_text, ["bloc bas","low block","passif","recule"], ["press","pressing","haut","intensité","agressif"])
+            _vert_lvl, _vert_col = _level(_all_text, ["lent","patient","positionnel"], ["vertical","direct","rapide","transition","profondeur"])
+            _phys_lvl, _phys_col = _level(_all_text, ["technique","léger","vitesse"], ["physique","agressif","intensité","duels","robuste"])
+
+            # Strengths icons map
+            _icon_map = {"Défense": "🛡️", "Attaque": "⚡", "Pressing": "🔥", "Possession": "🎯",
+                         "Vitesse": "💨", "Physique": "💪", "Technique": "🎨", "Collectif": "🤝",
+                         "Expérience": "🏆", "Jeunesse": "🌱", "Organisation": "📐", "Créativité": "✨"}
+
+            _str_icons = []
+            for s in _strengths[:3]:
+                icon = "⭐"
+                for k, v in _icon_map.items():
+                    if k.lower() in s.lower():
+                        icon = v
+                        break
+                _str_icons.append((icon, s[:28]))
+
+            _principles_display = _principles[:3] if _principles else []
+
+            # Badge colors cycling
+            _badge_colors = ["#1a3a5c", "#1a4a2a", "#4a2a1a", "#3a1a4a"]
+
+            _catalog_html = f"""
+<div style="background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-top:10px;">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+    <div style="width:36px;height:36px;border-radius:50%;background:#1e1e1e;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:18px;">👤</div>
+    <div>
+      <div style="color:#e0e0e0;font-size:12px;font-weight:600;line-height:1.2;">{_coach_name}</div>
+      <div style="color:#888;font-size:11px;">{_nationality}</div>
+    </div>
+    <div style="margin-left:auto;background:#0a1a0a;border:1px solid #CAFF33;border-radius:6px;padding:3px 8px;">
+      <span style="color:#CAFF33;font-size:14px;font-weight:900;letter-spacing:1px;">{_formation}</span>
+    </div>
+  </div>
+  <div style="color:#aaa;font-size:11px;line-height:1.4;margin-bottom:8px;border-left:2px solid #333;padding-left:8px;">{_style[:80]}{"…" if len(_style)>80 else ""}</div>"""
+
+            if _principles_display:
+                _catalog_html += '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">'
+                for i, p in enumerate(_principles_display):
+                    bc = _badge_colors[i % len(_badge_colors)]
+                    _catalog_html += f'<span style="background:{bc};color:#ddd;font-size:10px;padding:2px 6px;border-radius:4px;white-space:nowrap;">{p[:22]}</span>'
+                _catalog_html += '</div>'
+
+            _catalog_html += f"""
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px;">
+    <div style="background:#161616;border-radius:6px;padding:5px 7px;">
+      <div style="color:#666;font-size:9px;text-transform:uppercase;margin-bottom:2px;">Possession</div>
+      <div style="color:{_poss_col};font-size:11px;font-weight:700;">{_poss_lvl}</div>
+    </div>
+    <div style="background:#161616;border-radius:6px;padding:5px 7px;">
+      <div style="color:#666;font-size:9px;text-transform:uppercase;margin-bottom:2px;">Pressing</div>
+      <div style="color:{_press_col};font-size:11px;font-weight:700;">{_press_lvl}</div>
+    </div>
+    <div style="background:#161616;border-radius:6px;padding:5px 7px;">
+      <div style="color:#666;font-size:9px;text-transform:uppercase;margin-bottom:2px;">Verticalité</div>
+      <div style="color:{_vert_col};font-size:11px;font-weight:700;">{_vert_lvl}</div>
+    </div>
+    <div style="background:#161616;border-radius:6px;padding:5px 7px;">
+      <div style="color:#666;font-size:9px;text-transform:uppercase;margin-bottom:2px;">Physicalité</div>
+      <div style="color:{_phys_col};font-size:11px;font-weight:700;">{_phys_lvl}</div>
+    </div>
+  </div>"""
+
+            if _str_icons:
+                _catalog_html += '<div style="border-top:1px solid #1e1e1e;padding-top:7px;">'
+                for icon, label in _str_icons:
+                    _catalog_html += f'<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span style="font-size:13px;">{icon}</span><span style="color:#bbb;font-size:10px;">{label}</span></div>'
+                _catalog_html += '</div>'
+
+            _catalog_html += '</div>'
+
+            st.markdown(_catalog_html, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN
