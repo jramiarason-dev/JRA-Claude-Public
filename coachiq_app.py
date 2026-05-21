@@ -3238,6 +3238,393 @@ SCOUTING_TEAM_LOOKUP: dict[str, str] = {
     "Stade Rochelais":                        "Stade Rochelais",
 }
 
+# ── Playbook : référentiel tactique basketball ────────────────────────────────
+PLAYBOOK: dict[str, dict] = {
+    # ── ATTAQUE PLACÉE ────────────────────────────────────────────────────────
+    "pick_and_roll": {
+        "categorie": "Attaque placée / PnR",
+        "objectif": "Créer un avantage numérique 2c1 entre porteur et pivot",
+        "principe": "Le pivot pose un écran sur le défenseur du porteur. Deux options : le porteur attaque la séparation, le pivot roule ou pop vers la cible.",
+        "avantages": "Polyvalent, difficile à défendre seul, crée déséquilibres en chaîne",
+        "limites": "Lecture requise des deux joueurs, inefficace si pivot pop faible ou porteur lent",
+        "reconnaître": "PG monte haut, C monte pour poser écran, action PG/C synchronisée",
+        "vs_defense": "vs Drop : attaquer le mid-range du porteur. vs Hedge : roll rapide. vs Switch : chercher le mismatch. vs Ice : changer de côté",
+        "contre_mesures": "Drop coverage, Hedge/Show agressif, Switch, Ice/Angle, Blitz double équipe",
+    },
+    "handoff": {
+        "categorie": "Attaque placée",
+        "objectif": "Créer un avantage de vitesse via transfert de balle courte distance",
+        "principe": "Le porteur passe la balle à la main à un coéquipier qui coupe, avec ou sans écran du passeur",
+        "avantages": "Crée confusion défensive porteur/receveur, difficile à défendre si timing parfait",
+        "limites": "Requiert timing précis, facile à perturbertrap si anticipé",
+        "reconnaître": "Joueur avec balle statique près de la raquette, partenaire qui coupe à côté",
+        "vs_defense": "vs Switch : chercher mismatch immédiat. vs Hedge : accélérer la coupe",
+        "contre_mesures": "Switch systématique, under tight pour empêcher la réception",
+    },
+    "isolation": {
+        "categorie": "Attaque placée / Iso",
+        "objectif": "Créer un 1c1 pur pour le meilleur créateur offensif",
+        "principe": "Les 4 autres joueurs s'écartent (empty side ou quatre coins), le porteur attaque en 1c1",
+        "avantages": "Simple à exécuter, exploite un mismatch, efficace pour clutch moments",
+        "limites": "Dépendance à un joueur, fatigue physique, défenses peuvent réduire les aides",
+        "reconnaître": "4 joueurs aux coins/ailes, porteur au milieu ou aile, espace vide côté fort",
+        "vs_defense": "vs Help rapide : drive opposé ou mid-range. vs Zone : difficile, mieux vaut éviter",
+        "contre_mesures": "Défense à deux, help agressive, force vers la faible main",
+    },
+    "post_up": {
+        "categorie": "Attaque placée / Post",
+        "objectif": "Exploiter un joueur dominant dans la raquette ou en poste bas",
+        "principe": "Joueur reçoit balle dos au panier, jeux de pied pour créer tir ou passes à l'extérieur",
+        "avantages": "Difficile à stopper si pivot technique, crée fautes, variété de moves",
+        "limites": "Lent, difficile contre zones, efficacité dépend du niveau du pivot",
+        "reconnaître": "C ou PF reçoit balle à mi-hauteur dos au panier, isolation des 4 autres",
+        "vs_defense": "vs Double team : kick-out rapide vers shooteurs. vs Front : lob",
+        "contre_mesures": "Double-team anticipée, front defense, empêcher la réception",
+    },
+    "motion_offense": {
+        "categorie": "Attaque placée / Systèmes collectifs",
+        "objectif": "Créer des tirs ouverts par le mouvement continu du ballon et des joueurs",
+        "principe": "5 joueurs en mouvement permanent, passes + cuts + écrans sans séquences prédéfinies, lecture spontanée",
+        "avantages": "Difficile à scouter, fatigue les défenseurs, nécessite peu de stars",
+        "limites": "Requiert QI basket élevé de tous les joueurs, erreurs de lecture coûteuses",
+        "reconnaître": "Mouvement perpétuel de tous les joueurs, pas de set plays évidents, passages de balle fluides",
+        "vs_defense": "vs Zone : espacements modifiés, perçage des espaces. vs Switch : chercher les mismatches créés",
+        "contre_mesures": "Deny agressif, communication défensive parfaite",
+    },
+    "princeton": {
+        "categorie": "Attaque placée / Systèmes collectifs",
+        "objectif": "Créer des layups faciles par des backdoor cuts et passes de poste haut",
+        "principe": "Pivot haut (elbow), garde coupe backdoor quand défenseur over-joue, jeu court-long entre extérieurs et poste haut",
+        "avantages": "Crée des layups contre défenses agressives, peu de tirs difficiles",
+        "limites": "Extrêmement lent, requiert une discipline parfaite, facile à contrer avec défense droite",
+        "reconnaître": "5 posté haut (elbow), coupes backdoor répétées, beaucoup de jeu à 2 hand-to-hand au poste haut",
+        "vs_defense": "vs Drop : pull-up mid du porteur. vs Sur-play : backdoor cut",
+        "contre_mesures": "Défense droite sans sur-jouer, bonne communication sur les backdoors",
+    },
+    "horns": {
+        "categorie": "Attaque placée / Sets",
+        "objectif": "Créer plusieurs options de lecture depuis une position de double poste haut",
+        "principe": "Deux joueurs aux elbows (cornes), PG au sommet, les deux extérieurs aux coins. PG peut : drive, PnR avec un des pivots, passer à l'ailier qui coupe",
+        "avantages": "Multiples options immédiates, difficile à scouter défensivement, base de nombreux ATO",
+        "limites": "Requiert lecture rapide du PG, pivots doivent être bons en PnR et en pop",
+        "reconnaître": "Formation initiale : 1 au sommet, 2 aux elbows, 2 aux coins",
+        "vs_defense": "vs Zone 2-3 : attaque les espaces de la zone. vs Switch : exploiter les gros lents",
+        "contre_mesures": "Communiquer sur qui prend le PG, not commit sur les leurres",
+    },
+    "flex": {
+        "categorie": "Attaque placée / Systèmes collectifs",
+        "objectif": "Créer des tirs sous cloche ou en poste bas via des séquences d'écrans",
+        "principe": "Combinaison d'un écran de bas du poste (flex screen) + écran transversal en haut (down screen), joueurs tournent en séquence",
+        "avantages": "Difficile à défendre si équipe bien synchronisée, crée des layups et des tirs ouverts",
+        "limites": "Mécanique, prévisible, requiert entraînement important",
+        "reconnaître": "Séquences répétées écran-coupe-écran, joueurs qui traversent la raquette",
+        "vs_defense": "vs physique : varier les angles d'écran. vs under : pop vers 3pts",
+        "contre_mesures": "Over les écrans sur les bons tireurs, under sur les non-tireurs",
+    },
+    "spread_offense": {
+        "categorie": "Attaque placée / Spacing",
+        "objectif": "Maximiser l'espace pour les drives et le pick and roll par espacement maximal",
+        "principe": "5 joueurs capables de tirer à 3 points forcent la défense à être sur la ligne des 3pts, créant des couloirs de drive immenses",
+        "avantages": "Crée des espaces énormes pour les pénétrateurs, impossible à défendre en zone",
+        "limites": "Requiert 5 joueurs qui menacent de 3pts, peu efficace si tirs froids",
+        "reconnaître": "Tous les joueurs sur ou hors de la ligne des 3pts, espace énorme dans la raquette",
+        "vs_defense": "vs Zone : presque impossible à jouer en zone contre 5 tireurs",
+        "contre_mesures": "Man-to-man avec helps tardives, couvrir les tireurs en priorité",
+    },
+    "dribble_drive": {
+        "categorie": "Attaque placée / Drive",
+        "objectif": "Créer des pénétrations à répétition en exploitant l'espace de la spread",
+        "principe": "Porteur agresse gap du défenseur, les 4 autres restent aux coins/ailes, joueurs perchés font des kick-outs ou suivent le drive",
+        "avantages": "Génère beaucoup de fautes, crée layups ou tirs ouverts kick-out",
+        "limites": "Exige pénétrateurs élite, peu de jeu intérieur posté",
+        "reconnaître": "Porteur cherche systématiquement le gap, coupes de caddie ou lob, kick-outs fréquents",
+        "vs_defense": "vs help : kick-out aux coins. vs pack : score au cercle ou mi-distance",
+        "contre_mesures": "Pack-line defense, contester tôt le drive, communiquer sur les kick-outs",
+    },
+    "transition_offense": {
+        "categorie": "Transition",
+        "objectif": "Attaquer avant que la défense soit replacée pour créer des tirs faciles",
+        "principe": "Après rebond défensif ou interception, course rapide pour créer surnombre (3c2, 2c1), ou avancer le ballon avant set de la défense",
+        "avantages": "Tirs très faciles (layups, 3pts ouverts), fatigue la défense",
+        "limites": "Faible si adversaire bon en transition défensive, risque de perte de balle à la hâte",
+        "reconnaître": "Sortie rapide du rebond, outlet pass, courses longues des ailes",
+        "vs_defense": "vs défense qui recule : accélérer. vs défense qui sprinte : ralentir et setter",
+        "contre_mesures": "Sprint au retour, protéger le cercle en premier, ne pas surengager en attaque",
+    },
+    "zone_offense": {
+        "categorie": "Attaque placée / vs Zone",
+        "objectif": "Trouver et exploiter les trous dans les zones défensives",
+        "principe": "Attaquer les espaces entre défenseurs (gap), utiliser les passes rapides pour déplacer la zone, trouver le haut du cercle (souvent non couvert)",
+        "avantages": "Déstabilise les zones si exécution rapide, crée des tirs ouverts aux espaces",
+        "limites": "Requiert entraînement spécifique, moins efficace si balle lente",
+        "reconnaître": "Attaque à la zone est identifiable : espacement modifié, flash au poste haut, perçage des gaps",
+        "vs_defense": "vs 2-3 : attaquer le milieu haut, corners. vs 3-2 : baseline",
+        "contre_mesures": "Ralentir la balle, forcer à jouer en dessous de la ligne de fond",
+    },
+    "ato": {
+        "categorie": "Situations spéciales / ATO",
+        "objectif": "Créer un tir ouvert de qualité en 5 secondes après un timeout",
+        "principe": "Set play dessiné pendant le temps mort, exploitant un mismatch ou une action que l'adversaire n'a pas préparé",
+        "avantages": "Très efficace si équipe adverse sort de la défense, joueur star libre",
+        "limites": "L'adversaire peut contrer si le set est connu, nécessite une exécution parfaite sous pression",
+        "reconnaître": "Tous les joueurs partent de la même position initiale (souvent horns ou stack), action rapide",
+        "vs_defense": "vs toutes défenses : lire le mismatch immédiatement et adapter",
+        "contre_mesures": "Communication rapide des défenseurs, sprint aux postes clés, pas de switch surprise",
+    },
+    "slob": {
+        "categorie": "Situations spéciales / SLOB",
+        "objectif": "Marquer ou avancer facilement depuis une remise en jeu latérale",
+        "principe": "Depuis la touche côté, créer un tir ouvert pour le meilleur joueur via 1-2 écrans. Peut être une action pour playmaker ou tireur extérieur",
+        "avantages": "Temps illimité pour dessiner, action souvent mémorisée en entraînement",
+        "limites": "5 secondes maximum, défense souvent bien organisée sur SLOB",
+        "reconnaître": "Remise en jeu latérale, stack de joueurs qui explosent, souvent après faute ou stoppage",
+        "vs_defense": "vs switch : chercher le mismatch. vs no-switch : attaquer le tireur libre",
+        "contre_mesures": "Communication sur tous les écrans, pas de switch sur les mauvais matchups",
+    },
+    "blob": {
+        "categorie": "Situations spéciales / BLOB",
+        "objectif": "Marquer depuis une remise en jeu sous le panier adverse",
+        "principe": "Stack ou ligne de joueurs qui explosent dans différentes directions via écrans. Options : tir rapproché, lob, pass de retour pour 3pts corner",
+        "avantages": "Très proche du panier, bon scoring avec bonne exécution",
+        "limites": "Défense souvent très organisée, angle de passe difficile",
+        "reconnaître": "Remise en jeu sous panier, stack initial compact, explosions multiples",
+        "vs_defense": "vs défense qui switch : lob immédiat. vs défense droite : écran doublé pour tireur corner",
+        "contre_mesures": "Défendre le lob en premier, couvrir les corners, ne pas switch sur les pivots",
+    },
+    # ── DÉFENSE ───────────────────────────────────────────────────────────────
+    "defense_homme": {
+        "categorie": "Défense / Homme à homme",
+        "objectif": "Marquer chaque attaquant individuellement, conserver la responsabilité individuelle",
+        "principe": "Chaque défenseur est assigné à un attaquant précis. Communication sur les écrans : switch ou go-through",
+        "avantages": "Responsabilité claire, difficile de trouver des joueurs libres si bien exécuté",
+        "limites": "Vulnérable aux good screeners, requiert niveau physique élevé de tous",
+        "reconnaître": "Défenseur colle son attaquant partout, communication verbale constante",
+        "vs_offense": "vs PnR : choisir switch, hedge, drop, ice selon joueurs",
+        "contre_mesures": "Écrans multiples, PnR ciblant le défenseur le plus faible",
+    },
+    "defense_zone": {
+        "categorie": "Défense / Zone",
+        "objectif": "Défendre par secteur géographique plutôt qu'individu, protéger la raquette",
+        "principe": "Chaque défenseur couvre une zone du terrain, coopération pour couvrir les espaces entre zones",
+        "avantages": "Protège les défenseurs en faute, déstabilise les équipes peu entraînées au zone offense",
+        "limites": "Vulnérable aux bonnes passes et aux équipes avec spacing extérieur",
+        "reconnaître": "Défenseurs se déplacent en miroir de la balle en secteur, pas de marquage individuel",
+        "vs_offense": "vs passes rapides : attaquer les espaces gap. vs corner : le corner est souvent ouvert en 2-3",
+        "contre_mesures": "Passes rapides, écrans dans la zone, trouver le flash haut",
+    },
+    "press_terrain": {
+        "categorie": "Défense / Press",
+        "objectif": "Provoquer des pertes de balle et fatiguer l'adversaire par pression sur tout le terrain",
+        "principe": "Défense agressive dès la remise en jeu ou le rebond, forcer l'adversaire à dribbler sous pression sur tout le terrain",
+        "avantages": "Génère des interceptions, met en difficulté les équipes lentes, crée un rythme élevé",
+        "limites": "Très exigeant physiquement, vulnérable aux équipes calmes et aux bons dribbleurs",
+        "reconnaître": "Défenseurs qui courent jusqu'au rebond adverse, pression dès la remise en jeu",
+        "vs_offense": "vs press : dribbleur calme + passes longues + flash center",
+        "contre_mesures": "Passes sûres court terme, jouer avec 5 relayeurs, balle au meilleur dribbleur",
+    },
+    "trap": {
+        "categorie": "Défense / Trap",
+        "objectif": "Forcer une perte de balle en doublant brusquement le porteur aux coins ou aux dribbles",
+        "principe": "Deux défenseurs convergent sur le porteur au moment précis où il est piégé (corner, sur côté), les 3 autres interceptent",
+        "avantages": "Génère des pertes de balle, déstabilise les meneurs moins expérimentés",
+        "limites": "3 autres joueurs doivent couvrir 4 adversaires, risky si mal exécuté",
+        "reconnaître": "Deux défenseurs sur un porteur, positionnement en triangle des 3 autres",
+        "vs_offense": "vs trap : passer avant que le deuxième défenseur arrive",
+        "contre_mesures": "Trap au corner, sur le côté après dribble, sur réception après écran",
+    },
+    "switch": {
+        "categorie": "Défense / PnR Coverage",
+        "objectif": "Neutraliser le PnR en échangeant les marquages sans aide défensive",
+        "principe": "Au signal, défenseur du porteur prend le pivot et vice versa, aucune aide requise, chacun reste sur son adversaire échangé",
+        "avantages": "Simple à exécuter, pas de hedging ou gap à couvrir, efficace vs PnR si équipe polyvalente",
+        "limites": "Crée des mismatches (petit sur grand, lent sur rapide), exploitable si adversaire intelligent",
+        "reconnaître": "Défenseurs qui s'échangent au contact de l'écran sans communication longue",
+        "vs_offense": "vs switch : chercher le mismatch immédiatement (iso sur le petit défenseur)",
+        "contre_mesures": "Ne switcher que 1-4 (pas le 5), ou switcher uniquement avec profils similaires",
+    },
+    "hedge": {
+        "categorie": "Défense / PnR Coverage",
+        "objectif": "Ralentir le porteur après l'écran pour laisser le défenseur revenir",
+        "principe": "Le défenseur du pivot sort vigoureusement pour bloquer le chemin du porteur (hedge/show), le défenseur du porteur contourne l'écran (go-under ou over) et reprend son homme",
+        "avantages": "Empêche le drive facile du porteur, maintient la responsabilité individuelle",
+        "limites": "Coûteux en énergie, le pivot doit être surveillé pendant le hedge",
+        "reconnaître": "Défenseur du C sort agressivement sur le porteur au moment de l'écran",
+        "vs_offense": "vs hedge : passer immédiatement au C qui roll derrière le défenseur écarté",
+        "contre_mesures": "Hard show (exagéré), soft show, choisir selon timing",
+    },
+    "drop": {
+        "categorie": "Défense / PnR Coverage",
+        "objectif": "Protéger la raquette contre les roll hommes forts sans risquer de donner des tirs mi-distance",
+        "principe": "Défenseur du pivot reste bas (dans la raquette), défenseur du porteur passe over ou tight, adversaire peut prendre le mid-range",
+        "avantages": "Protège le cercle, défenseur du C reste entre la balle et le panier",
+        "limites": "Concède les mid-ranges au porteur, inefficace vs les bons tireurs PG",
+        "reconnaître": "Défenseur du C reste dans la raquette sans bouger sur l'écran",
+        "vs_offense": "vs drop : porteur doit avoir un bon pull-up mid-range",
+        "contre_mesures": "Ajuster la profondeur du drop selon le danger du porteur",
+    },
+    "ice": {
+        "categorie": "Défense / PnR Coverage",
+        "objectif": "Forcer le porteur du PnR à aller vers l'extérieur (baseline), loin du roll homme",
+        "principe": "Défenseur du porteur se positionne côté fort pour forcer le drive vers la ligne de fond où le pivot peut aider plus facilement",
+        "avantages": "Éloigne le porteur du roll homme, aide plus simple pour le défenseur du C",
+        "limites": "Concède le drive baseline, le porteur peut pop vers l'extérieur si bien entraîné",
+        "reconnaître": "Défenseur du PG positionné côté ballon avant l'écran, force vers la baseline",
+        "vs_offense": "vs ice : écran doit être posé côté fort pour neutraliser le forçage",
+        "contre_mesures": "Utiliser sur les côtés, communication 'ICE' dès que le screen est vu",
+    },
+    "blitz": {
+        "categorie": "Défense / PnR Coverage",
+        "objectif": "Forcer une perte de balle ou une mauvaise décision par double-équipe immédiate au PnR",
+        "principe": "Dès l'écran, les deux défenseurs (porteur ET pivot) convergent agressivement sur le porteur. 3 autres joueurs interceptent les passes",
+        "avantages": "Arrête les porteurs dominants du PnR, génère des turnovers si mal lu",
+        "limites": "Risqué : laisse des joueurs libres, requiert lectures parfaites des 3 autres",
+        "reconnaître": "Deux défenseurs sur le porteur dès l'écran, positionnement X-out des 3 autres",
+        "vs_offense": "vs blitz : porteur doit passer vite au pop ou au slip avant que le second arrive",
+        "contre_mesures": "Trigger : signal verbal ou positional, X-out des 3 autres immédiat",
+    },
+    "help_recover": {
+        "categorie": "Défense / Aide",
+        "objectif": "Stopper la pénétration tout en récupérant sa responsabilité sur le relais",
+        "principe": "Un défenseur hors-balle vient aider sur le drive, son attaquant est temporairement libre, le défenseur revient sur son attaquant après que le drive est stoppé",
+        "avantages": "Stoppe les drives sans laisser de tir facile si récupération rapide",
+        "limites": "Si récupération trop lente, l'attaquant libre tire. Requiert lecture et sprint",
+        "reconnaître": "Un défenseur sort de son attaquant pour bloquer un drive, récupère rapidement",
+        "vs_offense": "vs help : kick-out immédiat vers l'attaquant laissé libre",
+        "contre_mesures": "Communication 'HELP', sprint de récupération, timing précis",
+    },
+    "zone_press": {
+        "categorie": "Défense / Press Zone",
+        "objectif": "Générer des turnovers par une pression de zone agressif sur tout le terrain",
+        "principe": "Zone appliquée en pression full court, typiquement 2-2-1. Premier rideau sur la balle, second rideau au milieu, dernier rideau au panier",
+        "avantages": "Moins fatigant que le press homme, piège les équipes peu entraînées",
+        "limites": "Attaque par le milieu peut être dévastatrice, équipe avec bon passeur peut la démolir",
+        "reconnaître": "Formation 2-2-1 visibles depuis les tribunes, rotation de zone sur tout le terrain",
+        "vs_offense": "vs 2-2-1 : dribbler par le milieu, passer au flash center",
+        "contre_mesures": "Choisir 1-2-1-1 ou 2-2-1 selon effectif disponible",
+    },
+    "matchup_zone": {
+        "categorie": "Défense / Zone spéciale",
+        "objectif": "Combiner les avantages de l'homme à homme et de la zone pour déstabiliser l'adversaire",
+        "principe": "Aspect zone : défenseurs bougent en référence au secteur. Aspect homme : quand le porteur entre dans une zone, un défenseur le marque individuellement",
+        "avantages": "Difficile à lire pour l'adversaire, protège les mismatchs individuels, polyvalent",
+        "limites": "Très complexe à enseigner, confusion possible entre coéquipiers si mal communiqué",
+        "reconnaître": "Semble homme à homme mais les défenseurs ne suivent pas leurs attaquants hors de zone",
+        "vs_offense": "Difficile : garder la balle en mouvement rapide, identifier le principe",
+        "contre_mesures": "Communication parfaite, identifier les responsabilités",
+    },
+    # ── VARIATIONS AVANCÉES ───────────────────────────────────────────────────
+    "empty_side_pnr": {
+        "categorie": "PnR Variations",
+        "objectif": "Maximiser l'espace pour le porteur du PnR en vidant le côté de l'action",
+        "principe": "Les 3 autres joueurs se positionnent du côté opposé de l'écran, laissant tout le côté vide. Aucune aide défensive possible sans quitter un attaquant",
+        "avantages": "Elimine les aides latérales, porteur peut drive ou mid-range sans obstacle",
+        "limites": "Le porteur doit être capable de finir seul ou de lire les aides tardives",
+        "reconnaître": "3 joueurs tous du même côté, PnR côté vide",
+        "vs_defense": "vs drop : pull-up immédiat. vs hedge : roll gap énorme. vs blitz : aucune aide du côté vide",
+        "contre_mesures": "Switch immédiat ou blitz pour forcer le pass vers les joueurs loin",
+    },
+    "double_drag": {
+        "categorie": "PnR Variations",
+        "objectif": "Créer une confusion défensive maximale avec deux écrans successifs en transition",
+        "principe": "Le PG remonte la balle, deux joueurs posent des écrans successifs en course (drag screens). Le PG peut utiliser le premier ou le second",
+        "avantages": "Très difficile à défendre en transition, crée des mismatches si switch",
+        "limites": "Requiert deux bons poseurs d'écran et une bonne lecture du PG",
+        "reconnaître": "PG qui remonte vite, deux joueurs qui sprinte et posent écrans haut côte à côte",
+        "vs_defense": "vs switch : le PG choisit l'écran qui crée le meilleur mismatch. vs hedge : roll immédiat",
+        "contre_mesures": "Switch systématique 1-4, ou two defenders hedge ensemble",
+    },
+    "spain_pnr": {
+        "categorie": "PnR Variations",
+        "objectif": "Créer un tir ouvert pour un tireur en ajoutant un écran supplémentaire sous le roll homme",
+        "principe": "PnR classique en haut. Un 3ème joueur pose un écran sur le défenseur du roll homme sous la raquette. Crée un pick-the-picker pour le roll",
+        "avantages": "Quasi-impossible à défendre sans switch ou double effort, crée un layup ou dunk sur roll",
+        "limites": "Requiert 3 joueurs synchronisés, peut être illégal si mal exécuté",
+        "reconnaître": "PnR en haut + un joueur qui va poser un écran sur le défenseur du C dans la raquette",
+        "vs_defense": "vs switch : chercher le mismatch chain. vs hedge : le roll man est totalement libre",
+        "contre_mesures": "Switch sur le 3ème écran, communiquer 'SPAIN'",
+    },
+    "delay_offense": {
+        "categorie": "Attaque / Gestion du temps",
+        "objectif": "Gérer le temps tout en maintenant la menace offensive pour forcer l'adversaire à sortir",
+        "principe": "Motion lente, garder la balle en sécurité, exploiter les espaces si la défense sur-joue pour voler la balle. Utilisé pour protéger un avantage",
+        "avantages": "Gère le score, fatigue les défenseurs qui courent pour piquer la balle",
+        "limites": "Risque de faute technique pour passivité, peut encourager le foul game adverse",
+        "reconnaître": "Passes lentes autour du périmètre, mouvement minimal, gestion de l'horloge",
+        "vs_defense": "vs défense qui sort : drive immédiat. vs défense passive : layup ou tir facile",
+        "contre_mesures": "Pression sur le porteur, foul stratégique si score le permet",
+    },
+    "stack_action": {
+        "categorie": "Attaque / Sets",
+        "objectif": "Créer de la confusion et des libérations multiples depuis une formation compacte",
+        "principe": "Plusieurs joueurs dans une zone compacte (stack), explosent dans différentes directions avec des écrans croisés. Défenseurs perdent leurs hommes",
+        "avantages": "Très difficile à défendre si bien synchronisé, plusieurs lecteurs possibles simultanément",
+        "limites": "Requiert beaucoup d'entraînement, confusion possible entre coéquipiers",
+        "reconnaître": "3-4 joueurs au même endroit (souvent coté fort) avant l'action",
+        "vs_defense": "vs switch : chercher le mismatch. vs man strict : le décalage se crée naturellement",
+        "contre_mesures": "Communication préventive sur qui prend qui, ne pas switch sur les mauvais matchups",
+    },
+    "flare_screen": {
+        "categorie": "Ecrans / Mouvements sans balle",
+        "objectif": "Libérer un tireur extérieur via un écran posé loin du porteur, en direction du coin ou de l'aile",
+        "principe": "Joueur sans balle se déplace vers l'extérieur, partenaire pose un écran vers l'extérieur (flare), le tireur sort vers le coin ou l'aile pour recevoir",
+        "avantages": "Crée un tir à 3 points ouvert pour les bons tireurs, difficile à défendre si timing parfait",
+        "limites": "Peu efficace si le tireur n'est pas menaçant, l'écranneur doit être bien positionné",
+        "reconnaître": "Joueur qui court vers l'extérieur avec un écran latéral loin du porteur",
+        "vs_defense": "vs over : le tireur change de direction. vs under : il reçoit en rythme",
+        "contre_mesures": "Défenseur sur le tireur joue entre l'écran et son homme, pas par derrière",
+    },
+    "staggers": {
+        "categorie": "Ecrans / Mouvements sans balle",
+        "objectif": "Libérer un tireur d'élite via deux ou trois écrans successifs",
+        "principe": "Le tireur court à travers 2-3 écrans posés en séquence par des coéquipiers, créant un décalage difficile à suivre défensivement",
+        "avantages": "Quasi-impossible à défendre pour les bons tireurs, crée un tir à 3pts ouvert régulièrement",
+        "limites": "Requiert des poseurs d'écran sérieux et le timing du tireur",
+        "reconnaître": "Un joueur qui passe à travers deux écrans successifs à l'aile ou au corner",
+        "vs_defense": "vs over tight : le premier écran crée de la distance. vs switch : mismatch garanti",
+        "contre_mesures": "Jump switch sur le premier écran avant que le second soit posé",
+    },
+    "pistol_action": {
+        "categorie": "Attaque / Sets",
+        "objectif": "Créer un PnR en transition déguisé via un dos-au-panier suivi d'un sprint",
+        "principe": "PG passe à un ailier et coupe à 45°. L'ailier reçoit et fait face au panier, le PG reçoit en retour et un C pose un écran immédiat. Crée un PnR tempo élevé",
+        "avantages": "Combine la transition et le demi-terrain, créé un PnR avant que la défense soit set",
+        "limites": "Requiert timing parfait, peut être contré si défense lit la coupture du PG",
+        "reconnaître": "PG coupe après passe à l'aile, reçoit en retour, écran immédiat du C",
+        "vs_defense": "vs hedge tardif : porteur peut attaquer. vs switch préventif : mismatch potentiel",
+        "contre_mesures": "Défenseur du PG anticipe la coupe, communication sur le PnR immédiat",
+    },
+    "zipper": {
+        "categorie": "Ecrans / Mouvements sans balle",
+        "objectif": "Amener un tireur ou créateur du coin vers la tête de la raquette via un écran du poste bas",
+        "principe": "Joueur au corner court vers le haut via un écran du joueur de poste. Reçoit à l'elbow ou au sommet pour attaquer ou shooter",
+        "avantages": "Crée un tir à mi-distance ou 3pts difficile à défendre, amène de la densité en haut",
+        "limites": "Peu efficace si le défenseur est en avance sur la coupe",
+        "reconnaître": "Joueur qui part du corner vers la tête de raquette via l'écran du poste bas",
+        "vs_defense": "vs over : le joueur reçoit avec de l'espace. vs under : drive immédiat vers la ligne de fond",
+        "contre_mesures": "Défenseur doit être proactif, anticiper la coupe",
+    },
+    "hammer": {
+        "categorie": "Ecrans / Situations spéciales",
+        "objectif": "Créer un tir à 3 points ouvert au corner via un écran en baseline pendant une pénétration",
+        "principe": "Porteur drive vers la ligne de fond. Un joueur court vers le corner et reçoit un écran d'un coéquipier (hammer screen). Porteur kick-out vers le corner libre",
+        "avantages": "Crée un 3pts ouvert pendant que la défense est occupée par le drive, difficile à anticiper",
+        "limites": "Requiert porteur capable de passer du corner en drive, timing précis",
+        "reconnaître": "Drive vers la baseline, joueur qui reçoit un écran en baseline et court au corner pour kick-out",
+        "vs_defense": "vs défense sur le drive : passe au corner libre. vs close-out tardif : tir ouvert",
+        "contre_mesures": "Défenseur du corner annonce 'HAMMER', sprint sur le tir possible",
+    },
+    "elevator_screen": {
+        "categorie": "Ecrans / Animations",
+        "objectif": "Libérer un tireur avec un couloir d'écran qui 'se ferme' sur le défenseur",
+        "principe": "Deux joueurs côte à côte (avec un espace entre eux), le tireur passe entre eux puis les deux écraneurs se referment ensemble sur le défenseur qui suit. Couloir d'ascenseur",
+        "avantages": "Piège complètement le défenseur si bien synchronisé, crée un tir à 3pts en rythme parfait",
+        "limites": "Requiert deux bons poseurs d'écran et timing parfait du tireur",
+        "reconnaître": "Deux joueurs côte à côte avec espace, tireur qui s'y engouffre, portes qui se ferment",
+        "vs_defense": "vs switch préventif : le tireur change de direction. vs over : timing difficile mais possible",
+        "contre_mesures": "Switch anticipé ou communication 'ELEVATOR' pour que le défenseur du tireur aille par dessus",
+    },
+}
+
 # ── Effectifs réels par équipe (11 joueurs football, 5 basket, 9 rugby) ───────
 TEAM_SQUADS: dict[str, list] = {
     # ── Ligue 1 ───────────────────────────────────────────────────────────────
@@ -4374,6 +4761,63 @@ if _sel_team:
                         st.markdown(f'<p style="color:#888;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;">PALMARÈS RÉCENT</p>'
                                     + "".join(f'<div style="color:#CAFF33;font-size:.72rem;margin-bottom:.15rem;">🏆 {t}</div>' for t in _titles),
                                     unsafe_allow_html=True)
+
+    # ── Schéma Tactique Clé (basket only, based on playing_style/offensive_system) ──
+    if _scouting:
+        _off_sys = _scouting.get("offensive_system", "") + " " + _scouting.get("playing_style", "")
+        _off_sys_lower = _off_sys.lower()
+        # Keyword → PLAYBOOK key mapping
+        _kw_map = [
+            (["pick and roll", "pick & roll", "pnr", "p&r"], "pick_and_roll"),
+            (["isolation", "iso"], "isolation"),
+            (["motion", "circulation", "extra pass"], "motion_offense"),
+            (["spread", "spacing", "pace & space", "pace and space"], "spread_offense"),
+            (["transition", "fast break", "run & gun", "run and gun"], "transition_offense"),
+            (["drive", "drive & kick", "dribble drive"], "dribble_drive"),
+            (["stagger", "screen"], "staggers"),
+            (["poste bas", "post", "post up"], "post_up"),
+            (["horns", "elbow"], "horns"),
+            (["backdoor", "princeton"], "princeton"),
+            (["drag screen", "drag"], "double_drag"),
+            (["press", "full court pressure"], "press_terrain"),
+            (["zone", "match-up zone", "matchup zone"], "defense_zone"),
+            (["drop coverage", "drop"], "drop"),
+            (["switch", "switching"], "switch"),
+            (["hedge", "show"], "hedge"),
+        ]
+        _team_plays: list[str] = []
+        for _kws, _pk in _kw_map:
+            if any(kw in _off_sys_lower for kw in _kws) and _pk not in _team_plays:
+                _team_plays.append(_pk)
+            if len(_team_plays) >= 3:
+                break
+        if not _team_plays:
+            _team_plays = ["pick_and_roll", "motion_offense", "defense_homme"]
+        _team_plays = _team_plays[:3]
+        # Only show for basketball teams (scouting sheets with PG/SG/SF positions)
+        _is_bk_team = any(p.get("pos", "") in ("PG", "SG", "SF", "PF", "C") for p in _scouting.get("key_players", []))
+        if _is_bk_team and _team_plays:
+            st.markdown('<hr style="border:none;border-top:1px solid #1a1a1a;margin:1rem 0 .75rem;">', unsafe_allow_html=True)
+            st.markdown('<p style="color:#CAFF33;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem;">🗝 SCHÉMA TACTIQUE CLÉ</p>', unsafe_allow_html=True)
+            _tac_cols = st.columns(len(_team_plays))
+            for _ti, _tpk in enumerate(_team_plays):
+                _tpd = PLAYBOOK.get(_tpk, {})
+                if _tpd:
+                    with _tac_cols[_ti]:
+                        _tlabel = _tpk.replace("_", " ").title()
+                        st.markdown(
+                            f'<div style="background:#0a140a;border:1px solid #1a2a1a;border-top:2px solid #CAFF33;'
+                            f'border-radius:8px;padding:.7rem .85rem;">'
+                            f'<p style="color:#CAFF33;font-size:.7rem;font-weight:700;text-transform:uppercase;'
+                            f'letter-spacing:.07em;margin-bottom:.2rem;">{_tlabel}</p>'
+                            f'<p style="color:#555;font-size:.62rem;margin-bottom:.3rem;">{_tpd.get("categorie","")}</p>'
+                            f'<p style="color:#ccc;font-size:.75rem;line-height:1.45;margin-bottom:.3rem;">{_tpd.get("objectif","")}</p>'
+                            f'<p style="color:#666;font-size:.7rem;line-height:1.4;margin:0;">'
+                            f'<b style="color:#888;">Avantage :</b> {_tpd.get("avantages","")}</p>'
+                            f'</div>',
+                            unsafe_allow_html=True,
+                        )
+
     if st.button("← Voir tous les matchs", key="team_reset"):
         st.session_state.selected_team = None
         st.session_state.selected_match = None
@@ -4633,3 +5077,125 @@ if _sel and _an and _m_sel:
             st.markdown(f'<p class="bbn" style="font-size:1.1rem;color:#CAFF33;">📝 Analyse {a["short"]}</p>', unsafe_allow_html=True)
             st.markdown(f'<div class="verdict-card">{verd["away_txt"]}</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="verdict-card" style="border-color:#2a2a2a;">{verd["coach_away"]}</div>', unsafe_allow_html=True)
+
+        # ── Clés Tactiques (Basketball uniquement) ────────────────────────────
+        if "Basket" in m.get("sport", ""):
+            _tac_sys_home = an["tactique"].get("home_form", "")
+            _tac_sys_away = an["tactique"].get("away_form", "")
+            # Map offensive system keywords to PLAYBOOK keys
+            _sys_to_plays: dict[str, list[str]] = {
+                "Positionnel":        ["pick_and_roll", "post_up", "horns"],
+                "Motion Offense":     ["motion_offense", "flare_screen", "staggers"],
+                "Iso Ball":           ["isolation", "pick_and_roll", "handoff"],
+                "Pace & Space":       ["spread_offense", "dribble_drive", "transition_offense"],
+                "Pick & Roll":        ["pick_and_roll", "spain_pnr", "empty_side_pnr"],
+                "Transition Offense": ["transition_offense", "pistol_action", "double_drag"],
+            }
+            _h_plays = _sys_to_plays.get(_tac_sys_home, ["pick_and_roll", "motion_offense", "defense_homme"])
+            _a_plays = _sys_to_plays.get(_tac_sys_away, ["pick_and_roll", "motion_offense", "defense_homme"])
+            _all_plays = list(dict.fromkeys(_h_plays + _a_plays))[:5]
+            if _all_plays:
+                st.markdown('<hr class="div-line">', unsafe_allow_html=True)
+                st.markdown('<p class="bbn" style="font-size:1.1rem;color:#CAFF33;">🗝️ Clés Tactiques du Match</p>', unsafe_allow_html=True)
+                st.markdown(
+                    f'<p style="color:#666;font-size:.78rem;margin-bottom:.75rem;">'
+                    f'Concepts tactiques clés identifiés pour {h["short"]} ({_tac_sys_home}) '
+                    f'et {a["short"]} ({_tac_sys_away})</p>',
+                    unsafe_allow_html=True,
+                )
+                _play_cols = st.columns(min(len(_all_plays), 3))
+                for _pi, _pk in enumerate(_all_plays[:3]):
+                    _pd = PLAYBOOK.get(_pk, {})
+                    if _pd:
+                        with _play_cols[_pi % 3]:
+                            _play_label = _pk.replace("_", " ").title()
+                            st.markdown(
+                                f'<div style="background:#0d1a0d;border:1px solid #1a2a1a;border-top:2px solid #CAFF33;'
+                                f'border-radius:8px;padding:.8rem .9rem;margin-bottom:.5rem;height:100%;">'
+                                f'<p style="color:#CAFF33;font-size:.72rem;font-weight:700;text-transform:uppercase;'
+                                f'letter-spacing:.08em;margin-bottom:.2rem;">{_play_label}</p>'
+                                f'<p style="color:#888;font-size:.65rem;margin-bottom:.35rem;">{_pd.get("categorie","")}</p>'
+                                f'<p style="color:#ddd;font-size:.78rem;line-height:1.5;margin-bottom:.35rem;">'
+                                f'<b style="color:#aaa;">Objectif :</b> {_pd.get("objectif","")}</p>'
+                                f'<p style="color:#888;font-size:.74rem;line-height:1.4;margin:0;">'
+                                f'{_pd.get("principe","")}</p>'
+                                f'</div>',
+                                unsafe_allow_html=True,
+                            )
+
+    # ── Référence Tactique (expander outside tabs, Basketball uniquement) ────
+    if "Basket" in m.get("sport", ""):
+        st.markdown('<hr style="border:none;border-top:1px solid #1a1a1a;margin:1.5rem 0 1rem;">', unsafe_allow_html=True)
+        with st.expander("📖 Référence Tactique — Playbook Basketball", expanded=False):
+            # Build category map
+            _pb_cats: dict[str, list[str]] = {}
+            for _pbk, _pbv in PLAYBOOK.items():
+                _cat = _pbv.get("categorie", "Autre")
+                _main_cat = _cat.split("/")[0].strip()
+                if _main_cat not in _pb_cats:
+                    _pb_cats[_main_cat] = []
+                _pb_cats[_main_cat].append(_pbk)
+            _cat_options = sorted(_pb_cats.keys())
+            _sel_cat = st.selectbox(
+                "Catégorie",
+                _cat_options,
+                key=f"pb_cat_{mid}",
+                label_visibility="collapsed",
+            )
+            _plays_in_cat = _pb_cats.get(_sel_cat, [])
+            _play_display = {k: PLAYBOOK[k].get("categorie", k) + " — " + k.replace("_", " ").title() for k in _plays_in_cat}
+            _sel_play_key = st.selectbox(
+                "Tactique",
+                _plays_in_cat,
+                format_func=lambda x: x.replace("_", " ").title(),
+                key=f"pb_play_{mid}",
+                label_visibility="collapsed",
+            )
+            _spb = PLAYBOOK.get(_sel_play_key, {})
+            if _spb:
+                _play_title = _sel_play_key.replace("_", " ").upper()
+                _vs_key = "vs_defense" if "vs_defense" in _spb else "vs_offense"
+                _vs_label = "VS DÉFENSE" if _vs_key == "vs_defense" else "VS ATTAQUE"
+                st.markdown(
+                    f'<div style="background:#0a140a;border:1px solid #1a2a1a;border-radius:12px;padding:1.1rem 1.25rem;margin-top:.75rem;">'
+                    f'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;">'
+                    f'<p class="bbn" style="font-size:1.3rem;color:#CAFF33;margin:0;">{_play_title}</p>'
+                    f'<span style="background:#1a2a1a;color:#CAFF33;border-radius:6px;padding:.2rem .7rem;font-size:.7rem;font-weight:700;">{_spb.get("categorie","")}</span>'
+                    f'</div>'
+                    f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;">'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #CAFF33;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#CAFF33;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">OBJECTIF</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_spb.get("objectif","")}</p>'
+                    f'</div>'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #3b82f6;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#3b82f6;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">PRINCIPE</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_spb.get("principe","")}</p>'
+                    f'</div>'
+                    f'</div>'
+                    f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;">'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #22c55e;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#22c55e;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">AVANTAGES</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_spb.get("avantages","")}</p>'
+                    f'</div>'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #ef4444;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#ef4444;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">LIMITES</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_spb.get("limites","")}</p>'
+                    f'</div>'
+                    f'</div>'
+                    f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #f97316;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#f97316;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">{_vs_label}</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_spb.get(_vs_key,"")}</p>'
+                    f'</div>'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #a855f7;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#a855f7;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">CONTRE-MESURES</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_spb.get("contre_mesures","")}</p>'
+                    f'</div>'
+                    f'</div>'
+                    f'<div style="margin-top:.75rem;background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:.6rem .9rem;">'
+                    f'<p style="color:#888;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;">COMMENT RECONNAÎTRE</p>'
+                    f'<p style="color:#aaa;font-size:.8rem;line-height:1.5;margin:0;">{_spb.get("reconnaître","")}</p>'
+                    f'</div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
