@@ -656,3 +656,286 @@ def generate_regulatory_framework_docx(data: dict, output_dir: str = "outputs") 
     filename  = f"{output_dir}/Regulatory_Framework_{timestamp}.docx"
     doc.save(filename)
     return filename
+
+
+# ── Excel exports ──────────────────────────────────────────────────────────────
+
+def generate_risk_analysis_excel(data: dict, output_dir: str = "outputs") -> str:
+    """Tab 1 — Risk matrix + Regulations + Recommendations in 3 sheets."""
+    import openpyxl
+    from openpyxl.styles import PatternFill, Font, Alignment
+    from openpyxl.utils import get_column_letter
+
+    wb = openpyxl.Workbook()
+    HDR_FONT = Font(bold=True, color="FFFFFF", size=11)
+    HDR_FILL = PatternFill("solid", fgColor="2D54D4")
+    LEVEL_FILL = {
+        "Critical": PatternFill("solid", fgColor="3D0A0A"),
+        "High":     PatternFill("solid", fgColor="3D1A0A"),
+        "Moderate": PatternFill("solid", fgColor="3D320A"),
+    }
+
+    def _hdr(ws, headers, col_widths):
+        ws.append(headers)
+        for cell in ws[1]:
+            cell.font = HDR_FONT
+            cell.fill = HDR_FILL
+            cell.alignment = Alignment(wrap_text=True, vertical="center")
+        ws.auto_filter.ref = ws.dimensions
+        for i, w in enumerate(col_widths, 1):
+            ws.column_dimensions[get_column_letter(i)].width = w
+
+    def _row_align(ws):
+        for cell in ws[ws.max_row]:
+            cell.alignment = Alignment(wrap_text=True, vertical="top")
+
+    # Sheet 1: Risk Matrix
+    ws1 = wb.active
+    ws1.title = "Risk Matrix"
+    _hdr(ws1, ["#", "Risk", "Level", "Description", "Impact", "Likelihood", "Expected Control"],
+         [4, 28, 12, 42, 32, 12, 38])
+    for i, r in enumerate(data.get("risks", []), 1):
+        lv = r.get("level", "")
+        ws1.append([i, r.get("name",""), lv, r.get("description",""), r.get("impact",""), r.get("likelihood",""), r.get("control","")])
+        if lv in LEVEL_FILL:
+            for cell in ws1[ws1.max_row]:
+                cell.fill = LEVEL_FILL[lv]
+        _row_align(ws1)
+
+    # Sheet 2: Regulations
+    ws2 = wb.create_sheet("Applicable Regulations")
+    _hdr(ws2, ["Jurisdiction", "Regulation", "Reference", "Key Requirement"], [20, 35, 20, 60])
+    for r in data.get("regs", []):
+        ws2.append([r.get("jurisdiction",""), r.get("text",""), r.get("reference",""), r.get("requirement","")])
+        _row_align(ws2)
+
+    # Sheet 3: Public Recommendations
+    ws3 = wb.create_sheet("Public Recommendations")
+    _hdr(ws3, ["Source", "Year", "Theme", "Recommendation", "Priority"], [18, 8, 20, 60, 12])
+    for r in data.get("pub_recs", []):
+        ws3.append([r.get("source",""), r.get("year",""), r.get("theme",""), r.get("recommendation",""), r.get("priority","")])
+        _row_align(ws3)
+
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    path = f"{output_dir}/Risk_Analysis_{ts}.xlsx"
+    wb.save(path)
+    return path
+
+
+def generate_audit_findings_excel(data: dict, output_dir: str = "outputs") -> str:
+    """Tab 3 — Findings + Action Plan in 2 sheets."""
+    import openpyxl
+    from openpyxl.styles import PatternFill, Font, Alignment
+    from openpyxl.utils import get_column_letter
+
+    wb = openpyxl.Workbook()
+    HDR_FONT = Font(bold=True, color="FFFFFF", size=11)
+    HDR_FILL = PatternFill("solid", fgColor="2D54D4")
+    RATING_FILL = {
+        "Critical": PatternFill("solid", fgColor="3D0A0A"),
+        "High":     PatternFill("solid", fgColor="3D1A0A"),
+        "Moderate": PatternFill("solid", fgColor="3D320A"),
+        "Low":      PatternFill("solid", fgColor="0A3D1A"),
+    }
+
+    def _hdr(ws, headers, col_widths):
+        ws.append(headers)
+        for cell in ws[1]:
+            cell.font = HDR_FONT; cell.fill = HDR_FILL
+            cell.alignment = Alignment(wrap_text=True, vertical="center")
+        ws.auto_filter.ref = ws.dimensions
+        for i, w in enumerate(col_widths, 1):
+            ws.column_dimensions[get_column_letter(i)].width = w
+
+    ws1 = wb.active
+    ws1.title = "Findings"
+    _hdr(ws1, ["#", "Finding", "Rating", "Observation", "Risk", "Recommendation", "Owner", "Due Date"],
+         [4, 30, 12, 45, 32, 45, 20, 14])
+    for i, f in enumerate(data.get("findings", []), 1):
+        rating = f.get("rating", f.get("severity", ""))
+        ws1.append([i, f.get("title",""), rating, f.get("observation", f.get("description","")),
+                    f.get("risk", f.get("impact","")), f.get("recommendation",""), f.get("owner",""), f.get("due_date","")])
+        if rating in RATING_FILL:
+            for cell in ws1[ws1.max_row]:
+                cell.fill = RATING_FILL[rating]
+        for cell in ws1[ws1.max_row]:
+            cell.alignment = Alignment(wrap_text=True, vertical="top")
+
+    ws2 = wb.create_sheet("Action Plan")
+    _hdr(ws2, ["#", "Finding", "Rating", "Action", "Owner", "Due Date", "Status"],
+         [4, 30, 12, 55, 20, 14, 12])
+    for i, f in enumerate(data.get("findings", []), 1):
+        ws2.append([i, f.get("title",""), f.get("rating", f.get("severity","")),
+                    f.get("recommendation",""), f.get("owner",""), f.get("due_date",""), "Open"])
+        for cell in ws2[ws2.max_row]:
+            cell.alignment = Alignment(wrap_text=True, vertical="top")
+
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    path = f"{output_dir}/Audit_Findings_{ts}.xlsx"
+    wb.save(path)
+    return path
+
+
+# ── Additional PowerPoint exports ──────────────────────────────────────────────
+
+def generate_tab1_pptx(data: dict, output_dir: str = "outputs") -> str:
+    """Tab 1 — Jurisdiction slides + risk heatmap."""
+    from pptx import Presentation
+    from pptx.util import Inches, Pt
+    from pptx.dml.color import RGBColor
+
+    prs = Presentation()
+    prs.slide_width = Inches(13.33)
+    prs.slide_height = Inches(7.5)
+    blank = prs.slide_layouts[6]
+
+    BLUE  = RGBColor(0xA0, 0xB4, 0xF8)
+    GRAY  = RGBColor(0x5A, 0x64, 0x88)
+    BODY  = RGBColor(0xC8, 0xD0, 0xE8)
+    RATING_RGB = {
+        "Critical": RGBColor(0xEF, 0x44, 0x44),
+        "High":     RGBColor(0xF9, 0x73, 0x16),
+        "Moderate": RGBColor(0xEA, 0xB3, 0x08),
+    }
+
+    def _slide(title_txt, body_lines, title_color=None):
+        s = prs.slides.add_slide(blank)
+        t = s.shapes.add_textbox(Inches(0.5), Inches(0.25), Inches(12.3), Inches(0.8))
+        tf = t.text_frame
+        tf.paragraphs[0].text = title_txt
+        tf.paragraphs[0].font.size = Pt(22)
+        tf.paragraphs[0].font.bold = True
+        tf.paragraphs[0].font.color.rgb = title_color or BLUE
+        b = s.shapes.add_textbox(Inches(0.5), Inches(1.15), Inches(12.3), Inches(5.9))
+        btf = b.text_frame; btf.word_wrap = True
+        for j, line in enumerate(body_lines):
+            p = btf.paragraphs[0] if j == 0 else btf.add_paragraph()
+            p.text = str(line); p.font.size = Pt(12.5)
+            p.font.color.rgb = BODY
+        return s
+
+    topic = data.get("topic", "Audit Topic")
+    risks = data.get("risks", []) or []
+    regs  = data.get("regs", []) or []
+    jurs  = data.get("jurs", []) or []
+
+    # Title slide
+    s0 = prs.slides.add_slide(blank)
+    t0 = s0.shapes.add_textbox(Inches(1), Inches(2.4), Inches(11.3), Inches(1.3))
+    t0.text_frame.paragraphs[0].text = f"Risk Analysis — {topic}"
+    t0.text_frame.paragraphs[0].font.size = Pt(32)
+    t0.text_frame.paragraphs[0].font.bold = True
+    t0.text_frame.paragraphs[0].font.color.rgb = BLUE
+    t1 = s0.shapes.add_textbox(Inches(1), Inches(3.9), Inches(11.3), Inches(0.6))
+    t1.text_frame.paragraphs[0].text = "AuditIQ · Private Banking · Multi-Jurisdiction"
+    t1.text_frame.paragraphs[0].font.size = Pt(14)
+    t1.text_frame.paragraphs[0].font.color.rgb = GRAY
+
+    # Risk heatmap
+    n_c = sum(1 for r in risks if r.get("level") == "Critical")
+    n_h = sum(1 for r in risks if r.get("level") == "High")
+    n_m = sum(1 for r in risks if r.get("level") == "Moderate")
+    hm = [f"Total risks identified: {len(risks)}", "",
+          f"  🔴 Critical : {n_c}", f"  🟠 High     : {n_h}", f"  🟡 Moderate : {n_m}", "",
+          "Top Critical Risks:"] + [f"  • {r.get('name','')}" for r in risks if r.get("level") == "Critical"][:5]
+    _slide(f"Risk Heatmap — {topic}", hm)
+
+    # Per-jurisdiction slides
+    for jur in jurs:
+        jur_regs = [r for r in regs if r.get("jurisdiction","") == jur]
+        lines = [f"Applicable regulations: {len(jur_regs)}", ""]
+        for r in jur_regs[:8]:
+            lines.append(f"  • {r.get('text','')} — {r.get('reference','')}")
+        if len(jur_regs) > 8:
+            lines.append(f"  … and {len(jur_regs)-8} more")
+        _slide(f"Regulatory Landscape — {jur}", lines)
+
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    path = f"{output_dir}/Risk_Analysis_{ts}.pptx"
+    prs.save(path)
+    return path
+
+
+def generate_report_pptx(data: dict, output_dir: str = "outputs") -> str:
+    """Tab 3 — Executive summary + one slide per finding."""
+    from pptx import Presentation
+    from pptx.util import Inches, Pt
+    from pptx.dml.color import RGBColor
+
+    prs = Presentation()
+    prs.slide_width = Inches(13.33)
+    prs.slide_height = Inches(7.5)
+    blank = prs.slide_layouts[6]
+    BLUE  = RGBColor(0xA0, 0xB4, 0xF8)
+    GRAY  = RGBColor(0x5A, 0x64, 0x88)
+    BODY  = RGBColor(0xC8, 0xD0, 0xE8)
+    RATING_RGB = {
+        "Critical": RGBColor(0xEF, 0x44, 0x44),
+        "High":     RGBColor(0xF9, 0x73, 0x16),
+        "Moderate": RGBColor(0xEA, 0xB3, 0x08),
+        "Low":      RGBColor(0x22, 0xD3, 0xA5),
+    }
+
+    name     = data.get("name", "Audit Report")
+    findings = data.get("findings", []) or []
+
+    # Title slide
+    s0 = prs.slides.add_slide(blank)
+    t0 = s0.shapes.add_textbox(Inches(1), Inches(2.2), Inches(11.3), Inches(1.4))
+    t0.text_frame.paragraphs[0].text = name
+    t0.text_frame.paragraphs[0].font.size = Pt(28)
+    t0.text_frame.paragraphs[0].font.bold = True
+    t0.text_frame.paragraphs[0].font.color.rgb = BLUE
+    t1 = s0.shapes.add_textbox(Inches(1), Inches(3.8), Inches(11.3), Inches(0.6))
+    t1.text_frame.paragraphs[0].text = "AuditIQ · Internal Audit Report · Private Banking"
+    t1.text_frame.paragraphs[0].font.size = Pt(14)
+    t1.text_frame.paragraphs[0].font.color.rgb = GRAY
+
+    # Executive summary
+    n_hi = sum(1 for f in findings if f.get("rating","").lower() in ("critical","high"))
+    exec_lines = [f"Total findings: {len(findings)}", f"Critical / High: {n_hi}", "",
+                  "Key findings:"] + [f"  • [{f.get('rating','')}] {f.get('title','')}" for f in findings[:6]]
+    s1 = prs.slides.add_slide(blank)
+    th = s1.shapes.add_textbox(Inches(0.5), Inches(0.25), Inches(12.3), Inches(0.8))
+    th.text_frame.paragraphs[0].text = "Executive Summary"
+    th.text_frame.paragraphs[0].font.size = Pt(22); th.text_frame.paragraphs[0].font.bold = True
+    th.text_frame.paragraphs[0].font.color.rgb = BLUE
+    bx = s1.shapes.add_textbox(Inches(0.5), Inches(1.15), Inches(12.3), Inches(5.9))
+    btf = bx.text_frame; btf.word_wrap = True
+    for j, line in enumerate(exec_lines):
+        p = btf.paragraphs[0] if j == 0 else btf.add_paragraph()
+        p.text = line; p.font.size = Pt(13); p.font.color.rgb = BODY
+
+    # Per-finding slides
+    for f in findings:
+        rating = f.get("rating", f.get("severity",""))
+        color  = RATING_RGB.get(rating, RGBColor(0x8A, 0x92, 0xBB))
+        s = prs.slides.add_slide(blank)
+        th2 = s.shapes.add_textbox(Inches(0.5), Inches(0.2), Inches(12.3), Inches(0.75))
+        th2.text_frame.paragraphs[0].text = f"Finding — {rating} — {f.get('title','')}"
+        th2.text_frame.paragraphs[0].font.size = Pt(18)
+        th2.text_frame.paragraphs[0].font.bold = True
+        th2.text_frame.paragraphs[0].font.color.rgb = color
+        content = [
+            f"Observation: {f.get('observation', f.get('description',''))}",
+            "",
+            f"Risk: {f.get('risk', f.get('impact',''))}",
+            "",
+            f"Recommendation: {f.get('recommendation','')}",
+            "",
+            f"Owner: {f.get('owner','')}   Due: {f.get('due_date','')}",
+        ]
+        bx2 = s.shapes.add_textbox(Inches(0.5), Inches(1.1), Inches(12.3), Inches(6))
+        btf2 = bx2.text_frame; btf2.word_wrap = True
+        for j, line in enumerate(content):
+            p = btf2.paragraphs[0] if j == 0 else btf2.add_paragraph()
+            p.text = line; p.font.size = Pt(13); p.font.color.rgb = BODY
+
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    path = f"{output_dir}/Audit_Report_{ts}.pptx"
+    prs.save(path)
+    return path
