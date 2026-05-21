@@ -3625,6 +3625,522 @@ PLAYBOOK: dict[str, dict] = {
     },
 }
 
+# ── Football Tactics Playbook ─────────────────────────────────────────────────
+FOOTBALL_PLAYBOOK: dict[str, dict] = {
+    # ── SYSTÈMES / FORMATIONS ─────────────────────────────────────────────────
+    "4-3-3": {
+        "categorie": "Système / Formation",
+        "objectif": "Domination possession et largeur offensive",
+        "structure": "4 défenseurs, 3 milieux (MDC+2MC), 3 attaquants larges (2 ailiers + 1 avant-centre)",
+        "declencheurs": "Équipe technique, ailiers de vitesse, MDC box-to-box",
+        "avantages": "Largeur naturelle, pression haute efficace, transitions rapides sur les côtés",
+        "limites": "Milieu sous-nombre si MDC seul contre 2 adverses, flancs exposés si ailiers ne défendent pas",
+        "reconnaitre": "Ailiers larges qui hurlent la ligne de touche, MDC seul au centre, latéraux qui montent",
+        "adaptations": "Ailiers rentrants + latéraux doublés côté, ou MDC stagger pour protéger",
+        "contre_mesures": "Surcharger le milieu, pressing latéraux, transition sur les flancs exposés",
+    },
+    "4-2-3-1": {
+        "categorie": "Système / Formation",
+        "objectif": "Solidité défensive avec double pivot et largeur contrôlée",
+        "structure": "4 défenseurs, double pivot, 1 meneur (n°10), 2 ailiers larges, 1 avant-centre",
+        "declencheurs": "Équipe qui veut contrôler sans trop prendre de risques, meneur technique créateur",
+        "avantages": "Double pivot protège, n°10 a de l'espace, transitions sur les côtés",
+        "limites": "N°10 doit être excellent sinon aucune création, double pivot peut être lent",
+        "reconnaitre": "Deux milieux récupérateurs côte à côte, joueur n°10 entre les lignes, ailiers larges",
+        "adaptations": "Meneur récupérateur ou créateur selon phase, latéraux offensifs pour compenser",
+        "contre_mesures": "Presser le n°10 entre les lignes, bloquer les reçus entre les lignes",
+    },
+    "4-4-2": {
+        "categorie": "Système / Formation",
+        "objectif": "Équilibre défensif-offensif, organisation collective claire",
+        "structure": "4 défenseurs, 4 milieux (2 centraux + 2 ailiers), 2 attaquants en ligne",
+        "declencheurs": "Équipe physique, duo d'attaquants complémentaires, milieux de terrain boîte-à-boîte",
+        "avantages": "Compacité naturelle, double menace offensive, redoublements sur les côtés",
+        "limites": "Manque de créativité si pas de joueur technique entre les lignes",
+        "reconnaitre": "4 milieux en ligne, duo d'attaquants côte à côte, très compact",
+        "adaptations": "4-4-2 losange (avec meneur), 4-4-2 avec milieux créatifs",
+        "contre_mesures": "Jouer entre les lignes du bloc, utiliser le demi-espace",
+    },
+    "3-4-3": {
+        "categorie": "Système / Formation",
+        "objectif": "Agressivité offensive, surcharge sur les côtés",
+        "structure": "3 défenseurs centraux, 4 milieux (2 pistons + 2 centraux), 3 attaquants",
+        "declencheurs": "Équipe technique polyvalente, pistons endurants, défenseurs centraux qui jouent en 1c1",
+        "avantages": "Supériorité numérique sur les côtés avec pistons, pressing haut structuré",
+        "limites": "Extrêmement vulnérable aux transitions, 3 DC contre transitions rapides",
+        "reconnaitre": "3 DC visibles, pistons très haut, attaque large",
+        "adaptations": "Transition défensive = pistons qui reculent vite",
+        "contre_mesures": "Transition rapide sur les flancs, exploiter l'espace derrière les pistons",
+    },
+    "3-5-2": {
+        "categorie": "Système / Formation",
+        "objectif": "Contrôle du milieu et solidité défensive à 5 derrière en repli",
+        "structure": "3 défenseurs centraux, 5 milieux (2 pistons + 3 centraux), 2 attaquants",
+        "declencheurs": "Équipe défensive qui veut surcharger le milieu, bons pistons bilatéraux",
+        "avantages": "5 joueurs de milieu = domination du centre, solidité défensive à 5 en repli",
+        "limites": "Pistons doivent couvrir tout le terrain, limitant si fatigués",
+        "reconnaitre": "Milieu de terrain très large, 3 DC en repli, pistons alternant haut et bas",
+        "adaptations": "En possession → 3-5-2. En repli → 5-3-2",
+        "contre_mesures": "Contre-attaque sur les espaces laissés par les pistons",
+    },
+    "4-1-4-1": {
+        "categorie": "Système / Formation",
+        "objectif": "Protection défensive par le pivot bas, étage offensif à 4",
+        "structure": "4 défenseurs, 1 pivot bas, 4 milieux offensifs en ligne, 1 avant-centre",
+        "declencheurs": "Équipe avec récupérateur élite, 4 milieux techniques et offensifs",
+        "avantages": "Pivot bas protège le bloc, 4 milieux créent du surnombre offensif",
+        "limites": "Si le pivot est dépassé, le bloc est percé. L'avant-centre peut être isolé",
+        "reconnaitre": "1 joueur seul devant la défense, 4 milieux en ligne derrière lui",
+        "adaptations": "Pivot qui couvre les espaces, milieux offensifs qui se replient",
+        "contre_mesures": "Presser le pivot en double, jouer dans les espaces entre le pivot et les milieux",
+    },
+    "5-3-2": {
+        "categorie": "Système / Formation",
+        "objectif": "Solidité défensive maximale, contre-attaque rapide",
+        "structure": "5 défenseurs (3 DC + 2 latéraux pistons), 3 milieux, 2 attaquants",
+        "declencheurs": "Équipe qui veut protéger un avantage ou affronter un adversaire supérieur",
+        "avantages": "Quasi-imperméable défensivement, efficace en contre-attaque",
+        "limites": "Très passif offensivement, pistons doivent monter pour attaquer",
+        "reconnaitre": "5 joueurs en défense, bloc bas compact, contre-attaques directes",
+        "adaptations": "Pistons qui montent selon le pressing adverse",
+        "contre_mesures": "Patience, circulation rapide, tirs de loin pour sortir le bloc",
+    },
+    "4-3-2-1": {
+        "categorie": "Système / Formation",
+        "objectif": "Possession et densité centrale, créativité entre les lignes",
+        "structure": "4 défenseurs, 3 milieux, 2 joueurs entre les lignes (meneur + ailier intérieur), 1 avant-centre",
+        "declencheurs": "Équipe très technique, joueurs entre les lignes capables de dribble et de passe",
+        "avantages": "Supériorité numérique au centre, difficile à presser, créativité entre les lignes",
+        "limites": "Peu de largeur naturelle, flancs exposés, latéraux très sollicités",
+        "reconnaitre": "Formation en sapin caractéristique, densité centrale, latéraux très haut",
+        "adaptations": "Latéraux offensifs compensent le manque de largeur",
+        "contre_mesures": "Écraser le centre, défendre en bloc bas, utiliser la largeur pour étirer",
+    },
+    # ── PRINCIPES OFFENSIFS ───────────────────────────────────────────────────
+    "build_up_court": {
+        "categorie": "Principe offensif",
+        "objectif": "Ressortir proprement depuis le gardien en combinaisons courtes",
+        "structure": "DC qui s'écartent, MDC qui descend entre les DC, gardien au sol",
+        "declencheurs": "Adversaire non-pressant, équipe technique et courageuse balle au pied",
+        "avantages": "Contrôle du rythme, attirer l'adversaire haut pour jouer derrière lui",
+        "limites": "Risque de perte de balle dangereuse en zone de construction",
+        "reconnaitre": "Gardien qui relance au pied, DC écartés, MDC qui descend",
+        "adaptations": "Switch vers build-up long si press agressif adverse",
+        "contre_mesures": "Pressing haut coordonné avec trap zone sur le gardien ou les DC",
+    },
+    "build_up_long": {
+        "categorie": "Principe offensif",
+        "objectif": "Sauter le pressing adverse par des passes longues vers les attaquants",
+        "structure": "Gardien ou DC en profondeur, cibles longues (avant-centre ou ailier), deuxième balle",
+        "declencheurs": "Adversaire qui presse haut, équipe avec cibles aériennes ou de vitesse",
+        "avantages": "Rapide, neutralise le pressing, efficace si cibles solides dans les duels",
+        "limites": "Peut perdre la balle facilement, dépend de la qualité des deuxièmes balles",
+        "reconnaitre": "Passes longues directes depuis la défense, attaquants qui cherchent profondeur",
+        "adaptations": "Combinaison avec troisième homme pour récupérer la deuxième balle",
+        "contre_mesures": "Défense haute compacte sur les cibles, bien gagner les secondes balles",
+    },
+    "third_man": {
+        "categorie": "Principe offensif",
+        "objectif": "Créer une ligne de passe supplémentaire via un troisième joueur en déplacement",
+        "structure": "Joueur A passe à B, pendant que C se déplace en troisième option. B passe à C qui est libre",
+        "declencheurs": "Défense qui suit la balle, joueurs capables de mouvements sans ballon",
+        "avantages": "Déstructure la défense, crée des espaces, difficilement pressable",
+        "limites": "Requiert lecture simultanée de 3 joueurs et timing parfait",
+        "reconnaitre": "Mouvement anticipé d'un joueur tiers pendant un échange A-B",
+        "adaptations": "Peut aussi fonctionner sur corner ou free kick",
+        "contre_mesures": "Défense en zone, intercepter les passes vers le 3ème homme",
+    },
+    "overload_isolate": {
+        "categorie": "Principe offensif",
+        "objectif": "Surcharger un côté pour libérer le côté opposé",
+        "structure": "3-4 joueurs se concentrent côté fort, 1 joueur seul côté faible, switch rapide",
+        "declencheurs": "Adversaire qui suit les mouvements numériques, latéral adverse poussé à monter",
+        "avantages": "Crée un 1c1 ou 2c1 côté faible, difficile à défendre si switch rapide",
+        "limites": "Nécessite un switch de jeu précis et rapide sous pression",
+        "reconnaitre": "Accumulation numérique d'un côté, puis long switch vers l'espace libre",
+        "adaptations": "Peut être déclenché par un latéral inversé ou une passe diagonale",
+        "contre_mesures": "Ne pas suivre la surcharge, maintenir la forme défensive",
+    },
+    "half_space": {
+        "categorie": "Principe offensif",
+        "objectif": "Occuper les demi-espaces pour créer des lignes de passe obliques et des finitions au cercle",
+        "structure": "Joueurs entre l'axe central et les latéraux (zones 8 et 14 du terrain), disponibles en réception",
+        "declencheurs": "Équipe technique, joueurs capables de se retourner et de passer sous pression",
+        "avantages": "Zone la plus dangereuse offensivement, difficile à défendre en zone ou en homme",
+        "limites": "Requiert des joueurs techniques et conscients du terrain",
+        "reconnaitre": "Milieu ou ailier intérieur qui se positionne entre le latéral et le DC adverse",
+        "adaptations": "Ailiers intérieurs, pistons inversés, n°10 mobile",
+        "contre_mesures": "Défenseur qui suit le joueur dans le demi-espace, compacité du bloc central",
+    },
+    "width_depth": {
+        "categorie": "Principe offensif",
+        "objectif": "Étirer la défense dans toutes les dimensions pour créer des espaces centraux",
+        "structure": "Ailiers larges + avant-centre qui tire les DC en profondeur, latéraux hauts",
+        "declencheurs": "Équipe rapide sur les côtés, avant-centre avec bonne course en profondeur",
+        "avantages": "Défense étirée = espaces centraux immenses pour les milieux",
+        "limites": "Si les attaquants ne tirent pas suffisamment les défenseurs, les espaces ne se créent pas",
+        "reconnaitre": "Ailiers au maximum de la largeur, avant-centre qui fait des courses de profondeur",
+        "adaptations": "Croiser largeur et profondeur : ailier large + course en profondeur de l'autre côté",
+        "contre_mesures": "Défense haute pour couper les courses en profondeur, ne pas suivre les ailiers larges",
+    },
+    "positional_play": {
+        "categorie": "Principe offensif",
+        "objectif": "Conserver la balle en supériorité numérique locale pour progresser",
+        "structure": "Triangles et losanges constants, joueurs toujours à 3 options de passe, positionnement entre les lignes",
+        "declencheurs": "Équipe très technique, lecture collective du pressing adverse",
+        "avantages": "Épuise l'adversaire, crée des passe-et-va dangereux, contrôle absolu",
+        "limites": "Lent si adversaire bien organisé, peut manquer de verticalité",
+        "reconnaitre": "Possession longue, triangles constants, joueurs qui cherchent toujours le 3ème homme",
+        "adaptations": "Verticalisation dès que l'espace se crée, ne pas jouer pour jouer",
+        "contre_mesures": "Pressing intense et organisé, trap zones, interdire les réceptions entre les lignes",
+    },
+    "direct_play": {
+        "categorie": "Principe offensif",
+        "objectif": "Attaquer rapidement la profondeur avec peu de touches de balle",
+        "structure": "Passes verticales directes, appuis courts en transition vers la profondeur, avant-centre target man",
+        "declencheurs": "Adversaire haut, équipe avec speed attaquants, cibles aériennes",
+        "avantages": "Surprend les défenses replacées, réduit le temps de réaction adverse",
+        "limites": "Dépend de la qualité des cibles et des deuxièmes balles, peu de contrôle",
+        "reconnaitre": "Peu de passes, verticalité immédiate, avant-centre qui cherche profondeur",
+        "adaptations": "Combiner avec jeu en appui si l'adversaire monte bien défensivement",
+        "contre_mesures": "Bloc défensif compact, bien défendre les deuxièmes balles",
+    },
+    "counter_attacking": {
+        "categorie": "Principe offensif",
+        "objectif": "Exploiter les espaces laissés par un adversaire offensif pour attaquer en transition",
+        "structure": "Bloc bas + transition rapide après récupération, vitesse maximale, 2-3 joueurs à l'avant",
+        "declencheurs": "Adversaire qui monte beaucoup, récupération basse, attaquants de vitesse",
+        "avantages": "Très efficace contre les équipes dominantes, crée des chances faciles",
+        "limites": "Requiert des joueurs très rapides, les transitions échouent souvent sans vitesse",
+        "reconnaitre": "Bloc bas, puis explosion rapide après récupération, peu de joueurs en transition",
+        "adaptations": "Transition contrôlée si adversaire bien organisé en défense",
+        "contre_mesures": "Rest defense, dernier défenseur toujours, ne pas monter à plus de 3-4 joueurs",
+    },
+    "rest_defense": {
+        "categorie": "Principe offensif",
+        "objectif": "Maintenir des joueurs positionnés pour contrer les transitions adverses",
+        "structure": "1-2 joueurs qui restent positionnés pendant les phases offensives, souvent le MDC et un DC",
+        "declencheurs": "Adversaire avec des joueurs de contre-attaque rapides",
+        "avantages": "Neutralise les transitions rapides adverses, équilibre offensif-défensif",
+        "limites": "Réduit le nombre de joueurs offensifs, peut limiter la finalisation",
+        "reconnaitre": "1-2 joueurs qui ne montent pas pendant les phases offensives",
+        "adaptations": "Identifier quelle vitesse adverse nécessite un rest defense renforcé",
+        "contre_mesures": "Surcharger offensivement pour forcer les joueurs de rest defense à monter",
+    },
+    # ── PRINCIPES DÉFENSIFS ───────────────────────────────────────────────────
+    "high_press": {
+        "categorie": "Principe défensif",
+        "objectif": "Récupérer la balle dans le camp adverse via une pression collective intense",
+        "structure": "Ligne défensive haute (45-50m), pressing coordonné dès la perte de balle, 4-5 joueurs qui pressent",
+        "declencheurs": "Signal (passe arrière adverse, gardien avec balle, DC sous pression)",
+        "avantages": "Récupération haute = chances directes, déstabilise les équipes peu techniques",
+        "limites": "Physiquement très exigeant, vulnérable aux longs dégagements précis",
+        "reconnaitre": "Ligne défensive haute, attaquants qui pressent les DC adverses, agitation constante",
+        "adaptations": "Press triggers clairs, pressing organisé par zones, couper les lignes de passe",
+        "contre_mesures": "Long ball au-dessus du press, appuis courts derrière le press, gardien à pied sûr",
+    },
+    "mid_block": {
+        "categorie": "Principe défensif",
+        "objectif": "Défendre dans son propre camp à hauteur du milieu de terrain",
+        "structure": "Bloc défensif compact à 35-40m du propre but, 2 lignes de 4 ou 5-4-1",
+        "declencheurs": "Équipe qui ne presse pas mais ne s'écrase pas non plus",
+        "avantages": "Équilibre risque/récompense, difficile à jouer contre, transitions possibles",
+        "limites": "Laisse l'adversaire construire librement devant le bloc",
+        "reconnaitre": "Deux lignes compactes au milieu, aucun joueur isolé devant",
+        "adaptations": "Pressing ponctuel au signal, pas de pressing systématique",
+        "contre_mesures": "Patience, jeu entre les lignes, tirs de loin pour ouvrir le bloc",
+    },
+    "low_block": {
+        "categorie": "Principe défensif",
+        "objectif": "Protéger le but en défendant très bas avec toute l'équipe",
+        "structure": "Deux lignes de 4 à 25-30m du but, compacité maximale, aucun espace vertical",
+        "declencheurs": "Protéger un avantage au score, adversaire très supérieur",
+        "avantages": "Très difficile à percer, neutralise la possession adverse",
+        "limites": "Passif, ne peut pas attaquer, épuisant mentalement et physiquement sur la durée",
+        "reconnaitre": "Tous les joueurs derrière la ligne du ballon, bloc très bas",
+        "adaptations": "Sorties rapides si ballon récupéré, transitions directes",
+        "contre_mesures": "Circulation rapide, tirs de loin, centres sur le second poteau, corners",
+    },
+    "man_oriented_press": {
+        "categorie": "Principe défensif",
+        "objectif": "Presser chaque adversaire individuellement avec un marquage direct",
+        "structure": "Chaque joueur assigné à un adversaire précis, pression individuelle coordonnée",
+        "declencheurs": "Adversaire avec des joueurs techniques qui dictent le jeu",
+        "avantages": "Aucun joueur adverse n'est libre, pression permanente",
+        "limites": "Épuisant, laisse des espaces si un marquage rate",
+        "reconnaitre": "Défenseurs qui suivent leur adversaire partout, peu de compacité par zones",
+        "adaptations": "Trap sur le porteur, aide immédiate si marquage raté",
+        "contre_mesures": "Mouvements sans ballon, permutations rapides pour créer des 2c1",
+    },
+    "zonal_pressing": {
+        "categorie": "Principe défensif",
+        "objectif": "Presser par zones avec des triggers déclencheurs collectifs",
+        "structure": "Joueurs assignés à des zones sur le terrain, pressing déclenché quand la balle entre dans la zone",
+        "declencheurs": "Balle dans la zone trigger, passe arrière adverse, indécision du porteur",
+        "avantages": "Plus économique physiquement, organisation collective claire",
+        "limites": "Requiert une lecture collective des triggers, peut rater si triggers mal définis",
+        "reconnaitre": "Equipe qui presse uniquement sur certains déclencheurs, puis se replace",
+        "adaptations": "Triggers clairs et entraînés : passe arrière, ballon aérien, joueur dos au jeu",
+        "contre_mesures": "Jouer vite avant le trigger, changer le côté avant que le pressing se déclenche",
+    },
+    "trigger_pressing": {
+        "categorie": "Principe défensif",
+        "objectif": "Déclencher le pressing collectif sur un signal précis et entraîné",
+        "structure": "Signal = trigger (passe arrière, DC qui reçoit, GK avec balle), 2-3 joueurs convergent immédiatement",
+        "declencheurs": "Voir les exemples de triggers : pass-back, long ball latéral, joueur sous pression",
+        "avantages": "Surprise pour l'adversaire, coordonné et difficile à éviter, efficace physiquement",
+        "limites": "Si le trigger est raté, l'équipe est déséquilibrée pendant 2-3 secondes",
+        "reconnaitre": "Déclenchement brutal et synchronisé du pressing après un événement précis",
+        "adaptations": "3-4 triggers maximum, entraînés intensivement",
+        "contre_mesures": "Identifier le trigger adverse et le provoquer de façon contrôlée",
+    },
+    "counter_press": {
+        "categorie": "Principe défensif",
+        "objectif": "Récupérer la balle immédiatement après une perte dans les 3-5 secondes",
+        "structure": "Dès la perte : 2-3 joueurs proches pressent immédiatement, les autres se replacent",
+        "declencheurs": "Perte de balle",
+        "avantages": "Récupération haute, adversaire pas encore organisé, position offensive maintenue",
+        "limites": "Si le counter-press échoue après 5 secondes, il faut renoncer et défendre en bloc",
+        "reconnaitre": "Pressing immédiat et collectif à la perte, 3 secondes de chaos contrôlé",
+        "adaptations": "Durée maximale du counter-press : 5 secondes puis repli",
+        "contre_mesures": "Passe immédiate après la récupération pour sortir du counter-press",
+    },
+    "compactness": {
+        "categorie": "Principe défensif",
+        "objectif": "Réduire les espaces entre les lignes pour rendre la progression adverse impossible",
+        "structure": "Distance inter-lignes : 10-15m maximum. Largeur : ne pas s'étirer. Bloc compact.",
+        "declencheurs": "Permanente en phase défensive organisée",
+        "avantages": "Aucun espace entre les lignes, difficile de jouer verticalement",
+        "limites": "Peut être contourné par le jeu large (ailiers très larges), tirs de loin",
+        "reconnaitre": "Équipe très resserrée, peu d'espace entre les lignes et entre les joueurs",
+        "adaptations": "Sortir rapidement sur le porteur dès que la balle est dans la zone",
+        "contre_mesures": "Jeu large pour étirer, switches de côté, tirs de loin",
+    },
+    "trap_zones": {
+        "categorie": "Principe défensif",
+        "objectif": "Forcer l'adversaire vers une zone piège où plusieurs défenseurs convergent",
+        "structure": "Orienter la pression vers un coin ou un flanc, 2-3 défenseurs qui convergent",
+        "declencheurs": "Balle dans la zone trap (coins, flancs, dos au jeu)",
+        "avantages": "Force l'erreur de l'adversaire dans une zone peu dangereuse",
+        "limites": "Les autres zones sont exposées pendant le trap, risque si la sortie est propre",
+        "reconnaitre": "Défenseurs qui semblent laisser délibérément un espace pour attirer là",
+        "adaptations": "Trap corner, trap flanc, trap milieu après pass-back",
+        "contre_mesures": "Anticiper le trap, passer avant d'y rentrer, jouer en 2 touches",
+    },
+    # ── PATTERNS OFFENSIFS ────────────────────────────────────────────────────
+    "overlaps": {
+        "categorie": "Pattern offensif",
+        "objectif": "Créer un 2c1 sur le côté via une montée du latéral derrière l'ailier",
+        "structure": "Ailier garde la balle sur le côté, latéral monte en couloir extérieur derrière lui, 2c1 créé",
+        "declencheurs": "Latéral qui monte dès que l'ailier a la balle et attire le défenseur",
+        "avantages": "Crée un 2c1 difficile à défendre, libère l'ailier pour rentrer",
+        "limites": "Latéral exposé en transition si le ballon est perdu",
+        "reconnaitre": "Latéral qui monte en couloir extérieur pendant que l'ailier a la balle",
+        "adaptations": "Ailier rentre en demi-espace, latéral croise derrière en overlapping run",
+        "contre_mesures": "Latéral adverse qui monte pour contrer, défenseur double côté",
+    },
+    "underlaps": {
+        "categorie": "Pattern offensif",
+        "objectif": "Créer un 2c1 dans le demi-espace via une montée intérieure du latéral",
+        "structure": "Ailier large, latéral coupe à l'intérieur (demi-espace), passe intérieure vers le latéral",
+        "declencheurs": "Ailier qui occupe le latéral adverse à l'extérieur",
+        "avantages": "Crée un angle de finition favorable, difficile à défendre si latéral arrive en demi-espace",
+        "limites": "Requiert un ailier capable de garder la balle large pendant que le latéral coupe",
+        "reconnaitre": "Latéral qui rentre à l'intérieur pendant que l'ailier est large",
+        "adaptations": "Combinaison avec pistons inverser pour créer overload intérieur",
+        "contre_mesures": "DC qui doit couvrir le demi-espace latéral",
+    },
+    "inverted_fullbacks": {
+        "categorie": "Pattern offensif",
+        "objectif": "Utiliser les latéraux inversés pour créer une supériorité numérique au centre",
+        "structure": "Latéraux qui rentrent au milieu de terrain au lieu de monter côté, créant un triangle avec le MDC",
+        "declencheurs": "Phase de construction, latéraux techniques capables de jouer au milieu",
+        "avantages": "Surnombre central, libère les demi-espaces pour les ailiers qui rentrent",
+        "limites": "Côtés sans couverture, vulnérable aux transitions latérales",
+        "reconnaitre": "Latéraux qui se positionnent entre DC et MDC au lieu de monter côté",
+        "adaptations": "Ailiers très larges pour compenser, MDC qui sort côté si nécessaire",
+        "contre_mesures": "Ailiers adverses qui restent côtés pour contrer le déséquilibre",
+    },
+    "third_man_runs": {
+        "categorie": "Pattern offensif",
+        "objectif": "Libérer un coureur en troisième homme non-marqué via une combinaison à deux",
+        "structure": "A passe à B, C fait une course de troisième homme vers la profondeur pendant l'échange A-B",
+        "declencheurs": "Défense qui suit la balle, C qui s'échappe pendant que la défense regarde l'échange",
+        "avantages": "Le troisième homme arrive en vitesse et est souvent seul, très difficile à anticiper",
+        "limites": "Timing parfait requis de C, passe de B doit être précise et au bon moment",
+        "reconnaitre": "Joueur qui sprinte en profondeur pendant que deux partenaires s'échangent la balle",
+        "adaptations": "Courses de troisième homme sur les côtés, dans le dos des DC",
+        "contre_mesures": "Défense qui continue à surveiller les courses même pendant l'échange",
+    },
+    "switch_play": {
+        "categorie": "Pattern offensif",
+        "objectif": "Changer rapidement le côté d'attaque pour trouver un espace libre",
+        "structure": "Passe longue ou séquence de 3-4 passes rapides pour inverser le jeu côté opposé",
+        "declencheurs": "Surcharge défensive côté fort, espace libre côté faible identifié",
+        "avantages": "Défense qui ne se replace pas assez vite = espace libre côté faible",
+        "limites": "Passe longue peut être interceptée, adversaire peut anticiper",
+        "reconnaitre": "Long pass diagonale ou séquence de passes rapides de gauche à droite ou inversement",
+        "adaptations": "Switch par le bas (gardien) ou par le haut (MDC pivot), ou diagonal direct",
+        "contre_mesures": "Compacité défensive, rotation collective rapide sur le switch",
+    },
+    "diagonal_switches": {
+        "categorie": "Pattern offensif",
+        "objectif": "Changer de côté via une passe diagonale longue qui surprend la défense",
+        "structure": "Passe diagonale d'un demi-espace vers l'autre, cible qui reçoit en courant vers la balle",
+        "declencheurs": "Défense concentrée côté fort, espace derrière le latéral adverse côté faible",
+        "avantages": "Très rapide, difficile à défendre, crée un 1c1 immédiat côté faible",
+        "limites": "Requiert un pied droit/gauche et une précision technique élevée",
+        "reconnaitre": "Passes longues diagonales depuis le milieu ou les demi-espaces",
+        "adaptations": "Combiner avec troisième homme sur la réception",
+        "contre_mesures": "Défenseur qui anticipe la diagonale et marque la cible côté faible",
+    },
+    "cross_strategies": {
+        "categorie": "Pattern offensif",
+        "objectif": "Créer des occasions via des centres dans la surface",
+        "structure": "Plusieurs types : early cross (avant ligne de fond), cutback (retour rasant), centre pied levé (aérien), zone de centre",
+        "declencheurs": "Ailier ou latéral en position de centre, attaquants dans la surface",
+        "avantages": "Efficace si bonnes cibles dans la surface, crée du chaos défensif",
+        "limites": "Dépend des qualités aériennes ou de timing des attaquants",
+        "reconnaitre": "Montée du latéral/ailier sur le côté, courses des attaquants en surface",
+        "adaptations": "Early cross (avant que la défense soit en place), cutback pour les arrivées tardives",
+        "contre_mesures": "Défense sur les centres : zonal ou man-to-man selon équipe",
+    },
+    "cutbacks": {
+        "categorie": "Pattern offensif",
+        "objectif": "Créer un tir ouvert depuis le centre de la surface via un retour rasant",
+        "structure": "Ailier ou latéral arrive au fond, au lieu de centrer, fait un retour en retrait vers le cercle",
+        "declencheurs": "Ailier qui gagne le duel sur le côté, défense qui monte pour couvrir le centre direct",
+        "avantages": "Tirs depuis le point de penalty avec balle au pied, défense souvent dépassée",
+        "limites": "Requiert une arrivée tardive d'un milieu ou second attaquant",
+        "reconnaitre": "Ailier qui arrive au fond et fait retour en retrait au lieu de centrer",
+        "adaptations": "Combiner avec course du MDC ou deuxième attaquant",
+        "contre_mesures": "Défenseur qui couvre le retrait, ne pas monter tous en premier poteau",
+    },
+    "box_occupation": {
+        "categorie": "Pattern offensif",
+        "objectif": "Occuper intelligemment la surface pour maximiser les chances de finition",
+        "structure": "5 zones : premier poteau, second poteau, point de penalty, retrait court, fond de surface. Attaquants se répartissent",
+        "declencheurs": "Présence de la balle côté ou en zone de centre",
+        "avantages": "Maximise les surfaces de réception, défense difficile à organiser sur 5 zones",
+        "limites": "Requiert des attaquants conscients de leur positionnement et de leurs zones",
+        "reconnaitre": "Attaquants qui courent vers des zones distinctes lors d'un centre",
+        "adaptations": "Selon le type de centreur : aérien = 1er et 2nd poteau. Ras du sol = retrait et point de penalty",
+        "contre_mesures": "Défense zonale en surface organisée avec recrutement de zones",
+    },
+    "channel_runs": {
+        "categorie": "Pattern offensif",
+        "objectif": "Créer des espaces en faisant courir des attaquants dans les couloirs entre DC et latéral",
+        "structure": "Attaquant court dans l'espace entre le DC et le latéral adverse (channel), passe en profondeur",
+        "declencheurs": "Latéral adverse monté haut, DC qui penche vers l'intérieur",
+        "avantages": "Espace souvent libre derrière les équipes qui défendent haut",
+        "limites": "Hors-jeu fréquent, requiert timing parfait",
+        "reconnaitre": "Attaquant qui court entre DC et latéral adverse",
+        "adaptations": "Combiner avec ailier large qui attire le latéral, puis channel run derrière",
+        "contre_mesures": "DC qui couvre l'espace channel, latéral qui ne monte pas trop",
+    },
+    # ── TRANSITIONS ───────────────────────────────────────────────────────────
+    "immediate_counter": {
+        "categorie": "Transition",
+        "objectif": "Attaquer immédiatement après récupération avant que l'adversaire soit replacé",
+        "structure": "Récupération → passe directe en profondeur → 2-3 joueurs en transition rapide",
+        "declencheurs": "Récupération dans le camp adverse ou au milieu, adversaire déséquilibré",
+        "avantages": "Chances faciles, défense adverse non-replacée, avantage numérique",
+        "limites": "Risque de perte si trop précipité, requiert des joueurs très rapides",
+        "reconnaitre": "Transition explosive dès la récupération, peu de passes, verticalité immédiate",
+        "adaptations": "Choisir entre passer immédiatement ou garder si aucune option directe n'existe",
+        "contre_mesures": "Rest defense permanente, tactical foul si nécessaire",
+    },
+    "controlled_transition": {
+        "categorie": "Transition",
+        "objectif": "Attaquer en transition avec contrôle et certitude plutôt que vitesse brute",
+        "structure": "Récupération → 2-3 passes pour remonter proprement → attaque organisée mais rapide",
+        "declencheurs": "Adversaire bien organisé en transition, pas de supériorité numérique immédiate",
+        "avantages": "Moins de risques de perdre la balle, attaque plus structurée",
+        "limites": "Laisse le temps à l'adversaire de se replacer",
+        "reconnaitre": "Transition plus posée, quelques passes rapides avant l'attaque",
+        "adaptations": "Combiner avec transition immédiate si supériorité numérique évidente",
+        "contre_mesures": "Pressing intense dès la récupération adverse pour perturber",
+    },
+    "defensive_recovery": {
+        "categorie": "Transition",
+        "objectif": "Reprendre une organisation défensive solide après une perte de balle",
+        "structure": "Sprints immédiats de tous les joueurs, formation défensive reconstituée en 3-4 secondes",
+        "declencheurs": "Perte de balle partout sur le terrain",
+        "avantages": "Neutralise les contre-attaques adverses, maintient la solidité défensive",
+        "limites": "Très épuisant physiquement, surtout en fin de match",
+        "reconnaitre": "Sprints de retour collectifs immédiats, formation qui se reconstitue",
+        "adaptations": "Counter-press 3-5 secondes puis repli si échec",
+        "contre_mesures": "Attaquer vite avant que la récupération soit complète",
+    },
+    "tactical_foul": {
+        "categorie": "Transition",
+        "objectif": "Casser la dynamique d'une transition adverse par une faute stratégique",
+        "structure": "Joueur le plus proche de l'adversaire en transition réalise une faute préventive",
+        "declencheurs": "Contre-attaque adverse avec surnombre, aucune option défensive propre",
+        "avantages": "Casse le contre, récupère le temps de replacer l'équipe",
+        "limites": "Risque de carton jaune ou rouge selon position et situation",
+        "reconnaitre": "Faute 'calculée' au milieu de terrain pour stopper la transition",
+        "adaptations": "MDC ou attaquant qui revient pour commettre la faute si nécessaire",
+        "contre_mesures": "Jouer vite avant que l'adversaire puisse commettre la faute",
+    },
+    # ── COUPS DE PIED ARRÊTÉS ─────────────────────────────────────────────────
+    "corner_offensif": {
+        "categorie": "Coup de pied arrêté",
+        "objectif": "Créer un but ou une occasion dangereuse depuis un corner",
+        "structure": "Types : inswinger (rentrant), outswinger (sortant), corner court, zone de délivrance (1er poteau, 2nd poteau, point de penalty)",
+        "declencheurs": "Corner obtenu",
+        "avantages": "Occasion directe de but, organisation planifiée",
+        "limites": "Défense bien organisée peut neutraliser si corners trop prévisibles",
+        "reconnaitre": "Formation avant le corner : bloc, coureurs, flick-on au 1er poteau",
+        "adaptations": "Varier les zones de délivrance, corner court pour déséquilibrer, blocker movements",
+        "contre_mesures": "Défense zonale ou homme à homme sur les corners",
+    },
+    "corner_defensif": {
+        "categorie": "Coup de pied arrêté",
+        "objectif": "Défendre les corners sans concéder de but",
+        "structure": "Types : zonal (défenseurs sur zones) ou man-to-man (marquage individuel). Souvent hybride au haut niveau",
+        "declencheurs": "Corner adverse obtenu",
+        "avantages": "Organisation claire, responsabilité définie",
+        "limites": "Blockers adverses peuvent neutraliser les marqueurs, 2nd balle difficile à couvrir",
+        "reconnaitre": "Positionnement des défenseurs : ligne de 6m ou ligne de zone",
+        "adaptations": "Combiner zonal + marquage sur les meilleurs aériens adverses",
+        "contre_mesures": "Corners inswinger/outswinger selon la défense adverse, blocker movements",
+    },
+    "free_kick_offensif": {
+        "categorie": "Coup de pied arrêté",
+        "objectif": "Marquer directement ou créer une occasion depuis un coup franc",
+        "structure": "Types : direct (tir), indirect (combinaison), proche surface (mur), lointain (délivrance)",
+        "declencheurs": "Coup franc obtenu dans la zone de danger",
+        "avantages": "Occasion directe planifiée, défense figée",
+        "limites": "Mur défensif bien organisé, gardien préparé",
+        "reconnaitre": "Organisation des tireurs et des coureurs avant le coup franc",
+        "adaptations": "Combinaisons sur coup franc indirect, 2ème tireur dans le mur",
+        "contre_mesures": "Mur bien placé, gardien sur le premier poteau, couverture de zone",
+    },
+    "free_kick_defensif": {
+        "categorie": "Coup de pied arrêté",
+        "objectif": "Défendre un coup franc sans concéder",
+        "structure": "Mur sur le premier poteau (nombre selon position), défenseurs sur zones, gardien sur le second poteau",
+        "declencheurs": "Coup franc adverse dans la zone de danger",
+        "avantages": "Organisation préventive, responsabilités claires",
+        "limites": "Combinaisons indirectes peuvent contourner le mur",
+        "reconnaitre": "Construction du mur, positionnement des défenseurs",
+        "adaptations": "Joueur qui saute dans le mur à l'impact, anticipation de la zone de délivrance",
+        "contre_mesures": "Surveiller les joueurs sans balle qui se déplacent pendant la prise du coup franc",
+    },
+    "throw_ins": {
+        "categorie": "Coup de pied arrêté",
+        "objectif": "Conserver la possession ou créer une occasion depuis une rentrée en touche",
+        "structure": "Types : court (conserver), long (attaquer), rapide (surprendre)",
+        "declencheurs": "Ballon sorti en touche",
+        "avantages": "Rapide = défense non-organisée. Long = occasion directe sur flanc",
+        "limites": "Perte de balle si déblayage mal anticipé",
+        "reconnaitre": "Lanceur qui regarde les options avant de lancer, coureurs positionnés",
+        "adaptations": "Routine de touche préparée dans les zones dangereuses",
+        "contre_mesures": "Pression sur le lanceur, marquage serré des receveurs potentiels",
+    },
+}
+
 # ── Effectifs réels par équipe (11 joueurs football, 5 basket, 9 rugby) ───────
 TEAM_SQUADS: dict[str, list] = {
     # ── Ligue 1 ───────────────────────────────────────────────────────────────
@@ -4818,6 +5334,62 @@ if _sel_team:
                             unsafe_allow_html=True,
                         )
 
+        # ── Schéma Tactique Clé (football teams) ──────────────────────────────
+        _is_ft_team = _scouting.get("sport", "") == "⚽ Football"
+        if _is_ft_team:
+            _ft_sys = _scouting.get("offensive_system", "") + " " + _scouting.get("playing_style", "") + " " + _scouting.get("defensive_system", "")
+            _ft_sys_lower = _ft_sys.lower()
+            _ft_kw_map = [
+                (["4-3-3"], "4-3-3"),
+                (["4-2-3-1"], "4-2-3-1"),
+                (["4-4-2"], "4-4-2"),
+                (["3-4-3"], "3-4-3"),
+                (["3-5-2"], "3-5-2"),
+                (["4-1-4-1"], "4-1-4-1"),
+                (["5-3-2"], "5-3-2"),
+                (["4-3-2-1"], "4-3-2-1"),
+                (["pressing très haut", "pressing haut", "pression haute"], "high_press"),
+                (["possession", "jeu de possession", "positionnel"], "positional_play"),
+                (["contre-attaque", "transition rapide", "contre attaque"], "counter_attacking"),
+                (["bloc médian", "bloc bas", "bloc défensif"], "mid_block"),
+                (["overlapping", "latéraux qui montent", "pistons"], "overlaps"),
+                (["demi-espace", "entre les lignes"], "half_space"),
+                (["largeurs", "ailiers larges", "large"], "width_depth"),
+                (["build-up", "ressortir", "relance au pied", "gardien libéro"], "build_up_court"),
+                (["jeu direct", "vertical", "long ball"], "direct_play"),
+                (["counter-press", "gegenpressing"], "counter_press"),
+                (["zones", "pressing par zones"], "zonal_pressing"),
+            ]
+            _ft_team_plays: list[str] = []
+            for _ftkws, _ftpk in _ft_kw_map:
+                if any(kw in _ft_sys_lower for kw in _ftkws) and _ftpk not in _ft_team_plays:
+                    _ft_team_plays.append(_ftpk)
+                if len(_ft_team_plays) >= 3:
+                    break
+            if not _ft_team_plays:
+                _ft_team_plays = ["positional_play", "high_press", "overlaps"]
+            _ft_team_plays = _ft_team_plays[:3]
+            st.markdown('<hr style="border:none;border-top:1px solid #1a1a1a;margin:1rem 0 .75rem;">', unsafe_allow_html=True)
+            st.markdown('<p style="color:#CAFF33;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem;">🗝 SCHÉMA TACTIQUE CLÉ</p>', unsafe_allow_html=True)
+            _ft_tac_cols = st.columns(len(_ft_team_plays))
+            for _ftti, _fttpk in enumerate(_ft_team_plays):
+                _fttpd = FOOTBALL_PLAYBOOK.get(_fttpk, {})
+                if _fttpd:
+                    with _ft_tac_cols[_ftti]:
+                        _fttlabel = _fttpk.replace("_", " ").replace("-", " ").title()
+                        st.markdown(
+                            f'<div style="background:#0a140a;border:1px solid #1a2a1a;border-top:2px solid #CAFF33;'
+                            f'border-radius:8px;padding:.7rem .85rem;">'
+                            f'<p style="color:#CAFF33;font-size:.7rem;font-weight:700;text-transform:uppercase;'
+                            f'letter-spacing:.07em;margin-bottom:.2rem;">{_fttlabel}</p>'
+                            f'<p style="color:#555;font-size:.62rem;margin-bottom:.3rem;">{_fttpd.get("categorie","")}</p>'
+                            f'<p style="color:#ccc;font-size:.75rem;line-height:1.45;margin-bottom:.3rem;">{_fttpd.get("objectif","")}</p>'
+                            f'<p style="color:#666;font-size:.7rem;line-height:1.4;margin:0;">'
+                            f'<b style="color:#888;">Avantage :</b> {_fttpd.get("avantages","")}</p>'
+                            f'</div>',
+                            unsafe_allow_html=True,
+                        )
+
     if st.button("← Voir tous les matchs", key="team_reset"):
         st.session_state.selected_team = None
         st.session_state.selected_match = None
@@ -5078,7 +5650,55 @@ if _sel and _an and _m_sel:
             st.markdown(f'<div class="verdict-card">{verd["away_txt"]}</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="verdict-card" style="border-color:#2a2a2a;">{verd["coach_away"]}</div>', unsafe_allow_html=True)
 
-        # ── Clés Tactiques (Basketball uniquement) ────────────────────────────
+        # ── Clés Tactiques (Basketball + Football) ───────────────────────────
+        if "Football" in m.get("sport", ""):
+            _ftac_home_form = an["tactique"].get("home_form", "")
+            _ftac_away_form = an["tactique"].get("away_form", "")
+            # Map formation/style keywords to FOOTBALL_PLAYBOOK keys
+            _form_to_plays: dict[str, list[str]] = {
+                "4-3-3":   ["4-3-3", "high_press", "width_depth"],
+                "4-2-3-1": ["4-2-3-1", "mid_block", "counter_attacking"],
+                "4-4-2":   ["4-4-2", "compactness", "direct_play"],
+                "3-4-3":   ["3-4-3", "high_press", "overlaps"],
+                "3-5-2":   ["3-5-2", "positional_play", "half_space"],
+                "4-1-4-1": ["4-1-4-1", "positional_play", "third_man_runs"],
+                "5-3-2":   ["5-3-2", "low_block", "immediate_counter"],
+                "4-3-2-1": ["4-3-2-1", "half_space", "positional_play"],
+            }
+            _fh_plays = _form_to_plays.get(_ftac_home_form, ["positional_play", "high_press", "overlaps"])
+            _fa_plays = _form_to_plays.get(_ftac_away_form, ["mid_block", "counter_attacking", "compactness"])
+            _fall_plays = list(dict.fromkeys(_fh_plays + _fa_plays))[:5]
+            if _fall_plays:
+                st.markdown('<hr class="div-line">', unsafe_allow_html=True)
+                st.markdown('<p class="bbn" style="font-size:1.1rem;color:#CAFF33;">🗝️ Clés Tactiques du Match</p>', unsafe_allow_html=True)
+                _form_desc_h = _ftac_home_form if _ftac_home_form else "Formation"
+                _form_desc_a = _ftac_away_form if _ftac_away_form else "Formation"
+                st.markdown(
+                    f'<p style="color:#666;font-size:.78rem;margin-bottom:.75rem;">'
+                    f'Concepts tactiques clés identifiés pour {h["short"]} ({_form_desc_h}) '
+                    f'et {a["short"]} ({_form_desc_a})</p>',
+                    unsafe_allow_html=True,
+                )
+                _fplay_cols = st.columns(min(len(_fall_plays), 3))
+                for _fpi, _fpk in enumerate(_fall_plays[:3]):
+                    _fpd = FOOTBALL_PLAYBOOK.get(_fpk, {})
+                    if _fpd:
+                        with _fplay_cols[_fpi % 3]:
+                            _fplay_label = _fpk.replace("_", " ").replace("-", " ").title()
+                            st.markdown(
+                                f'<div style="background:#0d1a0d;border:1px solid #1a2a1a;border-top:2px solid #CAFF33;'
+                                f'border-radius:8px;padding:.8rem .9rem;margin-bottom:.5rem;height:100%;">'
+                                f'<p style="color:#CAFF33;font-size:.72rem;font-weight:700;text-transform:uppercase;'
+                                f'letter-spacing:.08em;margin-bottom:.2rem;">{_fplay_label}</p>'
+                                f'<p style="color:#888;font-size:.65rem;margin-bottom:.35rem;">{_fpd.get("categorie","")}</p>'
+                                f'<p style="color:#ddd;font-size:.78rem;line-height:1.5;margin-bottom:.35rem;">'
+                                f'<b style="color:#aaa;">Objectif :</b> {_fpd.get("objectif","")}</p>'
+                                f'<p style="color:#888;font-size:.74rem;line-height:1.4;margin:0;">'
+                                f'{_fpd.get("structure","")}</p>'
+                                f'</div>',
+                                unsafe_allow_html=True,
+                            )
+
         if "Basket" in m.get("sport", ""):
             _tac_sys_home = an["tactique"].get("home_form", "")
             _tac_sys_away = an["tactique"].get("away_form", "")
@@ -5122,6 +5742,92 @@ if _sel and _an and _m_sel:
                                 f'</div>',
                                 unsafe_allow_html=True,
                             )
+
+    # ── Référence Tactique Football ────────────────────────────────────────
+    if "Football" in m.get("sport", ""):
+        st.markdown('<hr style="border:none;border-top:1px solid #1a1a1a;margin:1.5rem 0 1rem;">', unsafe_allow_html=True)
+        with st.expander("📖 Référence Tactique — Playbook Football", expanded=False):
+            _fpb_cats: dict[str, list[str]] = {}
+            for _fpbk, _fpbv in FOOTBALL_PLAYBOOK.items():
+                _fcat = _fpbv.get("categorie", "Autre")
+                if _fcat not in _fpb_cats:
+                    _fpb_cats[_fcat] = []
+                _fpb_cats[_fcat].append(_fpbk)
+            _fcat_order = [
+                "Système / Formation",
+                "Principe offensif",
+                "Principe défensif",
+                "Pattern offensif",
+                "Transition",
+                "Coup de pied arrêté",
+            ]
+            _fcat_options = [c for c in _fcat_order if c in _fpb_cats] + [c for c in sorted(_fpb_cats.keys()) if c not in _fcat_order]
+            _fsel_cat = st.selectbox(
+                "Catégorie Football",
+                _fcat_options,
+                key=f"fpb_cat_{mid}",
+                label_visibility="collapsed",
+            )
+            _fplays_in_cat = _fpb_cats.get(_fsel_cat, [])
+            _fsel_play_key = st.selectbox(
+                "Tactique Football",
+                _fplays_in_cat,
+                format_func=lambda x: x.replace("_", " ").replace("-", " ").title(),
+                key=f"fpb_play_{mid}",
+                label_visibility="collapsed",
+            )
+            _fspb = FOOTBALL_PLAYBOOK.get(_fsel_play_key, {})
+            if _fspb:
+                _fplay_title = _fsel_play_key.replace("_", " ").upper()
+                st.markdown(
+                    f'<div style="background:#0a140a;border:1px solid #1a2a1a;border-radius:12px;padding:1.1rem 1.25rem;margin-top:.75rem;">'
+                    f'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;">'
+                    f'<p class="bbn" style="font-size:1.3rem;color:#CAFF33;margin:0;">{_fplay_title}</p>'
+                    f'<span style="background:#1a2a1a;color:#CAFF33;border-radius:6px;padding:.2rem .7rem;font-size:.7rem;font-weight:700;">{_fspb.get("categorie","")}</span>'
+                    f'</div>'
+                    f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;">'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #CAFF33;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#CAFF33;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">OBJECTIF</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_fspb.get("objectif","")}</p>'
+                    f'</div>'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #3b82f6;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#3b82f6;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">STRUCTURE</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_fspb.get("structure","")}</p>'
+                    f'</div>'
+                    f'</div>'
+                    f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;">'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #22c55e;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#22c55e;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">AVANTAGES</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_fspb.get("avantages","")}</p>'
+                    f'</div>'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #ef4444;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#ef4444;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">LIMITES</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_fspb.get("limites","")}</p>'
+                    f'</div>'
+                    f'</div>'
+                    f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;">'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #f97316;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#f97316;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">DÉCLENCHEURS</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_fspb.get("declencheurs","")}</p>'
+                    f'</div>'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #a855f7;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#a855f7;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">CONTRE-MESURES</p>'
+                    f'<p style="color:#ddd;font-size:.82rem;line-height:1.5;margin:0;">{_fspb.get("contre_mesures","")}</p>'
+                    f'</div>'
+                    f'</div>'
+                    f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #06b6d4;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#06b6d4;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">COMMENT RECONNAÎTRE</p>'
+                    f'<p style="color:#aaa;font-size:.8rem;line-height:1.5;margin:0;">{_fspb.get("reconnaitre","")}</p>'
+                    f'</div>'
+                    f'<div style="background:#111;border:1px solid #1e1e1e;border-left:3px solid #eab308;border-radius:8px;padding:.7rem .9rem;">'
+                    f'<p style="color:#eab308;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">ADAPTATIONS</p>'
+                    f'<p style="color:#aaa;font-size:.8rem;line-height:1.5;margin:0;">{_fspb.get("adaptations","")}</p>'
+                    f'</div>'
+                    f'</div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
 
     # ── Référence Tactique (expander outside tabs, Basketball uniquement) ────
     if "Basket" in m.get("sport", ""):
