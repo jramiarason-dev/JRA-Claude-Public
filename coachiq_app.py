@@ -704,6 +704,55 @@ MATCHES = {
         "home": {"name": "Real Betis",   "short": "BET", "color": "#00833E", "score": None},
         "away": {"name": "Real Sociedad","short": "RSO", "color": "#0047AB", "score": None},
     },
+    # ── Ligue 1 2025-26 résultats réels ──────────────────────────────────────
+    "psg_toulouse_l1_aug": {
+        "sport": "⚽ Football", "competition": "Ligue 1",
+        "date": "2025-08-30", "time": "21:00", "stadium": "Parc des Princes, Paris", "status": "Terminé",
+        "home": {"name": "Paris Saint-Germain", "short": "PSG", "color": "#004174", "score": 6},
+        "away": {"name": "Toulouse FC", "short": "TFC", "color": "#6B2D8B", "score": 3},
+    },
+    "lorient_lille_l1_aug": {
+        "sport": "⚽ Football", "competition": "Ligue 1",
+        "date": "2025-08-30", "time": "17:00", "stadium": "Stade du Moustoir, Lorient", "status": "Terminé",
+        "home": {"name": "FC Lorient", "short": "LOR", "color": "#FF6600", "score": 1},
+        "away": {"name": "LOSC Lille", "short": "LIL", "color": "#C41E3A", "score": 7},
+    },
+    "strasbourg_angers_l1_oct": {
+        "sport": "⚽ Football", "competition": "Ligue 1",
+        "date": "2025-10-05", "time": "15:00", "stadium": "Stade de la Meinau, Strasbourg", "status": "Terminé",
+        "home": {"name": "RC Strasbourg", "short": "RCS", "color": "#1A5C9C", "score": 5},
+        "away": {"name": "Angers SCO", "short": "ANG", "color": "#000000", "score": 0},
+    },
+    "lille_metz_l1_oct": {
+        "sport": "⚽ Football", "competition": "Ligue 1",
+        "date": "2025-10-26", "time": "15:00", "stadium": "Stade Pierre-Mauroy, Lille", "status": "Terminé",
+        "home": {"name": "LOSC Lille", "short": "LIL", "color": "#C41E3A", "score": 6},
+        "away": {"name": "FC Metz", "short": "MET", "color": "#8B0000", "score": 1},
+    },
+    "marseille_brest_l1_nov": {
+        "sport": "⚽ Football", "competition": "Ligue 1",
+        "date": "2025-11-08", "time": "21:00", "stadium": "Stade Vélodrome, Marseille", "status": "Terminé",
+        "home": {"name": "Olympique de Marseille", "short": "OM", "color": "#009BDE", "score": 3},
+        "away": {"name": "Stade Brestois", "short": "SB29", "color": "#E63329", "score": 0},
+    },
+    "psg_rennes_l1_dec": {
+        "sport": "⚽ Football", "competition": "Ligue 1",
+        "date": "2025-12-06", "time": "21:00", "stadium": "Parc des Princes, Paris", "status": "Terminé",
+        "home": {"name": "Paris Saint-Germain", "short": "PSG", "color": "#004174", "score": 5},
+        "away": {"name": "Stade Rennais", "short": "SRF", "color": "#DD0000", "score": 0},
+    },
+    "monaco_lorient_l1_jan": {
+        "sport": "⚽ Football", "competition": "Ligue 1",
+        "date": "2026-01-16", "time": "21:00", "stadium": "Stade Louis-II, Monaco", "status": "Terminé",
+        "home": {"name": "AS Monaco", "short": "ASM", "color": "#E8231A", "score": 1},
+        "away": {"name": "FC Lorient", "short": "LOR", "color": "#FF6600", "score": 3},
+    },
+    "psg_marseille_clasico": {
+        "sport": "⚽ Football", "competition": "Ligue 1",
+        "date": "2026-02-08", "time": "21:00", "stadium": "Parc des Princes, Paris", "status": "Terminé",
+        "home": {"name": "Paris Saint-Germain", "short": "PSG", "color": "#004174", "score": 5},
+        "away": {"name": "Olympique de Marseille", "short": "OM", "color": "#009BDE", "score": 0},
+    },
 }
 
 # ── Analyses détaillées (données réelles) ─────────────────────────────────────
@@ -3288,42 +3337,319 @@ SCOUTING_SHEETS: dict[str, dict] = {
     "Olympique de Marseille": {
         "competition": "Ligue 1", "sport": "⚽ Football",
         "city": "Marseille", "arena": "Orange Vélodrome", "capacity": 67394,
-        "founded": 1899, "president": "Pablo Longoria", "coach": "Roberto De Zerbi",
+        "founded": 1899, "president": "Pablo Longoria", "coach": "Jean-Louis Gasset (fév 2026)",
         "budget_rank": 3, "euroleague": False,
-        "season_objective": "Top 3 Ligue 1 + Champions League",
-        "playing_style": "Possession élaborée depuis le gardien, pressing par zones",
-        "offensive_system": "Greenwood-Rowe larges, Wahi en pivot, Harit entre les lignes",
-        "defensive_system": "Pressing organisé par zones, gardien libéro, sortie balle basse",
+        "season_objective": "Top 4 Ligue 1",
+        "playing_style": "Jeu offensif avec Greenwood, nouveau projet après départ De Zerbi (11 fév 2026)",
+        "offensive_system": "Greenwood meilleur buteur L1, largeurs exploitées, jeu direct",
+        "defensive_system": "Organisation en transition, nouveau coach depuis 18 fév 2026",
         "key_players": [
-            {"name": "Greenwood",  "pos": "AD", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "age": 23, "strengths": "Vitesse, dribble, finition",     "role": "Ailier droit dangereux"},
-            {"name": "Rabiot",     "pos": "MC", "flag": "🇫🇷",     "age": 29, "strengths": "Physique, passes, box-to-box",   "role": "Milieu box-to-box"},
-            {"name": "Harit",      "pos": "MO", "flag": "🇲🇦",     "age": 27, "strengths": "Créativité, dribble, passes",    "role": "Meneur de jeu offensif"},
+            {"name": "Mason Greenwood", "pos": "AD", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "age": 23, "strengths": "Vitesse, dribble, finition — 14 buts", "role": "Meilleur buteur L1, ailier droit"},
+            {"name": "Rabiot",         "pos": "MC", "flag": "🇫🇷",     "age": 29, "strengths": "Physique, passes, box-to-box",       "role": "Milieu box-to-box"},
+            {"name": "Harit",          "pos": "MO", "flag": "🇲🇦",     "age": 27, "strengths": "Créativité, dribble, passes",        "role": "Meneur de jeu offensif"},
         ],
-        "strengths": ["De Zerbi jeu de possession élaboré", "Vélodrome 12ème homme", "Effectif international"],
-        "weaknesses": ["Vulnérable au pressing adverse haut", "Défense parfois fragile"],
-        "stats_profile": {"Possession": "60%", "Pressing PPDA": "9.1", "xG/match": "2.1", "Buts/match": "1.9"},
+        "strengths": ["Greenwood meilleur buteur L1", "Vélodrome 12ème homme", "Effectif international"],
+        "weaknesses": ["Transition coaching", "Défense parfois fragile"],
+        "stats_profile": {"Classement": "4e · 40pts", "BP": "48", "BC": "31", "Diff": "+17", "Buteur": "Greenwood 14"},
         "rivals": ["Paris Saint-Germain", "Olympique Lyonnais"],
         "recent_titles": ["Champion Ligue 1 2010"],
     },
     "AS Monaco": {
         "competition": "Ligue 1", "sport": "⚽ Football",
         "city": "Monaco", "arena": "Stade Louis II", "capacity": 18523,
-        "founded": 1924, "president": "Dmitry Rybolovlev", "coach": "Adi Hütter",
+        "founded": 1924, "president": "Dmitry Rybolovlev", "coach": "Luca Mancini (oct 2025)",
         "budget_rank": 2, "euroleague": False,
-        "season_objective": "Top 2 Ligue 1 + Champions League",
-        "playing_style": "Pressing intense, jeu direct et vertical, physique",
-        "offensive_system": "Embolo en pivot, Akliouche-Ben Seghir créateurs, transition rapide",
-        "defensive_system": "Pressing très haut, bloc haut, Camara-Zakaria en sentinelles",
+        "season_objective": "Top 8 Ligue 1",
+        "playing_style": "Pressing intense, jeu direct et vertical, Ansu Fati option offensive",
+        "offensive_system": "Ansu Fati option offensive, Akliouche-Ben Seghir créateurs, transition rapide",
+        "defensive_system": "Pressing haut, bloc compact, Camara-Zakaria en sentinelles",
         "key_players": [
-            {"name": "Akliouche", "pos": "MO", "flag": "🇫🇷", "age": 22, "strengths": "Technique, créativité, jeunesse", "role": "Meneur de jeu offensif"},
-            {"name": "Embolo",    "pos": "BU", "flag": "🇨🇲", "age": 27, "strengths": "Puissance, vitesse, finition",    "role": "Avant-centre physique"},
-            {"name": "Zakaria",   "pos": "MDC","flag": "🇨🇭", "age": 27, "strengths": "Récupération, physique, passe",   "role": "Milieu défensif robuste"},
+            {"name": "Ansu Fati",  "pos": "AG", "flag": "🇪🇸", "age": 22, "strengths": "Vitesse, dribble, finition — 7 buts", "role": "Ailier gauche dynamique"},
+            {"name": "Akliouche", "pos": "MO", "flag": "🇫🇷", "age": 22, "strengths": "Technique, créativité, jeunesse",       "role": "Meneur de jeu offensif"},
+            {"name": "Embolo",    "pos": "BU", "flag": "🇨🇲", "age": 27, "strengths": "Puissance, vitesse, finition",           "role": "Avant-centre physique"},
         ],
-        "strengths": ["Pressing ultra-intense", "Effectif physique et rapide", "Hütter coach exigeant"],
-        "weaknesses": ["Peut s'exposer sur les contre-attaques", "Salle de petite capacité"],
-        "stats_profile": {"Possession": "52%", "Pressing PPDA": "8.3", "xG/match": "2.0", "Buts/match": "1.8"},
+        "strengths": ["Pressing intense", "Effectif physique et rapide", "Stade Louis-II forteresse"],
+        "weaknesses": ["Transition coaching (Hütter licencié oct 2025)", "Salle de petite capacité"],
+        "stats_profile": {"Classement": "7e · 37pts", "BP": "40", "BC": "36", "Diff": "+4", "Buteur": "Ansu Fati 7"},
         "rivals": ["Paris Saint-Germain", "Olympique de Marseille"],
         "recent_titles": ["Champion Ligue 1 2017", "Champion Ligue 1 2000"],
+    },
+
+    # ══ LIGUE 1 COMPLETE (autres équipes) ═══════════════════════════════════════
+    "RC Lens": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Lens", "arena": "Stade Bollaert-Delelis", "capacity": 38223,
+        "coach": "Will Still",
+        "season_objective": "Top 3 Ligue 1",
+        "playing_style": "Pressing intense data-driven, transitions rapides, bloc médian adaptatif",
+        "offensive_system": "Saïd-Édouard en attaque, jeu direct, exploitation des transitions",
+        "defensive_system": "Pressing déclenché par triggers, bloc adaptable, Robin Risser en gardien",
+        "key_players": [
+            {"name": "Wesley Saïd",      "pos": "AG",  "flag": "🇫🇷", "age": 27, "role": "Ailier gauche meilleur buteur",   "strengths": "Vitesse, finition, 10 buts"},
+            {"name": "Odsonne Édouard",  "pos": "BU",  "flag": "🇫🇷", "age": 27, "role": "Avant-centre polyvalent",         "strengths": "Technique, finition, 8 buts"},
+            {"name": "Robin Risser",     "pos": "GB",  "flag": "🇫🇷", "age": 25, "role": "Gardien titulaire",               "strengths": "Réflexes, organisation défensive"},
+        ],
+        "stats_profile": {"Classement": "2e · 53pts", "BP": "45", "BC": "21", "Diff": "+24", "Buteur": "Saïd 10, Édouard 8"},
+        "strengths": ["Saïd-Édouard redoutables", "Pressing data-driven", "Bollaert forteresse"],
+        "weaknesses": ["Adaptabilité au très haut niveau", "Dépendance aux individualités"],
+        "rivals": ["Lille", "Rennes"],
+        "recent_titles": [],
+        "sport": "⚽ Football",
+    },
+    "Olympique Lyonnais": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Lyon", "arena": "Groupama Stadium", "capacity": 59186,
+        "coach": "Pierre Sage",
+        "season_objective": "Top 5 Ligue 1",
+        "playing_style": "Possession patient, pressing organisé par zones, Šulc meilleur buteur",
+        "offensive_system": "Šulc en création offensive, Lacazette référence, Cherki entre les lignes",
+        "defensive_system": "Pressing par zones définis, Dominik Greif gardien solide",
+        "key_players": [
+            {"name": "Pavel Šulc",       "pos": "MO",  "flag": "🇨🇿", "age": 24, "role": "Meneur offensif meilleur buteur", "strengths": "Tir, dribble, 10 buts"},
+            {"name": "Lacazette",        "pos": "BU",  "flag": "🇫🇷", "age": 33, "role": "Avant-centre vétéran leader",     "strengths": "Finition, expérience, leadership"},
+            {"name": "Dominik Greif",    "pos": "GB",  "flag": "🇸🇰", "age": 28, "role": "Gardien titulaire solide",        "strengths": "Réflexes, organisation"},
+        ],
+        "stats_profile": {"Classement": "3e · 45pts", "BP": "37", "BC": "23", "Diff": "+14", "Buteur": "Šulc 10"},
+        "strengths": ["Šulc talent offensif", "Groupama Stadium ambiance", "Sage coach de talent"],
+        "weaknesses": ["Défense perfectible", "Manque de profondeur"],
+        "rivals": ["Saint-Etienne", "Marseille"],
+        "recent_titles": ["Champion Ligue 1 2008"],
+        "sport": "⚽ Football",
+    },
+    "LOSC Lille": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Lille", "arena": "Stade Pierre-Mauroy", "capacity": 50186,
+        "coach": "Bruno Genesio",
+        "season_objective": "Top 5 Ligue 1 + Europe",
+        "playing_style": "Bloc médian compact, contre-attaques rapides, organisation défensive",
+        "offensive_system": "David en pivot, Zhegrova ailier, Cabella créateur",
+        "defensive_system": "Bloc médian compact 4-4-2, duels physiques au milieu",
+        "key_players": [
+            {"name": "Jonathan David", "pos": "BU",  "flag": "🇨🇦", "age": 25, "role": "Avant-centre de référence",        "strengths": "Finition, vitesse, efficacité"},
+            {"name": "Zhegrova",       "pos": "AD",  "flag": "🇽🇰", "age": 25, "role": "Ailier droit créateur",            "strengths": "Dribble, vitesse, créativité"},
+            {"name": "Lucas Chevalier","pos": "GB",  "flag": "🇫🇷", "age": 24, "role": "Gardien élite Ligue 1",            "strengths": "Réflexes, organisation, 9 clean sheets"},
+        ],
+        "stats_profile": {"Classement": "5e · 40pts", "BP": "37", "BC": "31", "Diff": "+6"},
+        "strengths": ["David redoutable", "Bloc défensif solide", "Genesio organisation"],
+        "weaknesses": ["Jeu offensif parfois limité", "Dépendance à David"],
+        "rivals": ["Lens", "Paris Saint-Germain"],
+        "recent_titles": ["Champion Ligue 1 2021"],
+        "sport": "⚽ Football",
+    },
+    "Stade Rennais": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Rennes", "arena": "Roazhon Park", "capacity": 29778,
+        "coach": "Jorge Sampaoli",
+        "season_objective": "Top 6 Ligue 1",
+        "playing_style": "Pressing ultra-offensif, chaos contrôlé, Lepaul meilleur buteur",
+        "offensive_system": "Lepaul en avant-centre, 3-4-3 offensif, transitions explosives",
+        "defensive_system": "Pressing ultra-haut, collectif mobile, parfois exposé",
+        "key_players": [
+            {"name": "Esteban Lepaul", "pos": "BU",  "flag": "🇫🇷", "age": 23, "role": "Avant-centre explosif meilleur buteur", "strengths": "Vitesse, finition, 11 buts"},
+            {"name": "Bourigeaud",     "pos": "AD",  "flag": "🇫🇷", "age": 30, "role": "Ailier droit expérimenté",               "strengths": "Tir, passes, constance"},
+        ],
+        "stats_profile": {"Classement": "6e · 40pts", "BP": "38", "BC": "35", "Diff": "+3", "Buteur": "Lepaul 11"},
+        "strengths": ["Lepaul talent brut", "Pressing offensif dévastateur", "Roazhon Park ambiance"],
+        "weaknesses": ["Vulnérable défensivement", "Physiquement exigeant"],
+        "rivals": ["Nantes", "Lorient", "Brest"],
+        "recent_titles": [],
+        "sport": "⚽ Football",
+    },
+    "RC Strasbourg": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Strasbourg", "arena": "Stade de la Meinau", "capacity": 26109,
+        "coach": "Nouveau coach (jan 2026)",
+        "season_objective": "Top 8 Ligue 1",
+        "playing_style": "Jeu de possession, Panichelli 2e buteur L1, pressing organisé",
+        "offensive_system": "Panichelli meilleur buteur, jeu offensif construit, largeurs exploitées",
+        "defensive_system": "Bloc organisé, possession maîtrisée, transition après Rosenior",
+        "key_players": [
+            {"name": "Joaquín Panichelli", "pos": "BU",  "flag": "🇦🇷", "age": 25, "role": "2e buteur L1, avant-centre argentin", "strengths": "Finition, technique, 12 buts"},
+        ],
+        "stats_profile": {"Classement": "8e · 35pts", "BP": "40", "BC": "31", "Diff": "+9", "Buteur": "Panichelli 12"},
+        "strengths": ["Panichelli 2e buteur L1", "Jeu de possession", "La Meinau ambiance"],
+        "weaknesses": ["Transition coach (Rosenior parti jan 2026)", "Régularité défensive"],
+        "rivals": ["Nancy", "Metz"],
+        "recent_titles": [],
+        "sport": "⚽ Football",
+    },
+    "Stade Brestois": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Brest", "arena": "Stade Francis-Le Blé", "capacity": 15097,
+        "coach": "Eric Roy",
+        "season_objective": "Maintien Ligue 1",
+        "playing_style": "Pressing offensif direct, Del Castillo créateur, solidarité collective",
+        "offensive_system": "Del Castillo créateur principal, Mounié en pivot, jeu direct",
+        "defensive_system": "Pressing organisé, compacité défensive, bloc médian",
+        "key_players": [
+            {"name": "Romain Del Castillo", "pos": "MO",  "flag": "🇫🇷", "age": 29, "role": "Meneur offensif, 7 buts",       "strengths": "Technique, dribble, 7 buts"},
+            {"name": "Mounié",              "pos": "BU",  "flag": "🇧🇯", "age": 30, "role": "Avant-centre physique",          "strengths": "Puissance, aérien, finition"},
+        ],
+        "stats_profile": {"Classement": "9e · 33pts", "BP": "32", "BC": "34", "Diff": "-2", "Buteur": "Del Castillo 7"},
+        "strengths": ["Del Castillo talent", "Solidarité collective", "Identité forte"],
+        "weaknesses": ["Effectif limité", "Stade de petite capacité"],
+        "rivals": ["Rennes", "Lorient", "Nantes"],
+        "recent_titles": [],
+        "sport": "⚽ Football",
+    },
+    "Toulouse FC": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Toulouse", "arena": "Stadium de Toulouse", "capacity": 33150,
+        "coach": "Carles Martínez Novell",
+        "season_objective": "Top 10 Ligue 1",
+        "playing_style": "Possession structurée à l'espagnole, pressing par zones, jeu collectif",
+        "offensive_system": "Dallinga en pivot, Aboukhlal ailier, jeu de possession",
+        "defensive_system": "Bloc compact, pressing triggers, organisation défensive",
+        "key_players": [
+            {"name": "Dallinga",    "pos": "BU",  "flag": "🇳🇱", "age": 24, "role": "Avant-centre néerlandais",   "strengths": "Finition, puissance, efficacité"},
+            {"name": "Aboukhlal",   "pos": "AG",  "flag": "🇲🇦", "age": 24, "role": "Ailier gauche rapide",       "strengths": "Vitesse, dribble, créativité"},
+        ],
+        "stats_profile": {"Classement": "11e · 31pts", "BP": "33", "BC": "28", "Diff": "+5"},
+        "strengths": ["Possession structurée", "Organisation collective", "Stadium ambiance"],
+        "weaknesses": ["Manque de régularité", "Effectif en construction"],
+        "rivals": ["Montpellier", "Bordeaux"],
+        "recent_titles": [],
+        "sport": "⚽ Football",
+    },
+    "Angers SCO": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Angers", "arena": "Stade Raymond-Kopa", "capacity": 18029,
+        "coach": "Alexandre Dujeux",
+        "season_objective": "Maintien Ligue 1",
+        "playing_style": "Organisation défensive, solidarité, jeu collectif progressif",
+        "offensive_system": "Lepaul option offensive, jeu direct, contre-attaques",
+        "defensive_system": "Bloc défensif organisé, Koffi gardien solide, compacité",
+        "key_players": [
+            {"name": "Esteban Lepaul", "pos": "BU",  "flag": "🇫🇷", "age": 23, "role": "Avant-centre, 11 buts",           "strengths": "Vitesse, finition, 11 buts"},
+            {"name": "Hervé Koffi",    "pos": "GB",  "flag": "🇧🇫", "age": 28, "role": "Gardien solide, 8 clean sheets",  "strengths": "Réflexes, leadership, 8 CS"},
+        ],
+        "stats_profile": {"Classement": "12e · 29pts", "BP": "22", "BC": "30", "Diff": "-8"},
+        "strengths": ["Organisation défensive", "Koffi gardien solide", "Combativité"],
+        "weaknesses": ["Attaque limitée", "Effectif en construction"],
+        "rivals": ["Rennes", "Nantes"],
+        "recent_titles": [],
+        "sport": "⚽ Football",
+    },
+    "Le Havre AC": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Le Havre", "arena": "Stade Océane", "capacity": 25178,
+        "coach": "Didier Digard",
+        "season_objective": "Maintien Ligue 1",
+        "playing_style": "Jeu propre et structuré, développement des jeunes, organisation défensive",
+        "offensive_system": "Jeu de possession patient, construction propre, jeunes talents",
+        "defensive_system": "Bloc défensif organisé, discipline collective",
+        "key_players": [],
+        "stats_profile": {"Classement": "13e · 26pts", "BP": "20", "BC": "30", "Diff": "-10"},
+        "strengths": ["Organisation défensive", "Développement jeunes", "Stade Océane"],
+        "weaknesses": ["Attaque limitée (20 BP)", "Manque d'expérience"],
+        "rivals": ["Caen", "Rouen"],
+        "recent_titles": [],
+        "sport": "⚽ Football",
+    },
+    "OGC Nice": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Nice", "arena": "Allianz Riviera", "capacity": 35624,
+        "coach": "Nouveau coach (jan 2026)",
+        "season_objective": "Maintien Ligue 1",
+        "playing_style": "Pressing haut, Diop option offensive, reconstruction après licenciement Haise",
+        "offensive_system": "Diop créateur principal, jeu direct, largeurs exploitées",
+        "defensive_system": "Pressing haut réorganisé, pire défense milieu tableau",
+        "key_players": [
+            {"name": "Sofiane Diop", "pos": "MO",  "flag": "🇫🇷", "age": 24, "role": "Créateur offensif principal",  "strengths": "Technique, dribble, 7 buts"},
+        ],
+        "stats_profile": {"Classement": "15e · 24pts", "BP": "30", "BC": "44", "Diff": "-14", "Buteur": "Diop 7"},
+        "strengths": ["Diop talent offensif", "Allianz Riviera ambiance", "Cadre Nice attractif"],
+        "weaknesses": ["Pire défense (44 BC)", "Haise licencié déc 2025", "Transition difficile"],
+        "rivals": ["Monaco", "Marseille"],
+        "recent_titles": [],
+        "sport": "⚽ Football",
+    },
+    "AJ Auxerre": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Auxerre", "arena": "Stade Abbé-Deschamps", "capacity": 19508,
+        "coach": "Christophe Pélissier",
+        "season_objective": "Maintien Ligue 1",
+        "playing_style": "Bloc compact pragmatique, transitions, efficacité maximale",
+        "offensive_system": "Jeu direct, transitions rapides, pragmatisme offensif",
+        "defensive_system": "Bloc compact bas, compacité centrale, discipline collective",
+        "key_players": [],
+        "stats_profile": {"Classement": "16e · 18pts", "BP": "19", "BC": "35", "Diff": "-16"},
+        "strengths": ["Pragmatisme", "Stade Abbé-Deschamps", "Identité historique"],
+        "weaknesses": ["Attaque limitée (19 BP)", "Bas du classement", "Manque de profondeur"],
+        "rivals": ["Troyes", "Dijon"],
+        "recent_titles": ["Champion Ligue 2 2022"],
+        "sport": "⚽ Football",
+    },
+    "FC Nantes": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Nantes", "arena": "Stade de la Beaujoire", "capacity": 35322,
+        "coach": "Nouveau coach (déc 2025)",
+        "season_objective": "Maintien Ligue 1",
+        "playing_style": "Jeu direct et combatif, duels physiques, coach changé déc 2025",
+        "offensive_system": "Jeu direct aérien, combativité offensive",
+        "defensive_system": "Bloc compact, duels physiques, discipline collective",
+        "key_players": [],
+        "stats_profile": {"Classement": "17e · 17pts", "BP": "22", "BC": "41", "Diff": "-19"},
+        "strengths": ["Histoire du club", "Beaujoire ambiance", "Combativité"],
+        "weaknesses": ["Bas du classement", "Coach démissionnaire déc 2025", "Défense fragile"],
+        "rivals": ["Rennes", "Lorient", "Brest"],
+        "recent_titles": ["Coupe de France 2022"],
+        "sport": "⚽ Football",
+    },
+    "lorient": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Lorient", "arena": "Stade du Moustoir", "capacity": 18890,
+        "coach": "Régis Le Bris",
+        "season_objective": "Maintien Ligue 1",
+        "playing_style": "Football direct et offensif, pressing haut, identité bretonne forte, transitions rapides exploitant la vitesse des ailiers",
+        "offensive_system": "4-3-3 offensif, ailiers larges, jeu direct en transition, pressing haut pour récupérer haut",
+        "defensive_system": "Pressing haut agressif, compacité en bloc médian, récupération rapide du ballon",
+        "key_players": [
+            {"name": "Pablo Pagis",      "flag": "🇫🇷", "pos": "AG",  "age": 24, "role": "Ailier gauche rapide",       "strengths": "Vitesse, dribbles, 7 buts saison"},
+            {"name": "Alexandre Mendy", "flag": "🇫🇷", "pos": "BU",  "age": 29, "role": "Attaquant de surface",       "strengths": "Finitions, jeu dos au but, présence"},
+        ],
+        "stats_profile": {"Classement": "10e · 33pts", "BP": "34", "BC": "38", "Buts": "Pagis 7"},
+        "strengths": ["Pressing offensif", "Identité de jeu", "Cohésion promus"],
+        "weaknesses": ["Maintien difficile", "Effectif limité"],
+        "rivals": ["Rennes", "Brest", "Nantes"],
+        "recent_titles": ["Champion Ligue 2 2024-25"],
+    },
+    "paris_fc": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Paris", "arena": "Stade Jean-Bouin", "capacity": 20000,
+        "coach": "Antoine Kombouaré",
+        "season_objective": "Maintien historique Ligue 1",
+        "playing_style": "Organisation défensive pragmatique, retour historique en L1 après 46 ans d'absence, jeu direct et efficace",
+        "offensive_system": "4-4-2 compact, jeu direct sur Kebbal, contre-attaques rapides",
+        "defensive_system": "Bloc bas organisé, 4-4-2 défensif, compacité centrale",
+        "key_players": [
+            {"name": "Ilan Kebbal", "flag": "🇩🇿", "pos": "MDC", "age": 27, "role": "Milieu créateur offensif — 8 buts", "strengths": "Tir extérieur, dribbles, 8 buts saison"},
+        ],
+        "stats_profile": {"Classement": "14e · 26pts", "BP": "28", "BC": "40", "Buts": "Kebbal 8"},
+        "strengths": ["Organisation défensive", "Combativité", "Histoire unique"],
+        "weaknesses": ["Retour après 46 ans", "Effectif limité"],
+        "rivals": ["PSG", "Red Star"],
+        "recent_titles": ["Champion Ligue 2 2024-25"],
+        "sport": "⚽ Football",
+    },
+    "metz": {
+        "competition": "Ligue 1", "sport": "⚽ Football",
+        "city": "Metz", "arena": "Stade Saint-Symphorien", "capacity": 28786,
+        "coach": "Vacant (licenciement jan 2026)",
+        "season_objective": "Maintien Ligue 1 (difficile)",
+        "playing_style": "Équipe en grande difficulté, pire défense du championnat, reconstruction urgente nécessaire",
+        "offensive_system": "Jeu direct sur Mikautadze, peu de possession, recherche de l'exploit",
+        "defensive_system": "Bloc bas par nécessité, nombreux buts encaissés (53)",
+        "key_players": [
+            {"name": "Georges Mikautadze", "flag": "🇬🇪", "pos": "BU",  "age": 24, "role": "Attaquant international géorgien", "strengths": "Dribbles, finitions, vitesse"},
+            {"name": "Farid Boulaya",      "flag": "🇫🇷", "pos": "AD",  "age": 29, "role": "Ailier créateur vétéran",          "strengths": "Technique, tir, expérience L1"},
+        ],
+        "stats_profile": {"Classement": "18e · 13pts", "BP": "22", "BC": "53", "Diff": "-31"},
+        "strengths": ["Capacité stade", "Histoire club"],
+        "weaknesses": ["Pire défense L1", "Manque de points"],
+        "rivals": ["Nancy", "Strasbourg"],
+        "recent_titles": [],
+        "sport": "⚽ Football",
     },
 
     # ══ LA LIGA (condensé) ══════════════════════════════════════════════════════
@@ -3593,6 +3919,21 @@ SCOUTING_TEAM_LOOKUP: dict[str, str] = {
     "Paris Saint-Germain":                    "Paris Saint-Germain",
     "Olympique de Marseille":                 "Olympique de Marseille",
     "AS Monaco":                              "AS Monaco",
+    "RC Lens":                                "RC Lens",
+    "Olympique Lyonnais":                     "Olympique Lyonnais",
+    "LOSC Lille":                             "LOSC Lille",
+    "Stade Rennais":                          "Stade Rennais",
+    "RC Strasbourg":                          "RC Strasbourg",
+    "Stade Brestois 29":                      "Stade Brestois",
+    "Toulouse FC":                            "Toulouse FC",
+    "Angers SCO":                             "Angers SCO",
+    "Le Havre AC":                            "Le Havre AC",
+    "OGC Nice":                               "OGC Nice",
+    "AJ Auxerre":                             "AJ Auxerre",
+    "FC Nantes":                              "FC Nantes",
+    "FC Lorient":                             "lorient",
+    "Paris FC":                               "paris_fc",
+    "FC Metz":                                "metz",
     # La Liga
     "Real Madrid CF":                         "Real Madrid CF",
     "FC Barcelona":                           "FC Barcelona",
@@ -5680,6 +6021,28 @@ st.markdown('''<style>
 }
 </style>''', unsafe_allow_html=True)
 
+# ── Classement Ligue 1 2025-26 ───────────────────────────────────────────────
+LIGUE1_STANDINGS = [
+    {"pos":1,  "team":"Paris Saint-Germain", "j":24, "v":18, "n":3,  "d":3,  "bp":53, "bc":19, "diff":34,  "pts":57, "zone":"ucl"},
+    {"pos":2,  "team":"RC Lens",             "j":24, "v":17, "n":2,  "d":5,  "bp":45, "bc":21, "diff":24,  "pts":53, "zone":"ucl"},
+    {"pos":3,  "team":"Olympique Lyonnais",  "j":23, "v":14, "n":3,  "d":6,  "bp":37, "bc":23, "diff":14,  "pts":45, "zone":"ucl"},
+    {"pos":4,  "team":"Olympique de Marseille","j":23,"v":12,"n":4,  "d":7,  "bp":48, "bc":31, "diff":17,  "pts":40, "zone":"ucl"},
+    {"pos":5,  "team":"LOSC Lille",          "j":24, "v":12, "n":4,  "d":8,  "bp":37, "bc":31, "diff":6,   "pts":40, "zone":"uel"},
+    {"pos":6,  "team":"Stade Rennais",       "j":24, "v":11, "n":7,  "d":6,  "bp":38, "bc":35, "diff":3,   "pts":40, "zone":"uel"},
+    {"pos":7,  "team":"AS Monaco",           "j":24, "v":11, "n":4,  "d":9,  "bp":40, "bc":36, "diff":4,   "pts":37, "zone":"uel"},
+    {"pos":8,  "team":"RC Strasbourg",       "j":24, "v":10, "n":5,  "d":9,  "bp":40, "bc":31, "diff":9,   "pts":35, "zone":""},
+    {"pos":9,  "team":"Stade Brestois",      "j":24, "v":9,  "n":6,  "d":9,  "bp":32, "bc":34, "diff":-2,  "pts":33, "zone":""},
+    {"pos":10, "team":"FC Lorient",          "j":24, "v":8,  "n":9,  "d":7,  "bp":34, "bc":38, "diff":-4,  "pts":33, "zone":""},
+    {"pos":11, "team":"Toulouse FC",         "j":24, "v":8,  "n":7,  "d":9,  "bp":33, "bc":28, "diff":5,   "pts":31, "zone":""},
+    {"pos":12, "team":"Angers SCO",          "j":24, "v":8,  "n":5,  "d":11, "bp":22, "bc":30, "diff":-8,  "pts":29, "zone":""},
+    {"pos":13, "team":"Le Havre AC",         "j":24, "v":6,  "n":8,  "d":10, "bp":20, "bc":30, "diff":-10, "pts":26, "zone":""},
+    {"pos":14, "team":"Paris FC",            "j":24, "v":6,  "n":8,  "d":10, "bp":28, "bc":40, "diff":-12, "pts":26, "zone":""},
+    {"pos":15, "team":"OGC Nice",            "j":24, "v":6,  "n":6,  "d":12, "bp":30, "bc":44, "diff":-14, "pts":24, "zone":""},
+    {"pos":16, "team":"AJ Auxerre",          "j":24, "v":4,  "n":6,  "d":14, "bp":19, "bc":35, "diff":-16, "pts":18, "zone":"rel"},
+    {"pos":17, "team":"FC Nantes",           "j":24, "v":4,  "n":5,  "d":15, "bp":22, "bc":41, "diff":-19, "pts":17, "zone":"rel"},
+    {"pos":18, "team":"FC Metz",             "j":24, "v":3,  "n":4,  "d":17, "bp":22, "bc":53, "diff":-31, "pts":13, "zone":"rel"},
+]
+
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown('<h1 style="color:#CAFF33;font-family:Bebas Neue,sans-serif;font-size:2.5rem;margin-bottom:0;">⚡ COACHIQ</h1>', unsafe_allow_html=True)
 
@@ -5897,6 +6260,51 @@ with tab3:
         st.info("Aucune compétition.")
     else:
         _sel_comp3 = st.selectbox("Compétition", _comps3, key="tab3_comp")
+
+        # Ligue 1 standings table
+        _comp_name = _sel_comp3
+        if _comp_name == "Ligue 1":
+            _standing_html = '''<div style="overflow-x:auto;margin-bottom:1rem;">
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
+    <thead><tr style="color:#666;text-transform:uppercase;font-size:.65rem;border-bottom:1px solid #1e1e1e;">
+    <th style="padding:.4rem .5rem;text-align:center;">Pos</th>
+    <th style="padding:.4rem .5rem;text-align:left;">Équipe</th>
+    <th style="padding:.4rem .5rem;text-align:center;">J</th>
+    <th style="padding:.4rem .5rem;text-align:center;">V</th>
+    <th style="padding:.4rem .5rem;text-align:center;">N</th>
+    <th style="padding:.4rem .5rem;text-align:center;">D</th>
+    <th style="padding:.4rem .5rem;text-align:center;">BP</th>
+    <th style="padding:.4rem .5rem;text-align:center;">BC</th>
+    <th style="padding:.4rem .5rem;text-align:center;">Diff</th>
+    <th style="padding:.4rem .5rem;text-align:center;color:#CAFF33;">Pts</th>
+    </tr></thead><tbody>'''
+            _zone_colors = {"ucl":"#1a3a6a","uel":"#2a1a0a","rel":"#3a0a0a","":""}
+            _zone_border = {"ucl":"#3b82f6","uel":"#f97316","rel":"#ef4444","":"#1e1e1e"}
+            for _row in LIGUE1_STANDINGS:
+                _zc = _zone_colors.get(_row["zone"],"")
+                _zb = _zone_border.get(_row["zone"],"#1e1e1e")
+                _bg = f'background:{_zc};' if _zc else ""
+                _diff_str = f'+{_row["diff"]}' if _row["diff"] > 0 else str(_row["diff"])
+                _diff_col = "#CAFF33" if _row["diff"] > 0 else ("#ef4444" if _row["diff"] < 0 else "#888")
+                _standing_html += f'<tr style="{_bg}border-left:2px solid {_zb};border-bottom:1px solid #111;">'
+                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#666;">{_row["pos"]}</td>'
+                _standing_html += f'<td style="padding:.4rem .5rem;color:#f0f0f0;font-weight:600;">{_row["team"]}</td>'
+                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#888;">{_row["j"]}</td>'
+                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#CAFF33;">{_row["v"]}</td>'
+                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#888;">{_row["n"]}</td>'
+                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#ef4444;">{_row["d"]}</td>'
+                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#ccc;">{_row["bp"]}</td>'
+                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#ccc;">{_row["bc"]}</td>'
+                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:{_diff_col};">{_diff_str}</td>'
+                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;font-weight:900;color:#CAFF33;">{_row["pts"]}</td>'
+                _standing_html += '</tr>'
+            _standing_html += '</tbody></table></div>'
+            _standing_html += '<div style="display:flex;gap:1rem;margin-bottom:.75rem;font-size:.68rem;">'
+            _standing_html += '<span><span style="display:inline-block;width:8px;height:8px;background:#3b82f6;border-radius:2px;margin-right:3px;"></span>Champions League</span>'
+            _standing_html += '<span><span style="display:inline-block;width:8px;height:8px;background:#f97316;border-radius:2px;margin-right:3px;"></span>Europa League</span>'
+            _standing_html += '<span><span style="display:inline-block;width:8px;height:8px;background:#ef4444;border-radius:2px;margin-right:3px;"></span>Relégation</span>'
+            _standing_html += '</div>'
+            st.markdown(_standing_html, unsafe_allow_html=True)
 
         # Matches for this competition
         _comp_matches = {k: v for k, v in MATCHES.items() if v.get("competition") == _sel_comp3}
