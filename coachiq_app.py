@@ -1252,24 +1252,24 @@ COACHES: dict[str, dict] = {
         'key_principles': ['Pressing haut immédiat à la perte', 'Sorties de balle structurées', 'Rotations milieu-attaque', 'Surcharges sur les côtés']
     },
     'Marseille': {
-        'name': 'Roberto De Zerbi',
-        'nationality': '🇮🇹',
+        'name': 'Jean-Louis Gasset (fév 2026)',
+        'nationality': '🇫🇷',
         'formation': '4-2-3-1',
-        'style': 'Possession élaborée, construction depuis la défense',
-        'philosophy': 'Jeu de possession très structuré depuis le gardien. Sorties de balle codifiées avec le gardien inclus. Pressing organisé par zones. Transitions offensives rapides après récupération. Très exigeant tactiquement, demande une grande maîtrise technique collective.',
-        'strengths': ['Construction propre depuis l\'arrière', 'Pressing par zones très organisé', 'Jeu positionnel élaboré', 'Créativité offensive'],
-        'weaknesses': ['Vulnérable au pressing adverse haut', 'Nécessite des joueurs très techniques'],
-        'key_principles': ['Gardien libéro', 'Supériorité numérique en construction', 'Pressing triggers définis', 'Circuits de passes codifiés']
+        'style': 'Jeu offensif, organisation, nouveau projet après De Zerbi',
+        'philosophy': 'Football offensif et technique. Après le départ de De Zerbi (11 fév 2026), nouveau projet avec Gasset depuis le 18 fév 2026.',
+        'strengths': ['Greenwood meilleur buteur L1', 'Vélodrome 12ème homme', 'Effectif international'],
+        'weaknesses': ['Transition coaching difficile', 'Vulnérable aux contres'],
+        'key_principles': ['Jeu offensif assumé', 'Largeurs exploitées', 'Transitions rapides']
     },
     'Monaco': {
-        'name': 'Adi Hütter',
-        'nationality': '🇦🇹',
+        'name': 'Luca Mancini (depuis oct 2025)',
+        'nationality': '🇮🇹',
         'formation': '4-2-3-1',
         'style': 'Pressing intense, jeu direct et vertical',
-        'philosophy': 'Équipe très physique et verticale. Pressing intensif sur tout le terrain. Jeu direct vers l\'avant dès la récupération. Exploitation des espaces en transition. Favorise les joueurs athlétiques et rapides.',
-        'strengths': ['Intensité physique très élevée', 'Efficacité en transition', 'Pressing collectif', 'Vitesse de jeu'],
-        'weaknesses': ['Moins à l\'aise dans la gestion du score', 'Peut manquer de patience en possession'],
-        'key_principles': ['Transition défense-attaque en moins de 6 secondes', 'Pressing immédiat', 'Verticalité maximale', 'Duels physiques assumés']
+        'philosophy': 'Hütter licencié le 9 oct 2025, nouveau coach depuis le 11 oct 2025. Équipe très physique et verticale avec Ansu Fati comme option offensive.',
+        'strengths': ['Intensité physique très élevée', 'Efficacité en transition', 'Pressing collectif'],
+        'weaknesses': ['Transition coaching en cours', 'Peut manquer de patience en possession'],
+        'key_principles': ['Transition défense-attaque rapide', 'Pressing immédiat', 'Verticalité maximale']
     },
     'Lille': {
         'name': 'Bruno Genesio',
@@ -1292,14 +1292,14 @@ COACHES: dict[str, dict] = {
         'key_principles': ['Patience en possession', 'Pressing par zones définis', 'Largeurs exploitées', 'Transitions contrôlées']
     },
     'Nice': {
-        'name': 'Franck Haise',
+        'name': 'Nouveau coach (jan 2026)',
         'nationality': '🇫🇷',
         'formation': '4-3-3',
         'style': 'Pressing haut, jeu direct, largeur maximale',
-        'philosophy': 'Pressing très haut dès la perte du ballon. Jeu direct et vertical. Largeur maximale avec des ailiers qui fixent les défenseurs. Très similaire à son système de Lens. Intensité physique élevée sur toute la durée du match.',
-        'strengths': ['Pressing très haut efficace', 'Largeurs maximales', 'Intensité physique', 'Jeu direct efficace'],
-        'weaknesses': ['Peut s\'exposer sur les espaces dans le dos', 'Fatigue physique en fin de match'],
-        'key_principles': ['Pressing immédiat', 'Ailiers très hauts et larges', 'Jeu direct vers les attaquants', 'Intensité constante']
+        'philosophy': 'Haise licencié le 29 déc 2025, nouveau coach depuis jan 2026. Équipe en difficulté (15e), Sofiane Diop principal danger offensif.',
+        'strengths': ['Pressing haut', 'Largeurs maximales', 'Diop talent offensif'],
+        'weaknesses': ['Bas du classement', 'Transition coaching difficile', 'Pire défense (44 BC)'],
+        'key_principles': ['Pressing immédiat', 'Ailiers hauts', 'Jeu direct']
     },
     'Lens': {
         'name': 'Will Still',
@@ -1322,14 +1322,14 @@ COACHES: dict[str, dict] = {
         'key_principles': ['Pressing maximum partout', 'Mobilité constante', 'Transitions offensives immédiates', '3 attaquants très actifs']
     },
     'Strasbourg': {
-        'name': 'Liam Rosenior',
-        'nationality': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+        'name': 'Nouveau coach (jan 2026)',
+        'nationality': '🇫🇷',
         'formation': '4-2-3-1',
         'style': 'Jeu de possession, organisation défensive',
-        'philosophy': 'Jeu de possession structuré. Organisation défensive solide. Développement des jeunes joueurs. Approche moderne du football avec pressing organisé.',
-        'strengths': ['Organisation collective', 'Possession structurée', 'Solidité défensive'],
-        'weaknesses': ['Manque d\'expérience au haut niveau', 'Effectif limité'],
-        'key_principles': ['Possession maîtrisée', 'Bloc défensif compact', 'Développement collectif']
+        'philosophy': 'Rosenior parti à Chelsea le 6 jan 2026, nouveau coach depuis jan 2026. Panichelli (12 buts) reste le danger principal.',
+        'strengths': ['Organisation collective', 'Panichelli meilleur buteur', 'Solidité défensive'],
+        'weaknesses': ['Transition coaching', 'Effectif sous pression'],
+        'key_principles': ['Possession maîtrisée', 'Bloc défensif compact', 'Exploitation Panichelli']
     },
     'Brest': {
         'name': 'Eric Roy',
@@ -1351,35 +1351,15 @@ COACHES: dict[str, dict] = {
         'weaknesses': ['Peut manquer de verticalité', 'Effectif en construction'],
         'key_principles': ['Possession patient', 'Pressing triggers', 'Construction depuis l\'arrière']
     },
-    'Reims': {
-        'name': 'Luka Elsner',
-        'nationality': '🇸🇮',
-        'formation': '4-4-2',
-        'style': 'Bloc compact, transitions rapides',
-        'philosophy': 'Bloc défensif compact et bien organisé. Transitions rapides vers l\'avant. Efficacité sur les coups de pied arrêtés. Discipline collective très forte.',
-        'strengths': ['Solidité défensive', 'Efficacité sur CPA', 'Organisation collective', 'Mental solide'],
-        'weaknesses': ['Jeu offensif limité', 'Manque de créativité'],
-        'key_principles': ['Bloc compact bas', 'Transitions rapides', 'CPA travaillés', 'Discipline collective']
-    },
     'Nantes': {
-        'name': 'Antoine Kombouaré',
+        'name': 'Nouveau coach (déc 2025)',
         'nationality': '🇫🇷',
         'formation': '4-4-2',
         'style': 'Jeu direct, combativité, duels physiques',
-        'philosophy': 'Football direct et combatif. Jeu aérien important. Duels physiques assumés. Passion et mental au cœur du projet. Exploitation des points forts individuels.',
-        'strengths': ['Combativité', 'Jeu aérien', 'Mental compétiteur', 'Duels physiques'],
-        'weaknesses': ['Jeu de possession limité', 'Peut manquer de technique collective'],
-        'key_principles': ['Jeu direct', 'Duels physiques gagnés', 'Mental combatif', 'Efficacité sur les coups de pied arrêtés']
-    },
-    'Montpellier': {
-        'name': 'Jean-Louis Gasset',
-        'nationality': '🇫🇷',
-        'formation': '4-3-3',
-        'style': 'Jeu offensif, possession, technique',
-        'philosophy': 'Football offensif et technique. Jeu de possession avec verticalité. Valorisation des joueurs techniques. Approche offensive assumée.',
-        'strengths': ['Jeu technique', 'Approche offensive', 'Valorisation des talents'],
-        'weaknesses': ['Fragilité défensive', 'Manque de solidité collective'],
-        'key_principles': ['Possession technique', 'Verticalité rapide', 'Valorisation individuelle']
+        'philosophy': 'Coach démissionné le 11 déc 2025, nouveau depuis le 16 déc. Football direct et combatif, maintien difficile en bas de classement.',
+        'strengths': ['Combativité', 'Jeu aérien', 'Mental compétiteur'],
+        'weaknesses': ['Bas du classement', 'Effectif en manque de confiance'],
+        'key_principles': ['Jeu direct', 'Duels physiques gagnés', 'Mental combatif']
     },
     'Le Havre': {
         'name': 'Didier Digard',
@@ -1411,15 +1391,35 @@ COACHES: dict[str, dict] = {
         'weaknesses': ['Manque d\'expérience Ligue 1', 'Effectif en construction'],
         'key_principles': ['Organisation défensive', 'Solidarité collective', 'Construction progressive']
     },
-    'Saint-Etienne': {
-        'name': 'Olivier Dall\'Oglio',
-        'nationality': '🇫🇷',
+    'lorient_coach': {
+        'name': 'Régis Le Bris',
+        'nationality': '🇫🇷 Français',
         'formation': '4-3-3',
-        'style': 'Pressing, intensité, identité forte',
-        'philosophy': 'Football intense avec pressing organisé. Identité forte et combativité. Jeu direct avec des transitions rapides. Exploitation du soutien populaire.',
-        'strengths': ['Combativité', 'Identité forte', 'Pressing organisé', 'Soutien populaire'],
-        'weaknesses': ['Effectif limité', 'Manque de régularité'],
-        'key_principles': ['Pressing collectif', 'Combativité', 'Jeu direct', 'Identité forte']
+        'style': 'Jeu offensif direct, transitions rapides, identité bretonne',
+        'philosophy': 'Football offensif, pressing haut, identité régionale forte',
+        'strengths': ['Transitions rapides', 'Pressing', 'Cohésion'],
+        'weaknesses': ['Maintien niveau Ligue 1', 'Effectif limité'],
+        'key_principles': ['Pressing haut', 'Fast break offensif', 'Compacité défensive']
+    },
+    'kombouare': {
+        'name': 'Antoine Kombouaré',
+        'nationality': '🇫🇷 Français',
+        'formation': '4-4-2',
+        'style': 'Organisation défensive, pragmatisme, expérience Ligue 1',
+        'philosophy': 'Solidité défensive avant tout, exploitation des transitions',
+        'strengths': ['Organisation défensive', 'Expérience L1', 'Solidité'],
+        'weaknesses': ['Jeu offensif limité', 'Nouveau en L1 après 46 ans'],
+        'key_principles': ['Bloc bas organisé', 'Contre-attaques', 'Solidité défensive']
+    },
+    'metz_coach': {
+        'name': 'À confirmer (poste vacant suite licenciement 20 jan 2026)',
+        'nationality': '🇫🇷',
+        'formation': '4-5-1',
+        'style': 'Reconstruction difficile, retour en L1 compliqué',
+        'philosophy': 'Solidité défensive pour tenter le maintien',
+        'strengths': ['Stade historique', 'Soutien supporters'],
+        'weaknesses': ['Dernière place', 'Pire défense L1 (-31)'],
+        'key_principles': ['Défense compacte', 'Limiter les dégâts', 'Transition']
     },
     # ── NBA ───────────────────────────────────────────────────────────────────
     'Lakers': {
@@ -2160,13 +2160,13 @@ COACH_TEAM_LOOKUP: dict[str, str] = {
     "RC Strasbourg":          "Strasbourg",
     "Stade Brestois 29":      "Brest",
     "Toulouse FC":            "Toulouse",
-    "Stade de Reims":         "Reims",
     "FC Nantes":              "Nantes",
-    "Montpellier HSC":        "Montpellier",
     "Le Havre AC":            "Le Havre",
     "AJ Auxerre":             "Auxerre",
     "Angers SCO":             "Angers",
-    "AS Saint-Étienne":       "Saint-Etienne",
+    "FC Lorient":             "lorient_coach",
+    "Paris FC":               "kombouare",
+    "FC Metz":                "metz_coach",
     # NBA
     "Los Angeles Lakers":     "Lakers",
     "Golden State Warriors":  "Warriors",
@@ -2304,6 +2304,27 @@ TEAM_SQUADS: dict[str, list] = {
         ["Belocian","DC"],["Truffert","LD"],
         ["Ugochukwu","MDC"],["Gronbaek","MC"],
         ["Bourigeaud","AD"],["Gouiri","BU"],["Terrier","AG"],["Kalimuendo","BU"],
+    ],
+    "FC Lorient": [
+        ["Benjamin Mendy","GB"],["Fabien Lemoine","RD"],["Julien Laporte","DC"],
+        ["Théo Le Bris","DC"],["Julien Ponceau","LD"],
+        ["Enzo Lebée","MDC"],["Brice Samba","MC"],
+        ["Matthieu Saunier","AD"],["Pablo Pagis","AG"],
+        ["Pedro Gancalves","BU"],["Alexandre Mendy","BU"],
+    ],
+    "Paris FC": [
+        ["Nicolas Penneteau","GB"],["Gautier Larsonneur","RD"],["Kevin N'Doram","DC"],
+        ["Oumar Gonzalez","DC"],["Ilan Kebbal","LD"],
+        ["Karim Ziani","MDC"],["Jean-Christophe Alidor","MC"],
+        ["Maxime Bernauer","AD"],["Matthieu Dreyer","AG"],
+        ["Wilson Isidor","BU"],["Gauthier Hein","BU"],
+    ],
+    "FC Metz": [
+        ["Marc-Aurèle Caillard","GB"],["Thierry Ambrose","RD"],["Dylan Bronn","DC"],
+        ["Nacéredine Nubret","DC"],["Ibrahima Niane","LD"],
+        ["Mathis Besses","MDC"],["Opa Nguette","MC"],
+        ["Farid Boulaya","AD"],["Kevin N'Doram","AG"],
+        ["Georges Mikautadze","BU"],["Habib Maïga","BU"],
     ],
     # ── Premier League ────────────────────────────────────────────────────────
     "Arsenal FC": [
@@ -3253,13 +3274,14 @@ SCOUTING_SHEETS: dict[str, dict] = {
         "offensive_system": "Dembélé-Barcola larges, João Neves pivot bas, Ramos en pivot",
         "defensive_system": "Pressing très haut dès la perte, bloc mi-haut, Donnarumma libéro",
         "key_players": [
-            {"name": "Dembélé",    "pos": "AD", "flag": "🇫🇷", "age": 27, "strengths": "Vitesse, dribble, finition",      "role": "Ailier droit star"},
-            {"name": "Barcola",    "pos": "AG", "flag": "🇫🇷", "age": 22, "strengths": "Vitesse, dribble, jeunesse",      "role": "Ailier gauche explosif"},
-            {"name": "João Neves", "pos": "MC", "flag": "🇵🇹", "age": 20, "strengths": "Récupération, passe, intelligence","role": "Milieu récupérateur"},
+            {"name": "Dembélé",         "pos": "AD", "flag": "🇫🇷", "age": 27, "strengths": "Vitesse, dribble, finition — 8 buts",   "role": "Ailier droit star, meilleur buteur"},
+            {"name": "Barcola",         "pos": "AG", "flag": "🇫🇷", "age": 22, "strengths": "Vitesse, dribble, jeunesse — 7 buts",   "role": "Ailier gauche explosif"},
+            {"name": "Lucas Chevalier", "pos": "GB", "flag": "🇫🇷", "age": 24, "strengths": "Réflexes, 9 clean sheets, leadership",  "role": "Gardien titulaire élite"},
+            {"name": "João Neves",      "pos": "MC", "flag": "🇵🇹", "age": 20, "strengths": "Récupération, passe, intelligence",     "role": "Milieu récupérateur"},
         ],
         "strengths": ["Effectif le plus profond de L1", "Pressing collectif élite", "Dembélé-Barcola redoutables"],
         "weaknesses": ["Pression attentes maximale", "Fatigue si parcours européen"],
-        "stats_profile": {"Possession": "65%", "Pressing PPDA": "7.2", "xG/match": "2.8", "Buts/match": "2.5"},
+        "stats_profile": {"Classement": "1er · 57pts", "BP": "53", "BC": "19", "Diff": "+34", "Buteur": "Dembélé 8, Barcola 7"},
         "rivals": ["Olympique de Marseille", "AS Monaco"],
         "recent_titles": ["Champion Ligue 1 2024", "Champion Ligue 1 2023"],
     },
@@ -4555,6 +4577,27 @@ TEAM_SQUADS: dict[str, list] = {
         ["Belocian","DC"],["Truffert","LD"],
         ["Ugochukwu","MDC"],["Gronbaek","MC"],
         ["Bourigeaud","AD"],["Gouiri","BU"],["Terrier","AG"],["Kalimuendo","BU"],
+    ],
+    "FC Lorient": [
+        ["Benjamin Mendy","GB"],["Fabien Lemoine","RD"],["Julien Laporte","DC"],
+        ["Théo Le Bris","DC"],["Julien Ponceau","LD"],
+        ["Enzo Lebée","MDC"],["Brice Samba","MC"],
+        ["Matthieu Saunier","AD"],["Pablo Pagis","AG"],
+        ["Pedro Gancalves","BU"],["Alexandre Mendy","BU"],
+    ],
+    "Paris FC": [
+        ["Nicolas Penneteau","GB"],["Gautier Larsonneur","RD"],["Kevin N'Doram","DC"],
+        ["Oumar Gonzalez","DC"],["Ilan Kebbal","LD"],
+        ["Karim Ziani","MDC"],["Jean-Christophe Alidor","MC"],
+        ["Maxime Bernauer","AD"],["Matthieu Dreyer","AG"],
+        ["Wilson Isidor","BU"],["Gauthier Hein","BU"],
+    ],
+    "FC Metz": [
+        ["Marc-Aurèle Caillard","GB"],["Thierry Ambrose","RD"],["Dylan Bronn","DC"],
+        ["Nacéredine Nubret","DC"],["Ibrahima Niane","LD"],
+        ["Mathis Besses","MDC"],["Opa Nguette","MC"],
+        ["Farid Boulaya","AD"],["Kevin N'Doram","AG"],
+        ["Georges Mikautadze","BU"],["Habib Maïga","BU"],
     ],
     # ── Premier League ────────────────────────────────────────────────────────
     "Arsenal FC": [
