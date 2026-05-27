@@ -1,9 +1,12 @@
 import streamlit as st
+import streamlit.components.v1 as _st_components
 import os
 import re
 import hashlib
 import random as _rng_mod
 import requests
+import json
+from pathlib import Path
 from datetime import date, datetime, timedelta
 import calendar as cal_mod
 
@@ -52,10 +55,11 @@ st.markdown("""<style>
 }
 
 /* ── Reset Streamlit ── */
-#MainMenu, footer, header { visibility: hidden; }
-.block-container { padding-top: 1rem !important; max-width: 1200px !important; }
-[data-testid="stHeader"] { display: none; }
+#MainMenu, footer, header { visibility: hidden; height: 0; }
+.block-container { padding: 0 !important; max-width: 100% !important; }
+[data-testid="stHeader"], [data-testid="stToolbar"] { display: none; }
 [data-testid="stSidebar"] { display: none; }
+iframe { border: 0 !important; }
 
 /* ── Body ── */
 body, .stApp {
@@ -6195,554 +6199,120 @@ LIGUE1_STANDINGS = [
     {"pos":18, "team":"FC Metz",             "j":24, "v":3,  "n":4,  "d":17, "bp":22, "bc":53, "diff":-31, "pts":13, "zone":"rel"},
 ]
 
-# ── Header ────────────────────────────────────────────────────────────────────
-st.markdown('''<div style="display:flex;align-items:center;gap:12px;padding:4px 0 16px;">
-  <div style="width:36px;height:36px;border-radius:9px;background:var(--accent);display:grid;place-items:center;font-family:var(--font-display);font-size:22px;color:var(--accent-ink);letter-spacing:0;font-weight:400;">C</div>
-  <div>
-    <span style="font-family:var(--font-display);font-size:26px;letter-spacing:0.06em;color:#fff;">COACH</span><span style="font-family:var(--font-display);font-size:26px;letter-spacing:0.06em;color:var(--accent);">IQ</span>
-    <div style="font-size:11px;color:#555;letter-spacing:0.06em;text-transform:uppercase;margin-top:-2px;">Analyse tactique · IA · Tous sports</div>
-  </div>
-</div>''', unsafe_allow_html=True)
-
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    '⚽🏀🏉 Matchs',
-    '📅 Calendrier',
-    '🏆 Compétitions',
-    '👥 Équipes & Scouting',
-    '📖 Playbooks & Tactiques'
-])
 
 # ══════════════════════════════════════════════════════════════════════════════
-# TAB 1 — MATCHS
+# REACT UI — merged from streamlit_app.py
+# All data from the Python dicts above is serialised to JSON and injected as
+# window.APP_MATCHES so the React prototype runs with real match data.
 # ══════════════════════════════════════════════════════════════════════════════
-with tab1:
-    # Sport selector (horizontal radio)
-    _sport = st.radio("Sport", ["⚽ Football", "🏀 Basket", "🏉 Rugby"], horizontal=True, key="tab1_sport", label_visibility="collapsed")
 
-    # Filter competitions for this sport
-    _comps = sorted(set(
-        v["competition"] for v in MATCHES.values()
-        if v.get("sport") == _sport
-    ))
-    _comp = st.selectbox("Compétition", ["Toutes"] + _comps, key="tab1_comp")
+def _build_js_matches() -> str:
+    """Convert Python MATCHES dict → window.MATCHES JS array for the React UI."""
+    sport_map  = {"⚽ Football": "football", "🏀 Basket": "basket", "🏉 Rugby": "rugby"}
+    status_map = {"Terminé": "finished", "Live": "live", "À venir": "upcoming"}
+    day_fr = ["Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam.", "Dim."]
+    mon_fr = ["Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin",
+              "Juil.", "Août", "Sep.", "Oct.", "Nov.", "Déc."]
 
-    # Filter teams for this competition
-    _teams_for_comp = sorted(set(
-        t for v in MATCHES.values()
-        if v.get("sport") == _sport and (_comp == "Toutes" or v.get("competition") == _comp)
-        for t in [v["home"]["name"], v["away"]["name"]]
-    ))
-    _team_filter = st.selectbox("Équipe", ["Toutes"] + _teams_for_comp, key="tab1_team")
+    grouped: dict = {"football": [], "basket": [], "rugby": []}
 
-    # Filter matches
-    _filtered = {
-        k: v for k, v in MATCHES.items()
-        if v.get("sport") == _sport
-        and (_comp == "Toutes" or v.get("competition") == _comp)
-        and (_team_filter == "Toutes" or _team_filter in [v["home"]["name"], v["away"]["name"]])
-    }
+    for mid, m in MATCHES.items():
+        sport_key = sport_map.get(m.get("sport", ""), "football")
+        status    = status_map.get(m.get("status", ""), "upcoming")
+        h, a      = m["home"], m["away"]
 
-    if not _filtered:
-        st.info("Aucun match trouvé.")
-    else:
-        # Sort by date
-        _sorted_matches = sorted(_filtered.items(), key=lambda x: x[1].get("date", ""))
+        date_str = m.get("date", "")
+        time_str = m.get("time", "")
+        try:
+            d        = datetime.strptime(date_str, "%Y-%m-%d")
+            fmt_date = f"{day_fr[d.weekday()]} {d.day:02d} {mon_fr[d.month - 1]}"
+            if time_str:
+                fmt_date += f" · {time_str}"
+        except Exception:
+            fmt_date = date_str
 
-        # Display match cards - 3 per row
-        _cols_per_row = 3
-        _items = list(_sorted_matches)
-        for i in range(0, len(_items), _cols_per_row):
-            _row = _items[i:i+_cols_per_row]
-            _cols = st.columns(len(_row))
-            for j, (mk, mv) in enumerate(_row):
-                with _cols[j]:
-                    _home = mv["home"]
-                    _away = mv["away"]
-                    _score_h = _home.get("score")
-                    _score_a = _away.get("score")
-                    _status = mv.get("status", "À venir")
-                    _date_str = mv.get("date", "")
-                    _time_str = mv.get("time", "")
+        entry: dict = {
+            "id":          mid,
+            "status":      status,
+            "date":        fmt_date,
+            "competition": m.get("competition", ""),
+            "venue":       m.get("stadium", ""),
+            "home": {
+                "code":  h.get("short", h["name"][:3].upper()),
+                "name":  h["name"],
+                "color": h.get("color", "#888"),
+            },
+            "away": {
+                "code":  a.get("short", a["name"][:3].upper()),
+                "name":  a["name"],
+                "color": a.get("color", "#888"),
+            },
+        }
 
-                    if _score_h is not None and _score_a is not None:
-                        _score_display = f"{_score_h} - {_score_a}"
-                        _status_color = "#CAFF33"
-                    else:
-                        _score_display = "vs"
-                        _status_color = "#888"
+        if h.get("score") is not None and a.get("score") is not None:
+            entry["score"] = {"home": h["score"], "away": a["score"]}
 
-                    _card_html = f"""<div style="background:#111;border:1px solid #222;border-radius:10px;padding:12px;margin-bottom:4px;cursor:pointer;">
-<div style="color:#666;font-size:10px;margin-bottom:6px;">{mv.get('competition','')} · {_date_str} {_time_str}</div>
-<div style="display:flex;justify-content:space-between;align-items:center;">
-  <div style="text-align:center;flex:1;">
-    <div style="color:#fff;font-size:12px;font-weight:700;">{_home['name'][:15]}</div>
-    <div style="color:#888;font-size:10px;">{_home.get('short','')}</div>
-  </div>
-  <div style="text-align:center;padding:0 8px;">
-    <div style="color:{_status_color};font-size:16px;font-weight:900;">{_score_display}</div>
-    <div style="color:#555;font-size:9px;">{_status[:10]}</div>
-  </div>
-  <div style="text-align:center;flex:1;">
-    <div style="color:#fff;font-size:12px;font-weight:700;">{_away['name'][:15]}</div>
-    <div style="color:#888;font-size:10px;">{_away.get('short','')}</div>
-  </div>
-</div></div>"""
-                    st.markdown(_card_html, unsafe_allow_html=True)
-                    if st.button("Analyser →", key=f"btn_{mk}", use_container_width=True):
-                        st.session_state["selected_match"] = mk
-                        st.session_state["show_analysis"] = True
+        grouped[sport_key].append(entry)
 
-        # Show analysis if a match is selected
-        _sel_match = st.session_state.get("selected_match")
-        _show = st.session_state.get("show_analysis", False)
-        if _sel_match and _show and _sel_match in MATCHES:
-            st.divider()
-            _mv = MATCHES[_sel_match]
-            st.markdown(f"### 🔍 {_mv['home']['name']} vs {_mv['away']['name']}")
-            # Call the existing render_match_analysis function
-            render_match_analysis(_sel_match, _mv)
-            if st.button("✕ Fermer l'analyse", key="close_analysis"):
-                st.session_state["show_analysis"] = False
+    return f"window.MATCHES = {json.dumps(grouped, ensure_ascii=False)};"
 
-# ══════════════════════════════════════════════════════════════════════════════
-# TAB 2 — CALENDRIER
-# ══════════════════════════════════════════════════════════════════════════════
-with tab2:
-    import calendar as _cal_mod
-    from datetime import date as _date_cls, timedelta as _td
 
-    _today = _date_cls.today()
+_ROOT = Path(__file__).parent
 
-    col_nav1, col_nav2, col_nav3 = st.columns([1, 2, 1])
-    with col_nav1:
-        if st.button("◀ Mois préc.", key="cal_prev"):
-            _cur = st.session_state.get("cal_month", _today)
-            if _cur.month == 1:
-                st.session_state["cal_month"] = _date_cls(_cur.year - 1, 12, 1)
-            else:
-                st.session_state["cal_month"] = _date_cls(_cur.year, _cur.month - 1, 1)
-    with col_nav2:
-        _cur_month = st.session_state.get("cal_month", _today)
-        _month_names = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
-        st.markdown(f"<h3 style='text-align:center;color:#CAFF33;'>{_month_names[_cur_month.month-1]} {_cur_month.year}</h3>", unsafe_allow_html=True)
-    with col_nav3:
-        if st.button("Mois suiv. ▶", key="cal_next"):
-            _cur = st.session_state.get("cal_month", _today)
-            if _cur.month == 12:
-                st.session_state["cal_month"] = _date_cls(_cur.year + 1, 1, 1)
-            else:
-                st.session_state["cal_month"] = _date_cls(_cur.year, _cur.month + 1, 1)
+def _read(rel: str) -> str:
+    return (_ROOT / rel).read_text(encoding="utf-8")
 
-    _cur_month = st.session_state.get("cal_month", _today)
 
-    # Build set of dates with matches
-    _match_dates = {}
-    for mk, mv in MATCHES.items():
-        _d = mv.get("date", "")
-        if _d:
-            try:
-                _dt = _date_cls.fromisoformat(str(_d))
-                if _dt not in _match_dates:
-                    _match_dates[_dt] = []
-                _match_dates[_dt].append(mk)
-            except:
-                pass
+_CSS_TOKENS = _read("tokens.css")
+_CSS_STYLES = _read("styles.css")
+_JS_DATA    = _read("data.js")
+_JSX_TWEAKS = _read("tweaks-panel.jsx")
+_JSX_UI     = _read("components-ui.jsx")
+_JSX_SHELL  = _read("components-shell.jsx")
+_JSX_DASH   = _read("screen-dashboard.jsx")
+_JSX_MATCH  = _read("screen-matches.jsx")
+_JSX_PRE    = _read("screen-prematch.jsx")
+_JSX_POST   = _read("screen-postmatch.jsx")
+_JSX_MISC   = _read("screen-misc.jsx")
+_JSX_APP    = _read("app.jsx")
 
-    # Calendar grid
-    _cal = _cal_mod.monthcalendar(_cur_month.year, _cur_month.month)
-    _day_names = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
+_JS_REAL_MATCHES = _build_js_matches()
 
-    _cal_html = '<div style="width:100%;">'
-    _cal_html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;">'
-    for dn in _day_names:
-        _cal_html += f'<div style="text-align:center;color:#666;font-size:11px;font-weight:700;padding:4px;">{dn}</div>'
-    _cal_html += '</div>'
+_HTML = f"""<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CoachIQ</title>
+<style>{_CSS_TOKENS}</style>
+<style>{_CSS_STYLES}</style>
+<style>html,body{{margin:0;padding:0;overflow-x:hidden}}</style>
+</head>
+<body data-product="coachiq">
+  <div id="root"></div>
 
-    _selected_date = st.session_state.get("cal_selected_date")
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"
+          integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+          crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
+          integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+          crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+          integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
+          crossorigin="anonymous"></script>
 
-    for week in _cal:
-        _cal_html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;">'
-        for day in week:
-            if day == 0:
-                _cal_html += '<div></div>'
-            else:
-                _d = _date_cls(_cur_month.year, _cur_month.month, day)
-                _has_matches = _d in _match_dates
-                _is_today = _d == _today
-                _is_selected = _d == _selected_date
+  <script>{_JS_DATA}</script>
+  <script>{_JS_REAL_MATCHES}</script>
+  <script type="text/babel" data-presets="react">{_JSX_TWEAKS}</script>
+  <script type="text/babel" data-presets="react">{_JSX_UI}</script>
+  <script type="text/babel" data-presets="react">{_JSX_SHELL}</script>
+  <script type="text/babel" data-presets="react">{_JSX_DASH}</script>
+  <script type="text/babel" data-presets="react">{_JSX_MATCH}</script>
+  <script type="text/babel" data-presets="react">{_JSX_PRE}</script>
+  <script type="text/babel" data-presets="react">{_JSX_POST}</script>
+  <script type="text/babel" data-presets="react">{_JSX_MISC}</script>
+  <script type="text/babel" data-presets="react">{_JSX_APP}</script>
+</body>
+</html>"""
 
-                _bg = "#CAFF33" if _is_selected else ("#1a2a1a" if _has_matches else "#141820")
-                _color = "#000" if _is_selected else ("#CAFF33" if _has_matches else "#888")
-                _border = "2px solid #CAFF33" if _is_today else "1px solid #222"
-                _dot = f'<div style="width:5px;height:5px;background:#CAFF33;border-radius:50%;margin:0 auto;"></div>' if _has_matches and not _is_selected else ""
-
-                _cal_html += f'<div style="background:{_bg};border:{_border};border-radius:8px;padding:6px 2px;text-align:center;cursor:pointer;">'
-                _cal_html += f'<div style="color:{_color};font-size:13px;font-weight:{"700" if _is_today else "400"};">{day}</div>'
-                _cal_html += _dot
-                _cal_html += '</div>'
-        _cal_html += '</div>'
-
-    _cal_html += '</div>'
-    st.markdown(_cal_html, unsafe_allow_html=True)
-
-    # Date selector for clicking
-    _sel_date_input = st.date_input("Sélectionner une date", value=_selected_date or _today, key="cal_date_picker", label_visibility="collapsed")
-    if _sel_date_input:
-        st.session_state["cal_selected_date"] = _sel_date_input
-        _day_matches = _match_dates.get(_sel_date_input, [])
-        if _day_matches:
-            st.markdown(f"#### Matchs du {_sel_date_input.strftime('%d/%m/%Y')} ({len(_day_matches)} match{'s' if len(_day_matches)>1 else ''})")
-            for mk in _day_matches:
-                mv = MATCHES[mk]
-                _h = mv['home']['name']
-                _a = mv['away']['name']
-                _sh = mv['home'].get('score')
-                _sa = mv['away'].get('score')
-                _sc = f"{_sh}-{_sa}" if _sh is not None else "vs"
-                st.markdown(f"**{_h}** {_sc} **{_a}** — {mv.get('competition','')} {mv.get('time','')}")
-        else:
-            st.info("Aucun match ce jour.")
-
-# ══════════════════════════════════════════════════════════════════════════════
-# TAB 3 — COMPÉTITIONS
-# ══════════════════════════════════════════════════════════════════════════════
-with tab3:
-    _sport3 = st.radio("Sport", ["⚽ Football", "🏀 Basket", "🏉 Rugby"], horizontal=True, key="tab3_sport")
-
-    _comps3 = sorted(set(
-        v["competition"] for v in MATCHES.values()
-        if v.get("sport") == _sport3
-    ))
-
-    if not _comps3:
-        st.info("Aucune compétition.")
-    else:
-        _sel_comp3 = st.selectbox("Compétition", _comps3, key="tab3_comp")
-
-        # Ligue 1 standings table
-        _comp_name = _sel_comp3
-        if _comp_name == "Ligue 1":
-            _standing_html = '''<div style="overflow-x:auto;margin-bottom:1rem;">
-    <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
-    <thead><tr style="color:#666;text-transform:uppercase;font-size:.65rem;border-bottom:1px solid #1e1e1e;">
-    <th style="padding:.4rem .5rem;text-align:center;">Pos</th>
-    <th style="padding:.4rem .5rem;text-align:left;">Équipe</th>
-    <th style="padding:.4rem .5rem;text-align:center;">J</th>
-    <th style="padding:.4rem .5rem;text-align:center;">V</th>
-    <th style="padding:.4rem .5rem;text-align:center;">N</th>
-    <th style="padding:.4rem .5rem;text-align:center;">D</th>
-    <th style="padding:.4rem .5rem;text-align:center;">BP</th>
-    <th style="padding:.4rem .5rem;text-align:center;">BC</th>
-    <th style="padding:.4rem .5rem;text-align:center;">Diff</th>
-    <th style="padding:.4rem .5rem;text-align:center;color:#CAFF33;">Pts</th>
-    </tr></thead><tbody>'''
-            _zone_colors = {"ucl":"#1a3a6a","uel":"#2a1a0a","rel":"#3a0a0a","":""}
-            _zone_border = {"ucl":"#3b82f6","uel":"#f97316","rel":"#ef4444","":"#1e1e1e"}
-            for _row in LIGUE1_STANDINGS:
-                _zc = _zone_colors.get(_row["zone"],"")
-                _zb = _zone_border.get(_row["zone"],"#1e1e1e")
-                _bg = f'background:{_zc};' if _zc else ""
-                _diff_str = f'+{_row["diff"]}' if _row["diff"] > 0 else str(_row["diff"])
-                _diff_col = "#CAFF33" if _row["diff"] > 0 else ("#ef4444" if _row["diff"] < 0 else "#888")
-                _standing_html += f'<tr style="{_bg}border-left:2px solid {_zb};border-bottom:1px solid #111;">'
-                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#666;">{_row["pos"]}</td>'
-                _standing_html += f'<td style="padding:.4rem .5rem;color:#f0f0f0;font-weight:600;">{_row["team"]}</td>'
-                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#888;">{_row["j"]}</td>'
-                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#CAFF33;">{_row["v"]}</td>'
-                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#888;">{_row["n"]}</td>'
-                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#ef4444;">{_row["d"]}</td>'
-                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#ccc;">{_row["bp"]}</td>'
-                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:#ccc;">{_row["bc"]}</td>'
-                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;color:{_diff_col};">{_diff_str}</td>'
-                _standing_html += f'<td style="padding:.4rem .5rem;text-align:center;font-weight:900;color:#CAFF33;">{_row["pts"]}</td>'
-                _standing_html += '</tr>'
-            _standing_html += '</tbody></table></div>'
-            _standing_html += '<div style="display:flex;gap:1rem;margin-bottom:.75rem;font-size:.68rem;">'
-            _standing_html += '<span><span style="display:inline-block;width:8px;height:8px;background:#3b82f6;border-radius:2px;margin-right:3px;"></span>Champions League</span>'
-            _standing_html += '<span><span style="display:inline-block;width:8px;height:8px;background:#f97316;border-radius:2px;margin-right:3px;"></span>Europa League</span>'
-            _standing_html += '<span><span style="display:inline-block;width:8px;height:8px;background:#ef4444;border-radius:2px;margin-right:3px;"></span>Relégation</span>'
-            _standing_html += '</div>'
-            st.markdown(_standing_html, unsafe_allow_html=True)
-
-        # Matches for this competition
-        _comp_matches = {k: v for k, v in MATCHES.items() if v.get("competition") == _sel_comp3}
-
-        # Teams
-        _comp_teams = sorted(set(
-            t for v in _comp_matches.values()
-            for t in [v["home"]["name"], v["away"]["name"]]
-        ))
-
-        col_a, col_b = st.columns([1, 1])
-        with col_a:
-            st.markdown(f"**{len(_comp_teams)} équipes** · **{len(_comp_matches)} matchs**")
-            st.markdown("##### Équipes")
-            for t in _comp_teams:
-                st.markdown(f"• {t}")
-        with col_b:
-            st.markdown("##### Derniers résultats")
-            _results = [(k,v) for k,v in _comp_matches.items() if v["home"].get("score") is not None]
-            _results.sort(key=lambda x: x[1].get("date",""), reverse=True)
-            if _results:
-                for mk, mv in _results[:8]:
-                    _h = mv['home']
-                    _a = mv['away']
-                    st.markdown(f"**{_h['name']}** {_h['score']} – {_a['score']} **{_a['name']}**")
-            else:
-                st.info("Aucun résultat disponible.")
-
-# ══════════════════════════════════════════════════════════════════════════════
-# TAB 4 — ÉQUIPES & SCOUTING
-# ══════════════════════════════════════════════════════════════════════════════
-with tab4:
-    _sport4 = st.radio("Sport", ["⚽ Football", "🏀 Basket", "🏉 Rugby"], horizontal=True, key="tab4_sport")
-
-    _comps4 = sorted(set(
-        v["competition"] for v in MATCHES.values()
-        if v.get("sport") == _sport4
-    ))
-    _comp4 = st.selectbox("Compétition", ["Toutes"] + _comps4, key="tab4_comp")
-
-    _teams4 = sorted(set(
-        t for v in MATCHES.values()
-        if v.get("sport") == _sport4
-        and (_comp4 == "Toutes" or v.get("competition") == _comp4)
-        for t in [v["home"]["name"], v["away"]["name"]]
-    ))
-
-    _sel_team4 = st.selectbox("Équipe", ["— Choisir une équipe —"] + _teams4, key="tab4_team")
-
-    if _sel_team4 and _sel_team4 != "— Choisir une équipe —":
-        _scout_key4 = SCOUTING_TEAM_LOOKUP.get(_sel_team4, "")
-        _scout4 = SCOUTING_SHEETS.get(_scout_key4, {})
-        _coach_key4 = COACH_TEAM_LOOKUP.get(_sel_team4, "")
-        _coach4 = COACHES.get(_coach_key4, {})
-
-        if _scout4:
-            # Identity card
-            st.markdown(f"## {_sel_team4}")
-
-            col_id1, col_id2, col_id3 = st.columns(3)
-            with col_id1:
-                st.metric("🏟️ Stade", _scout4.get("arena", "—"))
-                st.metric("📍 Ville", _scout4.get("city", "—"))
-            with col_id2:
-                st.metric("👤 Coach", _scout4.get("coach", "—"))
-                st.metric("🏅 Fondé en", _scout4.get("founded", "—"))
-            with col_id3:
-                st.metric("🎯 Objectif", _scout4.get("season_objective", "—")[:30])
-                st.metric("👥 Capacité", f"{_scout4.get('capacity',0):,}")
-
-            st.divider()
-
-            # Playing style
-            col_s1, col_s2 = st.columns(2)
-            with col_s1:
-                st.markdown("**⚡ Système Offensif**")
-                st.info(_scout4.get("offensive_system", "—"))
-            with col_s2:
-                st.markdown("**🛡️ Système Défensif**")
-                st.info(_scout4.get("defensive_system", "—"))
-
-            # Key players
-            _kp = _scout4.get("key_players", [])
-            if _kp:
-                st.markdown("#### 🌟 Joueurs Clés")
-                _kp_cols = st.columns(min(len(_kp), 3))
-                for i, p in enumerate(_kp[:3]):
-                    with _kp_cols[i]:
-                        _pos = p.get("pos","")
-                        _pos_colors = {"PG":"#3b82f6","SG":"#22c55e","SF":"#f97316","PF":"#ef4444","C":"#a855f7",
-                                       "GB":"#3b82f6","DC":"#22c55e","MC":"#f97316","MDC":"#ef4444","BU":"#a855f7",
-                                       "DM":"#3b82f6","DO":"#22c55e","TL":"#f97316","N°8":"#ef4444"}
-                        _pc = _pos_colors.get(_pos, "#666")
-                        st.markdown(f"""<div style="background:#111;border:1px solid #222;border-radius:8px;padding:10px;">
-<span style="background:{_pc};color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;">{_pos}</span>
-<div style="color:#fff;font-size:13px;font-weight:700;margin-top:4px;">{p.get('flag','')} {p.get('name','')}</div>
-<div style="color:#888;font-size:11px;">Age {p.get('age','')} · {p.get('role','')[:30]}</div>
-<div style="color:#aaa;font-size:10px;margin-top:4px;">{p.get('strengths','')[:50]}</div>
-</div>""", unsafe_allow_html=True)
-
-            # Stats profile
-            _stats = _scout4.get("stats_profile", {})
-            if _stats:
-                st.markdown("#### 📊 Profil Statistique")
-                _stat_cols = st.columns(len(_stats))
-                for i, (k, v) in enumerate(_stats.items()):
-                    with _stat_cols[i]:
-                        st.metric(k, v)
-
-            # Strengths & Weaknesses
-            col_sw1, col_sw2 = st.columns(2)
-            with col_sw1:
-                st.markdown("**✅ Forces**")
-                for s in _scout4.get("strengths", []):
-                    st.markdown(f"• {s}")
-            with col_sw2:
-                st.markdown("**⚠️ Faiblesses**")
-                for w in _scout4.get("weaknesses", []):
-                    st.markdown(f"• {w}")
-
-            # Rivals
-            _rivals = _scout4.get("rivals", [])
-            if _rivals:
-                st.markdown(f"**⚔️ Rivalités :** {' · '.join(_rivals)}")
-
-            # Recent titles
-            _titles = _scout4.get("recent_titles", [])
-            if _titles:
-                st.markdown(f"**🏆 Titres récents :** {' · '.join(_titles)}")
-        else:
-            st.info(f"Fiche scouting non disponible pour {_sel_team4}.")
-    else:
-        st.info("Sélectionnez une équipe pour voir sa fiche scouting complète.")
-
-# ══════════════════════════════════════════════════════════════════════════════
-# TAB 5 — PLAYBOOKS & TACTIQUES
-# ══════════════════════════════════════════════════════════════════════════════
-with tab5:
-    _pb_sport = st.radio("Sport", ["⚽ Football", "🏀 Basket / Rugby"], horizontal=True, key="tab5_sport")
-
-    _pb_dict = FOOTBALL_PLAYBOOK if _pb_sport == "⚽ Football" else PLAYBOOK
-
-    sub_tab_a, sub_tab_b, sub_tab_c = st.tabs(["📚 Catalogue Tactique", "🆚 Comparateur d'équipes", "🔍 Référence"])
-
-    with sub_tab_a:
-        # All teams tactical profiles
-        _pb_comps = sorted(set(
-            v["competition"] for v in MATCHES.values()
-            if (_pb_sport == "⚽ Football" and v.get("sport") == "⚽ Football")
-            or (_pb_sport != "⚽ Football" and v.get("sport") in ["🏀 Basket", "🏉 Rugby"])
-        ))
-        _pb_comp_sel = st.selectbox("Compétition", ["Toutes"] + _pb_comps, key="tab5_comp")
-
-        _pb_teams = sorted(set(
-            t for v in MATCHES.values()
-            if ((_pb_sport == "⚽ Football" and v.get("sport") == "⚽ Football") or
-                (_pb_sport != "⚽ Football" and v.get("sport") in ["🏀 Basket", "🏉 Rugby"]))
-            and (_pb_comp_sel == "Toutes" or v.get("competition") == _pb_comp_sel)
-            for t in [v["home"]["name"], v["away"]["name"]]
-        ))
-
-        if _pb_teams:
-            _pb_cols = st.columns(2)
-            for idx, team in enumerate(_pb_teams):
-                _ck = COACH_TEAM_LOOKUP.get(team, "")
-                _coach_data = COACHES.get(_ck, {})
-                _sk = SCOUTING_TEAM_LOOKUP.get(team, "")
-                _scout_data = SCOUTING_SHEETS.get(_sk, {})
-
-                if not _coach_data and not _scout_data:
-                    continue
-
-                _formation = _coach_data.get("formation", "—")
-                _style = _scout_data.get("playing_style", _coach_data.get("style", "—"))
-                _principles = _coach_data.get("key_principles", [])
-                _coach_name = _scout_data.get("coach", _coach_data.get("name", "—"))
-                _nationality = _coach_data.get("nationality", "")
-
-                # Derive indicators
-                _all_text = f"{_style} {_scout_data.get('offensive_system','')} {_scout_data.get('defensive_system','')}".lower()
-                def _ind(text, low_kw, high_kw):
-                    s = sum(1 for k in high_kw if k in text) - sum(1 for k in low_kw if k in text)
-                    return ("High","#CAFF33") if s>=1 else ("Low","#ff6b6b") if s<=-1 else ("Mid","#ffd93d")
-                _poss = _ind(_all_text, ["direct","counter","rapide"], ["possession","contrôle","conservation"])
-                _pres = _ind(_all_text, ["bas","passif","recule"], ["press","pressing","haut","intensité"])
-                _vert = _ind(_all_text, ["lent","patient"], ["vertical","direct","rapide","profondeur"])
-                _phys = _ind(_all_text, ["technique","léger"], ["physique","agressif","intensité","duels"])
-
-                with _pb_cols[idx % 2]:
-                    _card = f"""<div style="background:#0e1118;border:1px solid #1e2a1e;border-radius:10px;padding:14px;margin-bottom:10px;">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
-    <div>
-      <div style="color:#fff;font-size:13px;font-weight:700;">{team}</div>
-      <div style="color:#888;font-size:11px;">{_coach_name} {_nationality}</div>
-    </div>
-    <div style="background:#0a1a0a;border:1px solid #CAFF33;border-radius:6px;padding:3px 10px;">
-      <span style="color:#CAFF33;font-size:13px;font-weight:900;">{_formation}</span>
-    </div>
-  </div>
-  <div style="color:#aaa;font-size:11px;margin-bottom:8px;">{_style[:70]}{"…" if len(_style)>70 else ""}</div>
-  <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px;">"""
-                    _colors = ["#1a3a5c","#1a4a2a","#4a2a1a","#3a1a4a"]
-                    for pi, pr in enumerate(_principles[:3]):
-                        _card += f'<span style="background:{_colors[pi%4]};color:#ddd;font-size:10px;padding:2px 6px;border-radius:4px;">{pr[:20]}</span>'
-                    _card += f"""</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;">
-    <div style="background:#161616;border-radius:4px;padding:4px;text-align:center;"><div style="color:#666;font-size:9px;">Poss.</div><div style="color:{_poss[1]};font-size:10px;font-weight:700;">{_poss[0]}</div></div>
-    <div style="background:#161616;border-radius:4px;padding:4px;text-align:center;"><div style="color:#666;font-size:9px;">Press</div><div style="color:{_pres[1]};font-size:10px;font-weight:700;">{_pres[0]}</div></div>
-    <div style="background:#161616;border-radius:4px;padding:4px;text-align:center;"><div style="color:#666;font-size:9px;">Vert.</div><div style="color:{_vert[1]};font-size:10px;font-weight:700;">{_vert[0]}</div></div>
-    <div style="background:#161616;border-radius:4px;padding:4px;text-align:center;"><div style="color:#666;font-size:9px;">Phys.</div><div style="color:{_phys[1]};font-size:10px;font-weight:700;">{_phys[0]}</div></div>
-  </div>
-</div>"""
-                    st.markdown(_card, unsafe_allow_html=True)
-
-    with sub_tab_b:
-        # Comparateur
-        _all_teams_pb = sorted(set(
-            t for v in MATCHES.values()
-            if ((_pb_sport == "⚽ Football" and v.get("sport") == "⚽ Football") or
-                (_pb_sport != "⚽ Football" and v.get("sport") in ["🏀 Basket", "🏉 Rugby"]))
-            for t in [v["home"]["name"], v["away"]["name"]]
-        ))
-        col_cmp1, col_cmp2 = st.columns(2)
-        with col_cmp1:
-            _team_a = st.selectbox("Équipe A", ["—"] + _all_teams_pb, key="cmp_team_a")
-        with col_cmp2:
-            _team_b = st.selectbox("Équipe B", ["—"] + _all_teams_pb, key="cmp_team_b")
-
-        if _team_a != "—" and _team_b != "—" and _team_a != _team_b:
-            def _get_team_data(tname):
-                _ck = COACH_TEAM_LOOKUP.get(tname, "")
-                _cd = COACHES.get(_ck, {})
-                _sk = SCOUTING_TEAM_LOOKUP.get(tname, "")
-                _sd = SCOUTING_SHEETS.get(_sk, {})
-                return _cd, _sd
-
-            _cd_a, _sd_a = _get_team_data(_team_a)
-            _cd_b, _sd_b = _get_team_data(_team_b)
-
-            st.markdown("---")
-            col_c1, col_c2 = st.columns(2)
-
-            for col, tname, cd, sd in [(col_c1, _team_a, _cd_a, _sd_a), (col_c2, _team_b, _cd_b, _sd_b)]:
-                with col:
-                    st.markdown(f"### {tname}")
-                    st.markdown(f"**Formation :** `{cd.get('formation','—')}`")
-                    st.markdown(f"**Coach :** {sd.get('coach', cd.get('name','—'))} {cd.get('nationality','')}")
-                    st.markdown(f"**Style :** {sd.get('playing_style', cd.get('style','—'))[:100]}")
-                    st.markdown(f"**Offensif :** {sd.get('offensive_system','—')[:80]}")
-                    st.markdown(f"**Défensif :** {sd.get('defensive_system','—')[:80]}")
-                    _prs = cd.get("key_principles",[])
-                    if _prs:
-                        st.markdown("**Principes :** " + " · ".join(_prs[:3]))
-                    _strs = sd.get("strengths",[])
-                    if _strs:
-                        st.markdown("**Forces :** " + " · ".join(_strs[:3]))
-
-    with sub_tab_c:
-        # Reference playbook
-        _cats = sorted(set(v.get("categorie","") for v in _pb_dict.values()))
-        _sel_cat = st.selectbox("Catégorie", _cats, key="tab5_ref_cat")
-        _tactics_in_cat = {k: v for k, v in _pb_dict.items() if v.get("categorie") == _sel_cat}
-        _sel_tactic = st.selectbox("Tactique", list(_tactics_in_cat.keys()), key="tab5_ref_tac",
-                                    format_func=lambda x: _tactics_in_cat[x].get("objectif","")[:50] if x in _tactics_in_cat else x)
-
-        if _sel_tactic and _sel_tactic in _pb_dict:
-            _td = _pb_dict[_sel_tactic]
-            st.markdown(f"### {_sel_tactic.replace('_',' ').title()}")
-            st.markdown(f"**Catégorie :** {_td.get('categorie','')}")
-
-            col_r1, col_r2 = st.columns(2)
-            with col_r1:
-                st.markdown(f"**🎯 Objectif**\n\n{_td.get('objectif','')}")
-                st.markdown(f"**✅ Avantages**\n\n{_td.get('avantages','')}")
-                k1 = 'principe' if 'principe' in _td else 'structure'
-                st.markdown(f"**⚙️ Principe/Structure**\n\n{_td.get(k1,'')}")
-            with col_r2:
-                st.markdown(f"**⚠️ Limites**\n\n{_td.get('limites','')}")
-                k2 = 'vs_defense' if 'vs_defense' in _td else ('vs_offense' if 'vs_offense' in _td else 'adaptations')
-                st.markdown(f"**🔄 Adaptations**\n\n{_td.get(k2,'')}")
-                st.markdown(f"**🛡️ Contre-mesures**\n\n{_td.get('contre_mesures','')}")
-
-            st.info(f"📹 **Reconnaître en vidéo :** {_td.get('reconnaitre', _td.get('reconnaître',''))}")
+_st_components.html(_HTML, height=1400, scrolling=True)
