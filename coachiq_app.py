@@ -6217,7 +6217,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 # ══════════════════════════════════════════════════════════════════════════════
 with tab1:
     # Sport selector (horizontal radio)
-    _sport = st.radio("", ["⚽ Football", "🏀 Basket", "🏉 Rugby"], horizontal=True, key="tab1_sport")
+    _sport = st.radio("Sport", ["⚽ Football", "🏀 Basket", "🏉 Rugby"], horizontal=True, key="tab1_sport", label_visibility="collapsed")
 
     # Filter competitions for this sport
     _comps = sorted(set(
