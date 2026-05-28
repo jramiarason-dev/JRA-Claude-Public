@@ -119,7 +119,7 @@ _EXAMPLE_PUB_REC = f"""
 <div style="{_EX_S}">
 {_EX_L}
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
-    <span style="font-size:13px;font-weight:600;color:#7fa8fb">FATF Guidance &mdash; Private Banking</span>
+    <span style="font-size:13px;font-weight:600;color:#818cf8">FATF Guidance &mdash; Private Banking</span>
     <span style="font-size:11.5px;color:#8392bb">2023</span>
     <span style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.35);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">🔴 High Priority</span>
   </div>
@@ -134,9 +134,9 @@ _EXAMPLE_RATIONALE = f"""
 <div style="{_EX_S}">
 {_EX_L}
   <div style="font-size:13px;font-weight:600;color:#dde3f5;margin-bottom:10px">💡 RATIONALE &mdash; Cyber Risk Audit 2025</div>
-  <div style="font-size:12px;color:#c8d0e8;line-height:1.85;margin-bottom:8px"><strong style="color:#7fa8fb">Why now:</strong> DORA entered into force January 2025. FINMA observed a 40% increase in cyber incidents in Swiss private banks (2024). MAS TRM 2021 requires annual ICT audit.</div>
-  <div style="font-size:12px;color:#c8d0e8;line-height:1.85;margin-bottom:8px"><strong style="color:#7fa8fb">Strategic context:</strong> Private banks managing HNWI data face elevated threats from ransomware and social engineering. Cloud migration increases attack surface across all jurisdictions.</div>
-  <div style="font-size:12px;color:#c8d0e8;line-height:1.85"><strong style="color:#7fa8fb">Benchmark:</strong> 78% of peer institutions suffered at least one cyber incident in 2023 (BCBS Sound Practices Survey).</div>
+  <div style="font-size:12px;color:#c8d0e8;line-height:1.85;margin-bottom:8px"><strong style="color:#818cf8">Why now:</strong> DORA entered into force January 2025. FINMA observed a 40% increase in cyber incidents in Swiss private banks (2024). MAS TRM 2021 requires annual ICT audit.</div>
+  <div style="font-size:12px;color:#c8d0e8;line-height:1.85;margin-bottom:8px"><strong style="color:#818cf8">Strategic context:</strong> Private banks managing HNWI data face elevated threats from ransomware and social engineering. Cloud migration increases attack surface across all jurisdictions.</div>
+  <div style="font-size:12px;color:#c8d0e8;line-height:1.85"><strong style="color:#818cf8">Benchmark:</strong> 78% of peer institutions suffered at least one cyber incident in 2023 (BCBS Sound Practices Survey).</div>
 </div>
 """
 
@@ -144,8 +144,8 @@ _EXAMPLE_TEST = f"""
 <div style="{_EX_S}">
 {_EX_L}
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
-    <span style="color:#7fa8fb;font-weight:700;font-size:13px">T011</span>
-    <span style="background:rgba(79,126,248,0.15);color:#7fa8fb;border:1px solid rgba(79,126,248,0.35);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600">📊 DA</span>
+    <span style="color:#818cf8;font-weight:700;font-size:13px">T011</span>
+    <span style="background:rgba(99,102,241,0.15);color:#818cf8;border:1px solid rgba(99,102,241,0.35);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600">📊 DA</span>
     <span style="background:rgba(249,115,22,0.15);color:#f97316;border:1px solid rgba(249,115,22,0.35);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">🔴 HIGH</span>
     <span style="font-size:13px;font-weight:600;color:#dde3f5">MFA Enforcement on Privileged Accounts</span>
   </div>
@@ -177,7 +177,7 @@ _EXAMPLE_DA = f"""
     <li>Logins outside business hours (22h&ndash;6h)</li><li>Bulk data exports &gt;500 records</li>
     <li>Lateral movement across network segments</li><li>Failed logins &gt;5 attempts</li>
   </ul>
-  <div style="margin-top:8px;font-size:11px;color:#5a6488">Tools: <span style="color:#7fa8fb">Python (pandas) / Splunk / SQL</span></div>
+  <div style="margin-top:8px;font-size:11px;color:#5a6488">Tools: <span style="color:#818cf8">Python (pandas) / Splunk / SQL</span></div>
 </div>
 """
 
@@ -197,7 +197,7 @@ _EXAMPLE_FINDING = f"""
   <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.06)">
     <div style="font-size:10.5px;font-weight:700;color:#8392bb;text-transform:uppercase;margin-bottom:4px">Recommendation</div>
     <p style="color:#c8d0e8;margin:0 0 8px;font-size:12px;line-height:1.85">Implement systematic annual SoW review for all clients above CHF 1M AuM. Assign ownership to Compliance team. Complete remediation by Q2 2025.</p>
-    <div style="font-size:11px;color:#5a6488">Ref: <span style="color:#7fa8fb">FINMA-RS 2011/1 §15 &middot; FATF R.10</span> &nbsp;&middot;&nbsp; Rating: <span style="color:#f97316;font-weight:600">High</span> &nbsp;&middot;&nbsp; Due: <span style="color:#22d3a5">Q2 2025</span></div>
+    <div style="font-size:11px;color:#5a6488">Ref: <span style="color:#818cf8">FINMA-RS 2011/1 §15 &middot; FATF R.10</span> &nbsp;&middot;&nbsp; Rating: <span style="color:#f97316;font-weight:600">High</span> &nbsp;&middot;&nbsp; Due: <span style="color:#22d3a5">Q2 2025</span></div>
   </div>
 </div>
 """
@@ -254,7 +254,7 @@ if _is_dark:
       --accent-primary: #6366f1;
       --accent-hover:   #818cf8;
       --accent-glow:    rgba(99,102,241,0.18);
-      --accent-blue:    #4f7ef8;
+      --accent-blue:    #6366f1;
 
       /* Severity */
       --critical:      #ef4444;
@@ -310,7 +310,7 @@ else:
       --tab-inactive: #6b7599;
       --tab-active: #2d54d4;
       --tab-active-border: #2d54d4;
-      --btn-primary-bg: linear-gradient(135deg,#2d54d4 0%,#4f7ef8 100%);
+      --btn-primary-bg: linear-gradient(135deg,#2d54d4 0%,#6366f1 100%);
       --btn-secondary-bg: rgba(45,84,212,0.08);
       --btn-secondary-color: #2d54d4;
       --btn-secondary-border: rgba(45,84,212,0.25);
@@ -422,7 +422,7 @@ label[data-testid="stWidgetLabel"] p {
 /* ── Buttons ── */
 div[data-testid="stButton"] > button[kind="primary"],
 .stButton > button[kind="primary"] {
-  background: linear-gradient(135deg, #4f7ef8 0%, #3b6ef0 100%) !important;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
   color: white !important;
   border: none !important;
   border-radius: 8px !important;
@@ -430,12 +430,12 @@ div[data-testid="stButton"] > button[kind="primary"],
   font-size: 13px !important;
   padding: 8px 20px !important;
   transition: all 0.2s ease !important;
-  box-shadow: 0 2px 8px rgba(79,126,248,0.25) !important;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.25) !important;
 }
 div[data-testid="stButton"] > button[kind="primary"]:hover {
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 16px rgba(79,126,248,0.35) !important;
-  background: linear-gradient(135deg, #6b96fa 0%, #4f7ef8 100%) !important;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.35) !important;
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%) !important;
 }
 div[data-testid="stButton"] > button[kind="primary"]:active { transform: translateY(0) !important; }
 div[data-testid="stButton"] > button[kind="primary"]:disabled {
@@ -450,7 +450,7 @@ div[data-testid="stButton"] > button:not([kind="primary"]) {
 }
 div[data-testid="stButton"] > button:not([kind="primary"]):hover {
   transform: translateY(-1px);
-  border-color: rgba(79,126,248,0.5);
+  border-color: rgba(99,102,241,0.5);
 }
 div[data-testid="stDownloadButton"] button {
   background: var(--btn-secondary-bg); color: var(--btn-secondary-color);
@@ -506,8 +506,8 @@ hr { border: none; border-top: 1px solid var(--border-divider) !important; margi
 .badge-open { display:inline-block; background:rgba(34,211,165,0.10); color:#22d3a5;
   border:1px solid rgba(34,211,165,0.28); border-radius:20px; padding:2px 8px;
   font-size:11px; font-weight:600; white-space:nowrap; }
-.badge-info { display:inline-block; background:rgba(79,126,248,0.10); color:#7fa8fb;
-  border:1px solid rgba(79,126,248,0.28); border-radius:20px; padding:2px 8px;
+.badge-info { display:inline-block; background:rgba(99,102,241,0.10); color:#818cf8;
+  border:1px solid rgba(99,102,241,0.28); border-radius:20px; padding:2px 8px;
   font-size:11px; font-weight:600; white-space:nowrap; }
 
 /* ── Risk cards — glassmorphism ── */
@@ -526,7 +526,7 @@ hr { border: none; border-top: 1px solid var(--border-divider) !important; margi
 .risk-card:hover {
   transform: translateY(-2px);
   border-color: var(--border-accent);
-  box-shadow: 0 8px 32px rgba(79,126,248,0.08);
+  box-shadow: 0 8px 32px rgba(99,102,241,0.08);
 }
 .risk-card::before {
   content: '';
@@ -545,7 +545,7 @@ hr { border: none; border-top: 1px solid var(--border-divider) !important; margi
   border-radius: 20px; transition: all 0.2s;
 }
 .pb-step.done { background: rgba(34,211,165,0.10); color: #22d3a5; border: 1px solid rgba(34,211,165,0.25); }
-.pb-step.active { background: rgba(79,126,248,0.12); color: #7fa8fb; border: 1px solid rgba(79,126,248,0.30); }
+.pb-step.active { background: rgba(99,102,241,0.12); color: #818cf8; border: 1px solid rgba(99,102,241,0.30); }
 .pb-step.pending { color: var(--text-muted); border: 1px solid var(--border-subtle); }
 .pb-connector { flex: 1; height: 1px; background: var(--border-subtle); margin: 0 4px; min-width: 16px; }
 
@@ -612,7 +612,7 @@ div[data-testid="stRadio"] label {
   padding: 4px 12px; border-radius: 6px; cursor: pointer;
 }
 div[data-testid="stRadio"] label:has(input:checked) {
-  background: rgba(79,126,248,0.12); color: var(--text-accent); font-weight: 600;
+  background: rgba(99,102,241,0.12); color: var(--text-accent); font-weight: 600;
 }
 
 /* ── Sidebar section cards ── */
@@ -634,14 +634,14 @@ div[data-testid="stRadio"] label:has(input:checked) {
 }
 .section-header-icon {
   width: 32px; height: 32px;
-  background: rgba(79,126,248,0.10);
-  border: 1px solid rgba(79,126,248,0.20);
+  background: rgba(99,102,241,0.10);
+  border: 1px solid rgba(99,102,241,0.20);
   border-radius: 8px; display: flex;
   align-items: center; justify-content: center; flex-shrink: 0;
 }
 .section-count-badge {
-  background: rgba(79,126,248,0.12); color: #4f7ef8;
-  border: 1px solid rgba(79,126,248,0.2); border-radius: 20px;
+  background: rgba(99,102,241,0.12); color: #6366f1;
+  border: 1px solid rgba(99,102,241,0.2); border-radius: 20px;
   padding: 2px 8px; font-size: 11px; font-weight: 600; margin-left: 8px;
 }
 
@@ -649,14 +649,14 @@ div[data-testid="stRadio"] label:has(input:checked) {
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading-spinner {
   display: flex; align-items: center; gap: 12px;
-  background: rgba(79,126,248,0.06);
-  border: 1px solid rgba(79,126,248,0.15);
+  background: rgba(99,102,241,0.06);
+  border: 1px solid rgba(99,102,241,0.15);
   border-radius: 10px; padding: 16px 20px; margin: 16px 0;
 }
 .loading-spinner-dot {
   width: 16px; height: 16px;
-  border: 2px solid rgba(79,126,248,0.2);
-  border-top-color: #4f7ef8;
+  border: 2px solid rgba(99,102,241,0.2);
+  border-top-color: #6366f1;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   flex-shrink: 0;
@@ -739,7 +739,7 @@ except ImportError as _data_err:
 # ── Global constants ───────────────────────────────────────────────────────────
 
 _ENTITY_COLORS = {
-    "🏦 Private Banking":                   ("#0a2540", "#7fa8fb"),
+    "🏦 Private Banking":                   ("#0a2540", "#818cf8"),
     "📊 Asset Management":                  ("#0a2a12", "#4ade80"),
     "🏢 Management Company (ManCo)":        ("#2a1f0a", "#f59e0b"),
     "🔀 Alternative Investment (PE/RE/HF)": ("#1e0a2a", "#c084fc"),
@@ -773,7 +773,7 @@ _TAB_NAMES = {
 
 
 def _entity_badge_html(entity_type: str, size: str = "13px") -> str:
-    bg, col = _ENTITY_COLORS.get(entity_type, ("#0a2540", "#7fa8fb"))
+    bg, col = _ENTITY_COLORS.get(entity_type, ("#0a2540", "#818cf8"))
     return (
         f'<span style="background:{bg};color:{col};border:1px solid {col}55;'
         f'border-radius:6px;padding:2px 10px;font-size:{size};font-weight:600">'
@@ -828,7 +828,7 @@ def section_header(icon_name: str, title: str, subtitle: str = "", count: int = 
     return f"""
     <div class="section-header">
       <div class="section-header-icon">
-        <i data-lucide="{icon_name}" style="width:16px;height:16px;color:#4f7ef8;"></i>
+        <i data-lucide="{icon_name}" style="width:16px;height:16px;color:#6366f1;"></i>
       </div>
       <div>
         <div style="font-size:15px;font-weight:700;color:#e2e8f0;
@@ -847,7 +847,7 @@ def show_loading(message: str) -> None:
     st.markdown(f"""
     <div class="loading-spinner">
       <div class="loading-spinner-dot"></div>
-      <span style="font-size:13px;color:#7fa8fb;font-weight:500;">{message}</span>
+      <span style="font-size:13px;color:#818cf8;font-weight:500;">{message}</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1333,7 +1333,7 @@ def _show_risk_indicators(theme: str, search: str = ""):
           </div>
           <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.7">{r["description"]}</p>
           <details style="margin-bottom:6px">
-            <summary style="font-size:12px;color:#7fa8fb;cursor:pointer;font-weight:500">Controls &amp; Red Flags</summary>
+            <summary style="font-size:12px;color:#818cf8;cursor:pointer;font-weight:500">Controls &amp; Red Flags</summary>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
               <div>
                 <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px">EXPECTED CONTROLS</div>
@@ -1368,7 +1368,7 @@ def _show_pub_recs(theme: str, search: str = ""):
         badge = '<span class="badge-high">High</span>' if pri == "High" else '<span class="badge-medium">Medium</span>'
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:#7fa8fb;font-weight:500;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-muted);text-align:center;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("year","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("recommendation","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-muted);font-size:11.5px;font-style:italic;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("private_banking_relevance","")}</td>'
@@ -1377,11 +1377,11 @@ def _show_pub_recs(theme: str, search: str = ""):
         )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
-      <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
-        <th style="color:#7fa8fb;width:12%">Source</th><th style="color:#7fa8fb;width:5%;text-align:center">Year</th>
-        <th style="color:#7fa8fb;width:40%">Recommendation</th>
-        <th style="color:#7fa8fb;width:35%">Private Banking Relevance</th>
-        <th style="color:#7fa8fb;width:8%">Priority</th>
+      <thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)">
+        <th style="color:#818cf8;width:12%">Source</th><th style="color:#818cf8;width:5%;text-align:center">Year</th>
+        <th style="color:#818cf8;width:40%">Recommendation</th>
+        <th style="color:#818cf8;width:35%">Private Banking Relevance</th>
+        <th style="color:#818cf8;width:8%">Priority</th>
       </tr></thead><tbody>{rows}</tbody>
     </table>""", unsafe_allow_html=True)
 
@@ -1404,7 +1404,7 @@ def _show_da_scenarios(theme: str, search: str = ""):
         tools = " · ".join(s.get("tools", []))
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:#7fa8fb;font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("id","")}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("id","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("title","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("objective","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-secondary);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("analysis_type","")}</td>'
@@ -1416,10 +1416,10 @@ def _show_da_scenarios(theme: str, search: str = ""):
         )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
-      <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
-        <th style="color:#7fa8fb;width:6%">ID</th><th style="color:#7fa8fb;width:18%">Scenario</th>
-        <th style="color:#7fa8fb;width:25%">Objective</th><th style="color:#7fa8fb;width:12%">Analysis Type</th>
-        <th style="color:#7fa8fb;width:28%">Anomaly Searched</th><th style="color:#7fa8fb;width:11%">Complexity / Tools</th>
+      <thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)">
+        <th style="color:#818cf8;width:6%">ID</th><th style="color:#818cf8;width:18%">Scenario</th>
+        <th style="color:#818cf8;width:25%">Objective</th><th style="color:#818cf8;width:12%">Analysis Type</th>
+        <th style="color:#818cf8;width:28%">Anomaly Searched</th><th style="color:#818cf8;width:11%">Complexity / Tools</th>
       </tr></thead><tbody>{rows}</tbody>
     </table>""", unsafe_allow_html=True)
 
@@ -1456,7 +1456,7 @@ def _show_regulatory_calendar(jur_filter="All", type_filter="All", prio_filter="
     _PRIO_C  = {"High": "#ef4444", "Medium": "#f97316", "Low": "#22d3a5"}
     _PRIO_BG = {"High": "rgba(239,68,68,0.08)", "Medium": "rgba(249,115,22,0.08)", "Low": "rgba(34,211,165,0.06)"}
     _TYPE_C  = {
-        "Entry into force":      "#7fa8fb",
+        "Entry into force":      "#818cf8",
         "Implementation deadline": "#ef4444",
         "Consultation":          "#eab308",
         "Review":                "#a78bfa",
@@ -1525,14 +1525,14 @@ def _show_regulatory_calendar(jur_filter="All", type_filter="All", prio_filter="
                   border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;white-space:nowrap">{etype}</span>
             <span style="background:{pcolor}18;color:{pcolor};border:1px solid {pcolor}33;
                   border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;white-space:nowrap">{prio}</span>
-            <span style="background:rgba(79,126,248,0.08);color:#7fa8fb;border:1px solid rgba(79,126,248,0.2);
+            <span style="background:rgba(99,102,241,0.08);color:#818cf8;border:1px solid rgba(99,102,241,0.2);
                   border-radius:4px;padding:2px 8px;font-size:10px;font-weight:600;white-space:nowrap">{e.get("jurisdiction","")}</span>
             <span style="font-size:13px;font-weight:600;color:#dde3f5;flex:1">{e.get("reg_id","")} &mdash; {e.get("regulation","")}</span>
             <span style="font-size:12px;font-weight:700;color:{date_color};white-space:nowrap">{date_display}{upcoming_badge}{past_badge}</span>
           </div>
           <p style="font-size:12px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{e.get("description","")}</p>
           <details>
-            <summary style="font-size:11.5px;color:#7fa8fb;cursor:pointer;font-weight:500">Impact &middot; Action required &middot; Audit relevance</summary>
+            <summary style="font-size:11.5px;color:#818cf8;cursor:pointer;font-weight:500">Impact &middot; Action required &middot; Audit relevance</summary>
             <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
               <div>
                 <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Impact &mdash; Private Banking</div>
@@ -1543,7 +1543,7 @@ def _show_regulatory_calendar(jur_filter="All", type_filter="All", prio_filter="
                 <p style="font-size:11.5px;color:var(--text-secondary);margin:0;line-height:1.65">{e.get("action_required","")}</p>
               </div>
               <div>
-                <div style="font-size:10px;font-weight:700;color:#7fa8fb;margin-bottom:4px;text-transform:uppercase">Audit Relevance</div>
+                <div style="font-size:10px;font-weight:700;color:#818cf8;margin-bottom:4px;text-transform:uppercase">Audit Relevance</div>
                 <p style="font-size:11.5px;color:#a8b4d8;margin:0;line-height:1.65">{e.get("audit_relevance","")}</p>
               </div>
             </div>
@@ -1556,7 +1556,7 @@ def _show_red_flags(cat_filter="All", level_filter="All", search=""):
     """Render HNWI_RED_FLAGS with filters, coloured badges, and italic examples."""
     _RL_C  = {"Critical": "#ef4444", "High": "#f97316", "Medium": "#eab308"}
     _RL_BG = {"Critical": "rgba(239,68,68,0.07)", "High": "rgba(249,115,22,0.07)", "Medium": "rgba(234,179,8,0.06)"}
-    _CAT_C = {"AML": "#7fa8fb", "Fraud": "#ef4444", "Suitability": "#a78bfa", "Tax": "#22d3a5", "Conduct": "#f97316"}
+    _CAT_C = {"AML": "#818cf8", "Fraud": "#ef4444", "Suitability": "#a78bfa", "Tax": "#22d3a5", "Conduct": "#f97316"}
 
     entries = list(HNWI_RED_FLAGS)
     if cat_filter   != "All": entries = [e for e in entries if e["category"] == cat_filter]
@@ -1592,7 +1592,7 @@ def _show_red_flags(cat_filter="All", level_filter="All", search=""):
           </div>
           <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{e.get("description","")}</p>
           <details>
-            <summary style="font-size:11.5px;color:#7fa8fb;cursor:pointer;font-weight:500">Detection &middot; Regulation &middot; PB context &middot; Examples</summary>
+            <summary style="font-size:11.5px;color:#818cf8;cursor:pointer;font-weight:500">Detection &middot; Regulation &middot; PB context &middot; Examples</summary>
             <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
               <div>
                 <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Detection Method</div>
@@ -1614,8 +1614,8 @@ def _show_red_flags(cat_filter="All", level_filter="All", search=""):
 # ── Thematic Background helper ────────────────────────────────────────────────
 def _show_thematic_background(theme_key: str):
     """Render a THEMATIC_BACKGROUND card with all subsections."""
-    _SEC_C  = "#7fa8fb"
-    _SEC_BG = "rgba(79,126,248,0.06)"
+    _SEC_C  = "#818cf8"
+    _SEC_BG = "rgba(99,102,241,0.06)"
 
     card = THEMATIC_BACKGROUND.get(theme_key)
     if not card:
@@ -1626,7 +1626,7 @@ def _show_thematic_background(theme_key: str):
             f'<p style="color:#eab308;font-size:12.5px;margin:0 0 6px;font-weight:600">'
             f'⚠️ No thematic profile found for this topic.</p>'
             f'<p style="color:#c8d0e8;font-size:12px;margin:0">Available themes: '
-            f'<span style="color:#7fa8fb">{available}</span></p></div>',
+            f'<span style="color:#818cf8">{available}</span></p></div>',
             unsafe_allow_html=True,
         )
         return
@@ -1684,7 +1684,7 @@ def _show_regulatory_frameworks(jur_filter: str = "All", search: str = ""):
                 reqs = "".join(f"<li>{k}</li>" for k in r.get("key_requirements", []))
                 rows += (
                     f'<tr>'
-                    f'<td style="padding:9px 13px;color:#7fa8fb;font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
+                    f'<td style="padding:9px 13px;color:#818cf8;font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
                     f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("title","")}<br><span style="font-size:11px;color:var(--text-muted)">{r.get("authority","")} &middot; {r.get("year","")}</span></td>'
                     f'<td style="padding:9px 13px;color:var(--text-secondary);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("scope","")}</td>'
                     f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{applies}</td>'
@@ -1693,10 +1693,10 @@ def _show_regulatory_frameworks(jur_filter: str = "All", search: str = ""):
                 )
             st.markdown(f"""
             <table class="data-table" style="font-size:12px">
-              <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
-                <th style="color:#7fa8fb;width:10%">Reference</th><th style="color:#7fa8fb;width:18%">Title</th>
-                <th style="color:#7fa8fb;width:22%">Scope</th><th style="color:#7fa8fb;width:14%">Applies To</th>
-                <th style="color:#7fa8fb;width:36%">Key Requirements</th>
+              <thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)">
+                <th style="color:#818cf8;width:10%">Reference</th><th style="color:#818cf8;width:18%">Title</th>
+                <th style="color:#818cf8;width:22%">Scope</th><th style="color:#818cf8;width:14%">Applies To</th>
+                <th style="color:#818cf8;width:36%">Key Requirements</th>
               </tr></thead><tbody>{rows}</tbody>
             </table>""", unsafe_allow_html=True)
 
@@ -1857,7 +1857,7 @@ def _show_risk_coverage_summary(theme: str, risk_map: dict, live_risks: list | N
 
     pct_color = "#22d3a5" if pct >= 80 else ("#eab308" if pct >= 50 else "#ef4444")
     uncov_rows = "".join(
-        f'<li><span style="color:#7fa8fb;font-weight:700">{r.get("id") or ""}</span>'
+        f'<li><span style="color:#818cf8;font-weight:700">{r.get("id") or ""}</span>'
         f' &mdash; {r.get("title") or r.get("name","")} &nbsp;'
         f'<span style="color:{_LEVEL_COLOR.get(r.get("level",""),"#8392bb")};font-size:11px">'
         f'{_LEVEL_EMOJI.get(r.get("level",""),"")} {r.get("level","")}</span></li>'
@@ -1865,10 +1865,10 @@ def _show_risk_coverage_summary(theme: str, risk_map: dict, live_risks: list | N
     )
 
     st.markdown(f"""
-    <div style="background:rgba(79,126,248,0.04);border:1px solid rgba(79,126,248,0.18);
+    <div style="background:rgba(99,102,241,0.04);border:1px solid rgba(99,102,241,0.18);
                 border-radius:8px;padding:16px 20px;margin-top:18px">
       <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;
-                  color:#7fa8fb;margin-bottom:12px">Risk Coverage Summary</div>
+                  color:#818cf8;margin-bottom:12px">Risk Coverage Summary</div>
       <div style="display:flex;gap:32px;flex-wrap:wrap;margin-bottom:12px">
         <div style="font-size:13px;color:var(--text-secondary)">
           Total risks identified: <strong style="color:var(--text-primary)">{total}</strong></div>
@@ -1923,7 +1923,7 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
         _show_risk_coverage_summary(theme, risk_map, live_risks)
         return
 
-    _DA_BADGE = '<span style="background:rgba(79,126,248,0.12);color:#7fa8fb;border:1px solid rgba(79,126,248,0.28);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600">📊 DA</span>'
+    _DA_BADGE = '<span style="background:rgba(99,102,241,0.12);color:#818cf8;border:1px solid rgba(99,102,241,0.28);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600">📊 DA</span>'
     rows = ""
     for t in tests:
         lv = t.get("level", "")
@@ -1932,7 +1932,7 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
         da  = _DA_BADGE if t.get("category") == "Data Analytics" else ""
         lv_badge = f'<span style="background:{bg};color:{col};border:1px solid {col}44;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">{lv}</span>'
         tr_ref = t.get("tr_reference", "")
-        tr_cell = (f'<span style="background:rgba(79,126,248,0.09);color:#7fa8fb;border:1px solid rgba(79,126,248,0.25);'
+        tr_cell = (f'<span style="background:rgba(99,102,241,0.09);color:#818cf8;border:1px solid rgba(99,102,241,0.25);'
                    f'border-radius:3px;padding:1px 5px;font-size:10px;white-space:nowrap">{tr_ref}</span>' if tr_ref else "")
 
         rm = risk_map.get(t["id"], {})
@@ -1944,7 +1944,7 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
         r_bg    = _LEVEL_BG.get(r_lv, "transparent")
         r_emoji = _LEVEL_EMOJI.get(r_lv, "")
         risk_cell = (
-            f'<div style="white-space:nowrap;color:#7fa8fb;font-size:11px;font-weight:700">{r_id}</div>'
+            f'<div style="white-space:nowrap;color:#818cf8;font-size:11px;font-weight:700">{r_id}</div>'
             f'<div style="font-size:11.5px;color:var(--text-secondary)">{r_title}</div>'
             f'<div style="margin-top:3px"><span style="background:{r_bg};color:{r_col};border:1px solid {r_col}44;'
             f'border-radius:3px;padding:1px 6px;font-size:10.5px;font-weight:700">{r_emoji} {r_lv}</span></div>'
@@ -1953,7 +1953,7 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
 
         rows += (
             f'<tr style="background:{bg}">'
-            f'<td style="padding:9px 12px;color:#7fa8fb;font-weight:700;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("id","")} {da}</td>'
+            f'<td style="padding:9px 12px;color:#818cf8;font-weight:700;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("id","")} {da}</td>'
             f'<td style="padding:9px 12px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{lv_badge}</td>'
             f'<td style="padding:9px 12px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("objective","")}</td>'
             f'<td style="padding:9px 12px;color:var(--text-secondary);font-size:12px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("procedure","")}</td>'
@@ -1966,16 +1966,16 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
         )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
-      <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
-        <th style="color:#7fa8fb;width:6%">ID</th>
-        <th style="color:#7fa8fb;width:6%">Level</th>
-        <th style="color:#7fa8fb;width:16%">Objective</th>
-        <th style="color:#7fa8fb;width:20%">Procedure</th>
-        <th style="color:#7fa8fb;width:9%">Sample</th>
-        <th style="color:#7fa8fb;width:14%">Associated Risk</th>
-        <th style="color:#7fa8fb;width:14%">Control Verified</th>
-        <th style="color:#7fa8fb;width:10%">Failure Criteria</th>
-        <th style="color:#7fa8fb;width:5%">TR</th>
+      <thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)">
+        <th style="color:#818cf8;width:6%">ID</th>
+        <th style="color:#818cf8;width:6%">Level</th>
+        <th style="color:#818cf8;width:16%">Objective</th>
+        <th style="color:#818cf8;width:20%">Procedure</th>
+        <th style="color:#818cf8;width:9%">Sample</th>
+        <th style="color:#818cf8;width:14%">Associated Risk</th>
+        <th style="color:#818cf8;width:14%">Control Verified</th>
+        <th style="color:#818cf8;width:10%">Failure Criteria</th>
+        <th style="color:#818cf8;width:5%">TR</th>
       </tr></thead><tbody>{rows}</tbody>
     </table>""", unsafe_allow_html=True)
 
@@ -1991,7 +1991,7 @@ def _render_iia_standard(s):
             src_txt = s.get("source_guide", "")
             st.markdown(
                 f'<div style="margin-bottom:10px">'
-                f'<span style="background:rgba(79,126,248,0.15);color:#7fa8fb;border:1px solid rgba(79,126,248,0.35);border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">TR &mdash; Topical Requirement</span>'
+                f'<span style="background:rgba(99,102,241,0.15);color:#818cf8;border:1px solid rgba(99,102,241,0.35);border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">TR &mdash; Topical Requirement</span>'
                 + (f' &nbsp;<span style="font-size:11px;color:#5a6488;font-style:italic">{src_txt}</span>' if src_txt else "")
                 + '</div>',
                 unsafe_allow_html=True,
@@ -2008,10 +2008,10 @@ def _render_iia_standard(s):
                 sec_icon = sec.get("icon", "")
                 with st.expander(f"{sec_icon} {sec['section_title']} — {len(sec['requirements'])} requirements", expanded=False):
                     for req in sec["requirements"]:
-                        fw_badges = " &nbsp;".join(f'<span style="background:rgba(79,126,248,0.09);color:#7fa8fb;border:1px solid rgba(79,126,248,0.25);border-radius:3px;padding:1px 5px;font-size:10px">{f}</span>' for f in req.get("frameworks", []))
+                        fw_badges = " &nbsp;".join(f'<span style="background:rgba(99,102,241,0.09);color:#818cf8;border:1px solid rgba(99,102,241,0.25);border-radius:3px;padding:1px 5px;font-size:10px">{f}</span>' for f in req.get("frameworks", []))
                         st.markdown(f"""
-                        <div style="border-left:3px solid rgba(79,126,248,0.4);padding:10px 14px;margin-bottom:10px;background:rgba(79,126,248,0.04);border-radius:0 6px 6px 0">
-                          <div style="font-size:11.5px;font-weight:700;color:#7fa8fb;margin-bottom:4px">{req['id']}</div>
+                        <div style="border-left:3px solid rgba(99,102,241,0.4);padding:10px 14px;margin-bottom:10px;background:rgba(99,102,241,0.04);border-radius:0 6px 6px 0">
+                          <div style="font-size:11.5px;font-weight:700;color:#818cf8;margin-bottom:4px">{req['id']}</div>
                           <p style="margin:0 0 8px;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{req['text']}</p>
                           <div style="font-size:10.5px;color:#5a6488">{fw_badges}</div>
                         </div>""", unsafe_allow_html=True)
@@ -2019,7 +2019,7 @@ def _render_iia_standard(s):
             reqs = "".join(f"<li>{r}</li>" for r in s.get("key_requirements", []))
             st.markdown(f"""
             <div>
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#7fa8fb;margin-bottom:6px">Key Requirements</div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#818cf8;margin-bottom:6px">Key Requirements</div>
               <ul style="margin:0;padding-left:16px;font-size:12.5px;color:var(--text-secondary);line-height:1.8">{reqs}</ul>
             </div>""", unsafe_allow_html=True)
 
@@ -2188,8 +2188,8 @@ def _copy_button(text_to_copy, key_id):
       this.textContent='&#10003; Copied!';
       setTimeout(()=>{{this.textContent='⎘ Copy'}},1800);
     }})" style="
-      background:rgba(79,126,248,0.10);color:#7fa8fb;
-      border:1px solid rgba(79,126,248,0.25);border-radius:8px;
+      background:rgba(99,102,241,0.10);color:#818cf8;
+      border:1px solid rgba(99,102,241,0.25);border-radius:8px;
       font-size:12px;font-weight:500;padding:5px 14px;cursor:pointer;
       font-family:-apple-system,BlinkMacSystemFont,sans-serif;
     ">⎘ Copy</button>
@@ -2201,8 +2201,8 @@ def _print_button():
     """Render a print button via JS (no API call)."""
     html = """
     <button onclick="window.print()" style="
-      background:rgba(79,126,248,0.10);color:#7fa8fb;
-      border:1px solid rgba(79,126,248,0.25);border-radius:8px;
+      background:rgba(99,102,241,0.10);color:#818cf8;
+      border:1px solid rgba(99,102,241,0.25);border-radius:8px;
       font-size:12px;font-weight:500;padding:5px 14px;cursor:pointer;
       font-family:-apple-system,BlinkMacSystemFont,sans-serif;
     ">🖨 Print / PDF</button>
@@ -2243,7 +2243,7 @@ def _cve_table(cves):
         sev = c.get("severity", "")
         badge = _SEV_BADGE.get(sev, f'<span class="badge-info">{sev}</span>')
         link = c.get("source", "")
-        src_html = (f'<a href="{link}" target="_blank" style="color:#7fa8fb;font-size:11px">{link[:40]}&hellip;</a>'
+        src_html = (f'<a href="{link}" target="_blank" style="color:#818cf8;font-size:11px">{link[:40]}&hellip;</a>'
                     if link.startswith("http") else f'<span style="color:#424d72;font-size:11.5px">{link}</span>')
         rows += (
             f'<tr>'
@@ -2291,7 +2291,7 @@ def _reg_updates_table(regs, type_filter=None):
         rows += (
             f'<tr>'
             f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("date","")}</td>'
-            f'<td style="padding:9px 13px;color:#7fa8fb;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("authority","")}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("authority","")}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{type_badge}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{title_html}{open_badge}</td>'
             f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("key_impact","")}</td>'
@@ -2299,12 +2299,12 @@ def _reg_updates_table(regs, type_filter=None):
         )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
-      <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
-        <th style="color:#7fa8fb;width:8%">Date</th>
-        <th style="color:#7fa8fb;width:10%">Authority</th>
-        <th style="color:#7fa8fb;width:10%">Type</th>
-        <th style="color:#7fa8fb;width:35%">Title</th>
-        <th style="color:#7fa8fb;width:37%">Key Impact</th>
+      <thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)">
+        <th style="color:#818cf8;width:8%">Date</th>
+        <th style="color:#818cf8;width:10%">Authority</th>
+        <th style="color:#818cf8;width:10%">Type</th>
+        <th style="color:#818cf8;width:35%">Title</th>
+        <th style="color:#818cf8;width:37%">Key Impact</th>
       </tr></thead>
       <tbody>{rows}</tbody>
     </table>
@@ -2322,7 +2322,7 @@ def _audit_recs_table(recs):
         rows += (
             f'<tr>'
             f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("date","")}</td>'
-            f'<td style="padding:9px 13px;color:#7fa8fb;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("theme","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("recommendation","")}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{badge}</td>'
@@ -2330,12 +2330,12 @@ def _audit_recs_table(recs):
         )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
-      <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
-        <th style="color:#7fa8fb;width:8%">Date</th>
-        <th style="color:#7fa8fb;width:14%">Source</th>
-        <th style="color:#7fa8fb;width:16%">Theme</th>
-        <th style="color:#7fa8fb;width:52%">Recommendation</th>
-        <th style="color:#7fa8fb;width:10%">Priority</th>
+      <thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)">
+        <th style="color:#818cf8;width:8%">Date</th>
+        <th style="color:#818cf8;width:14%">Source</th>
+        <th style="color:#818cf8;width:16%">Theme</th>
+        <th style="color:#818cf8;width:52%">Recommendation</th>
+        <th style="color:#818cf8;width:10%">Priority</th>
       </tr></thead>
       <tbody>{rows}</tbody>
     </table>
@@ -2350,7 +2350,7 @@ def _pub_recs_table(recs):
     for r in recs:
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:#7fa8fb;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;text-align:center;border-bottom:1px solid var(--tbl-row-border)">{r.get("year","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("recommendation","")}</td>'
             f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("applicability","")}</td>'
@@ -2358,11 +2358,11 @@ def _pub_recs_table(recs):
         )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
-      <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
-        <th style="color:#7fa8fb;width:16%">Source</th>
-        <th style="color:#7fa8fb;width:7%;text-align:center">Year</th>
-        <th style="color:#7fa8fb;width:46%">Recommendation</th>
-        <th style="color:#7fa8fb;width:31%">Applicability to Private Banking</th>
+      <thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)">
+        <th style="color:#818cf8;width:16%">Source</th>
+        <th style="color:#818cf8;width:7%;text-align:center">Year</th>
+        <th style="color:#818cf8;width:46%">Recommendation</th>
+        <th style="color:#818cf8;width:31%">Applicability to Private Banking</th>
       </tr></thead>
       <tbody>{rows}</tbody>
     </table>
@@ -2410,7 +2410,7 @@ def _reg_table(regs):
         return
     rows = "".join(
         f'<tr>'
-        f'<td style="padding:10px 13px;color:#7fa8fb;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("jurisdiction","")}</td>'
+        f'<td style="padding:10px 13px;color:#818cf8;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("jurisdiction","")}</td>'
         f'<td style="padding:10px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("text","")}</td>'
         f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
         f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("requirement","")}</td>'
@@ -2419,11 +2419,11 @@ def _reg_table(regs):
     )
     st.markdown(f"""
     <table class="data-table">
-      <thead><tr style="background:rgba(79,126,248,0.08);border-bottom:1px solid rgba(79,126,248,0.2)">
-        <th style="color:#7fa8fb;width:15%">Jurisdiction</th>
-        <th style="color:#7fa8fb;width:22%">Regulation</th>
-        <th style="color:#7fa8fb;width:16%">Reference</th>
-        <th style="color:#7fa8fb;width:47%">Key Requirement</th>
+      <thead><tr style="background:rgba(99,102,241,0.08);border-bottom:1px solid rgba(99,102,241,0.2)">
+        <th style="color:#818cf8;width:15%">Jurisdiction</th>
+        <th style="color:#818cf8;width:22%">Regulation</th>
+        <th style="color:#818cf8;width:16%">Reference</th>
+        <th style="color:#818cf8;width:47%">Key Requirement</th>
       </tr></thead>
       <tbody>{rows}</tbody>
     </table>
@@ -2435,7 +2435,7 @@ def _tests_table(tests):
         return
     rows = "".join(
         f'<tr>'
-        f'<td style="padding:9px 10px;color:#7fa8fb;font-weight:600;text-align:center;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("num","")}</td>'
+        f'<td style="padding:9px 10px;color:#818cf8;font-weight:600;text-align:center;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("num","")}</td>'
         f'<td style="padding:9px 10px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("objective","")}</td>'
         f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("procedure","")}</td>'
         f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("population","")}</td>'
@@ -2446,13 +2446,13 @@ def _tests_table(tests):
     )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
-      <thead><tr style="background:rgba(79,126,248,0.08);border-bottom:1px solid rgba(79,126,248,0.2)">
-        <th style="color:#7fa8fb;width:4%;text-align:center">No.</th>
-        <th style="color:#7fa8fb;width:16%">Objective</th>
-        <th style="color:#7fa8fb;width:27%">Procedure</th>
-        <th style="color:#7fa8fb;width:14%">Population</th>
-        <th style="color:#7fa8fb;width:12%">Sample Size</th>
-        <th style="color:#7fa8fb;width:27%">Failure Criteria</th>
+      <thead><tr style="background:rgba(99,102,241,0.08);border-bottom:1px solid rgba(99,102,241,0.2)">
+        <th style="color:#818cf8;width:4%;text-align:center">No.</th>
+        <th style="color:#818cf8;width:16%">Objective</th>
+        <th style="color:#818cf8;width:27%">Procedure</th>
+        <th style="color:#818cf8;width:14%">Population</th>
+        <th style="color:#818cf8;width:12%">Sample Size</th>
+        <th style="color:#818cf8;width:27%">Failure Criteria</th>
       </tr></thead>
       <tbody>{rows}</tbody>
     </table>
@@ -2474,12 +2474,12 @@ def _analytics_table(scenarios):
     )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
-      <thead><tr style="background:rgba(79,126,248,0.08);border-bottom:1px solid rgba(79,126,248,0.2)">
-        <th style="color:#7fa8fb;width:18%">Scenario</th>
-        <th style="color:#7fa8fb;width:20%">Objective</th>
-        <th style="color:#7fa8fb;width:18%">Data Source</th>
-        <th style="color:#7fa8fb;width:16%">Analysis Type</th>
-        <th style="color:#7fa8fb;width:28%">Anomaly Detected</th>
+      <thead><tr style="background:rgba(99,102,241,0.08);border-bottom:1px solid rgba(99,102,241,0.2)">
+        <th style="color:#818cf8;width:18%">Scenario</th>
+        <th style="color:#818cf8;width:20%">Objective</th>
+        <th style="color:#818cf8;width:18%">Data Source</th>
+        <th style="color:#818cf8;width:16%">Analysis Type</th>
+        <th style="color:#818cf8;width:28%">Anomaly Detected</th>
       </tr></thead>
       <tbody>{rows}</tbody>
     </table>
@@ -2534,7 +2534,7 @@ with st.sidebar:
 
     _sb_entity = st.session_state.get("entity_type", "🏦 Private Banking")
     _ent_colors = {
-        "🏦 Private Banking":                   ("#4f7ef8", "rgba(79,126,248,0.12)"),
+        "🏦 Private Banking":                   ("#6366f1", "rgba(99,102,241,0.12)"),
         "📊 Asset Management":                  ("#8b5cf6", "rgba(139,92,246,0.12)"),
         "🏢 Management Company (ManCo)":        ("#06b6d4", "rgba(6,182,212,0.12)"),
         "🔀 Alternative Investment (PE/RE/HF)": ("#f59e0b", "rgba(245,158,11,0.12)"),
@@ -2830,9 +2830,9 @@ with _hdr_col1:
 <div style="text-align:center;padding:32px 0 24px 0;position:relative;">
   <div style="display:inline-flex;align-items:center;justify-content:center;
               width:48px;height:48px;
-              background:linear-gradient(135deg,#4f7ef8 0%,#7b3fe4 100%);
+              background:linear-gradient(135deg,#6366f1 0%,#7b3fe4 100%);
               border-radius:12px;margin-bottom:12px;
-              box-shadow:0 0 24px rgba(79,126,248,0.3);">
+              box-shadow:0 0 24px rgba(99,102,241,0.3);">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
          xmlns="http://www.w3.org/2000/svg">
       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
@@ -3163,7 +3163,7 @@ def _assemble_report_static(findings_raw, topic, scope, jurisdictions,
 def _show_report_section1(rd: dict):
     """Render Section 1 — Executive Summary."""
     opinion = rd["opinion"]
-    op_bg, op_col, op_card_bg = _OPINION_COLORS.get(opinion, ("rgba(79,126,248,0.1)","#7fa8fb","background:#1a1e33"))
+    op_bg, op_col, op_card_bg = _OPINION_COLORS.get(opinion, ("rgba(99,102,241,0.1)","#818cf8","background:#1a1e33"))
 
     # A — Audit Context
     ctx_rows = "".join(
@@ -3175,16 +3175,16 @@ def _show_report_section1(rd: dict):
                      ("Audit Scope", rd["scope"]), ("Period", rd["period"])]
     )
     st.markdown(f"""
-    <div style="background:#0f1423;border-left:4px solid #7fa8fb;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:18px">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#7fa8fb;margin-bottom:14px">A &mdash; Audit Context</div>
+    <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:18px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#818cf8;margin-bottom:14px">A &mdash; Audit Context</div>
       <table style="width:100%;border-collapse:collapse">{ctx_rows}</table>
     </div>""", unsafe_allow_html=True)
 
     # B — Overall Context
     ctx_paras = rd["overall_context"].replace("\n\n","</p><p style='margin:0 0 10px;font-size:13px;color:var(--text-secondary);line-height:1.8'>")
     st.markdown(f"""
-    <div style="background:#0f1423;border-left:4px solid #7fa8fb;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:18px">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#7fa8fb;margin-bottom:12px">B &mdash; Overall Context</div>
+    <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:18px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#818cf8;margin-bottom:12px">B &mdash; Overall Context</div>
       <p style="margin:0 0 10px;font-size:13px;color:var(--text-secondary);line-height:1.8">{ctx_paras}</p>
     </div>""", unsafe_allow_html=True)
 
@@ -3196,8 +3196,8 @@ def _show_report_section1(rd: dict):
         for f in rd["top3"]
     )
     st.markdown(f"""
-    <div style="background:#0f1423;border-left:4px solid #7fa8fb;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:18px">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#7fa8fb;margin-bottom:12px">C &mdash; Key Observations Summary</div>
+    <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:18px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#818cf8;margin-bottom:12px">C &mdash; Key Observations Summary</div>
       <div style="display:flex;gap:28px;flex-wrap:wrap;margin-bottom:14px">
         <div style="font-size:13px;color:var(--text-secondary)">Total observations: <strong style="color:var(--text-primary);font-size:15px">{rd["n_total"]}</strong></div>
         <div style="font-size:13px;color:#ef4444">🔴 Critical: <strong>{rd["n_crit"]}</strong></div>
@@ -3237,13 +3237,13 @@ def _show_report_section2(rd: dict):
                  f"management attention.")
 
     st.markdown(f"""
-    <div style="background:#0f1423;border-left:4px solid #7fa8fb;border-radius:0 10px 10px 0;padding:18px 22px;margin-bottom:18px">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#7fa8fb;margin-bottom:10px">A &mdash; Narrative Introduction</div>
+    <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:18px 22px;margin-bottom:18px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#818cf8;margin-bottom:10px">A &mdash; Narrative Introduction</div>
       <p style="margin:0;font-size:13px;color:var(--text-secondary);line-height:1.8">{intro[:500]}</p>
     </div>""", unsafe_allow_html=True)
 
     # B — Findings by Theme
-    st.markdown('<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#7fa8fb;margin:16px 0 10px">B &mdash; Findings Overview by Domain</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#818cf8;margin:16px 0 10px">B &mdash; Findings Overview by Domain</div>', unsafe_allow_html=True)
     for theme_key, theme_findings in rd["theme_groups"].items():
         theme_label = theme_key.replace("_"," ").title()
         bg_t = THEMATIC_BACKGROUND.get(theme_key, {})
@@ -3258,7 +3258,7 @@ def _show_report_section2(rd: dict):
         max_emoji = _LEVEL_EMOJI.get(max_crit, "")
         refs_t   = _get_reg_refs(theme_key, rd["jurs"])
         st.markdown(f"""
-        <div style="background:#0c1220;border:1px solid rgba(79,126,248,0.15);border-left:4px solid {max_col};
+        <div style="background:#0c1220;border:1px solid rgba(99,102,241,0.15);border-left:4px solid {max_col};
                     border-radius:0 8px 8px 0;padding:16px 20px;margin-bottom:12px">
           <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px">
             {max_emoji} Domain: {theme_label}
@@ -3272,7 +3272,7 @@ def _show_report_section2(rd: dict):
         </div>""", unsafe_allow_html=True)
 
     # C — Heat Map
-    st.markdown('<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#7fa8fb;margin:18px 0 8px">C &mdash; Findings Heat Map</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#818cf8;margin:18px 0 8px">C &mdash; Findings Heat Map</div>', unsafe_allow_html=True)
     st.markdown(_render_heat_map_html(findings), unsafe_allow_html=True)
 
 
@@ -3309,7 +3309,7 @@ def _show_report_section3(rd: dict):
                     st.markdown(f"""
                     <div style="background:#0c1220;border-left:3px solid {r_col};border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:12px">
                       <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;color:{r_col};margin-bottom:6px">Associated Risk</div>
-                      <div style="font-size:12px;color:#7fa8fb;font-weight:700;margin-bottom:3px">{risk.get("id","")}</div>
+                      <div style="font-size:12px;color:#818cf8;font-weight:700;margin-bottom:3px">{risk.get("id","")}</div>
                       <div style="font-size:12.5px;color:var(--text-primary);font-weight:600;margin-bottom:6px">{risk.get("title","")}</div>
                       <span style="background:{r_bg};color:{r_col};border:1px solid {r_col}44;border-radius:4px;padding:1px 8px;font-size:11px;font-weight:700">{_LEVEL_EMOJI.get(r_lv,"")} {r_lv}</span>
                       {"<ul style='margin:8px 0 0;padding-left:15px;font-size:11.5px;color:var(--text-secondary);line-height:1.7'>" + ctrls + "</ul>" if ctrls else ""}
@@ -3321,8 +3321,8 @@ def _show_report_section3(rd: dict):
             with col2:
                 refs_html = "".join(f"<li style='font-size:11.5px'>{r}</li>" for r in refs)
                 st.markdown(f"""
-                <div style="background:#0c1220;border-left:3px solid #7fa8fb;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:12px">
-                  <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;color:#7fa8fb;margin-bottom:6px">Regulatory Reference</div>
+                <div style="background:#0c1220;border-left:3px solid #818cf8;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:12px">
+                  <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;color:#818cf8;margin-bottom:6px">Regulatory Reference</div>
                   <ul style="margin:0;padding-left:15px;color:var(--text-secondary);line-height:1.8">{refs_html or "<li>See applicable framework</li>"}</ul>
                 </div>""", unsafe_allow_html=True)
                 st.markdown(f"""
@@ -3345,15 +3345,15 @@ def _show_report_section3(rd: dict):
             # Management Actions + Due Date
             actions_html = "".join(
                 f'<tr><td style="padding:7px 12px;color:var(--text-secondary);font-size:12px;border-bottom:1px solid rgba(255,255,255,0.05)">{a.get("action","")}</td>'
-                f'<td style="padding:7px 12px;color:#7fa8fb;font-size:11.5px;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.05)">{a.get("owner","")}</td>'
+                f'<td style="padding:7px 12px;color:#818cf8;font-size:11.5px;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.05)">{a.get("owner","")}</td>'
                 f'<td style="padding:7px 12px;color:#22d3a5;font-size:11.5px;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.05)">{a.get("due","")}</td></tr>'
                 for a in acts
             ) if acts else '<tr><td colspan="3" style="padding:8px;color:#5a6488;font-size:12px">No specific actions defined for this domain.</td></tr>'
 
             st.markdown(f"""
             <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">
-              <div style="flex:2;min-width:260px;background:#0c1220;border-left:3px solid #7fa8fb;border-radius:0 8px 8px 0;padding:14px 18px">
-                <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;color:#7fa8fb;margin-bottom:8px">Proposed Management Actions</div>
+              <div style="flex:2;min-width:260px;background:#0c1220;border-left:3px solid #818cf8;border-radius:0 8px 8px 0;padding:14px 18px">
+                <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;color:#818cf8;margin-bottom:8px">Proposed Management Actions</div>
                 <table style="width:100%;border-collapse:collapse">
                   <thead><tr>
                     <th style="padding:5px 12px;font-size:10px;color:#5a6488;text-align:left">Action</th>
@@ -3386,27 +3386,27 @@ def _show_report_section4(rd: dict):
         owner = acts[0].get("owner","TBD") if acts else "TBD"
         rows += (
             f'<tr>'
-            f'<td style="padding:8px 12px;color:#7fa8fb;font-weight:700;text-align:center;border-bottom:1px solid var(--tbl-row-border)">F{f["idx"]}</td>'
+            f'<td style="padding:8px 12px;color:#818cf8;font-weight:700;text-align:center;border-bottom:1px solid var(--tbl-row-border)">F{f["idx"]}</td>'
             f'<td style="padding:8px 12px;color:var(--text-primary);border-bottom:1px solid var(--tbl-row-border)">{f["title"]}</td>'
             f'<td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--tbl-row-border)"><span style="background:{_LEVEL_BG.get(crit,"transparent")};color:{col};border:1px solid {col}44;border-radius:4px;padding:1px 8px;font-size:11px;font-weight:700">{emoji} {crit}</span></td>'
             f'<td style="padding:8px 12px;color:var(--text-secondary);font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">'
             + (f'{acts[0]["action"][:70]}&hellip;' if acts and len(acts[0].get("action",""))>70 else (acts[0].get("action","&mdash;") if acts else "&mdash;")) +
             f'</td>'
-            f'<td style="padding:8px 12px;color:#7fa8fb;font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">{owner}</td>'
+            f'<td style="padding:8px 12px;color:#818cf8;font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">{owner}</td>'
             f'<td style="padding:8px 12px;color:#22d3a5;font-size:11.5px;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{f["due_date"]}</td>'
-            f'<td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--tbl-row-border)"><span style="background:rgba(79,126,248,0.1);color:#7fa8fb;border:1px solid rgba(79,126,248,0.3);border-radius:4px;padding:1px 8px;font-size:11px">Open</span></td>'
+            f'<td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--tbl-row-border)"><span style="background:rgba(99,102,241,0.1);color:#818cf8;border:1px solid rgba(99,102,241,0.3);border-radius:4px;padding:1px 8px;font-size:11px">Open</span></td>'
             f'</tr>'
         )
     st.markdown(f"""
     <table class="data-table" style="font-size:12px">
-      <thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)">
-        <th style="color:#7fa8fb;width:4%">#</th>
-        <th style="color:#7fa8fb;width:22%">Finding</th>
-        <th style="color:#7fa8fb;width:9%">Rating</th>
-        <th style="color:#7fa8fb;width:28%">Recommendation</th>
-        <th style="color:#7fa8fb;width:13%">Owner</th>
-        <th style="color:#7fa8fb;width:12%">Due Date</th>
-        <th style="color:#7fa8fb;width:8%">Status</th>
+      <thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)">
+        <th style="color:#818cf8;width:4%">#</th>
+        <th style="color:#818cf8;width:22%">Finding</th>
+        <th style="color:#818cf8;width:9%">Rating</th>
+        <th style="color:#818cf8;width:28%">Recommendation</th>
+        <th style="color:#818cf8;width:13%">Owner</th>
+        <th style="color:#818cf8;width:12%">Due Date</th>
+        <th style="color:#818cf8;width:8%">Status</th>
       </tr></thead><tbody>{rows}</tbody>
     </table>""", unsafe_allow_html=True)
 
@@ -3425,7 +3425,7 @@ def _show_audit_snapshot():
     rd = st.session_state["report_data"]
     ts = st.session_state.get("report_timestamp","")
     opinion = rd["opinion"]
-    op_bg, op_col, op_card_bg = _OPINION_COLORS.get(opinion, ("rgba(79,126,248,0.1)","#7fa8fb","background:#1a1e33"))
+    op_bg, op_col, op_card_bg = _OPINION_COLORS.get(opinion, ("rgba(99,102,241,0.1)","#818cf8","background:#1a1e33"))
     top_html = "".join(
         f'<li style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">'
         f'<span style="color:{_LEVEL_COLOR.get(f["criticality"],"#8392bb")};font-weight:700">'
@@ -3435,8 +3435,8 @@ def _show_audit_snapshot():
     ctx_text = rd.get("overall_context","")[:400] + ("…" if len(rd.get("overall_context",""))>400 else "")
 
     st.markdown(f"""
-    <div style="background:#0f1423;border-left:4px solid #7fa8fb;border-radius:0 10px 10px 0;padding:18px 22px">
-      <div style="font-size:11px;font-weight:700;color:#7fa8fb;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px">📋 Latest Audit Snapshot</div>
+    <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:18px 22px">
+      <div style="font-size:11px;font-weight:700;color:#818cf8;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px">📋 Latest Audit Snapshot</div>
       <div style="font-size:12px;color:#5a6488;margin-bottom:14px">Based on: <strong style="color:#8392bb">{rd["topic"]}</strong> &middot; Generated: {ts}</div>
 
       <div style="font-size:10.5px;font-weight:700;color:#5a6488;text-transform:uppercase;margin-bottom:6px">── Audit Context ──</div>
@@ -3546,7 +3546,7 @@ with tab0:
             _rec_stheme = _rec_sc2.selectbox("Theme", ["All"] + _all_themes, key="_rec_stheme", label_visibility="collapsed")
             for _t in (_all_themes if _rec_stheme == "All" else [_rec_stheme]):
                 if _rec_stheme == "All":
-                    st.markdown(f'<div style="font-size:12px;font-weight:600;color:#7fa8fb;margin:10px 0 4px">{_t}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div style="font-size:12px;font-weight:600;color:#818cf8;margin:10px 0 4px">{_t}</div>', unsafe_allow_html=True)
                 _show_pub_recs(theme=_t, search=_rec_sq)
 
         with st.expander("📅 D — Regulatory Calendar 2025–2026", expanded=False):
@@ -3777,7 +3777,7 @@ with tab1:
     _t1_ent_ctx  = ENTITY_CONTEXT.get(_t1_entity, {})
     _t1_reg_focus = _t1_ent_ctx.get("regulatory_focus", [])
     if _t1_reg_focus:
-        _bg, _col = _ENTITY_COLORS.get(_t1_entity, ("#0a2540", "#7fa8fb"))
+        _bg, _col = _ENTITY_COLORS.get(_t1_entity, ("#0a2540", "#818cf8"))
         st.markdown(
             f'<div style="background:{_bg};border-left:3px solid {_col};border-radius:0 6px 6px 0;'
             f'padding:8px 12px;margin-bottom:12px;font-size:12px;color:#c8d0e8">'
@@ -3815,7 +3815,7 @@ with tab1:
                 "keys": [],
             }
         _t1_entity_key   = _t1_entity_data.get("entity_key", "PRIVATE_BANKING")
-        _t1_entity_color = _ENTITY_COLORS.get(_t1_entity_key, "#7fa8fb")
+        _t1_entity_color = _ENTITY_COLORS.get(_t1_entity_key, "#818cf8")
         _entity_label    = _t1_entity_type.split(" ", 1)[1] if " " in _t1_entity_type else _t1_entity_type
         st.markdown(
             f'<div style="display:flex;align-items:center;gap:12px;margin:8px 0 16px">'
@@ -3837,7 +3837,7 @@ with tab1:
         _ri_reg_refs   = _ri_topic_data.get("regulatory_refs", [])
         _ri_emphasis   = [e.lower() for e in _ri_topic_data.get("risk_emphasis", [])]
         _ri_findings   = _ri_topic_data.get("typical_findings", [])
-        _ri_bg, _ri_col = _ENTITY_COLORS.get(_ri_entity, ("#0a2540", "#7fa8fb"))
+        _ri_bg, _ri_col = _ENTITY_COLORS.get(_ri_entity, ("#0a2540", "#818cf8"))
         _ri_bg_lbl     = _ri_ent_data.get("background_angle", "financial services")
 
         with st.expander("🗺️ A — Risk Indicators", expanded=True):
@@ -3906,7 +3906,7 @@ with tab1:
                       </div>
                       <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.7">{_r["description"]}</p>
                       <details>
-                        <summary style="font-size:12px;color:#7fa8fb;cursor:pointer;font-weight:500">Controls &amp; Red Flags</summary>
+                        <summary style="font-size:12px;color:#818cf8;cursor:pointer;font-weight:500">Controls &amp; Red Flags</summary>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
                           <div><div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px">EXPECTED CONTROLS</div>
                           <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{_ctrls}</ul></div>
@@ -4188,7 +4188,7 @@ with tab2:
     _t2_topic_data = _t2_ent_ctx.get("topics", {}).get(_t2_theme or "", {}) if _t2_theme else {}
     _t2_test_emphasis = _t2_topic_data.get("risk_emphasis", [])
     if _t2_test_emphasis:
-        _bg2, _col2 = _ENTITY_COLORS.get(_t2_entity, ("#0a2540", "#7fa8fb"))
+        _bg2, _col2 = _ENTITY_COLORS.get(_t2_entity, ("#0a2540", "#818cf8"))
         st.markdown(
             f'<div style="background:{_bg2};border-left:3px solid {_col2};border-radius:0 6px 6px 0;'
             f'padding:8px 12px;margin:4px 0 10px;font-size:12px;color:#c8d0e8">'
@@ -4290,7 +4290,7 @@ with tab2:
             if _typical:
                 st.markdown(
                     '<div style="margin-top:14px"><div style="font-size:12px;font-weight:700;'
-                    'color:#7fa8fb;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">'
+                    'color:#818cf8;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">'
                     '★ Typical Findings for this Entity Type</div>',
                     unsafe_allow_html=True,
                 )
@@ -4566,7 +4566,7 @@ with tab3:
     _t3_ent_ctx   = ENTITY_CONTEXT.get(_t3_entity, {})
     _t3_findings  = _t3_ent_ctx.get("typical_findings", [])
     if _t3_findings:
-        _bg3, _col3 = _ENTITY_COLORS.get(_t3_entity, ("#0a2540", "#7fa8fb"))
+        _bg3, _col3 = _ENTITY_COLORS.get(_t3_entity, ("#0a2540", "#818cf8"))
         st.markdown(
             f'<div style="background:{_bg3};border-left:3px solid {_col3};border-radius:0 6px 6px 0;'
             f'padding:8px 12px;margin:4px 0 12px;font-size:12px;color:#c8d0e8">'
@@ -4663,12 +4663,12 @@ with tab3:
                     if _reg3_items:
                         with st.expander(f"**{_jur3}** — {len(_reg3_items)} texts"):
                             _rows3 = "".join(
-                                f'<tr><td style="padding:8px 12px;color:#7fa8fb;font-weight:600;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
+                                f'<tr><td style="padding:8px 12px;color:#818cf8;font-weight:600;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
                                 f'<td style="padding:8px 12px;color:var(--text-primary);border-bottom:1px solid var(--tbl-row-border)">{r.get("title","")}</td>'
                                 f'<td style="padding:8px 12px;color:var(--text-secondary);font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">{r.get("scope","")[:120]}</td></tr>'
                                 for r in _reg3_items
                             )
-                            st.markdown(f'<table class="data-table" style="font-size:12px"><thead><tr style="background:rgba(79,126,248,0.07)"><th style="color:#7fa8fb;padding:8px 12px;width:15%">Reference</th><th style="color:#7fa8fb;padding:8px 12px;width:40%">Title</th><th style="color:#7fa8fb;padding:8px 12px;width:45%">Scope</th></tr></thead><tbody>{_rows3}</tbody></table>', unsafe_allow_html=True)
+                            st.markdown(f'<table class="data-table" style="font-size:12px"><thead><tr style="background:rgba(99,102,241,0.07)"><th style="color:#818cf8;padding:8px 12px;width:15%">Reference</th><th style="color:#818cf8;padding:8px 12px;width:40%">Title</th><th style="color:#818cf8;padding:8px 12px;width:45%">Scope</th></tr></thead><tbody>{_rows3}</tbody></table>', unsafe_allow_html=True)
 
             # ── Revision expander ─────────────────────────────────────────────
             with st.expander("✏️ Request a Revision", expanded=False):
@@ -4730,14 +4730,14 @@ with tab3:
                     if _r3b:
                         with st.expander(f"**{_jur}** — {len(_r3b)} texts"):
                             _rows3b = "".join(
-                                f'<tr><td style="padding:9px 13px;color:#7fa8fb;font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
+                                f'<tr><td style="padding:9px 13px;color:#818cf8;font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
                                 f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("title","")}<br><span style="font-size:11px;color:var(--text-muted)">{r.get("authority","")} &middot; {r.get("year","")}</span></td>'
                                 f'<td style="padding:9px 13px;color:var(--text-secondary);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("scope","")}</td>'
                                 f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)"><ul style="margin:0;padding-left:15px;font-size:11.5px;color:var(--text-secondary);line-height:1.7">{"".join(f"<li>{k}</li>" for k in r.get("key_requirements",[]))}</ul></td>'
                                 f'</tr>'
                                 for r in _r3b
                             )
-                            st.markdown(f'<table class="data-table" style="font-size:12px"><thead><tr style="background:rgba(79,126,248,0.07);border-bottom:1px solid rgba(79,126,248,0.18)"><th style="color:#7fa8fb;width:10%">Reference</th><th style="color:#7fa8fb;width:22%">Title</th><th style="color:#7fa8fb;width:22%">Scope</th><th style="color:#7fa8fb;width:46%">Key Requirements</th></tr></thead><tbody>{_rows3b}</tbody></table>', unsafe_allow_html=True)
+                            st.markdown(f'<table class="data-table" style="font-size:12px"><thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)"><th style="color:#818cf8;width:10%">Reference</th><th style="color:#818cf8;width:22%">Title</th><th style="color:#818cf8;width:22%">Scope</th><th style="color:#818cf8;width:46%">Key Requirements</th></tr></thead><tbody>{_rows3b}</tbody></table>', unsafe_allow_html=True)
             st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
             _print_button()
             st.markdown("</div>", unsafe_allow_html=True)
