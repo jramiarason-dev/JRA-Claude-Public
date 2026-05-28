@@ -1,0 +1,260 @@
+/* ════════════════════════════════════════════════════════════════
+   JRA Studio — Design Tokens
+   Colors, type, spacing, radii, shadows for the 5 JRA products:
+   AuditIQ · KidQuest Academy · CoachIQ · PhotoPost AI · Audit Report deck
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Webfonts (all four are Google Fonts; loaded via CDN) ──────── */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap");
+
+:root {
+  /* ─── BASE PALETTE ────────────────────────────────────────────
+     The whole portfolio is dark-first. There's no "light mode"
+     except in KidQuest (which has both). Greys all sit between
+     near-black and off-white with a faint cool tint. */
+  --jra-black:        #07090f;   /* deepest — AuditIQ report bg */
+  --jra-ink:          #080808;   /* CoachIQ bg */
+  --jra-ink-2:        #080b12;   /* AuditIQ app bg */
+  --jra-ink-3:        #0e0e0e;   /* CoachIQ sidebar */
+  --jra-ink-4:        #0f0f13;   /* PhotoPost bg */
+  --jra-coal:         #111111;   /* CoachIQ card */
+  --jra-coal-2:       #141414;   /* CoachIQ button bg */
+  --jra-graphite:     #1a1a24;   /* PhotoPost surface */
+  --jra-graphite-2:   #22223a;   /* PhotoPost surface-2 */
+  --jra-line:         #1e1e1e;   /* CoachIQ border */
+  --jra-line-soft:    rgba(255,255,255,.07);
+  --jra-line-softer:  rgba(255,255,255,.05);
+
+  /* Text */
+  --jra-text:         #f0f0f0;   /* CoachIQ / PhotoPost primary */
+  --jra-text-2:       #e8edf8;   /* AuditIQ primary */
+  --jra-text-3:       #eef0f8;   /* presentation primary */
+  --jra-muted:        #7b7a8e;   /* PhotoPost muted */
+  --jra-muted-2:      #5a6488;   /* AuditIQ muted */
+  --jra-muted-3:      #8392bb;   /* AuditIQ label */
+  --jra-faint:        #424d72;   /* AuditIQ sub-label */
+
+  /* ─── BRAND ACCENTS (one signature per product) ───────────────
+     These are the colors a user immediately recognises as
+     "that JRA app". Use them sparingly — one per surface. */
+  --auditiq-blue:        #4f7ef8;   /* AuditIQ primary */
+  --auditiq-blue-deep:   #2d54d4;   /* AuditIQ gradient end */
+  --auditiq-blue-soft:   #7fa8fb;   /* AuditIQ download link */
+  --auditiq-indigo:      #6366f1;   /* Presentation accent */
+  --auditiq-indigo-soft: #818cf8;   /* Presentation accent-2 */
+
+  --coachiq-lime:        #CAFF33;   /* CoachIQ primary — THE color */
+  --coachiq-lime-hot:    #d8ff5a;   /* CoachIQ hover */
+  --coachiq-lime-deep:   #90ee2a;   /* CoachIQ gradient end */
+
+  --photopost-violet:    #7c6ef5;   /* PhotoPost primary */
+  --photopost-violet-2:  #a78bfa;   /* PhotoPost accent-2 */
+  --photopost-violet-dk: #1e1b4b;   /* PhotoPost header start */
+  --photopost-violet-dk2:#312e81;   /* PhotoPost header mid */
+
+  --kidquest-orange:     #FF6B35;   /* KidQuest primary */
+  --kidquest-orange-2:   #FF8E53;   /* KidQuest gradient end */
+  --kidquest-yellow:     #FFD93D;   /* KidQuest highlight */
+  --kidquest-teal:       #4ECDC4;   /* KidQuest secondary */
+  --kidquest-teal-2:     #44A9C6;
+  --kidquest-mint:       #A8E6CF;   /* KidQuest tertiary */
+  --kidquest-mint-2:     #56C596;
+  --kidquest-purple:     #667eea;   /* KidQuest "I don't know" */
+  --kidquest-purple-2:   #764ba2;
+  --kidquest-pink:       #f093fb;
+  --kidquest-pink-2:     #f5576c;
+
+  /* ─── SEMANTIC STATUS ─────────────────────────────────────────
+     Used across audit reports, math feedback, sports score deltas.
+     The same hue lives in multiple shades depending on context. */
+  --jra-red:        #ef4444;   /* critique / wrong */
+  --jra-red-soft:   #f87171;
+  --jra-red-page:   #fca5a5;   /* readable on dark */
+  --jra-orange:     #f97316;   /* élevé */
+  --jra-orange-soft:#fdba74;
+  --jra-yellow:     #eab308;   /* moyen */
+  --jra-yellow-soft:#fde047;
+  --jra-green:      #22c55e;   /* faible / ok */
+  --jra-green-soft: #86efac;
+  --jra-green-2:    #22d3a5;   /* AuditIQ status */
+  --jra-green-3:    #34d399;   /* PhotoPost ok */
+  --jra-blue:       #60a5fa;   /* info */
+  --jra-blue-soft:  #93c5fd;
+
+  /* ─── TYPOGRAPHY ──────────────────────────────────────────────
+     Four families, one per product personality.
+     - Inter: default body & UI. AuditIQ + CoachIQ body.
+     - Bebas Neue: CoachIQ display only — scoreboards, section titles.
+     - Fredoka: KidQuest display & body (was "Fredoka One" originally,
+       now using the variable Fredoka family which covers the same weight).
+     - Nunito: KidQuest fallback / secondary body.
+     - Segoe UI / system stack: fallback used by the older Streamlit
+       apps before custom fonts landed. */
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Bebas Neue', 'Inter', sans-serif;
+  --font-fun:     'Fredoka', 'Nunito', 'Comic Sans MS', cursive;
+  --font-system:  'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  /* Type scale — semantic */
+  --t-display:   clamp(2rem, 5vw, 3.4rem);   /* hero / cover */
+  --t-h1:        clamp(1.5rem, 3vw, 2rem);   /* page title */
+  --t-h2:        clamp(1.3rem, 3vw, 1.9rem); /* section title */
+  --t-h3:        1.2rem;                     /* sub-section */
+  --t-body:      0.95rem;                    /* prose */
+  --t-ui:        0.85rem;                    /* buttons, controls */
+  --t-small:     0.75rem;                    /* meta, hints */
+  --t-tiny:      0.7rem;                     /* labels / badges */
+
+  --lh-tight:    1.15;
+  --lh-snug:     1.4;
+  --lh-normal:   1.6;
+  --lh-loose:    1.75;
+
+  /* ─── SPACING ─────────────────────────────────────────────────
+     Loose 4-px grid. Most components use s-3 / s-4 padding. */
+  --s-1: 0.25rem; --s-2: 0.5rem;  --s-3: 0.75rem; --s-4: 1rem;
+  --s-5: 1.25rem; --s-6: 1.5rem;  --s-7: 1.75rem; --s-8: 2rem;
+  --s-10: 2.5rem; --s-12: 3rem;
+
+  /* ─── RADII ───────────────────────────────────────────────────
+     A consistent step ladder. KidQuest cards lean to 22px.
+     Audit / Coach cards are 10–14px. Pills are 20px+. */
+  --r-xs:  6px;
+  --r-sm:  8px;
+  --r-md:  10px;   /* CoachIQ tabs, AuditIQ buttons */
+  --r-lg:  14px;   /* Audit presentation cards */
+  --r-xl:  16px;   /* PhotoPost cards */
+  --r-2xl: 22px;   /* KidQuest q-cards */
+  --r-pill: 9999px;
+
+  /* ─── SHADOWS / GLOWS ─────────────────────────────────────────
+     Dark UIs use accent-colored glows more than soft drop shadows.
+     The grey-on-grey shadow exists but is rarely visible. */
+  --shadow-card:   0 8px 32px rgba(0,0,0,.45);   /* PhotoPost card */
+  --shadow-soft:   0 6px 18px rgba(0,0,0,.09);   /* KidQuest light */
+  --shadow-lift:   0 4px 20px rgba(124,110,245,.35);  /* PhotoPost btn */
+  --shadow-lift-2: 0 8px 28px rgba(124,110,245,.5);
+  --glow-lime:     0 0 12px rgba(202,255,51,.15);     /* CoachIQ hover */
+  --glow-lime-2:   0 0 18px rgba(202,255,51,.4);      /* CoachIQ active */
+  --glow-lime-3:   0 0 24px rgba(202,255,51,.15);     /* CoachIQ selected */
+  --glow-blue:     0 0 0 3px rgba(79,126,248,.08);    /* AuditIQ focus */
+  --glow-card:     0 8px 22px rgba(0,0,0,.18);
+
+  /* ─── GRADIENTS ───────────────────────────────────────────────
+     Three signature patterns used throughout: */
+  --grad-auditiq:    linear-gradient(135deg, #2d54d4 0%, #4f7ef8 100%);
+  --grad-coachiq:    linear-gradient(135deg, #CAFF33, #90ee2a);
+  --grad-photopost:  linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+  --grad-photopost-btn: linear-gradient(135deg, #7c6ef5, #60a5fa);
+  --grad-kidquest-title: linear-gradient(135deg, #FF6B35, #FFD93D, #4ECDC4);
+  --grad-kidquest-orange: linear-gradient(135deg, #FF6B35, #FF8E53);
+  --grad-kidquest-teal:   linear-gradient(135deg, #4ECDC4, #44A9C6);
+  --grad-kidquest-mint:   linear-gradient(135deg, #A8E6CF, #56C596);
+  --grad-kidquest-purple: linear-gradient(135deg, #667eea, #764ba2);
+  --grad-kidquest-pink:   linear-gradient(135deg, #f093fb, #f5576c);
+  --grad-text-cool:  linear-gradient(130deg, #fff 30%, #818cf8 100%);
+  --grad-text-warm:  linear-gradient(135deg, #FF6B35, #FFD93D, #4ECDC4);
+
+  /* ─── MOTION ─────────────────────────────────────────────── */
+  --ease:           cubic-bezier(.4, 0, .2, 1);
+  --dur-fast:       150ms;
+  --dur:            250ms;
+  --dur-slow:       550ms;
+  --dur-glacial:    1200ms;   /* gauge / counter sweeps */
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   SEMANTIC ELEMENT STYLES
+   Importing colors_and_type.css gives you the variables AND these
+   default-styled elements so prose / forms look consistent.
+   ════════════════════════════════════════════════════════════════ */
+
+body {
+  background: var(--jra-ink-2);
+  color: var(--jra-text);
+  font-family: var(--font-sans);
+  line-height: var(--lh-normal);
+  font-size: var(--t-body);
+}
+
+h1, .h1 {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  line-height: var(--lh-tight);
+  color: var(--jra-text-2);
+}
+h2, .h2 {
+  font-family: var(--font-sans);
+  font-size: var(--t-h2);
+  font-weight: 800;
+  line-height: var(--lh-tight);
+  color: var(--jra-text-2);
+}
+h3, .h3 {
+  font-size: var(--t-h3);
+  font-weight: 700;
+  color: var(--jra-text-2);
+}
+
+p, .body {
+  font-size: var(--t-body);
+  color: var(--jra-text);
+  line-height: var(--lh-normal);
+}
+
+small, .small  { font-size: var(--t-small); color: var(--jra-muted); }
+.label         { font-size: var(--t-tiny); letter-spacing: 0.1em;
+                 text-transform: uppercase; color: var(--jra-muted);
+                 font-weight: 700; }
+
+code, pre, .mono {
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+/* Hero / display — used by KidQuest title & AuditIQ presentation cover */
+.display-warm {
+  font-family: var(--font-fun);
+  font-size: var(--t-display);
+  background: var(--grad-text-warm);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: var(--lh-tight);
+}
+.display-cool {
+  font-family: var(--font-sans);
+  font-size: var(--t-display);
+  font-weight: 900;
+  background: var(--grad-text-cool);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: var(--lh-tight);
+}
+.display-stadium {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: var(--jra-text);
+}
+
+/* Standard form field — Audit pattern */
+.field {
+  background: #10141f;
+  border: 1px solid var(--jra-line-soft);
+  border-radius: var(--r-sm);
+  color: var(--jra-text-2);
+  font-size: var(--t-ui);
+  padding: 0.6rem 0.85rem;
+  font-family: var(--font-sans);
+  width: 100%;
+}
+.field:focus {
+  outline: none;
+  border-color: rgba(79,126,248,.5);
+  box-shadow: var(--glow-blue);
+}

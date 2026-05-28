@@ -1,0 +1,3208 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AuditIQ — Audit bancaire augmenté par l'IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+/* ════════════════════════════════════════════════════════════════
+   JRA Studio — Design Tokens
+   Colors, type, spacing, radii, shadows for the 5 JRA products:
+   AuditIQ · KidQuest Academy · CoachIQ · PhotoPost AI · Audit Report deck
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Webfonts (all four are Google Fonts; loaded via CDN) ──────── */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap");
+
+:root {
+  /* ─── BASE PALETTE ────────────────────────────────────────────
+     The whole portfolio is dark-first. There's no "light mode"
+     except in KidQuest (which has both). Greys all sit between
+     near-black and off-white with a faint cool tint. */
+  --jra-black:        #07090f;   /* deepest — AuditIQ report bg */
+  --jra-ink:          #080808;   /* CoachIQ bg */
+  --jra-ink-2:        #080b12;   /* AuditIQ app bg */
+  --jra-ink-3:        #0e0e0e;   /* CoachIQ sidebar */
+  --jra-ink-4:        #0f0f13;   /* PhotoPost bg */
+  --jra-coal:         #111111;   /* CoachIQ card */
+  --jra-coal-2:       #141414;   /* CoachIQ button bg */
+  --jra-graphite:     #1a1a24;   /* PhotoPost surface */
+  --jra-graphite-2:   #22223a;   /* PhotoPost surface-2 */
+  --jra-line:         #1e1e1e;   /* CoachIQ border */
+  --jra-line-soft:    rgba(255,255,255,.07);
+  --jra-line-softer:  rgba(255,255,255,.05);
+
+  /* Text */
+  --jra-text:         #f0f0f0;   /* CoachIQ / PhotoPost primary */
+  --jra-text-2:       #e8edf8;   /* AuditIQ primary */
+  --jra-text-3:       #eef0f8;   /* presentation primary */
+  --jra-muted:        #7b7a8e;   /* PhotoPost muted */
+  --jra-muted-2:      #5a6488;   /* AuditIQ muted */
+  --jra-muted-3:      #8392bb;   /* AuditIQ label */
+  --jra-faint:        #424d72;   /* AuditIQ sub-label */
+
+  /* ─── BRAND ACCENTS (one signature per product) ───────────────
+     These are the colors a user immediately recognises as
+     "that JRA app". Use them sparingly — one per surface. */
+  --auditiq-blue:        #4f7ef8;   /* AuditIQ primary */
+  --auditiq-blue-deep:   #2d54d4;   /* AuditIQ gradient end */
+  --auditiq-blue-soft:   #7fa8fb;   /* AuditIQ download link */
+  --auditiq-indigo:      #6366f1;   /* Presentation accent */
+  --auditiq-indigo-soft: #818cf8;   /* Presentation accent-2 */
+
+  --coachiq-lime:        #CAFF33;   /* CoachIQ primary — THE color */
+  --coachiq-lime-hot:    #d8ff5a;   /* CoachIQ hover */
+  --coachiq-lime-deep:   #90ee2a;   /* CoachIQ gradient end */
+
+  --photopost-violet:    #7c6ef5;   /* PhotoPost primary */
+  --photopost-violet-2:  #a78bfa;   /* PhotoPost accent-2 */
+  --photopost-violet-dk: #1e1b4b;   /* PhotoPost header start */
+  --photopost-violet-dk2:#312e81;   /* PhotoPost header mid */
+
+  --kidquest-orange:     #FF6B35;   /* KidQuest primary */
+  --kidquest-orange-2:   #FF8E53;   /* KidQuest gradient end */
+  --kidquest-yellow:     #FFD93D;   /* KidQuest highlight */
+  --kidquest-teal:       #4ECDC4;   /* KidQuest secondary */
+  --kidquest-teal-2:     #44A9C6;
+  --kidquest-mint:       #A8E6CF;   /* KidQuest tertiary */
+  --kidquest-mint-2:     #56C596;
+  --kidquest-purple:     #667eea;   /* KidQuest "I don't know" */
+  --kidquest-purple-2:   #764ba2;
+  --kidquest-pink:       #f093fb;
+  --kidquest-pink-2:     #f5576c;
+
+  /* ─── SEMANTIC STATUS ─────────────────────────────────────────
+     Used across audit reports, math feedback, sports score deltas.
+     The same hue lives in multiple shades depending on context. */
+  --jra-red:        #ef4444;   /* critique / wrong */
+  --jra-red-soft:   #f87171;
+  --jra-red-page:   #fca5a5;   /* readable on dark */
+  --jra-orange:     #f97316;   /* élevé */
+  --jra-orange-soft:#fdba74;
+  --jra-yellow:     #eab308;   /* moyen */
+  --jra-yellow-soft:#fde047;
+  --jra-green:      #22c55e;   /* faible / ok */
+  --jra-green-soft: #86efac;
+  --jra-green-2:    #22d3a5;   /* AuditIQ status */
+  --jra-green-3:    #34d399;   /* PhotoPost ok */
+  --jra-blue:       #60a5fa;   /* info */
+  --jra-blue-soft:  #93c5fd;
+
+  /* ─── TYPOGRAPHY ──────────────────────────────────────────────
+     Four families, one per product personality.
+     - Inter: default body & UI. AuditIQ + CoachIQ body.
+     - Bebas Neue: CoachIQ display only — scoreboards, section titles.
+     - Fredoka: KidQuest display & body (was "Fredoka One" originally,
+       now using the variable Fredoka family which covers the same weight).
+     - Nunito: KidQuest fallback / secondary body.
+     - Segoe UI / system stack: fallback used by the older Streamlit
+       apps before custom fonts landed. */
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Bebas Neue', 'Inter', sans-serif;
+  --font-fun:     'Fredoka', 'Nunito', 'Comic Sans MS', cursive;
+  --font-system:  'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  /* Type scale — semantic */
+  --t-display:   clamp(2rem, 5vw, 3.4rem);   /* hero / cover */
+  --t-h1:        clamp(1.5rem, 3vw, 2rem);   /* page title */
+  --t-h2:        clamp(1.3rem, 3vw, 1.9rem); /* section title */
+  --t-h3:        1.2rem;                     /* sub-section */
+  --t-body:      0.95rem;                    /* prose */
+  --t-ui:        0.85rem;                    /* buttons, controls */
+  --t-small:     0.75rem;                    /* meta, hints */
+  --t-tiny:      0.7rem;                     /* labels / badges */
+
+  --lh-tight:    1.15;
+  --lh-snug:     1.4;
+  --lh-normal:   1.6;
+  --lh-loose:    1.75;
+
+  /* ─── SPACING ─────────────────────────────────────────────────
+     Loose 4-px grid. Most components use s-3 / s-4 padding. */
+  --s-1: 0.25rem; --s-2: 0.5rem;  --s-3: 0.75rem; --s-4: 1rem;
+  --s-5: 1.25rem; --s-6: 1.5rem;  --s-7: 1.75rem; --s-8: 2rem;
+  --s-10: 2.5rem; --s-12: 3rem;
+
+  /* ─── RADII ───────────────────────────────────────────────────
+     A consistent step ladder. KidQuest cards lean to 22px.
+     Audit / Coach cards are 10–14px. Pills are 20px+. */
+  --r-xs:  6px;
+  --r-sm:  8px;
+  --r-md:  10px;   /* CoachIQ tabs, AuditIQ buttons */
+  --r-lg:  14px;   /* Audit presentation cards */
+  --r-xl:  16px;   /* PhotoPost cards */
+  --r-2xl: 22px;   /* KidQuest q-cards */
+  --r-pill: 9999px;
+
+  /* ─── SHADOWS / GLOWS ─────────────────────────────────────────
+     Dark UIs use accent-colored glows more than soft drop shadows.
+     The grey-on-grey shadow exists but is rarely visible. */
+  --shadow-card:   0 8px 32px rgba(0,0,0,.45);   /* PhotoPost card */
+  --shadow-soft:   0 6px 18px rgba(0,0,0,.09);   /* KidQuest light */
+  --shadow-lift:   0 4px 20px rgba(124,110,245,.35);  /* PhotoPost btn */
+  --shadow-lift-2: 0 8px 28px rgba(124,110,245,.5);
+  --glow-lime:     0 0 12px rgba(202,255,51,.15);     /* CoachIQ hover */
+  --glow-lime-2:   0 0 18px rgba(202,255,51,.4);      /* CoachIQ active */
+  --glow-lime-3:   0 0 24px rgba(202,255,51,.15);     /* CoachIQ selected */
+  --glow-blue:     0 0 0 3px rgba(79,126,248,.08);    /* AuditIQ focus */
+  --glow-card:     0 8px 22px rgba(0,0,0,.18);
+
+  /* ─── GRADIENTS ───────────────────────────────────────────────
+     Three signature patterns used throughout: */
+  --grad-auditiq:    linear-gradient(135deg, #2d54d4 0%, #4f7ef8 100%);
+  --grad-coachiq:    linear-gradient(135deg, #CAFF33, #90ee2a);
+  --grad-photopost:  linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+  --grad-photopost-btn: linear-gradient(135deg, #7c6ef5, #60a5fa);
+  --grad-kidquest-title: linear-gradient(135deg, #FF6B35, #FFD93D, #4ECDC4);
+  --grad-kidquest-orange: linear-gradient(135deg, #FF6B35, #FF8E53);
+  --grad-kidquest-teal:   linear-gradient(135deg, #4ECDC4, #44A9C6);
+  --grad-kidquest-mint:   linear-gradient(135deg, #A8E6CF, #56C596);
+  --grad-kidquest-purple: linear-gradient(135deg, #667eea, #764ba2);
+  --grad-kidquest-pink:   linear-gradient(135deg, #f093fb, #f5576c);
+  --grad-text-cool:  linear-gradient(130deg, #fff 30%, #818cf8 100%);
+  --grad-text-warm:  linear-gradient(135deg, #FF6B35, #FFD93D, #4ECDC4);
+
+  /* ─── MOTION ─────────────────────────────────────────────── */
+  --ease:           cubic-bezier(.4, 0, .2, 1);
+  --dur-fast:       150ms;
+  --dur:            250ms;
+  --dur-slow:       550ms;
+  --dur-glacial:    1200ms;   /* gauge / counter sweeps */
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   SEMANTIC ELEMENT STYLES
+   Importing colors_and_type.css gives you the variables AND these
+   default-styled elements so prose / forms look consistent.
+   ════════════════════════════════════════════════════════════════ */
+
+body {
+  background: var(--jra-ink-2);
+  color: var(--jra-text);
+  font-family: var(--font-sans);
+  line-height: var(--lh-normal);
+  font-size: var(--t-body);
+}
+
+h1, .h1 {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  line-height: var(--lh-tight);
+  color: var(--jra-text-2);
+}
+h2, .h2 {
+  font-family: var(--font-sans);
+  font-size: var(--t-h2);
+  font-weight: 800;
+  line-height: var(--lh-tight);
+  color: var(--jra-text-2);
+}
+h3, .h3 {
+  font-size: var(--t-h3);
+  font-weight: 700;
+  color: var(--jra-text-2);
+}
+
+p, .body {
+  font-size: var(--t-body);
+  color: var(--jra-text);
+  line-height: var(--lh-normal);
+}
+
+small, .small  { font-size: var(--t-small); color: var(--jra-muted); }
+.label         { font-size: var(--t-tiny); letter-spacing: 0.1em;
+                 text-transform: uppercase; color: var(--jra-muted);
+                 font-weight: 700; }
+
+code, pre, .mono {
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+/* Hero / display — used by KidQuest title & AuditIQ presentation cover */
+.display-warm {
+  font-family: var(--font-fun);
+  font-size: var(--t-display);
+  background: var(--grad-text-warm);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: var(--lh-tight);
+}
+.display-cool {
+  font-family: var(--font-sans);
+  font-size: var(--t-display);
+  font-weight: 900;
+  background: var(--grad-text-cool);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: var(--lh-tight);
+}
+.display-stadium {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: var(--jra-text);
+}
+
+/* Standard form field — Audit pattern */
+.field {
+  background: #10141f;
+  border: 1px solid var(--jra-line-soft);
+  border-radius: var(--r-sm);
+  color: var(--jra-text-2);
+  font-size: var(--t-ui);
+  padding: 0.6rem 0.85rem;
+  font-family: var(--font-sans);
+  width: 100%;
+}
+.field:focus {
+  outline: none;
+  border-color: rgba(79,126,248,.5);
+  box-shadow: var(--glow-blue);
+}
+
+</style>
+<style>
+/* AuditIQ — modern indigo-on-navy professional UI */
+
+
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; }
+
+:root {
+  --aiq-bg: #07090f;
+  --aiq-bg-2: #0b0f1a;
+  --aiq-surface: #10141f;
+  --aiq-surface-2: #161b2a;
+  --aiq-border: rgba(255,255,255,.08);
+  --aiq-border-2: rgba(255,255,255,.14);
+  --aiq-text: #eef0f8;
+  --aiq-text-2: #c9cde0;
+  --aiq-muted: #8392bb;
+  --aiq-faint: #5a6488;
+  --aiq-accent: #6366f1;       /* primary indigo */
+  --aiq-accent-2: #818cf8;     /* lighter */
+  --aiq-accent-3: #4f7ef8;     /* blue alt */
+  --aiq-accent-soft: rgba(99,102,241,.14);
+  --aiq-glow: 0 0 0 3px rgba(99,102,241,.18);
+}
+
+body {
+  background: var(--aiq-bg);
+  color: var(--aiq-text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   COVER / SIGN-IN — rotating earth + auth panel
+   ────────────────────────────────────────────────────────────── */
+.aiq-cover {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  background: radial-gradient(ellipse at 30% 20%, #11173a 0%, #07090f 70%);
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity .75s cubic-bezier(.4,0,.2,1);
+}
+.aiq-cover.fading { opacity: 0; pointer-events: none; }
+.aiq-cover::before {
+  /* faint star field */
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 13% 22%, rgba(255,255,255,.5) 0, transparent 50%),
+    radial-gradient(1px 1px at 28% 78%, rgba(255,255,255,.32) 0, transparent 50%),
+    radial-gradient(1px 1px at 41% 14%, rgba(255,255,255,.4) 0, transparent 50%),
+    radial-gradient(1px 1px at 9% 54%, rgba(255,255,255,.3) 0, transparent 50%),
+    radial-gradient(1px 1px at 47% 52%, rgba(255,255,255,.3) 0, transparent 50%),
+    radial-gradient(1px 1px at 36% 90%, rgba(255,255,255,.35) 0, transparent 50%),
+    radial-gradient(1px 1px at 21% 38%, rgba(255,255,255,.28) 0, transparent 50%);
+  opacity: .7;
+}
+
+/* — left hero — */
+.aiq-cover-hero {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center;
+  padding: 56px clamp(40px, 6vw, 96px);
+  gap: 8px;
+}
+.aiq-cover-brand {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 8px;
+}
+.aiq-cover-brand .mark {
+  width: 38px; height: 38px; border-radius: 11px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  display: grid; place-items: center; color: #fff;
+  font-weight: 800; font-size: 16px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.12) inset, 0 8px 24px rgba(99,102,241,.45);
+}
+.aiq-cover-brand .nm { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--aiq-text); }
+.aiq-cover-brand .nm b { color: var(--aiq-accent-2); }
+
+.aiq-cover-globe {
+  align-self: center;
+  margin: 6px 0 22px;
+  filter: drop-shadow(0 0 64px rgba(99,102,241,.4));
+  animation: coverGlobeIn 1.1s cubic-bezier(.34,1.3,.64,1) both;
+}
+@keyframes coverGlobeIn { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: scale(1); } }
+
+.aiq-cover-title {
+  font-size: clamp(30px, 4vw, 50px);
+  font-weight: 800; letter-spacing: -0.03em; line-height: 1.06;
+  margin: 0; color: var(--aiq-text);
+  animation: coverUp .7s var(--ease) .2s both;
+}
+.aiq-cover-title .grad {
+  background: linear-gradient(120deg, #aab6ff 0%, #6366f1 70%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.aiq-cover-tag {
+  margin: 16px 0 0; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--aiq-muted);
+  animation: coverUp .7s var(--ease) .32s both;
+}
+.aiq-cover-flags {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px;
+  animation: coverUp .7s var(--ease) .44s both;
+}
+.aiq-cover-flags .fl {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 12px; border-radius: 999px;
+  background: rgba(255,255,255,.04); border: 1px solid var(--aiq-border);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+  color: var(--aiq-text-2);
+}
+.aiq-cover-flags .fl .em { font-size: 15px; }
+@keyframes coverUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+/* — right auth panel — */
+.aiq-cover-auth {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px;
+  background: linear-gradient(180deg, rgba(11,15,26,.72), rgba(7,9,15,.86));
+  border-left: 1px solid var(--aiq-border);
+  backdrop-filter: blur(8px);
+}
+.aiq-cover-lang { position: absolute; top: 26px; right: 26px; }
+
+.aiq-signin {
+  width: 100%; max-width: 380px;
+  display: flex; flex-direction: column; gap: 14px;
+  animation: coverUp .7s var(--ease) .15s both;
+}
+.aiq-signin-head h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 6px; color: var(--aiq-text); }
+.aiq-signin-head p { margin: 0 0 6px; font-size: 13.5px; color: var(--aiq-muted); line-height: 1.5; }
+
+.aiq-signin-field { display: flex; flex-direction: column; gap: 7px; }
+.aiq-signin-field > span { font-size: 12px; font-weight: 600; color: var(--aiq-text-2); letter-spacing: 0.02em; }
+.aiq-signin-field .ip { position: relative; }
+.aiq-signin-field .ic {
+  position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; opacity: .65; pointer-events: none;
+}
+.aiq-signin-field input {
+  width: 100%;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--aiq-border);
+  border-radius: 10px;
+  padding: 12px 14px 12px 40px;
+  color: var(--aiq-text); font-family: inherit; font-size: 14px;
+  outline: none; transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+}
+.aiq-signin-field input:focus { border-color: rgba(99,102,241,.5); box-shadow: var(--aiq-glow); background: rgba(255,255,255,.06); }
+
+.aiq-signin-row {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12.5px; margin-top: 2px;
+}
+.aiq-signin-row a { color: var(--aiq-accent-2); font-weight: 600; }
+.aiq-signin-row a:hover { text-decoration: underline; }
+.aiq-check { display: inline-flex; align-items: center; gap: 8px; color: var(--aiq-text-2); cursor: pointer; user-select: none; }
+.aiq-check .box {
+  width: 17px; height: 17px; border-radius: 5px;
+  border: 1.5px solid var(--aiq-border-2); background: rgba(255,255,255,.03);
+  display: grid; place-items: center; font-size: 11px; color: #fff;
+  transition: all .15s var(--ease);
+}
+.aiq-check .box[data-on="true"] { background: var(--aiq-accent); border-color: var(--aiq-accent); }
+
+.aiq-signin-btn {
+  margin-top: 6px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #fff; border: 0; border-radius: 10px;
+  padding: 14px 18px; font-family: inherit; font-size: 14.5px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: 0 8px 24px rgba(99,102,241,.4);
+  transition: transform .15s var(--ease), box-shadow .15s var(--ease), opacity .15s var(--ease);
+}
+.aiq-signin-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(99,102,241,.55); }
+.aiq-signin-btn:disabled { cursor: default; opacity: .85; }
+.aiq-signin-btn .arr { transition: transform .15s var(--ease); }
+.aiq-signin-btn:hover:not(:disabled) .arr { transform: translateX(4px); }
+
+.aiq-signin-or {
+  display: flex; align-items: center; gap: 12px;
+  color: var(--aiq-faint); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+  margin: 2px 0;
+}
+.aiq-signin-or::before, .aiq-signin-or::after { content: ""; flex: 1; height: 1px; background: var(--aiq-border); }
+
+.aiq-signin-sso { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.aiq-signin-sso button {
+  background: rgba(255,255,255,.03); border: 1px solid var(--aiq-border);
+  border-radius: 10px; padding: 11px; color: var(--aiq-text-2);
+  font-family: inherit; font-size: 12.5px; font-weight: 600;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all .15s var(--ease);
+}
+.aiq-signin-sso button:hover { background: rgba(255,255,255,.07); color: var(--aiq-text); border-color: var(--aiq-border-2); }
+.aiq-signin-sso .g { font-size: 14px; }
+
+.aiq-signin-foot {
+  margin: 8px 0 0; display: flex; flex-direction: column; gap: 8px; align-items: center;
+  font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--aiq-faint);
+  text-align: center;
+}
+
+@media (max-width: 880px) {
+  .aiq-cover { grid-template-columns: 1fr; overflow-y: auto; }
+  .aiq-cover-hero { padding: 40px 28px 8px; align-items: center; text-align: center; }
+  .aiq-cover-title, .aiq-cover-tag { text-align: center; }
+  .aiq-cover-flags { justify-content: center; }
+  .aiq-cover-globe { transform: scale(.82); margin: 0; }
+  .aiq-cover-auth { border-left: 0; border-top: 1px solid var(--aiq-border); padding: 32px 24px 48px; }
+  .aiq-cover-lang { top: 18px; right: 18px; }
+}
+
+/* — rotating earth globe — */
+.aiq-globe { position: relative; }
+.aiq-globe svg { width: 100%; height: 100%; overflow: visible; }
+.aiq-globe .aiq-earth-spin {
+  animation: earthSpin 26s linear infinite;
+}
+@keyframes earthSpin {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-380px); }
+}
+.aiq-globe .aiq-orbit {
+  animation: orbitSpin 16s linear infinite;
+}
+@keyframes orbitSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aiq-globe .aiq-earth-spin, .aiq-globe .aiq-orbit { animation: none; }
+}
+
+/* Ambient blobs (subtle background) */
+.aiq-blob {
+  position: fixed; border-radius: 50%;
+  filter: blur(120px); opacity: .14;
+  pointer-events: none; z-index: 0;
+}
+.aiq-blob.b1 { width: 600px; height: 600px; background: #4f46e5; top: -180px; left: -180px;
+               animation: blobMove1 22s ease-in-out infinite; }
+.aiq-blob.b2 { width: 480px; height: 480px; background: #0ea5e9; bottom: -120px; right: -100px;
+               animation: blobMove2 26s ease-in-out infinite; }
+@keyframes blobMove1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(90px,60px)} }
+@keyframes blobMove2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-70px,-90px)} }
+
+/* ──────────────────────────────────────────────────────────────
+   APP SHELL
+   ────────────────────────────────────────────────────────────── */
+.aiq-app {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: 268px 1fr;
+  min-height: 100vh;
+  opacity: 0;
+  animation: appIn .6s var(--ease) .5s forwards;
+}
+@keyframes appIn { to { opacity: 1; } }
+
+.aiq-sidebar {
+  position: sticky; top: 0; height: 100vh;
+  background: linear-gradient(180deg, var(--aiq-bg-2) 0%, var(--aiq-bg) 100%);
+  border-right: 1px solid var(--aiq-border);
+  display: flex; flex-direction: column;
+  padding: 22px 14px 18px;
+  overflow-y: auto;
+}
+.aiq-brand {
+  display: flex; align-items: center; gap: 12px;
+  padding: 4px 10px 18px;
+}
+.aiq-brand .mark {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  display: grid; place-items: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.1) inset, 0 6px 20px rgba(99,102,241,.4);
+}
+.aiq-brand .name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--aiq-text);
+}
+.aiq-brand .name b { color: var(--aiq-accent-2); }
+.aiq-brand .badge {
+  margin-left: auto;
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: rgba(99,102,241,.14);
+  border: 1px solid rgba(99,102,241,.3);
+  color: var(--aiq-accent-2);
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.aiq-nav-title {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiq-faint);
+  font-weight: 700;
+  padding: 14px 12px 6px;
+}
+.aiq-nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--aiq-text-2);
+  font-size: 13.5px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  transition: all .15s var(--ease);
+}
+.aiq-nav-item:hover { background: rgba(255,255,255,.04); color: var(--aiq-text); }
+.aiq-nav-item[data-active="true"] {
+  background: var(--aiq-accent-soft);
+  color: #fff;
+  border-color: rgba(99,102,241,.3);
+}
+.aiq-nav-item .ic {
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  font-size: 15px;
+  background: rgba(255,255,255,.03);
+  border-radius: 7px;
+  border: 1px solid var(--aiq-border);
+  flex-shrink: 0;
+}
+.aiq-nav-item[data-active="true"] .ic {
+  background: rgba(99,102,241,.2);
+  border-color: rgba(99,102,241,.4);
+}
+.aiq-nav-item .ic.agent {
+  color: var(--agent-color, var(--aiq-accent-2));
+}
+.aiq-nav-item .lbl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.aiq-nav-item .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--aiq-accent-2);
+}
+
+.aiq-sidebar-foot {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--aiq-border);
+}
+
+.aiq-user {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--aiq-border);
+  background: rgba(255,255,255,.02);
+}
+.aiq-user .av {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  display: grid; place-items: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+}
+.aiq-user .meta { flex: 1; min-width: 0; }
+.aiq-user .meta .nm { font-size: 13px; font-weight: 600; color: var(--aiq-text); line-height: 1.2; }
+.aiq-user .meta .ro { font-size: 11px; color: var(--aiq-muted); line-height: 1.2; }
+
+/* ──────────────────────────────────────────────────────────────
+   MAIN COLUMN
+   ────────────────────────────────────────────────────────────── */
+.aiq-main { min-width: 0; padding-bottom: 60px; }
+
+.aiq-topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 32px;
+  background: rgba(7,9,15,.78);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--aiq-border);
+}
+.aiq-topbar .crumbs {
+  font-size: 13px;
+  color: var(--aiq-muted);
+  display: flex; align-items: center; gap: 8px;
+  flex: 0 0 auto;
+}
+.aiq-topbar .crumbs .here {
+  color: var(--aiq-text);
+  font-weight: 600;
+  font-size: 14px;
+}
+.aiq-topbar .crumbs .sep { color: var(--aiq-faint); }
+.aiq-topbar .spacer { flex: 1; }
+
+.aiq-search {
+  flex: 1 1 320px;
+  max-width: 420px;
+  position: relative;
+  min-width: 0;
+}
+.aiq-search input {
+  width: 100%;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--aiq-border);
+  border-radius: 10px;
+  padding: 9px 14px 9px 38px;
+  color: var(--aiq-text);
+  font-size: 13px;
+  outline: none;
+  transition: border-color .15s var(--ease), box-shadow .15s var(--ease);
+}
+.aiq-search input:focus {
+  border-color: rgba(99,102,241,.45);
+  box-shadow: var(--aiq-glow);
+}
+.aiq-search input::placeholder { color: var(--aiq-faint); }
+.aiq-search .ic {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--aiq-muted);
+  pointer-events: none;
+}
+
+.aiq-lang {
+  display: inline-flex;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--aiq-border);
+  border-radius: 8px;
+  padding: 3px;
+}
+.aiq-lang button {
+  background: transparent; border: 0;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: var(--aiq-muted);
+}
+.aiq-lang button[data-active="true"] {
+  background: var(--aiq-surface);
+  color: var(--aiq-accent-2);
+}
+
+.aiq-icon-btn {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--aiq-border);
+  border-radius: 9px;
+  color: var(--aiq-text-2);
+  display: grid; place-items: center;
+  transition: all .15s var(--ease);
+}
+.aiq-icon-btn:hover { background: rgba(255,255,255,.08); color: var(--aiq-text); }
+.aiq-icon-btn .badge-dot {
+  position: absolute;
+  width: 8px; height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  top: 6px; right: 6px;
+  border: 2px solid var(--aiq-bg);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BUTTONS
+   ────────────────────────────────────────────────────────────── */
+.aiq-btn {
+  appearance: none; border: 1px solid transparent;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 10px 18px;
+  border-radius: 9px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all .15s var(--ease);
+  white-space: nowrap;
+}
+.aiq-btn-primary {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(99,102,241,.35);
+}
+.aiq-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(99,102,241,.5); }
+.aiq-btn-primary:disabled {
+  background: rgba(255,255,255,.05); color: var(--aiq-faint);
+  box-shadow: none; transform: none; cursor: not-allowed;
+}
+.aiq-btn-ghost {
+  background: rgba(255,255,255,.03);
+  color: var(--aiq-text-2);
+  border-color: var(--aiq-border);
+}
+.aiq-btn-ghost:hover { background: rgba(255,255,255,.08); color: var(--aiq-text); border-color: var(--aiq-border-2); }
+.aiq-btn-sm { padding: 7px 12px; font-size: 12px; }
+.aiq-btn-lg { padding: 13px 24px; font-size: 14px; }
+
+/* ──────────────────────────────────────────────────────────────
+   CONTENT / PAGE
+   ────────────────────────────────────────────────────────────── */
+.aiq-page {
+  padding: 28px 32px 50px;
+  max-width: 1440px;
+}
+.aiq-page-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px; margin-bottom: 28px; flex-wrap: wrap;
+}
+.aiq-h1 {
+  font-size: clamp(26px, 3vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0 0 6px;
+  color: var(--aiq-text);
+  line-height: 1.15;
+}
+.aiq-h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--aiq-text);
+  letter-spacing: -0.01em;
+}
+.aiq-sub {
+  color: var(--aiq-muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+.aiq-grid { display: grid; gap: 16px; }
+.aiq-row { display: flex; gap: 12px; }
+.aiq-col { display: flex; flex-direction: column; gap: 16px; }
+
+/* ──────────────────────────────────────────────────────────────
+   CARDS
+   ────────────────────────────────────────────────────────────── */
+.aiq-card {
+  background: var(--aiq-surface);
+  border: 1px solid var(--aiq-border);
+  border-radius: 14px;
+  padding: 22px;
+  position: relative;
+}
+.aiq-card-tight { padding: 16px; border-radius: 12px; }
+.aiq-card-glass {
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  backdrop-filter: blur(16px);
+}
+
+.aiq-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   STAT TILES
+   ────────────────────────────────────────────────────────────── */
+.aiq-stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.aiq-stat {
+  background: linear-gradient(180deg, var(--aiq-surface), var(--aiq-surface-2));
+  border: 1px solid var(--aiq-border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.aiq-stat::after {
+  content: ""; position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--aiq-accent-2), transparent);
+  opacity: 0.4;
+}
+.aiq-stat .lbl {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--aiq-muted);
+  font-weight: 700;
+  min-height: 2.4em;
+  display: flex; align-items: flex-start;
+}
+.aiq-stat .val {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--aiq-text);
+  line-height: 1.1;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.aiq-stat .delta {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.aiq-stat .delta.up { color: #22c55e; }
+.aiq-stat .delta.down { color: #ef4444; }
+.aiq-stat .delta.flat { color: var(--aiq-muted); }
+.aiq-stat .meta {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--aiq-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   PILLS / BADGES
+   ────────────────────────────────────────────────────────────── */
+.aiq-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--aiq-border);
+  background: rgba(255,255,255,.04);
+  color: var(--aiq-text-2);
+  font-family: var(--font-sans);
+  white-space: nowrap;
+}
+.aiq-pill .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.aiq-pill-indigo { background: rgba(99,102,241,.14); border-color: rgba(99,102,241,.3); color: var(--aiq-accent-2); }
+.aiq-pill-green  { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.3); color: #86efac; }
+.aiq-pill-orange { background: rgba(249,115,22,.12); border-color: rgba(249,115,22,.3); color: #fdba74; }
+.aiq-pill-red    { background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.3); color: #fca5a5; }
+.aiq-pill-yellow { background: rgba(234,179,8,.12); border-color: rgba(234,179,8,.3); color: #fde047; }
+.aiq-pill-blue   { background: rgba(96,165,250,.12); border-color: rgba(96,165,250,.3); color: #93c5fd; }
+
+/* ──────────────────────────────────────────────────────────────
+   PROGRESS BAR
+   ────────────────────────────────────────────────────────────── */
+.aiq-progress {
+  height: 6px; background: rgba(255,255,255,.06);
+  border-radius: 3px; overflow: hidden;
+}
+.aiq-progress > span {
+  display: block; height: 100%;
+  background: linear-gradient(90deg, #6366f1, #818cf8);
+  border-radius: 3px;
+  transition: width .9s cubic-bezier(.4,0,.2,1);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   TABLE
+   ────────────────────────────────────────────────────────────── */
+.aiq-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.aiq-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--aiq-muted);
+  border-bottom: 1px solid var(--aiq-border);
+}
+.aiq-table td {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--aiq-text-2);
+  border-bottom: 1px solid var(--aiq-border);
+}
+.aiq-table tbody tr {
+  transition: background .15s var(--ease);
+  cursor: pointer;
+}
+.aiq-table tbody tr:hover { background: rgba(255,255,255,.02); }
+.aiq-table tbody tr:last-child td { border-bottom: 0; }
+.aiq-table .id {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  color: var(--aiq-accent-2);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   ACTIVITY FEED
+   ────────────────────────────────────────────────────────────── */
+.aiq-activity-row {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--aiq-border);
+}
+.aiq-activity-row:last-child { border-bottom: 0; }
+.aiq-activity-row .ic {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--aiq-border);
+  display: grid; place-items: center;
+  font-size: 16px;
+}
+.aiq-activity-row .who { font-weight: 600; color: var(--aiq-text); font-size: 13px; }
+.aiq-activity-row .what { font-size: 12.5px; color: var(--aiq-muted); }
+.aiq-activity-row .when {
+  font-size: 11px;
+  color: var(--aiq-faint);
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   AGENT TILE
+   ────────────────────────────────────────────────────────────── */
+.aiq-agent-tile {
+  background: var(--aiq-surface);
+  border: 1px solid var(--aiq-border);
+  border-radius: 14px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all .2s var(--ease);
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  width: 100%;
+}
+.aiq-agent-tile:hover {
+  border-color: rgba(99,102,241,.4);
+  transform: translateY(-2px);
+}
+.aiq-agent-tile::before {
+  content: ""; position: absolute; inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--agent-color, var(--aiq-accent-2));
+  opacity: 0; transition: opacity .25s var(--ease);
+}
+.aiq-agent-tile:hover::before { opacity: 1; }
+.aiq-agent-tile .head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.aiq-agent-tile .ic {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: grid; place-items: center;
+  font-size: 22px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--aiq-border);
+  color: var(--agent-color, var(--aiq-accent-2));
+}
+.aiq-agent-tile h3 { font-size: 15px; font-weight: 700; margin: 0; color: var(--aiq-text); }
+.aiq-agent-tile .num { font-size: 10px; letter-spacing: 0.14em; color: var(--aiq-muted); text-transform: uppercase; font-weight: 700; }
+.aiq-agent-tile p { font-size: 13px; color: var(--aiq-muted); margin: 0 0 14px; line-height: 1.5; }
+
+/* ──────────────────────────────────────────────────────────────
+   FORM
+   ────────────────────────────────────────────────────────────── */
+.aiq-field {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-bottom: 16px;
+}
+.aiq-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--aiq-text-2);
+  letter-spacing: 0.02em;
+}
+.aiq-field .hint {
+  font-size: 11px;
+  color: var(--aiq-faint);
+  font-style: italic;
+}
+.aiq-input, .aiq-select, .aiq-textarea {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--aiq-border);
+  border-radius: 9px;
+  color: var(--aiq-text);
+  font-family: inherit;
+  font-size: 13.5px;
+  padding: 10px 14px;
+  outline: none;
+  transition: all .15s var(--ease);
+  width: 100%;
+}
+.aiq-textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+.aiq-input::placeholder, .aiq-textarea::placeholder { color: var(--aiq-faint); }
+.aiq-input:focus, .aiq-select:focus, .aiq-textarea:focus {
+  border-color: rgba(99,102,241,.45);
+  box-shadow: var(--aiq-glow);
+  background: rgba(255,255,255,.05);
+}
+
+.aiq-chip-grid {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.aiq-chip-check {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--aiq-border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--aiq-text-2);
+  cursor: pointer;
+  transition: all .15s var(--ease);
+  user-select: none;
+}
+.aiq-chip-check:hover { border-color: var(--aiq-border-2); color: var(--aiq-text); }
+.aiq-chip-check[data-checked="true"] {
+  background: rgba(99,102,241,.18);
+  border-color: rgba(99,102,241,.45);
+  color: #fff;
+}
+.aiq-chip-check .check {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: grid; place-items: center;
+  font-size: 9px;
+  opacity: 0.5;
+}
+.aiq-chip-check[data-checked="true"] .check {
+  background: var(--aiq-accent);
+  border-color: var(--aiq-accent);
+  color: #fff;
+  opacity: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   STATUS PILLS (capability / agent status)
+   ────────────────────────────────────────────────────────────── */
+.aiq-status-tile {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--aiq-border);
+  background: rgba(255,255,255,.02);
+}
+.aiq-status-tile .icb {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(99,102,241,.14);
+  display: grid; place-items: center;
+  font-size: 16px;
+}
+.aiq-status-tile .nm { font-size: 13px; font-weight: 600; color: var(--aiq-text); line-height: 1.2; }
+.aiq-status-tile .st { font-size: 11px; color: var(--aiq-muted); display: flex; align-items: center; gap: 4px; }
+.aiq-status-tile .st .live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 0 rgba(34,197,94,.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
+  70% { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   AUDIT CARD
+   ────────────────────────────────────────────────────────────── */
+.aiq-audit-card {
+  background: var(--aiq-surface);
+  border: 1px solid var(--aiq-border);
+  border-radius: 14px;
+  padding: 18px;
+  cursor: pointer;
+  transition: all .15s var(--ease);
+}
+.aiq-audit-card:hover { border-color: var(--aiq-border-2); background: var(--aiq-surface-2); }
+.aiq-audit-card .id { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--aiq-faint); letter-spacing: 0.04em; }
+.aiq-audit-card .subj { font-size: 14px; font-weight: 600; color: var(--aiq-text); margin: 4px 0 12px; line-height: 1.35; }
+.aiq-audit-card .jur-row { display: flex; gap: 4px; margin-bottom: 12px; font-size: 16px; }
+.aiq-audit-card .meta-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; flex-wrap: wrap;
+  font-size: 11px; color: var(--aiq-muted);
+}
+.aiq-audit-card .prog-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 10px;
+  font-size: 11px; color: var(--aiq-muted);
+  font-variant-numeric: tabular-nums;
+}
+.aiq-audit-card .prog-row .aiq-progress { flex: 1; }
+
+/* ──────────────────────────────────────────────────────────────
+   SEVERITY VISUAL
+   ────────────────────────────────────────────────────────────── */
+.aiq-sev-bar {
+  display: inline-block;
+  width: 4px; height: 18px;
+  border-radius: 2px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.aiq-sev-bar.critical { background: #ef4444; }
+.aiq-sev-bar.high     { background: #f97316; }
+.aiq-sev-bar.medium   { background: #eab308; }
+.aiq-sev-bar.low      { background: #22c55e; }
+.aiq-sev-bar.info     { background: #60a5fa; }
+
+/* ──────────────────────────────────────────────────────────────
+   GENERATION PANE (3 agents)
+   ────────────────────────────────────────────────────────────── */
+.aiq-gen-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 18px;
+}
+@media (max-width: 980px) {
+  .aiq-gen-split { grid-template-columns: 1fr; }
+}
+
+.aiq-output-card {
+  min-height: 460px;
+  display: flex; flex-direction: column;
+}
+.aiq-output-empty {
+  flex: 1;
+  display: grid; place-items: center;
+  text-align: center;
+  color: var(--aiq-muted);
+  padding: 40px 20px;
+  border: 1px dashed var(--aiq-border-2);
+  border-radius: 12px;
+  background: rgba(255,255,255,.01);
+}
+.aiq-output-empty .ic { font-size: 36px; margin-bottom: 12px; opacity: 0.5; }
+
+/* Bouncing dots while "generating" */
+.aiq-typing {
+  display: inline-flex; gap: 4px; margin-left: 6px;
+}
+.aiq-typing span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--aiq-accent-2);
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+.aiq-typing span:nth-child(2) { animation-delay: .15s; }
+.aiq-typing span:nth-child(3) { animation-delay: .3s; }
+@keyframes typingBounce {
+  0%,100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Inline preview content (regulation list, plan steps, findings) */
+.aiq-prev-list {
+  display: flex; flex-direction: column; gap: 10px;
+  flex: 1;
+}
+.aiq-prev-item {
+  background: rgba(255,255,255,.02);
+  border: 1px solid var(--aiq-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  animation: fadeUp .5s var(--ease) backwards;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.aiq-prev-item .jur-tag {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 10px;
+  background: rgba(99,102,241,.14);
+  color: var(--aiq-accent-2);
+  border-radius: 4px;
+  padding: 2px 7px;
+  letter-spacing: 0.04em;
+  display: inline-block;
+  margin-right: 8px;
+}
+.aiq-prev-item .code { font-weight: 700; color: var(--aiq-text); font-size: 13px; }
+.aiq-prev-item .ttl { font-size: 13px; color: var(--aiq-text-2); margin-top: 4px; line-height: 1.5; }
+.aiq-prev-item .meta { font-size: 11px; color: var(--aiq-muted); margin-top: 6px; display: flex; gap: 12px; }
+
+/* Plan step row */
+.aiq-step {
+  display: grid; grid-template-columns: 36px 1fr; gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--aiq-border);
+  animation: fadeUp .5s var(--ease) backwards;
+}
+.aiq-step:last-child { border-bottom: 0; }
+.aiq-step .num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(99,102,241,.14);
+  border: 1px solid rgba(99,102,241,.3);
+  display: grid; place-items: center;
+  color: var(--aiq-accent-2);
+  font-weight: 700;
+  font-size: 13px;
+}
+.aiq-step .body h4 { font-size: 13.5px; font-weight: 700; margin: 0 0 4px; color: var(--aiq-text); }
+.aiq-step .body p { font-size: 13px; color: var(--aiq-muted); margin: 0; line-height: 1.5; }
+.aiq-step .body .meta {
+  font-size: 11px; color: var(--aiq-faint); margin-top: 6px;
+  display: flex; gap: 14px; flex-wrap: wrap;
+}
+
+/* Finding row */
+.aiq-finding {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  padding: 16px;
+  background: rgba(255,255,255,.02);
+  border: 1px solid var(--aiq-border);
+  border-left-width: 3px;
+  border-radius: 10px;
+  animation: fadeUp .5s var(--ease) backwards;
+}
+.aiq-finding[data-sev="critical"] { border-left-color: #ef4444; }
+.aiq-finding[data-sev="high"]     { border-left-color: #f97316; }
+.aiq-finding[data-sev="medium"]   { border-left-color: #eab308; }
+.aiq-finding[data-sev="low"]      { border-left-color: #22c55e; }
+.aiq-finding .ico {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 14px;
+  font-weight: 800;
+}
+.aiq-finding[data-sev="critical"] .ico { background: rgba(239,68,68,.15); color: #fca5a5; }
+.aiq-finding[data-sev="high"]     .ico { background: rgba(249,115,22,.15); color: #fdba74; }
+.aiq-finding[data-sev="medium"]   .ico { background: rgba(234,179,8,.15); color: #fde047; }
+.aiq-finding[data-sev="low"]      .ico { background: rgba(34,197,94,.15); color: #86efac; }
+.aiq-finding .body h4 { font-size: 13.5px; font-weight: 700; margin: 0 0 4px; color: var(--aiq-text); }
+.aiq-finding .body p { font-size: 13px; color: var(--aiq-muted); margin: 0; line-height: 1.5; }
+.aiq-finding .body .jurs { margin-top: 6px; display: flex; gap: 6px; font-size: 16px; }
+
+/* ──────────────────────────────────────────────────────────────
+   SETTINGS
+   ────────────────────────────────────────────────────────────── */
+.aiq-setting {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--aiq-border);
+  gap: 16px;
+}
+.aiq-setting:last-child { border-bottom: 0; }
+.aiq-setting .meta-l { flex: 1; min-width: 0; }
+.aiq-setting .nm { font-weight: 600; color: var(--aiq-text); font-size: 14px; }
+.aiq-setting .ds { font-size: 12px; color: var(--aiq-muted); margin-top: 2px; }
+
+.aiq-switch {
+  width: 42px; height: 24px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid var(--aiq-border-2);
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  transition: all .15s var(--ease);
+  flex-shrink: 0;
+}
+.aiq-switch::after {
+  content: ""; position: absolute;
+  width: 18px; height: 18px;
+  background: var(--aiq-muted);
+  border-radius: 50%;
+  top: 2px; left: 2px;
+  transition: all .15s var(--ease);
+}
+.aiq-switch[data-on="true"] {
+  background: var(--aiq-accent);
+  border-color: var(--aiq-accent);
+}
+.aiq-switch[data-on="true"]::after {
+  background: #fff;
+  left: calc(100% - 21px);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   FOOTER
+   ────────────────────────────────────────────────────────────── */
+.aiq-footer {
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid var(--aiq-border);
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--aiq-faint);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   RESPONSIVE
+   ────────────────────────────────────────────────────────────── */
+.aiq-menu-btn {
+  display: none;
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--aiq-border);
+  color: var(--aiq-text);
+  display: none;
+  place-items: center;
+}
+.aiq-scrim {
+  display: none;
+  position: fixed; inset: 0; background: rgba(0,0,0,.6);
+  z-index: 19;
+  backdrop-filter: blur(2px);
+}
+.aiq-scrim.open { display: block; }
+
+@media (max-width: 900px) {
+  .aiq-app { grid-template-columns: 1fr; }
+  .aiq-sidebar {
+    position: fixed; top: 0; left: 0;
+    width: 280px; z-index: 20;
+    transform: translateX(-110%);
+    transition: transform .2s var(--ease);
+  }
+  .aiq-sidebar.open { transform: translateX(0); }
+  .aiq-menu-btn { display: grid; }
+  .aiq-topbar { padding: 12px 16px; }
+  .aiq-page { padding: 18px 16px 60px; }
+  .aiq-search { display: none; }
+  .aiq-page-head { flex-direction: column; align-items: flex-start; }
+}
+
+</style>
+<style>html,body{margin:0;padding:0;background:#07090f;overflow-x:hidden;}</style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <template id="__bundler_thumbnail">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" fill="#0d1224"/>
+      <circle cx="50" cy="46" r="26" fill="none" stroke="#6366f1" stroke-width="2.5"/>
+      <ellipse cx="50" cy="46" rx="26" ry="9" fill="none" stroke="#818cf8" stroke-width="1.5"/>
+      <ellipse cx="50" cy="46" rx="9" ry="26" fill="none" stroke="#818cf8" stroke-width="1.5"/>
+      <text x="50" y="86" text-anchor="middle" fill="#aab6ff" font-family="Inter,sans-serif" font-weight="800" font-size="13">AuditIQ</text>
+    </svg>
+  </template>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"
+          integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+          crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
+          integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+          crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+          integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
+          crossorigin="anonymous"></script>
+
+  <script>// data.js — AuditIQ i18n, jurisdictions, sample audits, agents
+
+window.AIQ = {
+  i18n: {
+    fr: {
+      brand: "AuditIQ",
+      tagline: "Audit bancaire augmenté par l'IA",
+      intro_sub: "Cadre réglementaire · Plan d'audit · Rapport",
+      enter: "Entrer",
+      // Nav
+      dashboard: "Tableau de bord",
+      audits: "Audits",
+      regulatory: "Cadre réglementaire",
+      audit_plan: "Plan d'audit",
+      audit_report: "Rapport d'audit",
+      documents: "Documents",
+      history: "Historique",
+      settings: "Paramètres",
+      agents_label: "Agents IA",
+      tools_label: "Outils",
+      account_label: "Compte",
+      // Dashboard
+      welcome: "Bienvenue, Lucas",
+      welcome_sub: "Voici l'état de vos audits en cours.",
+      new_audit: "Nouvel audit",
+      kpi_audits: "Audits actifs",
+      kpi_completed: "Audits clôturés",
+      kpi_pending: "Recommandations en attente",
+      kpi_jurisdictions: "Juridictions couvertes",
+      this_month: "ce mois",
+      vs_last_q: "vs trimestre précédent",
+      recent_activity: "Activité récente",
+      next_milestones: "Prochaines échéances",
+      due_in_days: "dans {n} jours",
+      view_all: "Tout voir",
+      agent_status: "État des agents",
+      // Generic
+      search: "Rechercher un audit, une réglementation...",
+      generate: "Lancer l'analyse",
+      generating: "Génération en cours…",
+      done: "Terminé",
+      in_progress: "En cours",
+      draft: "Brouillon",
+      review: "À revoir",
+      approved: "Approuvé",
+      severity: "Sévérité",
+      critical: "Critique",
+      high: "Élevé",
+      medium: "Moyen",
+      low: "Faible",
+      info: "Info",
+      // Forms
+      audit_subject: "Sujet d'audit",
+      audit_subject_ph: "Ex : Lutte contre le blanchiment de capitaux",
+      audit_scope: "Périmètre de l'audit",
+      audit_scope_ph: "Ex : Activités de banque privée en Suisse et à Singapour",
+      audit_scope_opt: "Périmètre (optionnel)",
+      jurisdiction: "Juridiction(s)",
+      regulation: "Réglementation",
+      framework: "Cadre",
+      period: "Période",
+      // Agent 1
+      agent1_title: "Agent 1 — Cadre réglementaire",
+      agent1_desc: "Compile les lois, réglementations et guidelines applicables sur 6 juridictions pour un sujet d'audit donné.",
+      generate_framework: "Générer le cadre",
+      framework_ready: "Cadre réglementaire disponible",
+      framework_missing: "Cadre réglementaire requis",
+      // Agent 2
+      agent2_title: "Agent 2 — Plan d'audit",
+      agent2_desc: "Décline le cadre en un plan d'audit structuré : étapes, contrôles, procédures, échantillonnage.",
+      generate_plan: "Générer le plan",
+      plan_ready: "Plan d'audit disponible",
+      plan_missing: "Plan d'audit requis",
+      // Agent 3
+      agent3_title: "Agent 3 — Rapport d'audit",
+      agent3_desc: "Produit un rapport exécutif synthétique : constats, gravité, recommandations, plan d'action.",
+      generate_report: "Générer le rapport",
+      report_ready: "Rapport d'audit disponible",
+      report_missing: "Rapport d'audit requis",
+      // Output
+      output: "Sortie",
+      preview: "Aperçu",
+      download_word: "Télécharger Word",
+      download_pptx: "Télécharger PowerPoint",
+      download_xlsx: "Télécharger Excel",
+      download_pdf: "Télécharger PDF",
+      // Documents
+      docs_sub: "Tous les livrables générés par AuditIQ",
+      doc_type: "Type",
+      doc_audit: "Audit",
+      doc_date: "Date",
+      doc_size: "Taille",
+      doc_status: "Statut",
+      // Settings
+      api_key: "Clé API Claude",
+      api_key_ph: "sk-ant-...",
+      api_key_set: "Clé API configurée",
+      api_key_missing: "Clé API requise",
+      language: "Langue d'interface",
+      model: "Modèle Claude",
+      thinking: "Mode raisonnement",
+      thinking_desc: "Active le raisonnement étendu (plus lent, plus précis)",
+      org: "Organisation",
+      // Status
+      status_label: "Statut",
+      status_active: "Actif",
+      status_review: "À revoir",
+      status_closed: "Clôturé",
+      // Misc
+      footer: "Propulsé par Claude AI · Anthropic",
+      no_data: "Aucune donnée à afficher.",
+      hint_required: "Champs requis",
+      ago: "il y a",
+      minutes: "min",
+      hours: "h",
+      days: "j",
+      // Severity descriptions
+      sev_critical_d: "Impact réglementaire immédiat",
+      sev_high_d: "Action sous 30 jours",
+      sev_medium_d: "À traiter au prochain cycle",
+      sev_low_d: "Veille à maintenir",
+    },
+    en: {
+      brand: "AuditIQ",
+      tagline: "AI-augmented banking audit",
+      intro_sub: "Regulatory framework · Audit plan · Report",
+      enter: "Enter",
+      dashboard: "Dashboard",
+      audits: "Audits",
+      regulatory: "Regulatory framework",
+      audit_plan: "Audit plan",
+      audit_report: "Audit report",
+      documents: "Documents",
+      history: "History",
+      settings: "Settings",
+      agents_label: "AI Agents",
+      tools_label: "Tools",
+      account_label: "Account",
+      welcome: "Welcome, Lucas",
+      welcome_sub: "Here's the status of your ongoing audits.",
+      new_audit: "New audit",
+      kpi_audits: "Active audits",
+      kpi_completed: "Completed audits",
+      kpi_pending: "Pending recommendations",
+      kpi_jurisdictions: "Jurisdictions covered",
+      this_month: "this month",
+      vs_last_q: "vs last quarter",
+      recent_activity: "Recent activity",
+      next_milestones: "Upcoming milestones",
+      due_in_days: "in {n} days",
+      view_all: "View all",
+      agent_status: "Agent status",
+      search: "Search an audit, a regulation...",
+      generate: "Run analysis",
+      generating: "Generating…",
+      done: "Done",
+      in_progress: "In progress",
+      draft: "Draft",
+      review: "To review",
+      approved: "Approved",
+      severity: "Severity",
+      critical: "Critical",
+      high: "High",
+      medium: "Medium",
+      low: "Low",
+      info: "Info",
+      audit_subject: "Audit subject",
+      audit_subject_ph: "E.g. Anti-money-laundering",
+      audit_scope: "Audit scope",
+      audit_scope_ph: "E.g. Private banking in Switzerland and Singapore",
+      audit_scope_opt: "Scope (optional)",
+      jurisdiction: "Jurisdiction(s)",
+      regulation: "Regulation",
+      framework: "Framework",
+      period: "Period",
+      agent1_title: "Agent 1 — Regulatory framework",
+      agent1_desc: "Compiles applicable laws, regulations and guidelines across 6 jurisdictions for a given audit subject.",
+      generate_framework: "Generate framework",
+      framework_ready: "Regulatory framework available",
+      framework_missing: "Regulatory framework required",
+      agent2_title: "Agent 2 — Audit plan",
+      agent2_desc: "Turns the framework into a structured audit plan: steps, controls, procedures, sampling.",
+      generate_plan: "Generate plan",
+      plan_ready: "Audit plan available",
+      plan_missing: "Audit plan required",
+      agent3_title: "Agent 3 — Audit report",
+      agent3_desc: "Produces an executive synthesis: findings, severity, recommendations, action plan.",
+      generate_report: "Generate report",
+      report_ready: "Audit report available",
+      report_missing: "Audit report required",
+      output: "Output",
+      preview: "Preview",
+      download_word: "Download Word",
+      download_pptx: "Download PowerPoint",
+      download_xlsx: "Download Excel",
+      download_pdf: "Download PDF",
+      docs_sub: "All deliverables generated by AuditIQ",
+      doc_type: "Type",
+      doc_audit: "Audit",
+      doc_date: "Date",
+      doc_size: "Size",
+      doc_status: "Status",
+      api_key: "Claude API key",
+      api_key_ph: "sk-ant-...",
+      api_key_set: "API key configured",
+      api_key_missing: "API key required",
+      language: "Interface language",
+      model: "Claude model",
+      thinking: "Reasoning mode",
+      thinking_desc: "Enable extended reasoning (slower, more accurate)",
+      org: "Organization",
+      status_label: "Status",
+      status_active: "Active",
+      status_review: "To review",
+      status_closed: "Closed",
+      footer: "Powered by Claude AI · Anthropic",
+      no_data: "No data to display.",
+      hint_required: "Required fields",
+      ago: "",
+      minutes: "min ago",
+      hours: "h ago",
+      days: "d ago",
+      sev_critical_d: "Immediate regulatory impact",
+      sev_high_d: "Action within 30 days",
+      sev_medium_d: "Address in next cycle",
+      sev_low_d: "Keep monitoring",
+    },
+  },
+
+  jurisdictions: [
+    { id: "ch", fr: "Suisse", en: "Switzerland", flag: "🇨🇭", regulator: "FINMA" },
+    { id: "sg", fr: "Singapour", en: "Singapore", flag: "🇸🇬", regulator: "MAS" },
+    { id: "hk", fr: "Hong Kong", en: "Hong Kong", flag: "🇭🇰", regulator: "HKMA · SFC" },
+    { id: "bs", fr: "Bahamas", en: "Bahamas", flag: "🇧🇸", regulator: "CBB · SCB" },
+    { id: "eu", fr: "Union Européenne", en: "European Union", flag: "🇪🇺", regulator: "EBA · ECB" },
+    { id: "uk", fr: "Royaume-Uni", en: "United Kingdom", flag: "🇬🇧", regulator: "FCA · PRA" },
+  ],
+
+  topics: [
+    { id: "aml",  fr: "Lutte contre le blanchiment (AML)", en: "Anti-money-laundering (AML)" },
+    { id: "kyc",  fr: "Connaissance du client (KYC)",       en: "Know-your-customer (KYC)" },
+    { id: "mar",  fr: "Abus de marché (MAR)",               en: "Market abuse (MAR)" },
+    { id: "icaap",fr: "Adéquation des fonds propres",       en: "Capital adequacy (ICAAP)" },
+    { id: "ops",  fr: "Risque opérationnel",                en: "Operational risk" },
+    { id: "cyber",fr: "Cybersécurité",                      en: "Cybersecurity" },
+    { id: "esg",  fr: "Risques ESG & climat",               en: "ESG & climate risk" },
+    { id: "dora", fr: "DORA — Résilience opérationnelle",   en: "DORA — Operational resilience" },
+  ],
+
+  // Live audits
+  audits: [
+    {
+      id: "AUD-2026-014",
+      subject_fr: "Lutte contre le blanchiment — Banque privée CH/SG",
+      subject_en: "AML — Private banking CH/SG",
+      jurisdictions: ["ch", "sg"],
+      regulators: ["FINMA", "MAS"],
+      status: "active",
+      progress: 68,
+      owner: "L. Brunner",
+      due: "12 juin 2026",
+      due_in: 15,
+      severity: "high",
+      stage: "agent2",
+    },
+    {
+      id: "AUD-2026-013",
+      subject_fr: "Résilience opérationnelle (DORA) — Périmètre UE",
+      subject_en: "Operational resilience (DORA) — EU scope",
+      jurisdictions: ["eu"],
+      regulators: ["EBA"],
+      status: "review",
+      progress: 92,
+      owner: "M. Tanaka",
+      due: "30 mai 2026",
+      due_in: 2,
+      severity: "critical",
+      stage: "agent3",
+    },
+    {
+      id: "AUD-2026-012",
+      subject_fr: "KYC client de haute valeur — Hong Kong",
+      subject_en: "High-net-worth KYC — Hong Kong",
+      jurisdictions: ["hk"],
+      regulators: ["HKMA", "SFC"],
+      status: "active",
+      progress: 42,
+      owner: "A. Cheung",
+      due: "28 juin 2026",
+      due_in: 31,
+      severity: "medium",
+      stage: "agent1",
+    },
+    {
+      id: "AUD-2026-011",
+      subject_fr: "Risque opérationnel — Bahamas",
+      subject_en: "Operational risk — Bahamas",
+      jurisdictions: ["bs"],
+      regulators: ["CBB"],
+      status: "active",
+      progress: 25,
+      owner: "R. Patel",
+      due: "22 juillet 2026",
+      due_in: 55,
+      severity: "medium",
+      stage: "agent1",
+    },
+    {
+      id: "AUD-2026-010",
+      subject_fr: "Cybersécurité & continuité — UK",
+      subject_en: "Cybersecurity & continuity — UK",
+      jurisdictions: ["uk"],
+      regulators: ["FCA", "PRA"],
+      status: "closed",
+      progress: 100,
+      owner: "S. Holm",
+      due: "15 mai 2026",
+      due_in: -12,
+      severity: "high",
+      stage: "done",
+    },
+    {
+      id: "AUD-2026-009",
+      subject_fr: "Abus de marché (MAR) — Trading desk",
+      subject_en: "Market abuse (MAR) — Trading desk",
+      jurisdictions: ["eu", "uk"],
+      regulators: ["ESMA", "FCA"],
+      status: "closed",
+      progress: 100,
+      owner: "L. Brunner",
+      due: "30 avril 2026",
+      due_in: -28,
+      severity: "low",
+      stage: "done",
+    },
+  ],
+
+  // Sample regulations for the Regulatory Framework agent
+  regulations: {
+    aml: [
+      { jur: "ch", code: "LBA / OBA-FINMA", fr: "Loi sur le blanchiment d'argent",
+        en: "Anti-Money Laundering Act", updated: "2024-03-01", severity: "critical" },
+      { jur: "sg", code: "MAS 626", fr: "Notice 626 — Prévention du blanchiment et du financement du terrorisme",
+        en: "Notice 626 — AML/CFT Prevention", updated: "2023-11-12", severity: "critical" },
+      { jur: "hk", code: "AMLO Cap. 615", fr: "Ordonnance AML",
+        en: "Anti-Money Laundering Ordinance", updated: "2023-06-30", severity: "high" },
+      { jur: "eu", code: "AMLD 6 / AMLR", fr: "6e directive AML & règlement",
+        en: "6th AML Directive & Regulation", updated: "2024-05-30", severity: "critical" },
+      { jur: "uk", code: "MLR 2017", fr: "Money Laundering Regulations 2017",
+        en: "Money Laundering Regulations 2017", updated: "2023-09-01", severity: "high" },
+      { jur: "bs", code: "POCA 2018", fr: "Loi sur les produits du crime",
+        en: "Proceeds of Crime Act 2018", updated: "2022-12-15", severity: "medium" },
+    ],
+  },
+
+  // Sample findings for the Report agent
+  findings: [
+    { sev: "critical", title_fr: "Données KYC obsolètes pour 4% des clients PEP",
+      title_en: "Outdated KYC data for 4% of PEP clients",
+      jur: ["ch", "sg"],
+      desc_fr: "127 clients politiquement exposés présentent des données de revue dépassant 18 mois.",
+      desc_en: "127 politically-exposed clients have review data older than 18 months.",
+    },
+    { sev: "high", title_fr: "Procédure d'escalade non documentée",
+      title_en: "Undocumented escalation procedure",
+      jur: ["sg"],
+      desc_fr: "Le mécanisme d'escalade vers le MLRO n'est pas formalisé.",
+      desc_en: "Escalation to the MLRO is not formally documented.",
+    },
+    { sev: "medium", title_fr: "Échantillonnage de transactions non randomisé",
+      title_en: "Non-randomised transaction sampling",
+      jur: ["ch"],
+      desc_fr: "La sélection des transactions à revoir suit un schéma déterministe.",
+      desc_en: "Transaction selection follows a deterministic pattern.",
+    },
+    { sev: "low", title_fr: "Format des rapports SAR non harmonisé",
+      title_en: "SAR report format not harmonised",
+      jur: ["sg", "hk"],
+      desc_fr: "Les rapports SAR utilisent deux templates différents.",
+      desc_en: "SAR reports use two different templates.",
+    },
+  ],
+
+  agents: [
+    { id: "agent1", icon: "📋", color: "#22d3a5",
+      title_key: "agent1_title", desc_key: "agent1_desc" },
+    { id: "agent2", icon: "🗺", color: "#4f7ef8",
+      title_key: "agent2_title", desc_key: "agent2_desc" },
+    { id: "agent3", icon: "📊", color: "#a78bfa",
+      title_key: "agent3_title", desc_key: "agent3_desc" },
+  ],
+
+  // Generated documents
+  documents: [
+    { id: "D-014-a", name: "AUD-2026-014_cadre_reglementaire.docx",
+      audit: "AUD-2026-014", type: "Word", size: "284 KB",
+      date: "27 mai 2026", status: "approved" },
+    { id: "D-014-b", name: "AUD-2026-014_plan_audit.pptx",
+      audit: "AUD-2026-014", type: "PowerPoint", size: "1.4 MB",
+      date: "28 mai 2026", status: "approved" },
+    { id: "D-014-c", name: "AUD-2026-014_procedures.xlsx",
+      audit: "AUD-2026-014", type: "Excel", size: "612 KB",
+      date: "28 mai 2026", status: "review" },
+    { id: "D-013-a", name: "AUD-2026-013_rapport_final.docx",
+      audit: "AUD-2026-013", type: "Word", size: "892 KB",
+      date: "26 mai 2026", status: "review" },
+    { id: "D-010-a", name: "AUD-2026-010_rapport_final.docx",
+      audit: "AUD-2026-010", type: "Word", size: "1.1 MB",
+      date: "15 mai 2026", status: "approved" },
+    { id: "D-009-a", name: "AUD-2026-009_rapport_final.docx",
+      audit: "AUD-2026-009", type: "Word", size: "740 KB",
+      date: "30 avril 2026", status: "approved" },
+  ],
+
+  // Activity feed
+  activity: [
+    { who: "Agent 3", what_fr: "Rapport généré pour AUD-2026-013",
+      what_en: "Report generated for AUD-2026-013", ago: "12 min", icon: "📊" },
+    { who: "L. Brunner", what_fr: "Recommandation approuvée (AUD-2026-014)",
+      what_en: "Recommendation approved (AUD-2026-014)", ago: "1 h", icon: "✓" },
+    { who: "Agent 2", what_fr: "Plan d'audit mis à jour (AUD-2026-014)",
+      what_en: "Audit plan updated (AUD-2026-014)", ago: "3 h", icon: "🗺" },
+    { who: "Agent 1", what_fr: "Cadre AML compilé (AUD-2026-012)",
+      what_en: "AML framework compiled (AUD-2026-012)", ago: "1 j", icon: "📋" },
+    { who: "Système", what_fr: "AUD-2026-010 clôturé",
+      what_en: "AUD-2026-010 closed", ago: "13 j", icon: "🔒" },
+  ],
+};
+</script>
+  <script type="text/babel" data-presets="react">// globe.jsx — Real rotating Earth.
+// A genuine 3-D globe: a coarse world land-mask is sampled into lat/long
+// points, rotated around the polar axis each frame, projected onto a sphere
+// (front hemisphere only) and drawn as shaded dots over an ocean gradient.
+
+const Globe = ({ size = 360 }) => {
+  const ref = React.useRef(null);
+
+  React.useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    ctx.scale(dpr, dpr);
+
+    const cx = size / 2, cy = size / 2, R = size * 0.43;
+
+    // Coarse equirectangular land mask. Each row = a 5° latitude band from
+    // +90° (top) to −90°; entries are inclusive [col0, col1] longitude spans
+    // on a 72-column grid (col 0 = −180°, 5° per col).
+    const MASK = {
+      2:  [[8,14],[26,30],[50,69]],
+      3:  [[2,5],[7,22],[25,31],[46,70]],
+      4:  [[1,24],[26,31],[35,40],[42,71]],
+      5:  [[1,14],[17,25],[27,30],[33,44],[45,71]],
+      6:  [[2,15],[19,26],[35,42],[43,71]],
+      7:  [[3,16],[19,27],[32,33],[35,71]],
+      8:  [[4,28],[33,71]],
+      9:  [[5,27],[33,52],[54,71]],
+      10: [[6,26],[32,37],[40,71]],
+      11: [[7,25],[31,46],[47,70]],
+      12: [[9,22],[30,53],[55,70]],
+      13: [[11,20],[29,53],[55,70]],
+      14: [[13,20],[30,52],[54,69]],
+      15: [[15,21],[31,51],[55,68]],
+      16: [[20,27],[32,50],[60,68]],
+      17: [[21,30],[33,49],[60,69]],
+      18: [[21,31],[34,48],[60,70]],
+      19: [[21,32],[35,47],[61,69]],
+      20: [[22,33],[36,46],[57,68]],
+      21: [[23,33],[37,45],[57,68]],
+      22: [[24,33],[38,45],[56,67]],
+      23: [[25,32],[39,44],[57,66]],
+      24: [[26,31],[40,43],[58,65]],
+      25: [[27,30],[41,43],[60,63]],
+      26: [[27,29],[68,70]],
+      27: [[27,29]],
+      28: [[27,28]],
+      29: [[27,28]],
+      32: [[4,67]],
+      33: [[0,71]],
+      34: [[0,71]],
+    };
+
+    const pts = [];
+    for (const r in MASK) {
+      const row = +r;
+      for (const [c0, c1] of MASK[r]) {
+        for (let c = c0; c <= c1; c += 0.5) {
+          const lon = (-180 + c * 5 + 2.5) * Math.PI / 180;
+          for (const sub of [-1.25, 1.25]) {
+            const lat = (90 - row * 5 - 2.5 + sub) * Math.PI / 180;
+            pts.push([lon, lat]);
+          }
+        }
+      }
+    }
+
+    const tilt = 21 * Math.PI / 180;
+    const ct = Math.cos(tilt), st = Math.sin(tilt);
+    // light direction (top-left, toward viewer)
+    const lx = -0.42, ly = 0.5, lz = 0.62;
+
+    let raf, rot = -1.2, last = performance.now();
+
+    const draw = (now) => {
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      rot += dt * 0.32;
+      ctx.clearRect(0, 0, size, size);
+
+      // ocean sphere
+      const og = ctx.createRadialGradient(cx - R * 0.34, cy - R * 0.4, R * 0.08, cx, cy, R);
+      og.addColorStop(0, '#26336f');
+      og.addColorStop(0.5, '#141f47');
+      og.addColorStop(1, '#070b1c');
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
+      ctx.fillStyle = og;
+      ctx.fill();
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = 'rgba(129,140,248,0.42)';
+      ctx.stroke();
+
+      // land dots
+      for (let i = 0; i < pts.length; i++) {
+        const lon = pts[i][0], lat = pts[i][1];
+        const lam = lon + rot;
+        const clat = Math.cos(lat);
+        let x = clat * Math.sin(lam);
+        let y = Math.sin(lat);
+        let z = clat * Math.cos(lam);
+        // axial tilt around X
+        const y2 = y * ct - z * st;
+        const z2 = y * st + z * ct;
+        y = y2; z = z2;
+        if (z <= 0.02) continue;            // front hemisphere only
+
+        const sx = cx + R * x, sy = cy - R * y;
+        const lf = Math.max(0, x * lx + y * ly + z * lz);   // diffuse light
+        const shade = 0.32 + 0.68 * lf;
+        const rr = Math.round(70 + 90 * shade);
+        const gg = Math.round(95 + 110 * shade);
+        const bb = Math.round(180 + 75 * shade);
+        const alpha = (0.55 + 0.45 * z) * (z < 0.12 ? z / 0.12 : 1);
+        ctx.beginPath();
+        ctx.arc(sx, sy, 1.5 * (0.55 + 0.55 * z), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${rr},${gg},${bb},${alpha})`;
+        ctx.fill();
+      }
+
+      // specular sheen
+      const sg = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.34, 0, cx - R * 0.3, cy - R * 0.34, R * 0.85);
+      sg.addColorStop(0, 'rgba(175,186,255,0.26)');
+      sg.addColorStop(0.45, 'rgba(175,186,255,0)');
+      ctx.fillStyle = sg;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
+      ctx.fill();
+
+      // limb darkening at the edge for roundness
+      const lg = ctx.createRadialGradient(cx, cy, R * 0.7, cx, cy, R);
+      lg.addColorStop(0, 'rgba(0,0,0,0)');
+      lg.addColorStop(1, 'rgba(2,4,12,0.5)');
+      ctx.fillStyle = lg;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
+      ctx.fill();
+
+      raf = requestAnimationFrame(draw);
+    };
+
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { rot = -0.6; draw(performance.now()); }
+    else raf = requestAnimationFrame(draw);
+
+    return () => raf && cancelAnimationFrame(raf);
+  }, [size]);
+
+  return (
+    <div className="aiq-globe" style={{ width: size, height: size }}>
+      <canvas ref={ref} style={{ width: size, height: size, display: 'block' }} />
+    </div>
+  );
+};
+
+window.AIQ_Globe = Globe;
+</script>
+  <script type="text/babel" data-presets="react">// screens.jsx — AuditIQ screens
+// Exposes: IntroSplash, Topbar, Sidebar, DashboardScreen, AgentScreen, AuditsScreen,
+//          DocumentsScreen, HistoryScreen, SettingsScreen
+
+var { useState, useEffect, useMemo, useRef } = React;
+
+// ─── helpers ─────────────────────────────────────────────────────
+const fmt = (s, vars) => Object.keys(vars || {}).reduce(
+  (acc, k) => acc.replace(`{${k}}`, vars[k]), s);
+const useT = (lang) => (key, vars) => fmt(window.AIQ.i18n[lang][key] || key, vars);
+
+const Icon = ({ name, size = 16 }) => {
+  const paths = {
+    home:     "M3 12l9-9 9 9M5 10v10h14V10",
+    grid:     "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
+    book:     "M4 4h12a4 4 0 0 1 4 4v12a4 4 0 0 0-4-4H4zM4 4v12h12",
+    map:      "M9 20l-6 2V6l6-2 6 2 6-2v16l-6 2-6-2zM9 4v16M15 6v16",
+    chart:    "M3 17l6-6 4 4 8-8M21 7h-5M21 7v5",
+    docs:     "M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5",
+    history:  "M3 12a9 9 0 1 0 3-6.7M3 4v5h5",
+    settings: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06A2 2 0 1 1 4.27 16.96l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1A1.65 1.65 0 0 0 4.27 7.27l-.06-.06A2 2 0 1 1 7.04 4.38l.06.06a1.65 1.65 0 0 0 1.82.33h.05a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z",
+    search:   "M11 19a8 8 0 1 1 5.3-14M21 21l-4.3-4.3",
+    plus:     "M12 5v14M5 12h14",
+    bell:     "M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0",
+    burger:   "M4 6h16M4 12h16M4 18h16",
+    arrow:    "M5 12h14M13 5l7 7-7 7",
+    chevron:  "M9 18l6-6-6-6",
+    sparkle:  "M12 3v6m0 6v6M3 12h6m6 0h6M5.6 5.6l4.2 4.2m4.4 4.4l4.2 4.2M5.6 18.4l4.2-4.2m4.4-4.4l4.2-4.2",
+    download: "M12 4v12m-5-5l5 5 5-5M5 20h14",
+    file:     "M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6",
+    check:    "M5 12l5 5 9-11",
+    close:    "M6 6l12 12M18 6L6 18",
+    pin:      "M12 22s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12zM12 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+    play:     "M5 3l14 9-14 9V3z",
+    pulse:    "M3 12h4l3-9 4 18 3-9h4",
+  };
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none"
+         stroke="currentColor" strokeWidth="1.7"
+         strokeLinecap="round" strokeLinejoin="round">
+      <path d={paths[name] || paths.home} />
+    </svg>
+  );
+};
+
+// ─── COVER / SIGN-IN ─────────────────────────────────────────────
+const SignIn = ({ lang, setLang, onEnter }) => {
+  const t = useT(lang);
+  const [fading, setFading] = useState(false);
+  const [email, setEmail] = useState("lucas.brunner@helvetia-private.ch");
+  const [pwd, setPwd] = useState("auditiq-demo");
+  const [remember, setRemember] = useState(true);
+  const [busy, setBusy] = useState(false);
+
+  const L = (fr, en) => (lang === 'fr' ? fr : en);
+
+  const handleEnter = () => {
+    if (fading || busy) return;
+    setBusy(true);
+    // brief "authenticating" beat, then fade to the app
+    setTimeout(() => {
+      setFading(true);
+      setTimeout(() => onEnter(), 750);
+    }, 720);
+  };
+
+  const submit = (e) => { e.preventDefault(); handleEnter(); };
+
+  return (
+    <div className={`aiq-cover ${fading ? 'fading' : ''}`}>
+      <div className="aiq-blob b1" />
+      <div className="aiq-blob b2" />
+
+      {/* ── Left: brand + rotating earth ── */}
+      <div className="aiq-cover-hero">
+        <div className="aiq-cover-brand">
+          <div className="mark">A</div>
+          <span className="nm">Audit<b>IQ</b></span>
+          <span className="aiq-pill aiq-pill-indigo" style={{ marginLeft: 6 }}>Pro</span>
+        </div>
+
+        <div className="aiq-cover-globe">
+          <window.AIQ_Globe size={340} />
+        </div>
+
+        <h1 className="aiq-cover-title" aria-label={t('brand')}>
+          {L("Audit bancaire,", "Banking audit,")}<br />
+          <span className="grad">{L("augmenté par l'IA.", "augmented by AI.")}</span>
+        </h1>
+        <p className="aiq-cover-tag">{t('intro_sub')}</p>
+
+        <div className="aiq-cover-flags">
+          {window.AIQ.jurisdictions.map(j => (
+            <span key={j.id} className="fl" title={`${j[lang]} · ${j.regulator}`}>
+              <span className="em">{j.flag}</span>{j.regulator}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Right: fake sign-in ── */}
+      <div className="aiq-cover-auth">
+        <div className="aiq-lang aiq-cover-lang">
+          <button data-active={lang === 'fr'} onClick={() => setLang('fr')}>FR</button>
+          <button data-active={lang === 'en'} onClick={() => setLang('en')}>EN</button>
+        </div>
+
+        <form className="aiq-signin" onSubmit={submit}>
+          <div className="aiq-signin-head">
+            <h2>{L("Connexion", "Sign in")}</h2>
+            <p>{L("Accédez à votre espace d'audit sécurisé.",
+                  "Access your secure audit workspace.")}</p>
+          </div>
+
+          <label className="aiq-signin-field">
+            <span>{L("Adresse e-mail", "Email address")}</span>
+            <div className="ip">
+              <span className="ic">✉</span>
+              <input type="email" value={email} autoComplete="username"
+                     onChange={e => setEmail(e.target.value)} />
+            </div>
+          </label>
+
+          <label className="aiq-signin-field">
+            <span>{L("Mot de passe", "Password")}</span>
+            <div className="ip">
+              <span className="ic">🔒</span>
+              <input type="password" value={pwd} autoComplete="current-password"
+                     onChange={e => setPwd(e.target.value)} />
+            </div>
+          </label>
+
+          <div className="aiq-signin-row">
+            <label className="aiq-check" onClick={() => setRemember(!remember)}>
+              <span className="box" data-on={remember}>{remember ? '✓' : ''}</span>
+              {L("Se souvenir de moi", "Remember me")}
+            </label>
+            <a href="#" onClick={e => e.preventDefault()}>{L("Mot de passe oublié ?", "Forgot password?")}</a>
+          </div>
+
+          <button type="submit" className={`aiq-signin-btn ${busy ? 'busy' : ''}`} disabled={busy}>
+            {busy ? (
+              <React.Fragment>
+                {L("Authentification", "Authenticating")}
+                <span className="aiq-typing"><span /><span /><span /></span>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>{L("Se connecter", "Sign in")} <span className="arr">→</span></React.Fragment>
+            )}
+          </button>
+
+          <div className="aiq-signin-or"><span>{L("ou", "or")}</span></div>
+
+          <div className="aiq-signin-sso">
+            <button type="button" onClick={handleEnter}>
+              <span className="g">🔑</span> {L("SSO entreprise", "Enterprise SSO")}
+            </button>
+            <button type="button" onClick={handleEnter}>
+              <span className="g">🪪</span> {L("Carte d'accès", "Access card")}
+            </button>
+          </div>
+
+          <p className="aiq-signin-foot">
+            <span className="aiq-pill aiq-pill-green" style={{ fontSize: 9 }}>
+              <span className="dot" /> {L("Connexion chiffrée", "Encrypted session")}
+            </span>
+            {t('footer')}
+          </p>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// ─── SIDEBAR ─────────────────────────────────────────────────────
+const Sidebar = ({ route, setRoute, lang, open, onClose }) => {
+  const t = useT(lang);
+  const navItem = (id, icon, badge) => (
+    <button className="aiq-nav-item"
+            data-active={route === id}
+            onClick={() => { setRoute(id); onClose && onClose(); }}>
+      <span className="ic"><Icon name={icon} size={14} /></span>
+      <span className="lbl">{t(id)}</span>
+      {badge && <span className="aiq-pill aiq-pill-indigo" style={{padding:'2px 7px', fontSize: 10}}>{badge}</span>}
+    </button>
+  );
+  const agentItem = (id, color) => {
+    const agent = window.AIQ.agents.find(a => a.id === id);
+    return (
+      <button className="aiq-nav-item"
+              data-active={route === id}
+              onClick={() => { setRoute(id); onClose && onClose(); }}
+              style={{ "--agent-color": color }}>
+        <span className="ic agent">{agent.icon}</span>
+        <span className="lbl">{t(id === 'agent1' ? 'regulatory'
+                                : id === 'agent2' ? 'audit_plan'
+                                : 'audit_report')}</span>
+        {route === id && <span className="dot" style={{background: color}} />}
+      </button>
+    );
+  };
+  return (
+    <aside className={`aiq-sidebar ${open ? 'open' : ''}`}>
+      <div className="aiq-brand">
+        <div className="mark">A</div>
+        <div className="name">Audit<b>IQ</b></div>
+        <span className="badge">Pro</span>
+      </div>
+
+      <div className="aiq-nav-title">{lang === 'fr' ? 'Menu' : 'Menu'}</div>
+      {navItem('dashboard', 'grid')}
+      {navItem('audits', 'book', '4')}
+
+      <div className="aiq-nav-title">{t('agents_label')}</div>
+      {agentItem('agent1', '#22d3a5')}
+      {agentItem('agent2', '#4f7ef8')}
+      {agentItem('agent3', '#a78bfa')}
+
+      <div className="aiq-nav-title">{t('tools_label')}</div>
+      {navItem('documents', 'docs')}
+      {navItem('history', 'history')}
+      {navItem('settings', 'settings')}
+
+      <div className="aiq-sidebar-foot">
+        <div className="aiq-user">
+          <div className="av">LB</div>
+          <div className="meta">
+            <div className="nm">L. Brunner</div>
+            <div className="ro">{lang === 'fr' ? 'Auditeur senior' : 'Senior auditor'}</div>
+          </div>
+          <button className="aiq-icon-btn" style={{position:'relative'}}>
+            <Icon name="bell" size={14} />
+            <span className="badge-dot" />
+          </button>
+        </div>
+      </div>
+    </aside>
+  );
+};
+
+// ─── TOPBAR ──────────────────────────────────────────────────────
+const Topbar = ({ route, lang, setLang, onMenu }) => {
+  const t = useT(lang);
+  return (
+    <header className="aiq-topbar">
+      <button className="aiq-menu-btn" onClick={onMenu}><Icon name="burger" size={16} /></button>
+      <div className="crumbs">
+        <span>AuditIQ</span>
+        <span className="sep">/</span>
+        <span className="here">{
+          t(route === 'agent1' ? 'regulatory'
+            : route === 'agent2' ? 'audit_plan'
+            : route === 'agent3' ? 'audit_report'
+            : route)
+        }</span>
+      </div>
+      <div className="spacer" />
+      <div className="aiq-search">
+        <span className="ic"><Icon name="search" size={14} /></span>
+        <input placeholder={t('search')} />
+      </div>
+      <div className="aiq-lang">
+        <button data-active={lang === 'fr'} onClick={() => setLang('fr')}>FR</button>
+        <button data-active={lang === 'en'} onClick={() => setLang('en')}>EN</button>
+      </div>
+      <button className="aiq-icon-btn" style={{position:'relative'}}>
+        <Icon name="bell" size={15} />
+        <span className="badge-dot" />
+      </button>
+      <button className="aiq-btn aiq-btn-primary aiq-btn-sm">
+        <Icon name="plus" size={13} /> {t('new_audit')}
+      </button>
+    </header>
+  );
+};
+
+// ─── DASHBOARD ──────────────────────────────────────────────────
+const StatTile = ({ label, value, delta, deltaKind = "up", meta }) => (
+  <div className="aiq-stat">
+    <div className="lbl">{label}</div>
+    <div className="val">{value}</div>
+    {delta && (
+      <div className={`delta ${deltaKind}`}>
+        {deltaKind === "up" ? "▲" : deltaKind === "down" ? "▼" : "—"} {delta}
+      </div>
+    )}
+    {meta && <div className="meta">{meta}</div>}
+  </div>
+);
+
+const AuditCard = ({ a, lang, t, onOpen }) => {
+  const jurs = a.jurisdictions.map(j => window.AIQ.jurisdictions.find(x => x.id === j));
+  const sev = a.severity;
+  const statusPill = a.status === 'active'
+    ? <span className="aiq-pill aiq-pill-indigo"><span className="dot" /> {t('status_active')}</span>
+    : a.status === 'review'
+      ? <span className="aiq-pill aiq-pill-orange"><span className="dot" /> {t('status_review')}</span>
+      : <span className="aiq-pill aiq-pill-green"><span className="dot" /> {t('status_closed')}</span>;
+  return (
+    <div className="aiq-audit-card" onClick={onOpen}>
+      <div className="id">{a.id}</div>
+      <div className="subj">
+        <span className={`aiq-sev-bar ${sev}`} />
+        {a[`subject_${lang}`]}
+      </div>
+      <div className="jur-row">
+        {jurs.map(j => <span key={j.id} title={j[lang]}>{j.flag}</span>)}
+      </div>
+      <div className="meta-row">
+        {statusPill}
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          <Icon name="pin" size={12} /> {a.owner}
+        </span>
+      </div>
+      <div className="prog-row">
+        <div className="aiq-progress"><span style={{ width: `${a.progress}%` }} /></div>
+        <span>{a.progress}%</span>
+      </div>
+    </div>
+  );
+};
+
+const DashboardScreen = ({ lang, setRoute }) => {
+  const t = useT(lang);
+  const audits = window.AIQ.audits;
+  const active = audits.filter(a => a.status !== 'closed').slice(0, 4);
+  const recentActivity = window.AIQ.activity.slice(0, 5);
+  const upcoming = audits.filter(a => a.due_in > 0 && a.due_in <= 40)
+    .sort((a, b) => a.due_in - b.due_in).slice(0, 3);
+
+  return (
+    <div className="aiq-page">
+      <div className="aiq-page-head">
+        <div>
+          <h1 className="aiq-h1">{t('welcome')}</h1>
+          <p className="aiq-sub">{t('welcome_sub')}</p>
+        </div>
+        <div className="aiq-row">
+          <button className="aiq-btn aiq-btn-ghost" onClick={() => setRoute('audits')}>
+            {t('view_all')} {t('audits')}
+          </button>
+          <button className="aiq-btn aiq-btn-primary">
+            <Icon name="plus" size={13} /> {t('new_audit')}
+          </button>
+        </div>
+      </div>
+
+      {/* KPI row */}
+      <div className="aiq-stat-row">
+        <StatTile label={t('kpi_audits')}        value="4"  delta="+1"   deltaKind="up"   meta={t('this_month')} />
+        <StatTile label={t('kpi_completed')}     value="12" delta="+3"   deltaKind="up"   meta={t('vs_last_q')} />
+        <StatTile label={t('kpi_pending')}       value="17" delta="-2"   deltaKind="down" meta={lang==='fr'?'cette semaine':'this week'} />
+        <StatTile label={t('kpi_jurisdictions')} value="6"  delta=""     deltaKind="flat" meta={lang==='fr'?'CH · SG · HK · BS · EU · UK':'CH · SG · HK · BS · EU · UK'} />
+      </div>
+
+      <div className="aiq-grid" style={{ gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)' }}>
+        {/* Left */}
+        <div className="aiq-col">
+          <div className="aiq-card">
+            <div className="aiq-card-head">
+              <div>
+                <h2 className="aiq-h2">{lang === 'fr' ? 'Audits en cours' : 'Active audits'}</h2>
+                <p className="aiq-sub" style={{ marginTop: 4 }}>
+                  {active.length} {lang === 'fr' ? 'audits en cours' : 'audits in progress'}
+                </p>
+              </div>
+              <button className="aiq-btn aiq-btn-ghost aiq-btn-sm" onClick={() => setRoute('audits')}>
+                {t('view_all')} →
+              </button>
+            </div>
+            <div className="aiq-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
+              {active.map(a => (
+                <AuditCard key={a.id} a={a} lang={lang} t={t}
+                           onOpen={() => setRoute('agent2')} />
+              ))}
+            </div>
+          </div>
+
+          {/* Agents */}
+          <div className="aiq-card">
+            <div className="aiq-card-head">
+              <h2 className="aiq-h2">{t('agents_label')}</h2>
+              <span className="aiq-pill aiq-pill-indigo">Claude · Sonnet 4.5</span>
+            </div>
+            <div className="aiq-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
+              {window.AIQ.agents.map(ag => (
+                <button key={ag.id} className="aiq-agent-tile"
+                        style={{ "--agent-color": ag.color }}
+                        onClick={() => setRoute(ag.id)}>
+                  <div className="head">
+                    <div className="ic">{ag.icon}</div>
+                    <div>
+                      <div className="num">{ag.id.toUpperCase()}</div>
+                      <h3>{t(ag.title_key).replace(/^Agent \d+ — /, '')}</h3>
+                    </div>
+                  </div>
+                  <p>{t(ag.desc_key)}</p>
+                  <span className="aiq-pill aiq-pill-green">
+                    <span className="dot" /> {lang === 'fr' ? 'Disponible' : 'Available'}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right */}
+        <div className="aiq-col">
+          <div className="aiq-card">
+            <div className="aiq-card-head">
+              <h2 className="aiq-h2">{t('next_milestones')}</h2>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {upcoming.map(a => (
+                <div key={a.id}
+                     style={{ padding: 12, border: '1px solid var(--aiq-border)',
+                              borderRadius: 10, background: 'rgba(255,255,255,.02)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                    <span className="aiq-pill aiq-pill-indigo" style={{ fontSize: 9 }}>{a.id}</span>
+                    <span className={`aiq-pill ${a.due_in <= 5 ? 'aiq-pill-red' : a.due_in <= 15 ? 'aiq-pill-orange' : ''}`}>
+                      {t('due_in_days', { n: a.due_in })}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 13, fontWeight: 600, marginTop: 6, color: 'var(--aiq-text)' }}>
+                    {a[`subject_${lang}`]}
+                  </div>
+                  <div style={{ fontSize: 11, color: 'var(--aiq-muted)', marginTop: 4 }}>
+                    {a.owner} · {a.due}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="aiq-card">
+            <div className="aiq-card-head">
+              <h2 className="aiq-h2">{t('recent_activity')}</h2>
+            </div>
+            <div>
+              {recentActivity.map((a, i) => (
+                <div key={i} className="aiq-activity-row">
+                  <div className="ic">{a.icon}</div>
+                  <div>
+                    <div className="who">{a.who}</div>
+                    <div className="what">{a[`what_${lang}`]}</div>
+                  </div>
+                  <div className="when">{a.ago}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="aiq-card">
+            <div className="aiq-card-head">
+              <h2 className="aiq-h2">{lang === 'fr' ? 'Couverture juridictions' : 'Jurisdiction coverage'}</h2>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {window.AIQ.jurisdictions.map(j => {
+                const count = audits.filter(a => a.jurisdictions.includes(j.id)).length;
+                const pct = (count / 4) * 100;
+                return (
+                  <div key={j.id}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <span style={{ fontSize: 13 }}>
+                        {j.flag} {j[lang]} <span style={{ color: 'var(--aiq-faint)', fontSize: 11 }}>· {j.regulator}</span>
+                      </span>
+                      <span style={{ fontSize: 12, color: 'var(--aiq-muted)', fontVariantNumeric: 'tabular-nums' }}>{count}</span>
+                    </div>
+                    <div className="aiq-progress" style={{ height: 4 }}>
+                      <span style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="aiq-footer">{t('footer')}</div>
+    </div>
+  );
+};
+
+// ─── AGENT SCREEN (generic, 3 agents differ by content) ─────────
+const AgentScreen = ({ lang, agentId, setRoute }) => {
+  const t = useT(lang);
+  const agent = window.AIQ.agents.find(a => a.id === agentId);
+  const [subject, setSubject] = useState(window.AIQ.topics[0].id);
+  const [scope, setScope] = useState("");
+  const [jurs, setJurs] = useState(["ch", "sg"]);
+  const [gen, setGen] = useState({ state: 'idle', progress: 0 });
+
+  // Generated content state
+  const [output, setOutput] = useState(null);
+
+  const subjectObj = window.AIQ.topics.find(x => x.id === subject);
+
+  const toggleJur = (id) => {
+    setJurs(prev => prev.includes(id) ? prev.filter(j => j !== id) : [...prev, id]);
+  };
+
+  const start = () => {
+    setGen({ state: 'running', progress: 0 });
+    setOutput(null);
+    // Fake progressive generation
+    let p = 0;
+    const tick = setInterval(() => {
+      p += 8 + Math.random() * 14;
+      if (p >= 100) {
+        clearInterval(tick);
+        setGen({ state: 'done', progress: 100 });
+        // Populate sample output by agent
+        if (agentId === 'agent1') {
+          setOutput({ kind: 'framework', regs: window.AIQ.regulations.aml.filter(r => jurs.includes(r.jur)) });
+        } else if (agentId === 'agent2') {
+          setOutput({ kind: 'plan', steps: buildPlan(lang, subject, jurs) });
+        } else {
+          setOutput({ kind: 'report', findings: window.AIQ.findings });
+        }
+      } else {
+        setGen({ state: 'running', progress: Math.min(p, 95) });
+      }
+    }, 280);
+  };
+
+  return (
+    <div className="aiq-page">
+      <div className="aiq-page-head">
+        <div>
+          <p className="aiq-sub" style={{ marginBottom: 6, color: agent.color, letterSpacing: '.1em', textTransform: 'uppercase', fontWeight: 700, fontSize: 11 }}>
+            {agent.icon} {agentId.toUpperCase()}
+          </p>
+          <h1 className="aiq-h1">{t(agent.title_key)}</h1>
+          <p className="aiq-sub">{t(agent.desc_key)}</p>
+        </div>
+        <div className="aiq-row">
+          <span className="aiq-pill aiq-pill-green">
+            <span className="dot" /> {t('api_key_set')}
+          </span>
+          <span className="aiq-pill aiq-pill-indigo">Claude Sonnet 4.5</span>
+        </div>
+      </div>
+
+      <div className="aiq-gen-split">
+        {/* Left — Input form */}
+        <div className="aiq-card">
+          <div className="aiq-card-head">
+            <h2 className="aiq-h2">{lang === 'fr' ? 'Paramètres' : 'Parameters'}</h2>
+          </div>
+
+          <div className="aiq-field">
+            <label>{t('audit_subject')}</label>
+            <select className="aiq-select" value={subject} onChange={e => setSubject(e.target.value)}>
+              {window.AIQ.topics.map(top => (
+                <option key={top.id} value={top.id}>{top[lang]}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="aiq-field">
+            <label>{t('audit_scope_opt')}</label>
+            <textarea className="aiq-textarea"
+                      placeholder={t('audit_scope_ph')}
+                      value={scope}
+                      onChange={e => setScope(e.target.value)} />
+            <span className="hint">{lang === 'fr' ? '(optionnel)' : '(optional)'}</span>
+          </div>
+
+          <div className="aiq-field">
+            <label>{t('jurisdiction')}</label>
+            <div className="aiq-chip-grid">
+              {window.AIQ.jurisdictions.map(j => (
+                <button key={j.id}
+                        className="aiq-chip-check"
+                        data-checked={jurs.includes(j.id)}
+                        onClick={() => toggleJur(j.id)}
+                        type="button">
+                  <span style={{ fontSize: 14 }}>{j.flag}</span>
+                  {j[lang]}
+                  <span className="check">{jurs.includes(j.id) ? '✓' : ''}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {agentId !== 'agent1' && (
+            <div className="aiq-field">
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span className="aiq-pill aiq-pill-green" style={{ padding: '2px 7px', fontSize: 9 }}>✓</span>
+                {agentId === 'agent2' ? t('framework_ready') : t('plan_ready')}
+              </label>
+              <span className="hint" style={{fontSize: 12}}>
+                {lang === 'fr' ? 'Sortie de l\'agent précédent disponible' : 'Previous agent output available'}
+              </span>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', gap: 10, marginTop: 18 }}>
+            <button className="aiq-btn aiq-btn-primary aiq-btn-lg"
+                    style={{ flex: 1 }}
+                    disabled={!jurs.length || gen.state === 'running'}
+                    onClick={start}>
+              {gen.state === 'running' ? (
+                <React.Fragment>
+                  {t('generating')}
+                  <span className="aiq-typing">
+                    <span /><span /><span />
+                  </span>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <Icon name="sparkle" size={14} />
+                  {agentId === 'agent1' ? t('generate_framework')
+                    : agentId === 'agent2' ? t('generate_plan')
+                    : t('generate_report')}
+                </React.Fragment>
+              )}
+            </button>
+          </div>
+          {gen.state === 'running' && (
+            <div style={{ marginTop: 14 }}>
+              <div className="aiq-progress">
+                <span style={{ width: `${gen.progress}%` }} />
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--aiq-faint)', marginTop: 6, letterSpacing: '.08em', textTransform: 'uppercase', fontWeight: 600 }}>
+                {Math.round(gen.progress)}% · {lang === 'fr' ? 'analyse multi-juridictions…' : 'multi-jurisdiction analysis…'}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Right — Output */}
+        <div className="aiq-card aiq-output-card">
+          <div className="aiq-card-head">
+            <h2 className="aiq-h2">{t('output')}</h2>
+            {gen.state === 'done' && (
+              <div className="aiq-row">
+                {agentId === 'agent1' && <button className="aiq-btn aiq-btn-ghost aiq-btn-sm"><Icon name="download" size={12} /> {t('download_word')}</button>}
+                {agentId === 'agent2' && <button className="aiq-btn aiq-btn-ghost aiq-btn-sm"><Icon name="download" size={12} /> {t('download_pptx')}</button>}
+                {agentId === 'agent2' && <button className="aiq-btn aiq-btn-ghost aiq-btn-sm"><Icon name="download" size={12} /> {t('download_xlsx')}</button>}
+                {agentId === 'agent3' && <button className="aiq-btn aiq-btn-ghost aiq-btn-sm"><Icon name="download" size={12} /> {t('download_word')}</button>}
+                {agentId === 'agent3' && <button className="aiq-btn aiq-btn-ghost aiq-btn-sm"><Icon name="download" size={12} /> {t('download_pdf')}</button>}
+              </div>
+            )}
+          </div>
+
+          {gen.state === 'idle' && (
+            <div className="aiq-output-empty">
+              <div className="ic">{agent.icon}</div>
+              <div style={{ fontSize: 14, color: 'var(--aiq-text-2)', fontWeight: 600, marginBottom: 6 }}>
+                {lang === 'fr' ? 'Aucune génération' : 'No generation yet'}
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--aiq-muted)' }}>
+                {lang === 'fr' ? 'Configurez les paramètres puis lancez l\'analyse.'
+                              : 'Set the parameters then run the analysis.'}
+              </div>
+            </div>
+          )}
+
+          {gen.state === 'running' && (
+            <div className="aiq-output-empty">
+              <div className="ic" style={{ animation: 'pulse 1.8s ease-in-out infinite' }}>{agent.icon}</div>
+              <div style={{ fontSize: 14, color: 'var(--aiq-text)', fontWeight: 600 }}>
+                {t('generating')}
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--aiq-muted)', marginTop: 6 }}>
+                {lang === 'fr' ? 'Claude analyse votre demande…' : 'Claude is analysing your request…'}
+              </div>
+            </div>
+          )}
+
+          {gen.state === 'done' && output && (
+            <OutputView lang={lang} output={output} subject={subjectObj[lang]} jurs={jurs} t={t} />
+          )}
+        </div>
+      </div>
+
+      <div className="aiq-footer">{t('footer')}</div>
+    </div>
+  );
+};
+
+// Build a fake plan based on subject + jurisdictions
+const buildPlan = (lang, subject, jurs) => {
+  const STEPS_FR = [
+    { h: "Cadrage du périmètre", p: "Délimiter les entités, processus et systèmes concernés." },
+    { h: "Identification des risques", p: "Cartographier les risques inhérents au sujet d'audit." },
+    { h: "Tests de conception des contrôles", p: "Évaluer l'adéquation des contrôles documentés." },
+    { h: "Tests d'efficacité opérationnelle", p: "Échantillonnage de transactions et revue d'évidence." },
+    { h: "Évaluation des écarts", p: "Quantifier les non-conformités et hiérarchiser." },
+    { h: "Synthèse & recommandations", p: "Formaliser les constats et préparer le rapport exécutif." },
+  ];
+  const STEPS_EN = [
+    { h: "Scope framing", p: "Define the entities, processes and systems in scope." },
+    { h: "Risk identification", p: "Map inherent risks tied to the audit topic." },
+    { h: "Control design testing", p: "Assess whether documented controls are adequate." },
+    { h: "Operating effectiveness testing", p: "Transaction sampling and evidence review." },
+    { h: "Gap assessment", p: "Quantify non-conformities and prioritise." },
+    { h: "Synthesis & recommendations", p: "Formalise findings and prepare the executive report." },
+  ];
+  const list = lang === 'fr' ? STEPS_FR : STEPS_EN;
+  return list.map((s, i) => ({
+    n: i + 1, h: s.h, p: s.p,
+    duration: lang === 'fr' ? `${2 + i} jours` : `${2 + i} days`,
+    auditor: ['L. Brunner', 'M. Tanaka', 'A. Cheung'][i % 3],
+  }));
+};
+
+const OutputView = ({ lang, output, subject, jurs, t }) => {
+  if (output.kind === 'framework') {
+    return (
+      <div className="aiq-prev-list">
+        <div style={{ fontSize: 12, color: 'var(--aiq-muted)', marginBottom: 8 }}>
+          {output.regs.length} {lang === 'fr' ? 'textes applicables' : 'applicable texts'} · {subject}
+        </div>
+        {output.regs.map((r, i) => {
+          const jur = window.AIQ.jurisdictions.find(x => x.id === r.jur);
+          return (
+            <div key={i} className="aiq-prev-item" style={{ animationDelay: `${i * 0.08}s` }}>
+              <span className="jur-tag">{jur.flag} {jur.id.toUpperCase()}</span>
+              <span className="code">{r.code}</span>
+              <div className="ttl">{r[lang]}</div>
+              <div className="meta">
+                <span>{jur.regulator}</span>
+                <span>{lang === 'fr' ? 'MàJ' : 'Updated'} : {r.updated}</span>
+                <span className={`aiq-pill aiq-pill-${r.severity === 'critical' ? 'red' : r.severity === 'high' ? 'orange' : 'yellow'}`}
+                      style={{padding: '1px 7px', fontSize: 9}}>
+                  {t(r.severity)}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+  if (output.kind === 'plan') {
+    return (
+      <div>
+        <div style={{ fontSize: 12, color: 'var(--aiq-muted)', marginBottom: 10 }}>
+          {output.steps.length} {lang === 'fr' ? 'étapes' : 'steps'} · {subject}
+        </div>
+        {output.steps.map((s, i) => (
+          <div key={s.n} className="aiq-step" style={{ animationDelay: `${i * 0.08}s` }}>
+            <div className="num">{s.n}</div>
+            <div className="body">
+              <h4>{s.h}</h4>
+              <p>{s.p}</p>
+              <div className="meta">
+                <span>⏱ {s.duration}</span>
+                <span>👤 {s.auditor}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  if (output.kind === 'report') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ fontSize: 12, color: 'var(--aiq-muted)', marginBottom: 8 }}>
+          {output.findings.length} {lang === 'fr' ? 'constats' : 'findings'} · {subject}
+        </div>
+        {output.findings.map((f, i) => (
+          <div key={i} className="aiq-finding" data-sev={f.sev} style={{ animationDelay: `${i * 0.08}s` }}>
+            <div className="ico">{f.sev[0].toUpperCase()}</div>
+            <div className="body">
+              <h4>{f[`title_${lang}`]}</h4>
+              <p>{f[`desc_${lang}`]}</p>
+              <div className="jurs">
+                {f.jur.map(jid => window.AIQ.jurisdictions.find(x => x.id === jid).flag)}
+              </div>
+            </div>
+            <span className={`aiq-pill aiq-pill-${f.sev === 'critical' ? 'red' : f.sev === 'high' ? 'orange' : f.sev === 'medium' ? 'yellow' : 'green'}`}>
+              {t(f.sev)}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
+// ─── AUDITS LIST ─────────────────────────────────────────────────
+const AuditsScreen = ({ lang, setRoute }) => {
+  const t = useT(lang);
+  const [filter, setFilter] = useState('all');
+  const all = window.AIQ.audits;
+  const items = filter === 'all' ? all : all.filter(a => a.status === filter);
+  return (
+    <div className="aiq-page">
+      <div className="aiq-page-head">
+        <div>
+          <h1 className="aiq-h1">{lang === 'fr' ? 'Tous les audits' : 'All audits'}</h1>
+          <p className="aiq-sub">{items.length} {lang === 'fr' ? 'audits' : 'audits'}</p>
+        </div>
+        <div className="aiq-row">
+          <div className="aiq-lang" style={{ padding: 3 }}>
+            {['all','active','review','closed'].map(f => (
+              <button key={f}
+                      data-active={filter === f}
+                      onClick={() => setFilter(f)}>
+                {f === 'all' ? (lang==='fr'?'Tous':'All')
+                  : f === 'active' ? t('status_active')
+                  : f === 'review' ? t('status_review')
+                  : t('status_closed')}
+              </button>
+            ))}
+          </div>
+          <button className="aiq-btn aiq-btn-primary aiq-btn-sm">
+            <Icon name="plus" size={13} /> {t('new_audit')}
+          </button>
+        </div>
+      </div>
+
+      <div className="aiq-card" style={{ padding: 0, overflowX: 'auto' }}>
+        <table className="aiq-table">
+          <thead>
+            <tr>
+              <th>{lang === 'fr' ? 'Identifiant' : 'ID'}</th>
+              <th>{t('audit_subject')}</th>
+              <th>{t('jurisdiction')}</th>
+              <th>{lang === 'fr' ? 'Responsable' : 'Owner'}</th>
+              <th>{lang === 'fr' ? 'Échéance' : 'Due'}</th>
+              <th>{lang === 'fr' ? 'Sévérité' : 'Severity'}</th>
+              <th>{lang === 'fr' ? 'Progression' : 'Progress'}</th>
+              <th>{t('status_label')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map(a => {
+              const jurs = a.jurisdictions.map(j => window.AIQ.jurisdictions.find(x => x.id === j));
+              const statusPill = a.status === 'active'
+                ? <span className="aiq-pill aiq-pill-indigo"><span className="dot" /> {t('status_active')}</span>
+                : a.status === 'review'
+                  ? <span className="aiq-pill aiq-pill-orange"><span className="dot" /> {t('status_review')}</span>
+                  : <span className="aiq-pill aiq-pill-green"><span className="dot" /> {t('status_closed')}</span>;
+              return (
+                <tr key={a.id} onClick={() => setRoute('agent2')}>
+                  <td><span className="id">{a.id}</span></td>
+                  <td style={{ maxWidth: 320, color: 'var(--aiq-text)' }}>{a[`subject_${lang}`]}</td>
+                  <td>{jurs.map(j => <span key={j.id} style={{ marginRight: 4, fontSize: 16 }}>{j.flag}</span>)}</td>
+                  <td>{a.owner}</td>
+                  <td style={{ whiteSpace: 'nowrap' }}>{a.due}</td>
+                  <td>
+                    <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                      <span className={`aiq-sev-bar ${a.severity}`} />
+                      {t(a.severity)}
+                    </span>
+                  </td>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 120 }}>
+                      <div className="aiq-progress" style={{ flex: 1 }}>
+                        <span style={{ width: `${a.progress}%` }} />
+                      </div>
+                      <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: 'var(--aiq-muted)' }}>{a.progress}%</span>
+                    </div>
+                  </td>
+                  <td>{statusPill}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="aiq-footer">{t('footer')}</div>
+    </div>
+  );
+};
+
+// ─── DOCUMENTS ───────────────────────────────────────────────────
+const DocumentsScreen = ({ lang }) => {
+  const t = useT(lang);
+  return (
+    <div className="aiq-page">
+      <div className="aiq-page-head">
+        <div>
+          <h1 className="aiq-h1">{t('documents')}</h1>
+          <p className="aiq-sub">{t('docs_sub')}</p>
+        </div>
+      </div>
+
+      <div className="aiq-card" style={{ padding: 0, overflowX: 'auto' }}>
+        <table className="aiq-table">
+          <thead>
+            <tr>
+              <th>{lang === 'fr' ? 'Fichier' : 'File'}</th>
+              <th>{t('doc_type')}</th>
+              <th>{t('doc_audit')}</th>
+              <th>{t('doc_date')}</th>
+              <th>{t('doc_size')}</th>
+              <th>{t('doc_status')}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {window.AIQ.documents.map(d => (
+              <tr key={d.id}>
+                <td>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 18 }}>
+                      {d.type === 'Word' ? '📄' : d.type === 'PowerPoint' ? '📊' : '📈'}
+                    </span>
+                    <span style={{ color: 'var(--aiq-text)', fontWeight: 600 }}>{d.name}</span>
+                  </div>
+                </td>
+                <td>{d.type}</td>
+                <td><span className="id">{d.audit}</span></td>
+                <td>{d.date}</td>
+                <td style={{ fontVariantNumeric: 'tabular-nums' }}>{d.size}</td>
+                <td>
+                  {d.status === 'approved'
+                    ? <span className="aiq-pill aiq-pill-green"><span className="dot" /> {t('approved')}</span>
+                    : <span className="aiq-pill aiq-pill-orange"><span className="dot" /> {t('review')}</span>}
+                </td>
+                <td>
+                  <button className="aiq-icon-btn">
+                    <Icon name="download" size={14} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="aiq-footer">{t('footer')}</div>
+    </div>
+  );
+};
+
+// ─── HISTORY ─────────────────────────────────────────────────────
+const HistoryScreen = ({ lang }) => {
+  const t = useT(lang);
+  const closed = window.AIQ.audits.filter(a => a.status === 'closed');
+  return (
+    <div className="aiq-page">
+      <div className="aiq-page-head">
+        <div>
+          <h1 className="aiq-h1">{t('history')}</h1>
+          <p className="aiq-sub">{lang === 'fr' ? 'Audits clôturés et archivés' : 'Closed and archived audits'}</p>
+        </div>
+      </div>
+
+      <div className="aiq-card" style={{ padding: 0, overflowX: 'auto' }}>
+        <table className="aiq-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>{t('audit_subject')}</th>
+              <th>{t('jurisdiction')}</th>
+              <th>{lang === 'fr' ? 'Clôturé le' : 'Closed on'}</th>
+              <th>{lang === 'fr' ? 'Constats' : 'Findings'}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {closed.map(a => {
+              const jurs = a.jurisdictions.map(j => window.AIQ.jurisdictions.find(x => x.id === j));
+              return (
+                <tr key={a.id}>
+                  <td><span className="id">{a.id}</span></td>
+                  <td style={{ color: 'var(--aiq-text)' }}>{a[`subject_${lang}`]}</td>
+                  <td>{jurs.map(j => <span key={j.id} style={{ marginRight: 4, fontSize: 16 }}>{j.flag}</span>)}</td>
+                  <td>{a.due}</td>
+                  <td>4 {lang === 'fr' ? 'constats' : 'findings'}</td>
+                  <td>
+                    <button className="aiq-btn aiq-btn-ghost aiq-btn-sm">
+                      {lang === 'fr' ? 'Revoir' : 'Review'} <Icon name="chevron" size={12} />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="aiq-footer">{t('footer')}</div>
+    </div>
+  );
+};
+
+// ─── SETTINGS ────────────────────────────────────────────────────
+const SettingsScreen = ({ lang, setLang }) => {
+  const t = useT(lang);
+  const [apiKey, setApiKey] = useState('sk-ant-•••••••••••••••••••••••••••f4e2');
+  const [thinking, setThinking] = useState(true);
+  const [model, setModel] = useState('sonnet-4-5');
+  const [notif, setNotif] = useState(true);
+
+  return (
+    <div className="aiq-page" style={{ maxWidth: 920 }}>
+      <div className="aiq-page-head">
+        <div>
+          <h1 className="aiq-h1">{t('settings')}</h1>
+          <p className="aiq-sub">{lang === 'fr' ? 'Configuration de l\'instance AuditIQ' : 'AuditIQ instance configuration'}</p>
+        </div>
+        <button className="aiq-btn aiq-btn-primary">{lang === 'fr' ? 'Enregistrer' : 'Save'}</button>
+      </div>
+
+      <div className="aiq-col">
+        <div className="aiq-card">
+          <div className="aiq-card-head">
+            <h2 className="aiq-h2">{t('api_key')}</h2>
+            <span className="aiq-pill aiq-pill-green">
+              <span className="dot" /> {t('api_key_set')}
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <input className="aiq-input" type="text"
+                   value={apiKey} onChange={e => setApiKey(e.target.value)}
+                   style={{ fontFamily: 'ui-monospace, Menlo, monospace' }} />
+            <button className="aiq-btn aiq-btn-ghost">{lang === 'fr' ? 'Régénérer' : 'Regenerate'}</button>
+          </div>
+          <p style={{ fontSize: 11, color: 'var(--aiq-faint)', marginTop: 10 }}>
+            {lang === 'fr'
+              ? 'Votre clé Anthropic est chiffrée au repos. Variable d\'environnement : ANTHROPIC_API_KEY'
+              : 'Your Anthropic key is encrypted at rest. Environment variable: ANTHROPIC_API_KEY'}
+          </p>
+        </div>
+
+        <div className="aiq-card">
+          <div className="aiq-card-head">
+            <h2 className="aiq-h2">{lang === 'fr' ? 'Modèle & raisonnement' : 'Model & reasoning'}</h2>
+          </div>
+
+          <div className="aiq-setting">
+            <div className="meta-l">
+              <div className="nm">{t('model')}</div>
+              <div className="ds">{lang === 'fr' ? 'Modèle Claude utilisé par les 3 agents' : 'Claude model used by all 3 agents'}</div>
+            </div>
+            <select className="aiq-select" value={model} onChange={e => setModel(e.target.value)} style={{ maxWidth: 240 }}>
+              <option value="sonnet-4-5">Claude Sonnet 4.5 (recommandé)</option>
+              <option value="opus-4">Claude Opus 4</option>
+              <option value="haiku-4">Claude Haiku 4</option>
+            </select>
+          </div>
+
+          <div className="aiq-setting">
+            <div className="meta-l">
+              <div className="nm">{t('thinking')}</div>
+              <div className="ds">{t('thinking_desc')}</div>
+            </div>
+            <div className="aiq-switch" data-on={thinking} onClick={() => setThinking(!thinking)} />
+          </div>
+        </div>
+
+        <div className="aiq-card">
+          <div className="aiq-card-head">
+            <h2 className="aiq-h2">{lang === 'fr' ? 'Apparence & langue' : 'Appearance & language'}</h2>
+          </div>
+
+          <div className="aiq-setting">
+            <div className="meta-l">
+              <div className="nm">{t('language')}</div>
+              <div className="ds">{lang === 'fr' ? 'Langue de l\'interface et des livrables' : 'UI and document language'}</div>
+            </div>
+            <div className="aiq-lang">
+              <button data-active={lang === 'fr'} onClick={() => setLang('fr')}>Français</button>
+              <button data-active={lang === 'en'} onClick={() => setLang('en')}>English</button>
+            </div>
+          </div>
+
+          <div className="aiq-setting">
+            <div className="meta-l">
+              <div className="nm">{lang === 'fr' ? 'Notifications email' : 'Email notifications'}</div>
+              <div className="ds">{lang === 'fr' ? 'Rapports prêts, échéances proches' : 'Reports ready, due dates approaching'}</div>
+            </div>
+            <div className="aiq-switch" data-on={notif} onClick={() => setNotif(!notif)} />
+          </div>
+        </div>
+
+        <div className="aiq-card">
+          <div className="aiq-card-head">
+            <h2 className="aiq-h2">{t('agent_status')}</h2>
+          </div>
+          <div className="aiq-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
+            {window.AIQ.agents.map(ag => (
+              <div key={ag.id} className="aiq-status-tile">
+                <div className="icb" style={{ background: `${ag.color}22`, color: ag.color }}>{ag.icon}</div>
+                <div style={{ flex: 1 }}>
+                  <div className="nm">{ag.id.toUpperCase()}</div>
+                  <div className="st"><span className="live-dot" /> {lang === 'fr' ? 'Opérationnel' : 'Operational'}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="aiq-footer">{t('footer')}</div>
+    </div>
+  );
+};
+
+Object.assign(window, {
+  AIQ_useT: useT,
+  AIQ_SignIn: SignIn,
+  AIQ_Sidebar: Sidebar,
+  AIQ_Topbar: Topbar,
+  AIQ_DashboardScreen: DashboardScreen,
+  AIQ_AgentScreen: AgentScreen,
+  AIQ_AuditsScreen: AuditsScreen,
+  AIQ_DocumentsScreen: DocumentsScreen,
+  AIQ_HistoryScreen: HistoryScreen,
+  AIQ_SettingsScreen: SettingsScreen,
+});
+</script>
+  <script type="text/babel" data-presets="react">// app.jsx — AuditIQ root: sign-in cover → app shell with routing.
+const { useState: useStateApp, useEffect: useEffectApp } = React;
+
+function AuditIQApp() {
+  const [lang, setLang] = useStateApp(() => localStorage.getItem('aiq-lang') || 'fr');
+  const [authed, setAuthed] = useStateApp(false);
+  const [route, setRoute] = useStateApp('dashboard');
+  const [navOpen, setNavOpen] = useStateApp(false);
+
+  useEffectApp(() => { localStorage.setItem('aiq-lang', lang); }, [lang]);
+  // reset scroll on route change
+  useEffectApp(() => { const m = document.querySelector('.aiq-main'); if (m) m.scrollTop = 0; window.scrollTo(0, 0); }, [route]);
+
+  const screen = () => {
+    switch (route) {
+      case 'dashboard': return <window.AIQ_DashboardScreen lang={lang} setRoute={setRoute} />;
+      case 'audits':    return <window.AIQ_AuditsScreen lang={lang} setRoute={setRoute} />;
+      case 'agent1':
+      case 'agent2':
+      case 'agent3':    return <window.AIQ_AgentScreen lang={lang} agentId={route} setRoute={setRoute} />;
+      case 'documents': return <window.AIQ_DocumentsScreen lang={lang} />;
+      case 'history':   return <window.AIQ_HistoryScreen lang={lang} />;
+      case 'settings':  return <window.AIQ_SettingsScreen lang={lang} setLang={setLang} />;
+      default:          return <window.AIQ_DashboardScreen lang={lang} setRoute={setRoute} />;
+    }
+  };
+
+  if (!authed) {
+    return <window.AIQ_SignIn lang={lang} setLang={setLang} onEnter={() => setAuthed(true)} />;
+  }
+
+  return (
+    <React.Fragment>
+      <div className="aiq-blob b1" />
+      <div className="aiq-blob b2" />
+      <div className="aiq-app">
+        <div className={`aiq-scrim ${navOpen ? 'open' : ''}`} onClick={() => setNavOpen(false)} />
+        <window.AIQ_Sidebar route={route} setRoute={setRoute} lang={lang}
+                            open={navOpen} onClose={() => setNavOpen(false)} />
+        <div className="aiq-main">
+          <window.AIQ_Topbar route={route} lang={lang} setLang={setLang}
+                             onMenu={() => setNavOpen(true)} />
+          {screen()}
+        </div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+const aiqRoot = ReactDOM.createRoot(document.getElementById('root'));
+aiqRoot.render(<AuditIQApp />);
+</script>
+</body>
+</html>
