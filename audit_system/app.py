@@ -2496,379 +2496,186 @@ if _qp.get("auth") == "1":
     st.rerun()
 
 if not st.session_state.signed_in:
+    # Hide Streamlit chrome and make iframe cover full viewport
     st.markdown("""
 <style>
-/* Hide all Streamlit chrome while sign-in is shown */
-#root > div:first-child [data-testid="stToolbar"],
-#root > div:first-child [data-testid="stDecoration"],
-header[data-testid="stHeader"],
-.stDeployButton { display: none !important; }
-[data-testid="stSidebar"] { display: none !important; }
-.main .block-container { padding: 0 !important; max-width: 100% !important; }
+header[data-testid="stHeader"], .stDeployButton,
+[data-testid="stToolbar"], [data-testid="stDecoration"] { display:none !important; }
+[data-testid="stSidebar"] { display:none !important; }
+.main .block-container { padding:0 !important; max-width:100% !important; }
+iframe[title="st.components.v1.html"] {
+  position:fixed !important; top:0 !important; left:0 !important;
+  width:100vw !important; height:100vh !important;
+  border:none !important; z-index:9998 !important;
+}
 </style>
-<div class="aiq-cover" id="aiq-cover-root">
-  <div class="aiq-blob b1"></div>
-  <div class="aiq-blob b2"></div>
-
-  <!-- Left: brand + globe + tagline -->
+""", unsafe_allow_html=True)
+    import streamlit.components.v1 as _stc
+    _stc.html("""<!doctype html><html lang="fr"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --aiq-bg:#07090f;--aiq-bg-2:#0b0f1a;--aiq-border:rgba(255,255,255,.08);
+  --aiq-border-2:rgba(255,255,255,.14);--aiq-text:#eef0f8;--aiq-text-2:#c9cde0;
+  --aiq-muted:#8392bb;--aiq-faint:#5a6488;--aiq-accent:#6366f1;--aiq-accent-2:#818cf8;
+  --aiq-glow:0 0 0 3px rgba(99,102,241,.18);--ease:cubic-bezier(.4,0,.2,1);
+}
+html,body{height:100%;background:var(--aiq-bg);font-family:'Inter',sans-serif;overflow:hidden;}
+.aiq-cover{
+  position:fixed;inset:0;display:grid;grid-template-columns:1.1fr 0.9fr;
+  background:radial-gradient(ellipse at 30% 20%,#11173a 0%,#07090f 70%);
+  overflow:hidden;transition:opacity .75s var(--ease);
+}
+.aiq-cover.fading{opacity:0;pointer-events:none;}
+.aiq-blob{position:fixed;border-radius:50%;filter:blur(120px);opacity:.14;pointer-events:none;z-index:0;}
+.aiq-blob.b1{width:600px;height:600px;background:#4f46e5;top:-180px;left:-180px;animation:blobMove1 22s ease-in-out infinite;}
+.aiq-blob.b2{width:480px;height:480px;background:#0ea5e9;bottom:-120px;right:-100px;animation:blobMove2 26s ease-in-out infinite;}
+@keyframes blobMove1{0%,100%{transform:translate(0,0)}50%{transform:translate(90px,60px)}}
+@keyframes blobMove2{0%,100%{transform:translate(0,0)}50%{transform:translate(-70px,-90px)}}
+.aiq-cover-hero{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:56px clamp(40px,6vw,96px);gap:8px;}
+.aiq-cover-brand{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.aiq-cover-brand .mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#6366f1,#4f46e5);display:grid;place-items:center;color:#fff;font-weight:800;font-size:16px;box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 8px 24px rgba(99,102,241,.45);}
+.aiq-cover-brand .nm{font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--aiq-text);}
+.aiq-cover-brand .nm b{color:var(--aiq-accent-2);}
+.aiq-pro{margin-left:8px;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(99,102,241,.14);border:1px solid rgba(99,102,241,.3);color:#818cf8;padding:2px 8px;border-radius:999px;}
+.aiq-cover-globe{align-self:center;margin:6px 0 22px;}
+.aiq-cover-title{font-size:clamp(30px,4vw,50px);font-weight:800;letter-spacing:-.03em;line-height:1.06;color:var(--aiq-text);animation:coverUp .7s var(--ease) .2s both;}
+.aiq-cover-title .grad{background:linear-gradient(120deg,#aab6ff 0%,#6366f1 70%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.aiq-cover-tag{margin-top:16px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--aiq-muted);animation:coverUp .7s var(--ease) .32s both;}
+.aiq-cover-flags{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;animation:coverUp .7s var(--ease) .44s both;}
+.aiq-cover-flags .fl{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--aiq-border);font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--aiq-text-2);}
+.aiq-cover-flags .fl .em{font-size:15px;}
+@keyframes coverUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.aiq-cover-auth{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;padding:40px;background:linear-gradient(180deg,rgba(11,15,26,.72),rgba(7,9,15,.86));border-left:1px solid var(--aiq-border);backdrop-filter:blur(8px);}
+.aiq-cover-lang{position:absolute;top:26px;right:26px;display:flex;gap:4px;}
+.aiq-lang-btn{background:transparent;border:1px solid var(--aiq-border);border-radius:6px;color:var(--aiq-muted);font-size:11px;font-weight:700;letter-spacing:.08em;padding:4px 10px;cursor:pointer;transition:all .15s var(--ease);font-family:inherit;}
+.aiq-lang-btn.active{background:rgba(99,102,241,.18);border-color:rgba(99,102,241,.4);color:#fff;}
+.aiq-signin{width:100%;max-width:380px;display:flex;flex-direction:column;gap:14px;animation:coverUp .7s var(--ease) .15s both;}
+.aiq-signin-head h2{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px;color:var(--aiq-text);}
+.aiq-signin-head p{font-size:13.5px;color:var(--aiq-muted);line-height:1.5;}
+.aiq-signin-field{display:flex;flex-direction:column;gap:7px;}
+.aiq-signin-field>span{font-size:12px;font-weight:600;color:var(--aiq-text-2);letter-spacing:.02em;}
+.aiq-signin-field .ip{position:relative;}
+.aiq-signin-field .ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.65;pointer-events:none;}
+.aiq-signin-field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--aiq-border);border-radius:10px;padding:12px 14px 12px 40px;color:var(--aiq-text);font-family:inherit;font-size:14px;outline:none;transition:border-color .15s var(--ease),box-shadow .15s var(--ease);}
+.aiq-signin-field input:focus{border-color:rgba(99,102,241,.5);box-shadow:var(--aiq-glow);background:rgba(255,255,255,.06);}
+.aiq-signin-row{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;margin-top:2px;}
+.aiq-signin-row a{color:var(--aiq-accent-2);font-weight:600;text-decoration:none;}
+.aiq-check{display:inline-flex;align-items:center;gap:8px;color:var(--aiq-text-2);cursor:pointer;user-select:none;}
+.aiq-check .box{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--aiq-border-2);background:rgba(255,255,255,.03);display:grid;place-items:center;font-size:11px;color:#fff;transition:all .15s var(--ease);}
+.aiq-check .box[data-on="true"]{background:var(--aiq-accent);border-color:var(--aiq-accent);}
+.aiq-signin-btn{margin-top:6px;background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;border:0;border-radius:10px;padding:14px 18px;font-family:inherit;font-size:14.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;box-shadow:0 8px 24px rgba(99,102,241,.4);transition:transform .15s var(--ease),box-shadow .15s var(--ease);}
+.aiq-signin-btn:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(99,102,241,.55);}
+.aiq-signin-or{display:flex;align-items:center;gap:12px;color:var(--aiq-faint);font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin:2px 0;}
+.aiq-signin-or::before,.aiq-signin-or::after{content:"";flex:1;height:1px;background:var(--aiq-border);}
+.aiq-signin-sso{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.aiq-sso-btn{background:rgba(255,255,255,.03);border:1px solid var(--aiq-border);border-radius:10px;padding:11px;color:var(--aiq-text-2);font-family:inherit;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:all .15s var(--ease);}
+.aiq-sso-btn:hover{background:rgba(255,255,255,.07);color:var(--aiq-text);border-color:var(--aiq-border-2);}
+.aiq-signin-foot{margin-top:8px;display:flex;flex-direction:column;gap:8px;align-items:center;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--aiq-faint);text-align:center;}
+.enc-pill{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#22c55e;padding:3px 9px;border-radius:999px;}
+.enc-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;display:inline-block;}
+@media(max-width:880px){
+  .aiq-cover{grid-template-columns:1fr;overflow-y:auto;}
+  .aiq-cover-hero{padding:40px 28px 8px;align-items:center;text-align:center;}
+  .aiq-cover-title,.aiq-cover-tag{text-align:center;}
+  .aiq-cover-flags{justify-content:center;}
+  .aiq-cover-globe{transform:scale(.82);margin:0;}
+  .aiq-cover-auth{border-left:0;border-top:1px solid var(--aiq-border);padding:32px 24px 48px;}
+  .aiq-cover-lang{top:18px;right:18px;}
+}
+</style></head><body>
+<div class="aiq-cover" id="aiq-root">
+  <div class="aiq-blob b1"></div><div class="aiq-blob b2"></div>
   <div class="aiq-cover-hero">
     <div class="aiq-cover-brand">
       <div class="mark">A</div>
       <span class="nm">Audit<b>IQ</b></span>
-      <span style="margin-left:8px;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(99,102,241,.14);border:1px solid rgba(99,102,241,.3);color:#818cf8;padding:2px 8px;border-radius:999px">Pro</span>
+      <span class="aiq-pro">Pro</span>
     </div>
-
     <div class="aiq-cover-globe">
-      <canvas id="aiq-globe-canvas" width="680" height="680"
-              style="width:340px;height:340px;display:block;filter:drop-shadow(0 0 64px rgba(99,102,241,.4))"></canvas>
+      <canvas id="globe" width="680" height="680" style="width:340px;height:340px;display:block;filter:drop-shadow(0 0 64px rgba(99,102,241,.4))"></canvas>
     </div>
-
-    <h1 class="aiq-cover-title">
-      Audit bancaire,<br><span class="grad">augmenté par l'IA.</span>
-    </h1>
+    <h1 class="aiq-cover-title">Audit bancaire,<br><span class="grad">augmenté par l’IA.</span></h1>
     <p class="aiq-cover-tag">CH &middot; SG &middot; HK &middot; Bahamas &middot; EU &middot; UK</p>
-
     <div class="aiq-cover-flags">
-      <span class="fl"><span class="em">🇨🇭</span>FINMA</span>
-      <span class="fl"><span class="em">🇸🇬</span>MAS</span>
-      <span class="fl"><span class="em">🇭🇰</span>SFC / HKMA</span>
-      <span class="fl"><span class="em">🇧🇸</span>SCB</span>
-      <span class="fl"><span class="em">🇪🇺</span>CSSF / BaFin</span>
-      <span class="fl"><span class="em">🇬🇧</span>FCA / PRA</span>
+      <span class="fl"><span class="em">&#127464;&#127469;</span>FINMA</span>
+      <span class="fl"><span class="em">&#127480;&#127468;</span>MAS</span>
+      <span class="fl"><span class="em">&#127469;&#127472;</span>SFC / HKMA</span>
+      <span class="fl"><span class="em">&#127463;&#127480;</span>SCB</span>
+      <span class="fl"><span class="em">&#127466;&#127482;</span>CSSF / BaFin</span>
+      <span class="fl"><span class="em">&#127468;&#127463;</span>FCA / PRA</span>
     </div>
   </div>
-
-  <!-- Right: sign-in panel -->
   <div class="aiq-cover-auth">
-    <div class="aiq-lang aiq-cover-lang" id="aiq-lang-sw">
-      <button onclick="setLang('fr')" id="btn-fr" class="aiq-lang-btn active">FR</button>
-      <button onclick="setLang('en')" id="btn-en" class="aiq-lang-btn">EN</button>
+    <div class="aiq-cover-lang">
+      <button class="aiq-lang-btn active" id="btn-fr" onclick="setLang('fr')">FR</button>
+      <button class="aiq-lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
     </div>
-
-    <form class="aiq-signin" id="aiq-signin-form" onsubmit="doSignin(event)">
+    <form class="aiq-signin" onsubmit="doSignin(event)">
       <div class="aiq-signin-head">
         <h2 id="si-title">Connexion</h2>
-        <p id="si-sub">Accédez à votre espace d'audit sécurisé.</p>
+        <p id="si-sub">Accédez à votre espace d’audit sécurisé.</p>
       </div>
-
       <label class="aiq-signin-field">
         <span id="si-email-lbl">Adresse e-mail</span>
-        <div class="ip">
-          <span class="ic">✉</span>
-          <input type="email" id="si-email" value="lucas.brunner@helvetia-private.ch" autocomplete="username" />
+        <div class="ip"><span class="ic">&#9993;</span>
+          <input type="email" id="si-email" value="lucas.brunner@helvetia-private.ch" autocomplete="username"/>
         </div>
       </label>
-
       <label class="aiq-signin-field">
         <span id="si-pwd-lbl">Mot de passe</span>
-        <div class="ip">
-          <span class="ic">🔒</span>
-          <input type="password" id="si-pwd" value="auditiq-demo" autocomplete="current-password" />
+        <div class="ip"><span class="ic">&#128274;</span>
+          <input type="password" id="si-pwd" value="auditiq-demo" autocomplete="current-password"/>
         </div>
       </label>
-
       <div class="aiq-signin-row">
-        <label class="aiq-check" onclick="toggleRemember()">
-          <span class="box" id="si-remember-box" data-on="true">✓</span>
-          <span id="si-remember-lbl">Se souvenir de moi</span>
+        <label class="aiq-check" onclick="toggleRem()">
+          <span class="box" id="rem-box" data-on="true">&#10003;</span>
+          <span id="si-rem-lbl">Se souvenir de moi</span>
         </label>
-        <a href="#" onclick="return false;" id="si-forgot">Mot de passe oublié ?</a>
+        <a href="#" onclick="return false" id="si-forgot">Mot de passe oublié&nbsp;?</a>
       </div>
-
-      <button type="submit" class="aiq-signin-btn" id="si-submit-btn">
-        <span id="si-btn-text">Se connecter</span> <span class="arr" id="si-arr">→</span>
+      <button type="submit" class="aiq-signin-btn" id="si-btn">
+        <span id="si-btn-txt">Se connecter</span> <span id="si-arr">&#8594;</span>
       </button>
-
-      <div class="aiq-signin-or"><span id="si-or-lbl">ou</span></div>
-
+      <div class="aiq-signin-or"><span id="si-or">ou</span></div>
       <div class="aiq-signin-sso">
-        <button type="button" onclick="doSignin()" class="aiq-sso-btn">
-          <span class="g">🔑</span> <span class="si-sso-t">SSO entreprise</span>
-        </button>
-        <button type="button" onclick="doSignin()" class="aiq-sso-btn">
-          <span class="g">🪪</span> <span class="si-sso-t">Carte d'accès</span>
-        </button>
+        <button type="button" class="aiq-sso-btn" onclick="doSignin()"><span>&#128273;</span> <span class="sso-t">SSO entreprise</span></button>
+        <button type="button" class="aiq-sso-btn" onclick="doSignin()"><span>&#129499;</span> <span class="sso-t">Carte d’accès</span></button>
       </div>
-
       <p class="aiq-signin-foot">
-        <span style="display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;
-              letter-spacing:.06em;text-transform:uppercase;background:rgba(34,197,94,.1);
-              border:1px solid rgba(34,197,94,.25);color:#22c55e;padding:3px 9px;border-radius:999px">
-          <span style="width:5px;height:5px;border-radius:50%;background:#22c55e;display:inline-block"></span>
-          Connexion chiffrée
-        </span>
-        <span id="si-footer-txt">AuditIQ · Banque privée suisse</span>
+        <span class="enc-pill"><span class="enc-dot"></span> Connexion chiffrée</span>
+        <span id="si-foot">AuditIQ &middot; Banque privée suisse</span>
       </p>
     </form>
   </div>
 </div>
-
-<style>
-:root {
-  --aiq-bg: #07090f; --aiq-bg-2: #0b0f1a; --aiq-surface: #10141f;
-  --aiq-border: rgba(255,255,255,.08); --aiq-border-2: rgba(255,255,255,.14);
-  --aiq-text: #eef0f8; --aiq-text-2: #c9cde0; --aiq-muted: #8392bb; --aiq-faint: #5a6488;
-  --aiq-accent: #6366f1; --aiq-accent-2: #818cf8; --aiq-glow: 0 0 0 3px rgba(99,102,241,.18);
-  --ease: cubic-bezier(.4,0,.2,1);
-}
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-.aiq-cover {
-  position: fixed; inset: 0; z-index: 9999;
-  display: grid; grid-template-columns: 1.1fr 0.9fr;
-  background: radial-gradient(ellipse at 30% 20%, #11173a 0%, #07090f 70%);
-  overflow: hidden; font-family: 'Inter', sans-serif;
-  transition: opacity .75s var(--ease);
-}
-.aiq-cover.fading { opacity: 0; pointer-events: none; }
-.aiq-blob { position: fixed; border-radius: 50%; filter: blur(120px); opacity: .14; pointer-events: none; z-index: 0; }
-.aiq-blob.b1 { width:600px;height:600px;background:#4f46e5;top:-180px;left:-180px;
-               animation: blobMove1 22s ease-in-out infinite; }
-.aiq-blob.b2 { width:480px;height:480px;background:#0ea5e9;bottom:-120px;right:-100px;
-               animation: blobMove2 26s ease-in-out infinite; }
-@keyframes blobMove1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(90px,60px)} }
-@keyframes blobMove2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-70px,-90px)} }
-.aiq-cover-hero {
-  position: relative; z-index: 2;
-  display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
-  padding: 56px clamp(40px,6vw,96px); gap: 8px;
-}
-.aiq-cover-brand { display:flex;align-items:center;gap:12px;margin-bottom:8px; }
-.aiq-cover-brand .mark {
-  width:38px;height:38px;border-radius:11px;
-  background: linear-gradient(135deg,#6366f1,#4f46e5);
-  display:grid;place-items:center;color:#fff;font-weight:800;font-size:16px;
-  box-shadow: 0 0 0 1px rgba(255,255,255,.12) inset, 0 8px 24px rgba(99,102,241,.45);
-}
-.aiq-cover-brand .nm { font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--aiq-text); }
-.aiq-cover-brand .nm b { color: var(--aiq-accent-2); }
-.aiq-cover-globe { align-self:center;margin:6px 0 22px; }
-.aiq-cover-title {
-  font-size: clamp(30px,4vw,50px); font-weight:800; letter-spacing:-.03em;
-  line-height:1.06; margin:0; color:var(--aiq-text);
-  animation: coverUp .7s var(--ease) .2s both;
-}
-.aiq-cover-title .grad {
-  background: linear-gradient(120deg,#aab6ff 0%,#6366f1 70%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.aiq-cover-tag {
-  margin:16px 0 0; font-size:13px; font-weight:600;
-  letter-spacing:.16em; text-transform:uppercase; color:var(--aiq-muted);
-  animation: coverUp .7s var(--ease) .32s both;
-}
-.aiq-cover-flags {
-  display:flex; flex-wrap:wrap; gap:8px; margin-top:26px;
-  animation: coverUp .7s var(--ease) .44s both;
-}
-.aiq-cover-flags .fl {
-  display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;
-  background:rgba(255,255,255,.04);border:1px solid var(--aiq-border);
-  font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--aiq-text-2);
-}
-.aiq-cover-flags .fl .em { font-size:15px; }
-@keyframes coverUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-.aiq-cover-auth {
-  position:relative;z-index:2;display:flex;align-items:center;justify-content:center;
-  padding:40px;background:linear-gradient(180deg,rgba(11,15,26,.72),rgba(7,9,15,.86));
-  border-left:1px solid var(--aiq-border); backdrop-filter:blur(8px);
-}
-.aiq-lang { display:flex;gap:4px; }
-.aiq-cover-lang { position:absolute;top:26px;right:26px; }
-.aiq-lang-btn {
-  background:transparent; border:1px solid var(--aiq-border); border-radius:6px;
-  color:var(--aiq-muted); font-size:11px; font-weight:700; letter-spacing:.08em;
-  padding:4px 10px; cursor:pointer; transition:all .15s var(--ease); font-family:inherit;
-}
-.aiq-lang-btn.active { background:rgba(99,102,241,.18); border-color:rgba(99,102,241,.4); color:#fff; }
-.aiq-signin { width:100%;max-width:380px;display:flex;flex-direction:column;gap:14px; animation:coverUp .7s var(--ease) .15s both; }
-.aiq-signin-head h2 { font-size:26px;font-weight:800;letter-spacing:-.02em;margin:0 0 6px;color:var(--aiq-text); }
-.aiq-signin-head p { margin:0 0 6px;font-size:13.5px;color:var(--aiq-muted);line-height:1.5; }
-.aiq-signin-field { display:flex;flex-direction:column;gap:7px; }
-.aiq-signin-field > span { font-size:12px;font-weight:600;color:var(--aiq-text-2);letter-spacing:.02em; }
-.aiq-signin-field .ip { position:relative; }
-.aiq-signin-field .ic { position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.65;pointer-events:none; }
-.aiq-signin-field input {
-  width:100%; background:rgba(255,255,255,.04); border:1px solid var(--aiq-border);
-  border-radius:10px; padding:12px 14px 12px 40px; color:var(--aiq-text);
-  font-family:inherit;font-size:14px;outline:none;
-  transition:border-color .15s var(--ease),box-shadow .15s var(--ease);
-}
-.aiq-signin-field input:focus { border-color:rgba(99,102,241,.5);box-shadow:var(--aiq-glow);background:rgba(255,255,255,.06); }
-.aiq-signin-row { display:flex;align-items:center;justify-content:space-between;font-size:12.5px;margin-top:2px; }
-.aiq-signin-row a { color:var(--aiq-accent-2);font-weight:600;text-decoration:none; }
-.aiq-signin-row a:hover { text-decoration:underline; }
-.aiq-check { display:inline-flex;align-items:center;gap:8px;color:var(--aiq-text-2);cursor:pointer;user-select:none; }
-.aiq-check .box {
-  width:17px;height:17px;border-radius:5px;
-  border:1.5px solid var(--aiq-border-2);background:rgba(255,255,255,.03);
-  display:grid;place-items:center;font-size:11px;color:#fff;transition:all .15s var(--ease);
-}
-.aiq-check .box[data-on="true"] { background:var(--aiq-accent);border-color:var(--aiq-accent); }
-.aiq-signin-btn {
-  margin-top:6px;background:linear-gradient(135deg,#4f46e5,#6366f1);
-  color:#fff;border:0;border-radius:10px;padding:14px 18px;font-family:inherit;font-size:14.5px;font-weight:700;
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;
-  box-shadow:0 8px 24px rgba(99,102,241,.4);
-  transition:transform .15s var(--ease),box-shadow .15s var(--ease);
-}
-.aiq-signin-btn:hover { transform:translateY(-1px);box-shadow:0 12px 30px rgba(99,102,241,.55); }
-.aiq-signin-btn .arr { transition:transform .15s var(--ease); }
-.aiq-signin-btn:hover .arr { transform:translateX(4px); }
-.aiq-signin-or { display:flex;align-items:center;gap:12px;color:var(--aiq-faint);font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin:2px 0; }
-.aiq-signin-or::before,.aiq-signin-or::after { content:"";flex:1;height:1px;background:var(--aiq-border); }
-.aiq-signin-sso { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
-.aiq-sso-btn {
-  background:rgba(255,255,255,.03);border:1px solid var(--aiq-border);border-radius:10px;
-  padding:11px;color:var(--aiq-text-2);font-family:inherit;font-size:12.5px;font-weight:600;
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;
-  transition:all .15s var(--ease);
-}
-.aiq-sso-btn:hover { background:rgba(255,255,255,.07);color:var(--aiq-text);border-color:var(--aiq-border-2); }
-.aiq-signin-foot { margin:8px 0 0;display:flex;flex-direction:column;gap:8px;align-items:center;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--aiq-faint);text-align:center; }
-@media (max-width:880px) {
-  .aiq-cover { grid-template-columns:1fr; overflow-y:auto; }
-  .aiq-cover-hero { padding:40px 28px 8px;align-items:center;text-align:center; }
-  .aiq-cover-title,.aiq-cover-tag { text-align:center; }
-  .aiq-cover-flags { justify-content:center; }
-  .aiq-cover-globe { transform:scale(.82);margin:0; }
-  .aiq-cover-auth { border-left:0;border-top:1px solid var(--aiq-border);padding:32px 24px 48px; }
-  .aiq-cover-lang { top:18px;right:18px; }
-}
-</style>
 <script>
-// ── Globe canvas animation ────────────────────────────────────────
-(function() {
-  var canvas = document.getElementById('aiq-globe-canvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var size = 340, dpr = 2;
-  canvas.width = size * dpr; canvas.height = size * dpr;
-  ctx.scale(dpr, dpr);
-  var cx = size/2, cy = size/2, R = size * 0.43;
-
-  var MASK = {
-    2:[[8,14],[26,30],[50,69]], 3:[[2,5],[7,22],[25,31],[46,70]],
-    4:[[1,24],[26,31],[35,40],[42,71]], 5:[[1,14],[17,25],[27,30],[33,44],[45,71]],
-    6:[[2,15],[19,26],[35,42],[43,71]], 7:[[3,16],[19,27],[32,33],[35,71]],
-    8:[[4,28],[33,71]], 9:[[5,27],[33,52],[54,71]],
-    10:[[6,26],[32,37],[40,71]], 11:[[7,25],[31,46],[47,70]],
-    12:[[9,22],[30,53],[55,70]], 13:[[11,20],[29,53],[55,70]],
-    14:[[13,20],[30,52],[54,69]], 15:[[15,21],[31,51],[55,68]],
-    16:[[20,27],[32,50],[60,68]], 17:[[21,30],[33,49],[60,69]],
-    18:[[21,31],[34,48],[60,70]], 19:[[21,32],[35,47],[61,69]],
-    20:[[22,33],[36,46],[57,68]], 21:[[23,33],[37,45],[57,68]],
-    22:[[24,33],[38,45],[56,67]], 23:[[25,32],[39,44],[57,66]],
-    24:[[26,31],[40,43],[58,65]], 25:[[27,30],[41,43],[60,63]],
-    26:[[27,29],[68,70]], 27:[[27,29]], 28:[[27,28]], 29:[[27,28]],
-    32:[[4,67]], 33:[[0,71]], 34:[[0,71]]
-  };
-  var pts = [];
-  for (var r in MASK) {
-    var row = +r;
-    var spans = MASK[r];
-    for (var si = 0; si < spans.length; si++) {
-      var c0 = spans[si][0], c1 = spans[si][1];
-      for (var c = c0; c <= c1; c += 0.5) {
-        var lon = (-180 + c*5 + 2.5) * Math.PI / 180;
-        for (var di = 0; di < 2; di++) {
-          var sub = di === 0 ? -1.25 : 1.25;
-          var lat = (90 - row*5 - 2.5 + sub) * Math.PI / 180;
-          pts.push([lon, lat]);
-        }
-      }
-    }
-  }
-  var tilt = 21 * Math.PI / 180, ct = Math.cos(tilt), st = Math.sin(tilt);
-  var lx = -0.42, ly = 0.5, lz = 0.62;
-  var rot = -1.2, last = performance.now();
-
-  function draw(now) {
-    var dt = Math.min((now - last) / 1000, 0.05); last = now;
-    rot += dt * 0.32;
-    ctx.clearRect(0, 0, size, size);
-    var og = ctx.createRadialGradient(cx - R*0.34, cy - R*0.4, R*0.08, cx, cy, R);
-    og.addColorStop(0, '#26336f'); og.addColorStop(0.5, '#141f47'); og.addColorStop(1, '#070b1c');
-    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2);
-    ctx.fillStyle = og; ctx.fill();
-    ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(129,140,248,0.42)'; ctx.stroke();
-    for (var i = 0; i < pts.length; i++) {
-      var lon2 = pts[i][0], lat2 = pts[i][1];
-      var lam = lon2 + rot, clat = Math.cos(lat2);
-      var x = clat * Math.sin(lam), y = Math.sin(lat2), z = clat * Math.cos(lam);
-      var y2 = y*ct - z*st, z2 = y*st + z*ct; y = y2; z = z2;
-      if (z <= 0.02) continue;
-      var sx = cx + R*x, sy = cy - R*y;
-      var lf = Math.max(0, x*lx + y*ly + z*lz);
-      var shade = 0.32 + 0.68*lf;
-      var rr = Math.round(70 + 90*shade), gg = Math.round(95 + 110*shade), bb = Math.round(180 + 75*shade);
-      var alpha = (0.55 + 0.45*z) * (z < 0.12 ? z/0.12 : 1);
-      ctx.beginPath(); ctx.arc(sx, sy, 1.5*(0.55 + 0.55*z), 0, Math.PI*2);
-      ctx.fillStyle = 'rgba('+rr+','+gg+','+bb+','+alpha+')'; ctx.fill();
-    }
-    var sg = ctx.createRadialGradient(cx - R*0.3, cy - R*0.34, 0, cx - R*0.3, cy - R*0.34, R*0.85);
-    sg.addColorStop(0, 'rgba(175,186,255,0.26)'); sg.addColorStop(0.45, 'rgba(175,186,255,0)');
-    ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.fill();
-    var lg = ctx.createRadialGradient(cx, cy, R*0.7, cx, cy, R);
-    lg.addColorStop(0, 'rgba(0,0,0,0)'); lg.addColorStop(1, 'rgba(2,4,12,0.5)');
-    ctx.fillStyle = lg; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.fill();
-    requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw);
-})();
-
-// ── Language switcher ─────────────────────────────────────────────
-var _lang = 'fr';
-var _i18n = {
-  fr: { title:'Connexion', sub:'Accédez à votre espace d\\'audit sécurisé.',
-        email:'Adresse e-mail', pwd:'Mot de passe', remember:'Se souvenir de moi',
-        forgot:'Mot de passe oublié ?', btn:'Se connecter', or:'ou', auth:'Authentification…',
-        sso1:'SSO entreprise', sso2:'Carte d\\'accès', footer:'AuditIQ · Banque privée suisse' },
-  en: { title:'Sign in', sub:'Access your secure audit workspace.',
-        email:'Email address', pwd:'Password', remember:'Remember me',
-        forgot:'Forgot password?', btn:'Sign in', or:'or', auth:'Authenticating…',
-        sso1:'Enterprise SSO', sso2:'Access card', footer:'AuditIQ · Swiss private bank' }
-};
-function setLang(l) {
-  _lang = l;
-  var d = _i18n[l];
-  document.getElementById('btn-fr').className = 'aiq-lang-btn' + (l==='fr'?' active':'');
-  document.getElementById('btn-en').className = 'aiq-lang-btn' + (l==='en'?' active':'');
-  document.getElementById('si-title').textContent = d.title;
-  document.getElementById('si-sub').textContent = d.sub;
-  document.getElementById('si-email-lbl').textContent = d.email;
-  document.getElementById('si-pwd-lbl').textContent = d.pwd;
-  document.getElementById('si-remember-lbl').textContent = d.remember;
-  document.getElementById('si-forgot').textContent = d.forgot;
-  document.getElementById('si-btn-text').textContent = d.btn;
-  document.getElementById('si-or-lbl').textContent = d.or;
-  document.querySelectorAll('.si-sso-t')[0].textContent = d.sso1;
-  document.querySelectorAll('.si-sso-t')[1].textContent = d.sso2;
-  document.getElementById('si-footer-txt').textContent = d.footer;
-}
-function toggleRemember() {
-  var box = document.getElementById('si-remember-box');
-  var on = box.getAttribute('data-on') === 'true';
-  box.setAttribute('data-on', (!on).toString());
-  box.textContent = !on ? '✓' : '';
-}
-// ── Sign-in submit → navigate with query param ────────────────────
-function doSignin(e) {
-  if (e && e.preventDefault) e.preventDefault();
-  var btn = document.getElementById('si-submit-btn');
-  var d = _i18n[_lang];
-  btn.disabled = true;
-  btn.innerHTML = '<span>' + d.auth + '</span>';
-  setTimeout(function() {
-    document.getElementById('aiq-cover-root').classList.add('fading');
-    setTimeout(function() {
-      var url = new URL(window.location.href);
-      url.searchParams.set('auth', '1');
-      window.location.href = url.toString();
-    }, 700);
-  }, 800);
-}
-</script>
-""", unsafe_allow_html=True)
+// Globe
+(function(){
+var cv=document.getElementById('globe'),ctx=cv.getContext('2d'),sz=340,dpr=2;
+cv.width=sz*dpr;cv.height=sz*dpr;ctx.scale(dpr,dpr);
+var cx=sz/2,cy=sz/2,R=sz*.43;
+var MASK={2:[[8,14],[26,30],[50,69]],3:[[2,5],[7,22],[25,31],[46,70]],4:[[1,24],[26,31],[35,40],[42,71]],5:[[1,14],[17,25],[27,30],[33,44],[45,71]],6:[[2,15],[19,26],[35,42],[43,71]],7:[[3,16],[19,27],[32,33],[35,71]],8:[[4,28],[33,71]],9:[[5,27],[33,52],[54,71]],10:[[6,26],[32,37],[40,71]],11:[[7,25],[31,46],[47,70]],12:[[9,22],[30,53],[55,70]],13:[[11,20],[29,53],[55,70]],14:[[13,20],[30,52],[54,69]],15:[[15,21],[31,51],[55,68]],16:[[20,27],[32,50],[60,68]],17:[[21,30],[33,49],[60,69]],18:[[21,31],[34,48],[60,70]],19:[[21,32],[35,47],[61,69]],20:[[22,33],[36,46],[57,68]],21:[[23,33],[37,45],[57,68]],22:[[24,33],[38,45],[56,67]],23:[[25,32],[39,44],[57,66]],24:[[26,31],[40,43],[58,65]],25:[[27,30],[41,43],[60,63]],26:[[27,29],[68,70]],27:[[27,29]],28:[[27,28]],29:[[27,28]],32:[[4,67]],33:[[0,71]],34:[[0,71]]};
+var pts=[];
+for(var r in MASK){var row=+r,sp=MASK[r];for(var si=0;si<sp.length;si++){var c0=sp[si][0],c1=sp[si][1];for(var c=c0;c<=c1;c+=.5){var lon=(-180+c*5+2.5)*Math.PI/180;for(var di=0;di<2;di++){var sub=di===0?-1.25:1.25,lat=(90-row*5-2.5+sub)*Math.PI/180;pts.push([lon,lat]);}}}}
+var tilt=21*Math.PI/180,ct=Math.cos(tilt),st2=Math.sin(tilt),lx=-.42,ly=.5,lz=.62,rot=-1.2,last=performance.now();
+function draw(now){var dt=Math.min((now-last)/1000,.05);last=now;rot+=dt*.32;ctx.clearRect(0,0,sz,sz);
+var og=ctx.createRadialGradient(cx-R*.34,cy-R*.4,R*.08,cx,cy,R);og.addColorStop(0,'#26336f');og.addColorStop(.5,'#141f47');og.addColorStop(1,'#070b1c');ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fillStyle=og;ctx.fill();ctx.lineWidth=1.2;ctx.strokeStyle='rgba(129,140,248,.42)';ctx.stroke();
+for(var i=0;i<pts.length;i++){var lo=pts[i][0],la=pts[i][1],lm=lo+rot,cl=Math.cos(la);var x=cl*Math.sin(lm),y=Math.sin(la),z=cl*Math.cos(lm);var y2=y*ct-z*st2,z2=y*st2+z*ct;y=y2;z=z2;if(z<=.02)continue;var sx=cx+R*x,sy=cy-R*y,lf=Math.max(0,x*lx+y*ly+z*lz),sh=.32+.68*lf,rr=Math.round(70+90*sh),gg=Math.round(95+110*sh),bb=Math.round(180+75*sh),al=(0.55+.45*z)*(z<.12?z/.12:1);ctx.beginPath();ctx.arc(sx,sy,1.5*(.55+.55*z),0,Math.PI*2);ctx.fillStyle='rgba('+rr+','+gg+','+bb+','+al+')';ctx.fill();}
+var sg=ctx.createRadialGradient(cx-R*.3,cy-R*.34,0,cx-R*.3,cy-R*.34,R*.85);sg.addColorStop(0,'rgba(175,186,255,.26)');sg.addColorStop(.45,'rgba(175,186,255,0)');ctx.fillStyle=sg;ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fill();
+var lg=ctx.createRadialGradient(cx,cy,R*.7,cx,cy,R);lg.addColorStop(0,'rgba(0,0,0,0)');lg.addColorStop(1,'rgba(2,4,12,.5)');ctx.fillStyle=lg;ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fill();
+requestAnimationFrame(draw);}
+requestAnimationFrame(draw);})();
+// i18n
+var lang='fr',i18n={fr:{title:'Connexion',sub:'Accédez à votre espace d’audit sécurisé.',email:'Adresse e-mail',pwd:'Mot de passe',rem:'Se souvenir de moi',forgot:'Mot de passe oublié ?',btn:'Se connecter',or:'ou',auth:'Authentification…',sso1:'SSO entreprise',sso2:'Carte d’accès',foot:'AuditIQ · Banque privée suisse'},en:{title:'Sign in',sub:'Access your secure audit workspace.',email:'Email address',pwd:'Password',rem:'Remember me',forgot:'Forgot password?',btn:'Sign in',or:'or',auth:'Authenticating…',sso1:'Enterprise SSO',sso2:'Access card',foot:'AuditIQ · Swiss private bank'}};
+function setLang(l){lang=l;var d=i18n[l];document.getElementById('btn-fr').className='aiq-lang-btn'+(l==='fr'?' active':'');document.getElementById('btn-en').className='aiq-lang-btn'+(l==='en'?' active':'');document.getElementById('si-title').textContent=d.title;document.getElementById('si-sub').textContent=d.sub;document.getElementById('si-email-lbl').textContent=d.email;document.getElementById('si-pwd-lbl').textContent=d.pwd;document.getElementById('si-rem-lbl').textContent=d.rem;document.getElementById('si-forgot').textContent=d.forgot;document.getElementById('si-btn-txt').textContent=d.btn;document.getElementById('si-or').textContent=d.or;document.getElementById('si-foot').textContent=d.foot;var ss=document.querySelectorAll('.sso-t');ss[0].textContent=d.sso1;ss[1].textContent=d.sso2;}
+function toggleRem(){var b=document.getElementById('rem-box'),on=b.getAttribute('data-on')==='true';b.setAttribute('data-on',(!on).toString());b.textContent=!on?'✓':'';}
+function doSignin(e){if(e&&e.preventDefault)e.preventDefault();var btn=document.getElementById('si-btn');btn.disabled=true;btn.innerHTML='<span>'+i18n[lang].auth+'</span>';setTimeout(function(){document.getElementById('aiq-root').classList.add('fading');setTimeout(function(){var url=new URL(window.top.location.href);url.searchParams.set('auth','1');window.top.location.href=url.toString();},700);},800);}
+</script></body></html>""", height=1, scrolling=False)
     st.stop()
 
 
