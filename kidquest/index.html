@@ -1,0 +1,3159 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>KidQuest — L'aventure du savoir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* style.css — KidQuest video-game refresh.
+   Uses JRA tokens from tokens.css and a custom layer on top. */
+
+/* ════════════════════════════════════════════════════════════════
+   JRA Studio — Design Tokens
+   Colors, type, spacing, radii, shadows for the 5 JRA products:
+   AuditIQ · KidQuest Academy · CoachIQ · PhotoPost AI · Audit Report deck
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Webfonts (all four are Google Fonts; loaded via CDN) ──────── */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap");
+
+:root {
+  /* ─── BASE PALETTE ────────────────────────────────────────────
+     The whole portfolio is dark-first. There's no "light mode"
+     except in KidQuest (which has both). Greys all sit between
+     near-black and off-white with a faint cool tint. */
+  --jra-black:        #07090f;   /* deepest — AuditIQ report bg */
+  --jra-ink:          #080808;   /* CoachIQ bg */
+  --jra-ink-2:        #080b12;   /* AuditIQ app bg */
+  --jra-ink-3:        #0e0e0e;   /* CoachIQ sidebar */
+  --jra-ink-4:        #0f0f13;   /* PhotoPost bg */
+  --jra-coal:         #111111;   /* CoachIQ card */
+  --jra-coal-2:       #141414;   /* CoachIQ button bg */
+  --jra-graphite:     #1a1a24;   /* PhotoPost surface */
+  --jra-graphite-2:   #22223a;   /* PhotoPost surface-2 */
+  --jra-line:         #1e1e1e;   /* CoachIQ border */
+  --jra-line-soft:    rgba(255,255,255,.07);
+  --jra-line-softer:  rgba(255,255,255,.05);
+
+  /* Text */
+  --jra-text:         #f0f0f0;   /* CoachIQ / PhotoPost primary */
+  --jra-text-2:       #e8edf8;   /* AuditIQ primary */
+  --jra-text-3:       #eef0f8;   /* presentation primary */
+  --jra-muted:        #7b7a8e;   /* PhotoPost muted */
+  --jra-muted-2:      #5a6488;   /* AuditIQ muted */
+  --jra-muted-3:      #8392bb;   /* AuditIQ label */
+  --jra-faint:        #424d72;   /* AuditIQ sub-label */
+
+  /* ─── BRAND ACCENTS (one signature per product) ───────────────
+     These are the colors a user immediately recognises as
+     "that JRA app". Use them sparingly — one per surface. */
+  --auditiq-blue:        #4f7ef8;   /* AuditIQ primary */
+  --auditiq-blue-deep:   #2d54d4;   /* AuditIQ gradient end */
+  --auditiq-blue-soft:   #7fa8fb;   /* AuditIQ download link */
+  --auditiq-indigo:      #6366f1;   /* Presentation accent */
+  --auditiq-indigo-soft: #818cf8;   /* Presentation accent-2 */
+
+  --coachiq-lime:        #CAFF33;   /* CoachIQ primary — THE color */
+  --coachiq-lime-hot:    #d8ff5a;   /* CoachIQ hover */
+  --coachiq-lime-deep:   #90ee2a;   /* CoachIQ gradient end */
+
+  --photopost-violet:    #7c6ef5;   /* PhotoPost primary */
+  --photopost-violet-2:  #a78bfa;   /* PhotoPost accent-2 */
+  --photopost-violet-dk: #1e1b4b;   /* PhotoPost header start */
+  --photopost-violet-dk2:#312e81;   /* PhotoPost header mid */
+
+  --kidquest-orange:     #FF6B35;   /* KidQuest primary */
+  --kidquest-orange-2:   #FF8E53;   /* KidQuest gradient end */
+  --kidquest-yellow:     #FFD93D;   /* KidQuest highlight */
+  --kidquest-teal:       #4ECDC4;   /* KidQuest secondary */
+  --kidquest-teal-2:     #44A9C6;
+  --kidquest-mint:       #A8E6CF;   /* KidQuest tertiary */
+  --kidquest-mint-2:     #56C596;
+  --kidquest-purple:     #667eea;   /* KidQuest "I don't know" */
+  --kidquest-purple-2:   #764ba2;
+  --kidquest-pink:       #f093fb;
+  --kidquest-pink-2:     #f5576c;
+
+  /* ─── SEMANTIC STATUS ─────────────────────────────────────────
+     Used across audit reports, math feedback, sports score deltas.
+     The same hue lives in multiple shades depending on context. */
+  --jra-red:        #ef4444;   /* critique / wrong */
+  --jra-red-soft:   #f87171;
+  --jra-red-page:   #fca5a5;   /* readable on dark */
+  --jra-orange:     #f97316;   /* élevé */
+  --jra-orange-soft:#fdba74;
+  --jra-yellow:     #eab308;   /* moyen */
+  --jra-yellow-soft:#fde047;
+  --jra-green:      #22c55e;   /* faible / ok */
+  --jra-green-soft: #86efac;
+  --jra-green-2:    #22d3a5;   /* AuditIQ status */
+  --jra-green-3:    #34d399;   /* PhotoPost ok */
+  --jra-blue:       #60a5fa;   /* info */
+  --jra-blue-soft:  #93c5fd;
+
+  /* ─── TYPOGRAPHY ──────────────────────────────────────────────
+     Four families, one per product personality.
+     - Inter: default body & UI. AuditIQ + CoachIQ body.
+     - Bebas Neue: CoachIQ display only — scoreboards, section titles.
+     - Fredoka: KidQuest display & body (was "Fredoka One" originally,
+       now using the variable Fredoka family which covers the same weight).
+     - Nunito: KidQuest fallback / secondary body.
+     - Segoe UI / system stack: fallback used by the older Streamlit
+       apps before custom fonts landed. */
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Bebas Neue', 'Inter', sans-serif;
+  --font-fun:     'Fredoka', 'Nunito', 'Comic Sans MS', cursive;
+  --font-system:  'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  /* Type scale — semantic */
+  --t-display:   clamp(2rem, 5vw, 3.4rem);   /* hero / cover */
+  --t-h1:        clamp(1.5rem, 3vw, 2rem);   /* page title */
+  --t-h2:        clamp(1.3rem, 3vw, 1.9rem); /* section title */
+  --t-h3:        1.2rem;                     /* sub-section */
+  --t-body:      0.95rem;                    /* prose */
+  --t-ui:        0.85rem;                    /* buttons, controls */
+  --t-small:     0.75rem;                    /* meta, hints */
+  --t-tiny:      0.7rem;                     /* labels / badges */
+
+  --lh-tight:    1.15;
+  --lh-snug:     1.4;
+  --lh-normal:   1.6;
+  --lh-loose:    1.75;
+
+  /* ─── SPACING ─────────────────────────────────────────────────
+     Loose 4-px grid. Most components use s-3 / s-4 padding. */
+  --s-1: 0.25rem; --s-2: 0.5rem;  --s-3: 0.75rem; --s-4: 1rem;
+  --s-5: 1.25rem; --s-6: 1.5rem;  --s-7: 1.75rem; --s-8: 2rem;
+  --s-10: 2.5rem; --s-12: 3rem;
+
+  /* ─── RADII ───────────────────────────────────────────────────
+     A consistent step ladder. KidQuest cards lean to 22px.
+     Audit / Coach cards are 10–14px. Pills are 20px+. */
+  --r-xs:  6px;
+  --r-sm:  8px;
+  --r-md:  10px;   /* CoachIQ tabs, AuditIQ buttons */
+  --r-lg:  14px;   /* Audit presentation cards */
+  --r-xl:  16px;   /* PhotoPost cards */
+  --r-2xl: 22px;   /* KidQuest q-cards */
+  --r-pill: 9999px;
+
+  /* ─── SHADOWS / GLOWS ─────────────────────────────────────────
+     Dark UIs use accent-colored glows more than soft drop shadows.
+     The grey-on-grey shadow exists but is rarely visible. */
+  --shadow-card:   0 8px 32px rgba(0,0,0,.45);   /* PhotoPost card */
+  --shadow-soft:   0 6px 18px rgba(0,0,0,.09);   /* KidQuest light */
+  --shadow-lift:   0 4px 20px rgba(124,110,245,.35);  /* PhotoPost btn */
+  --shadow-lift-2: 0 8px 28px rgba(124,110,245,.5);
+  --glow-lime:     0 0 12px rgba(202,255,51,.15);     /* CoachIQ hover */
+  --glow-lime-2:   0 0 18px rgba(202,255,51,.4);      /* CoachIQ active */
+  --glow-lime-3:   0 0 24px rgba(202,255,51,.15);     /* CoachIQ selected */
+  --glow-blue:     0 0 0 3px rgba(79,126,248,.08);    /* AuditIQ focus */
+  --glow-card:     0 8px 22px rgba(0,0,0,.18);
+
+  /* ─── GRADIENTS ───────────────────────────────────────────────
+     Three signature patterns used throughout: */
+  --grad-auditiq:    linear-gradient(135deg, #2d54d4 0%, #4f7ef8 100%);
+  --grad-coachiq:    linear-gradient(135deg, #CAFF33, #90ee2a);
+  --grad-photopost:  linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+  --grad-photopost-btn: linear-gradient(135deg, #7c6ef5, #60a5fa);
+  --grad-kidquest-title: linear-gradient(135deg, #FF6B35, #FFD93D, #4ECDC4);
+  --grad-kidquest-orange: linear-gradient(135deg, #FF6B35, #FF8E53);
+  --grad-kidquest-teal:   linear-gradient(135deg, #4ECDC4, #44A9C6);
+  --grad-kidquest-mint:   linear-gradient(135deg, #A8E6CF, #56C596);
+  --grad-kidquest-purple: linear-gradient(135deg, #667eea, #764ba2);
+  --grad-kidquest-pink:   linear-gradient(135deg, #f093fb, #f5576c);
+  --grad-text-cool:  linear-gradient(130deg, #fff 30%, #818cf8 100%);
+  --grad-text-warm:  linear-gradient(135deg, #FF6B35, #FFD93D, #4ECDC4);
+
+  /* ─── MOTION ─────────────────────────────────────────────── */
+  --ease:           cubic-bezier(.4, 0, .2, 1);
+  --dur-fast:       150ms;
+  --dur:            250ms;
+  --dur-slow:       550ms;
+  --dur-glacial:    1200ms;   /* gauge / counter sweeps */
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   SEMANTIC ELEMENT STYLES
+   Importing colors_and_type.css gives you the variables AND these
+   default-styled elements so prose / forms look consistent.
+   ════════════════════════════════════════════════════════════════ */
+
+body {
+  background: var(--jra-ink-2);
+  color: var(--jra-text);
+  font-family: var(--font-sans);
+  line-height: var(--lh-normal);
+  font-size: var(--t-body);
+}
+
+h1, .h1 {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  line-height: var(--lh-tight);
+  color: var(--jra-text-2);
+}
+h2, .h2 {
+  font-family: var(--font-sans);
+  font-size: var(--t-h2);
+  font-weight: 800;
+  line-height: var(--lh-tight);
+  color: var(--jra-text-2);
+}
+h3, .h3 {
+  font-size: var(--t-h3);
+  font-weight: 700;
+  color: var(--jra-text-2);
+}
+
+p, .body {
+  font-size: var(--t-body);
+  color: var(--jra-text);
+  line-height: var(--lh-normal);
+}
+
+small, .small  { font-size: var(--t-small); color: var(--jra-muted); }
+.label         { font-size: var(--t-tiny); letter-spacing: 0.1em;
+                 text-transform: uppercase; color: var(--jra-muted);
+                 font-weight: 700; }
+
+code, pre, .mono {
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+/* Hero / display — used by KidQuest title & AuditIQ presentation cover */
+.display-warm {
+  font-family: var(--font-fun);
+  font-size: var(--t-display);
+  background: var(--grad-text-warm);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: var(--lh-tight);
+}
+.display-cool {
+  font-family: var(--font-sans);
+  font-size: var(--t-display);
+  font-weight: 900;
+  background: var(--grad-text-cool);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: var(--lh-tight);
+}
+.display-stadium {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  color: var(--jra-text);
+}
+
+/* Standard form field — Audit pattern */
+.field {
+  background: #10141f;
+  border: 1px solid var(--jra-line-soft);
+  border-radius: var(--r-sm);
+  color: var(--jra-text-2);
+  font-size: var(--t-ui);
+  padding: 0.6rem 0.85rem;
+  font-family: var(--font-sans);
+  width: 100%;
+}
+.field:focus {
+  outline: none;
+  border-color: rgba(79,126,248,.5);
+  box-shadow: var(--glow-blue);
+}
+
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+:root {
+  /* runtime palette — driven by Tweaks */
+  --kq-primary: #FF6B35;
+  --kq-primary-deep: #FF8E53;
+  --kq-soft: #FFD93D;
+  --kq-bg: #FFF6E8;          /* light mode page */
+  --kq-bg-2: #FFE9C8;
+  --kq-surface: #FFFFFF;
+  --kq-ink: #2A1F1F;
+  --kq-ink-soft: #6B6068;
+  --kq-line: #2A1F1F;
+  --kq-border-w: 3px;
+  --kq-shadow-y: 5px;
+}
+
+[data-dark="true"] {
+  --kq-bg: #15102A;
+  --kq-bg-2: #1f1a3a;
+  --kq-surface: #221d3c;
+  --kq-ink: #FEFCEC;
+  --kq-ink-soft: #B0A8C0;
+  --kq-line: #FEFCEC;
+  --kq-border-w: 3px;
+  --kq-shadow-y: 4px;
+}
+
+body {
+  font-family: var(--font-fun);
+  background: var(--kq-bg);
+  color: var(--kq-ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── App shell ───────────────────────────────────────────────────── */
+.kq-app {
+  position: relative;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 18px 24px 120px;
+  min-height: 100vh;
+}
+
+/* Sticky topbar */
+.kq-topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.kq-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--kq-ink);
+}
+.kq-brand .logo {
+  width: 44px; height: 44px;
+  background: var(--kq-primary);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 14px;
+  display: grid; place-items: center;
+  font-size: 22px;
+  box-shadow: 0 var(--kq-shadow-y) 0 var(--kq-line);
+  transform: rotate(-4deg);
+}
+.kq-brand .name b { color: var(--kq-primary); }
+
+.kq-topbar-spacer { flex: 1; min-width: 0; }
+
+/* HUD widgets (stars, streak, profile) */
+.kq-hud {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+.kq-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--font-fun);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--kq-ink);
+  box-shadow: 0 var(--kq-shadow-y) 0 var(--kq-line);
+  white-space: nowrap;
+}
+.kq-chip.gold   { background: var(--kq-soft); }
+.kq-chip.fire   { background: #FF6B6B; color: #FEFCEC; }
+.kq-chip.purple { background: #A78BFA; color: #FEFCEC; }
+.kq-chip.teal   { background: #4ECDC4; color: var(--kq-ink); }
+.kq-chip .emoji { font-size: 18px; }
+.kq-chip strong { font-weight: 800; }
+
+/* Language pill */
+.kq-lang {
+  display: inline-flex;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 999px;
+  padding: 3px;
+  box-shadow: 0 var(--kq-shadow-y) 0 var(--kq-line);
+}
+.kq-lang button {
+  background: transparent; border: 0;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  color: var(--kq-ink-soft);
+}
+.kq-lang button[data-active="true"] {
+  background: var(--kq-soft);
+  color: var(--kq-ink);
+}
+
+/* Profile pill */
+.kq-profile-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 999px;
+  padding: 4px 14px 4px 4px;
+  box-shadow: 0 var(--kq-shadow-y) 0 var(--kq-line);
+  font-family: var(--font-fun);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--kq-ink);
+  cursor: pointer;
+}
+.kq-profile-pill .av {
+  width: 30px; height: 30px;
+  background: var(--kq-primary);
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 18px;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────── */
+.kq-btn {
+  appearance: none; border: 0;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: 18px;
+  padding: 12px 22px;
+  border-radius: 16px;
+  border: var(--kq-border-w) solid var(--kq-line);
+  box-shadow: 0 var(--kq-shadow-y) 0 var(--kq-line);
+  background: var(--kq-surface);
+  color: var(--kq-ink);
+  transition: transform .12s var(--ease), box-shadow .12s var(--ease);
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  white-space: nowrap;
+}
+.kq-btn:hover { transform: translateY(-2px); box-shadow: 0 calc(var(--kq-shadow-y) + 2px) 0 var(--kq-line); }
+.kq-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--kq-line); }
+.kq-btn:disabled {
+  opacity: .45; cursor: not-allowed;
+  transform: none; box-shadow: 0 var(--kq-shadow-y) 0 var(--kq-line);
+}
+.kq-btn-primary { background: var(--kq-primary); color: #FEFCEC; }
+.kq-btn-gold    { background: var(--kq-soft); color: var(--kq-ink); }
+.kq-btn-teal    { background: #4ECDC4; color: var(--kq-ink); }
+.kq-btn-purple  { background: #A78BFA; color: #FEFCEC; }
+.kq-btn-ghost   { background: transparent; }
+.kq-btn-big {
+  font-size: 22px;
+  padding: 16px 32px;
+  border-radius: 22px;
+}
+.kq-btn-icon {
+  width: 48px; height: 48px; padding: 0;
+  border-radius: 50%;
+}
+
+/* ── Cards (KidQuest signature: thick border + offset shadow) ──── */
+.kq-card {
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 6px 0 var(--kq-line);
+  position: relative;
+}
+.kq-card-tight { padding: 16px; border-radius: 18px; }
+
+/* ── Section title ───────────────────────────────────────────────── */
+.kq-h1 {
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.05;
+  margin: 0 0 6px;
+  color: var(--kq-ink);
+  letter-spacing: -.5px;
+}
+.kq-h1.rainbow {
+  background: linear-gradient(110deg, #FF6B35, #FFD93D, #4ECDC4, #A78BFA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.kq-h2 {
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: clamp(20px, 2.4vw, 26px);
+  margin: 0 0 4px;
+  color: var(--kq-ink);
+}
+.kq-sub {
+  color: var(--kq-ink-soft);
+  font-size: 16px;
+  margin: 0;
+}
+
+/* ── ONBOARDING ──────────────────────────────────────────────────── */
+.kq-onboard {
+  min-height: 78vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 24px; text-align: center;
+  padding-top: 20px;
+}
+.kq-onboard .step-dots {
+  display: flex; gap: 8px;
+}
+.kq-onboard .dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--kq-line); opacity: 0.25;
+  border: 2px solid var(--kq-line);
+}
+.kq-onboard .dot[data-active="true"] { opacity: 1; background: var(--kq-primary); }
+
+.kq-onboard-mascot {
+  filter: drop-shadow(0 8px 0 rgba(42,31,31,.18));
+  animation: bobMascot 2.6s ease-in-out infinite;
+}
+@keyframes bobMascot {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50%     { transform: translateY(-10px) rotate(2deg); }
+}
+
+.kq-lang-row {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+}
+.kq-lang-row .kq-btn {
+  font-size: 22px; padding: 16px 28px;
+  min-width: 180px;
+}
+.kq-lang-row .flag { font-size: 28px; }
+
+.kq-avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  max-width: 520px;
+}
+.kq-avatar-grid button {
+  appearance: none; border: var(--kq-border-w) solid var(--kq-line);
+  background: var(--kq-surface);
+  width: 100%; aspect-ratio: 1;
+  border-radius: 22px;
+  font-size: 44px;
+  display: grid; place-items: center;
+  cursor: pointer;
+  box-shadow: 0 var(--kq-shadow-y) 0 var(--kq-line);
+  transition: transform .15s var(--ease);
+  position: relative;
+}
+.kq-avatar-grid button:hover { transform: translateY(-3px); }
+.kq-avatar-grid button[data-active="true"] {
+  background: var(--kq-soft);
+  transform: scale(1.06) rotate(-2deg);
+}
+.kq-avatar-grid button[data-active="true"]::after {
+  content: "✓";
+  position: absolute;
+  top: -8px; right: -8px;
+  width: 28px; height: 28px;
+  background: #22c55e;
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 50%;
+  color: #fff;
+  display: grid; place-items: center;
+  font-size: 16px;
+  box-shadow: 0 3px 0 var(--kq-line);
+}
+
+.kq-input {
+  appearance: none;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: 24px;
+  padding: 16px 22px;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 22px;
+  color: var(--kq-ink);
+  text-align: center;
+  max-width: 320px;
+  width: 100%;
+  outline: none;
+  box-shadow: 0 var(--kq-shadow-y) 0 var(--kq-line);
+}
+.kq-input:focus { background: var(--kq-soft); }
+
+/* ── WORLD MAP ───────────────────────────────────────────────────── */
+.kq-world {
+  position: relative;
+  padding: 14px 0 40px;
+}
+.kq-world-bg {
+  position: absolute;
+  inset: -40px -120px 0 -120px;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(78,205,196,.35) 0%, transparent 38%),
+    radial-gradient(circle at 80% 65%, rgba(255,217,61,.30) 0%, transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(167,139,250,.25) 0%, transparent 50%);
+  z-index: -1;
+}
+[data-dark="true"] .kq-world-bg {
+  background:
+    radial-gradient(circle at 18% 30%, rgba(78,205,196,.20) 0%, transparent 38%),
+    radial-gradient(circle at 80% 65%, rgba(255,142,83,.20) 0%, transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(167,139,250,.20) 0%, transparent 50%);
+}
+.kq-world h1 { text-align: center; }
+.kq-world .sub { text-align: center; margin-bottom: 26px; }
+
+.kq-islands {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.kq-island {
+  position: relative;
+  background: var(--hub-bg);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 28px;
+  padding: 28px 22px 26px;
+  cursor: pointer;
+  box-shadow: 0 8px 0 var(--kq-line);
+  transition: transform .15s var(--ease), box-shadow .15s var(--ease);
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 360px;
+  overflow: hidden;
+}
+.kq-island:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 0 var(--kq-line);
+}
+.kq-island::before {
+  /* Subtle dotted sparkle pattern */
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(255,255,255,.4) 0 3px, transparent 4px),
+    radial-gradient(circle at 84% 32%, rgba(255,255,255,.3) 0 3px, transparent 4px),
+    radial-gradient(circle at 30% 78%, rgba(255,255,255,.3) 0 3px, transparent 4px),
+    radial-gradient(circle at 70% 88%, rgba(255,255,255,.4) 0 3px, transparent 4px);
+  pointer-events: none;
+}
+.kq-island-mascot {
+  margin-bottom: 12px;
+  filter: drop-shadow(0 6px 0 rgba(42,31,31,.15));
+  animation: bobMascot 3s ease-in-out infinite;
+}
+.kq-island-title {
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: 28px;
+  margin: 0;
+  color: var(--kq-ink);
+  text-align: center;
+}
+.kq-island-sub {
+  font-size: 15px; color: var(--kq-ink); opacity: .75;
+  margin: 4px 0 16px; text-align: center;
+}
+.kq-island-cta {
+  margin-top: auto;
+}
+.kq-island-progress {
+  width: 100%;
+  background: rgba(42,31,31,.15);
+  border-radius: 999px;
+  height: 12px;
+  border: 2px solid var(--kq-line);
+  position: relative;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.kq-island-progress > span {
+  display: block; height: 100%;
+  background: var(--kq-soft);
+  border-right: 2px solid var(--kq-line);
+}
+.kq-island-meta {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  margin-bottom: 12px;
+}
+.kq-island-meta .kq-chip { font-size: 13px; padding: 4px 10px; box-shadow: 0 3px 0 var(--kq-line); }
+
+/* ── QUEST MAP (per-hub levels) ──────────────────────────────────── */
+.kq-quest {
+  position: relative;
+  padding: 0 0 40px;
+}
+.kq-quest-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 18px; flex-wrap: wrap;
+}
+.kq-back-btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  box-shadow: 0 var(--kq-shadow-y) 0 var(--kq-line);
+  display: grid; place-items: center;
+  font-size: 22px;
+  color: var(--kq-ink);
+  font-family: var(--font-fun);
+  font-weight: 700;
+}
+.kq-quest-hero {
+  background: var(--hub-bg);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 28px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 26px;
+  box-shadow: 0 6px 0 var(--kq-line);
+}
+.kq-quest-hero .who h1 {
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: clamp(24px, 3.5vw, 34px);
+  margin: 0;
+}
+.kq-quest-hero .who p { margin: 4px 0 8px; color: var(--kq-ink); opacity: .8; }
+.kq-quest-hero .mascot { filter: drop-shadow(0 8px 0 rgba(42,31,31,.18)); }
+.kq-quest-hero .stats {
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+}
+
+.kq-path {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 8px 0 40px;
+}
+/* zigzag dotted background road */
+.kq-path::before {
+  content: "";
+  position: absolute;
+  left: 50%; top: 60px; bottom: 60px;
+  width: 6px;
+  background-image: linear-gradient(to bottom, var(--kq-line) 0 14px, transparent 14px 28px);
+  background-size: 6px 28px;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+.kq-level {
+  position: relative;
+  z-index: 1;
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 0;
+}
+.kq-level.right { flex-direction: row-reverse; }
+.kq-level-node {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  border: var(--kq-border-w) solid var(--kq-line);
+  background: var(--kq-surface);
+  display: grid; place-items: center;
+  position: relative;
+  box-shadow: 0 8px 0 var(--kq-line);
+  cursor: pointer;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: 30px;
+  color: var(--kq-ink);
+  flex-shrink: 0;
+  transition: transform .15s var(--ease), box-shadow .15s var(--ease);
+}
+.kq-level-node:hover { transform: translateY(-3px); box-shadow: 0 11px 0 var(--kq-line); }
+.kq-level-node[data-status="done"]    { background: var(--hub-color); color: #FEFCEC; }
+.kq-level-node[data-status="current"] {
+  background: var(--kq-soft); color: var(--kq-ink);
+  animation: levelPulse 1.6s ease-in-out infinite;
+}
+.kq-level-node[data-status="locked"]  { background: #d4d4d4; color: #888; cursor: default; }
+[data-dark="true"] .kq-level-node[data-status="locked"] { background: #322b50; color: #6a6080; }
+.kq-level-node[data-status="locked"]:hover { transform: none; box-shadow: 0 8px 0 var(--kq-line); }
+.kq-level-node .boss-emoji { font-size: 38px; }
+.kq-level-node .lock { font-size: 32px; }
+@keyframes levelPulse {
+  0%, 100% { box-shadow: 0 8px 0 var(--kq-line), 0 0 0 0 rgba(255,217,61,.7); }
+  50%      { box-shadow: 0 8px 0 var(--kq-line), 0 0 0 14px rgba(255,217,61,0); }
+}
+.kq-level-stars {
+  position: absolute;
+  bottom: -14px; left: 50%; transform: translateX(-50%);
+  background: var(--kq-surface);
+  border: 2px solid var(--kq-line);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 12px;
+  display: flex; gap: 1px;
+  font-family: var(--font-fun);
+  font-weight: 700;
+}
+.kq-level-info {
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 18px;
+  padding: 10px 16px;
+  box-shadow: 0 4px 0 var(--kq-line);
+  font-family: var(--font-fun);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--kq-ink);
+  min-width: 0;
+}
+.kq-level-info .num { font-size: 12px; color: var(--kq-ink-soft); }
+.kq-level-info .ttl { font-size: 16px; font-weight: 700; }
+
+/* ── QUIZ ────────────────────────────────────────────────────────── */
+.kq-quiz {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 0 40px;
+}
+.kq-quiz-bar {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 18px;
+}
+.kq-progress {
+  flex: 1;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 999px;
+  height: 22px;
+  overflow: hidden;
+}
+.kq-progress > span {
+  display: block; height: 100%;
+  background: var(--hub-color, var(--kq-primary));
+  border-right: 2px solid var(--kq-line);
+  transition: width .35s var(--ease);
+}
+.kq-hearts { display: flex; gap: 4px; font-size: 20px; }
+.kq-hearts span.empty { filter: grayscale(1); opacity: .35; }
+
+.kq-question-card {
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 8px 0 var(--kq-line);
+  text-align: center;
+}
+.kq-mascot-bubble {
+  display: flex; align-items: flex-end; gap: 14px;
+  justify-content: center;
+  margin-bottom: 18px;
+  text-align: left;
+}
+.kq-mascot-bubble .speech {
+  background: var(--kq-soft);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 22px;
+  padding: 14px 20px;
+  font-family: var(--font-fun);
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--kq-ink);
+  position: relative;
+  max-width: 80%;
+}
+.kq-mascot-bubble .speech::after {
+  content: ""; position: absolute;
+  left: -16px; bottom: 22px;
+  width: 18px; height: 18px;
+  background: var(--kq-soft);
+  border-left: var(--kq-border-w) solid var(--kq-line);
+  border-bottom: var(--kq-border-w) solid var(--kq-line);
+  transform: rotate(45deg);
+}
+.kq-question {
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: clamp(22px, 3vw, 30px);
+  margin: 0 0 22px;
+  text-wrap: pretty;
+}
+
+.kq-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.kq-option {
+  appearance: none;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 22px;
+  padding: 22px 14px;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--kq-ink);
+  box-shadow: 0 5px 0 var(--kq-line);
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  transition: transform .12s var(--ease), background .15s var(--ease);
+}
+.kq-option .emoji { font-size: 44px; line-height: 1; }
+.kq-option:hover { transform: translateY(-3px); }
+.kq-option[data-selected="true"] {
+  background: var(--kq-soft);
+  transform: scale(1.04);
+}
+.kq-option[data-state="correct"] {
+  background: #6BCB77; color: #FEFCEC;
+  animation: correctPop .5s var(--ease);
+}
+.kq-option[data-state="wrong"] {
+  background: #FF6B6B; color: #FEFCEC;
+  animation: shake .4s ease-in-out;
+}
+@keyframes correctPop {
+  0% { transform: scale(.9); }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1.04); }
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-8px) rotate(-2deg); }
+  60% { transform: translateX(8px) rotate(2deg); }
+}
+
+.kq-feedback {
+  margin: 0 0 14px;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: 22px;
+}
+.kq-feedback.good { color: #2A9D5C; }
+.kq-feedback.bad  { color: #C44545; }
+
+/* ── REWARD overlay ──────────────────────────────────────────────── */
+.kq-reward {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(42,31,31,.55);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.kq-reward-card {
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 28px;
+  padding: 36px 30px;
+  box-shadow: 0 10px 0 var(--kq-line);
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  animation: popIn .45s var(--ease);
+}
+@keyframes popIn {
+  0% { transform: scale(.6) rotate(-6deg); opacity: 0; }
+  60% { transform: scale(1.08) rotate(2deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.kq-reward-stars {
+  display: flex; justify-content: center; gap: 6px; margin: 12px 0 6px;
+  font-size: 44px;
+}
+.kq-reward-stars .pop { animation: starPop .45s var(--ease) backwards; }
+.kq-reward-stars .pop:nth-child(2) { animation-delay: .15s; }
+.kq-reward-stars .pop:nth-child(3) { animation-delay: .3s; }
+@keyframes starPop {
+  0%   { transform: scale(0) rotate(-90deg); }
+  60%  { transform: scale(1.3) rotate(10deg); }
+  100% { transform: scale(1)   rotate(0); }
+}
+.kq-reward-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--kq-soft);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 999px;
+  padding: 6px 14px;
+  margin: 10px 0;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* ── TROPHIES / COLLECTION ───────────────────────────────────────── */
+.kq-trophies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+}
+.kq-trophy {
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 22px;
+  padding: 18px 12px;
+  box-shadow: 0 5px 0 var(--kq-line);
+  text-align: center;
+  position: relative;
+}
+.kq-trophy.locked { background: rgba(42,31,31,.05); filter: grayscale(.6); }
+[data-dark="true"] .kq-trophy.locked { background: rgba(255,255,255,.04); }
+.kq-trophy .emoji { font-size: 52px; line-height: 1; }
+.kq-trophy.locked .emoji::after {
+  content: "🔒";
+  position: absolute; right: 10px; top: 10px;
+  font-size: 20px;
+}
+.kq-trophy h4 { font-family: var(--font-fun); font-weight: 700; margin: 10px 0 4px; font-size: 16px; }
+.kq-trophy p { font-size: 12px; color: var(--kq-ink-soft); margin: 0; line-height: 1.4; }
+
+/* ── PROFILE ─────────────────────────────────────────────────────── */
+.kq-profile-hero {
+  background: linear-gradient(135deg, #FFD93D, #FF8E53);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 28px;
+  padding: 26px;
+  box-shadow: 0 8px 0 var(--kq-line);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.kq-big-avatar {
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  display: grid; place-items: center;
+  font-size: 64px;
+  box-shadow: 0 6px 0 var(--kq-line);
+}
+.kq-profile-hero h1 { margin: 0; font-size: clamp(28px, 4vw, 38px); }
+.kq-profile-hero .sub { margin: 6px 0 12px; opacity: .9; }
+.kq-profile-hero .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.kq-stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.kq-stat {
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 4px 0 var(--kq-line);
+  text-align: center;
+}
+.kq-stat .v {
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: 32px;
+  color: var(--kq-ink);
+}
+.kq-stat .l {
+  font-size: 13px;
+  color: var(--kq-ink-soft);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 700;
+}
+
+/* ── PARENT ZONE ─────────────────────────────────────────────────── */
+.kq-parent {
+  max-width: 720px; margin: 0 auto;
+}
+.kq-parent .lock-screen {
+  text-align: center; padding: 60px 20px;
+}
+.kq-parent .pin-row {
+  display: flex; justify-content: center; gap: 10px; margin: 20px 0;
+}
+.kq-parent .pin-row input {
+  width: 60px; height: 70px;
+  font-size: 28px; text-align: center;
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 16px;
+  font-family: var(--font-fun); font-weight: 700;
+  background: var(--kq-surface); color: var(--kq-ink);
+  outline: none;
+  box-shadow: 0 4px 0 var(--kq-line);
+}
+
+.kq-setting {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(42,31,31,.1);
+}
+.kq-setting:last-child { border-bottom: 0; }
+[data-dark="true"] .kq-setting { border-bottom-color: rgba(255,255,255,.08); }
+.kq-setting .label { font-weight: 600; font-size: 16px; }
+.kq-setting .desc  { color: var(--kq-ink-soft); font-size: 13px; }
+.kq-switch {
+  width: 56px; height: 30px;
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 999px;
+  background: #d4d4d4;
+  position: relative; cursor: pointer;
+}
+.kq-switch::after {
+  content: ""; position: absolute;
+  width: 20px; height: 20px;
+  background: var(--kq-line);
+  border-radius: 50%;
+  top: 50%; transform: translateY(-50%);
+  left: 3px;
+  transition: left .15s var(--ease);
+}
+.kq-switch[data-on="true"] { background: #6BCB77; }
+.kq-switch[data-on="true"]::after { left: calc(100% - 25px); }
+
+.kq-seg {
+  display: inline-flex;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 999px;
+  padding: 3px;
+}
+.kq-seg button {
+  background: transparent; border: 0;
+  font-family: var(--font-fun); font-weight: 700;
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  color: var(--kq-ink-soft);
+}
+.kq-seg button[data-active="true"] {
+  background: var(--kq-primary); color: #FEFCEC;
+}
+
+/* ── Bottom tab bar (mobile/tablet primary nav) ──────────────────── */
+.kq-tabs {
+  position: fixed;
+  left: 50%; transform: translateX(-50%);
+  bottom: 16px;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  border-radius: 999px;
+  box-shadow: 0 6px 0 var(--kq-line);
+  padding: 4px;
+  display: flex; gap: 2px;
+  z-index: 20;
+}
+.kq-tabs button {
+  appearance: none; border: 0;
+  background: transparent;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--kq-ink-soft);
+  display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer;
+}
+.kq-tabs button[data-active="true"] {
+  background: var(--kq-primary); color: #FEFCEC;
+}
+.kq-tabs button .emoji { font-size: 18px; }
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 880px) {
+  .kq-app { padding: 12px 16px 120px; }
+  .kq-islands { grid-template-columns: 1fr; }
+  .kq-island { min-height: 280px; }
+  .kq-quest-hero { grid-template-columns: 1fr; text-align: center; }
+  .kq-quest-hero .stats { align-items: center; }
+  .kq-avatar-grid { grid-template-columns: repeat(3, 1fr); }
+  .kq-profile-hero { grid-template-columns: 1fr; text-align: center; }
+  .kq-profile-hero .chips { justify-content: center; }
+  .kq-options { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .kq-tabs button { padding: 10px 12px; font-size: 12px; }
+  .kq-tabs button span:not(.emoji) { display: none; }
+  .kq-brand .name { font-size: 20px; }
+}
+
+/* ── Confetti dots (reward bg) ───────────────────────────────────── */
+.kq-confetti {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  border-radius: 28px;
+}
+.kq-confetti span {
+  position: absolute;
+  width: 8px; height: 8px;
+  background: var(--c);
+  border-radius: 2px;
+  animation: confetti var(--d, 2s) ease-in infinite;
+}
+@keyframes confetti {
+  0% { transform: translateY(-20px) rotate(0); opacity: 1; }
+  100% { transform: translateY(360px) rotate(720deg); opacity: 0; }
+}
+
+/* Tabs hidden when in onboarding or quiz */
+.kq-app[data-mode="onboard"] .kq-tabs,
+.kq-app[data-mode="quiz"] .kq-tabs { display: none; }
+
+</style>
+</head>
+<body data-product="kidquest">
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script>
+// data.js — KidQuest i18n + worlds + quests + avatars
+window.KQ = {
+  i18n: {
+    fr: {
+      brand: "KidQuest",
+      tagline: "L'aventure du savoir",
+      // Onboarding
+      welcome: "Bonjour, petit aventurier !",
+      welcome_sub: "Choisis ta langue pour commencer",
+      lang_fr: "Français",
+      lang_en: "English",
+      next: "Continuer",
+      back: "Retour",
+      skip: "Passer",
+      choose_avatar: "Choisis ton héros !",
+      choose_avatar_sub: "Tu pourras le changer plus tard",
+      whats_your_name: "Comment tu t'appelles ?",
+      name_placeholder: "Ton prénom",
+      lets_go: "C'est parti !",
+      // Home / world map
+      hello_name: "Bonjour {name} !",
+      world_map: "La grande carte",
+      choose_world: "Choisis un monde à explorer",
+      english_quest: "English Quest",
+      english_sub: "Les mots magiques",
+      geo_explorer: "Geo Explorer",
+      geo_sub: "Voyage autour du monde",
+      math_arena: "Math Arena",
+      math_sub: "Les jeux des nombres",
+      locked: "Verrouillé",
+      coming_soon: "Bientôt disponible",
+      stars_won: "{n} étoiles gagnées",
+      streak_days: "{n} jours d'affilée",
+      // Hub
+      level: "Niveau",
+      lesson: "Leçon",
+      hub_english: "Le monde de l'anglais",
+      hub_geo: "Le monde des explorateurs",
+      hub_math: "Le monde des chiffres",
+      play: "Jouer",
+      replay: "Rejouer",
+      // Quiz
+      question_of: "Question {a} sur {b}",
+      pick_answer: "Touche la bonne réponse",
+      check: "Vérifier",
+      correct: "Bravo !",
+      wrong: "Oups, essaie encore !",
+      try_again: "Essaie encore",
+      continue: "Continuer",
+      hint: "Un indice",
+      // Reward
+      well_done: "Bien joué !",
+      stars_earned: "Tu gagnes {n} étoiles",
+      new_badge: "Nouveau badge !",
+      back_to_map: "Retour à la carte",
+      // Profile
+      profile: "Mon profil",
+      my_collection: "Ma collection",
+      trophies: "Trophées",
+      streak: "Série",
+      total_stars: "Total étoiles",
+      levels_done: "Niveaux finis",
+      day: "jour",
+      days: "jours",
+      // Parent
+      parent_zone: "Espace parents",
+      parent_lock: "Pour les grands seulement",
+      parent_settings: "Réglages",
+      progress: "Progression",
+      difficulty: "Difficulté",
+      easy: "Facile",
+      medium: "Moyen",
+      hard: "Difficile",
+      time_today: "Temps aujourd'hui",
+      minutes: "minutes",
+      // Status
+      done: "Fini",
+      current: "Ici",
+      // Footer
+      footer: "Propulsé par Claude AI · Anthropic",
+    },
+    en: {
+      brand: "KidQuest",
+      tagline: "The learning adventure",
+      welcome: "Hello, little adventurer!",
+      welcome_sub: "Pick your language to begin",
+      lang_fr: "Français",
+      lang_en: "English",
+      next: "Continue",
+      back: "Back",
+      skip: "Skip",
+      choose_avatar: "Pick your hero!",
+      choose_avatar_sub: "You can change it later",
+      whats_your_name: "What's your name?",
+      name_placeholder: "Your name",
+      lets_go: "Let's go!",
+      hello_name: "Hello {name}!",
+      world_map: "The big map",
+      choose_world: "Pick a world to explore",
+      english_quest: "English Quest",
+      english_sub: "Magic words",
+      geo_explorer: "Geo Explorer",
+      geo_sub: "Travel the world",
+      math_arena: "Math Arena",
+      math_sub: "Number games",
+      locked: "Locked",
+      coming_soon: "Coming soon",
+      stars_won: "{n} stars earned",
+      streak_days: "{n}-day streak",
+      level: "Level",
+      lesson: "Lesson",
+      hub_english: "The English world",
+      hub_geo: "The Explorer world",
+      hub_math: "The Numbers world",
+      play: "Play",
+      replay: "Replay",
+      question_of: "Question {a} of {b}",
+      pick_answer: "Tap the right answer",
+      check: "Check",
+      correct: "Yay!",
+      wrong: "Oops, try again!",
+      try_again: "Try again",
+      continue: "Continue",
+      hint: "Hint",
+      well_done: "Well done!",
+      stars_earned: "You earn {n} stars",
+      new_badge: "New badge!",
+      back_to_map: "Back to map",
+      profile: "My profile",
+      my_collection: "My collection",
+      trophies: "Trophies",
+      streak: "Streak",
+      total_stars: "Total stars",
+      levels_done: "Levels done",
+      day: "day",
+      days: "days",
+      parent_zone: "Parent area",
+      parent_lock: "For grown-ups only",
+      parent_settings: "Settings",
+      progress: "Progress",
+      difficulty: "Difficulty",
+      easy: "Easy",
+      medium: "Medium",
+      hard: "Hard",
+      time_today: "Time today",
+      minutes: "minutes",
+      done: "Done",
+      current: "Here",
+      footer: "Powered by Claude AI · Anthropic",
+    },
+  },
+
+  // 12 child avatars
+  avatars: [
+    { id: "fox",     emoji: "🦊", color: "#FF8E53" },
+    { id: "lion",    emoji: "🦁", color: "#FFD93D" },
+    { id: "owl",     emoji: "🦉", color: "#A78BFA" },
+    { id: "dragon",  emoji: "🐲", color: "#56C596" },
+    { id: "panda",   emoji: "🐼", color: "#cbd5e1" },
+    { id: "penguin", emoji: "🐧", color: "#60a5fa" },
+    { id: "unicorn", emoji: "🦄", color: "#f093fb" },
+    { id: "robot",   emoji: "🤖", color: "#94a3b8" },
+    { id: "astro",   emoji: "🧑‍🚀", color: "#7c6ef5" },
+    { id: "wizard",  emoji: "🧙", color: "#FF6B6B" },
+    { id: "ninja",   emoji: "🥷", color: "#475569" },
+    { id: "elf",     emoji: "🧝", color: "#FF99B6" },
+  ],
+
+  // 3 hubs with distinct identity and mascot id
+  hubs: [
+    {
+      id: "english",
+      mascot: "owl",
+      mascotName: { fr: "Lumi", en: "Lumi" },
+      title_key: "english_quest",
+      sub_key: "english_sub",
+      hub_title_key: "hub_english",
+      // KidQuest teal family
+      color: "#4ECDC4",
+      colorDeep: "#44A9C6",
+      colorSoft: "#A8E6CF",
+      bgGrad: "linear-gradient(180deg, #c8f5f0 0%, #a8e6cf 100%)",
+      bgGradDark: "linear-gradient(180deg, #143838 0%, #0e2a2a 100%)",
+    },
+    {
+      id: "geo",
+      mascot: "turtle",
+      mascotName: { fr: "Globi", en: "Globi" },
+      title_key: "geo_explorer",
+      sub_key: "geo_sub",
+      hub_title_key: "hub_geo",
+      // Yellow/orange family
+      color: "#FF8E53",
+      colorDeep: "#FF6B35",
+      colorSoft: "#FFD93D",
+      bgGrad: "linear-gradient(180deg, #fff1d6 0%, #ffdba8 100%)",
+      bgGradDark: "linear-gradient(180deg, #3a2a1a 0%, #2a1f10 100%)",
+    },
+    {
+      id: "math",
+      mascot: "fox",
+      mascotName: { fr: "Pixel", en: "Pixel" },
+      title_key: "math_arena",
+      sub_key: "math_sub",
+      hub_title_key: "hub_math",
+      // Purple/pink family
+      color: "#A78BFA",
+      colorDeep: "#7c6ef5",
+      colorSoft: "#f093fb",
+      bgGrad: "linear-gradient(180deg, #ede8ff 0%, #d6cdff 100%)",
+      bgGradDark: "linear-gradient(180deg, #1f1a3a 0%, #15102a 100%)",
+    },
+  ],
+
+  // Per-hub level lists (8 levels each, 4-6 ans logic)
+  levels: {
+    english: [
+      { n: 1, title_fr: "Les animaux", title_en: "Animals",   topic: "animals",   stars: 3, status: "done" },
+      { n: 2, title_fr: "Les couleurs", title_en: "Colours",  topic: "colors",    stars: 3, status: "done" },
+      { n: 3, title_fr: "Les chiffres", title_en: "Numbers",  topic: "numbers",   stars: 2, status: "done" },
+      { n: 4, title_fr: "La famille",  title_en: "Family",    topic: "family",    stars: 0, status: "current" },
+      { n: 5, title_fr: "Les fruits",  title_en: "Fruits",    topic: "fruits",    stars: 0, status: "locked" },
+      { n: 6, title_fr: "Le corps",    title_en: "The body",  topic: "body",      stars: 0, status: "locked" },
+      { n: 7, title_fr: "Les saisons", title_en: "Seasons",   topic: "seasons",   stars: 0, status: "locked" },
+      { n: 8, title_fr: "Le défi !",   title_en: "Big quiz",  topic: "challenge", stars: 0, status: "locked", boss: true },
+    ],
+    geo: [
+      { n: 1, title_fr: "L'Europe",        title_en: "Europe",         topic: "europe",  stars: 3, status: "done" },
+      { n: 2, title_fr: "L'Afrique",       title_en: "Africa",         topic: "africa",  stars: 2, status: "done" },
+      { n: 3, title_fr: "Les drapeaux",    title_en: "Flags",          topic: "flags",   stars: 0, status: "current" },
+      { n: 4, title_fr: "Les capitales",   title_en: "Capitals",       topic: "capitals",stars: 0, status: "locked" },
+      { n: 5, title_fr: "L'Asie",          title_en: "Asia",           topic: "asia",    stars: 0, status: "locked" },
+      { n: 6, title_fr: "L'Amérique",      title_en: "The Americas",   topic: "america", stars: 0, status: "locked" },
+      { n: 7, title_fr: "Les océans",      title_en: "Oceans",         topic: "oceans",  stars: 0, status: "locked" },
+      { n: 8, title_fr: "Tour du monde !", title_en: "World tour",     topic: "world",   stars: 0, status: "locked", boss: true },
+    ],
+    math: [
+      { n: 1, title_fr: "Compter jusqu'à 10", title_en: "Count to 10",  topic: "count10",  stars: 3, status: "done" },
+      { n: 2, title_fr: "Plus grand, plus petit", title_en: "More or less", topic: "compare", stars: 3, status: "done" },
+      { n: 3, title_fr: "Les additions",     title_en: "Add it up",     topic: "add",      stars: 2, status: "done" },
+      { n: 4, title_fr: "Les formes",        title_en: "Shapes",        topic: "shapes",   stars: 1, status: "current" },
+      { n: 5, title_fr: "Les soustractions", title_en: "Take away",     topic: "sub",      stars: 0, status: "locked" },
+      { n: 6, title_fr: "Les suites",        title_en: "Patterns",      topic: "patterns", stars: 0, status: "locked" },
+      { n: 7, title_fr: "L'heure",           title_en: "Telling time",  topic: "time",     stars: 0, status: "locked" },
+      { n: 8, title_fr: "Le grand défi",     title_en: "Big challenge", topic: "boss",     stars: 0, status: "locked", boss: true },
+    ],
+  },
+
+  // Sample questions by topic (3 per topic, used for quiz preview)
+  questions: {
+    family: [
+      { q_fr: "Comment dit-on 'maman' en anglais ?", q_en: "How do you say 'maman' in English?",
+        opts: [ {fr:"Mother",en:"Mother",emoji:"👩"}, {fr:"Father",en:"Father",emoji:"👨"}, {fr:"Sister",en:"Sister",emoji:"👧"} ],
+        correct: 0 },
+      { q_fr: "Quel mot pour 'papa' ?", q_en: "Which word means 'papa'?",
+        opts: [ {fr:"Brother",en:"Brother",emoji:"👦"}, {fr:"Father",en:"Father",emoji:"👨"}, {fr:"Baby",en:"Baby",emoji:"👶"} ],
+        correct: 1 },
+      { q_fr: "Et 'bébé' ?", q_en: "And 'bébé'?",
+        opts: [ {fr:"Baby",en:"Baby",emoji:"👶"}, {fr:"Dog",en:"Dog",emoji:"🐶"}, {fr:"Cat",en:"Cat",emoji:"🐱"} ],
+        correct: 0 },
+    ],
+    flags: [
+      { q_fr: "Quel est le drapeau de la France ?", q_en: "Which flag is France?",
+        opts: [ {fr:"🇫🇷",en:"🇫🇷",emoji:"🇫🇷"}, {fr:"🇮🇹",en:"🇮🇹",emoji:"🇮🇹"}, {fr:"🇪🇸",en:"🇪🇸",emoji:"🇪🇸"} ],
+        correct: 0 },
+      { q_fr: "Lequel est le drapeau du Japon ?", q_en: "Which one is Japan's flag?",
+        opts: [ {fr:"🇨🇳",en:"🇨🇳",emoji:"🇨🇳"}, {fr:"🇯🇵",en:"🇯🇵",emoji:"🇯🇵"}, {fr:"🇰🇷",en:"🇰🇷",emoji:"🇰🇷"} ],
+        correct: 1 },
+      { q_fr: "Et le Brésil ?", q_en: "And Brazil?",
+        opts: [ {fr:"🇦🇷",en:"🇦🇷",emoji:"🇦🇷"}, {fr:"🇲🇽",en:"🇲🇽",emoji:"🇲🇽"}, {fr:"🇧🇷",en:"🇧🇷",emoji:"🇧🇷"} ],
+        correct: 2 },
+    ],
+    shapes: [
+      { q_fr: "Quelle est la forme du soleil ?", q_en: "What shape is the sun?",
+        opts: [ {fr:"Cercle",en:"Circle",emoji:"⭕"}, {fr:"Carré",en:"Square",emoji:"⬜"}, {fr:"Triangle",en:"Triangle",emoji:"🔺"} ],
+        correct: 0 },
+      { q_fr: "Trouve le triangle.", q_en: "Find the triangle.",
+        opts: [ {fr:"Étoile",en:"Star",emoji:"⭐"}, {fr:"Triangle",en:"Triangle",emoji:"🔺"}, {fr:"Cœur",en:"Heart",emoji:"❤️"} ],
+        correct: 1 },
+      { q_fr: "Combien de côtés a un carré ?", q_en: "How many sides has a square?",
+        opts: [ {fr:"3",en:"3",emoji:"3️⃣"}, {fr:"4",en:"4",emoji:"4️⃣"}, {fr:"5",en:"5",emoji:"5️⃣"} ],
+        correct: 1 },
+    ],
+  },
+
+  trophies: [
+    { id: "first_step",   emoji: "👶", title_fr: "Premier pas",      title_en: "First step",        owned: true,
+      desc_fr: "Tu as fini ta première leçon !", desc_en: "You finished your first lesson!" },
+    { id: "english_star", emoji: "📚", title_fr: "Étoile d'anglais", title_en: "English star",      owned: true,
+      desc_fr: "3 leçons d'anglais finies",     desc_en: "3 English lessons done" },
+    { id: "globe_trotter",emoji: "🌍", title_fr: "Tour du monde",    title_en: "Globe trotter",     owned: true,
+      desc_fr: "Tu as visité 2 continents",     desc_en: "Visited 2 continents" },
+    { id: "math_genius",  emoji: "🧮", title_fr: "Génie des chiffres",title_en: "Math genius",      owned: true,
+      desc_fr: "10 additions correctes d'affilée", desc_en: "10 correct additions in a row" },
+    { id: "streak_7",     emoji: "🔥", title_fr: "Série de 7",       title_en: "7-day streak",      owned: true,
+      desc_fr: "Tu as joué 7 jours d'affilée",  desc_en: "You played 7 days in a row" },
+    { id: "perfect",      emoji: "💎", title_fr: "Score parfait",    title_en: "Perfect score",     owned: false,
+      desc_fr: "Termine une leçon sans erreur", desc_en: "Finish a lesson with no mistake" },
+    { id: "explorer",     emoji: "🗺️", title_fr: "Grand explorateur", title_en: "Great explorer",   owned: false,
+      desc_fr: "Visite tous les continents",    desc_en: "Visit every continent" },
+    { id: "speedster",    emoji: "⚡", title_fr: "Éclair",           title_en: "Speedster",         owned: false,
+      desc_fr: "Termine une leçon en 1 min",    desc_en: "Finish a lesson in 1 min" },
+    { id: "wordsmith",    emoji: "🪄", title_fr: "Magicien des mots",title_en: "Wordsmith",        owned: false,
+      desc_fr: "Apprends 50 mots d'anglais",    desc_en: "Learn 50 English words" },
+    { id: "all_stars",    emoji: "🏆", title_fr: "Tout en étoiles",  title_en: "All stars",         owned: false,
+      desc_fr: "Gagne 3 étoiles sur tous les niveaux", desc_en: "Earn 3 stars on every level" },
+  ],
+};
+
+  </script>
+
+  <script type="text/babel" data-presets="react" data-name="tweaks">
+
+/* BEGIN USAGE */
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+// Exports (to window): useTweaks, TweaksPanel, TweakSection, TweakRow, TweakSlider,
+//   TweakToggle, TweakRadio, TweakSelect, TweakText, TweakNumber, TweakColor, TweakButton.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "palette": ["#D97757", "#29261b", "#f6f4ef"],
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        options={['#D97757', '#2A6FDB', '#1F8A5B', '#7A5AE0']}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakColor  label="Palette" value={t.palette}
+//                        options={[['#D97757', '#29261b', '#f6f4ef'],
+//                                  ['#475569', '#0f172a', '#f1f5f9']]}
+//                        onChange={(v) => setTweak('palette', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// TweakRadio is the segmented control for 2–3 short options (auto-falls-back to
+// TweakSelect past ~16/~10 chars per label); reach for TweakSelect directly when
+// options are many or long. For color tweaks always curate 3-4 options rather than
+// a free picker; an option can also be a whole 2–5 color palette (the stored value
+// is the array). The Tweak* controls are a floor, not a ceiling — build custom
+// controls inside the panel if a tweak calls for UI they don't cover.
+/* END USAGE */
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;box-sizing:border-box;min-width:0;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+    0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    // Same-window signal so in-page listeners (deck-stage rail thumbnails)
+    // can react — the parent message only reaches the host, not peers.
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-omelette-chrome=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">
+          {children}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  // Segments wrap mid-word once per-segment width runs out. The track is
+  // ~248px (280 panel − 28 body pad − 4 seg pad), each button loses 12px
+  // to its own padding, and 11.5px system-ui averages ~6.3px/char — so 2
+  // options fit ~16 chars each, 3 fit ~10. Past that (or >3 options), fall
+  // back to a dropdown rather than wrap.
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    // <select> emits strings — map back to the original option value so the
+    // fallback stays type-preserving (numbers, booleans) like the segment path.
+    const resolve = (s) => {
+      const m = options.find((o) => String(typeof o === 'object' ? o.value : o) === s);
+      return m === undefined ? s : typeof m === 'object' ? m.value : m;
+    };
+    return <TweakSelect label={label} value={value} options={options}
+                        onChange={(s) => onChange(resolve(s))} />;
+  }
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+// Relative-luminance contrast pick — checkmarks drawn over a swatch need to
+// read on both #111 and #fafafa without per-option configuration. Hex input
+// only (#rgb / #rrggbb); named or rgb()/hsl() colors fall through to "light".
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+
+const __TwkCheck = ({ light }) => (
+  <svg viewBox="0 0 14 14" aria-hidden="true">
+    <path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2"
+          strokeLinecap="round" strokeLinejoin="round"
+          stroke={light ? 'rgba(0,0,0,.78)' : '#fff'} />
+  </svg>
+);
+
+// TweakColor — curated color/palette picker. Each option is either a single
+// hex string or an array of 1-5 hex strings; the card adapts — a lone color
+// renders solid, a palette renders colors[0] as the hero (left ~2/3) with the
+// rest stacked in a sharp column on the right. onChange emits the
+// option in the shape it was passed (string stays string, array stays array).
+// Without options it falls back to the native color input for back-compat.
+function TweakColor({ label, value, options, onChange }) {
+  if (!options || !options.length) {
+    return (
+      <div className="twk-row twk-row-h">
+        <div className="twk-lbl"><span>{label}</span></div>
+        <input type="color" className="twk-swatch" value={value}
+               onChange={(e) => onChange(e.target.value)} />
+      </div>
+    );
+  }
+  // Native <input type=color> emits lowercase hex per the HTML spec, so
+  // compare case-insensitively. String() guards JSON.stringify(undefined),
+  // which returns the primitive undefined (no .toLowerCase).
+  const key = (o) => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return (
+    <TweakRow label={label}>
+      <div className="twk-chips" role="radiogroup">
+        {options.map((o, i) => {
+          const colors = Array.isArray(o) ? o : [o];
+          const [hero, ...rest] = colors;
+          const sup = rest.slice(0, 4);
+          const on = key(o) === cur;
+          return (
+            <button key={i} type="button" className="twk-chip" role="radio"
+                    aria-checked={on} data-on={on ? '1' : '0'}
+                    aria-label={colors.join(', ')} title={colors.join(' · ')}
+                    style={{ background: hero }}
+                    onClick={() => onChange(o)}>
+              {sup.length > 0 && (
+                <span>
+                  {sup.map((c, j) => <i key={j} style={{ background: c }} />)}
+                </span>
+              )}
+              {on && <__TwkCheck light={__twkIsLight(hero)} />}
+            </button>
+          );
+        })}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+
+  </script>
+
+  <script type="text/babel" data-presets="react" data-name="mascots">
+// mascots.jsx — Three original SVG mascots, one per hub
+// Owl (English) "Lumi", Turtle (Geo) "Globi", Fox (Math) "Pixel"
+//
+// Props:
+//   size      — display size in px (default 120)
+//   mood      — "happy" | "wave" | "wow" | "think"
+//   accent    — override main color
+//
+// Each is drawn around viewBox 0 0 200 200, centered.
+
+const OwlMascot = ({ size = 120, mood = "happy", accent = "#4ECDC4" }) => {
+  const eyeRadius = mood === "wow" ? 18 : 14;
+  const pupilOffsetY = mood === "wow" ? -2 : 2;
+  return (
+    <svg viewBox="0 0 200 200" width={size} height={size} className="kq-mascot">
+      {/* Branch */}
+      <path d="M 30 175 Q 100 165 170 175" stroke="#8B6F47" strokeWidth="6" fill="none" strokeLinecap="round" />
+      {/* Body */}
+      <ellipse cx="100" cy="120" rx="56" ry="62" fill={accent} stroke="#2A1F1F" strokeWidth="4" />
+      {/* Belly */}
+      <ellipse cx="100" cy="135" rx="36" ry="42" fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="3" />
+      {/* Belly speckles */}
+      <ellipse cx="92"  cy="125" rx="3" ry="4" fill="#E0B783" opacity="0.5" />
+      <ellipse cx="110" cy="135" rx="3" ry="4" fill="#E0B783" opacity="0.5" />
+      <ellipse cx="98"  cy="150" rx="3" ry="4" fill="#E0B783" opacity="0.5" />
+      {/* Wings */}
+      <path d={mood === "wave"
+        ? "M 50 100 Q 30 80 28 60 Q 36 75 50 95 Z"
+        : "M 50 110 Q 32 120 38 150 Q 50 130 58 120 Z"}
+        fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      <path d="M 150 110 Q 168 120 162 150 Q 150 130 142 120 Z"
+            fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      {/* Feet */}
+      <path d="M 86 175 L 86 168 M 92 175 L 92 168 M 80 175 L 80 168" stroke="#FFB84D" strokeWidth="3" strokeLinecap="round" />
+      <path d="M 114 175 L 114 168 M 120 175 L 120 168 M 108 175 L 108 168" stroke="#FFB84D" strokeWidth="3" strokeLinecap="round" />
+      {/* Head tufts (horns) */}
+      <path d="M 65 65 L 72 45 L 80 65 Z" fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      <path d="M 135 65 L 128 45 L 120 65 Z" fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      {/* Face base */}
+      <circle cx="100" cy="80" r="44" fill={accent} stroke="#2A1F1F" strokeWidth="4" />
+      {/* Eye disks */}
+      <circle cx="80" cy="80" r={eyeRadius + 6} fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="3" />
+      <circle cx="120" cy="80" r={eyeRadius + 6} fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="3" />
+      {/* Eyes */}
+      <circle cx="80" cy="80" r={eyeRadius} fill="#2A1F1F" />
+      <circle cx="120" cy="80" r={eyeRadius} fill="#2A1F1F" />
+      {/* Pupils glints */}
+      <circle cx={82} cy={78 + pupilOffsetY} r="4" fill="#fff" />
+      <circle cx={122} cy={78 + pupilOffsetY} r="4" fill="#fff" />
+      {/* Beak */}
+      <path d="M 92 96 L 100 108 L 108 96 Z" fill="#FFB84D" stroke="#2A1F1F" strokeWidth="3" />
+      {/* Glasses arms — only owl has these (English teacher vibe) */}
+      <path d="M 64 80 L 56 78 M 136 80 L 144 78" stroke="#2A1F1F" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+};
+
+const TurtleMascot = ({ size = 120, mood = "happy", accent = "#FF8E53" }) => {
+  return (
+    <svg viewBox="0 0 200 200" width={size} height={size} className="kq-mascot">
+      {/* Ground shadow */}
+      <ellipse cx="100" cy="178" rx="68" ry="6" fill="#2A1F1F" opacity="0.12" />
+      {/* Back leg */}
+      <ellipse cx="148" cy="155" rx="14" ry="10" fill="#56C596" stroke="#2A1F1F" strokeWidth="3" />
+      {/* Front leg */}
+      <ellipse cx="52" cy="155" rx="16" ry="11" fill="#56C596" stroke="#2A1F1F" strokeWidth="3" />
+      {/* Tail */}
+      <path d="M 160 145 L 175 142 L 168 152 Z" fill="#56C596" stroke="#2A1F1F" strokeWidth="2.5" />
+      {/* Head & neck */}
+      <ellipse cx="48" cy="118" rx="22" ry="20" fill="#56C596" stroke="#2A1F1F" strokeWidth="3.5" />
+      {/* Cheeks */}
+      <ellipse cx="36" cy="124" rx="5" ry="4" fill="#FFB6C1" opacity="0.7" />
+      {/* Shell — main dome */}
+      <path d="M 50 125 Q 100 60 150 125 Z" fill={accent} stroke="#2A1F1F" strokeWidth="4" />
+      <path d="M 50 125 L 150 125" stroke="#2A1F1F" strokeWidth="3" />
+      {/* Shell scutes pattern (hexagons) */}
+      <g stroke="#2A1F1F" strokeWidth="2.5" fill="#FFD93D">
+        <polygon points="100,80 115,90 115,108 100,118 85,108 85,90" />
+        <polygon points="74,98 86,108 86,120 74,124 64,118 64,108" />
+        <polygon points="126,98 136,108 136,118 126,124 114,120 114,108" />
+      </g>
+      <path d="M 100 80 L 100 60 M 100 118 L 100 125" stroke="#2A1F1F" strokeWidth="2.5" />
+      {/* Eye */}
+      <circle cx="40" cy="112" r="6" fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="2.5" />
+      <circle cx="40" cy="112" r="3" fill="#2A1F1F" />
+      <circle cx="41" cy="111" r="1" fill="#fff" />
+      {/* Smile */}
+      <path d={mood === "wow" ? "M 32 128 Q 38 134 44 128" : "M 32 128 Q 40 134 48 128"}
+            stroke="#2A1F1F" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      {/* Tiny explorer hat */}
+      <ellipse cx="48" cy="98" rx="22" ry="4" fill="#8B6F47" stroke="#2A1F1F" strokeWidth="2.5" />
+      <path d="M 36 98 Q 48 84 60 98" fill="#A0794F" stroke="#2A1F1F" strokeWidth="2.5" />
+      <path d="M 44 96 Q 48 92 52 96" stroke="#FF6B6B" strokeWidth="2.5" fill="none" />
+    </svg>
+  );
+};
+
+const FoxMascot = ({ size = 120, mood = "happy", accent = "#A78BFA" }) => {
+  return (
+    <svg viewBox="0 0 200 200" width={size} height={size} className="kq-mascot">
+      {/* Tail */}
+      <path d="M 160 130 Q 188 110 178 80 Q 170 100 158 120 Z" fill={accent} stroke="#2A1F1F" strokeWidth="3.5" />
+      <path d="M 178 80 Q 186 85 182 92" fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="2.5" />
+      {/* Body */}
+      <ellipse cx="100" cy="135" rx="52" ry="44" fill={accent} stroke="#2A1F1F" strokeWidth="4" />
+      {/* Belly */}
+      <ellipse cx="100" cy="148" rx="32" ry="28" fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="3" />
+      {/* Legs */}
+      <ellipse cx="74"  cy="172" rx="11" ry="9" fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      <ellipse cx="126" cy="172" rx="11" ry="9" fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      {/* Head */}
+      <path d="M 60 90 L 50 50 L 80 70 Z" fill={accent} stroke="#2A1F1F" strokeWidth="3.5" />
+      <path d="M 140 90 L 150 50 L 120 70 Z" fill={accent} stroke="#2A1F1F" strokeWidth="3.5" />
+      <path d="M 64 56 L 60 70 L 73 60 Z" fill="#FFB6C1" />
+      <path d="M 136 56 L 140 70 L 127 60 Z" fill="#FFB6C1" />
+      <ellipse cx="100" cy="92" rx="44" ry="38" fill={accent} stroke="#2A1F1F" strokeWidth="4" />
+      {/* Face mask */}
+      <ellipse cx="100" cy="100" rx="28" ry="22" fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="3" />
+      {/* Eyes */}
+      <ellipse cx="86" cy="92" rx={mood === "wow" ? 6 : 4} ry={mood === "wow" ? 6 : 5} fill="#2A1F1F" />
+      <ellipse cx="114" cy="92" rx={mood === "wow" ? 6 : 4} ry={mood === "wow" ? 6 : 5} fill="#2A1F1F" />
+      <circle cx="87" cy="90" r="1.5" fill="#fff" />
+      <circle cx="115" cy="90" r="1.5" fill="#fff" />
+      {/* Nose */}
+      <path d="M 94 104 L 106 104 L 100 112 Z" fill="#2A1F1F" />
+      {/* Smile */}
+      <path d={mood === "wow"
+        ? "M 92 116 Q 100 122 108 116"
+        : "M 92 114 Q 100 122 108 114"}
+        stroke="#2A1F1F" strokeWidth="2.5" fill="#FF99B6" />
+      {/* Math accessory: tiny calculator hint or glasses */}
+      <rect x="78" y="72" width="44" height="14" rx="6" fill="none" stroke="#2A1F1F" strokeWidth="2" opacity="0.4" />
+    </svg>
+  );
+};
+
+// Pick mascot for a hub
+const HubMascot = ({ hubId, ...rest }) => {
+  if (hubId === "english") return <OwlMascot {...rest} />;
+  if (hubId === "geo") return <TurtleMascot {...rest} />;
+  return <FoxMascot {...rest} />;
+};
+
+window.OwlMascot = OwlMascot;
+window.TurtleMascot = TurtleMascot;
+window.FoxMascot = FoxMascot;
+window.HubMascot = HubMascot;
+
+  </script>
+
+  <script type="text/babel" data-presets="react" data-name="screens">
+// screens.jsx — All KidQuest screens
+// Exposes: OnboardScreen, WorldMapScreen, QuestMapScreen, QuizScreen,
+//          RewardOverlay, ProfileScreen, ParentScreen, BottomTabs, Topbar
+
+var { useState, useEffect, useMemo } = React;
+
+// ── helpers ──
+const fmt = (s, vars) => Object.keys(vars || {}).reduce(
+  (acc, k) => acc.replace(`{${k}}`, vars[k]), s);
+
+const useT = (lang) => (key, vars) => fmt(window.KQ.i18n[lang][key] || key, vars);
+
+const ConfettiBurst = () => (
+  <div className="kq-confetti" aria-hidden="true">
+    {[...Array(24)].map((_, i) => {
+      const colors = ["#FF6B35","#FFD93D","#4ECDC4","#A78BFA","#FF99B6","#6BCB77"];
+      const left = (i * 4.2) % 100;
+      const delay = (i * 0.13).toFixed(2);
+      const dur = 1.2 + (i % 4) * 0.4;
+      const c = colors[i % colors.length];
+      return <span key={i} style={{ left: `${left}%`, top: 0, animationDelay: `${delay}s`, "--c": c, "--d": `${dur}s` }} />;
+    })}
+  </div>
+);
+
+const Stars = ({ n, max = 3, size = 16 }) => (
+  <span style={{ display: 'inline-flex', gap: 1, fontSize: size }}>
+    {[...Array(max)].map((_, i) => (
+      <span key={i} style={{ opacity: i < n ? 1 : 0.25 }}>⭐</span>
+    ))}
+  </span>
+);
+
+// ── TOPBAR ──
+const Topbar = ({ lang, setLang, t, profile, stars, streak, onProfile, hideHud }) => (
+  <div className="kq-topbar">
+    <div className="kq-brand">
+      <div className="logo">🎓</div>
+      <div className="name"><b>Kid</b>Quest</div>
+    </div>
+    <div className="kq-topbar-spacer" />
+    {!hideHud && (
+      <div className="kq-hud">
+        <div className="kq-chip gold"><span className="emoji">⭐</span><strong>{stars}</strong></div>
+        <div className="kq-chip fire"><span className="emoji">🔥</span><strong>{streak}</strong></div>
+        <div className="kq-lang" role="tablist">
+          <button data-active={lang === 'fr'} onClick={() => setLang('fr')}>🇫🇷 FR</button>
+          <button data-active={lang === 'en'} onClick={() => setLang('en')}>🇬🇧 EN</button>
+        </div>
+        {profile && (
+          <button className="kq-profile-pill" onClick={onProfile} title={t('profile')}>
+            <div className="av">{profile.avatar}</div>
+            <span>{profile.name}</span>
+          </button>
+        )}
+      </div>
+    )}
+    {hideHud && (
+      <div className="kq-lang" role="tablist">
+        <button data-active={lang === 'fr'} onClick={() => setLang('fr')}>🇫🇷 FR</button>
+        <button data-active={lang === 'en'} onClick={() => setLang('en')}>🇬🇧 EN</button>
+      </div>
+    )}
+  </div>
+);
+
+// ── BOTTOM TABS ──
+const BottomTabs = ({ active, onPick, t }) => (
+  <nav className="kq-tabs">
+    {[
+      { id: "world",    emoji: "🗺️", label: t('world_map') },
+      { id: "trophies", emoji: "🏆", label: t('trophies') },
+      { id: "profile",  emoji: "👤", label: t('profile') },
+      { id: "parent",   emoji: "🔒", label: t('parent_zone') },
+    ].map(tab => (
+      <button key={tab.id} data-active={active === tab.id} onClick={() => onPick(tab.id)}>
+        <span className="emoji">{tab.emoji}</span>
+        <span>{tab.label}</span>
+      </button>
+    ))}
+  </nav>
+);
+
+// ── ONBOARDING ──
+const OnboardScreen = ({ lang, setLang, onDone }) => {
+  const t = useT(lang);
+  const [step, setStep] = useState(0);
+  const [avatar, setAvatar] = useState(null);
+  const [name, setName] = useState("");
+
+  const next = () => setStep(s => s + 1);
+  const back = () => setStep(s => Math.max(0, s - 1));
+
+  // 0 = welcome, 1 = avatar, 2 = name
+  return (
+    <div className="kq-onboard">
+      <div className="step-dots">
+        {[0,1,2].map(i => <span key={i} className="dot" data-active={step === i} />)}
+      </div>
+
+      {step === 0 && (
+        <React.Fragment>
+          <div className="kq-onboard-mascot">
+            <window.OwlMascot size={150} accent="#4ECDC4" />
+          </div>
+          <h1 className="kq-h1 rainbow">{t('welcome')}</h1>
+          <p className="kq-sub">{t('welcome_sub')}</p>
+          <div className="kq-lang-row">
+            <button className="kq-btn kq-btn-teal kq-btn-big"
+                    data-active={lang === 'fr'}
+                    onClick={() => { setLang('fr'); }}>
+              <span className="flag">🇫🇷</span> Français
+            </button>
+            <button className="kq-btn kq-btn-purple kq-btn-big"
+                    data-active={lang === 'en'}
+                    onClick={() => { setLang('en'); }}>
+              <span className="flag">🇬🇧</span> English
+            </button>
+          </div>
+          <button className="kq-btn kq-btn-primary kq-btn-big" onClick={next}>
+            {t('next')} →
+          </button>
+        </React.Fragment>
+      )}
+
+      {step === 1 && (
+        <React.Fragment>
+          <h1 className="kq-h1">{t('choose_avatar')}</h1>
+          <p className="kq-sub">{t('choose_avatar_sub')}</p>
+          <div className="kq-avatar-grid">
+            {window.KQ.avatars.map(a => (
+              <button key={a.id}
+                      data-active={avatar?.id === a.id}
+                      onClick={() => setAvatar(a)}>
+                {a.emoji}
+              </button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <button className="kq-btn kq-btn-ghost" onClick={back}>← {t('back')}</button>
+            <button className="kq-btn kq-btn-primary kq-btn-big"
+                    disabled={!avatar}
+                    onClick={next}>
+              {t('next')} →
+            </button>
+          </div>
+        </React.Fragment>
+      )}
+
+      {step === 2 && (
+        <React.Fragment>
+          <div className="kq-onboard-mascot">
+            <window.FoxMascot size={130} accent={avatar?.color || "#A78BFA"} />
+          </div>
+          <h1 className="kq-h1">{t('whats_your_name')}</h1>
+          <input className="kq-input"
+                 maxLength={12}
+                 value={name}
+                 onChange={e => setName(e.target.value)}
+                 placeholder={t('name_placeholder')}
+                 autoFocus />
+          <div style={{ display: 'flex', gap: 12 }}>
+            <button className="kq-btn kq-btn-ghost" onClick={back}>← {t('back')}</button>
+            <button className="kq-btn kq-btn-primary kq-btn-big"
+                    disabled={!name.trim()}
+                    onClick={() => onDone({ name: name.trim(), avatar })}>
+              {t('lets_go')} 🚀
+            </button>
+          </div>
+        </React.Fragment>
+      )}
+    </div>
+  );
+};
+
+// ── WORLD MAP ──
+const WorldMapScreen = ({ lang, profile, progress, onPickHub }) => {
+  const t = useT(lang);
+  const totalStars = Object.values(progress).reduce((s, h) =>
+    s + h.reduce((ss, l) => ss + l.stars, 0), 0);
+
+  return (
+    <section className="kq-world">
+      <div className="kq-world-bg" />
+      <h1 className="kq-h1 rainbow">{t('hello_name', { name: profile?.name || '' })}</h1>
+      <p className="kq-sub sub">{t('choose_world')}</p>
+
+      <div className="kq-islands" style={{ marginTop: 24 }}>
+        {window.KQ.hubs.map((hub, i) => {
+          const levels = progress[hub.id] || window.KQ.levels[hub.id];
+          const done = levels.filter(l => l.status === 'done').length;
+          const total = levels.length;
+          const hubStars = levels.reduce((s, l) => s + l.stars, 0);
+          const bgGrad = `linear-gradient(180deg, ${hub.colorSoft}, ${hub.color})`;
+          return (
+            <button key={hub.id}
+                    className="kq-island"
+                    style={{ "--hub-bg": bgGrad, "--hub-color": hub.color, animationDelay: `${i*.1}s` }}
+                    onClick={() => onPickHub(hub.id)}>
+              <div className="kq-island-mascot">
+                <window.HubMascot hubId={hub.id} size={130} accent={hub.color} />
+              </div>
+              <h2 className="kq-island-title">{t(hub.title_key)}</h2>
+              <p className="kq-island-sub">{t(hub.sub_key)}</p>
+
+              <div className="kq-island-meta">
+                <span className="kq-chip"><span className="emoji">⭐</span><strong>{hubStars}</strong></span>
+                <span className="kq-chip"><span className="emoji">📍</span><strong>{done}/{total}</strong></span>
+              </div>
+
+              <div className="kq-island-progress">
+                <span style={{ width: `${(done/total) * 100}%` }} />
+              </div>
+
+              <div className="kq-island-cta">
+                <span className="kq-btn kq-btn-primary">
+                  {done === total ? t('replay') : t('play')} →
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
+
+// ── QUEST MAP ──
+const QuestMapScreen = ({ lang, hubId, levels, profile, onBack, onPickLevel }) => {
+  const t = useT(lang);
+  const hub = window.KQ.hubs.find(h => h.id === hubId);
+  const hubStars = levels.reduce((s, l) => s + l.stars, 0);
+  const done = levels.filter(l => l.status === 'done').length;
+  const bgGrad = `linear-gradient(135deg, ${hub.colorSoft}, ${hub.color})`;
+
+  return (
+    <section className="kq-quest">
+      <div className="kq-quest-header">
+        <button className="kq-back-btn" onClick={onBack} aria-label={t('back')}>←</button>
+        <div style={{ flex: 1 }}>
+          <h1 className="kq-h2">{t(hub.hub_title_key)}</h1>
+          <p className="kq-sub" style={{ margin: 0 }}>
+            ⭐ {hubStars} · 📍 {done}/{levels.length}
+          </p>
+        </div>
+      </div>
+
+      <div className="kq-quest-hero" style={{ "--hub-bg": bgGrad }}>
+        <div className="mascot">
+          <window.HubMascot hubId={hubId} size={120} accent={hub.color} />
+        </div>
+        <div className="who">
+          <h1>{hub.mascotName[lang]}</h1>
+          <p>
+            {lang === 'fr'
+              ? `Coucou ${profile?.name || ''} ! Aujourd'hui on apprend ensemble.`
+              : `Hi ${profile?.name || ''}! Let's learn together today.`}
+          </p>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <span className="kq-chip gold"><span className="emoji">⭐</span><strong>{hubStars}</strong></span>
+            <span className="kq-chip"><span className="emoji">📍</span><strong>{done}/{levels.length}</strong></span>
+          </div>
+        </div>
+        <div className="stats">
+          <span className="kq-chip teal">{t('level')} {done + 1}</span>
+        </div>
+      </div>
+
+      <div className="kq-path" style={{ "--hub-color": hub.color }}>
+        {levels.map((lv, i) => {
+          const side = i % 2 === 0 ? "left" : "right";
+          const offset = side === "left" ? -60 : 60;
+          return (
+            <div key={lv.n} className={`kq-level ${side === 'right' ? 'right' : ''}`}
+                 style={{ marginLeft: side === 'left' ? 0 : 'auto',
+                          marginRight: side === 'right' ? 0 : 'auto',
+                          paddingLeft: side === 'left' ? 8 : 0,
+                          paddingRight: side === 'right' ? 8 : 0,
+                          transform: `translateX(${offset}px)` }}>
+              <button className="kq-level-node"
+                      data-status={lv.status}
+                      onClick={() => lv.status !== 'locked' && onPickLevel(lv)}
+                      title={lv[`title_${lang}`]}>
+                {lv.status === 'locked' ? <span className="lock">🔒</span>
+                  : lv.boss ? <span className="boss-emoji">👑</span>
+                  : <span>{lv.n}</span>}
+                {lv.status === 'done' && lv.stars > 0 && (
+                  <div className="kq-level-stars">
+                    <Stars n={lv.stars} max={3} size={11} />
+                  </div>
+                )}
+                {lv.status === 'current' && (
+                  <div className="kq-level-stars" style={{ background: '#FFD93D' }}>
+                    {t('current')} 📍
+                  </div>
+                )}
+              </button>
+              <div className="kq-level-info">
+                <div className="num">{t('lesson')} {lv.n}</div>
+                <div className="ttl">{lv[`title_${lang}`]}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
+
+// ── QUIZ ──
+const QuizScreen = ({ lang, hubId, level, onExit, onComplete }) => {
+  const t = useT(lang);
+  const hub = window.KQ.hubs.find(h => h.id === hubId);
+  // Fallback: if no question bank, generate placeholders matching the topic count
+  const bank = window.KQ.questions[level.topic] || [
+    { q_fr: `Question d'exemple — ${level.title_fr}`,
+      q_en: `Example question — ${level.title_en}`,
+      opts: [
+        { fr: "Option A", en: "Option A", emoji: "🅰️" },
+        { fr: "Option B", en: "Option B", emoji: "🅱️" },
+        { fr: "Option C", en: "Option C", emoji: "🆎" },
+      ], correct: 0 },
+    { q_fr: "Une autre question d'exemple", q_en: "Another example question",
+      opts: [
+        { fr: "Bonne", en: "Right", emoji: "✅" },
+        { fr: "Pas bonne", en: "Wrong", emoji: "❌" },
+        { fr: "Peut-être", en: "Maybe", emoji: "🤔" },
+      ], correct: 0 },
+    { q_fr: "Dernière question", q_en: "Last question",
+      opts: [
+        { fr: "Un", en: "One", emoji: "1️⃣" },
+        { fr: "Deux", en: "Two", emoji: "2️⃣" },
+        { fr: "Trois", en: "Three", emoji: "3️⃣" },
+      ], correct: 1 },
+  ];
+
+  const [qi, setQi] = useState(0);
+  const [picked, setPicked] = useState(null);
+  const [state, setState] = useState("idle"); // idle | correct | wrong
+  const [hearts, setHearts] = useState(3);
+  const [correctCount, setCorrectCount] = useState(0);
+
+  const q = bank[qi];
+  const total = bank.length;
+
+  const choose = (i) => {
+    if (state !== 'idle') return;
+    setPicked(i);
+  };
+  const check = () => {
+    if (picked == null) return;
+    const right = picked === q.correct;
+    setState(right ? 'correct' : 'wrong');
+    if (right) setCorrectCount(c => c + 1);
+    else setHearts(h => Math.max(0, h - 1));
+  };
+  const cont = () => {
+    if (qi + 1 >= total) {
+      // Compute stars: 3 if perfect, 2 if 1 mistake, 1 if 2+ mistakes
+      const stars = correctCount + (state === 'correct' ? 0 : 0) === total
+        ? 3 : correctCount >= total - 1 ? 2 : 1;
+      onComplete({ stars, correctCount: correctCount + (state === 'correct' ? 0 : 0), total });
+      return;
+    }
+    setQi(qi + 1);
+    setPicked(null);
+    setState('idle');
+  };
+
+  return (
+    <section className="kq-quiz">
+      <div className="kq-quiz-bar">
+        <button className="kq-back-btn" onClick={onExit} aria-label="Quit">✕</button>
+        <div className="kq-progress">
+          <span style={{ width: `${((qi + (state !== 'idle' ? 1 : 0))/total) * 100}%`, background: hub.color }} />
+        </div>
+        <div className="kq-hearts">
+          {[0,1,2].map(i => <span key={i} className={i < hearts ? '' : 'empty'}>❤️</span>)}
+        </div>
+      </div>
+
+      <div className="kq-question-card">
+        <div className="kq-mascot-bubble">
+          <div className="speech">
+            {state === 'idle' && t('pick_answer')}
+            {state === 'correct' && t('correct') + " 🎉"}
+            {state === 'wrong' && t('wrong')}
+          </div>
+          <window.HubMascot hubId={hubId} size={88} mood={state === 'wrong' ? 'wow' : 'happy'} accent={hub.color} />
+        </div>
+
+        <p style={{ fontSize: 12, color: 'var(--kq-ink-soft)', letterSpacing: '.1em',
+                    textTransform: 'uppercase', fontWeight: 700, margin: '0 0 8px' }}>
+          {t('question_of', { a: qi + 1, b: total })}
+        </p>
+        <h2 className="kq-question">{q[`q_${lang}`]}</h2>
+
+        <div className="kq-options">
+          {q.opts.map((opt, i) => {
+            const selected = picked === i;
+            let stateAttr;
+            if (state !== 'idle') {
+              if (i === q.correct) stateAttr = 'correct';
+              else if (selected && state === 'wrong') stateAttr = 'wrong';
+            }
+            return (
+              <button key={i}
+                      className="kq-option"
+                      data-selected={selected}
+                      data-state={stateAttr}
+                      onClick={() => choose(i)}
+                      disabled={state !== 'idle'}>
+                <span className="emoji">{opt.emoji}</span>
+                <span>{opt[lang]}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {state === 'idle' ? (
+          <button className="kq-btn kq-btn-primary kq-btn-big"
+                  disabled={picked == null}
+                  onClick={check}>
+            {t('check')} ✓
+          </button>
+        ) : (
+          <React.Fragment>
+            <div className={`kq-feedback ${state === 'correct' ? 'good' : 'bad'}`}>
+              {state === 'correct' ? t('correct') + ' 🌟' : t('wrong') + ' 💪'}
+            </div>
+            <button className="kq-btn kq-btn-primary kq-btn-big" onClick={cont}>
+              {qi + 1 >= total ? t('continue') + ' 🏁' : t('continue') + ' →'}
+            </button>
+          </React.Fragment>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// ── REWARD OVERLAY ──
+const RewardOverlay = ({ lang, stars, newBadge, onClose }) => {
+  const t = useT(lang);
+  return (
+    <div className="kq-reward" onClick={onClose}>
+      <div className="kq-reward-card" onClick={e => e.stopPropagation()}>
+        <ConfettiBurst />
+        <div style={{ fontSize: 70, lineHeight: 1 }}>🎉</div>
+        <h2 className="kq-h1">{t('well_done')}</h2>
+        <div className="kq-reward-stars">
+          {[0,1,2].map(i => (
+            <span key={i} className="pop" style={{ opacity: i < stars ? 1 : 0.18 }}>⭐</span>
+          ))}
+        </div>
+        <p className="kq-sub">{t('stars_earned', { n: stars })}</p>
+        {newBadge && (
+          <div className="kq-reward-badge">
+            <span style={{ fontSize: 22 }}>{newBadge.emoji}</span>
+            <span>{t('new_badge')} — {newBadge[`title_${lang}`]}</span>
+          </div>
+        )}
+        <button className="kq-btn kq-btn-primary kq-btn-big" onClick={onClose} style={{ marginTop: 14 }}>
+          {t('back_to_map')} 🗺️
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// ── TROPHIES / COLLECTION ──
+const TrophiesScreen = ({ lang }) => {
+  const t = useT(lang);
+  const owned = window.KQ.trophies.filter(tr => tr.owned).length;
+  return (
+    <section style={{ paddingBottom: 40 }}>
+      <h1 className="kq-h1 rainbow" style={{ textAlign: 'center' }}>{t('trophies')}</h1>
+      <p className="kq-sub" style={{ textAlign: 'center', marginBottom: 18 }}>
+        {owned} / {window.KQ.trophies.length} 🏆
+      </p>
+      <div className="kq-trophies">
+        {window.KQ.trophies.map(tr => (
+          <div key={tr.id} className={`kq-trophy ${tr.owned ? '' : 'locked'}`}>
+            <div className="emoji">{tr.emoji}</div>
+            <h4>{tr[`title_${lang}`]}</h4>
+            <p>{tr[`desc_${lang}`]}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+// ── PROFILE ──
+const ProfileScreen = ({ lang, profile, progress, onChangeAvatar }) => {
+  const t = useT(lang);
+  const totalStars = Object.values(progress).reduce((s, h) =>
+    s + h.reduce((ss, l) => ss + l.stars, 0), 0);
+  const levelsDone = Object.values(progress).reduce((s, h) =>
+    s + h.filter(l => l.status === 'done').length, 0);
+  const trophies = window.KQ.trophies.filter(tr => tr.owned).length;
+
+  return (
+    <section style={{ paddingBottom: 40 }}>
+      <div className="kq-profile-hero">
+        <div className="kq-big-avatar">{profile?.avatar?.emoji || '🦊'}</div>
+        <div>
+          <h1>{profile?.name || 'Aventurier'}</h1>
+          <p className="sub">{t('hello_name', { name: '' }).replace(/[!\s]+$/, '')} 👋</p>
+          <div className="chips">
+            <span className="kq-chip gold"><span className="emoji">⭐</span><strong>{totalStars}</strong> {t('total_stars')}</span>
+            <span className="kq-chip fire"><span className="emoji">🔥</span><strong>5</strong> {t('streak')}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="kq-stat-row">
+        <div className="kq-stat"><div className="v">{totalStars}</div><div className="l">⭐ {t('total_stars')}</div></div>
+        <div className="kq-stat"><div className="v">{levelsDone}</div><div className="l">📍 {t('levels_done')}</div></div>
+        <div className="kq-stat"><div className="v">{trophies}</div><div className="l">🏆 {t('trophies')}</div></div>
+        <div className="kq-stat"><div className="v">5</div><div className="l">🔥 {t('streak')}</div></div>
+      </div>
+
+      <div className="kq-card">
+        <h2 className="kq-h2">{t('progress')}</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 14 }}>
+          {window.KQ.hubs.map(hub => {
+            const levels = progress[hub.id];
+            const done = levels.filter(l => l.status === 'done').length;
+            const pct = (done / levels.length) * 100;
+            return (
+              <div key={hub.id}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <strong>{t(hub.title_key)}</strong>
+                  <span style={{ color: 'var(--kq-ink-soft)' }}>{done}/{levels.length}</span>
+                </div>
+                <div style={{
+                  height: 14,
+                  background: 'rgba(42,31,31,.1)',
+                  border: '2px solid var(--kq-line)',
+                  borderRadius: 999,
+                  overflow: 'hidden',
+                }}>
+                  <div style={{
+                    height: '100%', width: `${pct}%`,
+                    background: hub.color, borderRight: '2px solid var(--kq-line)',
+                    transition: 'width .6s var(--ease)',
+                  }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="kq-card" style={{ marginTop: 16 }}>
+        <h2 className="kq-h2">{t('choose_avatar')}</h2>
+        <p className="kq-sub" style={{ marginBottom: 12 }}>{t('choose_avatar_sub')}</p>
+        <div className="kq-avatar-grid" style={{ maxWidth: 'none' }}>
+          {window.KQ.avatars.map(a => (
+            <button key={a.id}
+                    data-active={profile?.avatar?.id === a.id}
+                    onClick={() => onChangeAvatar(a)}>
+              {a.emoji}
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ── PARENT ZONE ──
+const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
+  const t = useT(lang);
+  const [unlocked, setUnlocked] = useState(false);
+  const [pin, setPin] = useState(['','','','']);
+
+  // Simple PIN: 1234 (placeholder)
+  const tryUnlock = (digits) => {
+    if (digits.every(d => d !== '') && digits.join('') === '1234') {
+      setUnlocked(true);
+    }
+  };
+
+  if (!unlocked) {
+    return (
+      <section className="kq-parent">
+        <div className="kq-card lock-screen">
+          <div style={{ fontSize: 72 }}>🔒</div>
+          <h1 className="kq-h1">{t('parent_zone')}</h1>
+          <p className="kq-sub">{t('parent_lock')}</p>
+          <div className="pin-row">
+            {[0,1,2,3].map(i => (
+              <input key={i}
+                     type="text" inputMode="numeric"
+                     maxLength={1}
+                     value={pin[i]}
+                     onChange={(e) => {
+                       const v = e.target.value.replace(/[^\d]/g, '');
+                       const next = [...pin]; next[i] = v;
+                       setPin(next);
+                       if (v && i < 3) document.querySelectorAll('.pin-row input')[i+1].focus();
+                       tryUnlock(next);
+                     }}
+                     onKeyDown={(e) => {
+                       if (e.key === 'Backspace' && !pin[i] && i > 0) {
+                         document.querySelectorAll('.pin-row input')[i-1].focus();
+                       }
+                     }} />
+            ))}
+          </div>
+          <p className="kq-sub" style={{ fontSize: 13 }}>
+            {lang === 'fr' ? 'Code par défaut : 1234' : 'Default code: 1234'}
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  const totalLevels = Object.values(progress).reduce((s, h) => s + h.length, 0);
+  const doneLevels = Object.values(progress).reduce((s, h) => s + h.filter(l => l.status === 'done').length, 0);
+  const totalStars = Object.values(progress).reduce((s, h) => s + h.reduce((ss, l) => ss + l.stars, 0), 0);
+
+  return (
+    <section className="kq-parent" style={{ paddingBottom: 40 }}>
+      <h1 className="kq-h1">{t('parent_zone')}</h1>
+      <p className="kq-sub" style={{ marginBottom: 18 }}>
+        {lang === 'fr' ? 'Suivi de la progression et réglages.' : 'Progress tracking and settings.'}
+      </p>
+
+      <div className="kq-stat-row">
+        <div className="kq-stat"><div className="v">{doneLevels}</div><div className="l">{t('levels_done')}</div></div>
+        <div className="kq-stat"><div className="v">{totalStars}</div><div className="l">⭐ {t('total_stars')}</div></div>
+        <div className="kq-stat"><div className="v">24</div><div className="l">{t('time_today')} ({t('minutes')})</div></div>
+        <div className="kq-stat"><div className="v">5</div><div className="l">🔥 {t('streak')}</div></div>
+      </div>
+
+      <div className="kq-card">
+        <h2 className="kq-h2">{t('parent_settings')}</h2>
+
+        <div className="kq-setting">
+          <div>
+            <div className="label">{t('difficulty')}</div>
+            <div className="desc">{lang === 'fr' ? 'Ajuste la difficulté des questions' : 'Adjusts question difficulty'}</div>
+          </div>
+          <div className="kq-seg">
+            {['easy','medium','hard'].map(d => (
+              <button key={d}
+                      data-active={tweaks.difficulty === d}
+                      onClick={() => setTweak('difficulty', d)}>
+                {t(d)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="kq-setting">
+          <div>
+            <div className="label">{lang === 'fr' ? 'Mode sombre' : 'Dark mode'}</div>
+            <div className="desc">{lang === 'fr' ? 'Repos pour les yeux le soir' : 'Easier on the eyes at night'}</div>
+          </div>
+          <div className="kq-switch" data-on={tweaks.dark}
+               onClick={() => setTweak('dark', !tweaks.dark)} />
+        </div>
+
+        <div className="kq-setting">
+          <div>
+            <div className="label">{lang === 'fr' ? 'Lecture vocale' : 'Voice reader'}</div>
+            <div className="desc">{lang === 'fr' ? 'Lit les questions à voix haute' : 'Reads questions aloud'}</div>
+          </div>
+          <div className="kq-switch" data-on={tweaks.voice}
+               onClick={() => setTweak('voice', !tweaks.voice)} />
+        </div>
+
+        <div className="kq-setting">
+          <div>
+            <div className="label">{lang === 'fr' ? 'Temps quotidien max' : 'Daily time limit'}</div>
+            <div className="desc">{tweaks.dailyLimit} {t('minutes')}</div>
+          </div>
+          <input type="range" min="10" max="60" step="5"
+                 value={tweaks.dailyLimit}
+                 onChange={e => setTweak('dailyLimit', parseInt(e.target.value, 10))} />
+        </div>
+      </div>
+
+      <div className="kq-card" style={{ marginTop: 16 }}>
+        <h2 className="kq-h2">{t('progress')}</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 12 }}>
+          {window.KQ.hubs.map(hub => {
+            const levels = progress[hub.id];
+            const done = levels.filter(l => l.status === 'done').length;
+            return (
+              <div key={hub.id} className="kq-setting">
+                <div>
+                  <div className="label">{t(hub.title_key)}</div>
+                  <div className="desc">{done} / {levels.length} {lang==='fr'?'leçons':'lessons'}</div>
+                </div>
+                <strong style={{ color: hub.color, fontSize: 22 }}>
+                  {Math.round((done/levels.length)*100)}%
+                </strong>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+Object.assign(window, {
+  KQ_useT: useT,
+  Topbar, BottomTabs,
+  OnboardScreen, WorldMapScreen, QuestMapScreen, QuizScreen,
+  RewardOverlay, TrophiesScreen, ProfileScreen, ParentScreen,
+});
+
+  </script>
+
+  <script type="text/babel" data-presets="react" data-name="main">
+// main.jsx — root app: routing + tweaks + persistence
+
+// useState/useEffect/useMemo are already destructured at the top of screens.jsx (loaded before main).
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "palette": ["#FF6B35", "#FF8E53", "#FFD93D"],
+  "dark": false,
+  "mascotStyle": "default",
+  "difficulty": "easy",
+  "voice": false,
+  "dailyLimit": 30
+}/*EDITMODE-END*/;
+
+// Accent palette options: [primary, primaryDeep, soft]
+const PALETTES = [
+  ["#FF6B35", "#FF8E53", "#FFD93D"], // KidQuest orange (default)
+  ["#4ECDC4", "#44A9C6", "#A8E6CF"], // teal
+  ["#A78BFA", "#7c6ef5", "#f093fb"], // purple
+  ["#FFD93D", "#FF8E53", "#4ECDC4"], // yellow
+];
+
+function App() {
+  const [t, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+
+  const [lang, setLangRaw] = useState('fr');
+  const [profile, setProfile] = useState(null);
+  const [mode, setMode] = useState('onboard'); // onboard | world | quest | quiz | trophies | profile | parent
+  const [activeHub, setActiveHub] = useState(null);
+  const [activeLevel, setActiveLevel] = useState(null);
+  const [reward, setReward] = useState(null);
+
+  // Progress is a copy of the data levels per hub, mutable
+  const [progress, setProgress] = useState(() => ({
+    english: JSON.parse(JSON.stringify(window.KQ.levels.english)),
+    geo:     JSON.parse(JSON.stringify(window.KQ.levels.geo)),
+    math:    JSON.parse(JSON.stringify(window.KQ.levels.math)),
+  }));
+
+  // ─── Persistence
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('kq_state');
+      if (saved) {
+        const s = JSON.parse(saved);
+        if (s.lang) setLangRaw(s.lang);
+        if (s.profile) setProfile(s.profile);
+        if (s.progress) setProgress(s.progress);
+        if (s.profile) setMode('world');
+      }
+    } catch (e) {}
+  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem('kq_state', JSON.stringify({ lang, profile, progress }));
+    } catch (e) {}
+  }, [lang, profile, progress]);
+
+  const setLang = (l) => setLangRaw(l);
+
+  // ─── Apply palette + dark via CSS vars
+  useEffect(() => {
+    const root = document.documentElement;
+    const [p, pd, soft] = t.palette || PALETTES[0];
+    root.style.setProperty('--kq-primary', p);
+    root.style.setProperty('--kq-primary-deep', pd);
+    root.style.setProperty('--kq-soft', soft);
+    root.dataset.dark = String(!!t.dark);
+  }, [t.palette, t.dark]);
+
+  // ─── Stats for HUD
+  const totalStars = Object.values(progress).reduce((s, h) =>
+    s + h.reduce((ss, l) => ss + l.stars, 0), 0);
+
+  const T = window.KQ_useT(lang);
+
+  // ─── Handlers
+  const handleOnboardDone = ({ name, avatar }) => {
+    setProfile({ name, avatar });
+    setMode('world');
+  };
+  const handlePickHub = (hubId) => {
+    setActiveHub(hubId);
+    setMode('quest');
+  };
+  const handleBackToWorld = () => {
+    setActiveHub(null);
+    setMode('world');
+  };
+  const handlePickLevel = (lv) => {
+    setActiveLevel(lv);
+    setMode('quiz');
+  };
+  const handleQuizComplete = ({ stars, correctCount, total }) => {
+    // Update progress
+    setProgress(prev => {
+      const next = { ...prev };
+      const list = [...next[activeHub]];
+      const i = list.findIndex(l => l.n === activeLevel.n);
+      if (i >= 0) {
+        list[i] = { ...list[i], status: 'done', stars: Math.max(list[i].stars || 0, stars) };
+        // Unlock next
+        if (i + 1 < list.length && list[i+1].status === 'locked') {
+          list[i+1] = { ...list[i+1], status: 'current' };
+        }
+      }
+      next[activeHub] = list;
+      return next;
+    });
+    // Reward overlay
+    setReward({
+      stars,
+      newBadge: stars === 3
+        ? { emoji: '💎', title_fr: 'Score parfait', title_en: 'Perfect score' }
+        : null,
+    });
+    setMode('quest');
+  };
+  const handleExitQuiz = () => { setActiveLevel(null); setMode('quest'); };
+  const handleCloseReward = () => setReward(null);
+
+  const handleTab = (id) => {
+    if (id === 'world') { setActiveHub(null); setMode('world'); }
+    else setMode(id);
+  };
+
+  const handleChangeAvatar = (a) => {
+    setProfile(p => ({ ...p, avatar: a }));
+  };
+
+  const hideHud = mode === 'onboard' || mode === 'quiz';
+  const showTabs = profile && mode !== 'onboard' && mode !== 'quiz';
+  const activeTab = ['world','trophies','profile','parent'].includes(mode) ? mode : 'world';
+
+  let screen;
+  if (mode === 'onboard' || !profile) {
+    screen = <window.OnboardScreen lang={lang} setLang={setLang} onDone={handleOnboardDone} />;
+  } else if (mode === 'world') {
+    screen = <window.WorldMapScreen lang={lang} profile={profile} progress={progress} onPickHub={handlePickHub} />;
+  } else if (mode === 'quest' && activeHub) {
+    screen = <window.QuestMapScreen lang={lang} hubId={activeHub} levels={progress[activeHub]}
+                                    profile={profile}
+                                    onBack={handleBackToWorld}
+                                    onPickLevel={handlePickLevel} />;
+  } else if (mode === 'quiz' && activeLevel) {
+    screen = <window.QuizScreen lang={lang} hubId={activeHub} level={activeLevel}
+                                onExit={handleExitQuiz}
+                                onComplete={handleQuizComplete} />;
+  } else if (mode === 'trophies') {
+    screen = <window.TrophiesScreen lang={lang} />;
+  } else if (mode === 'profile') {
+    screen = <window.ProfileScreen lang={lang} profile={profile} progress={progress}
+                                   onChangeAvatar={handleChangeAvatar} />;
+  } else if (mode === 'parent') {
+    screen = <window.ParentScreen lang={lang} progress={progress}
+                                  tweaks={t} setTweak={setTweak} />;
+  }
+
+  return (
+    <React.Fragment>
+      <div className="kq-app" data-mode={mode}>
+        <window.Topbar lang={lang} setLang={setLang}
+                       t={T}
+                       profile={profile}
+                       stars={totalStars} streak={5}
+                       onProfile={() => setMode('profile')}
+                       hideHud={hideHud || !profile} />
+        {screen}
+        {showTabs && <window.BottomTabs active={activeTab} onPick={handleTab} t={T} />}
+      </div>
+
+      {reward && (
+        <window.RewardOverlay lang={lang}
+                              stars={reward.stars}
+                              newBadge={reward.newBadge}
+                              onClose={handleCloseReward} />
+      )}
+
+      <window.TweaksPanel title="Tweaks">
+        <window.TweakSection label={lang === 'fr' ? 'Palette' : 'Palette'} />
+        <window.TweakColor label={lang === 'fr' ? 'Couleurs' : 'Colors'}
+                           value={t.palette}
+                           options={PALETTES}
+                           onChange={(v) => setTweak('palette', v)} />
+        <window.TweakSection label={lang === 'fr' ? 'Apparence' : 'Appearance'} />
+        <window.TweakToggle label={lang === 'fr' ? 'Mode sombre' : 'Dark mode'}
+                            value={t.dark}
+                            onChange={(v) => setTweak('dark', v)} />
+        <window.TweakSection label={lang === 'fr' ? 'Difficulté' : 'Difficulty'} />
+        <window.TweakRadio label={lang === 'fr' ? 'Niveau' : 'Level'}
+                           value={t.difficulty}
+                           options={['easy', 'medium', 'hard']}
+                           onChange={(v) => setTweak('difficulty', v)} />
+        <window.TweakSection label={lang === 'fr' ? 'Confort' : 'Comfort'} />
+        <window.TweakToggle label={lang === 'fr' ? 'Lecture vocale' : 'Voice reader'}
+                            value={t.voice}
+                            onChange={(v) => setTweak('voice', v)} />
+        <window.TweakSlider label={lang === 'fr' ? 'Temps quotidien' : 'Daily time'}
+                            value={t.dailyLimit}
+                            min={10} max={60} step={5} unit=" min"
+                            onChange={(v) => setTweak('dailyLimit', v)} />
+        <window.TweakButton label={lang === 'fr' ? 'Réinitialiser' : 'Reset'}
+                            onClick={() => {
+                              try { localStorage.removeItem('kq_state'); } catch {}
+                              location.reload();
+                            }} />
+      </window.TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+  </script>
+</body>
+</html>

@@ -1,9 +1,11 @@
 """
-KidQuest Academy v5 — Bilingual Edutainment Platform (ages 4–7)
-Tabs: English Quest · Geo Explorer · Math Arena
-Features: profiles, badges, dark mode, collectibles, adaptive difficulty
+KidQuest Academy — Bilingual Edutainment Platform (ages 4–7)
+New design: HTML/React prototype served full-bleed via Streamlit.
+Legacy Python game logic preserved below (reachable via kidquest/streamlit_app.py).
 """
 import streamlit as st
+import streamlit.components.v1 as components
+from pathlib import Path
 import random
 import requests
 import plotly.graph_objects as go
@@ -21,11 +23,34 @@ except ImportError:
     _anthropic = None
 
 st.set_page_config(
-    page_title="KidQuest Academy 🎓",
+    page_title="KidQuest — L'aventure du savoir",
     page_icon="🎓",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
+
+# ─── Full-bleed: hide all Streamlit chrome so the HTML fills the screen ──────
+st.markdown(
+    """
+    <style>
+      #MainMenu, header, footer { visibility: hidden; height: 0; }
+      .block-container { padding: 0 !important; max-width: 100% !important; }
+      [data-testid="stHeader"], [data-testid="stToolbar"] { display: none; }
+      [data-testid="stSidebar"] { display: none; }
+      body, .stApp { background: #FFF6E8; margin: 0; }
+      iframe { border: 0 !important; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ─── Serve the redesigned HTML/React app full-bleed ──────────────────────────
+_HTML_PATH = Path(__file__).parent / "kidquest" / "index.html"
+if _HTML_PATH.exists():
+    components.html(_HTML_PATH.read_text(encoding="utf-8"), height=1700, scrolling=True)
+    st.stop()  # Don't render legacy Streamlit UI when design is available
+
+# ─── FALLBACK: legacy Streamlit app (runs only if kidquest/index.html missing) ─
 
 PROFILES_DIR = pathlib.Path("data/profiles")
 
