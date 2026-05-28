@@ -2610,6 +2610,31 @@ with st.sidebar:
             else:
                 st.caption("No matches found.")
 
+    # ── New Design Preview ────────────────────────────────────────────────────
+    st.markdown("---")
+    st.markdown(
+        '<div style="font-size:11px;font-weight:700;text-transform:uppercase;'
+        'letter-spacing:1px;color:var(--sidebar-header-color);margin-bottom:8px">'
+        '✨ New Design Preview</div>',
+        unsafe_allow_html=True,
+    )
+    _html_path = _HERE / "AuditIQ.html"
+    if _html_path.exists():
+        with open(_html_path, "rb") as _hf:
+            st.download_button(
+                label="⬇️ Download AuditIQ v2",
+                data=_hf.read(),
+                file_name="AuditIQ.html",
+                mime="text/html",
+                help="Standalone redesign — open in any browser",
+                use_container_width=True,
+            )
+    st.markdown(
+        '<div style="font-size:10.5px;color:var(--text-muted);margin-top:4px">'
+        'Self-contained HTML — no server needed</div>',
+        unsafe_allow_html=True,
+    )
+
 
 # ── Help content ──────────────────────────────────────────────────────────────
 
