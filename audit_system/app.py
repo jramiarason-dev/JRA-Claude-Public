@@ -51,6 +51,9 @@ _SS_DEFAULTS = {
     # Help
     "help_open": False,
     "help_lang": "Français",
+    # Stub UI features
+    "voice_active": False,
+    "cowork_open": False,
     "active_tab": 0,
     "entity_type": "🏦 Private Banking",
     # Static data
@@ -2795,7 +2798,7 @@ def _show_help_panel():
 
 
 # ── Header ────────────────────────────────────────────────────────────────────
-_hdr_col1, _hdr_col2 = st.columns([8, 1])
+_hdr_col1, _hdr_col2, _hdr_col3, _hdr_col4 = st.columns([8, 1, 1, 1])
 with _hdr_col1:
     st.markdown("""
 <div style="text-align:center;padding:32px 0 24px 0;position:relative;">
@@ -2823,9 +2826,30 @@ with _hdr_col1:
 """, unsafe_allow_html=True)
 with _hdr_col2:
     st.markdown("<div style='padding-top:1.4rem'>", unsafe_allow_html=True)
+    if st.button("🎙️", key="_voice_toggle_btn", help="Commande vocale / Voice command"):
+        st.session_state["voice_active"] = not st.session_state.get("voice_active", False)
+    st.markdown("</div>", unsafe_allow_html=True)
+with _hdr_col3:
+    st.markdown("<div style='padding-top:1.4rem'>", unsafe_allow_html=True)
+    if st.button("✨", key="_cowork_toggle_btn", help="Claude Cowork — Suggestions"):
+        st.session_state["cowork_open"] = not st.session_state.get("cowork_open", False)
+    st.markdown("</div>", unsafe_allow_html=True)
+with _hdr_col4:
+    st.markdown("<div style='padding-top:1.4rem'>", unsafe_allow_html=True)
     if st.button("❓", key="_help_toggle_btn", help="Help / Aide"):
         st.session_state["help_open"] = not st.session_state.get("help_open", False)
     st.markdown("</div>", unsafe_allow_html=True)
+
+if st.session_state.get("voice_active", False):
+    st.info("🎙️ Commande vocale — fonctionnalité à venir.")
+
+if st.session_state.get("cowork_open", False):
+    with st.expander("✨ Claude Cowork — Suggestions", expanded=True):
+        st.markdown(
+            "💡 Les suggestions d'actions Claude seront disponibles ici.\n\n"
+            "Ce module est en cours d'intégration avec l'API Anthropic."
+        )
+        st.button("Générer des suggestions", disabled=True, key="_cowork_generate_btn")
 
 if st.session_state.get("help_open", False):
     _show_help_panel()
