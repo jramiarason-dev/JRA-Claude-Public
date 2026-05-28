@@ -234,26 +234,27 @@ _is_dark = st.session_state.theme == "dark"
 if _is_dark:
     _theme_vars = """
     :root {
-      /* Backgrounds */
-      --bg-app:        #080c14;
-      --bg-primary:    #080c14;
-      --bg-secondary:  #0c1018;
-      --bg-card:       #0f1520;
-      --bg-card-hover: #131926;
-      --bg-input:      #0d1219;
-      --bg-sidebar:    #090d15;
+      /* Backgrounds — aligned with AuditIQ redesign tokens */
+      --bg-app:        #07090f;
+      --bg-primary:    #07090f;
+      --bg-secondary:  #0b0f1a;
+      --bg-card:       #10141f;
+      --bg-card-hover: #161b2a;
+      --bg-input:      #10141f;
+      --bg-sidebar:    #09101b;
 
       /* Borders */
-      --border-subtle: rgba(255,255,255,0.06);
-      --border-medium: rgba(255,255,255,0.10);
+      --border-subtle: rgba(255,255,255,0.08);
+      --border-medium: rgba(255,255,255,0.14);
       --border-input:  rgba(255,255,255,0.08);
-      --border-accent: rgba(79,126,248,0.30);
+      --border-accent: rgba(99,102,241,0.30);
       --border-divider:rgba(255,255,255,0.05);
 
-      /* Accent */
-      --accent-primary: #4f7ef8;
-      --accent-hover:   #6b96fa;
-      --accent-glow:    rgba(79,126,248,0.15);
+      /* Accent — indigo per new design */
+      --accent-primary: #6366f1;
+      --accent-hover:   #818cf8;
+      --accent-glow:    rgba(99,102,241,0.18);
+      --accent-blue:    #4f7ef8;
 
       /* Severity */
       --critical:      #ef4444;
@@ -266,30 +267,30 @@ if _is_dark:
       --low-bg:        rgba(34,197,94,0.10);
 
       /* Text */
-      --text-primary:   #e2e8f0;
-      --text-secondary: #94a3b8;
-      --text-muted:     #475569;
-      --text-accent:    #7fa8fb;
-      --text-label:     #94a3b8;
+      --text-primary:   #eef0f8;
+      --text-secondary: #c9cde0;
+      --text-muted:     #8392bb;
+      --text-accent:    #818cf8;
+      --text-label:     #8392bb;
 
-      /* Legacy aliases kept for compatibility */
-      --tab-inactive:          #475569;
-      --tab-active:            #6b96fa;
-      --tab-active-border:     #4f7ef8;
-      --btn-primary-bg:        linear-gradient(135deg,#4f7ef8 0%,#3b6ef0 100%);
-      --btn-secondary-bg:      rgba(79,126,248,0.10);
-      --btn-secondary-color:   #7fa8fb;
-      --btn-secondary-border:  rgba(79,126,248,0.25);
+      /* Legacy aliases */
+      --tab-inactive:          #5a6488;
+      --tab-active:            #818cf8;
+      --tab-active-border:     #6366f1;
+      --btn-primary-bg:        linear-gradient(135deg,#6366f1 0%,#4f46e5 100%);
+      --btn-secondary-bg:      rgba(99,102,241,0.14);
+      --btn-secondary-color:   #818cf8;
+      --btn-secondary-border:  rgba(99,102,241,0.25);
       --ctx-pill-bg:           rgba(34,211,165,0.07);
       --ctx-pill-border:       rgba(34,211,165,0.18);
       --ctx-pill-color:        #22d3a5;
-      --output-box-bg:         #0f1520;
-      --output-box-border:     rgba(255,255,255,0.06);
-      --output-box-text:       #e2e8f0;
-      --section-title-color:   #e2e8f0;
-      --footer-color:          #334155;
-      --tbl-row-border:        rgba(255,255,255,0.04);
-      --sidebar-header-color:  #7fa8fb;
+      --output-box-bg:         #10141f;
+      --output-box-border:     rgba(255,255,255,0.08);
+      --output-box-text:       #eef0f8;
+      --section-title-color:   #eef0f8;
+      --footer-color:          #5a6488;
+      --tbl-row-border:        rgba(255,255,255,0.05);
+      --sidebar-header-color:  #818cf8;
     }
     """
 else:
@@ -383,10 +384,10 @@ section[data-testid="stSidebar"] button:hover { opacity: 0.82; }
   transition: all 0.2s ease !important;
 }
 .stTabs [aria-selected="true"] {
-  background: linear-gradient(135deg, rgba(79,126,248,0.20) 0%, rgba(79,126,248,0.10) 100%) !important;
+  background: linear-gradient(135deg, rgba(99,102,241,0.20) 0%, rgba(99,102,241,0.10) 100%) !important;
   color: var(--accent-hover) !important;
   font-weight: 600 !important;
-  box-shadow: 0 1px 0 rgba(79,126,248,0.4), inset 0 1px 0 rgba(79,126,248,0.1) !important;
+  box-shadow: 0 1px 0 rgba(99,102,241,0.4), inset 0 1px 0 rgba(99,102,241,0.1) !important;
 }
 .stTabs [data-baseweb="tab"]:hover {
   background: rgba(255,255,255,0.04) !important;
