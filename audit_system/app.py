@@ -2196,7 +2196,7 @@ def _copy_button(text_to_copy, key_id):
       font-family:-apple-system,BlinkMacSystemFont,sans-serif;
     ">⎘ Copy</button>
     """
-    st.components.v1.html(html, height=40)
+    st.html(html)
 
 
 def _print_button():
@@ -2209,7 +2209,7 @@ def _print_button():
       font-family:-apple-system,BlinkMacSystemFont,sans-serif;
     ">🖨 Print / PDF</button>
     """
-    st.components.v1.html(html, height=40)
+    st.html(html)
 
 
 # ── Display components ────────────────────────────────────────────────────────
