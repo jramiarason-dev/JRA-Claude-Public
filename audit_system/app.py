@@ -777,27 +777,53 @@ section[data-testid="stSidebar"],
   background: var(--bg-card) !important;
   overflow: hidden !important;
 }
-[data-testid="stExpander"] summary {
+[data-testid="stExpander"] summary,
+[data-testid="stExpander"] details > summary {
   background: var(--bg-card) !important;
   color: var(--text-secondary) !important;
   font-size: 13px !important;
   font-weight: 600 !important;
-  padding: 12px 16px !important;
+  padding: 10px 14px 10px 32px !important;
   list-style: none !important;
-  display: flex !important;
-  align-items: center !important;
+  display: block !important;
+  position: relative !important;
+  cursor: pointer !important;
 }
-/* Fix: hide icon-font fallback text (_arrow_right / keyboard_arrow_right) on Android */
+/* Nuclear icon suppression: hide every child that is not the label p/span */
 [data-testid="stExpander"] summary::-webkit-details-marker { display:none !important; }
-[data-testid="stExpander"] summary > svg { flex-shrink:0; }
-[data-testid="stExpander"] summary span[class*="Icon"],
-[data-testid="stExpander"] summary span[class*="icon"],
-[data-testid="stExpander"] summary .material-icons,
-[data-testid="stExpander"] summary .material-icons-sharp,
-[data-testid="stExpander"] summary [class*="material"] {
-  font-size: 0 !important;
-  width: 18px !important;
-  overflow: hidden !important;
+[data-testid="stExpander"] summary::marker { content:"" !important; }
+/* Hide ALL direct children (icons) and then re-show only the label */
+[data-testid="stExpander"] summary > * {
+  display: none !important;
+}
+/* Re-show label elements — Streamlit puts the label in p or span[data-testid] */
+[data-testid="stExpander"] summary > p,
+[data-testid="stExpander"] summary > div > p,
+[data-testid="stExpander"] summary [data-testid="StyledLabelText"],
+[data-testid="stExpander"] summary [class*="Label"],
+[data-testid="stExpander"] summary [class*="label"] {
+  display: inline !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--text-secondary) !important;
+}
+/* CSS arrow indicator replacing the icon */
+[data-testid="stExpander"] summary::before,
+[data-testid="stExpander"] details > summary::before {
+  content: "›" !important;
+  position: absolute !important;
+  left: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: var(--text-muted) !important;
+  transition: transform .15s !important;
+  font-family: 'Inter', sans-serif !important;
+}
+[data-testid="stExpander"] details[open] > summary::before {
+  content: "⌄" !important;
+  transform: translateY(-60%) !important;
 }
 [data-testid="stExpander"] summary:hover {
   background: var(--bg-card-hover) !important;
@@ -2514,17 +2540,6 @@ def _copy_button(text_to_copy, key_id):
     st.html(html)
 
 
-def _print_button():
-    """Render a print button via JS (no API call)."""
-    html = """
-    <button onclick="window.print()" style="
-      background:rgba(99,102,241,0.10);color:#818cf8;
-      border:1px solid rgba(99,102,241,0.25);border-radius:8px;
-      font-size:12px;font-weight:500;padding:5px 14px;cursor:pointer;
-      font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-    ">🖨 Print / PDF</button>
-    """
-    st.html(html)
 
 
 # ── Display components ────────────────────────────────────────────────────────
@@ -4056,7 +4071,6 @@ with tab0:
             _show_audit_snapshot()
 
         st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
-        _print_button()
         st.markdown("</div>", unsafe_allow_html=True)
 
     else:
@@ -4180,7 +4194,6 @@ with tab0:
             _audit_recs_table(filtered_arecs)
 
         st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
-        _print_button()
         st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -4433,7 +4446,6 @@ with tab1:
             _show_red_flags(cat_filter=_rf_scat, level_filter=_rf_slv, search=_rf_sq)
 
         st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
-        _print_button()
         st.markdown("</div>", unsafe_allow_html=True)
 
     if _t1_mode == "live":
@@ -4593,7 +4605,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
         st.markdown("---")
         _t1_has_exports = st.session_state.t1_docx or st.session_state.t1_xlsx or st.session_state.t1_pptx2
         if _t1_has_exports:
-            _e1, _e2, _e3, _e4 = st.columns([2, 2, 2, 1])
+            _e1, _e2, _e3 = st.columns([2, 2, 2])
             if st.session_state.t1_docx:
                 _e1.download_button(
                     "📄 Export Word",
@@ -4615,11 +4627,8 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
                 )
-            with _e4:
-                _print_button()
         else:
             st.markdown("<div style='margin-top:1rem'>", unsafe_allow_html=True)
-            _print_button()
             st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -4810,7 +4819,6 @@ with tab2:
             _show_da_scenarios(_t2_theme, search=_da_sq)
 
         st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
-        _print_button()
         st.markdown("</div>", unsafe_allow_html=True)
 
     if _t2_mode == "live":
@@ -4993,7 +5001,7 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
         xlsx = st.session_state.t2_xlsx
         if pptx or xlsx:
             st.markdown("---")
-            ca, cb, cc = st.columns([2, 2, 1])
+            ca, cb = st.columns([2, 2])
             if pptx:
                 ca.download_button(
                     "📄 Export Word (.pptx)", data=pptx,
@@ -5006,11 +5014,8 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                     file_name=f"Audit_Tests_{topic2_lbl.replace(' ', '_')}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 )
-            with cc:
-                _print_button()
         else:
             st.markdown("<div style='margin-top:1rem'>", unsafe_allow_html=True)
-            _print_button()
             st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -5171,7 +5176,7 @@ with tab3:
 
             # ── Export buttons ────────────────────────────────────────────────
             st.markdown("---")
-            _fe1, _fe2, _fe3, _fe4 = st.columns([2, 2, 2, 1])
+            _fe1, _fe2, _fe3 = st.columns([2, 2, 2])
             _fe1.caption("📄 Word export available after live generation")
             try:
                 _action_rows = [
@@ -5191,8 +5196,6 @@ with tab3:
             except Exception:
                 pass
             _fe3.caption("📑 PPT export available after live generation")
-            with _fe4:
-                _print_button()
 
         else:
             # Reference panels shown before report is generated
@@ -5227,7 +5230,6 @@ with tab3:
                             )
                             st.markdown(f'<table class="data-table" style="font-size:12px"><thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)"><th style="color:#818cf8;width:10%">Reference</th><th style="color:#818cf8;width:22%">Title</th><th style="color:#818cf8;width:22%">Scope</th><th style="color:#818cf8;width:46%">Key Requirements</th></tr></thead><tbody>{_rows3b}</tbody></table>', unsafe_allow_html=True)
             st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
-            _print_button()
             st.markdown("</div>", unsafe_allow_html=True)
 
     if _t3_mode == "live":
@@ -5355,7 +5357,7 @@ with tab3:
                 st.markdown("---")
                 _t3_has_exports = res.get("docx_bytes") or st.session_state.t3_xlsx or st.session_state.t3_pptx2
                 if _t3_has_exports:
-                    _f1, _f2, _f3, _f4 = st.columns([2, 2, 2, 1])
+                    _f1, _f2, _f3 = st.columns([2, 2, 2])
                     if res.get("docx_bytes"):
                         _f1.download_button("📄 Export Word", data=res["docx_bytes"],
                                             file_name=f"Audit_Report_{name.replace(' ','_')}.docx",
@@ -5368,8 +5370,6 @@ with tab3:
                         _f3.download_button("📑 Export PPT", data=st.session_state.t3_pptx2,
                                             file_name=f"Audit_Report_{name.replace(' ','_')}.pptx",
                                             mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
-                    with _f4:
-                        _print_button()
 
 
             # Static-enriched sections also shown in live mode
