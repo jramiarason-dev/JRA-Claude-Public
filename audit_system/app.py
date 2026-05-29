@@ -1188,10 +1188,10 @@ def _tab_actions_bar(tab_key: str, subtitle: str, exports: list) -> None:
         # Teammate+ always visible
         with _ecols[-1]:
             st.markdown(f'<div class="wk-btn">', unsafe_allow_html=True)
-            if st.button("📤 TM+", key=f"wk_top_{tab_key}",
+            if st.button("↑ TM+", key=f"wk_top_{tab_key}",
                          help="Export to Wolters Kluwer Teammate+",
                          use_container_width=True):
-                st.toast("✅ Données exportées vers Teammate+ (Wolters Kluwer)", icon="📤")
+                st.toast("✅ Données exportées vers Teammate+ (Wolters Kluwer)", icon="⬆")
             st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -3201,7 +3201,7 @@ _HELP = {
 - Fiches détaillées par observation : risque associé, réglementation, impact, recommandations
 - Tableau récapitulatif des actions management
 
-**Exports :** 📄 Word &nbsp; 📊 Excel &nbsp; 📑 PPT &nbsp; 🖨️ PDF
+**Exports :** docx · xlsx · pptx
 
 💡 *Astuce : complétez d'abord les onglets 1 et 2 pour un rapport plus riche.*""",
 
@@ -3220,7 +3220,7 @@ _HELP = {
 - Detailed finding cards: associated risk, regulation, impact, recommendations
 - Action plan summary table
 
-**Exports:** 📄 Word &nbsp; 📊 Excel &nbsp; 📑 PPT &nbsp; 🖨️ PDF
+**Exports:** docx · xlsx · pptx
 
 💡 *Tip: complete tabs 1 and 2 first for a richer, more contextualised report.*""",
     },
@@ -4205,11 +4205,11 @@ with tab1:
     _tab_actions_bar("t1",
         "Risk mapping, applicable regulations, and public audit recommendations by topic.",
         [
-            ("📊 Excel", st.session_state.get("t1_xlsx"),
+            ("xlsx ↓", st.session_state.get("t1_xlsx"),
              f"Risk_Analysis.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
-            ("📄 Word",  st.session_state.get("t1_docx"),
+            ("docx ↓", st.session_state.get("t1_docx"),
              f"Risk_Analysis.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
-            ("📑 PPT",   st.session_state.get("t1_pptx2"),
+            ("pptx ↓", st.session_state.get("t1_pptx2"),
              f"Risk_Analysis.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
         ]
     )
@@ -4608,21 +4608,21 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
             _e1, _e2, _e3 = st.columns([2, 2, 2])
             if st.session_state.t1_docx:
                 _e1.download_button(
-                    "📄 Export Word",
+                    "docx ↓",
                     data=st.session_state.t1_docx,
                     file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.docx",
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 )
             if st.session_state.t1_xlsx:
                 _e2.download_button(
-                    "📊 Export Excel",
+                    "xlsx ↓",
                     data=st.session_state.t1_xlsx,
                     file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 )
             if st.session_state.t1_pptx2:
                 _e3.download_button(
-                    "📑 Export PPT",
+                    "pptx ↓",
                     data=st.session_state.t1_pptx2,
                     file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
@@ -4641,9 +4641,9 @@ with tab2:
     _tab_actions_bar("t2",
         "Structured audit planning, test programme, and data analytics scenarios.",
         [
-            ("📑 PPT",   st.session_state.get("t2_pptx"),
+            ("pptx ↓", st.session_state.get("t2_pptx"),
              "Audit_Plan.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
-            ("📊 Excel", st.session_state.get("t2_xlsx"),
+            ("xlsx ↓", st.session_state.get("t2_xlsx"),
              "Audit_Tests.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
         ]
     )
@@ -5004,13 +5004,13 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
             ca, cb = st.columns([2, 2])
             if pptx:
                 ca.download_button(
-                    "📄 Export Word (.pptx)", data=pptx,
+                    "pptx ↓", data=pptx,
                     file_name=f"Audit_Plan_{topic2_lbl.replace(' ', '_')}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
                 )
             if xlsx:
                 cb.download_button(
-                    "📊 Export Excel (.xlsx)", data=xlsx,
+                    "xlsx ↓", data=xlsx,
                     file_name=f"Audit_Tests_{topic2_lbl.replace(' ', '_')}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 )
@@ -5027,12 +5027,12 @@ with tab3:
     _tab_actions_bar("t3",
         "IIA-standard audit report — assembled from Risk Analysis and Audit Plan context.",
         [
-            ("📄 Word",  st.session_state.get("t3_docx_bytes") or (
+            ("docx ↓", st.session_state.get("t3_docx_bytes") or (
                 st.session_state.get("report_data") and None),
              "Audit_Report.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
-            ("📊 Excel", st.session_state.get("t3_xlsx"),
+            ("xlsx ↓", st.session_state.get("t3_xlsx"),
              "Audit_Findings.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
-            ("📑 PPT",   st.session_state.get("t3_pptx2"),
+            ("pptx ↓", st.session_state.get("t3_pptx2"),
              "Audit_Report.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
         ]
     )
@@ -5177,7 +5177,7 @@ with tab3:
             # ── Export buttons ────────────────────────────────────────────────
             st.markdown("---")
             _fe1, _fe2, _fe3 = st.columns([2, 2, 2])
-            _fe1.caption("📄 Word export available after live generation")
+            _fe1.caption("docx — available after live generation")
             try:
                 _action_rows = [
                     {"Finding": f"F{f['idx']}: {f['title']}", "Rating": f['criticality'],
@@ -5190,12 +5190,12 @@ with tab3:
                 _ap_xlsx_buf = io.BytesIO()
                 pd.DataFrame(_action_rows).to_excel(_ap_xlsx_buf, index=False)
                 _ap_xlsx_buf.seek(0)
-                _fe2.download_button("📊 Export Action Plan (.xlsx)", data=_ap_xlsx_buf,
+                _fe2.download_button("xlsx ↓", data=_ap_xlsx_buf,
                                      file_name=f"{rname}_ActionPlan.xlsx",
                                      mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             except Exception:
                 pass
-            _fe3.caption("📑 PPT export available after live generation")
+            _fe3.caption("pptx — available after live generation")
 
         else:
             # Reference panels shown before report is generated
@@ -5359,15 +5359,15 @@ with tab3:
                 if _t3_has_exports:
                     _f1, _f2, _f3 = st.columns([2, 2, 2])
                     if res.get("docx_bytes"):
-                        _f1.download_button("📄 Export Word", data=res["docx_bytes"],
+                        _f1.download_button("docx ↓", data=res["docx_bytes"],
                                             file_name=f"Audit_Report_{name.replace(' ','_')}.docx",
                                             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                     if st.session_state.t3_xlsx:
-                        _f2.download_button("📊 Export Excel", data=st.session_state.t3_xlsx,
+                        _f2.download_button("xlsx ↓", data=st.session_state.t3_xlsx,
                                             file_name=f"Audit_Findings_{name.replace(' ','_')}.xlsx",
                                             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                     if st.session_state.t3_pptx2:
-                        _f3.download_button("📑 Export PPT", data=st.session_state.t3_pptx2,
+                        _f3.download_button("pptx ↓", data=st.session_state.t3_pptx2,
                                             file_name=f"Audit_Report_{name.replace(' ','_')}.pptx",
                                             mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
 
