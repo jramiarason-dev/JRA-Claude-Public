@@ -59,6 +59,8 @@ TOPIC_KEY_MAPPING = {
     "Wealth Management Advisory & Suitability":  ["WEALTH_ADVISORY"],
     "IT Production & Infrastructure":            ["IT_PRODUCTION"],
     "IT Operating Model & Governance":           ["IT_OPERATING_MODEL"],
+    "API Security & Open Banking":               ["API_SECURITY"],
+    "Payment Fraud & SWIFT CSP":                 ["PAYMENT_FRAUD_SWIFT"],
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -5216,6 +5218,345 @@ RISK_INDICATORS = {
             ),
         },
     ],
+    # ── API Security & Open Banking ────────────────────────────────────────────
+    "API_SECURITY": [
+        {
+            "id": "API_R001",
+            "title": "Broken Authentication & Authorisation on APIs",
+            "description": (
+                "APIs lack proper OAuth 2.0 / OIDC implementation, allowing attackers to bypass "
+                "authentication, escalate privileges, or access resources belonging to other users "
+                "(BOLA — Broken Object Level Authorisation). Affects both internal APIs and PSD2 "
+                "open banking interfaces exposed to third-party providers."
+            ),
+            "level": "Critical",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "OAuth 2.0 with PKCE enforced on all external-facing APIs",
+                "Per-resource authorisation checks at object level (not just endpoint level)",
+                "Token expiry ≤15 minutes for sensitive operations",
+                "API gateway enforcing authentication before routing",
+                "Regular penetration testing targeting authentication flows",
+            ],
+            "red_flags": [
+                "API endpoints accessible without valid bearer token",
+                "Users able to access other users' data by manipulating IDs in requests",
+                "Long-lived tokens (>1 hour) used for sensitive banking APIs",
+                "No API gateway in front of core banking APIs",
+                "JWT tokens with algorithm set to 'none'",
+            ],
+            "private_banking_specifics": (
+                "Private banking APIs serving wealth management portals hold extremely sensitive "
+                "client data — portfolio valuations, transaction history, account details. A BOLA "
+                "vulnerability could expose HNWI client data across the entire client base if an "
+                "attacker enumerates client IDs. PSD2 APIs add external exposure surface."
+            ),
+        },
+        {
+            "id": "API_R002",
+            "title": "API Injection & Sensitive Data Exposure",
+            "description": (
+                "APIs vulnerable to injection attacks (SQL, NoSQL, command injection) through "
+                "unvalidated input parameters. APIs also returning excessive data in responses "
+                "(over-exposure pattern) — returning full objects when only specific fields are "
+                "needed, leaking PII, account numbers, or internal system information."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Input validation and parameterised queries on all API endpoints",
+                "Response filtering — return only fields required by the consumer",
+                "API schema validation (request and response) via OpenAPI spec",
+                "WAF with API-specific rule set deployed in front of all APIs",
+                "Sensitive data masking in API logs (card numbers, passwords, tokens)",
+            ],
+            "red_flags": [
+                "API responses containing full database objects with internal fields",
+                "Error messages exposing stack traces or SQL query details",
+                "No input validation on query parameters or request body fields",
+                "API logs containing unmasked sensitive client data",
+                "No WAF or API gateway filtering malformed requests",
+            ],
+            "private_banking_specifics": (
+                "Wealth management APIs processing portfolio data commonly return nested objects "
+                "with full client profiles when a single field is requested. This 'mass assignment' "
+                "and over-exposure pattern is endemic in financial APIs built without strict "
+                "response schema enforcement, creating regulatory data protection risk."
+            ),
+        },
+        {
+            "id": "API_R003",
+            "title": "PSD2 / Open Banking TPP Access Controls",
+            "description": (
+                "Third-party providers (TPPs) accessing the bank's Open Banking APIs under PSD2 "
+                "lack adequate controls: no eIDAS certificate validation, insufficient consent "
+                "management, missing rate limiting per TPP, or inability to revoke TPP access "
+                "in real time following suspicious activity."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "eIDAS qualified certificate validation for all TPP connections",
+                "Customer-level consent management with granular scope and expiry",
+                "TPP-specific rate limiting and anomaly detection",
+                "Real-time TPP access revocation capability",
+                "Quarterly review of active TPP consents and access logs",
+            ],
+            "red_flags": [
+                "TPP certificates not validated against FCA/EBA trust anchor",
+                "Customer consents with no expiry date or overly broad scope",
+                "No per-TPP rate limiting — single TPP can exhaust API capacity",
+                "TPP access cannot be revoked faster than next business day",
+                "No alerting on unusual TPP data access patterns",
+            ],
+            "private_banking_specifics": (
+                "Private banks with UK/EU presence must comply with PSD2 RTS on Strong Customer "
+                "Authentication. HNWI clients using third-party aggregators (Plaid, Tink) expose "
+                "high-value account data. A compromised TPP credential could allow bulk extraction "
+                "of client portfolio and transaction data."
+            ),
+        },
+        {
+            "id": "API_R004",
+            "title": "Inadequate API Rate Limiting & DoS Exposure",
+            "description": (
+                "APIs lack effective rate limiting, allowing attackers to conduct credential "
+                "stuffing, enumeration attacks, or denial-of-service attacks. Absence of throttling "
+                "also enables scraping of client data through automated bulk requests."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Per-client and per-IP rate limits enforced at API gateway",
+                "Adaptive throttling based on behaviour patterns (not just fixed limits)",
+                "CAPTCHA or step-up authentication after threshold breaches",
+                "DDoS protection layer (e.g. Cloudflare, AWS Shield) upstream of APIs",
+                "Real-time alerting on rate limit breaches with auto-block capability",
+            ],
+            "red_flags": [
+                "No rate limiting on authentication endpoints (login, token refresh)",
+                "Enumeration possible via API responses that differ for valid vs. invalid users",
+                "No alerting when a single IP or client exceeds 1,000 requests/minute",
+                "Error messages confirming whether a username exists during failed login",
+                "No IP-based blocking for repeated authentication failures",
+            ],
+            "private_banking_specifics": (
+                "Banking APIs are prime targets for credential stuffing using leaked credentials "
+                "from unrelated breaches. For private banking, even a single successful account "
+                "takeover on an HNWI account creates significant financial and reputational exposure."
+            ),
+        },
+        {
+            "id": "API_R005",
+            "title": "Unmanaged API Inventory & Shadow APIs",
+            "description": (
+                "Absence of a complete, current API inventory allows undocumented ('shadow') APIs "
+                "and deprecated endpoints to remain accessible. These forgotten APIs often lack "
+                "security controls applied to officially maintained APIs and represent an "
+                "unmonitored attack surface."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Central API registry/catalogue maintained and reviewed quarterly",
+                "Automated API discovery scanning the network for undocumented endpoints",
+                "Formal API deprecation process with hard-cutoff deadlines",
+                "API gateway routing all traffic — direct backend API access blocked",
+                "API versioning policy with maximum two active major versions simultaneously",
+            ],
+            "red_flags": [
+                "No formal API inventory or catalogue exists",
+                "APIs accessible directly on backend servers bypassing the gateway",
+                "Legacy API versions (v1, v0) still active alongside current versions",
+                "Developers unaware of all APIs exposed to the internet",
+                "No automated scanning for new or undocumented API endpoints",
+            ],
+            "private_banking_specifics": (
+                "Private banking core banking modernisation projects frequently leave legacy API "
+                "endpoints active during transition periods. These v1/beta endpoints often lack "
+                "the security hardening applied to current APIs and are rarely monitored in SIEM."
+            ),
+        },
+    ],
+
+    # ── Payment Fraud & SWIFT CSP ───────────────────────────────────────────────
+    "PAYMENT_FRAUD_SWIFT": [
+        {
+            "id": "PAY_R001",
+            "title": "SWIFT Operator Fraud & Unauthorised Transactions",
+            "description": (
+                "SWIFT payment operators with excessive privileges, weak authentication, or "
+                "inadequate dual-control can initiate or approve fraudulent high-value transfers. "
+                "The 2016 Bangladesh Bank heist (USD 81M) and subsequent SWIFT attacks demonstrate "
+                "the catastrophic potential. SWIFT CSP (Customer Security Programme) CSCF v2025 "
+                "mandates specific technical and operational controls."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Dual control for all SWIFT payments above defined threshold",
+                "MFA enforced for all SWIFT operator authentication",
+                "SWIFT operator access recertified quarterly",
+                "Out-of-band confirmation for unusual counterparties or amounts",
+                "SWIFT audit trail reviewed daily by independent controller",
+            ],
+            "red_flags": [
+                "Single operator can create and approve payments without second authoriser",
+                "SWIFT operators not required to use hardware MFA token",
+                "SWIFT access not revoked within 24h of operator departure",
+                "No alerting on SWIFT messages sent outside business hours",
+                "SWIFT operator accounts shared between multiple individuals",
+            ],
+            "private_banking_specifics": (
+                "Private banking involves frequent large-value transfers for HNWI clients — asset "
+                "moves between custodians, real estate transactions, private equity capital calls. "
+                "A fraudulent SWIFT message mimicking a legitimate client instruction could result "
+                "in multi-million-franc losses before detection. BEC attacks targeting relationship "
+                "managers are a known fraud vector."
+            ),
+        },
+        {
+            "id": "PAY_R002",
+            "title": "Business Email Compromise (BEC) — Payment Fraud",
+            "description": (
+                "Attackers impersonate senior executives, clients, or trusted counterparties via "
+                "compromised or spoofed email to redirect payment instructions. BEC is the leading "
+                "cause of financial losses in banking fraud, with global losses exceeding USD 50B "
+                "in 2023 (FBI IC3). Private banking is particularly exposed due to high transaction "
+                "values and complex client instruction channels."
+            ),
+            "level": "Critical",
+            "probability": "High",
+            "impact": "High",
+            "expected_controls": [
+                "Mandatory voice callback for all payment amendments above threshold",
+                "Email security (DMARC/DKIM/SPF) configured and enforced for all domains",
+                "Staff training on BEC indicators with annual simulated phishing test",
+                "Positive payment list for regular counterparties — step-up for new beneficiaries",
+                "Transaction cooling period (30-60 minutes) for first-time high-value recipients",
+            ],
+            "red_flags": [
+                "Payment instruction amendments accepted via email without voice confirmation",
+                "DMARC policy set to 'p=none' (monitor only) rather than 'p=reject'",
+                "No positive beneficiary list — new beneficiary accounts approved same-day",
+                "Staff unable to identify BEC indicators in simulated phishing exercise",
+                "No velocity controls on new beneficiary account additions",
+            ],
+            "private_banking_specifics": (
+                "HNWI clients and their family offices frequently communicate payment instructions "
+                "informally via email or WhatsApp. Fraudsters intercept estate agent transactions, "
+                "impersonate client family members, or create lookalike domains for legitimate "
+                "legal/fiduciary counterparties. A single successful BEC attack on a private banking "
+                "client can result in losses of CHF 1M+ with severe reputational consequences."
+            ),
+        },
+        {
+            "id": "PAY_R003",
+            "title": "SWIFT CSP CSCF Compliance Gaps",
+            "description": (
+                "Non-compliance with mandatory controls in the SWIFT Customer Security Controls "
+                "Framework (CSCF v2025). SWIFT CSP requires annual self-attestation and independent "
+                "assessment for Tier 1 users. Gaps in mandatory controls — particularly around "
+                "network segregation, malware protection, and operator credential management — "
+                "expose the institution to both fraud risk and potential SWIFT suspension."
+            ),
+            "level": "Critical",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Annual independent SWIFT CSP assessment completed and attested",
+                "SWIFT local infrastructure fully segregated from general corporate network",
+                "All 23 mandatory CSCF v2025 controls implemented and evidenced",
+                "Dedicated SWIFT security officer with documented responsibilities",
+                "SWIFT-related security incidents reported to SWIFT within 24h",
+            ],
+            "red_flags": [
+                "SWIFT CSP attestation not completed or overdue",
+                "SWIFT messaging interface accessible from general corporate network",
+                "Mandatory CSCF controls self-assessed without independent verification",
+                "No documented SWIFT incident response procedure",
+                "SWIFT operating systems running end-of-life software",
+            ],
+            "private_banking_specifics": (
+                "Private banks processing correspondent banking and custodian transfers are typically "
+                "SWIFT Tier 1 users, requiring the highest level of CSP compliance. Failure to maintain "
+                "CSCF compliance can result in SWIFT suspending messaging capability — an operational "
+                "catastrophe for a private bank dependent on cross-border settlement."
+            ),
+        },
+        {
+            "id": "PAY_R004",
+            "title": "Correspondent Banking Fraud & Nostro Reconciliation",
+            "description": (
+                "Weaknesses in nostro account reconciliation, correspondent bank due diligence, "
+                "or intraday payment monitoring allow fraudulent transactions to pass undetected. "
+                "Correspondent relationships with banks in high-risk jurisdictions amplify exposure "
+                "to sanctions violations and payment fraud."
+            ),
+            "level": "High",
+            "probability": "Medium",
+            "impact": "High",
+            "expected_controls": [
+                "Daily automated nostro reconciliation with same-day break resolution",
+                "Annual correspondent bank due diligence review",
+                "Real-time sanctions screening on all payment instructions (not batch)",
+                "Intraday liquidity monitoring with automated alerts on unusual flows",
+                "De-risking process for correspondent banks in FATF grey/black-listed jurisdictions",
+            ],
+            "red_flags": [
+                "Nostro reconciliation breaks outstanding >5 business days",
+                "Correspondent bank due diligence files older than 18 months",
+                "Sanctions screening applied in batch (end-of-day) rather than real-time",
+                "No process to exit correspondent relationships with high-risk banks",
+                "Manual nostro reconciliation — no automated matching tool",
+            ],
+            "private_banking_specifics": (
+                "Private banks with correspondent relationships in offshore centres (Bahamas, BVI, "
+                "Cayman) face elevated sanctions and AML risk from pass-through transactions. "
+                "Concentration in a small number of correspondent banks also creates operational "
+                "resilience risk if a correspondent exits the relationship."
+            ),
+        },
+        {
+            "id": "PAY_R005",
+            "title": "Payment Anomaly Detection & Monitoring Gaps",
+            "description": (
+                "Payment processing systems lack effective real-time anomaly detection — unusual "
+                "amounts, unusual counterparties, off-hours processing, geographic anomalies — "
+                "allowing fraudulent payments to be processed before detection. Rules-based systems "
+                "without ML augmentation are increasingly unable to detect sophisticated fraud patterns."
+            ),
+            "level": "High",
+            "probability": "High",
+            "impact": "Medium",
+            "expected_controls": [
+                "Real-time payment anomaly detection with ML-based scoring",
+                "Alerts on first-time counterparties above threshold requiring step-up approval",
+                "Out-of-hours payment processing requires senior management authorisation",
+                "Velocity controls — maximum transaction count and amount per 24h window",
+                "Retrospective fraud investigation process for anomaly alerts",
+            ],
+            "red_flags": [
+                "No real-time payment monitoring — alerts generated post-settlement",
+                "No controls on payments to first-time counterparties",
+                "Off-hours SWIFT messages processed without additional authorisation",
+                "Fraud alert review backlog exceeding 48 hours",
+                "Payment anomaly rules not reviewed or updated in more than 12 months",
+            ],
+            "private_banking_specifics": (
+                "HNWI client payment patterns are inherently unusual — large irregular transfers "
+                "for art purchases, real estate, yacht charters — making rule-based anomaly detection "
+                "prone to false positives. ML models trained on client-specific baseline behaviour "
+                "are needed but rarely deployed in private banking payment operations."
+            ),
+        },
+    ],
 }
 
 
@@ -8170,6 +8511,66 @@ DATA_ANALYTICS_SCENARIOS = {
             "complexity": "Low",
         },
     ],
+
+    "API_SECURITY": [
+        {
+            "id": "DA_API_001",
+            "title": "API Authentication Failure Rate Analysis",
+            "description": "Detect credential stuffing and brute-force attacks on API authentication endpoints.",
+            "query_logic": "SELECT endpoint, client_ip, COUNT(*) as failures, MIN(timestamp) as first_attempt, MAX(timestamp) as last_attempt FROM api_logs WHERE response_code = 401 GROUP BY endpoint, client_ip, DATE(timestamp) HAVING failures > 50 ORDER BY failures DESC",
+            "data_sources": ["API gateway access logs", "Authentication service logs", "SIEM"],
+            "risk_indicators": ["Single IP with >100 auth failures in 1h", "Multiple IPs targeting same endpoint simultaneously", "Auth failures from TOR/VPN exit nodes"],
+            "frequency": "Daily automated, results reviewed weekly",
+        },
+        {
+            "id": "DA_API_002",
+            "title": "API Data Exfiltration Pattern Detection",
+            "description": "Identify abnormal data download volumes from APIs — potential scraping or exfiltration.",
+            "query_logic": "SELECT client_id, endpoint, SUM(response_size_bytes) as total_bytes, COUNT(*) as request_count, AVG(response_size_bytes) as avg_response FROM api_logs WHERE timestamp > DATEADD(day,-30,GETDATE()) GROUP BY client_id, endpoint HAVING total_bytes > (SELECT AVG(total_bytes)*10 FROM baseline_api_usage WHERE endpoint = api_logs.endpoint)",
+            "data_sources": ["API gateway logs", "DLP tools", "Network flow data"],
+            "risk_indicators": ["Single session downloading >10x normal data volume", "Sequential enumeration of object IDs", "Bulk export of client portfolio data outside business hours"],
+            "frequency": "Real-time alerting + daily summary",
+        },
+        {
+            "id": "DA_API_003",
+            "title": "BOLA / IDOR Attempt Detection",
+            "description": "Detect broken object-level authorisation exploitation attempts — cross-user data access.",
+            "query_logic": "SELECT user_id, requested_resource_id, resource_owner_id, timestamp FROM api_audit_log WHERE user_id != resource_owner_id AND response_code = 200 AND endpoint LIKE '/api/accounts/%' ORDER BY timestamp DESC",
+            "data_sources": ["API authorisation logs", "Application audit trail"],
+            "risk_indicators": ["Successful responses where requester != resource owner", "Sequential resource ID incrementation pattern", "High volume of 403 responses followed by 200 responses"],
+            "frequency": "Real-time alerting — any successful cross-user access triggers immediate incident",
+        },
+    ],
+
+    "PAYMENT_FRAUD_SWIFT": [
+        {
+            "id": "DA_PAY_001",
+            "title": "SWIFT After-Hours Message Detection",
+            "description": "Identify SWIFT messages sent outside business hours — high fraud risk indicator.",
+            "query_logic": "SELECT message_id, operator_id, message_type, amount, beneficiary_bic, sent_timestamp FROM swift_message_log WHERE DATEPART(hour, sent_timestamp) NOT BETWEEN 7 AND 18 OR DATEPART(weekday, sent_timestamp) IN (1,7) ORDER BY amount DESC",
+            "data_sources": ["SWIFT Alliance message archive", "Payment system audit log"],
+            "risk_indicators": ["High-value MT103 sent after 18:00 or on weekends", "Same operator initiating and approving after-hours", "Beneficiary BIC in high-risk jurisdiction"],
+            "frequency": "Real-time alert on each after-hours payment; daily summary for management review",
+        },
+        {
+            "id": "DA_PAY_002",
+            "title": "New Beneficiary Velocity & First-Payment Risk Scoring",
+            "description": "Flag first-time beneficiary payments above threshold for enhanced verification.",
+            "query_logic": "SELECT p.payment_id, p.client_id, p.beneficiary_iban, p.amount, p.payment_date FROM payments p LEFT JOIN beneficiary_whitelist w ON p.beneficiary_iban = w.iban AND p.client_id = w.client_id WHERE w.iban IS NULL AND p.amount > 50000 AND p.payment_date > DATEADD(day,-90,GETDATE()) ORDER BY p.amount DESC",
+            "data_sources": ["Payment processing system", "Client beneficiary register", "Wire transfer log"],
+            "risk_indicators": ["New beneficiary + amount >CHF 500K", "Multiple new beneficiaries added by same client within 7 days", "Beneficiary IBAN country different from client domicile"],
+            "frequency": "Real-time — new beneficiary payment triggers pre-approval hold for manual review",
+        },
+        {
+            "id": "DA_PAY_003",
+            "title": "Round-Sum & Structuring Detection in Payment Data",
+            "description": "Detect round-number payments and structuring patterns indicative of manual fraud or money laundering.",
+            "query_logic": "SELECT client_id, COUNT(*) as payment_count, SUM(amount) as total_amount, STRING_AGG(CAST(amount AS VARCHAR), ', ') as amounts FROM payments WHERE amount % 1000 = 0 AND amount >= 100000 AND payment_date > DATEADD(day,-90,GETDATE()) GROUP BY client_id HAVING COUNT(*) >= 3 ORDER BY total_amount DESC",
+            "data_sources": ["Payment system", "SWIFT message archive", "AML transaction monitoring system"],
+            "risk_indicators": ["3+ round-sum payments >100K within 30 days to same beneficiary", "Total amount structured across multiple dates avoiding reporting threshold", "Same beneficiary receiving round-sum payments from multiple clients"],
+            "frequency": "Weekly batch analysis + real-time feed to AML TMS for STR consideration",
+        },
+    ],
 }
 
 
@@ -9712,6 +10113,203 @@ AUDIT_TESTS_LIBRARY = {
             "sample_size": "All critical roles",
             "failure_criteria": "Critical IT roles without documented succession plan; IT skills gap analysis not performed in last 12 months; critical project delivery dependent on single named external consultant with no backup",
             "linked_risk_id": "R-ITOM-005",
+        },
+    ],
+
+    "API_SECURITY": [
+        {
+            "id": "API_T001",
+            "level": "Critical",
+            "category": "Standard",
+            "objective": "Verify OAuth 2.0 / OIDC implementation and token security on all production APIs",
+            "procedure": (
+                "Obtain the API inventory from the API gateway or developer portal. For each production API: "
+                "(1) Confirm OAuth 2.0 with PKCE is enforced — test unauthenticated access is rejected (HTTP 401). "
+                "(2) Verify token expiry ≤15 minutes for sensitive operations by inspecting JWT claims (exp field). "
+                "(3) Test refresh token rotation — old refresh token must be invalidated after use. "
+                "(4) Verify API gateway enforces authentication before routing to backend. "
+                "(5) Review API gateway configuration for any endpoints whitelisted from authentication."
+            ),
+            "population": "All production APIs in the API inventory (typically 20-80 endpoints)",
+            "sample_size": "100% of APIs classified as 'sensitive' or 'external-facing'; 20% sample of internal APIs",
+            "failure_criteria": "Any external API accessible without valid token; any token with expiry >1 hour for sensitive endpoints; any refresh token reuse not rejected",
+        },
+        {
+            "id": "API_T002",
+            "level": "Critical",
+            "category": "Standard",
+            "objective": "Test for OWASP API Security Top 10 — BOLA, injection, excessive data exposure",
+            "procedure": (
+                "In coordination with IT security, conduct API security testing using Burp Suite or OWASP ZAP: "
+                "(1) BOLA test — modify object IDs in API requests (e.g. /api/accounts/123 → /api/accounts/124) "
+                "to verify cross-user data access is rejected. Test with two separate authenticated test accounts. "
+                "(2) Injection test — submit SQL metacharacters (' ; -- DROP), NoSQL operators ($where, $gt) in "
+                "all input fields. Verify sanitised response, no error disclosure. "
+                "(3) Excessive exposure — review 5 API responses per endpoint for fields not required by the "
+                "consuming application. Flag any PII, account numbers, or internal system fields returned unnecessarily."
+            ),
+            "population": "All production APIs with client or account data access",
+            "sample_size": "100% of APIs handling client PII or financial data (typically 10-20 endpoints)",
+            "failure_criteria": "Any BOLA vulnerability allowing cross-user data access; any injection not sanitised; any response returning unnecessary PII fields",
+        },
+        {
+            "id": "API_T003",
+            "level": "High",
+            "category": "Standard",
+            "objective": "Review PSD2/Open Banking TPP access controls and consent management",
+            "procedure": (
+                "If PSD2 Open Banking APIs are in scope: "
+                "(1) Obtain list of active TPP connections from API gateway. Verify each TPP has a valid eIDAS "
+                "qualified certificate registered in the FCA/EBA register. "
+                "(2) Sample 10 customer consents — verify each has defined scope (not '*'), expiry date, and "
+                "can be revoked by the customer via online banking. "
+                "(3) Test TPP rate limiting — verify per-TPP request limit is enforced (maximum 4 requests/second "
+                "per TPP per customer per PSD2 RTS Art. 36). "
+                "(4) Review TPP access logs for the last 30 days — flag any TPP with unusual access patterns "
+                "(bulk data extraction, off-hours access, multiple failed authentications)."
+            ),
+            "population": "All active TPP connections (typically 5-20 registered TPPs)",
+            "sample_size": "100% of registered TPPs for certificate validation; 10 customer consents sample",
+            "failure_criteria": "Any TPP with expired/invalid certificate; any consent with no expiry; rate limiting not enforced; TPP revocation taking >1 business day",
+        },
+        {
+            "id": "API_T004",
+            "level": "High",
+            "category": "Data Analytics",
+            "objective": "Detect API anomalies — unusual call volumes, failed auth attempts, data scraping patterns",
+            "procedure": (
+                "Extract API gateway logs for 90-day period. Run the following analytics: "
+                "(1) Authentication failure rate by endpoint — flag endpoints with failure rate >10% in any 1h window. "
+                "(2) Unusual call volume — flag any client_id or IP generating >500% of their 30-day average in any 1h period. "
+                "(3) Sequential ID enumeration — detect requests incrementing object IDs monotonically (potential BOLA exploitation). "
+                "(4) After-hours API access — flag API calls to sensitive endpoints between 22:00-06:00 local time. "
+                "Review flagged events against incident log and security team awareness."
+            ),
+            "population": "All API gateway logs for 90-day review period",
+            "sample_size": "Full population analytics (100% of log data)",
+            "failure_criteria": "Anomalies not present in security incident log or SIEM alerts; authentication flood events not triggering auto-block",
+        },
+        {
+            "id": "API_T005",
+            "level": "High",
+            "category": "Standard",
+            "objective": "Review API inventory completeness and deprecated endpoint management",
+            "procedure": (
+                "Request the official API inventory/catalogue from the API governance team. "
+                "(1) Run automated API discovery scan (OWASP Amass or similar) against production "
+                "and staging environments — compare discovered endpoints against the catalogue. "
+                "(2) For each deprecated API version (v0, v1 where v3+ is current), verify: "
+                "hard-cutoff date defined, no active traffic in last 30 days, or scheduled decommission within 90 days. "
+                "(3) Verify all APIs route through the API gateway — test direct backend access is blocked "
+                "by attempting to reach backend service ports directly from the audit workstation."
+            ),
+            "population": "All production APIs and API gateway configuration",
+            "sample_size": "100% review (API inventory is typically a document/registry, not a sample-based test)",
+            "failure_criteria": "Undocumented APIs discovered by scanner not in inventory; deprecated versions with active traffic; backends accessible bypassing the API gateway",
+        },
+    ],
+
+    "PAYMENT_FRAUD_SWIFT": [
+        {
+            "id": "PAY_T001",
+            "level": "Critical",
+            "category": "Standard",
+            "objective": "Verify SWIFT CSP CSCF v2025 mandatory controls implementation",
+            "procedure": (
+                "Obtain the current SWIFT CSP self-attestation and the last independent assessment report. "
+                "(1) Map each of the 23 mandatory CSCF v2025 controls against documented evidence. "
+                "For each mandatory control, verify: implementation evidence exists, last tested/reviewed date, "
+                "and responsible owner. "
+                "(2) For Mandatory Control 1.1 (SWIFT Environment Protection): verify SWIFT zone is on a dedicated "
+                "network segment, firewall rules restrict access to SWIFT-specific ports only, and no general "
+                "corporate workstations are in the SWIFT zone. "
+                "(3) For Mandatory Control 4.1 (Password Policy): verify all SWIFT operator passwords meet "
+                "minimum complexity requirements and MFA is enforced. "
+                "(4) Verify attestation was completed by the required deadline and submitted via KYC-SA."
+            ),
+            "population": "All 23 mandatory CSCF v2025 controls",
+            "sample_size": "100% of mandatory controls (full population)",
+            "failure_criteria": "Any mandatory control rated as 'Not Implemented' or 'Partial'; attestation not submitted; independent assessment not completed for Tier 1 users",
+        },
+        {
+            "id": "PAY_T002",
+            "level": "Critical",
+            "category": "Standard",
+            "objective": "Test dual-control on SWIFT payment authorisation and operator segregation",
+            "procedure": (
+                "(1) Extract the SWIFT operator access matrix — list all users with Create, Verify, and Approve rights. "
+                "Verify no single user has both Create and Approve rights (separation of duties). "
+                "(2) For the 12-month review period, extract SWIFT message logs. Test: "
+                "confirm all payments above threshold (e.g. CHF 500,000) have two distinct operator IDs in "
+                "the message audit trail (creator ≠ approver). Flag any single-operator payments above threshold. "
+                "(3) Test after-hours payments: extract all SWIFT messages sent outside 08:00-18:00 on business days. "
+                "Verify each has documented authorisation from a senior manager via phone/email log. "
+                "(4) Verify SWIFT operator access list matches current HR records — no terminated employees."
+            ),
+            "population": "All SWIFT operators (typically 3-10) + all SWIFT messages for 12-month period",
+            "sample_size": "100% of operators (access matrix) + 100% of payments above threshold + random 50 of all others",
+            "failure_criteria": "Any operator with Create+Approve rights; any high-value payment with single operator; any message from terminated employee credential",
+        },
+        {
+            "id": "PAY_T003",
+            "level": "Critical",
+            "category": "Standard",
+            "objective": "Assess BEC controls — payment instruction verification and email security",
+            "procedure": (
+                "(1) DMARC/DKIM/SPF: Request DNS records for all company email domains. Verify DMARC policy = 'p=reject' "
+                "(not 'p=none' or 'p=quarantine'). Verify DKIM signing is active. Verify SPF includes all legitimate "
+                "mail senders and ends with '-all'. "
+                "(2) Payment instruction verification: Review the payments procedure for client instruction amendments. "
+                "Verify the procedure requires voice callback (not email reply) for: new beneficiary accounts, "
+                "amount changes >10%, and all changes received within 48h of payment date. "
+                "(3) Sample 15 payment amendments received by email over the last 6 months. "
+                "Verify each has a voice callback log entry. Flag any amendment processed without voice confirmation. "
+                "(4) BEC training: verify staff completed BEC/phishing awareness training in last 12 months. "
+                "Request phishing simulation results — flag organisations with >10% click rate."
+            ),
+            "population": "All client payment amendment instructions received via email (typically 20-50/month); all company email domains",
+            "sample_size": "15 payment amendments + 100% of email domains + last phishing simulation results",
+            "failure_criteria": "DMARC not set to 'p=reject'; any amendment processed without voice confirmation; phishing click rate >10%; no BEC training in last 12 months",
+        },
+        {
+            "id": "PAY_T004",
+            "level": "High",
+            "category": "Data Analytics",
+            "objective": "Payment anomaly analysis — unusual counterparties, amounts, timing, and velocity",
+            "procedure": (
+                "Extract all outbound SWIFT/payment transactions for 12-month review period. Run: "
+                "(1) New beneficiary analysis: flag all payments to counterparties that appear for the first time "
+                "in the last 12 months AND are above CHF 50,000. Verify each has a client authorisation on file. "
+                "(2) After-hours analysis: flag all payments sent/approved between 18:00-07:00 or weekends. "
+                "Calculate percentage of total payment volume. Verify each has documented authorisation. "
+                "(3) Round-sum detection: flag payments ending in 000 above CHF 100,000 — indicative of manual "
+                "instructions rather than system-generated. Cross-reference against client instructions. "
+                "(4) Velocity analysis: flag client accounts with >3 outbound payments >CHF 100,000 in any 24h window. "
+                "Review against client profile and instructions."
+            ),
+            "population": "All outbound payments for 12-month review period (typically 500-5,000 transactions)",
+            "sample_size": "Full population analytics (100%); investigate all flagged items",
+            "failure_criteria": "New beneficiary payments without documented client authorisation; after-hours payments without senior approval; unexplained velocity clusters",
+        },
+        {
+            "id": "PAY_T005",
+            "level": "High",
+            "category": "Standard",
+            "objective": "Verify nostro reconciliation timeliness and correspondent bank due diligence",
+            "procedure": (
+                "(1) Nostro reconciliation: obtain reconciliation reports for 3 randomly selected nostro accounts "
+                "for the last 3 months. Verify: reconciliation performed daily, all breaks >CHF 10,000 resolved "
+                "within 5 business days, a responsible owner is named for each break, and escalation to Treasury "
+                "occurs for breaks >CHF 100,000 or >3 days unresolved. "
+                "(2) Correspondent bank DD: request the correspondent bank register. For each correspondent, "
+                "verify the last due diligence review was within 12 months (24 months for low-risk correspondents). "
+                "Verify the DD file includes AML assessment, sanctions check, and financial strength review. "
+                "(3) Flag correspondent banks domiciled in FATF grey/black-listed jurisdictions — verify enhanced "
+                "due diligence and management approval for relationship continuation."
+            ),
+            "population": "All nostro accounts (typically 5-20) + all correspondent banks (typically 10-40)",
+            "sample_size": "3 nostro accounts (random) + 100% of correspondent bank register",
+            "failure_criteria": "Nostro breaks >5 days unresolved without escalation; correspondent DD older than stated frequency; no enhanced DD for FATF-listed jurisdiction correspondents",
         },
     ],
 }
