@@ -22,7 +22,7 @@ st.set_page_config(
     page_title="AuditIQ",
     page_icon="🏦",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # ── Session state (init before CSS) ───────────────────────────────────────────
@@ -682,6 +682,10 @@ div[data-testid="stRadio"] label:has(input:checked) {
   .stColumns > div { width: 100% !important; min-width: 100% !important; }
 }
 
+/* ── Hide sidebar completely ── */
+section[data-testid="stSidebar"],
+[data-testid="collapsedControl"] { display: none !important; }
+
 /* ── Print ── */
 @media print {
   section[data-testid="stSidebar"] { display: none !important; }
@@ -893,6 +897,7 @@ _ENTITY_COLORS = {
     "📊 Asset Management":                  ("#0a2a12", "#4ade80"),
     "🏢 Management Company (ManCo)":        ("#2a1f0a", "#f59e0b"),
     "🔀 Alternative Investment (PE/RE/HF)": ("#1e0a2a", "#c084fc"),
+    "🏛️ Group / Holding":                   ("#0a2028", "#22d3ee"),
 }
 
 _ENTITY_KEYS = {
@@ -900,7 +905,102 @@ _ENTITY_KEYS = {
     "📊 Asset Management":                  "ASSET_MANAGEMENT",
     "🏢 Management Company (ManCo)":        "MANAGEMENT_COMPANY",
     "🔀 Alternative Investment (PE/RE/HF)": "ALTERNATIVE_INVESTMENT",
+    "🏛️ Group / Holding":                   "GROUP_HOLDING",
 }
+
+# Per-entity full color themes (accent + derived tones)
+_ENTITY_THEMES = {
+    "🏦 Private Banking": {
+        "primary": "#6366f1", "hover": "#818cf8",
+        "glow": "rgba(99,102,241,0.18)",
+        "bg_btn": "linear-gradient(135deg,#6366f1 0%,#4f46e5 100%)",
+        "sec_bg": "rgba(99,102,241,0.12)", "sec_color": "#818cf8",
+        "sec_border": "rgba(99,102,241,0.22)",
+    },
+    "📊 Asset Management": {
+        "primary": "#22c55e", "hover": "#4ade80",
+        "glow": "rgba(34,197,94,0.18)",
+        "bg_btn": "linear-gradient(135deg,#22c55e 0%,#16a34a 100%)",
+        "sec_bg": "rgba(34,197,94,0.12)", "sec_color": "#4ade80",
+        "sec_border": "rgba(34,197,94,0.22)",
+    },
+    "🏢 Management Company (ManCo)": {
+        "primary": "#f59e0b", "hover": "#fbbf24",
+        "glow": "rgba(245,158,11,0.18)",
+        "bg_btn": "linear-gradient(135deg,#f59e0b 0%,#d97706 100%)",
+        "sec_bg": "rgba(245,158,11,0.12)", "sec_color": "#fbbf24",
+        "sec_border": "rgba(245,158,11,0.22)",
+    },
+    "🔀 Alternative Investment (PE/RE/HF)": {
+        "primary": "#c084fc", "hover": "#d8b4fe",
+        "glow": "rgba(192,132,252,0.18)",
+        "bg_btn": "linear-gradient(135deg,#c084fc 0%,#a855f7 100%)",
+        "sec_bg": "rgba(192,132,252,0.12)", "sec_color": "#d8b4fe",
+        "sec_border": "rgba(192,132,252,0.22)",
+    },
+    "🏛️ Group / Holding": {
+        "primary": "#06b6d4", "hover": "#22d3ee",
+        "glow": "rgba(6,182,212,0.18)",
+        "bg_btn": "linear-gradient(135deg,#06b6d4 0%,#0891b2 100%)",
+        "sec_bg": "rgba(6,182,212,0.12)", "sec_color": "#22d3ee",
+        "sec_border": "rgba(6,182,212,0.22)",
+    },
+}
+
+def _ent_slug(name: str) -> str:
+    import re
+    return re.sub(r"[^a-z0-9]", "-", name.lower()).strip("-")
+
+
+# ── Entity-aware accent CSS injection ────────────────────────────────────────
+def _inject_entity_theme() -> None:
+    _et = st.session_state.get("entity_type", "🏦 Private Banking")
+    _t = _ENTITY_THEMES.get(_et, _ENTITY_THEMES["🏦 Private Banking"])
+    st.markdown(f"""<style>
+:root {{
+  --accent-primary:      {_t['primary']};
+  --accent-hover:        {_t['hover']};
+  --accent-glow:         {_t['glow']};
+  --tab-active:          {_t['primary']};
+  --tab-active-border:   {_t['primary']};
+  --btn-primary-bg:      {_t['bg_btn']};
+  --btn-secondary-bg:    {_t['sec_bg']};
+  --btn-secondary-color: {_t['sec_color']};
+  --btn-secondary-border:{_t['sec_border']};
+  --sidebar-header-color:{_t['primary']};
+  --border-accent:       {_t['primary']}4d;
+  --text-accent:         {_t['hover']};
+}}
+div[data-testid="stButton"]>button[kind="primary"]{{
+  background:{_t['bg_btn']} !important;
+  box-shadow:0 2px 8px {_t['glow']} !important;
+}}
+div[data-testid="stButton"]>button[kind="primary"]:hover{{
+  background:{_t['bg_btn']} !important;
+  box-shadow:0 4px 16px {_t['glow']} !important;
+  filter:brightness(1.08);
+}}
+.section-header-icon{{
+  background:{_t['glow']} !important;
+  border-color:{_t['primary']}33 !important;
+}}
+.section-count-badge{{
+  background:{_t['sec_bg']} !important;
+  color:{_t['primary']} !important;
+  border-color:{_t['primary']}33 !important;
+}}
+.loading-spinner{{
+  background:{_t['glow']} !important;
+  border-color:{_t['primary']}26 !important;
+}}
+.loading-spinner-dot{{
+  border-top-color:{_t['primary']} !important;
+  border-color:{_t['primary']}33 !important;
+}}
+</style>""", unsafe_allow_html=True)
+
+_inject_entity_theme()
+
 
 TAB_TITLES = {
     0: "🌐 Intelligence Dashboard",
@@ -2904,157 +3004,6 @@ html,body{font-family:'Inter',sans-serif!important;}
 
 
 
-# ── Sidebar───────────────────────────────────────────────────────────────────
-with st.sidebar:
-    # Theme toggle
-    _theme_lbl = "☀️ Light mode" if _is_dark else "🌙 Dark mode"
-    if st.button(_theme_lbl, key="theme_toggle"):
-        st.session_state.theme = "light" if _is_dark else "dark"
-        st.rerun()
-
-    st.markdown("---")
-
-    # Entity Type selector
-    st.markdown(f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--sidebar-header-color);margin-bottom:6px">Entity Type</div>', unsafe_allow_html=True)
-    _entity_opts = list(_ENTITY_COLORS.keys())
-    _entity_idx  = _entity_opts.index(st.session_state.get("entity_type", "🏦 Private Banking"))
-    _new_entity  = st.selectbox(
-        "Entity Type",
-        options=_entity_opts,
-        index=_entity_idx,
-        key="_sidebar_entity_select",
-        label_visibility="collapsed",
-    )
-    if _new_entity != st.session_state.get("entity_type"):
-        st.session_state["entity_type"] = _new_entity
-        st.rerun()
-
-    st.markdown("---")
-
-    # Current audit summary
-    st.markdown(f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--sidebar-header-color);margin-bottom:8px">Current Audit</div>', unsafe_allow_html=True)
-
-    if st.session_state.t1_topic:
-        st.markdown(f'<div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:4px">{st.session_state.t1_topic}</div>', unsafe_allow_html=True)
-        if st.session_state.t1_jurs:
-            jurs_short = " · ".join(j.split(" / ")[0] for j in st.session_state.t1_jurs)
-            st.markdown(f'<div style="font-size:11.5px;color:var(--text-muted);margin-bottom:10px">{jurs_short}</div>', unsafe_allow_html=True)
-    else:
-        st.markdown('<div style="font-size:12.5px;color:var(--text-muted);margin-bottom:10px">No analysis yet.</div>', unsafe_allow_html=True)
-
-    # Status per tab
-    def _status_icon(done):
-        return "✅" if done else "⬜"
-
-    t1_done = bool(st.session_state.t1_risks or st.session_state.t1_regs)
-    t2_done = bool(st.session_state.t2_rationale)
-    t3_done = bool(st.session_state.t3_report)
-
-    _sb_entity = st.session_state.get("entity_type", "🏦 Private Banking")
-    _ent_colors = {
-        "🏦 Private Banking":                   ("#6366f1", "rgba(99,102,241,0.12)"),
-        "📊 Asset Management":                  ("#8b5cf6", "rgba(139,92,246,0.12)"),
-        "🏢 Management Company (ManCo)":        ("#06b6d4", "rgba(6,182,212,0.12)"),
-        "🔀 Alternative Investment (PE/RE/HF)": ("#f59e0b", "rgba(245,158,11,0.12)"),
-    }
-    _ec, _ebg = _ent_colors.get(_sb_entity, ("#94a3b8", "rgba(148,163,184,0.12)"))
-    st.markdown(f"""
-    <div style="background:{_ebg};border:1px solid {_ec}40;border-radius:8px;
-                padding:8px 10px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-      <div style="width:6px;height:6px;border-radius:50%;background:{_ec};
-                  box-shadow:0 0 6px {_ec};flex-shrink:0;"></div>
-      <span style="font-size:12px;font-weight:600;color:{_ec};">{_sb_entity}</span>
-    </div>
-    <div style="font-size:12.5px;color:var(--text-secondary);line-height:2;">
-      {_status_icon(t1_done)} Risk Analysis<br>
-      {_status_icon(t2_done)} Audit Plan<br>
-      {_status_icon(t3_done)} Audit Report
-    </div>
-    """, unsafe_allow_html=True,
-    )
-
-    st.markdown("---")
-
-    # Recent analyses history
-    if st.session_state.history:
-        st.markdown(f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--sidebar-header-color);margin-bottom:8px">📁 Recent Analyses</div>', unsafe_allow_html=True)
-        for i, h in enumerate(st.session_state.history):
-            n_c = h.get("n_critical", 0)
-            n_h = h.get("n_high", 0)
-            risk_str = f"{n_c}C {n_h}H" if (n_c or n_h) else ""
-            btn_lbl = f"{h['topic'][:22]}{'…' if len(h['topic'])>22 else ''}"
-            if st.button(btn_lbl, key=f"hist_load_{i}"):
-                # Reload topic + jurs into session state for Tab 1
-                st.session_state["t1_topic_in"] = h["topic"]
-                st.session_state["t1_jurs_in"] = h["jurs"]
-                st.rerun()
-            ts_line = f"{h['timestamp']}"
-            if risk_str:
-                ts_line += f" · {risk_str}"
-            st.markdown(f'<div style="font-size:10.5px;color:var(--text-muted);margin:-4px 0 6px 4px">{ts_line}</div>', unsafe_allow_html=True)
-
-    # ── Reference Data search ─────────────────────────────────────────────────
-    st.markdown("---")
-    ref_open = st.checkbox("📚 Reference Data", key="ref_data_open")
-    if ref_open:
-        st.markdown(f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--sidebar-header-color);margin-bottom:6px">Global Search</div>', unsafe_allow_html=True)
-        ref_q = st.text_input("Search", placeholder="e.g. GDPR, AML, cyber, FINMA…", key="ref_search_q", label_visibility="collapsed")
-        if ref_q:
-            q = ref_q.lower()
-            hits = []
-            for theme, risks in RISK_INDICATORS.items():
-                for r in risks:
-                    if q in (r.get("title", "") + r.get("description", "")).lower():
-                        hits.append(f'🔴 **Risk** `{theme}` — {r["title"]}')
-            for r in PUBLIC_AUDIT_RECOMMENDATIONS:
-                if q in (r.get("source", "") + r.get("recommendation", "")).lower():
-                    hits.append(f'📋 **Rec** `{r.get("theme", "")}` — {r.get("source", "")} ({r.get("year", "")})')
-            for jur, regs in REGULATORY_FRAMEWORKS.items():
-                for r in regs:
-                    if q in (r.get("title", "") + r.get("reference", "") + " ".join(r.get("applies_to", []))).lower():
-                        hits.append(f'📜 **Reg** `{jur}` — {r.get("reference", "")} {r.get("title", "")[:40]}')
-            for c in CVE_BANKING:
-                if q in (c.get("cve_id", "") + c.get("system_affected", "") + c.get("description", "")).lower():
-                    hits.append(f'⚠️ **CVE** {c.get("cve_id", "")} — {c.get("system_affected", "")}')
-            for theme, scenarios in DATA_ANALYTICS_SCENARIOS.items():
-                for s in scenarios:
-                    if q in (s.get("title", "") + s.get("objective", "")).lower():
-                        hits.append(f'📊 **DA** `{theme}` — {s.get("id", "")} {s.get("title", "")[:40]}')
-            if hits:
-                st.markdown(f'<div style="font-size:10.5px;color:var(--text-muted);margin-bottom:5px">{len(hits)} result(s)</div>', unsafe_allow_html=True)
-                for h in hits[:25]:
-                    st.markdown(f'<div style="font-size:11.5px;color:var(--text-secondary);padding:3px 0;border-bottom:1px solid var(--border-divider);line-height:1.5">{h}</div>', unsafe_allow_html=True)
-                if len(hits) > 25:
-                    st.markdown(f'<div style="font-size:10.5px;color:var(--text-muted);margin-top:4px">&hellip;and {len(hits) - 25} more</div>', unsafe_allow_html=True)
-            else:
-                st.caption("No matches found.")
-
-    # ── New Design Preview ────────────────────────────────────────────────────
-    st.markdown("---")
-    st.markdown(
-        '<div style="font-size:11px;font-weight:700;text-transform:uppercase;'
-        'letter-spacing:1px;color:var(--sidebar-header-color);margin-bottom:8px">'
-        '✨ New Design Preview</div>',
-        unsafe_allow_html=True,
-    )
-    _html_path = _HERE / "AuditIQ.html"
-    if _html_path.exists():
-        with open(_html_path, "rb") as _hf:
-            st.download_button(
-                label="⬇️ Download AuditIQ v2",
-                data=_hf.read(),
-                file_name="AuditIQ.html",
-                mime="text/html",
-                help="Standalone redesign — open in any browser",
-                use_container_width=True,
-            )
-    st.markdown(
-        '<div style="font-size:10.5px;color:var(--text-muted);margin-top:4px">'
-        'Self-contained HTML — no server needed</div>',
-        unsafe_allow_html=True,
-    )
-
-
 # ── Help content ──────────────────────────────────────────────────────────────
 
 _HELP = {
@@ -3242,46 +3191,96 @@ def _show_help_panel():
 
 
 # ── Header ────────────────────────────────────────────────────────────────────
-_hdr_col1, _hdr_col2, _hdr_col3, _hdr_col4 = st.columns([8, 1, 1, 1])
-with _hdr_col1:
-    st.markdown("""
-<div style="text-align:center;padding:32px 0 24px 0;position:relative;">
-  <div style="display:inline-flex;align-items:center;justify-content:center;
-              width:48px;height:48px;
-              background:linear-gradient(135deg,#6366f1 0%,#7b3fe4 100%);
-              border-radius:12px;margin-bottom:12px;
-              box-shadow:0 0 24px rgba(99,102,241,0.3);">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-         xmlns="http://www.w3.org/2000/svg">
+_cur_ent = st.session_state.get("entity_type", "🏦 Private Banking")
+_cur_t   = _ENTITY_THEMES.get(_cur_ent, _ENTITY_THEMES["🏦 Private Banking"])
+
+_hdr_left, _hdr_right = st.columns([6, 4], gap="small")
+with _hdr_left:
+    st.markdown(f"""
+<div style="display:flex;align-items:center;gap:14px;padding:20px 0 8px">
+  <div style="width:44px;height:44px;border-radius:12px;flex-shrink:0;
+    background:{_cur_t['bg_btn']};
+    display:grid;place-items:center;
+    box-shadow:0 0 20px {_cur_t['glow']};">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            stroke="white" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round"/>
+            stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
-  <h1 style="font-size:36px;font-weight:800;
-             background:linear-gradient(135deg,#e2e8f0 0%,#94a3b8 100%);
-             -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-             margin:0;line-height:1.1;">AuditIQ</h1>
-  <p style="font-size:14px;color:#64748b;font-style:italic;
-            margin:6px 0 0 0;font-weight:400;">
-    From risk to insight &mdash; intelligent audit support for financial institutions.
-  </p>
+  <div>
+    <div style="font-size:22px;font-weight:800;letter-spacing:-.02em;
+      color:#eef0f8;line-height:1.1">Audit<span style="color:{_cur_t['hover']}">IQ</span></div>
+    <div style="font-size:11px;color:#5a6488;letter-spacing:.04em;margin-top:1px">
+      Intelligent audit support &mdash; financial institutions</div>
+  </div>
 </div>
 """, unsafe_allow_html=True)
-with _hdr_col2:
-    st.markdown("<div style='padding-top:1.4rem'>", unsafe_allow_html=True)
-    if st.button("🎙️", key="_voice_toggle_btn", help="Commande vocale / Voice command"):
-        st.session_state["voice_active"] = not st.session_state.get("voice_active", False)
-    st.markdown("</div>", unsafe_allow_html=True)
-with _hdr_col3:
-    st.markdown("<div style='padding-top:1.4rem'>", unsafe_allow_html=True)
-    if st.button("✨", key="_cowork_toggle_btn", help="Claude Cowork — Suggestions"):
-        st.session_state["cowork_open"] = not st.session_state.get("cowork_open", False)
-    st.markdown("</div>", unsafe_allow_html=True)
-with _hdr_col4:
-    st.markdown("<div style='padding-top:1.4rem'>", unsafe_allow_html=True)
-    if st.button("❓", key="_help_toggle_btn", help="Help / Aide"):
-        st.session_state["help_open"] = not st.session_state.get("help_open", False)
+
+with _hdr_right:
+    # Entity switcher + utility buttons
+    st.markdown("<div style='padding-top:14px'>", unsafe_allow_html=True)
+
+    # ── Entity switcher CSS ───────────────────────────────────────────────────
+    _ent_btn_css = ""
+    for _ename, _et in _ENTITY_THEMES.items():
+        _sl = _ent_slug(_ename)
+        _ent_btn_css += f"""
+        .ent-{_sl} button{{
+          background:rgba(255,255,255,.04) !important;
+          border:1px solid {_et['primary']}44 !important;
+          color:{_et['primary']} !important;
+          border-radius:20px !important;
+          font-size:11px !important; font-weight:600 !important;
+          padding:2px 4px !important; height:30px !important;
+          transition:all .15s;
+        }}
+        .ent-{_sl} button:hover{{
+          background:{_et['sec_bg']} !important;
+          border-color:{_et['primary']}88 !important;
+        }}
+        .ent-{_sl}-active button{{
+          background:{_et['primary']} !important;
+          border:1px solid {_et['primary']} !important;
+          color:#fff !important;
+          border-radius:20px !important;
+          font-size:11px !important; font-weight:700 !important;
+          padding:2px 4px !important; height:30px !important;
+          box-shadow:0 0 12px {_et['glow']} !important;
+        }}
+        """
+    st.markdown(f"<style>{_ent_btn_css}</style>", unsafe_allow_html=True)
+
+    # ── Entity pill buttons ───────────────────────────────────────────────────
+    _ent_opts = list(_ENTITY_THEMES.keys())
+    _ent_ncols = len(_ent_opts)
+    _ent_cols = st.columns(_ent_ncols, gap="small")
+    for _i, (_ename, _ecol) in enumerate(zip(_ent_opts, _ent_cols)):
+        _sl = _ent_slug(_ename)
+        _cls = f"ent-{_sl}-active" if _ename == _cur_ent else f"ent-{_sl}"
+        with _ecol:
+            st.markdown(f'<div class="{_cls}">', unsafe_allow_html=True)
+            if st.button(_ename, key=f"_ent_sel_{_i}", use_container_width=True):
+                st.session_state["entity_type"] = _ename
+                st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── Utility icon buttons ──────────────────────────────────────────────────
+    _u1, _u2, _u3, _u4 = st.columns(4, gap="small")
+    _theme_lbl = "☀️" if _is_dark else "🌙"
+    with _u1:
+        if st.button(_theme_lbl, key="theme_toggle", help="Basculer thème clair/sombre"):
+            st.session_state.theme = "light" if _is_dark else "dark"
+            st.rerun()
+    with _u2:
+        if st.button("🎙️", key="_voice_toggle_btn", help="Commande vocale"):
+            st.session_state["voice_active"] = not st.session_state.get("voice_active", False)
+    with _u3:
+        if st.button("✨", key="_cowork_toggle_btn", help="Claude Cowork — Suggestions"):
+            st.session_state["cowork_open"] = not st.session_state.get("cowork_open", False)
+    with _u4:
+        if st.button("❓", key="_help_toggle_btn", help="Help / Aide"):
+            st.session_state["help_open"] = not st.session_state.get("help_open", False)
+
     st.markdown("</div>", unsafe_allow_html=True)
 
 if st.session_state.get("voice_active", False):
