@@ -625,7 +625,7 @@ div[data-testid="stRadio"] label:has(input:checked) {
 }
 .sidebar-section-title {
   font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-  color: #334155; text-transform: uppercase; margin-bottom: 10px;
+  color: var(--sidebar-header-color); text-transform: uppercase; margin-bottom: 10px;
 }
 
 /* ── Section header ── */
@@ -688,6 +688,147 @@ div[data-testid="stRadio"] label:has(input:checked) {
     background: #fff !important; color: #000 !important; border-color: #ccc !important; }
   .data-table td, .data-table th { border: 1px solid #ccc !important; color: #000 !important; }
   .section-title { color: #000 !important; }
+}
+
+/* ── Metric cards ── */
+[data-testid="stMetric"] {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 14px !important;
+  padding: 16px 20px !important;
+}
+[data-testid="stMetric"] label {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .08em !important;
+  color: var(--text-muted) !important;
+}
+[data-testid="stMetricValue"] > div {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  color: var(--text-primary) !important;
+  letter-spacing: -.03em !important;
+}
+[data-testid="stMetricDelta"] {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  padding: 2px 6px !important;
+}
+
+/* ── Multiselect tags ── */
+.stMultiSelect [data-baseweb="tag"] {
+  background: rgba(99,102,241,.15) !important;
+  border: 1px solid rgba(99,102,241,.3) !important;
+  color: #818cf8 !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+}
+.stMultiSelect [data-baseweb="tag"] span { color: #818cf8 !important; }
+.stMultiSelect [data-baseweb="tag"] button { color: #818cf8 !important; opacity: .7; }
+.stMultiSelect [data-baseweb="select"] > div {
+  background: var(--bg-input) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 8px !important;
+}
+
+/* ── Native progress bar ── */
+.stProgress > div > div {
+  background: rgba(255,255,255,.06) !important;
+  border-radius: 6px !important;
+  height: 6px !important;
+}
+.stProgress > div > div > div > div {
+  background: linear-gradient(90deg, #6366f1, #818cf8) !important;
+  border-radius: 6px !important;
+}
+
+/* ── Checkboxes ── */
+.stCheckbox label span { color: var(--text-secondary) !important; font-size: 13px !important; }
+.stCheckbox [data-baseweb="checkbox"] span {
+  border-color: var(--border-medium) !important;
+  background: rgba(255,255,255,.03) !important;
+  border-radius: 4px !important;
+}
+
+/* ── Slider ── */
+[data-testid="stSlider"] [data-baseweb="slider"] div[role="slider"] {
+  background: var(--accent-primary) !important;
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 4px var(--accent-glow) !important;
+}
+
+/* ── Expander (Streamlit 1.58 selectors) ── */
+[data-testid="stExpander"] {
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 10px !important;
+  background: var(--bg-card) !important;
+  overflow: hidden !important;
+}
+[data-testid="stExpander"] summary {
+  background: var(--bg-card) !important;
+  color: var(--text-secondary) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 12px 16px !important;
+}
+[data-testid="stExpander"] summary:hover {
+  background: var(--bg-card-hover) !important;
+  color: var(--text-accent) !important;
+}
+[data-testid="stExpander"] > div > div {
+  padding: 12px 16px 16px !important;
+}
+
+/* ── Selectbox / dropdown menu ── */
+[data-baseweb="popover"] [role="listbox"] {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.45) !important;
+}
+[data-baseweb="option"] {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  font-size: 13px !important;
+}
+[data-baseweb="option"]:hover, [data-baseweb="option"][aria-selected="true"] {
+  background: rgba(99,102,241,.1) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ── Code blocks ── */
+.stCodeBlock code, pre {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 8px !important;
+  font-size: 12.5px !important;
+  color: #c9cde0 !important;
+}
+
+/* ── DataFrame ── */
+[data-testid="stDataFrame"] {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  border: 1px solid var(--border-subtle) !important;
+}
+
+/* ── Info / warning / success / error boxes ── */
+[data-testid="stAlert"] {
+  border-radius: 10px !important;
+  border-width: 1px !important;
+  font-size: 13px !important;
+}
+
+/* ── Column vertical spacing ── */
+[data-testid="stVerticalBlock"] > [data-testid="stVerticalBlock"] {
+  gap: 0 !important;
+}
+
+/* ── Tab panel content ── */
+[data-testid="stTabsContent"] {
+  padding-top: 1.2rem !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -2546,10 +2687,18 @@ html,body{font-family:'Inter',sans-serif!important;}
 .si-btn-sso button:hover{
   background:rgba(255,255,255,.08)!important;color:#eef0f8!important;
 }
-/* Animated orb pulse */
+/* Orb glow pulse */
 @keyframes si-pulse{
   0%,100%{box-shadow:0 0 50px 15px rgba(99,102,241,.22),0 0 100px 30px rgba(79,126,248,.08);}
-  50%{box-shadow:0 0 70px 25px rgba(99,102,241,.30),0 0 140px 50px rgba(79,126,248,.12);}
+  50%{box-shadow:0 0 80px 28px rgba(99,102,241,.35),0 0 150px 55px rgba(79,126,248,.14);}
+}
+/* Orbital ring spin (applied inside a tilted wrapper) */
+@keyframes si-ring-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+/* Secondary slower ring */
+@keyframes si-ring-spin2{from{transform:rotate(0deg);}to{transform:rotate(-360deg);}}
+/* Atmospheric shimmer on the globe */
+@keyframes si-shimmer{
+  0%,100%{opacity:.18;} 50%{opacity:.32;}
 }
 </style>
 """, unsafe_allow_html=True)
@@ -2591,23 +2740,57 @@ html,body{font-family:'Inter',sans-serif!important;}
       color:#818cf8;padding:2px 8px;border-radius:999px">Pro</span>
   </div>
 
-  <!-- CSS animated planet orb -->
+  <!-- Animated planet orb: sphere + tilted orbital rings + orbiting dot -->
   <div style="display:flex;justify-content:flex-start;padding-left:8px;
-    margin:22px 0 26px;position:relative;z-index:1">
+    margin:22px 0 26px;position:relative;z-index:1;perspective:600px">
+
+    <!-- Outer container: defines the 200x200 sphere space -->
     <div style="position:relative;width:200px;height:200px">
-      <div style="position:absolute;inset:-28px;border-radius:50%;
-        border:1px solid rgba(99,102,241,.2);"></div>
-      <div style="position:absolute;inset:-48px;border-radius:50%;
-        border:1px solid rgba(79,126,248,.1);"></div>
+
+      <!-- Orbit 1: tilted ring with orbiting particle -->
+      <div style="position:absolute;inset:-32px;
+        transform:rotateX(72deg);transform-style:preserve-3d">
+        <div style="position:absolute;inset:0;
+          animation:si-ring-spin 18s linear infinite;
+          transform-style:preserve-3d">
+          <!-- ring border -->
+          <div style="position:absolute;inset:0;border-radius:50%;
+            border:1.5px solid rgba(99,102,241,.4);"></div>
+          <!-- orbiting dot -->
+          <div style="position:absolute;width:7px;height:7px;border-radius:50%;
+            background:#818cf8;top:-3.5px;left:calc(50% - 3.5px);
+            box-shadow:0 0 10px 3px rgba(129,140,248,.8);"></div>
+        </div>
+      </div>
+
+      <!-- Orbit 2: wider, different tilt, slower, no dot -->
+      <div style="position:absolute;inset:-52px;
+        transform:rotateX(58deg) rotateZ(30deg);transform-style:preserve-3d">
+        <div style="position:absolute;inset:0;
+          animation:si-ring-spin2 28s linear infinite;
+          transform-style:preserve-3d">
+          <div style="position:absolute;inset:0;border-radius:50%;
+            border:1px solid rgba(79,126,248,.2);"></div>
+        </div>
+      </div>
+
+      <!-- Globe sphere -->
       <div style="width:200px;height:200px;border-radius:50%;position:relative;
         background:radial-gradient(circle at 33% 30%,#26336f 0%,#141f47 50%,#070b1c 100%);
         border:1.5px solid rgba(129,140,248,.4);
         animation:si-pulse 4s ease-in-out infinite;">
+        <!-- specular highlight -->
         <div style="position:absolute;inset:0;border-radius:50%;
-          background:radial-gradient(circle at 28% 26%,rgba(175,186,255,.22) 0%,transparent 52%);"></div>
+          background:radial-gradient(circle at 28% 26%,rgba(175,186,255,.22) 0%,transparent 52%);
+          animation:si-shimmer 5s ease-in-out infinite;"></div>
+        <!-- limb darkening -->
         <div style="position:absolute;inset:0;border-radius:50%;
-          background:radial-gradient(circle at 70% 70%,rgba(2,4,12,.5) 0%,transparent 55%);"></div>
+          background:radial-gradient(circle at 70% 70%,rgba(2,4,12,.55) 0%,transparent 55%);"></div>
+        <!-- equatorial band hint -->
+        <div style="position:absolute;left:0;right:0;top:44%;height:12%;border-radius:999px;
+          background:rgba(99,102,241,.06);"></div>
       </div>
+
     </div>
   </div>
 
