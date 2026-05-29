@@ -49,6 +49,9 @@ _SS_DEFAULTS = {
     "history": [],
     "_tpl_applied": False,
     "_tpl_name": "",
+    "t1_show_form": True,
+    "t2_show_form": True,
+    "t1_jurs_pills": None,
     # Auth
     "signed_in": False,
     # Help
@@ -893,6 +896,86 @@ section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
 /* ── Tab panel content ── */
 [data-testid="stTabsContent"] {
   padding-top: 1.2rem !important;
+}
+
+/* ── Agent card layout ── */
+.agent-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+.agent-badge-pill {
+  display: inline-block;
+  background: rgba(99,102,241,0.15);
+  color: #818cf8;
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.agent-status-pill {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 6px;
+}
+.agent-status-ready {
+  background: rgba(34,211,165,0.12);
+  color: #22d3a5;
+  border: 1px solid rgba(34,211,165,0.3);
+}
+.agent-status-live {
+  background: rgba(249,115,22,0.12);
+  color: #f97316;
+  border: 1px solid rgba(249,115,22,0.3);
+}
+.param-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.jur-pills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.gen-btn-wrap {
+  margin-top: 20px;
+}
+div[data-testid="stButton"].gen-btn > button {
+  background: linear-gradient(135deg, #6366f1, #818cf8) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  padding: 14px 32px !important;
+  min-height: 52px !important;
+  width: 100% !important;
+  letter-spacing: 0.3px !important;
+}
+div[data-testid="stButton"].gen-btn > button:hover {
+  opacity: 0.9 !important;
+}
+div[data-testid="stButton"].back-btn > button {
+  background: rgba(255,255,255,0.05) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -4408,349 +4491,396 @@ elif _active == 1:
         ]
     )
     _t1_mode = render_mode_toggle("mode_tab1")
-    st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
 
-    # Quick Start Template
-    tpl_name = st.selectbox(
-        "Quick Start Template",
-        options=list(TEMPLATES.keys()),
-        key="t1_tpl_select",
-        help="Pre-fill topic, jurisdictions and scope with a predefined audit template.",
-        format_func=lambda x: x,
-    )
-    if tpl_name not in _TPL_SEPARATORS and tpl_name != st.session_state._tpl_name:
-        tpl = TEMPLATES[tpl_name]
-        _cur_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
-        _tpl_topic_key = (TOPIC_KEY_MAPPING.get(tpl_name) or [None])[0]
-        _entity_ctx  = ENTITY_CONTEXT.get(_cur_entity, {})
-        _entity_scope = (
-            _entity_ctx.get("topics", {}).get(_tpl_topic_key, {}).get("scope_suggestion", "")
-            if _tpl_topic_key else ""
+    # Form / results toggle
+    _t1_show_form = st.session_state.get("t1_show_form", True)
+    _t1_has_results = bool(st.session_state.get("t1_risks") or st.session_state.get("t1_regs"))
+    _t1_in_results = _t1_mode == "live" and _t1_has_results and not _t1_show_form
+
+    if not _t1_in_results:
+        # ── Agent Card ──────────────────────────────────────────────────────────
+        _t1_status_pill = '<span class="agent-status-pill agent-status-live">⚡ Live</span>' if _t1_mode == "live" else '<span class="agent-status-pill agent-status-ready">📚 Static</span>'
+        st.markdown(f"""
+        <div class="agent-card">
+          <div class="agent-badge-pill">AGENT 1</div>
+          <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Agent 1 — Risk Analysis</div>
+          <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:14px">Identifies key risks, applicable regulations, and public audit recommendations for your selected topic and jurisdictions.</div>
+          <div>{_t1_status_pill}</div>
+        </div>""", unsafe_allow_html=True)
+
+        # ── Quick Start Template ─────────────────────────────────────────────────
+        tpl_name = st.selectbox(
+            "Quick Start Template",
+            options=list(TEMPLATES.keys()),
+            key="t1_tpl_select",
+            help="Pre-fill topic, jurisdictions and scope with a predefined audit template.",
+            format_func=lambda x: x,
         )
-        st.session_state["t1_topic_in"] = tpl.get("topic", "")
-        st.session_state["t1_jurs_in"]  = tpl.get("jurisdictions", JURISDICTIONS[:4])
-        st.session_state._tpl_name = tpl_name
-        st.session_state._tpl_scope = _entity_scope or tpl.get("scope", "")
-        st.rerun()
-
-    _tpl_scope_default = st.session_state.get("_tpl_scope", "")
-
-    audit_topic = st.text_input(
-        "Audit Topic",
-        placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity, Operational Risk…",
-        key="t1_topic_in",
-        help="Enter the main audit topic or domain to analyze (e.g. 'AML/KYC', 'Cyber Risk'). Must be at least 3 characters.",
-    )
-    # Propagate typed topic to Tab 2 pre-fill
-    st.session_state["topic_tab1"] = audit_topic or ""
-
-    jurisdictions = st.multiselect(
-        "Jurisdictions",
-        options=JURISDICTIONS,
-        default=st.session_state.get("t1_jurs_in") or JURISDICTIONS[:4],
-        key="t1_jurs_in",
-        help="Select one or more jurisdictions. Each adds regulatory and risk context specific to that regulator.",
-    )
-
-    st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
-
-    # Entity context hint
-    _t1_entity   = st.session_state.get("entity_type", "🏦 Private Banking")
-    _t1_ent_ctx  = ENTITY_CONTEXT.get(_t1_entity, {})
-    _t1_reg_focus = _t1_ent_ctx.get("regulatory_focus", [])
-    if _t1_reg_focus:
-        _bg, _col = _ENTITY_COLORS.get(_t1_entity, ("#0a2540", "#818cf8"))
-        st.markdown(
-            f'<div style="background:{_bg};border-left:3px solid {_col};border-radius:0 6px 6px 0;'
-            f'padding:8px 12px;margin-bottom:12px;font-size:12px;color:#c8d0e8">'
-            f'<span style="font-weight:700;color:{_col}">{_t1_entity} &mdash; regulatory focus:</span> '
-            f'{" &middot; ".join(_t1_reg_focus[:5])}</div>',
-            unsafe_allow_html=True,
-        )
-
-    st.markdown("<div style='margin-top:0.4rem'></div>", unsafe_allow_html=True)
-
-    # Input validation
-    _t1_valid = True
-    if audit_topic and len(audit_topic.strip()) < 3:
-        st.warning("⚠ Audit topic must be at least 3 characters. Try: 'AML/KYC', 'Credit Risk', or 'Cybersecurity'.")
-        _t1_valid = False
-    if not jurisdictions:
-        st.warning("⚠ Please select at least one jurisdiction.")
-        _t1_valid = False
-
-    if _t1_mode == "static":
-        # ── Static Reference Data mode ─────────────────────────────────────────
-        _static_label()
-        _t1_entity_type = st.session_state.get("t1_entity_type", "🏦 Private Banking")
-        try:
-            _t1_entity_data = get_data_for_topic(
-                audit_topic if audit_topic else "AML / KYC & Transaction Monitoring",
-                entity_type=_t1_entity_type,
+        if tpl_name not in _TPL_SEPARATORS and tpl_name != st.session_state._tpl_name:
+            tpl = TEMPLATES[tpl_name]
+            _cur_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
+            _tpl_topic_key = (TOPIC_KEY_MAPPING.get(tpl_name) or [None])[0]
+            _entity_ctx  = ENTITY_CONTEXT.get(_cur_entity, {})
+            _entity_scope = (
+                _entity_ctx.get("topics", {}).get(_tpl_topic_key, {}).get("scope_suggestion", "")
+                if _tpl_topic_key else ""
             )
-        except Exception:
-            _t1_entity_data = {
-                "risks": [], "tests": [], "kris": [],
-                "da_scenarios": [], "regulatory_focus": [],
-                "scope_suggestion": "", "typical_findings": [],
-                "background_angle": "", "entity_key": "PRIVATE_BANKING",
-                "keys": [],
-            }
-        _t1_entity_key   = _t1_entity_data.get("entity_key", "PRIVATE_BANKING")
-        _t1_entity_color = _ENTITY_COLORS.get(_t1_entity_key, "#818cf8")
-        _entity_label    = _t1_entity_type.split(" ", 1)[1] if " " in _t1_entity_type else _t1_entity_type
-        st.markdown(
-            f'<div style="display:flex;align-items:center;gap:12px;margin:8px 0 16px">'
-            f'<span style="background:{_t1_entity_color}22;color:{_t1_entity_color};border:1px solid {_t1_entity_color}44;'
-            f'border-radius:6px;padding:4px 14px;font-size:12px;font-weight:700">📊 {_entity_label} context</span>'
-            f'<span style="font-size:11.5px;color:#5a6488;font-style:italic">'
-            f'Risks and regulations adapted for {_t1_entity_type}</span>'
-            f'</div>',
-            unsafe_allow_html=True,
+            st.session_state["t1_topic_in"] = tpl.get("topic", "")
+            st.session_state["t1_jurs_pills"] = tpl.get("jurisdictions", JURISDICTIONS[:4])
+            st.session_state._tpl_name = tpl_name
+            st.session_state._tpl_scope = _entity_scope or tpl.get("scope", "")
+            st.rerun()
+
+        _tpl_scope_default = st.session_state.get("_tpl_scope", "")
+
+        audit_topic = st.text_input(
+            "Audit Topic",
+            placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity, Operational Risk…",
+            key="t1_topic_in",
+            help="Enter the main audit topic or domain to analyze (e.g. 'AML/KYC', 'Cyber Risk'). Must be at least 3 characters.",
         )
-        _t1_theme = _topic_to_theme(audit_topic) if audit_topic else "AML_KYC"
-        _t1_theme = _t1_theme or "AML_KYC"
-        _t1_theme_label = _t1_theme.replace("_", " ").title()
+        # Propagate typed topic to Tab 2 pre-fill
+        st.session_state["topic_tab1"] = audit_topic or ""
 
-        # Resolve entity-specific data for this topic
-        _ri_entity     = st.session_state.get("entity_type", "🏦 Private Banking")
-        _ri_ent_data   = ENTITY_CONTEXT.get(_ri_entity, {})
-        _ri_topic_data = _ri_ent_data.get("topics", {}).get(_t1_theme, {})
-        _ri_reg_refs   = _ri_topic_data.get("regulatory_refs", [])
-        _ri_emphasis   = [e.lower() for e in _ri_topic_data.get("risk_emphasis", [])]
-        _ri_findings   = _ri_topic_data.get("typical_findings", [])
-        _ri_bg, _ri_col = _ENTITY_COLORS.get(_ri_entity, ("#0a2540", "#818cf8"))
-        _ri_bg_lbl     = _ri_ent_data.get("background_angle", "financial services")
+        # ── Jurisdiction pills ───────────────────────────────────────────────────
+        st.markdown('<div class="param-label">Jurisdictions</div>', unsafe_allow_html=True)
+        _jurs_selected = st.session_state.get("t1_jurs_pills") or JURISDICTIONS[:4]
+        if not isinstance(_jurs_selected, list):
+            _jurs_selected = list(_jurs_selected)
+        _jur_cols = st.columns(len(JURISDICTIONS))
+        for _ji, _jur in enumerate(JURISDICTIONS):
+            _flag = _JUR_FLAG.get(_jur, "🌐")
+            _is_sel = _jur in _jurs_selected
+            with _jur_cols[_ji]:
+                if st.button(
+                    f"{_flag} {_jur.split('/')[0].strip()}",
+                    key=f"t1_jur_{_ji}",
+                    help=_jur,
+                ):
+                    if _is_sel and len(_jurs_selected) > 1:
+                        _jurs_selected = [j for j in _jurs_selected if j != _jur]
+                    elif not _is_sel:
+                        _jurs_selected = _jurs_selected + [_jur]
+                    st.session_state["t1_jurs_pills"] = _jurs_selected
+                    st.rerun()
+        jurisdictions = _jurs_selected
 
-        with st.expander("🗺️ A — Risk Indicators", expanded=True):
-            # Section header with entity context badge
-            _ri_badge_html = _entity_badge_html(_ri_entity, "11px")
+        st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
+
+        # Entity context hint
+        _t1_entity   = st.session_state.get("entity_type", "🏦 Private Banking")
+        _t1_ent_ctx  = ENTITY_CONTEXT.get(_t1_entity, {})
+        _t1_reg_focus = _t1_ent_ctx.get("regulatory_focus", [])
+        if _t1_reg_focus:
+            _bg, _col = _ENTITY_COLORS.get(_t1_entity, ("#0a2540", "#818cf8"))
             st.markdown(
-                f'<div class="section-title" style="display:flex;align-items:center;justify-content:space-between">'
-                f'<span>A. Risk Indicators &mdash; {_t1_theme_label}'
-                f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
-                f'{len(RISK_INDICATORS.get(_t1_theme, []))} risks in library</span></span>'
-                f'<span style="font-size:11px;color:#5a6488">{_ri_badge_html} context</span>'
-                f'</div>',
+                f'<div style="background:{_bg};border-left:3px solid {_col};border-radius:0 6px 6px 0;'
+                f'padding:8px 12px;margin-bottom:12px;font-size:12px;color:#c8d0e8">'
+                f'<span style="font-weight:700;color:{_col}">{_t1_entity} &mdash; regulatory focus:</span> '
+                f'{" &middot; ".join(_t1_reg_focus[:5])}</div>',
                 unsafe_allow_html=True,
             )
-            # Entity-specific context panel
-            if _ri_reg_refs or _ri_emphasis:
-                _reg_str  = " &nbsp;·&nbsp; ".join(_ri_reg_refs[:4]) if _ri_reg_refs else ""
-                _emp_str  = " &nbsp;·&nbsp; ".join(e.capitalize() for e in _ri_topic_data.get("risk_emphasis", [])[:4])
-                st.markdown(
-                    f'<div style="background:{_ri_bg};border-left:3px solid {_ri_col};border-radius:0 6px 6px 0;'
-                    f'padding:8px 14px;margin:6px 0 12px;font-size:12px;color:#c8d0e8">'
-                    f'<span style="font-size:11px;color:{_ri_col};font-weight:700">Risks and regulations adapted for {_ri_entity}</span><br>'
-                    + (f'<span style="font-size:11.5px"><b>Regulatory focus:</b> {_reg_str}</span><br>' if _reg_str else "")
-                    + (f'<span style="font-size:11.5px"><b>Key risk areas:</b> {_emp_str}</span>' if _emp_str else "")
-                    + '</div>',
-                    unsafe_allow_html=True,
-                )
-            st.markdown(_EXAMPLE_RISK, unsafe_allow_html=True)
-            _ri_c1, _ri_c2 = st.columns([3, 1.5])
-            _ri_sq = _ri_c1.text_input("Search risks", placeholder="Filter risks…", key="_ri_sq", label_visibility="collapsed")
-            _ri_slv = _ri_c2.selectbox("Level", ["All", "Critical", "High", "Moderate"], key="_ri_slv", label_visibility="collapsed")
-            _entity_specific_risks = _t1_entity_data.get("additional_risks", [])
-            _base_risks = RISK_INDICATORS.get(_t1_theme, [])
-            _ri_filtered = _entity_specific_risks + _base_risks
-            if _ri_slv != "All":
-                _ri_filtered = [r for r in _ri_filtered if r.get("level") == _ri_slv]
-            if _ri_sq:
-                _qr = _ri_sq.lower()
-                _ri_filtered = [r for r in _ri_filtered if _qr in (r.get("title","") + r.get("description","")).lower()]
-            if _ri_filtered:
-                _LVLC = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308"}
-                _LVLBG = {"Critical": "rgba(239,68,68,0.08)", "High": "rgba(249,115,22,0.08)", "Moderate": "rgba(234,179,8,0.06)"}
-                for _r in _ri_filtered:
-                    _col = _LVLC.get(_r["level"], "#8392bb")
-                    _bg  = _LVLBG.get(_r["level"], "transparent")
-                    _pcolor = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(_r.get("probability",""), "#8392bb")
-                    _icolor = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(_r.get("impact",""), "#8392bb")
-                    _ctrls  = "".join(f"<li>{c}</li>" for c in _r.get("expected_controls", []))
-                    _flags  = "".join(f"<li>{f}</li>" for f in _r.get("red_flags", []))
-                    # Highlight risks matching entity emphasis
-                    _rtitle_low = _r.get("title","").lower()
-                    _entity_match = any(kw in _rtitle_low for kw in _ri_emphasis)
-                    _star_badge   = (
-                        f'<span style="background:{_ri_col}22;color:{_ri_col};border:1px solid {_ri_col}44;'
-                        f'border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">★ Entity focus</span>'
-                        if _entity_match else ""
-                    )
-                    _specifics_lbl = f"🏢 {_ri_bg_lbl.title()} context"
-                    _specifics_txt = _r.get("private_banking_specifics","")
-                    st.markdown(f"""
-                    <div style="border:1px solid {_col}33;border-radius:9px;padding:14px 18px;margin-bottom:12px;background:{_bg}">
-                      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-                        <span style="background:{_col}22;color:{_col};border:1px solid {_col}44;border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">{_r["level"]}</span>
-                        <span style="font-size:13.5px;font-weight:600;color:var(--text-primary)">{_r.get("id","")} &mdash; {_r["title"]}</span>{_star_badge}
-                        <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">Prob: <span style="color:{_pcolor};font-weight:600">{_r.get("probability","")}</span> &nbsp;&middot;&nbsp; Impact: <span style="color:{_icolor};font-weight:600">{_r.get("impact","")}</span></span>
-                      </div>
-                      <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.7">{_r["description"]}</p>
-                      <details>
-                        <summary style="font-size:12px;color:#818cf8;cursor:pointer;font-weight:500">Controls &amp; Red Flags</summary>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-                          <div><div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px">EXPECTED CONTROLS</div>
-                          <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{_ctrls}</ul></div>
-                          <div><div style="font-size:11px;font-weight:600;color:#ef4444aa;margin-bottom:4px">RED FLAGS</div>
-                          <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{_flags}</ul></div>
-                        </div>
-                        <div style="margin-top:10px;font-size:11.5px;color:var(--text-muted);font-style:italic">{_specifics_lbl}: {_specifics_txt}</div>
-                      </details>
-                    </div>""", unsafe_allow_html=True)
-                # Entity-specific typical findings for this topic
-                if _ri_findings:
-                    st.markdown(
-                        f'<div style="background:{_ri_bg};border-left:3px solid {_ri_col};border-radius:0 6px 6px 0;'
-                        f'padding:8px 14px;margin-top:10px;font-size:12px;color:#c8d0e8">'
-                        f'<span style="font-weight:700;color:{_ri_col}">Typical findings for {_ri_entity}:</span><br>'
-                        + "".join(f'<span style="display:block;margin-top:3px">&bull; {f}</span>' for f in _ri_findings)
-                        + '</div>',
-                        unsafe_allow_html=True,
-                    )
-            else:
-                st.caption("No risks match the filter.")
 
-        with st.expander("📋 B — Public Audit Recommendations", expanded=False):
-            _all_rec_sources = sorted({r.get("source","") for r in PUBLIC_AUDIT_RECOMMENDATIONS if r.get("source")})
-            st.markdown(
-                f'<div class="section-title">B. Public Audit Recommendations &mdash; {_t1_theme_label}'
-                f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
-                f'{len([r for r in PUBLIC_AUDIT_RECOMMENDATIONS if r.get("theme") == _t1_theme])} entries</span></div>',
-                unsafe_allow_html=True,
-            )
-            st.markdown(_EXAMPLE_PUB_REC, unsafe_allow_html=True)
-            _pr_c1, _pr_c2 = st.columns([3, 2])
-            _pr_sq = _pr_c1.text_input("Search recommendations", placeholder="Filter…", key="_pr_sq", label_visibility="collapsed")
-            _pr_ssrc = _pr_c2.selectbox("Source", ["All"] + _all_rec_sources, key="_pr_ssrc", label_visibility="collapsed")
-            _show_pub_recs(_t1_theme, search=_pr_sq)
+        # Input validation
+        _t1_valid = True
+        if audit_topic and len(audit_topic.strip()) < 3:
+            st.warning("⚠ Audit topic must be at least 3 characters.")
+            _t1_valid = False
+        if not jurisdictions:
+            st.warning("⚠ Please select at least one jurisdiction.")
+            _t1_valid = False
 
-        _rf_cats = sorted({e["category"] for e in HNWI_RED_FLAGS})
-        with st.expander("🚨 C — HNWI Red Flags", expanded=False):
-            st.markdown(
-                f'<div class="section-title">C. HNWI Red Flags &mdash; Private Banking'
-                f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
-                f'{len(HNWI_RED_FLAGS)} red flags &middot; AML &middot; Fraud &middot; Suitability &middot; Tax &middot; Conduct</span></div>',
-                unsafe_allow_html=True,
-            )
-            _rf_c1, _rf_c2, _rf_c3 = st.columns([3, 1.5, 1.5])
-            _rf_sq   = _rf_c1.text_input("Search red flags", placeholder="Filter red flags…", key="_rf_sq",   label_visibility="collapsed")
-            _rf_scat = _rf_c2.selectbox("Category", ["All"] + _rf_cats,                        key="_rf_scat", label_visibility="collapsed")
-            _rf_slv  = _rf_c3.selectbox("Risk Level", ["All", "Critical", "High", "Medium"],    key="_rf_slv",  label_visibility="collapsed")
-            _show_red_flags(cat_filter=_rf_scat, level_filter=_rf_slv, search=_rf_sq)
+        if _t1_mode == "live":
+            st.markdown('<div class="gen-btn-wrap">', unsafe_allow_html=True)
+            st.markdown('<div class="gen-btn">', unsafe_allow_html=True)
+            if st.button("✦ Générer l'analyse", disabled=_disabled or not audit_topic or not _t1_valid, key="t1_run"):
+                with st.spinner("Analyzing…"):
+                    try:
+                        c = _client()
+                        jur_str = ", ".join(jurisdictions) if jurisdictions else "all jurisdictions"
+                        _t1_inst = _entity_institution_str(jurs=jurisdictions)
 
-        st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    if _t1_mode == "live":
-        if st.button("Analyze", type="primary", disabled=_disabled or not audit_topic or not _t1_valid, key="t1_run"):
-            with st.spinner("Analyzing…"):
-                try:
-                    c = _client()
-                    jur_str = ", ".join(jurisdictions) if jurisdictions else "all jurisdictions"
-                    _t1_inst = _entity_institution_str(jurs=jurisdictions)
-
-                    risks_raw = _call(c, f"""Audit topic: {audit_topic}
+                        risks_raw = _call(c, f"""Audit topic: {audit_topic}
 Jurisdictions: {jur_str}
 Institution: {_t1_inst}
 
 Identify 10-12 key risks for this audit topic across 3 severity levels.
 Respond ONLY with a valid JSON array — no markdown, no preamble:
 [{{"level":"Critical|High|Moderate","name":"<5-8 words>","description":"<2-3 sentences>","impact":"<1-2 sentences, quantified where possible>","likelihood":"High|Medium|Low","control":"<1-2 sentences on expected control mechanism>"}}]""",
-                        max_tokens=5000)
+                            max_tokens=5000)
 
-                    regs_raw = _call(c, f"""Audit topic: {audit_topic}
+                        regs_raw = _call(c, f"""Audit topic: {audit_topic}
 Jurisdictions: {jur_str}
 Institution: {_t1_inst}
 
 List applicable regulations for this institution type and audit topic.
 Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
 [{{"jurisdiction":"<e.g. CH / FINMA>","text":"<law or regulation name>","reference":"<specific article/circular number>","requirement":"<key requirement in 1-2 sentences>"}}]""",
-                        max_tokens=5000)
+                            max_tokens=5000)
 
-                    _t1_bg_angle = ENTITY_CONTEXT.get(
-                        st.session_state.get("entity_type","🏦 Private Banking"), {}
-                    ).get("background_angle","financial services")
-                    pub_recs_raw = _web_search_call(c,
-                        f"Search for public audit recommendations and supervisory findings specifically about '{audit_topic}' "
-                        f"in {_t1_bg_angle}, from the last 3 years. "
-                        f"Sources: Basel Committee, IMF FSAPs, Big 4 public reports, IIA, FINMA, MAS, FCA, EBA, FATF. "
-                        f"Return a JSON array of 6-10 real entries found:\n"
-                        f'[{{"source":"<issuing body>","year":"YYYY","recommendation":"<recommendation summary, 2-3 sentences>","applicability":"<how it applies to {_t1_bg_angle}>"}}]',
-                        system="You are a financial sector audit intelligence analyst. Search the web for real published information. Return ONLY a valid JSON array. No markdown, no commentary.",
-                        max_tokens=4000)
+                        _t1_bg_angle = ENTITY_CONTEXT.get(
+                            st.session_state.get("entity_type","🏦 Private Banking"), {}
+                        ).get("background_angle","financial services")
+                        pub_recs_raw = _web_search_call(c,
+                            f"Search for public audit recommendations and supervisory findings specifically about '{audit_topic}' "
+                            f"in {_t1_bg_angle}, from the last 3 years. "
+                            f"Sources: Basel Committee, IMF FSAPs, Big 4 public reports, IIA, FINMA, MAS, FCA, EBA, FATF. "
+                            f"Return a JSON array of 6-10 real entries found:\n"
+                            f'[{{"source":"<issuing body>","year":"YYYY","recommendation":"<recommendation summary, 2-3 sentences>","applicability":"<how it applies to {_t1_bg_angle}>"}}]',
+                            system="You are a financial sector audit intelligence analyst. Search the web for real published information. Return ONLY a valid JSON array. No markdown, no commentary.",
+                            max_tokens=4000)
 
-                    st.session_state.t1_risks    = _parse_json(risks_raw)
-                    st.session_state.t1_regs     = _parse_json(regs_raw)
-                    st.session_state.t1_pub_recs = _parse_json(pub_recs_raw) or []
-                    st.session_state.t1_topic    = audit_topic
-                    st.session_state.t1_jurs     = jurisdictions
+                        st.session_state.t1_risks    = _parse_json(risks_raw)
+                        st.session_state.t1_regs     = _parse_json(regs_raw)
+                        st.session_state.t1_pub_recs = _parse_json(pub_recs_raw) or []
+                        st.session_state.t1_topic    = audit_topic
+                        st.session_state.t1_jurs     = jurisdictions
 
-                    _save_history(audit_topic, jurisdictions, st.session_state.t1_risks, st.session_state.t1_regs, st.session_state.t1_pub_recs)
+                        _save_history(audit_topic, jurisdictions, st.session_state.t1_risks, st.session_state.t1_regs, st.session_state.t1_pub_recs)
 
-                    def _h1(name, inp):
-                        if name == "save_regulatory_framework":
-                            try:
-                                p = generate_regulatory_framework_docx(inp, OUTPUT_DIR)
-                                return f"Saved: {p}", {"docx_path": p}
-                            except Exception as ex:
-                                return f"Error: {ex}", {}
-                        return "Unknown tool", {}
+                        def _h1(name, inp):
+                            if name == "save_regulatory_framework":
+                                try:
+                                    p = generate_regulatory_framework_docx(inp, OUTPUT_DIR)
+                                    return f"Saved: {p}", {"docx_path": p}
+                                except Exception as ex:
+                                    return f"Error: {ex}", {}
+                            return "Unknown tool", {}
 
-                    _, extra = _agentic_loop(c, _a1.SYSTEM_PROMPT, _a1.TOOLS,
-                        [{"role": "user", "content": [{"type": "text", "text": (
-                            f"Generate a comprehensive regulatory framework report.\n\n"
-                            f"Audit Topic: {audit_topic}\n"
-                            f"Institution: {_t1_inst}\n"
-                            f"Jurisdictions: {jur_str}\n\n"
-                            f"Cover: identified risks, applicable regulations, cross-jurisdictional analysis. "
-                            f"Then call save_regulatory_framework to export."
-                        )}]}], _h1)
+                        _, extra = _agentic_loop(c, _a1.SYSTEM_PROMPT, _a1.TOOLS,
+                            [{"role": "user", "content": [{"type": "text", "text": (
+                                f"Generate a comprehensive regulatory framework report.\n\n"
+                                f"Audit Topic: {audit_topic}\n"
+                                f"Institution: {_t1_inst}\n"
+                                f"Jurisdictions: {jur_str}\n\n"
+                                f"Cover: identified risks, applicable regulations, cross-jurisdictional analysis. "
+                                f"Then call save_regulatory_framework to export."
+                            )}]}], _h1)
 
-                    if "docx_path" in extra and Path(extra["docx_path"]).exists():
-                        st.session_state.t1_docx = Path(extra["docx_path"]).read_bytes()
+                        if "docx_path" in extra and Path(extra["docx_path"]).exists():
+                            st.session_state.t1_docx = Path(extra["docx_path"]).read_bytes()
 
-                    try:
-                        p_xlsx = generate_risk_analysis_excel({
-                            "topic": audit_topic,
-                            "risks": st.session_state.t1_risks or [],
-                            "regs": st.session_state.t1_regs or [],
-                            "pub_recs": st.session_state.t1_pub_recs or [],
-                        }, OUTPUT_DIR)
-                        st.session_state.t1_xlsx = Path(p_xlsx).read_bytes()
+                        try:
+                            p_xlsx = generate_risk_analysis_excel({
+                                "topic": audit_topic,
+                                "risks": st.session_state.t1_risks or [],
+                                "regs": st.session_state.t1_regs or [],
+                                "pub_recs": st.session_state.t1_pub_recs or [],
+                            }, OUTPUT_DIR)
+                            st.session_state.t1_xlsx = Path(p_xlsx).read_bytes()
+                        except Exception:
+                            pass
+                        try:
+                            p_pptx = generate_tab1_pptx({
+                                "topic": audit_topic,
+                                "jurs": jurisdictions,
+                                "risks": st.session_state.t1_risks or [],
+                                "regs": st.session_state.t1_regs or [],
+                            }, OUTPUT_DIR)
+                            st.session_state.t1_pptx2 = Path(p_pptx).read_bytes()
+                        except Exception:
+                            pass
+                        try:
+                            _risks_txt = "\n".join(
+                                f"[{r.get('level','')}] {r.get('title','')} — {r.get('description','')}"
+                                for r in (st.session_state.t1_risks or [])
+                            )
+                            _regs_txt = "\n".join(
+                                r if isinstance(r, str) else f"{r.get('reference','')} — {r.get('title','')}"
+                                for r in (st.session_state.t1_regs or [])
+                            )
+                            st.session_state.t1_pdf = _make_pdf(
+                                f"Risk Analysis — {audit_topic}",
+                                [("Risks Identified", _risks_txt), ("Applicable Regulations", _regs_txt)],
+                            )
+                        except Exception:
+                            pass
+
+                        st.session_state["t1_show_form"] = False
+                        st.rerun()
+
                     except Exception:
-                        pass
-                    try:
-                        p_pptx = generate_tab1_pptx({
-                            "topic": audit_topic,
-                            "jurs": jurisdictions,
-                            "risks": st.session_state.t1_risks or [],
-                            "regs": st.session_state.t1_regs or [],
-                        }, OUTPUT_DIR)
-                        st.session_state.t1_pptx2 = Path(p_pptx).read_bytes()
-                    except Exception:
-                        pass
-                    try:
-                        _risks_txt = "\n".join(
-                            f"[{r.get('level','')}] {r.get('title','')} — {r.get('description','')}"
-                            for r in (st.session_state.t1_risks or [])
-                        )
-                        _regs_txt = "\n".join(
-                            r if isinstance(r, str) else f"{r.get('reference','')} — {r.get('title','')}"
-                            for r in (st.session_state.t1_regs or [])
-                        )
-                        st.session_state.t1_pdf = _make_pdf(
-                            f"Risk Analysis — {audit_topic}",
-                            [("Risks Identified", _risks_txt), ("Applicable Regulations", _regs_txt)],
-                        )
-                    except Exception:
-                        pass
+                        st.error("An error occurred. Please try again.")
+            st.markdown('</div></div>', unsafe_allow_html=True)
 
-                except Exception:
-                    st.error("An error occurred. Please try again.")
+        if _t1_mode == "static":
+            # ── Static Reference Data mode ─────────────────────────────────────────
+            _static_label()
+            _t1_entity_type = st.session_state.get("t1_entity_type", "🏦 Private Banking")
+            try:
+                _t1_entity_data = get_data_for_topic(
+                    audit_topic if audit_topic else "AML / KYC & Transaction Monitoring",
+                    entity_type=_t1_entity_type,
+                )
+            except Exception:
+                _t1_entity_data = {
+                    "risks": [], "tests": [], "kris": [],
+                    "da_scenarios": [], "regulatory_focus": [],
+                    "scope_suggestion": "", "typical_findings": [],
+                    "background_angle": "", "entity_key": "PRIVATE_BANKING",
+                    "keys": [],
+                }
+            _t1_entity_key   = _t1_entity_data.get("entity_key", "PRIVATE_BANKING")
+            _t1_entity_color = _ENTITY_COLORS.get(_t1_entity_key, "#818cf8")
+            _entity_label    = _t1_entity_type.split(" ", 1)[1] if " " in _t1_entity_type else _t1_entity_type
+            st.markdown(
+                f'<div style="display:flex;align-items:center;gap:12px;margin:8px 0 16px">'
+                f'<span style="background:{_t1_entity_color}22;color:{_t1_entity_color};border:1px solid {_t1_entity_color}44;'
+                f'border-radius:6px;padding:4px 14px;font-size:12px;font-weight:700">📊 {_entity_label} context</span>'
+                f'<span style="font-size:11.5px;color:#5a6488;font-style:italic">'
+                f'Risks and regulations adapted for {_t1_entity_type}</span>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+            _t1_theme = _topic_to_theme(audit_topic) if audit_topic else "AML_KYC"
+            _t1_theme = _t1_theme or "AML_KYC"
+            _t1_theme_label = _t1_theme.replace("_", " ").title()
 
-    # Results (live mode only)
-    if _t1_mode == "live" and (st.session_state.t1_risks or st.session_state.t1_regs):
+            # Resolve entity-specific data for this topic
+            _ri_entity     = st.session_state.get("entity_type", "🏦 Private Banking")
+            _ri_ent_data   = ENTITY_CONTEXT.get(_ri_entity, {})
+            _ri_topic_data = _ri_ent_data.get("topics", {}).get(_t1_theme, {})
+            _ri_reg_refs   = _ri_topic_data.get("regulatory_refs", [])
+            _ri_emphasis   = [e.lower() for e in _ri_topic_data.get("risk_emphasis", [])]
+            _ri_findings   = _ri_topic_data.get("typical_findings", [])
+            _ri_bg, _ri_col = _ENTITY_COLORS.get(_ri_entity, ("#0a2540", "#818cf8"))
+            _ri_bg_lbl     = _ri_ent_data.get("background_angle", "financial services")
+
+            with st.expander("🗺️ A — Risk Indicators", expanded=True):
+                # Section header with entity context badge
+                _ri_badge_html = _entity_badge_html(_ri_entity, "11px")
+                st.markdown(
+                    f'<div class="section-title" style="display:flex;align-items:center;justify-content:space-between">'
+                    f'<span>A. Risk Indicators &mdash; {_t1_theme_label}'
+                    f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
+                    f'{len(RISK_INDICATORS.get(_t1_theme, []))} risks in library</span></span>'
+                    f'<span style="font-size:11px;color:#5a6488">{_ri_badge_html} context</span>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+                # Entity-specific context panel
+                if _ri_reg_refs or _ri_emphasis:
+                    _reg_str  = " &nbsp;·&nbsp; ".join(_ri_reg_refs[:4]) if _ri_reg_refs else ""
+                    _emp_str  = " &nbsp;·&nbsp; ".join(e.capitalize() for e in _ri_topic_data.get("risk_emphasis", [])[:4])
+                    st.markdown(
+                        f'<div style="background:{_ri_bg};border-left:3px solid {_ri_col};border-radius:0 6px 6px 0;'
+                        f'padding:8px 14px;margin:6px 0 12px;font-size:12px;color:#c8d0e8">'
+                        f'<span style="font-size:11px;color:{_ri_col};font-weight:700">Risks and regulations adapted for {_ri_entity}</span><br>'
+                        + (f'<span style="font-size:11.5px"><b>Regulatory focus:</b> {_reg_str}</span><br>' if _reg_str else "")
+                        + (f'<span style="font-size:11.5px"><b>Key risk areas:</b> {_emp_str}</span>' if _emp_str else "")
+                        + '</div>',
+                        unsafe_allow_html=True,
+                    )
+                st.markdown(_EXAMPLE_RISK, unsafe_allow_html=True)
+                _ri_c1, _ri_c2 = st.columns([3, 1.5])
+                _ri_sq = _ri_c1.text_input("Search risks", placeholder="Filter risks…", key="_ri_sq", label_visibility="collapsed")
+                _ri_slv = _ri_c2.selectbox("Level", ["All", "Critical", "High", "Moderate"], key="_ri_slv", label_visibility="collapsed")
+                _entity_specific_risks = _t1_entity_data.get("additional_risks", [])
+                _base_risks = RISK_INDICATORS.get(_t1_theme, [])
+                _ri_filtered = _entity_specific_risks + _base_risks
+                if _ri_slv != "All":
+                    _ri_filtered = [r for r in _ri_filtered if r.get("level") == _ri_slv]
+                if _ri_sq:
+                    _qr = _ri_sq.lower()
+                    _ri_filtered = [r for r in _ri_filtered if _qr in (r.get("title","") + r.get("description","")).lower()]
+                if _ri_filtered:
+                    _LVLC = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308"}
+                    _LVLBG = {"Critical": "rgba(239,68,68,0.08)", "High": "rgba(249,115,22,0.08)", "Moderate": "rgba(234,179,8,0.06)"}
+                    for _r in _ri_filtered:
+                        _col = _LVLC.get(_r["level"], "#8392bb")
+                        _bg  = _LVLBG.get(_r["level"], "transparent")
+                        _pcolor = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(_r.get("probability",""), "#8392bb")
+                        _icolor = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(_r.get("impact",""), "#8392bb")
+                        _ctrls  = "".join(f"<li>{c}</li>" for c in _r.get("expected_controls", []))
+                        _flags  = "".join(f"<li>{f}</li>" for f in _r.get("red_flags", []))
+                        # Highlight risks matching entity emphasis
+                        _rtitle_low = _r.get("title","").lower()
+                        _entity_match = any(kw in _rtitle_low for kw in _ri_emphasis)
+                        _star_badge   = (
+                            f'<span style="background:{_ri_col}22;color:{_ri_col};border:1px solid {_ri_col}44;'
+                            f'border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px">★ Entity focus</span>'
+                            if _entity_match else ""
+                        )
+                        _specifics_lbl = f"🏢 {_ri_bg_lbl.title()} context"
+                        _specifics_txt = _r.get("private_banking_specifics","")
+                        st.markdown(f"""
+                        <div style="border:1px solid {_col}33;border-radius:9px;padding:14px 18px;margin-bottom:12px;background:{_bg}">
+                          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+                            <span style="background:{_col}22;color:{_col};border:1px solid {_col}44;border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">{_r["level"]}</span>
+                            <span style="font-size:13.5px;font-weight:600;color:var(--text-primary)">{_r.get("id","")} &mdash; {_r["title"]}</span>{_star_badge}
+                            <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">Prob: <span style="color:{_pcolor};font-weight:600">{_r.get("probability","")}</span> &nbsp;&middot;&nbsp; Impact: <span style="color:{_icolor};font-weight:600">{_r.get("impact","")}</span></span>
+                          </div>
+                          <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.7">{_r["description"]}</p>
+                          <details>
+                            <summary style="font-size:12px;color:#818cf8;cursor:pointer;font-weight:500">Controls &amp; Red Flags</summary>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+                              <div><div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px">EXPECTED CONTROLS</div>
+                              <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{_ctrls}</ul></div>
+                              <div><div style="font-size:11px;font-weight:600;color:#ef4444aa;margin-bottom:4px">RED FLAGS</div>
+                              <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{_flags}</ul></div>
+                            </div>
+                            <div style="margin-top:10px;font-size:11.5px;color:var(--text-muted);font-style:italic">{_specifics_lbl}: {_specifics_txt}</div>
+                          </details>
+                        </div>""", unsafe_allow_html=True)
+                    # Entity-specific typical findings for this topic
+                    if _ri_findings:
+                        st.markdown(
+                            f'<div style="background:{_ri_bg};border-left:3px solid {_ri_col};border-radius:0 6px 6px 0;'
+                            f'padding:8px 14px;margin-top:10px;font-size:12px;color:#c8d0e8">'
+                            f'<span style="font-weight:700;color:{_ri_col}">Typical findings for {_ri_entity}:</span><br>'
+                            + "".join(f'<span style="display:block;margin-top:3px">&bull; {f}</span>' for f in _ri_findings)
+                            + '</div>',
+                            unsafe_allow_html=True,
+                        )
+                else:
+                    st.caption("No risks match the filter.")
+
+            with st.expander("📋 B — Public Audit Recommendations", expanded=False):
+                _all_rec_sources = sorted({r.get("source","") for r in PUBLIC_AUDIT_RECOMMENDATIONS if r.get("source")})
+                st.markdown(
+                    f'<div class="section-title">B. Public Audit Recommendations &mdash; {_t1_theme_label}'
+                    f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
+                    f'{len([r for r in PUBLIC_AUDIT_RECOMMENDATIONS if r.get("theme") == _t1_theme])} entries</span></div>',
+                    unsafe_allow_html=True,
+                )
+                st.markdown(_EXAMPLE_PUB_REC, unsafe_allow_html=True)
+                _pr_c1, _pr_c2 = st.columns([3, 2])
+                _pr_sq = _pr_c1.text_input("Search recommendations", placeholder="Filter…", key="_pr_sq", label_visibility="collapsed")
+                _pr_ssrc = _pr_c2.selectbox("Source", ["All"] + _all_rec_sources, key="_pr_ssrc", label_visibility="collapsed")
+                _show_pub_recs(_t1_theme, search=_pr_sq)
+
+            _rf_cats = sorted({e["category"] for e in HNWI_RED_FLAGS})
+            with st.expander("🚨 C — HNWI Red Flags", expanded=False):
+                st.markdown(
+                    f'<div class="section-title">C. HNWI Red Flags &mdash; Private Banking'
+                    f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
+                    f'{len(HNWI_RED_FLAGS)} red flags &middot; AML &middot; Fraud &middot; Suitability &middot; Tax &middot; Conduct</span></div>',
+                    unsafe_allow_html=True,
+                )
+                _rf_c1, _rf_c2, _rf_c3 = st.columns([3, 1.5, 1.5])
+                _rf_sq   = _rf_c1.text_input("Search red flags", placeholder="Filter red flags…", key="_rf_sq",   label_visibility="collapsed")
+                _rf_scat = _rf_c2.selectbox("Category", ["All"] + _rf_cats,                        key="_rf_scat", label_visibility="collapsed")
+                _rf_slv  = _rf_c3.selectbox("Risk Level", ["All", "Critical", "High", "Medium"],    key="_rf_slv",  label_visibility="collapsed")
+                _show_red_flags(cat_filter=_rf_scat, level_filter=_rf_slv, search=_rf_sq)
+
+            st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
+
+    else:
+        # ── Results mode: show "← Modifier" back button ────────────────────────
+        audit_topic = st.session_state.get("t1_topic", "") or ""
+        jurisdictions = st.session_state.get("t1_jurs") or st.session_state.get("t1_jurs_pills") or JURISDICTIONS[:4]
+        _t1_valid = True
+
+        _back_c, _ = st.columns([2, 6])
+        with _back_c:
+            st.markdown('<div class="back-btn">', unsafe_allow_html=True)
+            if st.button("← Modifier", key="t1_back"):
+                st.session_state["t1_show_form"] = True
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
+
+        # Results display
         topic_lbl = st.session_state.t1_topic or "audit"
         st.markdown("---")
 
@@ -4858,223 +4988,155 @@ elif _active == 2:
         ]
     )
     _t2_mode = render_mode_toggle("mode_tab2")
-    st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
 
-    if st.session_state.t1_topic:
-        st.markdown(f'<div class="ctx-pill">&#10003; Topic: {st.session_state.t1_topic}</div>', unsafe_allow_html=True)
+    # Form / results toggle
+    _t2_show_form = st.session_state.get("t2_show_form", True)
+    _t2_has_results = bool(st.session_state.get("t2_rationale") or st.session_state.get("t2_tests"))
+    _t2_in_results = _t2_mode == "live" and _t2_has_results and not _t2_show_form
 
-    # Pre-fill from Tab 1 if Tab 2 field is still empty
-    if not st.session_state.get("t2_topic_in"):
-        _prefill = st.session_state.get("topic_tab1") or st.session_state.get("t1_topic") or ""
-        if _prefill:
-            st.session_state["t2_topic_in"] = _prefill
-
-    topic2 = st.text_input(
-        "Audit Topic",
-        placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity…",
-        key="t2_topic_in",
-    )
-    if st.session_state.get("topic_tab1"):
-        st.markdown(
-            '<p style="color:#5a6488;font-size:11px;margin:-8px 0 8px">ℹ️ Pre-filled from Risk Analysis. You can modify it freely.</p>',
-            unsafe_allow_html=True,
-        )
-
-    # Entity context hint for Tab 2
-    _t2_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
-    _t2_ent_ctx = ENTITY_CONTEXT.get(_t2_entity, {})
-    _t2_theme   = _topic_to_theme(topic2 or "") or _topic_to_theme(st.session_state.get("topic_tab1", "") or "")
-    _t2_topic_data = _t2_ent_ctx.get("topics", {}).get(_t2_theme or "", {}) if _t2_theme else {}
-    _t2_test_emphasis = _t2_topic_data.get("risk_emphasis", [])
-    if _t2_test_emphasis:
-        _bg2, _col2 = _ENTITY_COLORS.get(_t2_entity, ("#0a2540", "#818cf8"))
-        st.markdown(
-            f'<div style="background:{_bg2};border-left:3px solid {_col2};border-radius:0 6px 6px 0;'
-            f'padding:8px 12px;margin:4px 0 10px;font-size:12px;color:#c8d0e8">'
-            f'<span style="font-weight:700;color:{_col2}">{_t2_entity} &mdash; key risk areas:</span> '
-            f'{" &middot; ".join(_t2_test_emphasis)}</div>',
-            unsafe_allow_html=True,
-        )
-
-    # Resolve scope: template > entity context > empty
-    _t2_scope_default = st.session_state.get("_tpl_scope", "")
-    if not _t2_scope_default and _t2_theme and _t2_topic_data:
-        _t2_scope_default = _t2_topic_data.get("scope_suggestion", "")
-    scope = st.text_area(
-        "Audit Scope",
-        value=_t2_scope_default,
-        placeholder="e.g. All group entities in CH, SG and HK. Focus on client onboarding and transaction monitoring.",
-        height=80,
-        key="t2_scope_in",
-        help="Define the perimeter of the audit: entities, geographies, processes, and systems in scope.",
-    )
-
-    st.caption("📎 Supporting documents (optional — PDF, Word, Excel, TXT)")
-    uploads2 = st.file_uploader(
-        "Supporting documents", label_visibility="collapsed",
-        type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t2_upload",
-    )
-
-    st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
-
-    # Input validation
-    _t2_valid = True
-    if topic2 and not scope.strip():
-        st.warning("⚠ Please define the audit scope before generating the plan.")
-        _t2_valid = False
-
-    # IIA Topical Requirement banner
-    _t2_topic_upper = (topic2 or "").upper()
-    _t2_tr_match = None
-    if any(k in _t2_topic_upper for k in ("CYBER", "ICT", "INFORMATION SECURITY", "DORA", "RANSOMWARE")):
-        _t2_tr_match = next((s for s in IIA_STANDARDS_2024 if s["standard_id"] == "TR-2"), None)
-        _t2_tr_label = "🔒 TR-Cyber"
-    elif any(k in _t2_topic_upper for k in ("THIRD", "VENDOR", "OUTSOURC", "SUPPLY CHAIN")):
-        _t2_tr_match = next((s for s in IIA_STANDARDS_2024 if s["standard_id"] == "TR-5"), None)
-        _t2_tr_label = "🤝 TR-Third"
-    if _t2_tr_match:
-        _tr_src = _t2_tr_match.get("source_guide", "IIA User Guide 2025")
-        _tr_keys = "".join(f"<li style='margin-bottom:3px'>{k}</li>" for k in _t2_tr_match.get("key_requirements", []))
+    if not _t2_in_results:
+        # ── Agent Card ──────────────────────────────────────────────────────────
+        _t2_status_pill = '<span class="agent-status-pill agent-status-live">⚡ Live</span>' if _t2_mode == "live" else '<span class="agent-status-pill agent-status-ready">📚 Static</span>'
         st.markdown(f"""
-        <div style="background:rgba(234,179,8,0.07);border:1px solid rgba(234,179,8,0.35);border-left:4px solid #eab308;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <span style="background:rgba(234,179,8,0.18);color:#eab308;border:1px solid rgba(234,179,8,0.45);border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">⚠️ IIA TOPICAL REQUIREMENT APPLICABLE</span>
-            <span style="font-size:12.5px;font-weight:600;color:#dde3f5">{_t2_tr_label} &mdash; {_t2_tr_match['title']}</span>
-            <span style="font-size:11px;color:#5a6488;font-style:italic">{_tr_src} &middot; Mandatory</span>
-          </div>
-          <p style="font-size:12px;color:#c8d0e8;margin:0 0 8px;line-height:1.8">This audit topic triggers a mandatory IIA Topical Requirement. All assurance engagements must cover the following key areas:</p>
-          <ul style="margin:0;padding-left:16px;font-size:12px;color:#c8d0e8;line-height:1.9">{_tr_keys}</ul>
-          <div style="margin-top:8px;font-size:11px;color:#5a6488">See Tab 3 &#8594; IIA Standards Reference &#8594; {_t2_tr_match['standard_id']} for full requirements with framework mapping.</div>
+        <div class="agent-card">
+          <div class="agent-badge-pill">AGENT 2</div>
+          <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Agent 2 — Audit Plan</div>
+          <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:14px">Generates a structured audit plan with rationale, background, test programme and data analytics scenarios tailored to your scope.</div>
+          <div>{_t2_status_pill}</div>
         </div>""", unsafe_allow_html=True)
 
-    if _t2_mode == "static":
-        # ── Static Reference Data mode ─────────────────────────────────────────
-        _static_label()
-        _t2_theme = _topic_to_theme(topic2) if topic2 else "CYBER_RISK"
-        _t2_theme = _t2_theme or "CYBER_RISK"
-        _t2_theme_label = _t2_theme.replace("_", " ").title()
-        _n_tests = len(AUDIT_TESTS_LIBRARY.get(_t2_theme, []))
-        _n_da = len(DATA_ANALYTICS_SCENARIOS.get(_t2_theme, []))
+        if st.session_state.t1_topic:
+            st.markdown(f'<div class="ctx-pill">&#10003; Topic: {st.session_state.t1_topic}</div>', unsafe_allow_html=True)
 
-        st.markdown(_EXAMPLE_RATIONALE, unsafe_allow_html=True)
+        # Pre-fill from Tab 1 if Tab 2 field is still empty
+        if not st.session_state.get("t2_topic_in"):
+            _prefill = st.session_state.get("topic_tab1") or st.session_state.get("t1_topic") or ""
+            if _prefill:
+                st.session_state["t2_topic_in"] = _prefill
 
-        try:
-            _t2_static_entity_data = get_data_for_topic(
-                topic2 if topic2 else "AML / KYC & Transaction Monitoring",
-                entity_type=st.session_state.get("t1_entity_type", "🏦 Private Banking"),
-            )
-        except Exception:
-            _t2_static_entity_data = {
-                "risks": [], "tests": [], "kris": [],
-                "da_scenarios": [], "regulatory_focus": [],
-                "scope_suggestion": "", "typical_findings": [],
-                "background_angle": "", "entity_key": "PRIVATE_BANKING",
-                "keys": [],
-            }
-        with st.expander("📖 A — Rationale & Thematic Background", expanded=True):
+        topic2 = st.text_input(
+            "Audit Topic",
+            placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity…",
+            key="t2_topic_in",
+        )
+        if st.session_state.get("topic_tab1"):
             st.markdown(
-                f'<div class="section-title">A. Rationale &amp; Thematic Background &mdash; {_t2_theme_label}</div>',
+                '<p style="color:#5a6488;font-size:11px;margin:-8px 0 8px">ℹ️ Pre-filled from Risk Analysis. You can modify it freely.</p>',
                 unsafe_allow_html=True,
             )
-            _bg_angle = _t2_static_entity_data.get("background_angle", "")
-            if _bg_angle:
-                st.markdown(
-                    f'<div style="background:rgba(99,102,241,0.08);border-left:3px solid #6366f1;'
-                    f'border-radius:0 8px 8px 0;padding:10px 16px;margin-bottom:14px;'
-                    f'font-size:12.5px;color:#c8d0e8;font-style:italic">'
-                    f'💡 {_bg_angle}</div>',
-                    unsafe_allow_html=True,
-                )
-            _show_thematic_background(_t2_theme)
-            _typical = _t2_static_entity_data.get("typical_findings", [])
-            if _typical:
-                st.markdown(
-                    '<div style="margin-top:14px"><div style="font-size:12px;font-weight:700;'
-                    'color:#818cf8;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">'
-                    '★ Typical Findings for this Entity Type</div>',
-                    unsafe_allow_html=True,
-                )
-                for _tf in _typical:
-                    st.markdown(
-                        f'<div style="font-size:12.5px;color:#c8d0e8;padding:4px 0 4px 14px;'
-                        f'border-left:2px solid rgba(127,168,251,0.3)">• {_tf}</div>',
-                        unsafe_allow_html=True,
-                    )
-                st.markdown('</div>', unsafe_allow_html=True)
 
-        with st.expander("🗂️ B — Audit Tests Library", expanded=False):
+        # Entity context hint for Tab 2
+        _t2_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
+        _t2_ent_ctx = ENTITY_CONTEXT.get(_t2_entity, {})
+        _t2_theme   = _topic_to_theme(topic2 or "") or _topic_to_theme(st.session_state.get("topic_tab1", "") or "")
+        _t2_topic_data = _t2_ent_ctx.get("topics", {}).get(_t2_theme or "", {}) if _t2_theme else {}
+        _t2_test_emphasis = _t2_topic_data.get("risk_emphasis", [])
+        if _t2_test_emphasis:
+            _bg2, _col2 = _ENTITY_COLORS.get(_t2_entity, ("#0a2540", "#818cf8"))
             st.markdown(
-                f'<div class="section-title">B. Audit Tests Library &mdash; {_t2_theme_label}'
-                f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{_n_tests} tests available for this topic</span></div>',
+                f'<div style="background:{_bg2};border-left:3px solid {_col2};border-radius:0 6px 6px 0;'
+                f'padding:8px 12px;margin:4px 0 10px;font-size:12px;color:#c8d0e8">'
+                f'<span style="font-weight:700;color:{_col2}">{_t2_entity} &mdash; key risk areas:</span> '
+                f'{" &middot; ".join(_t2_test_emphasis)}</div>',
                 unsafe_allow_html=True,
             )
-            st.markdown(_EXAMPLE_TEST, unsafe_allow_html=True)
-            _tl_c1, _tl_c2, _tl_c3, _tl_c4 = st.columns([3, 1.5, 1.8, 1.8])
-            _tl_sq    = _tl_c1.text_input("Search tests", placeholder="Filter tests…", key="_tl_sq", label_visibility="collapsed")
-            _tl_slv   = _tl_c2.selectbox("Level", ["All", "Critical", "High", "Moderate"], key="_tl_slv", label_visibility="collapsed")
-            _tl_stype = _tl_c3.selectbox("Type", ["All", "Standard", "Data Analytics"], key="_tl_stype", label_visibility="collapsed")
-            _tl_rlv   = _tl_c4.selectbox("Filter by Risk Level", ["All", "🔴 Critical", "🟠 High", "🟡 Moderate"], key="_tl_rlv", label_visibility="collapsed")
-            _rl_map   = {"All": "All", "🔴 Critical": "Critical", "🟠 High": "High", "🟡 Moderate": "Moderate"}
-            _show_tests_library(_t2_theme, search=_tl_sq, level_filter=_tl_slv, type_filter=_tl_stype,
-                                risk_level_filter=_rl_map[_tl_rlv])
 
-        with st.expander("📊 C — Data Analytics Scenarios", expanded=False):
-            st.markdown(
-                f'<div class="section-title">C. Data Analytics Scenarios &mdash; {_t2_theme_label}'
-                f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{_n_da} scenarios</span></div>',
-                unsafe_allow_html=True,
-            )
-            st.markdown(_EXAMPLE_DA, unsafe_allow_html=True)
-            _da_c1 = st.columns([3])[0]
-            _da_sq = _da_c1.text_input("Search scenarios", placeholder="Filter scenarios…", key="_da_sq", label_visibility="collapsed")
-            _show_da_scenarios(_t2_theme, search=_da_sq)
+        # Resolve scope: template > entity context > empty
+        _t2_scope_default = st.session_state.get("_tpl_scope", "")
+        if not _t2_scope_default and _t2_theme and _t2_topic_data:
+            _t2_scope_default = _t2_topic_data.get("scope_suggestion", "")
+        scope = st.text_area(
+            "Audit Scope",
+            value=_t2_scope_default,
+            placeholder="e.g. All group entities in CH, SG and HK. Focus on client onboarding and transaction monitoring.",
+            height=80,
+            key="t2_scope_in",
+            help="Define the perimeter of the audit: entities, geographies, processes, and systems in scope.",
+        )
 
-        st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.caption("📎 Supporting documents (optional — PDF, Word, Excel, TXT)")
+        uploads2 = st.file_uploader(
+            "Supporting documents", label_visibility="collapsed",
+            type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t2_upload",
+        )
 
-    if _t2_mode == "live":
-        if st.button("Generate Plan", type="primary", disabled=_disabled or not topic2 or not _t2_valid, key="t2_run"):
-            with st.spinner("Generating…"):
-                try:
-                    c = _client()
-                    jur_str = ", ".join(st.session_state.t1_jurs or JURISDICTIONS[:3])
-                    top_risks_str = ""
-                    if st.session_state.t1_risks:
-                        top = [r["name"] for r in st.session_state.t1_risks if r.get("level") == "Critical"][:4]
-                        if top:
-                            top_risks_str = f"\nKey critical risks identified: {', '.join(top)}"
+        st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
 
-                    file_ids2 = []
-                    for uf in (uploads2 or []):
-                        fm = _upload_sf(c, uf)
-                        if fm:
-                            file_ids2.append(fm)
-                    doc_ctx = f"\n{len(file_ids2)} supporting document(s) provided for context." if file_ids2 else ""
+        # Input validation
+        _t2_valid = True
+        if topic2 and not scope.strip():
+            st.warning("⚠ Please define the audit scope before generating the plan.")
+            _t2_valid = False
 
-                    _t2_ent     = st.session_state.get("entity_type", "🏦 Private Banking")
-                    _t2_bg_ang  = ENTITY_CONTEXT.get(_t2_ent, {}).get("background_angle", "financial services")
-                    _t2_inst    = _entity_institution_str(jurs=st.session_state.t1_jurs or JURISDICTIONS[:3])
-                    sys_prompt  = f"You are a senior audit partner at a Big 4 firm specialising in {_t2_bg_ang}. Write in English, professional tone, concise and precise."
+        # IIA Topical Requirement banner
+        _t2_topic_upper = (topic2 or "").upper()
+        _t2_tr_match = None
+        if any(k in _t2_topic_upper for k in ("CYBER", "ICT", "INFORMATION SECURITY", "DORA", "RANSOMWARE")):
+            _t2_tr_match = next((s for s in IIA_STANDARDS_2024 if s["standard_id"] == "TR-2"), None)
+            _t2_tr_label = "🔒 TR-Cyber"
+        elif any(k in _t2_topic_upper for k in ("THIRD", "VENDOR", "OUTSOURC", "SUPPLY CHAIN")):
+            _t2_tr_match = next((s for s in IIA_STANDARDS_2024 if s["standard_id"] == "TR-5"), None)
+            _t2_tr_label = "🤝 TR-Third"
+        if _t2_tr_match:
+            _tr_src = _t2_tr_match.get("source_guide", "IIA User Guide 2025")
+            _tr_keys = "".join(f"<li style='margin-bottom:3px'>{k}</li>" for k in _t2_tr_match.get("key_requirements", []))
+            st.markdown(f"""
+            <div style="background:rgba(234,179,8,0.07);border:1px solid rgba(234,179,8,0.35);border-left:4px solid #eab308;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+                <span style="background:rgba(234,179,8,0.18);color:#eab308;border:1px solid rgba(234,179,8,0.45);border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">⚠️ IIA TOPICAL REQUIREMENT APPLICABLE</span>
+                <span style="font-size:12.5px;font-weight:600;color:#dde3f5">{_t2_tr_label} &mdash; {_t2_tr_match['title']}</span>
+                <span style="font-size:11px;color:#5a6488;font-style:italic">{_tr_src} &middot; Mandatory</span>
+              </div>
+              <p style="font-size:12px;color:#c8d0e8;margin:0 0 8px;line-height:1.8">This audit topic triggers a mandatory IIA Topical Requirement. All assurance engagements must cover the following key areas:</p>
+              <ul style="margin:0;padding-left:16px;font-size:12px;color:#c8d0e8;line-height:1.9">{_tr_keys}</ul>
+              <div style="margin-top:8px;font-size:11px;color:#5a6488">See Tab 3 &#8594; IIA Standards Reference &#8594; {_t2_tr_match['standard_id']} for full requirements with framework mapping.</div>
+            </div>""", unsafe_allow_html=True)
 
-                    rationale = _call(c, f"""Audit topic: {topic2}
+        if _t2_mode == "live":
+            st.markdown('<div class="gen-btn-wrap">', unsafe_allow_html=True)
+            st.markdown('<div class="gen-btn">', unsafe_allow_html=True)
+            if st.button("✦ Générer le plan", disabled=_disabled or not topic2 or not _t2_valid, key="t2_run"):
+                with st.spinner("Generating…"):
+                    try:
+                        c = _client()
+                        jur_str = ", ".join(st.session_state.t1_jurs or JURISDICTIONS[:3])
+                        top_risks_str = ""
+                        if st.session_state.t1_risks:
+                            top = [r["name"] for r in st.session_state.t1_risks if r.get("level") == "Critical"][:4]
+                            if top:
+                                top_risks_str = f"\nKey critical risks identified: {', '.join(top)}"
+
+                        file_ids2 = []
+                        for uf in (uploads2 or []):
+                            fm = _upload_sf(c, uf)
+                            if fm:
+                                file_ids2.append(fm)
+                        doc_ctx = f"\n{len(file_ids2)} supporting document(s) provided for context." if file_ids2 else ""
+
+                        _t2_ent     = st.session_state.get("entity_type", "🏦 Private Banking")
+                        _t2_bg_ang  = ENTITY_CONTEXT.get(_t2_ent, {}).get("background_angle", "financial services")
+                        _t2_inst    = _entity_institution_str(jurs=st.session_state.t1_jurs or JURISDICTIONS[:3])
+                        sys_prompt  = f"You are a senior audit partner at a Big 4 firm specialising in {_t2_bg_ang}. Write in English, professional tone, concise and precise."
+
+                        rationale = _call(c, f"""Audit topic: {topic2}
 Institution: {_t2_inst}
 Scope: {scope or "All group entities"}{top_risks_str}{doc_ctx}
 
 Write a concise RATIONALE section (2-3 paragraphs) explaining why this audit is relevant RIGHT NOW.
 Cover: current regulatory triggers, recent enforcement actions or industry incidents, emerging risk trends specific to {_t2_bg_ang}.
 Plain prose, no headers. Bold key terms where appropriate.""",
-                        system=sys_prompt, max_tokens=2000)
+                            system=sys_prompt, max_tokens=2000)
 
-                    background = _call(c, f"""Audit topic: {topic2}
+                        background = _call(c, f"""Audit topic: {topic2}
 Institution: {_t2_inst}
 Scope: {scope or "All group entities"}{top_risks_str}{doc_ctx}
 
 Write a BACKGROUND INFORMATION section (3-4 paragraphs). Tone: McKinsey/EY — strategic, consultative.
 Cover: market context, current state in {_t2_bg_ang}, key challenges and regulatory landscape for this institution type.
 Plain prose, no headers. Bold key terms where appropriate.""",
-                        system=sys_prompt, max_tokens=2500)
+                            system=sys_prompt, max_tokens=2500)
 
-                    org_plan = _call(c, f"""Audit topic: {topic2}
+                        org_plan = _call(c, f"""Audit topic: {topic2}
 Institution: {_t2_inst}
 Scope: {scope or "All entities"}{top_risks_str}{doc_ctx}
 
@@ -5087,80 +5149,183 @@ Write a structured AUDIT PLAN with three inline sections (use **bold** for secti
 **Audit Objectives & Methodology** — 3-4 clear objectives. Risk-based, IIA-aligned. Key techniques.
 
 Plain prose per section.""",
-                        system=sys_prompt, max_tokens=2500)
+                            system=sys_prompt, max_tokens=2500)
 
-                    tests_raw = _call(c, f"""Audit topic: {topic2}
+                        tests_raw = _call(c, f"""Audit topic: {topic2}
 Institution: {_t2_inst}
 Scope: {scope or "All entities"}{top_risks_str}
 
 Generate EXACTLY 15 audit test procedures. ONLY valid JSON array, no markdown:
 [{{"num":1,"objective":"<1 sentence>","procedure":"<2-3 sentences>","population":"<what is tested>","sample_size":"<method and size>","failure_criteria":"<control failure definition>"}}]""",
-                        system=sys_prompt, max_tokens=7000)
-                    tests = _parse_json(tests_raw)
+                            system=sys_prompt, max_tokens=7000)
+                        tests = _parse_json(tests_raw)
 
-                    analytics_raw = _call(c, f"""Audit topic: {topic2}
+                        analytics_raw = _call(c, f"""Audit topic: {topic2}
 Institution: {_t2_inst}
 Scope: {scope or "All entities"}{top_risks_str}
 
 Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
 [{{"scenario":"<4-6 words>","objective":"<what it verifies>","data_source":"<system or dataset>","analysis_type":"<e.g. Trend analysis, Exception report>","anomaly":"<red flag being detected>"}}]""",
-                        system=sys_prompt, max_tokens=4000)
-                    analytics = _parse_json(analytics_raw)
+                            system=sys_prompt, max_tokens=4000)
+                        analytics = _parse_json(analytics_raw)
 
-                    st.session_state.t2_rationale  = rationale
-                    st.session_state.t2_background = background
-                    st.session_state.t2_org_plan   = org_plan
-                    st.session_state.t2_tests      = tests
-                    st.session_state.t2_analytics  = analytics
+                        st.session_state.t2_rationale  = rationale
+                        st.session_state.t2_background = background
+                        st.session_state.t2_org_plan   = org_plan
+                        st.session_state.t2_tests      = tests
+                        st.session_state.t2_analytics  = analytics
 
-                    extra_ctx = ""
-                    if st.session_state.t1_regs:
-                        extra_ctx = f"\n\nREGULATORY CONTEXT:\n{json.dumps(st.session_state.t1_regs, indent=2)[:2000]}"
+                        extra_ctx = ""
+                        if st.session_state.t1_regs:
+                            extra_ctx = f"\n\nREGULATORY CONTEXT:\n{json.dumps(st.session_state.t1_regs, indent=2)[:2000]}"
 
-                    def _h2(name, inp):
-                        if name == "generate_audit_plan_ppt":
-                            try:
-                                p = generate_audit_plan_ppt(inp, OUTPUT_DIR)
-                                return f"PPT saved: {p}. Now generate Excel.", {"ppt_path": p}
-                            except Exception as ex:
-                                return f"Error: {ex}", {}
-                        elif name == "generate_audit_procedures_excel":
-                            try:
-                                p = generate_audit_procedures_excel(inp, OUTPUT_DIR)
-                                return f"Excel saved: {p}.", {"excel_path": p}
-                            except Exception as ex:
-                                return f"Error: {ex}", {}
-                        return "Unknown tool", {}
+                        def _h2(name, inp):
+                            if name == "generate_audit_plan_ppt":
+                                try:
+                                    p = generate_audit_plan_ppt(inp, OUTPUT_DIR)
+                                    return f"PPT saved: {p}. Now generate Excel.", {"ppt_path": p}
+                                except Exception as ex:
+                                    return f"Error: {ex}", {}
+                            elif name == "generate_audit_procedures_excel":
+                                try:
+                                    p = generate_audit_procedures_excel(inp, OUTPUT_DIR)
+                                    return f"Excel saved: {p}.", {"excel_path": p}
+                                except Exception as ex:
+                                    return f"Error: {ex}", {}
+                            return "Unknown tool", {}
 
-                    _, extra = _agentic_loop(c, _a2.SYSTEM_PROMPT, _a2.TOOLS,
-                        [{"role": "user", "content": [{"type": "text", "text": (
-                            f"Create an audit plan for: {topic2}\n"
-                            f"Institution: {_t2_inst}\n"
-                            f"Scope: {scope or 'All entities'}"
-                            f"{extra_ctx}\n\n"
-                            f"1. Identify 6-10 audit subjects → call generate_audit_plan_ppt.\n"
-                            f"2. For each design 4-8 procedures → call generate_audit_procedures_excel."
-                        )}]}], _h2)
+                        _, extra = _agentic_loop(c, _a2.SYSTEM_PROMPT, _a2.TOOLS,
+                            [{"role": "user", "content": [{"type": "text", "text": (
+                                f"Create an audit plan for: {topic2}\n"
+                                f"Institution: {_t2_inst}\n"
+                                f"Scope: {scope or 'All entities'}"
+                                f"{extra_ctx}\n\n"
+                                f"1. Identify 6-10 audit subjects → call generate_audit_plan_ppt.\n"
+                                f"2. For each design 4-8 procedures → call generate_audit_procedures_excel."
+                            )}]}], _h2)
 
-                    if "ppt_path" in extra and Path(extra["ppt_path"]).exists():
-                        st.session_state.t2_pptx = Path(extra["ppt_path"]).read_bytes()
-                    if "excel_path" in extra and Path(extra["excel_path"]).exists():
-                        st.session_state.t2_xlsx = Path(extra["excel_path"]).read_bytes()
-                    try:
-                        _t2_sections = [(h, str(v)) for h, v in [
-                            ("Rationale",      st.session_state.t2_rationale or ""),
-                            ("Background",     st.session_state.t2_background or ""),
-                            ("Audit Programme",st.session_state.t2_org_plan   or ""),
-                        ] if v]
-                        st.session_state.t2_pdf = _make_pdf(f"Audit Plan — {topic2}", _t2_sections)
+                        if "ppt_path" in extra and Path(extra["ppt_path"]).exists():
+                            st.session_state.t2_pptx = Path(extra["ppt_path"]).read_bytes()
+                        if "excel_path" in extra and Path(extra["excel_path"]).exists():
+                            st.session_state.t2_xlsx = Path(extra["excel_path"]).read_bytes()
+                        try:
+                            _t2_sections = [(h, str(v)) for h, v in [
+                                ("Rationale",      st.session_state.t2_rationale or ""),
+                                ("Background",     st.session_state.t2_background or ""),
+                                ("Audit Programme",st.session_state.t2_org_plan   or ""),
+                            ] if v]
+                            st.session_state.t2_pdf = _make_pdf(f"Audit Plan — {topic2}", _t2_sections)
+                        except Exception:
+                            pass
+
+                        st.session_state["t2_show_form"] = False
+                        st.rerun()
+
                     except Exception:
-                        pass
+                        st.error("An error occurred. Please try again.")
+            st.markdown('</div></div>', unsafe_allow_html=True)
 
-                except Exception:
-                    st.error("An error occurred. Please try again.")
+        if _t2_mode == "static":
+            # ── Static Reference Data mode ─────────────────────────────────────────
+            _static_label()
+            _t2_theme_static = _topic_to_theme(topic2) if topic2 else "CYBER_RISK"
+            _t2_theme_static = _t2_theme_static or "CYBER_RISK"
+            _t2_theme_label = _t2_theme_static.replace("_", " ").title()
+            _n_tests = len(AUDIT_TESTS_LIBRARY.get(_t2_theme_static, []))
+            _n_da = len(DATA_ANALYTICS_SCENARIOS.get(_t2_theme_static, []))
 
-    # Results (live mode only)
-    if _t2_mode == "live" and st.session_state.t2_rationale:
+            st.markdown(_EXAMPLE_RATIONALE, unsafe_allow_html=True)
+
+            try:
+                _t2_static_entity_data = get_data_for_topic(
+                    topic2 if topic2 else "AML / KYC & Transaction Monitoring",
+                    entity_type=st.session_state.get("t1_entity_type", "🏦 Private Banking"),
+                )
+            except Exception:
+                _t2_static_entity_data = {
+                    "risks": [], "tests": [], "kris": [],
+                    "da_scenarios": [], "regulatory_focus": [],
+                    "scope_suggestion": "", "typical_findings": [],
+                    "background_angle": "", "entity_key": "PRIVATE_BANKING",
+                    "keys": [],
+                }
+            with st.expander("📖 A — Rationale & Thematic Background", expanded=True):
+                st.markdown(
+                    f'<div class="section-title">A. Rationale &amp; Thematic Background &mdash; {_t2_theme_label}</div>',
+                    unsafe_allow_html=True,
+                )
+                _bg_angle = _t2_static_entity_data.get("background_angle", "")
+                if _bg_angle:
+                    st.markdown(
+                        f'<div style="background:rgba(99,102,241,0.08);border-left:3px solid #6366f1;'
+                        f'border-radius:0 8px 8px 0;padding:10px 16px;margin-bottom:14px;'
+                        f'font-size:12.5px;color:#c8d0e8;font-style:italic">'
+                        f'💡 {_bg_angle}</div>',
+                        unsafe_allow_html=True,
+                    )
+                _show_thematic_background(_t2_theme_static)
+                _typical = _t2_static_entity_data.get("typical_findings", [])
+                if _typical:
+                    st.markdown(
+                        '<div style="margin-top:14px"><div style="font-size:12px;font-weight:700;'
+                        'color:#818cf8;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">'
+                        '★ Typical Findings for this Entity Type</div>',
+                        unsafe_allow_html=True,
+                    )
+                    for _tf in _typical:
+                        st.markdown(
+                            f'<div style="font-size:12.5px;color:#c8d0e8;padding:4px 0 4px 14px;'
+                            f'border-left:2px solid rgba(127,168,251,0.3)">• {_tf}</div>',
+                            unsafe_allow_html=True,
+                        )
+                    st.markdown('</div>', unsafe_allow_html=True)
+
+            with st.expander("🗂️ B — Audit Tests Library", expanded=False):
+                st.markdown(
+                    f'<div class="section-title">B. Audit Tests Library &mdash; {_t2_theme_label}'
+                    f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{_n_tests} tests available for this topic</span></div>',
+                    unsafe_allow_html=True,
+                )
+                st.markdown(_EXAMPLE_TEST, unsafe_allow_html=True)
+                _tl_c1, _tl_c2, _tl_c3, _tl_c4 = st.columns([3, 1.5, 1.8, 1.8])
+                _tl_sq    = _tl_c1.text_input("Search tests", placeholder="Filter tests…", key="_tl_sq", label_visibility="collapsed")
+                _tl_slv   = _tl_c2.selectbox("Level", ["All", "Critical", "High", "Moderate"], key="_tl_slv", label_visibility="collapsed")
+                _tl_stype = _tl_c3.selectbox("Type", ["All", "Standard", "Data Analytics"], key="_tl_stype", label_visibility="collapsed")
+                _tl_rlv   = _tl_c4.selectbox("Filter by Risk Level", ["All", "🔴 Critical", "🟠 High", "🟡 Moderate"], key="_tl_rlv", label_visibility="collapsed")
+                _rl_map   = {"All": "All", "🔴 Critical": "Critical", "🟠 High": "High", "🟡 Moderate": "Moderate"}
+                _show_tests_library(_t2_theme_static, search=_tl_sq, level_filter=_tl_slv, type_filter=_tl_stype,
+                                    risk_level_filter=_rl_map[_tl_rlv])
+
+            with st.expander("📊 C — Data Analytics Scenarios", expanded=False):
+                st.markdown(
+                    f'<div class="section-title">C. Data Analytics Scenarios &mdash; {_t2_theme_label}'
+                    f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{_n_da} scenarios</span></div>',
+                    unsafe_allow_html=True,
+                )
+                st.markdown(_EXAMPLE_DA, unsafe_allow_html=True)
+                _da_c1 = st.columns([3])[0]
+                _da_sq = _da_c1.text_input("Search scenarios", placeholder="Filter scenarios…", key="_da_sq", label_visibility="collapsed")
+                _show_da_scenarios(_t2_theme_static, search=_da_sq)
+
+            st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
+
+    else:
+        # ── Results mode: show "← Modifier" back button ────────────────────────
+        topic2 = st.session_state.get("t2_topic_in", "") or st.session_state.get("t1_topic", "") or ""
+        scope = st.session_state.get("t2_scope_in", "") or ""
+        uploads2 = []
+        _t2_valid = True
+
+        _back_c2, _ = st.columns([2, 6])
+        with _back_c2:
+            st.markdown('<div class="back-btn">', unsafe_allow_html=True)
+            if st.button("← Modifier", key="t2_back"):
+                st.session_state["t2_show_form"] = True
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
+
+        # Results display
         topic2_lbl = st.session_state.t1_topic or topic2 or "audit"
         st.markdown("---")
 
