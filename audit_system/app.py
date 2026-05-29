@@ -3292,10 +3292,11 @@ div[data-testid="stButton"] > button[kind="primary"] {
     with _col_r:
         st.markdown("""
 <div style="
-  padding:24px clamp(20px,4vw,52px) 0;
+  padding-top:32px;padding-left:clamp(20px,4vw,52px);padding-right:clamp(20px,4vw,52px);padding-bottom:0;
   background:linear-gradient(180deg,rgba(11,15,26,.9),rgba(7,9,15,.96));
   border-left:1px solid rgba(255,255,255,.08);min-height:100vh;
-  box-sizing:border-box;
+  box-sizing:border-box;display:flex;flex-direction:column;
+  justify-content:flex-start;align-items:flex-start;
 ">
 <h2 style="font-size:26px;font-weight:800;letter-spacing:-.02em;color:#eef0f8;margin:0 0 6px">
   Connexion</h2>
@@ -3823,6 +3824,10 @@ with st.sidebar:
   </div>
 </div>
 """, unsafe_allow_html=True)
+    st.markdown("<div style='margin-top:8px'></div>", unsafe_allow_html=True)
+    if st.button("← Sign out", key="sidebar_logout", use_container_width=True):
+        st.session_state["signed_in"] = False
+        st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN HEADER (breadcrumb + new audit button)
@@ -4881,31 +4886,21 @@ elif _active == 1:
             )
             st.session_state["topic_tab1"] = audit_topic or ""
 
-            # ── Jurisdiction pills ───────────────────────────────────────────────
-            st.markdown('<div class="param-label">Jurisdictions</div>', unsafe_allow_html=True)
-            _jurs_selected = st.session_state.get("t1_jurs_pills") or JURISDICTIONS[:4]
-            if not isinstance(_jurs_selected, list):
-                _jurs_selected = list(_jurs_selected)
-            _jur_rows = [JURISDICTIONS[:3], JURISDICTIONS[3:]]
-            for _row_idx, _row_jurs in enumerate(_jur_rows):
-                _jur_cols = st.columns(3)
-                for _ji, _jur in enumerate(_row_jurs):
-                    _global_ji = _row_idx * 3 + _ji
-                    _flag = _JUR_FLAG.get(_jur, "🌐")
-                    _is_sel = _jur in _jurs_selected
-                    with _jur_cols[_ji]:
-                        if st.button(
-                            f"{_flag} {_jur.split('/')[0].strip()}",
-                            key=f"t1_jur_{_global_ji}",
-                            help=_jur,
-                        ):
-                            if _is_sel and len(_jurs_selected) > 1:
-                                _jurs_selected = [j for j in _jurs_selected if j != _jur]
-                            elif not _is_sel:
-                                _jurs_selected = _jurs_selected + [_jur]
-                            st.session_state["t1_jurs_pills"] = _jurs_selected
-                            st.rerun()
-            jurisdictions = _jurs_selected
+            # ── Jurisdiction multiselect ─────────────────────────────────────────────
+            _JURS_DISPLAY = {j: f"{_JUR_FLAG.get(j, '🌐')} {j}" for j in JURISDICTIONS}
+            _jurs_current = st.session_state.get("t1_jurs_pills") or JURISDICTIONS[:4]
+            if not isinstance(_jurs_current, list):
+                _jurs_current = list(_jurs_current)
+            jurisdictions = st.multiselect(
+                "Jurisdictions",
+                options=JURISDICTIONS,
+                default=_jurs_current,
+                format_func=lambda x: _JURS_DISPLAY.get(x, x),
+                key="t1_jurs_in",
+                help="Select one or more jurisdictions.",
+            )
+            if jurisdictions != _jurs_current:
+                st.session_state["t1_jurs_pills"] = jurisdictions
 
             # Input validation
             _t1_valid = True
