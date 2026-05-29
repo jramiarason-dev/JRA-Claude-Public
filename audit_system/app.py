@@ -330,11 +330,6 @@ else:
     """
 
 st.markdown(f"<style>{_theme_vars}</style>", unsafe_allow_html=True)
-st.markdown("""
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<script>document.addEventListener('DOMContentLoaded',function(){if(window.lucide)lucide.createIcons();});</script>
-""", unsafe_allow_html=True)
-
 # Part 2: Static CSS using var() — no f-string needed
 st.markdown("""
 <style>
@@ -460,6 +455,18 @@ div[data-testid="stDownloadButton"] button {
   font-size: 13px; font-weight: 500;
 }
 div[data-testid="stDownloadButton"] button:hover { opacity: 0.82; }
+.wk-btn button {
+  background: rgba(255,102,0,.08) !important;
+  border: 1px solid rgba(255,102,0,.25) !important;
+  color: #ff8533 !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+.wk-btn button:hover {
+  background: rgba(255,102,0,.15) !important;
+  border-color: rgba(255,102,0,.45) !important;
+}
 div[data-testid="stFileUploader"] {
   border: 1px dashed var(--border-medium) !important;
   border-radius: 10px !important; background: var(--bg-input) !important;
@@ -929,11 +936,21 @@ Path(OUTPUT_DIR).mkdir(exist_ok=True)
 
 # ── UI helpers ────────────────────────────────────────────────────────────────
 
+_ICON_MAP = {
+    "shield": "🛡️", "search": "🔍", "file-text": "📄", "bar-chart": "📊",
+    "alert-triangle": "⚠️", "check-circle": "✅", "info": "ℹ️",
+    "download": "⬇️", "upload": "⬆️", "globe": "🌐", "lock": "🔒",
+    "users": "👥", "building": "🏦", "calendar": "📅", "clock": "🕐",
+    "double-arrow-right": "»", "arrow-right": "›", "chevron-right": "›",
+    "zap": "⚡", "star": "★", "flag": "🚩", "target": "🎯",
+}
+
 def lucide_icon(name: str, size: int = 16, color: str = "currentColor") -> str:
-    """Returns a Lucide icon as inline HTML."""
+    """Returns an emoji icon (Lucide removed — not compatible with Streamlit CSP)."""
+    emoji = _ICON_MAP.get(name, "•")
     return (
-        f'<i data-lucide="{name}" style="width:{size}px;height:{size}px;'
-        f'color:{color};vertical-align:middle;display:inline-block;"></i>'
+        f'<span style="font-size:{size}px;color:{color};'
+        f'vertical-align:middle;display:inline-block;">{emoji}</span>'
     )
 
 
@@ -971,7 +988,7 @@ def section_header(icon_name: str, title: str, subtitle: str = "", count: int = 
     return f"""
     <div class="section-header">
       <div class="section-header-icon">
-        <i data-lucide="{icon_name}" style="width:16px;height:16px;color:#6366f1;"></i>
+        <span style="font-size:16px;color:#6366f1;">{_ICON_MAP.get(icon_name, "•")}</span>
       </div>
       <div>
         <div style="font-size:15px;font-weight:700;color:#e2e8f0;
@@ -981,7 +998,6 @@ def section_header(icon_name: str, title: str, subtitle: str = "", count: int = 
         {subtitle_html}
       </div>
     </div>
-    <script>if(window.lucide)lucide.createIcons();</script>
     """
 
 
@@ -2712,7 +2728,7 @@ html,body{font-family:'Inter',sans-serif!important;}
   min-height:100vh;width:100%;box-sizing:border-box;
   background:radial-gradient(ellipse at 30% 20%,#11173a 0%,#07090f 70%);
   padding:clamp(32px,6vh,72px) clamp(28px,6vw,80px);
-  display:flex;flex-direction:column;justify-content:center;
+  display:flex;flex-direction:column;justify-content:flex-start;
   position:relative;overflow:hidden;
 ">
   <!-- star field -->
@@ -2740,57 +2756,13 @@ html,body{font-family:'Inter',sans-serif!important;}
       color:#818cf8;padding:2px 8px;border-radius:999px">Pro</span>
   </div>
 
-  <!-- Animated planet orb: sphere + tilted orbital rings + orbiting dot -->
-  <div style="display:flex;justify-content:flex-start;padding-left:8px;
-    margin:22px 0 26px;position:relative;z-index:1;perspective:600px">
-
-    <!-- Outer container: defines the 200x200 sphere space -->
-    <div style="position:relative;width:200px;height:200px">
-
-      <!-- Orbit 1: tilted ring with orbiting particle -->
-      <div style="position:absolute;inset:-32px;
-        transform:rotateX(72deg);transform-style:preserve-3d">
-        <div style="position:absolute;inset:0;
-          animation:si-ring-spin 18s linear infinite;
-          transform-style:preserve-3d">
-          <!-- ring border -->
-          <div style="position:absolute;inset:0;border-radius:50%;
-            border:1.5px solid rgba(99,102,241,.4);"></div>
-          <!-- orbiting dot -->
-          <div style="position:absolute;width:7px;height:7px;border-radius:50%;
-            background:#818cf8;top:-3.5px;left:calc(50% - 3.5px);
-            box-shadow:0 0 10px 3px rgba(129,140,248,.8);"></div>
-        </div>
-      </div>
-
-      <!-- Orbit 2: wider, different tilt, slower, no dot -->
-      <div style="position:absolute;inset:-52px;
-        transform:rotateX(58deg) rotateZ(30deg);transform-style:preserve-3d">
-        <div style="position:absolute;inset:0;
-          animation:si-ring-spin2 28s linear infinite;
-          transform-style:preserve-3d">
-          <div style="position:absolute;inset:0;border-radius:50%;
-            border:1px solid rgba(79,126,248,.2);"></div>
-        </div>
-      </div>
-
-      <!-- Globe sphere -->
-      <div style="width:200px;height:200px;border-radius:50%;position:relative;
-        background:radial-gradient(circle at 33% 30%,#26336f 0%,#141f47 50%,#070b1c 100%);
-        border:1.5px solid rgba(129,140,248,.4);
-        animation:si-pulse 4s ease-in-out infinite;">
-        <!-- specular highlight -->
-        <div style="position:absolute;inset:0;border-radius:50%;
-          background:radial-gradient(circle at 28% 26%,rgba(175,186,255,.22) 0%,transparent 52%);
-          animation:si-shimmer 5s ease-in-out infinite;"></div>
-        <!-- limb darkening -->
-        <div style="position:absolute;inset:0;border-radius:50%;
-          background:radial-gradient(circle at 70% 70%,rgba(2,4,12,.55) 0%,transparent 55%);"></div>
-        <!-- equatorial band hint -->
-        <div style="position:absolute;left:0;right:0;top:44%;height:12%;border-radius:999px;
-          background:rgba(99,102,241,.06);"></div>
-      </div>
-
+  <!-- abstract brand mark -->
+  <div style="margin:22px 0 26px;position:relative;z-index:1">
+    <div style="width:72px;height:72px;border-radius:20px;
+      background:linear-gradient(135deg,#6366f1 0%,#4f46e5 60%,#3730a3 100%);
+      display:grid;place-items:center;
+      box-shadow:0 0 0 1px rgba(255,255,255,.1) inset,0 12px 40px rgba(99,102,241,.5),0 0 80px rgba(99,102,241,.15)">
+      <span style="font-size:32px;font-weight:900;color:#fff;letter-spacing:-.04em">A</span>
     </div>
   </div>
 
@@ -2841,7 +2813,7 @@ html,body{font-family:'Inter',sans-serif!important;}
     with _col_r:
         st.markdown("""
 <div style="
-  padding:clamp(28px,5vh,56px) clamp(20px,4vw,52px) 0;
+  padding:24px clamp(20px,4vw,52px) 0;
   background:linear-gradient(180deg,rgba(11,15,26,.9),rgba(7,9,15,.96));
   border-left:1px solid rgba(255,255,255,.08);min-height:100vh;
   box-sizing:border-box;
@@ -3332,9 +3304,6 @@ if not _api_key:
 if not _READY:
     st.error(f"Required modules unavailable: {_ERR}")
     st.stop()
-
-# ── Progress bar ──────────────────────────────────────────────────────────────
-_build_progress_bar()
 
 # ═════════════════════════════════════════════════════════════════════════════
 
@@ -4593,6 +4562,13 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
             _print_button()
             st.markdown("</div>", unsafe_allow_html=True)
 
+        st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
+        st.markdown('<div class="wk-btn">', unsafe_allow_html=True)
+        if st.button("📤 Export to Teammate+", key="wk_export_t1", help="Wolters Kluwer Teammate+ · synchronisation fictive"):
+            st.success("✅ Données exportées vers Teammate+ (Wolters Kluwer) — intégration en cours de configuration.")
+        st.markdown("</div>", unsafe_allow_html=True)
+        st.caption("Wolters Kluwer Teammate+ · synchronisation fictive")
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 2 — AUDIT PLAN
@@ -4979,6 +4955,13 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
             _print_button()
             st.markdown("</div>", unsafe_allow_html=True)
 
+        st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
+        st.markdown('<div class="wk-btn">', unsafe_allow_html=True)
+        if st.button("📤 Export to Teammate+", key="wk_export_t2", help="Wolters Kluwer Teammate+ · synchronisation fictive"):
+            st.success("✅ Données exportées vers Teammate+ (Wolters Kluwer) — intégration en cours de configuration.")
+        st.markdown("</div>", unsafe_allow_html=True)
+        st.caption("Wolters Kluwer Teammate+ · synchronisation fictive")
+
 
 # TAB 3 — AUDIT REPORT
 # ─────────────────────────────────────────────────────────────────────────────
@@ -5328,6 +5311,13 @@ with tab3:
                                             mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
                     with _f4:
                         _print_button()
+
+                st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
+                st.markdown('<div class="wk-btn">', unsafe_allow_html=True)
+                if st.button("📤 Export to Teammate+", key="wk_export_t3", help="Wolters Kluwer Teammate+ · synchronisation fictive"):
+                    st.success("✅ Données exportées vers Teammate+ (Wolters Kluwer) — intégration en cours de configuration.")
+                st.markdown("</div>", unsafe_allow_html=True)
+                st.caption("Wolters Kluwer Teammate+ · synchronisation fictive")
 
             # Static-enriched sections also shown in live mode
             if st.session_state.get("report_data"):
