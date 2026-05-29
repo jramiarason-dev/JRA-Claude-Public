@@ -52,6 +52,9 @@ _SS_DEFAULTS = {
     "t1_show_form": True,
     "t2_show_form": True,
     "t1_jurs_pills": None,
+    "t3_docs_analysis": None,
+    "t3_observations": [],
+    "t4_recommendations": None,
     # Auth
     "signed_in": False,
     # Help
@@ -3409,7 +3412,8 @@ _NAV_NAMES = {
     0: "Intelligence Dashboard",
     1: "Risk Analysis",
     2: "Audit Plan & Testing",
-    3: "Audit Report",
+    3: "Document Analyser",
+    4: "Audit Report",
 }
 
 # ── Entity switcher CSS (sidebar pills) ──────────────────────────────────────
@@ -3541,8 +3545,15 @@ with st.sidebar:
 
     _cls3 = "nav-active" if _active == 3 else "nav-item"
     st.markdown(f'<div class="{_cls3}">', unsafe_allow_html=True)
-    if st.button("📄  Rapport d'audit", key="_nav3", use_container_width=True):
+    if st.button("🔍  Document Analyser", key="nav_3", use_container_width=True):
         st.session_state["active_tab"] = 3
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    _cls4 = "nav-active" if _active == 4 else "nav-item"
+    st.markdown(f'<div class="{_cls4}">', unsafe_allow_html=True)
+    if st.button("📄  Rapport d'audit", key="_nav3", use_container_width=True):
+        st.session_state["active_tab"] = 4
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -3617,24 +3628,16 @@ with st.sidebar:
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN HEADER (breadcrumb + new audit button)
 # ══════════════════════════════════════════════════════════════════════════════
-_hdr_left, _hdr_right = st.columns([8, 2], gap="small")
-
-with _hdr_left:
+with st.container():
+    _ent_display = _cur_ent.split(" ", 1)[1] if " " in _cur_ent and _cur_ent[0] in "🏦🏢🏗️💼🏛️" else _cur_ent
     st.markdown(f"""
 <div style="display:flex;align-items:center;gap:6px;padding:16px 0 8px">
   <span style="font-size:13px;color:#5a6488;font-weight:500">AuditIQ</span>
   <span style="color:#3d4a6b;font-size:13px">/</span>
   <span style="font-size:13px;font-weight:700;color:#eef0f8">{_NAV_NAMES.get(_active, "Dashboard")}</span>
-  {_entity_badge_html(_cur_ent)}
+  {_entity_badge_html(_ent_display)}
 </div>
 """, unsafe_allow_html=True)
-
-with _hdr_right:
-    _fr_en = st.session_state.get("help_lang", "Français")
-    if st.button("FR" if _fr_en == "Français" else "EN", key="_lang_toggle",
-                 help="Basculer la langue", use_container_width=True):
-        st.session_state["help_lang"] = "English" if _fr_en == "Français" else "Français"
-        st.rerun()
 
 
 if st.session_state.get("voice_active", False):
@@ -4472,6 +4475,14 @@ if _active == 0:
         st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
+    # Public Audit Recommendations (populated from Risk Analysis live run)
+    with st.expander("📋 Public Audit Recommendations", expanded=False):
+        _dash_pub = st.session_state.get("t1_pub_recs") or []
+        if _dash_pub:
+            _pub_recs_table(_dash_pub)
+        else:
+            st.caption("Run a Risk Analysis (live mode) to populate recommendations here.")
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 1 — RISK ANALYSIS
@@ -4547,22 +4558,25 @@ elif _active == 1:
         _jurs_selected = st.session_state.get("t1_jurs_pills") or JURISDICTIONS[:4]
         if not isinstance(_jurs_selected, list):
             _jurs_selected = list(_jurs_selected)
-        _jur_cols = st.columns(len(JURISDICTIONS))
-        for _ji, _jur in enumerate(JURISDICTIONS):
-            _flag = _JUR_FLAG.get(_jur, "🌐")
-            _is_sel = _jur in _jurs_selected
-            with _jur_cols[_ji]:
-                if st.button(
-                    f"{_flag} {_jur.split('/')[0].strip()}",
-                    key=f"t1_jur_{_ji}",
-                    help=_jur,
-                ):
-                    if _is_sel and len(_jurs_selected) > 1:
-                        _jurs_selected = [j for j in _jurs_selected if j != _jur]
-                    elif not _is_sel:
-                        _jurs_selected = _jurs_selected + [_jur]
-                    st.session_state["t1_jurs_pills"] = _jurs_selected
-                    st.rerun()
+        _jur_rows = [JURISDICTIONS[:3], JURISDICTIONS[3:]]
+        for _row_idx, _row_jurs in enumerate(_jur_rows):
+            _jur_cols = st.columns(3)
+            for _ji, _jur in enumerate(_row_jurs):
+                _global_ji = _row_idx * 3 + _ji
+                _flag = _JUR_FLAG.get(_jur, "🌐")
+                _is_sel = _jur in _jurs_selected
+                with _jur_cols[_ji]:
+                    if st.button(
+                        f"{_flag} {_jur.split('/')[0].strip()}",
+                        key=f"t1_jur_{_global_ji}",
+                        help=_jur,
+                    ):
+                        if _is_sel and len(_jurs_selected) > 1:
+                            _jurs_selected = [j for j in _jurs_selected if j != _jur]
+                        elif not _is_sel:
+                            _jurs_selected = _jurs_selected + [_jur]
+                        st.session_state["t1_jurs_pills"] = _jurs_selected
+                        st.rerun()
         jurisdictions = _jurs_selected
 
         st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
@@ -4835,34 +4849,6 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 else:
                     st.caption("No risks match the filter.")
 
-            with st.expander("📋 B — Public Audit Recommendations", expanded=False):
-                _all_rec_sources = sorted({r.get("source","") for r in PUBLIC_AUDIT_RECOMMENDATIONS if r.get("source")})
-                st.markdown(
-                    f'<div class="section-title">B. Public Audit Recommendations &mdash; {_t1_theme_label}'
-                    f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
-                    f'{len([r for r in PUBLIC_AUDIT_RECOMMENDATIONS if r.get("theme") == _t1_theme])} entries</span></div>',
-                    unsafe_allow_html=True,
-                )
-                st.markdown(_EXAMPLE_PUB_REC, unsafe_allow_html=True)
-                _pr_c1, _pr_c2 = st.columns([3, 2])
-                _pr_sq = _pr_c1.text_input("Search recommendations", placeholder="Filter…", key="_pr_sq", label_visibility="collapsed")
-                _pr_ssrc = _pr_c2.selectbox("Source", ["All"] + _all_rec_sources, key="_pr_ssrc", label_visibility="collapsed")
-                _show_pub_recs(_t1_theme, search=_pr_sq)
-
-            _rf_cats = sorted({e["category"] for e in HNWI_RED_FLAGS})
-            with st.expander("🚨 C — HNWI Red Flags", expanded=False):
-                st.markdown(
-                    f'<div class="section-title">C. HNWI Red Flags &mdash; Private Banking'
-                    f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">'
-                    f'{len(HNWI_RED_FLAGS)} red flags &middot; AML &middot; Fraud &middot; Suitability &middot; Tax &middot; Conduct</span></div>',
-                    unsafe_allow_html=True,
-                )
-                _rf_c1, _rf_c2, _rf_c3 = st.columns([3, 1.5, 1.5])
-                _rf_sq   = _rf_c1.text_input("Search red flags", placeholder="Filter red flags…", key="_rf_sq",   label_visibility="collapsed")
-                _rf_scat = _rf_c2.selectbox("Category", ["All"] + _rf_cats,                        key="_rf_scat", label_visibility="collapsed")
-                _rf_slv  = _rf_c3.selectbox("Risk Level", ["All", "Critical", "High", "Medium"],    key="_rf_slv",  label_visibility="collapsed")
-                _show_red_flags(cat_filter=_rf_scat, level_filter=_rf_slv, search=_rf_sq)
-
             st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
 
@@ -4919,26 +4905,6 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 _copy_button(
                     json.dumps(st.session_state.t1_regs or [], indent=2),
                     "t1_regs_copy"
-                )
-
-        with st.expander("📋 C — Public Audit Recommendations", expanded=False):
-            n_pub = len(st.session_state.t1_pub_recs or [])
-            st.markdown(
-                f'<div class="section-title">C. Public Audit Recommendations &mdash; {topic_lbl}'
-                f'<span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{n_pub} entries found</span></div>',
-                unsafe_allow_html=True,
-            )
-            filtered_pub = _filter_data(
-                st.session_state.t1_pub_recs or [],
-                ["source", "recommendation", "applicability"],
-                "t1_pub_recs",
-            )
-            _pub_recs_table(filtered_pub)
-            col_copy_c, _ = st.columns([1, 5])
-            with col_copy_c:
-                _copy_button(
-                    json.dumps(st.session_state.t1_pub_recs or [], indent=2),
-                    "t1_pub_copy"
                 )
 
         st.markdown("---")
@@ -5405,9 +5371,119 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
 
 
 
-# TAB 3 — AUDIT REPORT
+# TAB 3 — DOCUMENT ANALYSER
 # ─────────────────────────────────────────────────────────────────────────────
 elif _active == 3:
+    st.markdown(
+        '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">'
+        'Upload audit documents — the AI maps findings to your audit tests and surfaces potential observations.</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown("""
+    <div class="agent-card">
+      <div class="agent-badge-pill">AGENT 3</div>
+      <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Agent 3 — Document Analyser</div>
+      <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:14px">
+        Analyses audit documents (policies, reports, MIS data), maps findings to the audit test programme, and surfaces potential observations that can be pushed to the Audit Report.
+      </div>
+    </div>""", unsafe_allow_html=True)
+
+    st.caption("📎 Upload documents to analyse (PDF, Word, Excel, TXT — multiple files)")
+    t3_uploads = st.file_uploader(
+        "Documents", label_visibility="collapsed",
+        type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t3_upload_docs",
+    )
+    _t3_topic_default = st.session_state.get("t1_topic") or st.session_state.get("topic_tab1") or ""
+    t3_topic = st.text_input(
+        "Audit Topic / Context",
+        value=_t3_topic_default,
+        placeholder="e.g. AML/KYC, Credit Risk…",
+        key="t3_topic_in",
+    )
+    t3_notes = st.text_area(
+        "Additional context or focus areas (optional)",
+        placeholder="e.g. Focus on gaps between policy and practice. Cross-reference with FINMA Circular 2011/1.",
+        height=80,
+        key="t3_notes_in",
+    )
+    st.markdown('<div class="gen-btn-wrap"><div class="gen-btn">', unsafe_allow_html=True)
+    _t3_can_run = bool(t3_uploads) and bool(t3_topic)
+    if st.button("✦ Analyser les documents", disabled=_disabled or not _t3_can_run, key="t3_run"):
+        with st.spinner("Analysing documents…"):
+            try:
+                c = _client()
+                file_ids3 = []
+                for uf in (t3_uploads or []):
+                    fm = _upload_sf(c, uf)
+                    if fm:
+                        file_ids3.append(fm)
+                _t3_tests_ctx = ""
+                if st.session_state.get("t2_tests"):
+                    _tests_sample = st.session_state.t2_tests[:5] if isinstance(st.session_state.t2_tests, list) else []
+                    if _tests_sample:
+                        _t3_tests_ctx = "\n\nAudit tests in programme:\n" + "\n".join(
+                            f"- {t.get('test_id', '')}: {t.get('title', '')}" for t in _tests_sample
+                        )
+                _t3_inst = _entity_institution_str(jurs=st.session_state.get("t1_jurs") or JURISDICTIONS[:4])
+                doc_note = f"{len(file_ids3)} document(s) provided." if file_ids3 else "No documents attached — analyse based on topic only."
+                analysis_raw = _call(c,
+                    f"Audit topic: {t3_topic}\nInstitution: {_t3_inst}\n{doc_note}"
+                    + (f"\nAdditional context: {t3_notes}" if t3_notes else "")
+                    + _t3_tests_ctx
+                    + "\n\nAnalyse the provided documents. Identify key findings, control gaps, and potential audit observations. "
+                    "For each observation link it to relevant audit tests where possible.\n"
+                    "Respond ONLY with valid JSON:\n"
+                    '[{"observation":"<concise observation title>","detail":"<2-3 sentences>","risk_level":"Critical|High|Moderate|Low","linked_tests":["<test id or title>"],"source":"<document name or inferred>"}]',
+                    system="You are a senior internal auditor. Analyse documents and identify potential audit observations. Return ONLY a valid JSON array.",
+                    max_tokens=4000,
+                )
+                st.session_state["t3_docs_analysis"] = _parse_json(analysis_raw) or []
+            except Exception:
+                st.error("Analysis failed. Please try again.")
+    st.markdown('</div></div>', unsafe_allow_html=True)
+
+    _t3_analysis = st.session_state.get("t3_docs_analysis") or []
+    if _t3_analysis:
+        st.markdown("---")
+        st.markdown('<div class="section-title">Observations & Findings</div>', unsafe_allow_html=True)
+        _LVLC4 = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308", "Low": "#22d3a5"}
+        _obs_list = list(st.session_state.get("t3_observations") or [])
+        _obs_ids = {o["id"] for o in _obs_list}
+        for _i, _obs in enumerate(_t3_analysis):
+            _ocol = _LVLC4.get(_obs.get("risk_level", ""), "#8392bb")
+            _tests_str = ", ".join(_obs.get("linked_tests") or []) or "—"
+            _already_added = str(_i) in _obs_ids
+            st.markdown(f"""
+            <div style="border:1px solid {_ocol}33;border-radius:9px;padding:14px 18px;margin-bottom:10px;background:{_ocol}08">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+                <span style="background:{_ocol}22;color:{_ocol};border:1px solid {_ocol}44;border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">{_obs.get("risk_level","")}</span>
+                <span style="font-size:13.5px;font-weight:600;color:var(--text-primary)">{_obs.get("observation","")}</span>
+              </div>
+              <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{_obs.get("detail","")}</p>
+              <div style="font-size:11.5px;color:var(--text-muted)">🔗 Linked tests: {_tests_str} &nbsp;·&nbsp; 📄 Source: {_obs.get("source","—")}</div>
+            </div>""", unsafe_allow_html=True)
+            if not _already_added:
+                if st.button("➕ Add to Report", key=f"t3_add_obs_{_i}"):
+                    _obs_list.append({
+                        "id": str(_i),
+                        "observation": _obs.get("observation", ""),
+                        "detail": _obs.get("detail", ""),
+                        "risk_level": _obs.get("risk_level", ""),
+                        "linked_tests": _obs.get("linked_tests", []),
+                        "source": _obs.get("source", "Document Analyser"),
+                    })
+                    st.session_state["t3_observations"] = _obs_list
+                    st.rerun()
+            else:
+                st.caption("✓ Added to Report")
+        _n_added = len(st.session_state.get("t3_observations") or [])
+        if _n_added:
+            st.success(f"{_n_added} observation(s) added to the Audit Report tab.")
+
+
+# TAB 4 — AUDIT REPORT
+# ─────────────────────────────────────────────────────────────────────────────
+elif _active == 4:
     _tab_actions_bar("t3",
         "IIA-standard audit report — assembled from Risk Analysis and Audit Plan context.",
         [
@@ -5422,396 +5498,485 @@ elif _active == 3:
              "Audit_Report.pdf", "application/pdf"),
         ]
     )
-    _t3_mode = render_mode_toggle("mode_tab3")
-    st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
-
-    # ── Context pills from previous tabs ──────────────────────────────────────
-    _t3_ctx = []
-    _t3_topic   = st.session_state.get("topic_tab1") or st.session_state.get("t1_topic") or ""
-    _t3_scope   = st.session_state.get("t2_scope_in","")
-    _t3_jurs    = st.session_state.get("t1_jurs") or ["CH / FINMA"]
-    _t3_risks   = st.session_state.get("t1_risks")
-    _t3_rat     = st.session_state.get("t2_rationale")
-    _t3_bg      = st.session_state.get("t2_background")
-    if _t3_topic:   _t3_ctx.append(f"&#10003; Topic: {_t3_topic}")
-    if _t3_scope:   _t3_ctx.append("&#10003; Scope defined")
-    if _t3_risks:   _t3_ctx.append(f"&#10003; {len(_t3_risks)} risks from Tab 1")
-    if _t3_rat:     _t3_ctx.append("&#10003; Rationale from Tab 2")
-    if _t3_ctx:
-        st.markdown(f'<div class="ctx-pill">{" &nbsp;&middot;&nbsp; ".join(_t3_ctx)}</div>', unsafe_allow_html=True)
-
-    # Entity context hint for Tab 3
-    _t3_entity    = st.session_state.get("entity_type", "🏦 Private Banking")
-    _t3_ent_ctx   = ENTITY_CONTEXT.get(_t3_entity, {})
-    _t3_findings  = _t3_ent_ctx.get("typical_findings", [])
-    if _t3_findings:
-        _bg3, _col3 = _ENTITY_COLORS.get(_t3_entity, ("#0a2540", "#818cf8"))
-        st.markdown(
-            f'<div style="background:{_bg3};border-left:3px solid {_col3};border-radius:0 6px 6px 0;'
-            f'padding:8px 12px;margin:4px 0 12px;font-size:12px;color:#c8d0e8">'
-            f'<span style="font-weight:700;color:{_col3}">{_t3_entity} &mdash; typical findings:</span><br>'
-            + "".join(f'<span style="margin-right:14px">&bull; {f}</span>' for f in _t3_findings[:4])
-            + '</div>',
-            unsafe_allow_html=True,
-        )
-
-    # ── Shared inputs (both modes) ─────────────────────────────────────────────
-    # Persist findings across interactions
-    _t3_findings_raw = st.text_area(
-        "Audit Observations & Findings",
-        value=st.session_state.get("report_findings_raw",""),
-        placeholder=(
-            "Enter your field observations, one per line or as free text.\n"
-            "Include: what was observed, where, evidence gathered.\n\n"
-            "Example:\n"
-            "1. Transaction monitoring does not cover transfers below CHF 10,000. Tested on 50 alerts.\n"
-            "2. KYC files incomplete for 8 out of 40 High-risk clients — missing source of wealth documentation.\n"
-            "3. No PEP screening procedure at Singapore entity — manual process only."
-        ),
-        height=200,
-        key="t3_findings_in",
-        help="Each line or paragraph becomes a structured finding with inferred criticality and risk mapping.",
+    _t4_section = st.radio(
+        "Section",
+        ["📋 Recommendations", "📄 Generate Report"],
+        horizontal=True,
+        label_visibility="collapsed",
+        key="t4_section_select",
     )
-    st.session_state["report_findings_raw"] = _t3_findings_raw
+    st.markdown("<div style='margin-bottom:16px'></div>", unsafe_allow_html=True)
 
-    if _t3_mode == "static":
-        # ── Static mode: assemble report from static data ──────────────────────
-        _static_label()
-        _t3_valid = bool(_t3_findings_raw.strip())
-        if not _t3_valid:
-            st.info("ℹ️ Enter at least one observation above to generate the report.")
-
-        if st.button("Generate Report", type="primary", disabled=not _t3_valid, key="t3_run_static"):
-            with st.spinner("Generating report…"):
-                rd = _assemble_report_static(
-                    _t3_findings_raw, _t3_topic, _t3_scope, _t3_jurs,
-                    _t3_risks, _t3_rat, _t3_bg,
+    if _t4_section == "📋 Recommendations":
+        # Show observations from Document Analyser + allow manual add
+        _t4_obs = list(st.session_state.get("t3_observations") or [])
+        if _t4_obs:
+            st.markdown('<div class="section-title">Observations</div>', unsafe_allow_html=True)
+            for _ob in _t4_obs:
+                _ocol2 = {"Critical":"#ef4444","High":"#f97316","Moderate":"#eab308","Low":"#22d3a5"}.get(_ob.get("risk_level",""), "#8392bb")
+                st.markdown(
+                    f'<div style="border:1px solid {_ocol2}33;border-radius:8px;padding:10px 16px;margin-bottom:8px;background:{_ocol2}08">'
+                    f'<span style="font-size:12.5px;font-weight:600;color:var(--text-primary)">{_ob.get("observation","")}</span>'
+                    f'<span style="font-size:11px;color:var(--text-muted);margin-left:10px">— {_ob.get("source","")}</span></div>',
+                    unsafe_allow_html=True,
                 )
-                st.session_state["report_data"]      = rd
-                st.session_state["report_generated"] = True
-                st.session_state["report_timestamp"] = datetime.now().strftime("%d %b %Y %H:%M")
+        else:
+            st.caption("No observations yet. Add them from Document Analyser or manually below.")
+
+        st.markdown("**Add observation manually**")
+        _t4_manual = st.text_area("Observation text", placeholder="Describe the finding…", height=80, key="t4_manual_obs")
+        if st.button("Add observation", key="t4_add_manual_obs"):
+            if _t4_manual.strip():
+                _t4_obs.append({
+                    "id": f"m_{int(datetime.now().timestamp())}",
+                    "observation": _t4_manual.strip(),
+                    "detail": "",
+                    "risk_level": "Moderate",
+                    "linked_tests": [],
+                    "source": "Manual",
+                })
+                st.session_state["t3_observations"] = _t4_obs
                 st.rerun()
 
-        if st.session_state.get("report_generated") and st.session_state.get("report_data"):
-            rd    = st.session_state["report_data"]
-            ts    = st.session_state.get("report_timestamp","")
-            rname = f"Audit_Report_{rd['topic'].replace(' ','_')}"
+        st.markdown('<div class="gen-btn-wrap"><div class="gen-btn">', unsafe_allow_html=True)
+        _t4_obs_current = st.session_state.get("t3_observations") or []
+        if st.button("✦ Generate Recommendations", disabled=_disabled or not _t4_obs_current, key="t4_recs_run"):
+            with st.spinner("Generating recommendations…"):
+                try:
+                    c = _client()
+                    _obs_text = "\n".join(
+                        f"Observation {_i+1}: {o.get('observation','')} — {o.get('detail','')} [Risk: {o.get('risk_level','')}]"
+                        for _i, o in enumerate(_t4_obs_current)
+                    )
+                    _t4_inst = _entity_institution_str(jurs=st.session_state.get("t1_jurs") or JURISDICTIONS[:4])
+                    recs_raw = _call(c,
+                        f"Institution: {_t4_inst}\nAudit topic: {st.session_state.get('t1_topic','')}\n\n"
+                        f"Observations:\n{_obs_text}\n\n"
+                        "For each observation, write a structured audit recommendation using this exact format:\n\n"
+                        "Observation N: <title>\n"
+                        "Condition: <what was found>\n"
+                        "Criteria: <what should be according to standards/policy>\n"
+                        "Cause: <root cause>\n"
+                        "Effect: <risk or impact if not addressed>\n"
+                        "Recommendation: <specific action>\n"
+                        "Management Response: [to be completed]\n\n"
+                        "Write all recommendations in professional English.",
+                        system="You are a senior Big 4 audit partner writing formal audit recommendations.",
+                        max_tokens=4000,
+                    )
+                    st.session_state["t4_recommendations"] = recs_raw
+                except Exception:
+                    st.error("Generation failed. Please try again.")
+        st.markdown('</div></div>', unsafe_allow_html=True)
+
+        _t4_recs = st.session_state.get("t4_recommendations")
+        if _t4_recs:
             st.markdown("---")
+            st.markdown('<div class="section-title">Generated Recommendations</div>', unsafe_allow_html=True)
             st.markdown(
-                f'<div style="font-size:11px;color:#5a6488;margin-bottom:16px">Report generated: {ts} &nbsp;&middot;&nbsp; '
-                f'Topic: <strong style="color:#8392bb">{rd["topic"]}</strong> &nbsp;&middot;&nbsp; '
-                f'{rd["n_total"]} finding(s)</div>',
+                f'<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:10px;'
+                f'padding:18px 22px;font-size:13px;color:var(--text-secondary);white-space:pre-wrap;line-height:1.8">{_t4_recs}</div>',
+                unsafe_allow_html=True,
+            )
+            st.download_button(
+                "docx ↓  Recommendations",
+                data=_t4_recs.encode("utf-8"),
+                file_name="Audit_Recommendations.txt",
+                mime="text/plain",
+                key="t4_recs_dl",
+            )
+
+    elif _t4_section == "📄 Generate Report":
+        _t3_mode = render_mode_toggle("mode_tab3")
+        st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
+
+        # ── Context pills from previous tabs ──────────────────────────────────────
+        _t3_ctx = []
+        _t3_topic   = st.session_state.get("topic_tab1") or st.session_state.get("t1_topic") or ""
+        _t3_scope   = st.session_state.get("t2_scope_in","")
+        _t3_jurs    = st.session_state.get("t1_jurs") or ["CH / FINMA"]
+        _t3_risks   = st.session_state.get("t1_risks")
+        _t3_rat     = st.session_state.get("t2_rationale")
+        _t3_bg      = st.session_state.get("t2_background")
+        if _t3_topic:   _t3_ctx.append(f"&#10003; Topic: {_t3_topic}")
+        if _t3_scope:   _t3_ctx.append("&#10003; Scope defined")
+        if _t3_risks:   _t3_ctx.append(f"&#10003; {len(_t3_risks)} risks from Tab 1")
+        if _t3_rat:     _t3_ctx.append("&#10003; Rationale from Tab 2")
+        if _t3_ctx:
+            st.markdown(f'<div class="ctx-pill">{" &nbsp;&middot;&nbsp; ".join(_t3_ctx)}</div>', unsafe_allow_html=True)
+
+        # Entity context hint for Tab 3
+        _t3_entity    = st.session_state.get("entity_type", "🏦 Private Banking")
+        _t3_ent_ctx   = ENTITY_CONTEXT.get(_t3_entity, {})
+        _t3_findings  = _t3_ent_ctx.get("typical_findings", [])
+        if _t3_findings:
+            _bg3, _col3 = _ENTITY_COLORS.get(_t3_entity, ("#0a2540", "#818cf8"))
+            st.markdown(
+                f'<div style="background:{_bg3};border-left:3px solid {_col3};border-radius:0 6px 6px 0;'
+                f'padding:8px 12px;margin:4px 0 12px;font-size:12px;color:#c8d0e8">'
+                f'<span style="font-weight:700;color:{_col3}">{_t3_entity} &mdash; typical findings:</span><br>'
+                + "".join(f'<span style="margin-right:14px">&bull; {f}</span>' for f in _t3_findings[:4])
+                + '</div>',
                 unsafe_allow_html=True,
             )
 
-            with st.expander("📊 Section 1 — Executive Summary", expanded=True):
-                st.markdown('<div class="section-title">1. Executive Summary</div>', unsafe_allow_html=True)
-                _show_report_section1(rd)
-
-            with st.expander("📖 Section 2 — Summary of Findings", expanded=False):
-                st.markdown('<div class="section-title">2. Summary of Findings</div>', unsafe_allow_html=True)
-                _show_report_section2(rd)
-
-            with st.expander("🔍 Section 3 — Detailed Recommendations", expanded=False):
-                st.markdown('<div class="section-title">3. Detailed Recommendations</div>', unsafe_allow_html=True)
-                _show_report_section3(rd)
-
-            with st.expander("✅ Section 4 — Action Plan Summary", expanded=False):
-                st.markdown('<div class="section-title">4. Action Plan Summary</div>', unsafe_allow_html=True)
-                _show_report_section4(rd)
-
-            # IIA Standards & Regulatory Reference (kept as reference)
-            with st.expander("📚 A — IIA Standards Reference 2024", expanded=False):
-                st.markdown(f'<div class="section-title">A. IIA Standards Reference &mdash; 2024 <span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{len(IIA_STANDARDS_2024)} standards</span></div>', unsafe_allow_html=True)
-                _iia_sq3 = st.text_input("Search IIA Standards", placeholder="Filter standards…", key="_iia_sq3", label_visibility="collapsed")
-                _iia_f3 = IIA_STANDARDS_2024
-                if _iia_sq3:
-                    _qi3 = _iia_sq3.lower()
-                    _iia_f3 = [s for s in IIA_STANDARDS_2024 if _qi3 in (s.get("title","") + s.get("standard_id","")).lower()]
-                for _s3 in _iia_f3:
-                    _render_iia_standard(_s3)
-
-            with st.expander("⚖️ B — Regulatory Reference Panel", expanded=False):
-                st.markdown(f'<div class="section-title">B. Regulatory Reference &mdash; {" &middot; ".join(_t3_jurs[:3])}</div>', unsafe_allow_html=True)
-                _reg3_sq = st.text_input("Search frameworks", placeholder="Filter frameworks…", key="_reg3_sq", label_visibility="collapsed")
-                for _jur3 in _t3_jurs:
-                    _reg3_items = REGULATORY_FRAMEWORKS.get(_jur3, [])
-                    if _reg3_sq:
-                        _qrg = _reg3_sq.lower()
-                        _reg3_items = [r for r in _reg3_items if _qrg in (r.get("title","") + r.get("reference","")).lower()]
-                    if _reg3_items:
-                        with st.expander(f"**{_jur3}** — {len(_reg3_items)} texts"):
-                            _rows3 = "".join(
-                                f'<tr><td style="padding:8px 12px;color:#818cf8;font-weight:600;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
-                                f'<td style="padding:8px 12px;color:var(--text-primary);border-bottom:1px solid var(--tbl-row-border)">{r.get("title","")}</td>'
-                                f'<td style="padding:8px 12px;color:var(--text-secondary);font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">{r.get("scope","")[:120]}</td></tr>'
-                                for r in _reg3_items
-                            )
-                            st.markdown(f'<table class="data-table" style="font-size:12px"><thead><tr style="background:rgba(99,102,241,0.07)"><th style="color:#818cf8;padding:8px 12px;width:15%">Reference</th><th style="color:#818cf8;padding:8px 12px;width:40%">Title</th><th style="color:#818cf8;padding:8px 12px;width:45%">Scope</th></tr></thead><tbody>{_rows3}</tbody></table>', unsafe_allow_html=True)
-
-            # ── Revision expander ─────────────────────────────────────────────
-            with st.expander("✏️ Request a Revision", expanded=False):
-                st.markdown('<div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Modify your observations above and click <strong>Generate Report</strong> again to refresh all sections.</div>', unsafe_allow_html=True)
-                _rev_note = st.text_input(
-                    "What would you like to revise?",
-                    placeholder="e.g. Add that finding #2 also affects the HK entity.",
-                    key="t3_rev_static_in",
-                )
-                if _rev_note:
-                    st.info(f"ℹ️ Update your findings text above to incorporate: '{_rev_note}', then click Generate Report.")
-
-            # ── Export buttons ────────────────────────────────────────────────
-            st.markdown("---")
-            _fe1, _fe2, _fe3 = st.columns([2, 2, 2])
-            _fe1.caption("docx — available after live generation")
-            try:
-                _action_rows = [
-                    {"Finding": f"F{f['idx']}: {f['title']}", "Rating": f['criticality'],
-                     "Due Date": f['due_date'], "Status": "Open",
-                     "Owner": (f.get('mgmt_actions',[{}])[0].get('owner','TBD') if f.get('mgmt_actions') else 'TBD'),
-                     "Recommendation": (f.get('mgmt_actions',[{}])[0].get('action','') if f.get('mgmt_actions') else '')}
-                    for f in rd["detailed"]
-                ]
-                import io, pandas as pd
-                _ap_xlsx_buf = io.BytesIO()
-                pd.DataFrame(_action_rows).to_excel(_ap_xlsx_buf, index=False)
-                _ap_xlsx_buf.seek(0)
-                _fe2.download_button("📗 Excel", data=_ap_xlsx_buf,
-                                     file_name=f"{rname}_ActionPlan.xlsx",
-                                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-            except Exception:
-                pass
-            _fe3.caption("pptx — available after live generation")
-
-        else:
-            # Reference panels shown before report is generated
-            st.markdown("---")
-            st.markdown(_EXAMPLE_FINDING, unsafe_allow_html=True)
-            with st.expander("📚 A — IIA Standards Reference 2024", expanded=True):
-                st.markdown(f'<div class="section-title">A. IIA Standards Reference &mdash; 2024 <span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{len(IIA_STANDARDS_2024)} standards</span></div>', unsafe_allow_html=True)
-                st.markdown(_EXAMPLE_IIA_STD, unsafe_allow_html=True)
-                _iia_sq = st.text_input("Search IIA Standards", placeholder="Filter standards…", key="_iia_sq", label_visibility="collapsed")
-                _iia_filtered = IIA_STANDARDS_2024
-                if _iia_sq:
-                    _qi = _iia_sq.lower()
-                    _iia_filtered = [s for s in IIA_STANDARDS_2024 if _qi in (s.get("title","") + s.get("description","") + s.get("standard_id","")).lower()]
-                for _s in _iia_filtered:
-                    _render_iia_standard(_s)
-            with st.expander("⚖️ B — Regulatory Reference Panel", expanded=False):
-                _t3_jurs_disp = st.session_state.get("t1_jurs") or list(REGULATORY_FRAMEWORKS.keys())[:3]
-                st.markdown(f'<div class="section-title">B. Regulatory Reference &mdash; {" &middot; ".join(_t3_jurs_disp[:4])}</div>', unsafe_allow_html=True)
-                st.markdown(_EXAMPLE_DORA, unsafe_allow_html=True)
-                _reg3b_sq = st.text_input("Search frameworks", placeholder="Filter frameworks…", key="_reg3b_sq", label_visibility="collapsed")
-                for _jur in _t3_jurs_disp:
-                    _r3b = [r for r in REGULATORY_FRAMEWORKS.get(_jur,[]) if not _reg3b_sq or _reg3b_sq.lower() in (r.get("title","") + r.get("reference","")).lower()]
-                    if _r3b:
-                        with st.expander(f"**{_jur}** — {len(_r3b)} texts"):
-                            _rows3b = "".join(
-                                f'<tr><td style="padding:9px 13px;color:#818cf8;font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
-                                f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("title","")}<br><span style="font-size:11px;color:var(--text-muted)">{r.get("authority","")} &middot; {r.get("year","")}</span></td>'
-                                f'<td style="padding:9px 13px;color:var(--text-secondary);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("scope","")}</td>'
-                                f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)"><ul style="margin:0;padding-left:15px;font-size:11.5px;color:var(--text-secondary);line-height:1.7">{"".join(f"<li>{k}</li>" for k in r.get("key_requirements",[]))}</ul></td>'
-                                f'</tr>'
-                                for r in _r3b
-                            )
-                            st.markdown(f'<table class="data-table" style="font-size:12px"><thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)"><th style="color:#818cf8;width:10%">Reference</th><th style="color:#818cf8;width:22%">Title</th><th style="color:#818cf8;width:22%">Scope</th><th style="color:#818cf8;width:46%">Key Requirements</th></tr></thead><tbody>{_rows3b}</tbody></table>', unsafe_allow_html=True)
-            st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
-            st.markdown("</div>", unsafe_allow_html=True)
-
-    if _t3_mode == "live":
-        # ── Live mode: API-generated report ────────────────────────────────────
-        _t3_ctx_live = []
-        if st.session_state.t1_topic:
-            _t3_ctx_live.append(f"&#10003; Topic: {st.session_state.t1_topic}")
-        if st.session_state.t2_org_plan:
-            _t3_ctx_live.append("&#10003; Audit plan available")
-        if _t3_ctx_live:
-            st.markdown(f'<div class="ctx-pill">{" &nbsp;&middot;&nbsp; ".join(_t3_ctx_live)}</div>', unsafe_allow_html=True)
-
-        default_name = f"Internal Audit — {st.session_state.t1_topic} — {datetime.now().year}" if st.session_state.t1_topic else ""
-        audit_name = st.text_input(
-            "Report Title",
-            value=default_name,
-            placeholder="e.g. Internal Audit — AML/KYC — Private Banking Group — 2025",
-            key="t3_name_in",
+        # ── Shared inputs (both modes) ─────────────────────────────────────────────
+        # Persist findings across interactions
+        _t3_findings_raw = st.text_area(
+            "Audit Observations & Findings",
+            value=st.session_state.get("report_findings_raw",""),
+            placeholder=(
+                "Enter your field observations, one per line or as free text.\n"
+                "Include: what was observed, where, evidence gathered.\n\n"
+                "Example:\n"
+                "1. Transaction monitoring does not cover transfers below CHF 10,000. Tested on 50 alerts.\n"
+                "2. KYC files incomplete for 8 out of 40 High-risk clients — missing source of wealth documentation.\n"
+                "3. No PEP screening procedure at Singapore entity — manual process only."
+            ),
+            height=200,
+            key="t3_findings_in",
+            help="Each line or paragraph becomes a structured finding with inferred criticality and risk mapping.",
         )
+        st.session_state["report_findings_raw"] = _t3_findings_raw
 
-        uploads3 = st.file_uploader(
-            "Working papers (optional — PDF, Word, Excel, TXT)",
-            type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t3_upload",
-        )
-        st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
+        if _t3_mode == "static":
+            # ── Static mode: assemble report from static data ──────────────────────
+            _static_label()
+            _t3_valid = bool(_t3_findings_raw.strip())
+            if not _t3_valid:
+                st.info("ℹ️ Enter at least one observation above to generate the report.")
 
-        _t3_live_valid = bool(audit_name and _t3_findings_raw.strip())
-        if not _t3_live_valid:
-            st.warning("⚠ Enter a report title and at least one observation to generate the report.")
-
-        if st.button("Generate Report", type="primary",
-                     disabled=_disabled or not _t3_live_valid, key="t3_run"):
-            with st.spinner("Generating report…"):
-                try:
-                    c = _client()
-                    file_ids3 = []
-                    for uf in (uploads3 or []):
-                        fm = _upload_sf(c, uf)
-                        if fm:
-                            file_ids3.append(fm)
-
-                    reg_ctx  = (f"\n\nApplicable regulations:\n{json.dumps(st.session_state.t1_regs, indent=2)[:1500]}"
-                                if st.session_state.t1_regs else "")
-                    plan_ctx = (f"\n\nAudit plan:\n{st.session_state.t2_org_plan[:900]}"
-                                if st.session_state.t2_org_plan else "")
-                    jur_str  = ", ".join(_t3_jurs)
-
-                    user_content = []
-                    if file_ids3:
-                        user_content.extend(build_file_content_blocks(file_ids3))
-                        user_content.append({"type": "text", "text": f"{len(file_ids3)} working paper(s) attached."})
-
-                    user_content.append({"type": "text", "text": (
-                        f"Draft a professional IIA-standard internal audit report in English.\n\n"
-                        f"Report title: {audit_name}\n"
-                        f"Institution: {_entity_institution_str(jurs=_t3_jurs)}"
-                        f"{reg_ctx}{plan_ctx}\n\n"
-                        f"Issues log:\n{_t3_findings_raw}\n\n"
-                        f"Structure:\n"
-                        f"1. Executive Summary — opinion, key findings, priority actions\n"
-                        f"2. Background & Context\n"
-                        f"3. Scope & Methodology\n"
-                        f"4. Findings — sorted by severity (Critical first): rating, impact, root cause, recommendation, owner, target date\n"
-                        f"5. Action Plan — summary table\n"
-                        f"6. Audit Opinion — motivated conclusion\n\n"
-                        f"Then call generate_audit_report to export."
-                    )})
-
-                    def _h3(name, inp):
-                        if name == "generate_audit_report":
-                            try:
-                                p = generate_audit_report_docx(inp, OUTPUT_DIR)
-                                return f"Saved: {p}", {"docx_path": p}
-                            except Exception as ex:
-                                return f"Error: {ex}", {}
-                        return "Unknown tool", {}
-
-                    text_out, extra = _agentic_loop(c, _a3.SYSTEM_PROMPT, _a3.TOOLS,
-                        [{"role": "user", "content": user_content}], _h3)
-
-                    result = {"text": text_out, "name": audit_name}
-                    if "docx_path" in extra and Path(extra["docx_path"]).exists():
-                        result["docx_bytes"] = Path(extra["docx_path"]).read_bytes()
-                    st.session_state.t3_report = result
-
-                    # Also build static enrichment for snapshot / Tab 0
-                    _rd_static = _assemble_report_static(
-                        _t3_findings_raw, _t3_topic, _t3_scope, _t3_jurs, _t3_risks, _t3_rat, _t3_bg,
+            if st.button("Generate Report", type="primary", disabled=not _t3_valid, key="t3_run_static"):
+                with st.spinner("Generating report…"):
+                    rd = _assemble_report_static(
+                        _t3_findings_raw, _t3_topic, _t3_scope, _t3_jurs,
+                        _t3_risks, _t3_rat, _t3_bg,
                     )
-                    st.session_state["report_data"]      = _rd_static
+                    st.session_state["report_data"]      = rd
                     st.session_state["report_generated"] = True
                     st.session_state["report_timestamp"] = datetime.now().strftime("%d %b %Y %H:%M")
+                    st.rerun()
 
-                    _obs_lines = [ln.strip("0123456789. \t-") for ln in _t3_findings_raw.strip().splitlines() if ln.strip()]
-                    _findings_export = [{"title": ln[:80], "rating": "High", "observation": ln,
-                                         "risk":"","recommendation":"","owner":"","due_date":""} for ln in _obs_lines if ln]
-                    try:
-                        p_xlsx3 = generate_audit_findings_excel({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
-                        st.session_state.t3_xlsx = Path(p_xlsx3).read_bytes()
-                    except Exception:
-                        pass
-                    try:
-                        p_pptx3 = generate_report_pptx({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
-                        st.session_state.t3_pptx2 = Path(p_pptx3).read_bytes()
-                    except Exception:
-                        pass
-                    try:
-                        _rd = st.session_state.get("report_data") or {}
-                        _t3_sections = [(k.replace("_"," ").title(), str(v))
-                                        for k, v in _rd.items()
-                                        if v and k not in ("findings","top3","detailed","theme_groups")]
-                        if not _t3_sections:
-                            _t3_sections = [("Findings", _t3_findings_raw)]
-                        st.session_state.t3_pdf = _make_pdf(audit_name or "Audit Report", _t3_sections)
-                    except Exception:
-                        pass
-
-                except Exception:
-                    st.error("An error occurred. Please try again.")
-
-        # Results (live mode)
-        if st.session_state.t3_report:
-            res  = st.session_state.t3_report
-            name = res.get("name","report")
-            st.markdown("---")
-
-            with st.expander("📄 A — Generated Audit Report", expanded=True):
-                st.markdown('<div class="section-title">Generated Audit Report</div>', unsafe_allow_html=True)
-                text = res.get("text","")
-                if text:
-                    st.markdown(f'<div class="output-box">{text}</div>', unsafe_allow_html=True)
-                    _copy_button(text, "t3_report_copy")
-                else:
-                    st.info("Report content is available in the export file.")
+            if st.session_state.get("report_generated") and st.session_state.get("report_data"):
+                rd    = st.session_state["report_data"]
+                ts    = st.session_state.get("report_timestamp","")
+                rname = f"Audit_Report_{rd['topic'].replace(' ','_')}"
                 st.markdown("---")
-                _t3_has_exports = res.get("docx_bytes") or st.session_state.t3_xlsx or st.session_state.t3_pptx2
-                if _t3_has_exports:
-                    _f1, _f2, _f3 = st.columns([2, 2, 2])
-                    if res.get("docx_bytes"):
-                        _f1.download_button("📝 Word", data=res["docx_bytes"],
-                                            file_name=f"Audit_Report_{name.replace(' ','_')}.docx",
-                                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-                    if st.session_state.t3_xlsx:
-                        _f2.download_button("📗 Excel", data=st.session_state.t3_xlsx,
-                                            file_name=f"Audit_Findings_{name.replace(' ','_')}.xlsx",
-                                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                    if st.session_state.t3_pptx2:
-                        _f3.download_button("📙 PPT", data=st.session_state.t3_pptx2,
-                                            file_name=f"Audit_Report_{name.replace(' ','_')}.pptx",
-                                            mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
-
-
-            # Static-enriched sections also shown in live mode
-            if st.session_state.get("report_data"):
-                _rd2 = st.session_state["report_data"]
-                with st.expander("📊 Section 1 — Executive Summary (Structured)", expanded=False):
-                    _show_report_section1(_rd2)
-                with st.expander("🔍 Section 3 — Detailed Recommendations", expanded=False):
-                    _show_report_section3(_rd2)
-                with st.expander("✅ Section 4 — Action Plan", expanded=False):
-                    _show_report_section4(_rd2)
-
-            with st.expander("✏️ Request a Revision", expanded=False):
-                st.markdown('<div class="section-title">Targeted Revision</div>', unsafe_allow_html=True)
-                followup = st.text_area(
-                    "What would you like to revise?", label_visibility="collapsed", height=80,
-                    placeholder="e.g. Strengthen recommendation 3. Add a 30-day deadline for the KYC finding.",
-                    key="t3_rev_in",
+                st.markdown(
+                    f'<div style="font-size:11px;color:#5a6488;margin-bottom:16px">Report generated: {ts} &nbsp;&middot;&nbsp; '
+                    f'Topic: <strong style="color:#8392bb">{rd["topic"]}</strong> &nbsp;&middot;&nbsp; '
+                    f'{rd["n_total"]} finding(s)</div>',
+                    unsafe_allow_html=True,
                 )
-                if st.button("Revise", disabled=not followup or _disabled, key="t3_rev_btn"):
-                    with st.spinner("Applying revisions…"):
+
+                with st.expander("📊 Section 1 — Executive Summary", expanded=True):
+                    st.markdown('<div class="section-title">1. Executive Summary</div>', unsafe_allow_html=True)
+                    _show_report_section1(rd)
+
+                with st.expander("📖 Section 2 — Summary of Findings", expanded=False):
+                    st.markdown('<div class="section-title">2. Summary of Findings</div>', unsafe_allow_html=True)
+                    _show_report_section2(rd)
+
+                with st.expander("🔍 Section 3 — Detailed Recommendations", expanded=False):
+                    st.markdown('<div class="section-title">3. Detailed Recommendations</div>', unsafe_allow_html=True)
+                    _show_report_section3(rd)
+
+                with st.expander("✅ Section 4 — Action Plan Summary", expanded=False):
+                    st.markdown('<div class="section-title">4. Action Plan Summary</div>', unsafe_allow_html=True)
+                    _show_report_section4(rd)
+
+                # IIA Standards & Regulatory Reference (kept as reference)
+                with st.expander("📚 A — IIA Standards Reference 2024", expanded=False):
+                    st.markdown(f'<div class="section-title">A. IIA Standards Reference &mdash; 2024 <span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{len(IIA_STANDARDS_2024)} standards</span></div>', unsafe_allow_html=True)
+                    _iia_sq3 = st.text_input("Search IIA Standards", placeholder="Filter standards…", key="_iia_sq3", label_visibility="collapsed")
+                    _iia_f3 = IIA_STANDARDS_2024
+                    if _iia_sq3:
+                        _qi3 = _iia_sq3.lower()
+                        _iia_f3 = [s for s in IIA_STANDARDS_2024 if _qi3 in (s.get("title","") + s.get("standard_id","")).lower()]
+                    for _s3 in _iia_f3:
+                        _render_iia_standard(_s3)
+
+                with st.expander("⚖️ B — Regulatory Reference Panel", expanded=False):
+                    st.markdown(f'<div class="section-title">B. Regulatory Reference &mdash; {" &middot; ".join(_t3_jurs[:3])}</div>', unsafe_allow_html=True)
+                    _reg3_sq = st.text_input("Search frameworks", placeholder="Filter frameworks…", key="_reg3_sq", label_visibility="collapsed")
+                    for _jur3 in _t3_jurs:
+                        _reg3_items = REGULATORY_FRAMEWORKS.get(_jur3, [])
+                        if _reg3_sq:
+                            _qrg = _reg3_sq.lower()
+                            _reg3_items = [r for r in _reg3_items if _qrg in (r.get("title","") + r.get("reference","")).lower()]
+                        if _reg3_items:
+                            with st.expander(f"**{_jur3}** — {len(_reg3_items)} texts"):
+                                _rows3 = "".join(
+                                    f'<tr><td style="padding:8px 12px;color:#818cf8;font-weight:600;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
+                                    f'<td style="padding:8px 12px;color:var(--text-primary);border-bottom:1px solid var(--tbl-row-border)">{r.get("title","")}</td>'
+                                    f'<td style="padding:8px 12px;color:var(--text-secondary);font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">{r.get("scope","")[:120]}</td></tr>'
+                                    for r in _reg3_items
+                                )
+                                st.markdown(f'<table class="data-table" style="font-size:12px"><thead><tr style="background:rgba(99,102,241,0.07)"><th style="color:#818cf8;padding:8px 12px;width:15%">Reference</th><th style="color:#818cf8;padding:8px 12px;width:40%">Title</th><th style="color:#818cf8;padding:8px 12px;width:45%">Scope</th></tr></thead><tbody>{_rows3}</tbody></table>', unsafe_allow_html=True)
+
+                # ── Revision expander ─────────────────────────────────────────────
+                with st.expander("✏️ Request a Revision", expanded=False):
+                    st.markdown('<div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Modify your observations above and click <strong>Generate Report</strong> again to refresh all sections.</div>', unsafe_allow_html=True)
+                    _rev_note = st.text_input(
+                        "What would you like to revise?",
+                        placeholder="e.g. Add that finding #2 also affects the HK entity.",
+                        key="t3_rev_static_in",
+                    )
+                    if _rev_note:
+                        st.info(f"ℹ️ Update your findings text above to incorporate: '{_rev_note}', then click Generate Report.")
+
+                # ── Export buttons ────────────────────────────────────────────────
+                st.markdown("---")
+                _fe1, _fe2, _fe3 = st.columns([2, 2, 2])
+                _fe1.caption("docx — available after live generation")
+                try:
+                    _action_rows = [
+                        {"Finding": f"F{f['idx']}: {f['title']}", "Rating": f['criticality'],
+                         "Due Date": f['due_date'], "Status": "Open",
+                         "Owner": (f.get('mgmt_actions',[{}])[0].get('owner','TBD') if f.get('mgmt_actions') else 'TBD'),
+                         "Recommendation": (f.get('mgmt_actions',[{}])[0].get('action','') if f.get('mgmt_actions') else '')}
+                        for f in rd["detailed"]
+                    ]
+                    import io, pandas as pd
+                    _ap_xlsx_buf = io.BytesIO()
+                    pd.DataFrame(_action_rows).to_excel(_ap_xlsx_buf, index=False)
+                    _ap_xlsx_buf.seek(0)
+                    _fe2.download_button("📗 Excel", data=_ap_xlsx_buf,
+                                         file_name=f"{rname}_ActionPlan.xlsx",
+                                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                except Exception:
+                    pass
+                _fe3.caption("pptx — available after live generation")
+
+            else:
+                # Reference panels shown before report is generated
+                st.markdown("---")
+                st.markdown(_EXAMPLE_FINDING, unsafe_allow_html=True)
+                with st.expander("📚 A — IIA Standards Reference 2024", expanded=True):
+                    st.markdown(f'<div class="section-title">A. IIA Standards Reference &mdash; 2024 <span style="font-size:12px;font-weight:400;color:#5a6488;margin-left:10px">{len(IIA_STANDARDS_2024)} standards</span></div>', unsafe_allow_html=True)
+                    st.markdown(_EXAMPLE_IIA_STD, unsafe_allow_html=True)
+                    _iia_sq = st.text_input("Search IIA Standards", placeholder="Filter standards…", key="_iia_sq", label_visibility="collapsed")
+                    _iia_filtered = IIA_STANDARDS_2024
+                    if _iia_sq:
+                        _qi = _iia_sq.lower()
+                        _iia_filtered = [s for s in IIA_STANDARDS_2024 if _qi in (s.get("title","") + s.get("description","") + s.get("standard_id","")).lower()]
+                    for _s in _iia_filtered:
+                        _render_iia_standard(_s)
+                with st.expander("⚖️ B — Regulatory Reference Panel", expanded=False):
+                    _t3_jurs_disp = st.session_state.get("t1_jurs") or list(REGULATORY_FRAMEWORKS.keys())[:3]
+                    st.markdown(f'<div class="section-title">B. Regulatory Reference &mdash; {" &middot; ".join(_t3_jurs_disp[:4])}</div>', unsafe_allow_html=True)
+                    st.markdown(_EXAMPLE_DORA, unsafe_allow_html=True)
+                    _reg3b_sq = st.text_input("Search frameworks", placeholder="Filter frameworks…", key="_reg3b_sq", label_visibility="collapsed")
+                    for _jur in _t3_jurs_disp:
+                        _r3b = [r for r in REGULATORY_FRAMEWORKS.get(_jur,[]) if not _reg3b_sq or _reg3b_sq.lower() in (r.get("title","") + r.get("reference","")).lower()]
+                        if _r3b:
+                            with st.expander(f"**{_jur}** — {len(_r3b)} texts"):
+                                _rows3b = "".join(
+                                    f'<tr><td style="padding:9px 13px;color:#818cf8;font-weight:600;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
+                                    f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("title","")}<br><span style="font-size:11px;color:var(--text-muted)">{r.get("authority","")} &middot; {r.get("year","")}</span></td>'
+                                    f'<td style="padding:9px 13px;color:var(--text-secondary);font-size:11.5px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("scope","")}</td>'
+                                    f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)"><ul style="margin:0;padding-left:15px;font-size:11.5px;color:var(--text-secondary);line-height:1.7">{"".join(f"<li>{k}</li>" for k in r.get("key_requirements",[]))}</ul></td>'
+                                    f'</tr>'
+                                    for r in _r3b
+                                )
+                                st.markdown(f'<table class="data-table" style="font-size:12px"><thead><tr style="background:rgba(99,102,241,0.07);border-bottom:1px solid rgba(99,102,241,0.18)"><th style="color:#818cf8;width:10%">Reference</th><th style="color:#818cf8;width:22%">Title</th><th style="color:#818cf8;width:22%">Scope</th><th style="color:#818cf8;width:46%">Key Requirements</th></tr></thead><tbody>{_rows3b}</tbody></table>', unsafe_allow_html=True)
+                st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
+                st.markdown("</div>", unsafe_allow_html=True)
+
+        if _t3_mode == "live":
+            # ── Live mode: API-generated report ────────────────────────────────────
+            _t3_ctx_live = []
+            if st.session_state.t1_topic:
+                _t3_ctx_live.append(f"&#10003; Topic: {st.session_state.t1_topic}")
+            if st.session_state.t2_org_plan:
+                _t3_ctx_live.append("&#10003; Audit plan available")
+            if _t3_ctx_live:
+                st.markdown(f'<div class="ctx-pill">{" &nbsp;&middot;&nbsp; ".join(_t3_ctx_live)}</div>', unsafe_allow_html=True)
+
+            default_name = f"Internal Audit — {st.session_state.t1_topic} — {datetime.now().year}" if st.session_state.t1_topic else ""
+            audit_name = st.text_input(
+                "Report Title",
+                value=default_name,
+                placeholder="e.g. Internal Audit — AML/KYC — Private Banking Group — 2025",
+                key="t3_name_in",
+            )
+
+            uploads3 = st.file_uploader(
+                "Working papers (optional — PDF, Word, Excel, TXT)",
+                type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t3_upload",
+            )
+            st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
+
+            _t3_live_valid = bool(audit_name and _t3_findings_raw.strip())
+            if not _t3_live_valid:
+                st.warning("⚠ Enter a report title and at least one observation to generate the report.")
+
+            if st.button("Generate Report", type="primary",
+                         disabled=_disabled or not _t3_live_valid, key="t3_run"):
+                with st.spinner("Generating report…"):
+                    try:
+                        c = _client()
+                        file_ids3 = []
+                        for uf in (uploads3 or []):
+                            fm = _upload_sf(c, uf)
+                            if fm:
+                                file_ids3.append(fm)
+
+                        reg_ctx  = (f"\n\nApplicable regulations:\n{json.dumps(st.session_state.t1_regs, indent=2)[:1500]}"
+                                    if st.session_state.t1_regs else "")
+                        plan_ctx = (f"\n\nAudit plan:\n{st.session_state.t2_org_plan[:900]}"
+                                    if st.session_state.t2_org_plan else "")
+                        jur_str  = ", ".join(_t3_jurs)
+
+                        user_content = []
+                        if file_ids3:
+                            user_content.extend(build_file_content_blocks(file_ids3))
+                            user_content.append({"type": "text", "text": f"{len(file_ids3)} working paper(s) attached."})
+
+                        user_content.append({"type": "text", "text": (
+                            f"Draft a professional IIA-standard internal audit report in English.\n\n"
+                            f"Report title: {audit_name}\n"
+                            f"Institution: {_entity_institution_str(jurs=_t3_jurs)}"
+                            f"{reg_ctx}{plan_ctx}\n\n"
+                            f"Issues log:\n{_t3_findings_raw}\n\n"
+                            f"Structure:\n"
+                            f"1. Executive Summary — opinion, key findings, priority actions\n"
+                            f"2. Background & Context\n"
+                            f"3. Scope & Methodology\n"
+                            f"4. Findings — sorted by severity (Critical first): rating, impact, root cause, recommendation, owner, target date\n"
+                            f"5. Action Plan — summary table\n"
+                            f"6. Audit Opinion — motivated conclusion\n\n"
+                            f"Then call generate_audit_report to export."
+                        )})
+
+                        def _h3(name, inp):
+                            if name == "generate_audit_report":
+                                try:
+                                    p = generate_audit_report_docx(inp, OUTPUT_DIR)
+                                    return f"Saved: {p}", {"docx_path": p}
+                                except Exception as ex:
+                                    return f"Error: {ex}", {}
+                            return "Unknown tool", {}
+
+                        text_out, extra = _agentic_loop(c, _a3.SYSTEM_PROMPT, _a3.TOOLS,
+                            [{"role": "user", "content": user_content}], _h3)
+
+                        result = {"text": text_out, "name": audit_name}
+                        if "docx_path" in extra and Path(extra["docx_path"]).exists():
+                            result["docx_bytes"] = Path(extra["docx_path"]).read_bytes()
+                        st.session_state.t3_report = result
+
+                        # Also build static enrichment for snapshot / Tab 0
+                        _rd_static = _assemble_report_static(
+                            _t3_findings_raw, _t3_topic, _t3_scope, _t3_jurs, _t3_risks, _t3_rat, _t3_bg,
+                        )
+                        st.session_state["report_data"]      = _rd_static
+                        st.session_state["report_generated"] = True
+                        st.session_state["report_timestamp"] = datetime.now().strftime("%d %b %Y %H:%M")
+
+                        _obs_lines = [ln.strip("0123456789. \t-") for ln in _t3_findings_raw.strip().splitlines() if ln.strip()]
+                        _findings_export = [{"title": ln[:80], "rating": "High", "observation": ln,
+                                             "risk":"","recommendation":"","owner":"","due_date":""} for ln in _obs_lines if ln]
                         try:
-                            c = _client()
-                            rev_content = [{"type":"text","text":(
-                                f"Previous report:\n{res.get('text','')[:3000]}\n\n"
-                                f"Revision instructions: {followup}\n\nApply revisions precisely. Then call generate_audit_report to export."
-                            )}]
-
-                            def _h3r(name, inp):
-                                if name == "generate_audit_report":
-                                    try:
-                                        p = generate_audit_report_docx(inp, OUTPUT_DIR)
-                                        return f"Saved: {p}", {"docx_path": p}
-                                    except Exception as ex:
-                                        return f"Error: {ex}", {}
-                                return "Unknown tool", {}
-
-                            text2, extra2 = _agentic_loop(c, _a3.SYSTEM_PROMPT, _a3.TOOLS,
-                                [{"role":"user","content":rev_content}], _h3r)
-                            res2 = {"text": text2, "name": name}
-                            if "docx_path" in extra2 and Path(extra2["docx_path"]).exists():
-                                res2["docx_bytes"] = Path(extra2["docx_path"]).read_bytes()
-                            st.session_state.t3_report = res2
-                            st.rerun()
+                            p_xlsx3 = generate_audit_findings_excel({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
+                            st.session_state.t3_xlsx = Path(p_xlsx3).read_bytes()
                         except Exception:
-                            st.error("An error occurred. Please try again.")
+                            pass
+                        try:
+                            p_pptx3 = generate_report_pptx({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
+                            st.session_state.t3_pptx2 = Path(p_pptx3).read_bytes()
+                        except Exception:
+                            pass
+                        try:
+                            _rd = st.session_state.get("report_data") or {}
+                            _t3_sections = [(k.replace("_"," ").title(), str(v))
+                                            for k, v in _rd.items()
+                                            if v and k not in ("findings","top3","detailed","theme_groups")]
+                            if not _t3_sections:
+                                _t3_sections = [("Findings", _t3_findings_raw)]
+                            st.session_state.t3_pdf = _make_pdf(audit_name or "Audit Report", _t3_sections)
+                        except Exception:
+                            pass
+
+                    except Exception:
+                        st.error("An error occurred. Please try again.")
+
+            # Results (live mode)
+            if st.session_state.t3_report:
+                res  = st.session_state.t3_report
+                name = res.get("name","report")
+                st.markdown("---")
+
+                with st.expander("📄 A — Generated Audit Report", expanded=True):
+                    st.markdown('<div class="section-title">Generated Audit Report</div>', unsafe_allow_html=True)
+                    text = res.get("text","")
+                    if text:
+                        st.markdown(f'<div class="output-box">{text}</div>', unsafe_allow_html=True)
+                        _copy_button(text, "t3_report_copy")
+                    else:
+                        st.info("Report content is available in the export file.")
+                    st.markdown("---")
+                    _t3_has_exports = res.get("docx_bytes") or st.session_state.t3_xlsx or st.session_state.t3_pptx2
+                    if _t3_has_exports:
+                        _f1, _f2, _f3 = st.columns([2, 2, 2])
+                        if res.get("docx_bytes"):
+                            _f1.download_button("📝 Word", data=res["docx_bytes"],
+                                                file_name=f"Audit_Report_{name.replace(' ','_')}.docx",
+                                                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                        if st.session_state.t3_xlsx:
+                            _f2.download_button("📗 Excel", data=st.session_state.t3_xlsx,
+                                                file_name=f"Audit_Findings_{name.replace(' ','_')}.xlsx",
+                                                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                        if st.session_state.t3_pptx2:
+                            _f3.download_button("📙 PPT", data=st.session_state.t3_pptx2,
+                                                file_name=f"Audit_Report_{name.replace(' ','_')}.pptx",
+                                                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
+
+
+                # Static-enriched sections also shown in live mode
+                if st.session_state.get("report_data"):
+                    _rd2 = st.session_state["report_data"]
+                    with st.expander("📊 Section 1 — Executive Summary (Structured)", expanded=False):
+                        _show_report_section1(_rd2)
+                    with st.expander("🔍 Section 3 — Detailed Recommendations", expanded=False):
+                        _show_report_section3(_rd2)
+                    with st.expander("✅ Section 4 — Action Plan", expanded=False):
+                        _show_report_section4(_rd2)
+
+                with st.expander("✏️ Request a Revision", expanded=False):
+                    st.markdown('<div class="section-title">Targeted Revision</div>', unsafe_allow_html=True)
+                    followup = st.text_area(
+                        "What would you like to revise?", label_visibility="collapsed", height=80,
+                        placeholder="e.g. Strengthen recommendation 3. Add a 30-day deadline for the KYC finding.",
+                        key="t3_rev_in",
+                    )
+                    if st.button("Revise", disabled=not followup or _disabled, key="t3_rev_btn"):
+                        with st.spinner("Applying revisions…"):
+                            try:
+                                c = _client()
+                                rev_content = [{"type":"text","text":(
+                                    f"Previous report:\n{res.get('text','')[:3000]}\n\n"
+                                    f"Revision instructions: {followup}\n\nApply revisions precisely. Then call generate_audit_report to export."
+                                )}]
+
+                                def _h3r(name, inp):
+                                    if name == "generate_audit_report":
+                                        try:
+                                            p = generate_audit_report_docx(inp, OUTPUT_DIR)
+                                            return f"Saved: {p}", {"docx_path": p}
+                                        except Exception as ex:
+                                            return f"Error: {ex}", {}
+                                    return "Unknown tool", {}
+
+                                text2, extra2 = _agentic_loop(c, _a3.SYSTEM_PROMPT, _a3.TOOLS,
+                                    [{"role":"user","content":rev_content}], _h3r)
+                                res2 = {"text": text2, "name": name}
+                                if "docx_path" in extra2 and Path(extra2["docx_path"]).exists():
+                                    res2["docx_bytes"] = Path(extra2["docx_path"]).read_bytes()
+                                st.session_state.t3_report = res2
+                                st.rerun()
+                            except Exception:
+                                st.error("An error occurred. Please try again.")
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("---")
