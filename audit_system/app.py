@@ -49,6 +49,9 @@ _SS_DEFAULTS = {
     "history": [],
     "_tpl_applied": False,
     "_tpl_name": "",
+    "t1_show_form": True,
+    "t2_show_form": True,
+    "t1_jurs_pills": None,
     # Auth
     "signed_in": False,
     # Help
@@ -893,6 +896,86 @@ section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
 /* ── Tab panel content ── */
 [data-testid="stTabsContent"] {
   padding-top: 1.2rem !important;
+}
+
+/* ── Agent card layout ── */
+.agent-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+.agent-badge-pill {
+  display: inline-block;
+  background: rgba(99,102,241,0.15);
+  color: #818cf8;
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.agent-status-pill {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 6px;
+}
+.agent-status-ready {
+  background: rgba(34,211,165,0.12);
+  color: #22d3a5;
+  border: 1px solid rgba(34,211,165,0.3);
+}
+.agent-status-live {
+  background: rgba(249,115,22,0.12);
+  color: #f97316;
+  border: 1px solid rgba(249,115,22,0.3);
+}
+.param-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.jur-pills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.gen-btn-wrap {
+  margin-top: 20px;
+}
+div[data-testid="stButton"].gen-btn > button {
+  background: linear-gradient(135deg, #6366f1, #818cf8) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  padding: 14px 32px !important;
+  min-height: 52px !important;
+  width: 100% !important;
+  letter-spacing: 0.3px !important;
+}
+div[data-testid="stButton"].gen-btn > button:hover {
+  opacity: 0.9 !important;
+}
+div[data-testid="stButton"].back-btn > button {
+  background: rgba(255,255,255,0.05) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
 }
 </style>
 """, unsafe_allow_html=True)
