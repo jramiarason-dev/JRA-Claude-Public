@@ -2496,270 +2496,253 @@ if _qp.get("auth") == "1":
     st.rerun()
 
 if not st.session_state.signed_in:
-    # ── Hide Streamlit chrome, inject AuditIQ design tokens ──────────────────
+    # ── Hide Streamlit chrome (theme handles bg/colors) ────────────────────────
     st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 header[data-testid="stHeader"],.stDeployButton,
-[data-testid="stToolbar"],[data-testid="stDecoration"]{display:none!important;}
+[data-testid="stToolbar"],[data-testid="stDecoration"],
 [data-testid="stSidebar"]{display:none!important;}
-html,body,.stApp{
-  background:#07090f!important;
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;
+html,body{font-family:'Inter',sans-serif!important;}
+.main .block-container{
+  padding-left:0!important;padding-right:0!important;
+  padding-top:0!important;padding-bottom:0!important;
+  max-width:100%!important;
 }
-.main .block-container{padding:0!important;max-width:100vw!important;margin:0!important;}
-
-/* ── Two-column cover layout ── */
-[data-testid="stHorizontalBlock"]{gap:0!important;min-height:100vh!important;}
-[data-testid="column"]:first-child{
-  background:radial-gradient(ellipse at 30% 20%,#11173a 0%,#07090f 70%)!important;
-  padding:clamp(32px,6vh,72px) clamp(28px,5vw,80px)!important;
-  display:flex!important;flex-direction:column!important;justify-content:center!important;
-  position:relative!important;overflow:hidden!important;
-}
-[data-testid="column"]:last-child{
-  background:linear-gradient(180deg,rgba(11,15,26,.85),rgba(7,9,15,.95))!important;
-  border-left:1px solid rgba(255,255,255,.08)!important;
-  padding:40px!important;display:flex!important;flex-direction:column!important;
-  justify-content:center!important;align-items:center!important;
-}
-
-/* ── CSS orb (replaces globe — no JS required) ── */
-@keyframes orbPulse{0%,100%{box-shadow:0 0 60px 20px rgba(99,102,241,.22),0 0 120px 40px rgba(79,126,248,.1);}50%{box-shadow:0 0 80px 30px rgba(99,102,241,.32),0 0 160px 60px rgba(79,126,248,.15);}}
-@keyframes orbRing{from{transform:rotateX(72deg) rotate(0deg);}to{transform:rotateX(72deg) rotate(360deg);}}
-@keyframes orbRing2{from{transform:rotateX(55deg) rotateY(20deg) rotate(0deg);}to{transform:rotateX(55deg) rotateY(20deg) rotate(-360deg);}}
-@keyframes coverUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-.si-orb-wrap{
-  display:flex;align-items:center;justify-content:center;
-  margin:28px 0 32px;perspective:900px;
-  animation:coverUp .8s cubic-bezier(.34,1.3,.64,1) .1s both;
-}
-.si-orb{
-  width:220px;height:220px;border-radius:50%;position:relative;
-  background:radial-gradient(circle at 33% 30%,#26336f 0%,#141f47 50%,#070b1c 100%);
-  border:1.5px solid rgba(129,140,248,.35);
-  animation:orbPulse 4s ease-in-out infinite;
-}
-.si-orb::before{
-  content:"";position:absolute;inset:-2px;border-radius:50%;
-  background:radial-gradient(circle at 28% 26%,rgba(175,186,255,.22) 0%,transparent 55%);
-}
-.si-orb::after{
-  content:"";position:absolute;inset:-2px;border-radius:50%;
-  background:radial-gradient(circle at 72% 72%,rgba(2,4,12,.55) 0%,transparent 50%);
-}
-.si-ring{
-  position:absolute;inset:-28px;border-radius:50%;
-  border:1px solid rgba(99,102,241,.28);
-  animation:orbRing 12s linear infinite;
-  transform-style:preserve-3d;
-}
-.si-ring2{
-  position:absolute;inset:-44px;border-radius:50%;
-  border:1px solid rgba(79,126,248,.16);
-  animation:orbRing2 20s linear infinite;
-  transform-style:preserve-3d;
-}
-
-/* ── Tagline animations ── */
-.si-title{animation:coverUp .7s cubic-bezier(.4,0,.2,1) .2s both;}
-.si-sub{animation:coverUp .7s cubic-bezier(.4,0,.2,1) .32s both;}
-.si-flags{animation:coverUp .7s cubic-bezier(.4,0,.2,1) .44s both;}
-
-/* ── Star-field pseudo on left column ── */
-[data-testid="column"]:first-child::before{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background-image:
-    radial-gradient(1px 1px at 13% 22%,rgba(255,255,255,.5) 0,transparent 50%),
-    radial-gradient(1px 1px at 28% 78%,rgba(255,255,255,.32) 0,transparent 50%),
-    radial-gradient(1px 1px at 41% 14%,rgba(255,255,255,.4) 0,transparent 50%),
-    radial-gradient(1px 1px at 9% 54%,rgba(255,255,255,.3) 0,transparent 50%),
-    radial-gradient(1px 1px at 47% 52%,rgba(255,255,255,.3) 0,transparent 50%),
-    radial-gradient(1px 1px at 21% 38%,rgba(255,255,255,.28) 0,transparent 50%);
-  opacity:.6;
-}
-
-/* ── Form inputs ── */
-.si-wrap{width:100%;max-width:380px;display:flex;flex-direction:column;gap:14px;
-  animation:coverUp .7s cubic-bezier(.4,0,.2,1) .15s both;}
-.si-wrap .stTextInput>div>div>input{
-  background:rgba(255,255,255,.04)!important;
+[data-testid="stHorizontalBlock"]{gap:0!important;}
+/* Input styling */
+.si-field .stTextInput input{
+  background:rgba(255,255,255,.05)!important;
   border:1px solid rgba(255,255,255,.1)!important;
-  border-radius:10px!important;color:#eef0f8!important;font-size:14px!important;
-  font-family:'Inter',sans-serif!important;padding:12px 14px!important;
-  transition:border-color .15s,box-shadow .15s;width:100%!important;
+  border-radius:10px!important;color:#eef0f8!important;
+  font-size:14px!important;font-family:'Inter',sans-serif!important;
+  padding:11px 14px!important;
 }
-.si-wrap .stTextInput>div>div>input:focus{
+.si-field .stTextInput input:focus{
   border-color:rgba(99,102,241,.55)!important;
-  box-shadow:0 0 0 3px rgba(99,102,241,.18)!important;
-  background:rgba(255,255,255,.06)!important;outline:none!important;
+  box-shadow:0 0 0 3px rgba(99,102,241,.15)!important;outline:none!important;
 }
-.si-wrap .stTextInput label,.si-wrap .stTextInput p{display:none!important;}
-.si-wrap .stTextInput>div{padding:0!important;}
-
-/* ── Primary submit button ── */
-.si-btn-primary>div>div>button,.si-btn-primary button{
+.si-field .stTextInput label,
+.si-field .stTextInput p,
+.si-field [data-testid="InputInstructions"]{display:none!important;}
+/* Submit button */
+.si-btn-submit button{
   background:linear-gradient(135deg,#4f46e5,#6366f1)!important;
-  color:#fff!important;border:0!important;border-radius:10px!important;
-  font-size:15px!important;font-weight:700!important;
-  padding:14px 20px!important;letter-spacing:.01em!important;
-  box-shadow:0 8px 24px rgba(99,102,241,.4)!important;
-  font-family:'Inter',sans-serif!important;width:100%!important;
-  transition:transform .15s,box-shadow .15s!important;cursor:pointer!important;
+  color:#fff!important;border:none!important;border-radius:10px!important;
+  font-size:15px!important;font-weight:700!important;padding:13px 20px!important;
+  box-shadow:0 8px 24px rgba(99,102,241,.4)!important;width:100%!important;
 }
-.si-btn-primary>div>div>button:hover,.si-btn-primary button:hover{
+.si-btn-submit button:hover{
   transform:translateY(-1px)!important;
   box-shadow:0 12px 30px rgba(99,102,241,.55)!important;
 }
-
-/* ── SSO buttons ── */
-.si-sso>div>div>button,.si-sso button{
-  background:rgba(255,255,255,.03)!important;
+/* SSO buttons */
+.si-btn-sso button{
+  background:rgba(255,255,255,.04)!important;
   border:1px solid rgba(255,255,255,.1)!important;
-  color:#c9cde0!important;border-radius:10px!important;font-size:12.5px!important;
-  font-weight:600!important;padding:11px!important;
-  font-family:'Inter',sans-serif!important;width:100%!important;
-  transition:all .15s!important;
+  color:#c9cde0!important;border-radius:10px!important;
+  font-size:12.5px!important;font-weight:600!important;padding:11px!important;width:100%!important;
 }
-.si-sso>div>div>button:hover,.si-sso button:hover{
+.si-btn-sso button:hover{
   background:rgba(255,255,255,.08)!important;color:#eef0f8!important;
-  border-color:rgba(255,255,255,.2)!important;
 }
-
-/* ── Or divider ── */
-.si-or{display:flex;align-items:center;gap:12px;color:#5a6488;
-  font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin:2px 0;}
-.si-or::before,.si-or::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.08);}
-
-@media(max-width:768px){
-  [data-testid="stHorizontalBlock"]{flex-direction:column!important;}
-  [data-testid="column"]:first-child,[data-testid="column"]:last-child{
-    min-height:auto!important;padding:32px 20px!important;
-  }
-  [data-testid="column"]:last-child{border-left:0!important;border-top:1px solid rgba(255,255,255,.08)!important;}
-  .si-orb{width:160px!important;height:160px!important;}
+/* Animated orb pulse */
+@keyframes si-pulse{
+  0%,100%{box-shadow:0 0 50px 15px rgba(99,102,241,.22),0 0 100px 30px rgba(79,126,248,.08);}
+  50%{box-shadow:0 0 70px 25px rgba(99,102,241,.30),0 0 140px 50px rgba(79,126,248,.12);}
 }
 </style>
 """, unsafe_allow_html=True)
 
     _col_l, _col_r = st.columns([1.1, 0.9], gap="small")
 
-    # LEFT — brand + CSS animated orb + tagline + flags
+    # ── LEFT: entire visual in one self-contained HTML div ────────────────────
     with _col_l:
         st.markdown("""
-<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
-  <div style="width:38px;height:38px;border-radius:11px;
-       background:linear-gradient(135deg,#6366f1,#4f46e5);
-       display:grid;place-items:center;color:#fff;font-weight:800;font-size:16px;
-       box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 8px 24px rgba(99,102,241,.45)">A</div>
-  <span style="font-size:22px;font-weight:800;letter-spacing:-.02em;color:#eef0f8">
-    Audit<b style="color:#818cf8">IQ</b></span>
-  <span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-       background:rgba(99,102,241,.14);border:1px solid rgba(99,102,241,.3);
-       color:#818cf8;padding:2px 8px;border-radius:999px">Pro</span>
-</div>
-
-<div class="si-orb-wrap">
-  <div class="si-orb">
-    <div class="si-ring"></div>
-    <div class="si-ring2"></div>
+<div style="
+  min-height:100vh;width:100%;box-sizing:border-box;
+  background:radial-gradient(ellipse at 30% 20%,#11173a 0%,#07090f 70%);
+  padding:clamp(32px,6vh,72px) clamp(28px,6vw,80px);
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+">
+  <!-- star field -->
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      radial-gradient(1px 1px at 13% 22%,rgba(255,255,255,.5) 0,transparent 50%),
+      radial-gradient(1px 1px at 28% 78%,rgba(255,255,255,.32) 0,transparent 50%),
+      radial-gradient(1px 1px at 41% 14%,rgba(255,255,255,.4) 0,transparent 50%),
+      radial-gradient(1px 1px at 9% 54%,rgba(255,255,255,.3) 0,transparent 50%),
+      radial-gradient(1px 1px at 62% 35%,rgba(255,255,255,.28) 0,transparent 50%),
+      radial-gradient(1px 1px at 21% 38%,rgba(255,255,255,.25) 0,transparent 50%);
+    opacity:.65;">
   </div>
-</div>
 
-<h1 class="si-title" style="font-size:clamp(26px,3.5vw,46px);font-weight:800;
-    letter-spacing:-.03em;line-height:1.06;color:#eef0f8;margin:0 0 10px">
-  Audit bancaire,<br>
-  <span style="background:linear-gradient(120deg,#aab6ff 0%,#6366f1 70%);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
-    augmenté par l'IA.
-  </span>
-</h1>
+  <!-- brand row -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;position:relative;z-index:1">
+    <div style="width:38px;height:38px;border-radius:11px;
+      background:linear-gradient(135deg,#6366f1,#4f46e5);
+      display:grid;place-items:center;color:#fff;font-weight:800;font-size:16px;
+      box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 8px 24px rgba(99,102,241,.45)">A</div>
+    <span style="font-size:22px;font-weight:800;letter-spacing:-.02em;color:#eef0f8">
+      Audit<b style="color:#818cf8">IQ</b></span>
+    <span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+      background:rgba(99,102,241,.14);border:1px solid rgba(99,102,241,.3);
+      color:#818cf8;padding:2px 8px;border-radius:999px">Pro</span>
+  </div>
 
-<p class="si-sub" style="font-size:12px;font-weight:600;letter-spacing:.16em;
-   text-transform:uppercase;color:#8392bb;margin:0 0 22px">
-  CH · SG · HK · Bahamas · EU · UK</p>
+  <!-- CSS animated planet orb -->
+  <div style="display:flex;justify-content:flex-start;padding-left:8px;
+    margin:22px 0 26px;position:relative;z-index:1">
+    <div style="position:relative;width:200px;height:200px">
+      <div style="position:absolute;inset:-28px;border-radius:50%;
+        border:1px solid rgba(99,102,241,.2);"></div>
+      <div style="position:absolute;inset:-48px;border-radius:50%;
+        border:1px solid rgba(79,126,248,.1);"></div>
+      <div style="width:200px;height:200px;border-radius:50%;position:relative;
+        background:radial-gradient(circle at 33% 30%,#26336f 0%,#141f47 50%,#070b1c 100%);
+        border:1.5px solid rgba(129,140,248,.4);
+        animation:si-pulse 4s ease-in-out infinite;">
+        <div style="position:absolute;inset:0;border-radius:50%;
+          background:radial-gradient(circle at 28% 26%,rgba(175,186,255,.22) 0%,transparent 52%);"></div>
+        <div style="position:absolute;inset:0;border-radius:50%;
+          background:radial-gradient(circle at 70% 70%,rgba(2,4,12,.5) 0%,transparent 55%);"></div>
+      </div>
+    </div>
+  </div>
 
-<div class="si-flags" style="display:flex;flex-wrap:wrap;gap:8px">
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-    font-size:11px;font-weight:700;color:#c9cde0">🇨🇭 FINMA</span>
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-    font-size:11px;font-weight:700;color:#c9cde0">🇸🇬 MAS</span>
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-    font-size:11px;font-weight:700;color:#c9cde0">🇭🇰 SFC/HKMA</span>
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-    font-size:11px;font-weight:700;color:#c9cde0">🇧🇸 SCB</span>
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-    font-size:11px;font-weight:700;color:#c9cde0">🇪🇺 CSSF/BaFin</span>
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-    font-size:11px;font-weight:700;color:#c9cde0">🇬🇧 FCA/PRA</span>
+  <!-- hero headline -->
+  <h1 style="font-size:clamp(26px,3.5vw,46px);font-weight:800;
+    letter-spacing:-.03em;line-height:1.06;color:#eef0f8;margin:0 0 10px;position:relative;z-index:1">
+    Audit bancaire,<br>
+    <span style="background:linear-gradient(120deg,#aab6ff 0%,#6366f1 70%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+      augmenté par l'IA.
+    </span>
+  </h1>
+  <p style="font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    color:#8392bb;margin:0 0 22px;position:relative;z-index:1">
+    CH · SG · HK · Bahamas · EU · UK</p>
+
+  <!-- jurisdiction flags -->
+  <div style="display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:1">
+    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
+      border-radius:999px;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
+      &#127464;&#127469; FINMA</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
+      border-radius:999px;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
+      &#127480;&#127468; MAS</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
+      border-radius:999px;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
+      &#127469;&#127472; SFC/HKMA</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
+      border-radius:999px;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
+      &#127463;&#127480; SCB</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
+      border-radius:999px;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
+      &#127466;&#127482; CSSF/BaFin</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
+      border-radius:999px;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
+      &#127468;&#127463; FCA/PRA</span>
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
-    # RIGHT — sign-in form (pure native Streamlit, no deprecated components)
+    # ── RIGHT: dark panel header + native Streamlit form ─────────────────────
     with _col_r:
-        st.markdown('<div class="si-wrap">', unsafe_allow_html=True)
-
         st.markdown("""
+<div style="
+  padding:clamp(28px,5vh,56px) clamp(20px,4vw,52px) 0;
+  background:linear-gradient(180deg,rgba(11,15,26,.9),rgba(7,9,15,.96));
+  border-left:1px solid rgba(255,255,255,.08);min-height:100vh;
+  box-sizing:border-box;
+">
 <h2 style="font-size:26px;font-weight:800;letter-spacing:-.02em;color:#eef0f8;margin:0 0 6px">
   Connexion</h2>
-<p style="font-size:13.5px;color:#8392bb;margin:0 0 18px;line-height:1.5">
+<p style="font-size:13.5px;color:#8392bb;margin:0 0 24px;line-height:1.5">
   Accédez à votre espace d'audit sécurisé.</p>
 <p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:0 0 5px">
   Adresse e-mail</p>
+</div>
 """, unsafe_allow_html=True)
+
+        st.markdown('<div class="si-field" style="padding:0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
         _email = st.text_input("email", value="lucas.brunner@helvetia-private.ch",
                                label_visibility="collapsed", key="si_email")
+        st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("""
-<p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:10px 0 5px">
+<div style="padding:0 clamp(20px,4vw,52px);
+  background:linear-gradient(180deg,rgba(11,15,26,.9),rgba(7,9,15,.96));
+  border-left:1px solid rgba(255,255,255,.08)">
+<p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:12px 0 5px">
   Mot de passe</p>
+</div>
 """, unsafe_allow_html=True)
+
+        st.markdown('<div class="si-field" style="padding:0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
         _pwd = st.text_input("pwd", value="auditiq-demo", type="password",
                              label_visibility="collapsed", key="si_pwd")
+        st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-        st.markdown('<div class="si-btn-primary">', unsafe_allow_html=True)
+
+        st.markdown('<div class="si-btn-submit" style="padding:0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
         if st.button("Se connecter  →", key="si_submit", use_container_width=True):
             st.session_state.signed_in = True
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-
-        st.markdown('<div class="si-or"><span>ou</span></div>', unsafe_allow_html=True)
-
-        _sso1, _sso2 = st.columns(2, gap="small")
-        with _sso1:
-            st.markdown('<div class="si-sso">', unsafe_allow_html=True)
-            if st.button("🔑  SSO entreprise", key="si_sso1", use_container_width=True):
-                st.session_state.signed_in = True
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
-        with _sso2:
-            st.markdown('<div class="si-sso">', unsafe_allow_html=True)
-            if st.button("🪪  Carte d'accès", key="si_sso2", use_container_width=True):
-                st.session_state.signed_in = True
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("""
-<div style="margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:8px">
-  <span style="display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:700;
-    letter-spacing:.06em;text-transform:uppercase;background:rgba(34,197,94,.1);
-    border:1px solid rgba(34,197,94,.25);color:#22c55e;padding:3px 10px;border-radius:999px">
+<div style="padding:10px clamp(20px,4vw,52px) 0;
+  background:linear-gradient(180deg,rgba(11,15,26,.9),rgba(7,9,15,.96));
+  border-left:1px solid rgba(255,255,255,.08)">
+<div style="display:flex;align-items:center;gap:12px;color:#5a6488;
+  font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin:2px 0 10px">
+  <div style="flex:1;height:1px;background:rgba(255,255,255,.08)"></div>
+  <span>ou</span>
+  <div style="flex:1;height:1px;background:rgba(255,255,255,.08)"></div>
+</div>
+</div>
+""", unsafe_allow_html=True)
+
+        _c1, _c2 = st.columns(2, gap="small")
+        with _c1:
+            st.markdown('<div class="si-btn-sso" style="padding:0 0 0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
+            if st.button("🔑  SSO", key="si_sso1", use_container_width=True):
+                st.session_state.signed_in = True
+                st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
+        with _c2:
+            st.markdown('<div class="si-btn-sso">', unsafe_allow_html=True)
+            if st.button("🪪  Carte", key="si_sso2", use_container_width=True):
+                st.session_state.signed_in = True
+                st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        st.markdown("""
+<div style="padding:20px clamp(20px,4vw,52px) 40px;
+  background:linear-gradient(180deg,rgba(11,15,26,.9),rgba(7,9,15,.96));
+  border-left:1px solid rgba(255,255,255,.08);min-height:60px;
+  display:flex;flex-direction:column;align-items:center;gap:8px">
+  <span style="display:inline-flex;align-items:center;gap:6px;font-size:9px;
+    font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);
+    color:#22c55e;padding:3px 10px;border-radius:999px">
     <span style="width:5px;height:5px;border-radius:50%;background:#22c55e;
-      display:inline-block;animation:orbPulse 2s ease-in-out infinite"></span>
+      display:inline-block"></span>
     Connexion chiffrée · TLS 1.3
   </span>
   <span style="font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#5a6488">
     AuditIQ · Banque privée suisse</span>
 </div>
 """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
 
     st.stop()
 
