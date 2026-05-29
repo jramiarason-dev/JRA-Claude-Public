@@ -1,8 +1,3 @@
-# Julien Ramiarason
-
-**Internal Auditor · Builder · Geneva, Switzerland**
-
-> Automating audit workflows and building AI-powered tools — one project at a time.
 
 ---
 
