@@ -2496,167 +2496,239 @@ if _qp.get("auth") == "1":
     st.rerun()
 
 if not st.session_state.signed_in:
-    # ── CSS: hide chrome, full-page dark bg, style native elements ──────────────
+    # ── Hide Streamlit chrome, inject AuditIQ design tokens ──────────────────
     st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 header[data-testid="stHeader"],.stDeployButton,
 [data-testid="stToolbar"],[data-testid="stDecoration"]{display:none!important;}
 [data-testid="stSidebar"]{display:none!important;}
-html,body,.stApp{background:#07090f!important;font-family:'Inter',sans-serif!important;}
+html,body,.stApp{
+  background:#07090f!important;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;
+}
 .main .block-container{padding:0!important;max-width:100vw!important;margin:0!important;}
-/* Column heights */
-[data-testid="stHorizontalBlock"]{gap:0!important;min-height:100vh;}
+
+/* ── Two-column cover layout ── */
+[data-testid="stHorizontalBlock"]{gap:0!important;min-height:100vh!important;}
 [data-testid="column"]:first-child{
   background:radial-gradient(ellipse at 30% 20%,#11173a 0%,#07090f 70%)!important;
-  padding:56px clamp(28px,5vw,80px)!important;display:flex!important;flex-direction:column!important;justify-content:center!important;
+  padding:clamp(32px,6vh,72px) clamp(28px,5vw,80px)!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;
+  position:relative!important;overflow:hidden!important;
 }
 [data-testid="column"]:last-child{
   background:linear-gradient(180deg,rgba(11,15,26,.85),rgba(7,9,15,.95))!important;
   border-left:1px solid rgba(255,255,255,.08)!important;
-  padding:40px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;
+  padding:40px!important;display:flex!important;flex-direction:column!important;
+  justify-content:center!important;align-items:center!important;
 }
-/* Inputs */
-.si-wrap .stTextInput input{
-  background:rgba(255,255,255,.04)!important;border:1px solid rgba(255,255,255,.1)!important;
+
+/* ── CSS orb (replaces globe — no JS required) ── */
+@keyframes orbPulse{0%,100%{box-shadow:0 0 60px 20px rgba(99,102,241,.22),0 0 120px 40px rgba(79,126,248,.1);}50%{box-shadow:0 0 80px 30px rgba(99,102,241,.32),0 0 160px 60px rgba(79,126,248,.15);}}
+@keyframes orbRing{from{transform:rotateX(72deg) rotate(0deg);}to{transform:rotateX(72deg) rotate(360deg);}}
+@keyframes orbRing2{from{transform:rotateX(55deg) rotateY(20deg) rotate(0deg);}to{transform:rotateX(55deg) rotateY(20deg) rotate(-360deg);}}
+@keyframes coverUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.si-orb-wrap{
+  display:flex;align-items:center;justify-content:center;
+  margin:28px 0 32px;perspective:900px;
+  animation:coverUp .8s cubic-bezier(.34,1.3,.64,1) .1s both;
+}
+.si-orb{
+  width:220px;height:220px;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 33% 30%,#26336f 0%,#141f47 50%,#070b1c 100%);
+  border:1.5px solid rgba(129,140,248,.35);
+  animation:orbPulse 4s ease-in-out infinite;
+}
+.si-orb::before{
+  content:"";position:absolute;inset:-2px;border-radius:50%;
+  background:radial-gradient(circle at 28% 26%,rgba(175,186,255,.22) 0%,transparent 55%);
+}
+.si-orb::after{
+  content:"";position:absolute;inset:-2px;border-radius:50%;
+  background:radial-gradient(circle at 72% 72%,rgba(2,4,12,.55) 0%,transparent 50%);
+}
+.si-ring{
+  position:absolute;inset:-28px;border-radius:50%;
+  border:1px solid rgba(99,102,241,.28);
+  animation:orbRing 12s linear infinite;
+  transform-style:preserve-3d;
+}
+.si-ring2{
+  position:absolute;inset:-44px;border-radius:50%;
+  border:1px solid rgba(79,126,248,.16);
+  animation:orbRing2 20s linear infinite;
+  transform-style:preserve-3d;
+}
+
+/* ── Tagline animations ── */
+.si-title{animation:coverUp .7s cubic-bezier(.4,0,.2,1) .2s both;}
+.si-sub{animation:coverUp .7s cubic-bezier(.4,0,.2,1) .32s both;}
+.si-flags{animation:coverUp .7s cubic-bezier(.4,0,.2,1) .44s both;}
+
+/* ── Star-field pseudo on left column ── */
+[data-testid="column"]:first-child::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    radial-gradient(1px 1px at 13% 22%,rgba(255,255,255,.5) 0,transparent 50%),
+    radial-gradient(1px 1px at 28% 78%,rgba(255,255,255,.32) 0,transparent 50%),
+    radial-gradient(1px 1px at 41% 14%,rgba(255,255,255,.4) 0,transparent 50%),
+    radial-gradient(1px 1px at 9% 54%,rgba(255,255,255,.3) 0,transparent 50%),
+    radial-gradient(1px 1px at 47% 52%,rgba(255,255,255,.3) 0,transparent 50%),
+    radial-gradient(1px 1px at 21% 38%,rgba(255,255,255,.28) 0,transparent 50%);
+  opacity:.6;
+}
+
+/* ── Form inputs ── */
+.si-wrap{width:100%;max-width:380px;display:flex;flex-direction:column;gap:14px;
+  animation:coverUp .7s cubic-bezier(.4,0,.2,1) .15s both;}
+.si-wrap .stTextInput>div>div>input{
+  background:rgba(255,255,255,.04)!important;
+  border:1px solid rgba(255,255,255,.1)!important;
   border-radius:10px!important;color:#eef0f8!important;font-size:14px!important;
   font-family:'Inter',sans-serif!important;padding:12px 14px!important;
-  transition:border-color .15s,box-shadow .15s;
+  transition:border-color .15s,box-shadow .15s;width:100%!important;
 }
-.si-wrap .stTextInput input:focus{
+.si-wrap .stTextInput>div>div>input:focus{
   border-color:rgba(99,102,241,.55)!important;
-  box-shadow:0 0 0 3px rgba(99,102,241,.18)!important;background:rgba(255,255,255,.06)!important;
+  box-shadow:0 0 0 3px rgba(99,102,241,.18)!important;
+  background:rgba(255,255,255,.06)!important;outline:none!important;
 }
 .si-wrap .stTextInput label,.si-wrap .stTextInput p{display:none!important;}
-/* Primary submit button */
-.si-wrap [data-testid="stFormSubmitButton"]:first-of-type button,
-.si-btn-primary button{
+.si-wrap .stTextInput>div{padding:0!important;}
+
+/* ── Primary submit button ── */
+.si-btn-primary>div>div>button,.si-btn-primary button{
   background:linear-gradient(135deg,#4f46e5,#6366f1)!important;
   color:#fff!important;border:0!important;border-radius:10px!important;
-  font-size:15px!important;font-weight:700!important;padding:14px 20px!important;
+  font-size:15px!important;font-weight:700!important;
+  padding:14px 20px!important;letter-spacing:.01em!important;
   box-shadow:0 8px 24px rgba(99,102,241,.4)!important;
   font-family:'Inter',sans-serif!important;width:100%!important;
   transition:transform .15s,box-shadow .15s!important;cursor:pointer!important;
 }
-.si-wrap [data-testid="stFormSubmitButton"]:first-of-type button:hover,
-.si-btn-primary button:hover{transform:translateY(-1px)!important;box-shadow:0 12px 30px rgba(99,102,241,.55)!important;}
-/* SSO buttons */
-.si-sso button{
-  background:rgba(255,255,255,.04)!important;border:1px solid rgba(255,255,255,.1)!important;
-  color:#c9cde0!important;border-radius:10px!important;font-size:13px!important;
-  font-weight:600!important;padding:11px!important;font-family:'Inter',sans-serif!important;
-  width:100%!important;transition:all .15s!important;
+.si-btn-primary>div>div>button:hover,.si-btn-primary button:hover{
+  transform:translateY(-1px)!important;
+  box-shadow:0 12px 30px rgba(99,102,241,.55)!important;
 }
-.si-sso button:hover{background:rgba(255,255,255,.08)!important;color:#eef0f8!important;}
-/* Divider */
-.si-or{display:flex;align-items:center;gap:12px;color:#5a6488;font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin:4px 0;}
+
+/* ── SSO buttons ── */
+.si-sso>div>div>button,.si-sso button{
+  background:rgba(255,255,255,.03)!important;
+  border:1px solid rgba(255,255,255,.1)!important;
+  color:#c9cde0!important;border-radius:10px!important;font-size:12.5px!important;
+  font-weight:600!important;padding:11px!important;
+  font-family:'Inter',sans-serif!important;width:100%!important;
+  transition:all .15s!important;
+}
+.si-sso>div>div>button:hover,.si-sso button:hover{
+  background:rgba(255,255,255,.08)!important;color:#eef0f8!important;
+  border-color:rgba(255,255,255,.2)!important;
+}
+
+/* ── Or divider ── */
+.si-or{display:flex;align-items:center;gap:12px;color:#5a6488;
+  font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin:2px 0;}
 .si-or::before,.si-or::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.08);}
-/* Globe iframe */
-iframe[title="st.components.v1.html"]{border:none!important;background:transparent!important;}
+
+@media(max-width:768px){
+  [data-testid="stHorizontalBlock"]{flex-direction:column!important;}
+  [data-testid="column"]:first-child,[data-testid="column"]:last-child{
+    min-height:auto!important;padding:32px 20px!important;
+  }
+  [data-testid="column"]:last-child{border-left:0!important;border-top:1px solid rgba(255,255,255,.08)!important;}
+  .si-orb{width:160px!important;height:160px!important;}
+}
 </style>
 """, unsafe_allow_html=True)
 
-    # ── Layout ────────────────────────────────────────────────────────────────
-    import streamlit.components.v1 as _stc
-
     _col_l, _col_r = st.columns([1.1, 0.9], gap="small")
 
-    # LEFT — brand + globe + tagline + flags
+    # LEFT — brand + CSS animated orb + tagline + flags
     with _col_l:
         st.markdown("""
-<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-  <div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#6366f1,#4f46e5);
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
+  <div style="width:38px;height:38px;border-radius:11px;
+       background:linear-gradient(135deg,#6366f1,#4f46e5);
        display:grid;place-items:center;color:#fff;font-weight:800;font-size:16px;
        box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 8px 24px rgba(99,102,241,.45)">A</div>
-  <span style="font-size:22px;font-weight:800;letter-spacing:-.02em;color:#eef0f8">Audit<b style="color:#818cf8">IQ</b></span>
+  <span style="font-size:22px;font-weight:800;letter-spacing:-.02em;color:#eef0f8">
+    Audit<b style="color:#818cf8">IQ</b></span>
   <span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
        background:rgba(99,102,241,.14);border:1px solid rgba(99,102,241,.3);
        color:#818cf8;padding:2px 8px;border-radius:999px">Pro</span>
 </div>
-""", unsafe_allow_html=True)
 
-        # Globe canvas — self-contained, no parent navigation needed
-        _stc.html("""<!doctype html><html><head>
-<meta charset="utf-8"/>
-<style>*{margin:0;padding:0;box-sizing:border-box;}html,body{background:transparent;overflow:hidden;}</style>
-</head><body>
-<canvas id="g" style="filter:drop-shadow(0 0 56px rgba(99,102,241,.45));display:block;margin:auto"></canvas>
-<script>
-var cv=document.getElementById('g'),ctx=cv.getContext('2d'),sz=320,dpr=2;
-cv.width=sz*dpr;cv.height=sz*dpr;cv.style.width=sz+'px';cv.style.height=sz+'px';ctx.scale(dpr,dpr);
-var cx=sz/2,cy=sz/2,R=sz*.43;
-var M={2:[[8,14],[26,30],[50,69]],3:[[2,5],[7,22],[25,31],[46,70]],4:[[1,24],[26,31],[35,40],[42,71]],5:[[1,14],[17,25],[27,30],[33,44],[45,71]],6:[[2,15],[19,26],[35,42],[43,71]],7:[[3,16],[19,27],[32,33],[35,71]],8:[[4,28],[33,71]],9:[[5,27],[33,52],[54,71]],10:[[6,26],[32,37],[40,71]],11:[[7,25],[31,46],[47,70]],12:[[9,22],[30,53],[55,70]],13:[[11,20],[29,53],[55,70]],14:[[13,20],[30,52],[54,69]],15:[[15,21],[31,51],[55,68]],16:[[20,27],[32,50],[60,68]],17:[[21,30],[33,49],[60,69]],18:[[21,31],[34,48],[60,70]],19:[[21,32],[35,47],[61,69]],20:[[22,33],[36,46],[57,68]],21:[[23,33],[37,45],[57,68]],22:[[24,33],[38,45],[56,67]],23:[[25,32],[39,44],[57,66]],24:[[26,31],[40,43],[58,65]],25:[[27,30],[41,43],[60,63]],26:[[27,29],[68,70]],27:[[27,29]],28:[[27,28]],29:[[27,28]],32:[[4,67]],33:[[0,71]],34:[[0,71]]};
-var pts=[];for(var r in M){var rw=+r,sp=M[r];for(var i=0;i<sp.length;i++){var c0=sp[i][0],c1=sp[i][1];for(var c=c0;c<=c1;c+=.5){var lo=(-180+c*5+2.5)*Math.PI/180;pts.push([lo,(90-rw*5-3.75)*Math.PI/180]);pts.push([lo,(90-rw*5-1.25)*Math.PI/180]);}}}
-var ti=21*Math.PI/180,ct=Math.cos(ti),st=Math.sin(ti),lx=-.42,ly=.5,lz=.62,rot=-1.2,last=performance.now();
-function draw(now){var dt=Math.min((now-last)/1000,.05);last=now;rot+=dt*.32;ctx.clearRect(0,0,sz,sz);
-var og=ctx.createRadialGradient(cx-R*.34,cy-R*.4,R*.08,cx,cy,R);og.addColorStop(0,'#26336f');og.addColorStop(.5,'#141f47');og.addColorStop(1,'#070b1c');
-ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fillStyle=og;ctx.fill();ctx.lineWidth=1.2;ctx.strokeStyle='rgba(129,140,248,.42)';ctx.stroke();
-for(var i=0;i<pts.length;i++){var lo=pts[i][0],la=pts[i][1],lm=lo+rot,cl=Math.cos(la),x=cl*Math.sin(lm),y=Math.sin(la),z=cl*Math.cos(lm),y2=y*ct-z*st,z2=y*st+z*ct;y=y2;z=z2;if(z<=.02)continue;
-var sx=cx+R*x,sy=cy-R*y,lf=Math.max(0,x*lx+y*ly+z*lz),sh=.32+.68*lf;
-ctx.beginPath();ctx.arc(sx,sy,1.5*(.55+.55*z),0,Math.PI*2);
-ctx.fillStyle='rgba('+Math.round(70+90*sh)+','+Math.round(95+110*sh)+','+Math.round(180+75*sh)+','+((.55+.45*z)*(z<.12?z/.12:1))+')';ctx.fill();}
-var sg=ctx.createRadialGradient(cx-R*.3,cy-R*.34,0,cx-R*.3,cy-R*.34,R*.85);sg.addColorStop(0,'rgba(175,186,255,.26)');sg.addColorStop(.45,'rgba(175,186,255,0)');ctx.fillStyle=sg;ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fill();
-var lg=ctx.createRadialGradient(cx,cy,R*.7,cx,cy,R);lg.addColorStop(0,'rgba(0,0,0,0)');lg.addColorStop(1,'rgba(2,4,12,.5)');ctx.fillStyle=lg;ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fill();
-requestAnimationFrame(draw);}requestAnimationFrame(draw);
-</script></body></html>""", height=340, scrolling=False)
+<div class="si-orb-wrap">
+  <div class="si-orb">
+    <div class="si-ring"></div>
+    <div class="si-ring2"></div>
+  </div>
+</div>
 
-        st.markdown("""
-<h1 style="font-size:clamp(26px,3.5vw,44px);font-weight:800;letter-spacing:-.03em;
-    line-height:1.08;color:#eef0f8;margin:16px 0 8px">
+<h1 class="si-title" style="font-size:clamp(26px,3.5vw,46px);font-weight:800;
+    letter-spacing:-.03em;line-height:1.06;color:#eef0f8;margin:0 0 10px">
   Audit bancaire,<br>
   <span style="background:linear-gradient(120deg,#aab6ff 0%,#6366f1 70%);
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
     augmenté par l'IA.
   </span>
 </h1>
-<p style="font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
-   color:#8392bb;margin:0 0 20px">CH · SG · HK · Bahamas · EU · UK</p>
-<div style="display:flex;flex-wrap:wrap;gap:8px">
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
+
+<p class="si-sub" style="font-size:12px;font-weight:600;letter-spacing:.16em;
+   text-transform:uppercase;color:#8392bb;margin:0 0 22px">
+  CH · SG · HK · Bahamas · EU · UK</p>
+
+<div class="si-flags" style="display:flex;flex-wrap:wrap;gap:8px">
+  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
     background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
     font-size:11px;font-weight:700;color:#c9cde0">🇨🇭 FINMA</span>
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
+  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
     background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
     font-size:11px;font-weight:700;color:#c9cde0">🇸🇬 MAS</span>
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
+  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
     background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
     font-size:11px;font-weight:700;color:#c9cde0">🇭🇰 SFC/HKMA</span>
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
+  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
     background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
     font-size:11px;font-weight:700;color:#c9cde0">🇧🇸 SCB</span>
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
+  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
     background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
     font-size:11px;font-weight:700;color:#c9cde0">🇪🇺 CSSF/BaFin</span>
-  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
+  <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
     background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
     font-size:11px;font-weight:700;color:#c9cde0">🇬🇧 FCA/PRA</span>
 </div>
 """, unsafe_allow_html=True)
 
-    # RIGHT — sign-in form (native Streamlit, reliable on all platforms)
+    # RIGHT — sign-in form (pure native Streamlit, no deprecated components)
     with _col_r:
         st.markdown('<div class="si-wrap">', unsafe_allow_html=True)
+
         st.markdown("""
-<h2 style="font-size:26px;font-weight:800;letter-spacing:-.02em;color:#eef0f8;margin:0 0 6px">Connexion</h2>
-<p style="font-size:13.5px;color:#8392bb;margin:0 0 20px;line-height:1.5">
+<h2 style="font-size:26px;font-weight:800;letter-spacing:-.02em;color:#eef0f8;margin:0 0 6px">
+  Connexion</h2>
+<p style="font-size:13.5px;color:#8392bb;margin:0 0 18px;line-height:1.5">
   Accédez à votre espace d'audit sécurisé.</p>
-<p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:0 0 6px">Adresse e-mail</p>
+<p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:0 0 5px">
+  Adresse e-mail</p>
 """, unsafe_allow_html=True)
         _email = st.text_input("email", value="lucas.brunner@helvetia-private.ch",
                                label_visibility="collapsed", key="si_email")
+
         st.markdown("""
-<p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:8px 0 6px">Mot de passe</p>
+<p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:10px 0 5px">
+  Mot de passe</p>
 """, unsafe_allow_html=True)
         _pwd = st.text_input("pwd", value="auditiq-demo", type="password",
                              label_visibility="collapsed", key="si_pwd")
-        st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
 
-        with st.container():
-            st.markdown('<div class="si-btn-primary">', unsafe_allow_html=True)
-            if st.button("Se connecter  →", key="si_submit", use_container_width=True):
-                st.session_state.signed_in = True
-                st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+        st.markdown('<div class="si-btn-primary">', unsafe_allow_html=True)
+        if st.button("Se connecter  →", key="si_submit", use_container_width=True):
+            st.session_state.signed_in = True
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown('<div class="si-or"><span>ou</span></div>', unsafe_allow_html=True)
 
@@ -2675,12 +2747,13 @@ requestAnimationFrame(draw);}requestAnimationFrame(draw);
             st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown("""
-<div style="margin-top:20px;display:flex;flex-direction:column;align-items:center;gap:8px">
-  <span style="display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;
+<div style="margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:8px">
+  <span style="display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:700;
     letter-spacing:.06em;text-transform:uppercase;background:rgba(34,197,94,.1);
-    border:1px solid rgba(34,197,94,.25);color:#22c55e;padding:3px 9px;border-radius:999px">
-    <span style="width:5px;height:5px;border-radius:50%;background:#22c55e;display:inline-block"></span>
-    Connexion chiffrée
+    border:1px solid rgba(34,197,94,.25);color:#22c55e;padding:3px 10px;border-radius:999px">
+    <span style="width:5px;height:5px;border-radius:50%;background:#22c55e;
+      display:inline-block;animation:orbPulse 2s ease-in-out infinite"></span>
+    Connexion chiffrée · TLS 1.3
   </span>
   <span style="font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#5a6488">
     AuditIQ · Banque privée suisse</span>
