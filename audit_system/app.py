@@ -1188,10 +1188,10 @@ def _tab_actions_bar(tab_key: str, subtitle: str, exports: list) -> None:
         # Teammate+ always visible
         with _ecols[-1]:
             st.markdown(f'<div class="wk-btn">', unsafe_allow_html=True)
-            if st.button("↑ TM+", key=f"wk_top_{tab_key}",
+            if st.button("📤 TM+", key=f"wk_top_{tab_key}",
                          help="Export to Wolters Kluwer Teammate+",
                          use_container_width=True):
-                st.toast("✅ Données exportées vers Teammate+ (Wolters Kluwer)", icon="⬆")
+                st.toast("✅ Données exportées vers Teammate+ (Wolters Kluwer)", icon="📤")
             st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -2840,6 +2840,10 @@ html,body{font-family:'Inter',sans-serif!important;}
   max-width:100%!important;
 }
 [data-testid="stHorizontalBlock"]{gap:0!important;}
+/* Reset column internal padding so form starts at top without scrolling */
+[data-testid="stHorizontalBlock"]>[data-testid="stColumn"]>[data-testid="stVerticalBlock"]{
+  padding-top:0!important;gap:4px!important;
+}
 /* Input styling */
 .si-field .stTextInput input{
   background:rgba(255,255,255,.05)!important;
@@ -3267,79 +3271,94 @@ def _show_help_panel():
 _cur_ent = st.session_state.get("entity_type", "🏦 Private Banking")
 _cur_t   = _ENTITY_THEMES.get(_cur_ent, _ENTITY_THEMES["🏦 Private Banking"])
 
-_hdr_left, _hdr_right = st.columns([6, 4], gap="small")
-with _hdr_left:
+# Short display labels so pills stay compact and uniform
+_ENTITY_SHORT = {
+    "🏦 Private Banking":                   "🏦 Priv. Banking",
+    "📊 Asset Management":                  "📊 Asset Mgmt",
+    "🏢 Management Company (ManCo)":        "🏢 ManCo",
+    "🔀 Alternative Investment (PE/RE/HF)": "🔀 Alt. Invest.",
+    "🏛️ Group / Holding":                   "🏛️ Group",
+}
+
+# ── Entity switcher CSS (inject once) ────────────────────────────────────────
+_ent_btn_css = ""
+for _ename, _et in _ENTITY_THEMES.items():
+    _sl = _ent_slug(_ename)
+    _ent_btn_css += f"""
+    .ent-{_sl} button{{
+      background:rgba(255,255,255,.04) !important;
+      border:1px solid {_et['primary']}44 !important;
+      color:{_et['primary']} !important;
+      border-radius:8px !important;
+      font-size:11px !important; font-weight:600 !important;
+      height:36px !important; min-width:0 !important;
+      white-space:nowrap !important; overflow:hidden !important;
+      text-overflow:ellipsis !important;
+      transition:all .15s;
+    }}
+    .ent-{_sl} button:hover{{
+      background:{_et['sec_bg']} !important;
+      border-color:{_et['primary']}88 !important;
+    }}
+    .ent-{_sl}-active button{{
+      background:{_et['primary']} !important;
+      border:1px solid {_et['primary']} !important;
+      color:#fff !important;
+      border-radius:8px !important;
+      font-size:11px !important; font-weight:700 !important;
+      height:36px !important; min-width:0 !important;
+      white-space:nowrap !important; overflow:hidden !important;
+      text-overflow:ellipsis !important;
+      box-shadow:0 0 12px {_et['glow']} !important;
+    }}
+    """
+st.markdown(f"<style>{_ent_btn_css}</style>", unsafe_allow_html=True)
+
+# ── 3-column header: logo | entity pills | utility icons ─────────────────────
+_hdr_logo, _hdr_ents, _hdr_utils = st.columns([2, 7, 1], gap="small")
+
+with _hdr_logo:
     st.markdown(f"""
-<div style="display:flex;align-items:center;gap:14px;padding:20px 0 8px">
-  <div style="width:44px;height:44px;border-radius:12px;flex-shrink:0;
-    background:{_cur_t['bg_btn']};
-    display:grid;place-items:center;
+<div style="display:flex;align-items:center;gap:10px;padding:18px 0 8px">
+  <div style="width:40px;height:40px;border-radius:12px;flex-shrink:0;
+    background:{_cur_t['bg_btn']};display:grid;place-items:center;
     box-shadow:0 0 20px {_cur_t['glow']};">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
   <div>
-    <div style="font-size:22px;font-weight:800;letter-spacing:-.02em;
+    <div style="font-size:20px;font-weight:800;letter-spacing:-.02em;
       color:#eef0f8;line-height:1.1">Audit<span style="color:{_cur_t['hover']}">IQ</span></div>
-    <div style="font-size:11px;color:#5a6488;letter-spacing:.04em;margin-top:1px">
-      Intelligent audit support &mdash; financial institutions</div>
+    <div style="font-size:10px;color:#5a6488;letter-spacing:.04em;margin-top:1px">
+      Intelligent audit support</div>
   </div>
 </div>
 """, unsafe_allow_html=True)
 
-with _hdr_right:
-    # Entity switcher + utility buttons
-    st.markdown("<div style='padding-top:14px'>", unsafe_allow_html=True)
-
-    # ── Entity switcher CSS ───────────────────────────────────────────────────
-    _ent_btn_css = ""
-    for _ename, _et in _ENTITY_THEMES.items():
-        _sl = _ent_slug(_ename)
-        _ent_btn_css += f"""
-        .ent-{_sl} button{{
-          background:rgba(255,255,255,.04) !important;
-          border:1px solid {_et['primary']}44 !important;
-          color:{_et['primary']} !important;
-          border-radius:20px !important;
-          font-size:11px !important; font-weight:600 !important;
-          padding:2px 4px !important; height:30px !important;
-          transition:all .15s;
-        }}
-        .ent-{_sl} button:hover{{
-          background:{_et['sec_bg']} !important;
-          border-color:{_et['primary']}88 !important;
-        }}
-        .ent-{_sl}-active button{{
-          background:{_et['primary']} !important;
-          border:1px solid {_et['primary']} !important;
-          color:#fff !important;
-          border-radius:20px !important;
-          font-size:11px !important; font-weight:700 !important;
-          padding:2px 4px !important; height:30px !important;
-          box-shadow:0 0 12px {_et['glow']} !important;
-        }}
-        """
-    st.markdown(f"<style>{_ent_btn_css}</style>", unsafe_allow_html=True)
-
-    # ── Entity pill buttons ───────────────────────────────────────────────────
+with _hdr_ents:
+    # Entity pill buttons — uniform width, left-aligned
+    st.markdown("<div style='padding-top:18px'>", unsafe_allow_html=True)
     _ent_opts = list(_ENTITY_THEMES.keys())
-    _ent_ncols = len(_ent_opts)
-    _ent_cols = st.columns(_ent_ncols, gap="small")
+    _ent_cols = st.columns(len(_ent_opts), gap="small")
     for _i, (_ename, _ecol) in enumerate(zip(_ent_opts, _ent_cols)):
         _sl = _ent_slug(_ename)
         _cls = f"ent-{_sl}-active" if _ename == _cur_ent else f"ent-{_sl}"
         with _ecol:
             st.markdown(f'<div class="{_cls}">', unsafe_allow_html=True)
-            if st.button(_ename, key=f"_ent_sel_{_i}", use_container_width=True):
+            if st.button(_ENTITY_SHORT.get(_ename, _ename), key=f"_ent_sel_{_i}",
+                         use_container_width=True):
                 st.session_state["entity_type"] = _ename
                 st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    # ── Utility icon buttons ──────────────────────────────────────────────────
-    _u1, _u2, _u3, _u4 = st.columns(4, gap="small")
+with _hdr_utils:
+    # Utility icon buttons — stacked 2×2, top-right
+    st.markdown("<div style='padding-top:14px'>", unsafe_allow_html=True)
     _theme_lbl = "☀️" if _is_dark else "🌙"
+    _u1, _u2 = st.columns(2, gap="small")
     with _u1:
         if st.button(_theme_lbl, key="theme_toggle", help="Basculer thème clair/sombre"):
             st.session_state.theme = "light" if _is_dark else "dark"
@@ -3347,13 +3366,13 @@ with _hdr_right:
     with _u2:
         if st.button("🎙️", key="_voice_toggle_btn", help="Commande vocale"):
             st.session_state["voice_active"] = not st.session_state.get("voice_active", False)
+    _u3, _u4 = st.columns(2, gap="small")
     with _u3:
         if st.button("✨", key="_cowork_toggle_btn", help="Claude Cowork — Suggestions"):
             st.session_state["cowork_open"] = not st.session_state.get("cowork_open", False)
     with _u4:
         if st.button("❓", key="_help_toggle_btn", help="Help / Aide"):
             st.session_state["help_open"] = not st.session_state.get("help_open", False)
-
     st.markdown("</div>", unsafe_allow_html=True)
 
 if st.session_state.get("voice_active", False):
@@ -4205,11 +4224,11 @@ with tab1:
     _tab_actions_bar("t1",
         "Risk mapping, applicable regulations, and public audit recommendations by topic.",
         [
-            ("xlsx ↓", st.session_state.get("t1_xlsx"),
+            ("📗 Excel", st.session_state.get("t1_xlsx"),
              f"Risk_Analysis.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
-            ("docx ↓", st.session_state.get("t1_docx"),
+            ("📝 Word", st.session_state.get("t1_docx"),
              f"Risk_Analysis.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
-            ("pptx ↓", st.session_state.get("t1_pptx2"),
+            ("📙 PPT", st.session_state.get("t1_pptx2"),
              f"Risk_Analysis.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
         ]
     )
@@ -4608,21 +4627,21 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
             _e1, _e2, _e3 = st.columns([2, 2, 2])
             if st.session_state.t1_docx:
                 _e1.download_button(
-                    "docx ↓",
+                    "📝 Word",
                     data=st.session_state.t1_docx,
                     file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.docx",
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 )
             if st.session_state.t1_xlsx:
                 _e2.download_button(
-                    "xlsx ↓",
+                    "📗 Excel",
                     data=st.session_state.t1_xlsx,
                     file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 )
             if st.session_state.t1_pptx2:
                 _e3.download_button(
-                    "pptx ↓",
+                    "📙 PPT",
                     data=st.session_state.t1_pptx2,
                     file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
@@ -4641,9 +4660,9 @@ with tab2:
     _tab_actions_bar("t2",
         "Structured audit planning, test programme, and data analytics scenarios.",
         [
-            ("pptx ↓", st.session_state.get("t2_pptx"),
+            ("📙 PPT", st.session_state.get("t2_pptx"),
              "Audit_Plan.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
-            ("xlsx ↓", st.session_state.get("t2_xlsx"),
+            ("📗 Excel", st.session_state.get("t2_xlsx"),
              "Audit_Tests.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
         ]
     )
@@ -5004,13 +5023,13 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
             ca, cb = st.columns([2, 2])
             if pptx:
                 ca.download_button(
-                    "pptx ↓", data=pptx,
+                    "📙 PPT", data=pptx,
                     file_name=f"Audit_Plan_{topic2_lbl.replace(' ', '_')}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
                 )
             if xlsx:
                 cb.download_button(
-                    "xlsx ↓", data=xlsx,
+                    "📗 Excel", data=xlsx,
                     file_name=f"Audit_Tests_{topic2_lbl.replace(' ', '_')}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 )
@@ -5027,12 +5046,12 @@ with tab3:
     _tab_actions_bar("t3",
         "IIA-standard audit report — assembled from Risk Analysis and Audit Plan context.",
         [
-            ("docx ↓", st.session_state.get("t3_docx_bytes") or (
+            ("📝 Word", st.session_state.get("t3_docx_bytes") or (
                 st.session_state.get("report_data") and None),
              "Audit_Report.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
-            ("xlsx ↓", st.session_state.get("t3_xlsx"),
+            ("📗 Excel", st.session_state.get("t3_xlsx"),
              "Audit_Findings.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
-            ("pptx ↓", st.session_state.get("t3_pptx2"),
+            ("📙 PPT", st.session_state.get("t3_pptx2"),
              "Audit_Report.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
         ]
     )
@@ -5190,7 +5209,7 @@ with tab3:
                 _ap_xlsx_buf = io.BytesIO()
                 pd.DataFrame(_action_rows).to_excel(_ap_xlsx_buf, index=False)
                 _ap_xlsx_buf.seek(0)
-                _fe2.download_button("xlsx ↓", data=_ap_xlsx_buf,
+                _fe2.download_button("📗 Excel", data=_ap_xlsx_buf,
                                      file_name=f"{rname}_ActionPlan.xlsx",
                                      mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             except Exception:
@@ -5359,15 +5378,15 @@ with tab3:
                 if _t3_has_exports:
                     _f1, _f2, _f3 = st.columns([2, 2, 2])
                     if res.get("docx_bytes"):
-                        _f1.download_button("docx ↓", data=res["docx_bytes"],
+                        _f1.download_button("📝 Word", data=res["docx_bytes"],
                                             file_name=f"Audit_Report_{name.replace(' ','_')}.docx",
                                             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                     if st.session_state.t3_xlsx:
-                        _f2.download_button("xlsx ↓", data=st.session_state.t3_xlsx,
+                        _f2.download_button("📗 Excel", data=st.session_state.t3_xlsx,
                                             file_name=f"Audit_Findings_{name.replace(' ','_')}.xlsx",
                                             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                     if st.session_state.t3_pptx2:
-                        _f3.download_button("pptx ↓", data=st.session_state.t3_pptx2,
+                        _f3.download_button("📙 PPT", data=st.session_state.t3_pptx2,
                                             file_name=f"Audit_Report_{name.replace(' ','_')}.pptx",
                                             mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
 
