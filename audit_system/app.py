@@ -22,7 +22,7 @@ st.set_page_config(
     page_title="AuditIQ",
     page_icon="🏦",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 # ── Session state (init before CSS) ───────────────────────────────────────────
@@ -682,9 +682,16 @@ div[data-testid="stRadio"] label:has(input:checked) {
   .stColumns > div { width: 100% !important; min-width: 100% !important; }
 }
 
-/* ── Hide sidebar completely ── */
-section[data-testid="stSidebar"],
+/* ── Sidebar styling ── */
+section[data-testid="stSidebar"] {
+  background: #0b0f1a !important;
+  border-right: 1px solid rgba(255,255,255,0.07) !important;
+  width: 240px !important; min-width: 240px !important;
+}
+section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
 [data-testid="collapsedControl"] { display: none !important; }
+/* Remove Streamlit default main-area left padding (sidebar already takes space) */
+.main .block-container { padding-left: 1.5rem !important; }
 
 /* ── Print ── */
 @media print {
@@ -3267,20 +3274,18 @@ def _show_help_panel():
         st.rerun()
 
 
-# ── Header ────────────────────────────────────────────────────────────────────
-_cur_ent = st.session_state.get("entity_type", "🏦 Private Banking")
-_cur_t   = _ENTITY_THEMES.get(_cur_ent, _ENTITY_THEMES["🏦 Private Banking"])
-
-# Short display labels so pills stay compact and uniform
-_ENTITY_SHORT = {
-    "🏦 Private Banking":                   "🏦 Priv. Banking",
-    "📊 Asset Management":                  "📊 Asset Mgmt",
-    "🏢 Management Company (ManCo)":        "🏢 ManCo",
-    "🔀 Alternative Investment (PE/RE/HF)": "🔀 Alt. Invest.",
-    "🏛️ Group / Holding":                   "🏛️ Group",
+# ── Shared state used by header and sidebar ───────────────────────────────────
+_cur_ent   = st.session_state.get("entity_type", "🏦 Private Banking")
+_cur_t     = _ENTITY_THEMES.get(_cur_ent, _ENTITY_THEMES["🏦 Private Banking"])
+_active    = st.session_state.get("active_tab", 0)
+_NAV_NAMES = {
+    0: "Intelligence Dashboard",
+    1: "Risk Analysis",
+    2: "Audit Plan & Testing",
+    3: "Audit Report",
 }
 
-# ── Entity switcher CSS (inject once) ────────────────────────────────────────
+# ── Entity switcher CSS (sidebar pills) ──────────────────────────────────────
 _ent_btn_css = ""
 for _ename, _et in _ENTITY_THEMES.items():
     _sl = _ent_slug(_ename)
@@ -3291,10 +3296,9 @@ for _ename, _et in _ENTITY_THEMES.items():
       color:{_et['primary']} !important;
       border-radius:8px !important;
       font-size:11px !important; font-weight:600 !important;
-      height:36px !important; min-width:0 !important;
+      height:32px !important; min-width:0 !important;
       white-space:nowrap !important; overflow:hidden !important;
-      text-overflow:ellipsis !important;
-      transition:all .15s;
+      text-overflow:ellipsis !important; transition:all .15s;
     }}
     .ent-{_sl} button:hover{{
       background:{_et['sec_bg']} !important;
@@ -3303,10 +3307,9 @@ for _ename, _et in _ENTITY_THEMES.items():
     .ent-{_sl}-active button{{
       background:{_et['primary']} !important;
       border:1px solid {_et['primary']} !important;
-      color:#fff !important;
-      border-radius:8px !important;
+      color:#fff !important; border-radius:8px !important;
       font-size:11px !important; font-weight:700 !important;
-      height:36px !important; min-width:0 !important;
+      height:32px !important; min-width:0 !important;
       white-space:nowrap !important; overflow:hidden !important;
       text-overflow:ellipsis !important;
       box-shadow:0 0 12px {_et['glow']} !important;
@@ -3314,66 +3317,220 @@ for _ename, _et in _ENTITY_THEMES.items():
     """
 st.markdown(f"<style>{_ent_btn_css}</style>", unsafe_allow_html=True)
 
-# ── 3-column header: logo | entity pills | utility icons ─────────────────────
-_hdr_logo, _hdr_ents, _hdr_utils = st.columns([2, 7, 1], gap="small")
+# ── Sidebar nav CSS ───────────────────────────────────────────────────────────
+_nav_primary = _cur_t["primary"]
+_nav_glow    = _cur_t["glow"]
+st.markdown(f"""<style>
+.nav-item button{{
+  background:transparent !important; border:none !important;
+  color:#8392bb !important; text-align:left !important;
+  font-size:13px !important; font-weight:500 !important;
+  padding:8px 16px !important; width:100% !important;
+  border-radius:8px !important; justify-content:flex-start !important;
+}}
+.nav-item button:hover{{
+  background:rgba(255,255,255,0.05) !important; color:#eef0f8 !important;
+}}
+.nav-active button{{
+  background:{_nav_primary}22 !important; border:none !important;
+  color:{_nav_primary} !important; text-align:left !important;
+  font-size:13px !important; font-weight:700 !important;
+  padding:8px 16px !important; width:100% !important;
+  border-radius:8px !important; justify-content:flex-start !important;
+  box-shadow:0 0 8px {_nav_glow} !important;
+}}
+.nav-stub button{{
+  background:transparent !important; border:none !important;
+  color:#3d4a6b !important; text-align:left !important;
+  font-size:13px !important; font-weight:400 !important;
+  padding:8px 16px !important; width:100% !important;
+  border-radius:8px !important; justify-content:flex-start !important;
+  cursor:default !important;
+}}
+</style>""", unsafe_allow_html=True)
 
-with _hdr_logo:
+# ══════════════════════════════════════════════════════════════════════════════
+# SIDEBAR
+# ══════════════════════════════════════════════════════════════════════════════
+with st.sidebar:
+    # ── Logo ─────────────────────────────────────────────────────────────────
     st.markdown(f"""
-<div style="display:flex;align-items:center;gap:10px;padding:18px 0 8px">
-  <div style="width:40px;height:40px;border-radius:12px;flex-shrink:0;
-    background:{_cur_t['bg_btn']};display:grid;place-items:center;
-    box-shadow:0 0 20px {_cur_t['glow']};">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </div>
-  <div>
-    <div style="font-size:20px;font-weight:800;letter-spacing:-.02em;
-      color:#eef0f8;line-height:1.1">Audit<span style="color:{_cur_t['hover']}">IQ</span></div>
-    <div style="font-size:10px;color:#5a6488;letter-spacing:.04em;margin-top:1px">
-      Intelligent audit support</div>
+<div style="padding:20px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.07)">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:36px;height:36px;border-radius:10px;flex-shrink:0;
+      background:{_cur_t['bg_btn']};display:grid;place-items:center;
+      box-shadow:0 0 16px {_cur_t['glow']}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <span style="font-size:18px;font-weight:800;letter-spacing:-.02em;color:#eef0f8">
+        Audit<span style="color:{_cur_t['hover']}">IQ</span>
+      </span>
+      <span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+        background:rgba(99,102,241,.18);border:1px solid rgba(99,102,241,.3);
+        color:#818cf8;padding:1px 7px;border-radius:999px;margin-left:6px">Pro</span>
+    </div>
   </div>
 </div>
 """, unsafe_allow_html=True)
 
-with _hdr_ents:
-    # Entity pill buttons — uniform width, left-aligned
-    st.markdown("<div style='padding-top:18px'>", unsafe_allow_html=True)
-    _ent_opts = list(_ENTITY_THEMES.keys())
-    _ent_cols = st.columns(len(_ent_opts), gap="small")
-    for _i, (_ename, _ecol) in enumerate(zip(_ent_opts, _ent_cols)):
-        _sl = _ent_slug(_ename)
-        _cls = f"ent-{_sl}-active" if _ename == _cur_ent else f"ent-{_sl}"
-        with _ecol:
-            st.markdown(f'<div class="{_cls}">', unsafe_allow_html=True)
-            if st.button(_ENTITY_SHORT.get(_ename, _ename), key=f"_ent_sel_{_i}",
-                         use_container_width=True):
-                st.session_state["entity_type"] = _ename
-                st.rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
+    # ── MENU section ─────────────────────────────────────────────────────────
+    st.markdown("""
+<div style="padding:16px 16px 4px">
+  <span style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d4a6b">Menu</span>
+</div>
+""", unsafe_allow_html=True)
+
+    _cls0 = "nav-active" if _active == 0 else "nav-item"
+    st.markdown(f'<div class="{_cls0}">', unsafe_allow_html=True)
+    if st.button("⊞  Tableau de bord", key="_nav0", use_container_width=True):
+        st.session_state["active_tab"] = 0
+        st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-with _hdr_utils:
-    # Utility icon buttons — stacked 2×2, top-right
-    st.markdown("<div style='padding-top:14px'>", unsafe_allow_html=True)
+    _cls1 = "nav-active" if _active == 1 else "nav-item"
+    st.markdown(f'<div class="{_cls1}">', unsafe_allow_html=True)
+    if st.button("≡  Risk Analysis", key="_nav1", use_container_width=True):
+        st.session_state["active_tab"] = 1
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── AGENTS IA section ────────────────────────────────────────────────────
+    st.markdown("""
+<div style="padding:16px 16px 4px">
+  <span style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d4a6b">Agents IA</span>
+</div>
+""", unsafe_allow_html=True)
+
+    _cls2 = "nav-active" if _active == 2 else "nav-item"
+    st.markdown(f'<div class="{_cls2}">', unsafe_allow_html=True)
+    if st.button("📋  Audit Plan & Testing", key="_nav2", use_container_width=True):
+        st.session_state["active_tab"] = 2
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    _cls3 = "nav-active" if _active == 3 else "nav-item"
+    st.markdown(f'<div class="{_cls3}">', unsafe_allow_html=True)
+    if st.button("📄  Rapport d'audit", key="_nav3", use_container_width=True):
+        st.session_state["active_tab"] = 3
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── OUTILS section ───────────────────────────────────────────────────────
+    st.markdown("""
+<div style="padding:16px 16px 4px">
+  <span style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d4a6b">Outils</span>
+</div>
+""", unsafe_allow_html=True)
+
+    st.markdown('<div class="nav-stub">', unsafe_allow_html=True)
+    st.button("📁  Documents", key="_nav_docs", disabled=True, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('<div class="nav-stub">', unsafe_allow_html=True)
+    st.button("🕐  Historique", key="_nav_hist", disabled=True, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('<div class="nav-stub">', unsafe_allow_html=True)
+    st.button("⚙  Paramètres", key="_nav_pref", disabled=True, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── Entity selector (compact selectbox) ──────────────────────────────────
+    st.markdown("""
+<div style="padding:16px 16px 4px;border-top:1px solid rgba(255,255,255,0.05);margin-top:8px">
+  <span style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d4a6b">Environnement</span>
+</div>
+""", unsafe_allow_html=True)
+    _ent_opts = list(_ENTITY_THEMES.keys())
+    _ent_idx  = _ent_opts.index(_cur_ent) if _cur_ent in _ent_opts else 0
+    _ent_sel  = st.selectbox(
+        "Entité", _ent_opts, index=_ent_idx,
+        key="_sb_entity_sel", label_visibility="collapsed",
+    )
+    if _ent_sel != _cur_ent:
+        st.session_state["entity_type"] = _ent_sel
+        st.rerun()
+
+    # ── Jurisdiction flags ───────────────────────────────────────────────────
+    _jurs_active = st.session_state.get("t1_jurs", [])
+    _flag_map = {
+        "Suisse": "🇨🇭", "Singapour": "🇸🇬", "Hong Kong": "🇭🇰",
+        "Bahamas": "🇧🇸", "Union Européenne": "🇪🇺", "Royaume-Uni": "🇬🇧",
+    }
+    _flags_html = " ".join(
+        f'<span title="{j}" style="font-size:16px;opacity:{1.0 if not _jurs_active or j in _jurs_active else 0.3}">'
+        f'{_flag_map.get(j, "🌐")}</span>'
+        for j in _flag_map
+    )
+    st.markdown(
+        f'<div style="padding:6px 16px 12px;display:flex;flex-wrap:wrap;gap:6px">{_flags_html}</div>',
+        unsafe_allow_html=True,
+    )
+
+    # ── Utility buttons ──────────────────────────────────────────────────────
+    st.markdown('<div style="padding:8px 8px 4px;border-top:1px solid rgba(255,255,255,0.05)">', unsafe_allow_html=True)
+    _sb_u1, _sb_u2, _sb_u3, _sb_u4 = st.columns(4, gap="small")
     _theme_lbl = "☀️" if _is_dark else "🌙"
-    _u1, _u2 = st.columns(2, gap="small")
-    with _u1:
-        if st.button(_theme_lbl, key="theme_toggle", help="Basculer thème clair/sombre"):
+    with _sb_u1:
+        if st.button(_theme_lbl, key="theme_toggle", help="Basculer thème"):
             st.session_state.theme = "light" if _is_dark else "dark"
             st.rerun()
-    with _u2:
+    with _sb_u2:
         if st.button("🎙️", key="_voice_toggle_btn", help="Commande vocale"):
             st.session_state["voice_active"] = not st.session_state.get("voice_active", False)
-    _u3, _u4 = st.columns(2, gap="small")
-    with _u3:
-        if st.button("✨", key="_cowork_toggle_btn", help="Claude Cowork — Suggestions"):
+    with _sb_u3:
+        if st.button("✨", key="_cowork_toggle_btn", help="Suggestions"):
             st.session_state["cowork_open"] = not st.session_state.get("cowork_open", False)
-    with _u4:
+    with _sb_u4:
         if st.button("❓", key="_help_toggle_btn", help="Help / Aide"):
             st.session_state["help_open"] = not st.session_state.get("help_open", False)
     st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── User info ────────────────────────────────────────────────────────────
+    st.markdown(f"""
+<div style="padding:12px 16px 20px;border-top:1px solid rgba(255,255,255,0.07)">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;
+      background:{_cur_t['bg_btn']};display:grid;place-items:center;
+      font-size:12px;font-weight:800;color:#fff">LB</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:13px;font-weight:600;color:#eef0f8;
+        white-space:nowrap;overflow:hidden;text-overflow:ellipsis">L. Brunner</div>
+      <div style="font-size:11px;color:#5a6488">Auditeur senior</div>
+    </div>
+    <span style="font-size:16px">🔔</span>
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# MAIN HEADER (breadcrumb + new audit button)
+# ══════════════════════════════════════════════════════════════════════════════
+_hdr_left, _hdr_right = st.columns([7, 3], gap="small")
+
+with _hdr_left:
+    st.markdown(f"""
+<div style="display:flex;align-items:center;gap:6px;padding:16px 0 8px">
+  <span style="font-size:13px;color:#5a6488;font-weight:500">AuditIQ</span>
+  <span style="color:#3d4a6b;font-size:13px">/</span>
+  <span style="font-size:13px;font-weight:700;color:#eef0f8">{_NAV_NAMES.get(_active, "Dashboard")}</span>
+  {_entity_badge_html(_cur_ent)}
+</div>
+""", unsafe_allow_html=True)
+
+with _hdr_right:
+    _hr1, _hr2 = st.columns([1, 2], gap="small")
+    with _hr1:
+        _fr_en = st.session_state.get("help_lang", "Français")
+        if st.button("FR" if _fr_en == "Français" else "EN", key="_lang_toggle",
+                     help="Basculer la langue"):
+            st.session_state["help_lang"] = "English" if _fr_en == "Français" else "Français"
+            st.rerun()
+    with _hr2:
+        if st.button("＋ Nouvel audit", key="_new_audit_btn", use_container_width=True):
+            st.toast("✨ Prêt pour un nouvel audit — sélectionnez un onglet pour commencer.")
+
 
 if st.session_state.get("voice_active", False):
     st.info("🎙️ Commande vocale — fonctionnalité à venir.")
@@ -3974,21 +4131,16 @@ def _show_audit_snapshot():
 
 # ─────────────────────────────────────────────────────────────────────────────
 
-# TABS
 # ═════════════════════════════════════════════════════════════════════════════
-tab0, tab1, tab2, tab3 = st.tabs([
-    "🌐  Intelligence Dashboard",
-    "🔍  Risk Analysis",
-    "📋  Audit Plan & Testing",
-    "📄  Audit Report",
-])
+# SECTIONS (sidebar-driven, no tabs)
+# ═════════════════════════════════════════════════════════════════════════════
+_active = st.session_state.get("active_tab", 0)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 0 — INTELLIGENCE DASHBOARD
 # ─────────────────────────────────────────────────────────────────────────────
-with tab0:
-    st.session_state["active_tab"] = 0
+if _active == 0:
     _tab_actions_bar("t0", "Stay informed before launching an audit — CVEs, regulations, recommendations.", [])
     # Source selector
     _src_c1, _src_c2, _ = st.columns([1.3, 1.5, 4])
@@ -4219,8 +4371,7 @@ with tab0:
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 1 — RISK ANALYSIS
 # ─────────────────────────────────────────────────────────────────────────────
-with tab1:
-    st.session_state["active_tab"] = 1
+elif _active == 1:
     _tab_actions_bar("t1",
         "Risk mapping, applicable regulations, and public audit recommendations by topic.",
         [
@@ -4655,8 +4806,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 2 — AUDIT PLAN
 # ─────────────────────────────────────────────────────────────────────────────
-with tab2:
-    st.session_state["active_tab"] = 2
+elif _active == 2:
     _tab_actions_bar("t2",
         "Structured audit planning, test programme, and data analytics scenarios.",
         [
@@ -5041,8 +5191,7 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
 
 # TAB 3 — AUDIT REPORT
 # ─────────────────────────────────────────────────────────────────────────────
-with tab3:
-    st.session_state["active_tab"] = 3
+elif _active == 3:
     _tab_actions_bar("t3",
         "IIA-standard audit report — assembled from Risk Analysis and Audit Plan context.",
         [
