@@ -783,6 +783,21 @@ section[data-testid="stSidebar"],
   font-size: 13px !important;
   font-weight: 600 !important;
   padding: 12px 16px !important;
+  list-style: none !important;
+  display: flex !important;
+  align-items: center !important;
+}
+/* Fix: hide icon-font fallback text (_arrow_right / keyboard_arrow_right) on Android */
+[data-testid="stExpander"] summary::-webkit-details-marker { display:none !important; }
+[data-testid="stExpander"] summary > svg { flex-shrink:0; }
+[data-testid="stExpander"] summary span[class*="Icon"],
+[data-testid="stExpander"] summary span[class*="icon"],
+[data-testid="stExpander"] summary .material-icons,
+[data-testid="stExpander"] summary .material-icons-sharp,
+[data-testid="stExpander"] summary [class*="material"] {
+  font-size: 0 !important;
+  width: 18px !important;
+  overflow: hidden !important;
 }
 [data-testid="stExpander"] summary:hover {
   background: var(--bg-card-hover) !important;
@@ -1109,6 +1124,49 @@ def show_loading(message: str) -> None:
       <span style="font-size:13px;color:#818cf8;font-weight:500;">{message}</span>
     </div>
     """, unsafe_allow_html=True)
+
+
+def _tab_actions_bar(tab_key: str, subtitle: str, exports: list) -> None:
+    """Render tab header: entity badge + subtitle left, export buttons right.
+
+    exports = list of (label, data_or_none, filename, mime) tuples.
+    """
+    _entity = st.session_state.get("entity_type", "🏦 Private Banking")
+    _t = _ENTITY_THEMES.get(_entity, _ENTITY_THEMES["🏦 Private Banking"])
+    _h_left, _h_right = st.columns([6, 4], gap="small")
+    with _h_left:
+        st.markdown(
+            f'<div style="margin-bottom:4px">{_entity_badge_html(_entity)}</div>'
+            f'<p style="color:#5a6488;font-size:13px;margin:0 0 0.4rem">{subtitle}</p>',
+            unsafe_allow_html=True,
+        )
+    with _h_right:
+        # Export buttons row — aligned right
+        _has_any = any(d for _, d, _, _ in exports)
+        _btn_count = len(exports) + 1  # +1 for Teammate+
+        _ecols = st.columns(_btn_count, gap="small")
+
+        # Download buttons
+        for i, (lbl, data, fname, mime) in enumerate(exports):
+            with _ecols[i]:
+                if data:
+                    st.download_button(
+                        lbl, data=data, file_name=fname, mime=mime,
+                        key=f"_top_dl_{tab_key}_{i}",
+                        use_container_width=True,
+                    )
+                else:
+                    st.button(lbl, key=f"_top_dl_dis_{tab_key}_{i}",
+                              disabled=True, use_container_width=True)
+
+        # Teammate+ always visible
+        with _ecols[-1]:
+            st.markdown(f'<div class="wk-btn">', unsafe_allow_html=True)
+            if st.button("📤 TM+", key=f"wk_top_{tab_key}",
+                         help="Export to Wolters Kluwer Teammate+",
+                         use_container_width=True):
+                st.toast("✅ Données exportées vers Teammate+ (Wolters Kluwer)", icon="📤")
+            st.markdown("</div>", unsafe_allow_html=True)
 
 
 def render_table(headers: list, rows: list, highlight_col: int = None) -> str:
@@ -3897,10 +3955,7 @@ tab0, tab1, tab2, tab3 = st.tabs([
 # ─────────────────────────────────────────────────────────────────────────────
 with tab0:
     st.session_state["active_tab"] = 0
-    st.markdown(
-        f'<div style="margin-bottom:8px">{_entity_badge_html(st.session_state.get("entity_type","🏦 Private Banking"))}</div>',
-        unsafe_allow_html=True,
-    )
+    _tab_actions_bar("t0", "Stay informed before launching an audit — CVEs, regulations, recommendations.", [])
     # Source selector
     _src_c1, _src_c2, _ = st.columns([1.3, 1.5, 4])
     _t0_static = st.session_state.dash_source == "static"
@@ -4134,11 +4189,17 @@ with tab0:
 # ─────────────────────────────────────────────────────────────────────────────
 with tab1:
     st.session_state["active_tab"] = 1
-    st.markdown(
-        f'<div style="margin-bottom:8px">{_entity_badge_html(st.session_state.get("entity_type","🏦 Private Banking"))}</div>',
-        unsafe_allow_html=True,
+    _tab_actions_bar("t1",
+        "Risk mapping, applicable regulations, and public audit recommendations by topic.",
+        [
+            ("📊 Excel", st.session_state.get("t1_xlsx"),
+             f"Risk_Analysis.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+            ("📄 Word",  st.session_state.get("t1_docx"),
+             f"Risk_Analysis.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+            ("📑 PPT",   st.session_state.get("t1_pptx2"),
+             f"Risk_Analysis.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+        ]
     )
-    st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">Risk mapping, applicable regulations, and public audit recommendations by topic.</p>', unsafe_allow_html=True)
     _t1_mode = render_mode_toggle("mode_tab1")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
 
@@ -4561,12 +4622,6 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
             _print_button()
             st.markdown("</div>", unsafe_allow_html=True)
 
-        st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
-        st.markdown('<div class="wk-btn">', unsafe_allow_html=True)
-        if st.button("📤 Export to Teammate+", key="wk_export_t1", help="Wolters Kluwer Teammate+ · synchronisation fictive"):
-            st.success("✅ Données exportées vers Teammate+ (Wolters Kluwer) — intégration en cours de configuration.")
-        st.markdown("</div>", unsafe_allow_html=True)
-        st.caption("Wolters Kluwer Teammate+ · synchronisation fictive")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -4574,11 +4629,15 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
 # ─────────────────────────────────────────────────────────────────────────────
 with tab2:
     st.session_state["active_tab"] = 2
-    st.markdown(
-        f'<div style="margin-bottom:8px">{_entity_badge_html(st.session_state.get("entity_type","🏦 Private Banking"))}</div>',
-        unsafe_allow_html=True,
+    _tab_actions_bar("t2",
+        "Structured audit planning, test programme, and data analytics scenarios.",
+        [
+            ("📑 PPT",   st.session_state.get("t2_pptx"),
+             "Audit_Plan.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+            ("📊 Excel", st.session_state.get("t2_xlsx"),
+             "Audit_Tests.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+        ]
     )
-    st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">Structured audit planning, test programme, and data analytics scenarios.</p>', unsafe_allow_html=True)
     _t2_mode = render_mode_toggle("mode_tab2")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
 
@@ -4954,23 +5013,24 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
             _print_button()
             st.markdown("</div>", unsafe_allow_html=True)
 
-        st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
-        st.markdown('<div class="wk-btn">', unsafe_allow_html=True)
-        if st.button("📤 Export to Teammate+", key="wk_export_t2", help="Wolters Kluwer Teammate+ · synchronisation fictive"):
-            st.success("✅ Données exportées vers Teammate+ (Wolters Kluwer) — intégration en cours de configuration.")
-        st.markdown("</div>", unsafe_allow_html=True)
-        st.caption("Wolters Kluwer Teammate+ · synchronisation fictive")
 
 
 # TAB 3 — AUDIT REPORT
 # ─────────────────────────────────────────────────────────────────────────────
 with tab3:
     st.session_state["active_tab"] = 3
-    st.markdown(
-        f'<div style="margin-bottom:8px">{_entity_badge_html(st.session_state.get("entity_type","🏦 Private Banking"))}</div>',
-        unsafe_allow_html=True,
+    _tab_actions_bar("t3",
+        "IIA-standard audit report — assembled from Risk Analysis and Audit Plan context.",
+        [
+            ("📄 Word",  st.session_state.get("t3_docx_bytes") or (
+                st.session_state.get("report_data") and None),
+             "Audit_Report.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+            ("📊 Excel", st.session_state.get("t3_xlsx"),
+             "Audit_Findings.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+            ("📑 PPT",   st.session_state.get("t3_pptx2"),
+             "Audit_Report.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+        ]
     )
-    st.markdown('<p style="color:#5a6488;font-size:13.5px;margin:0 0 0.8rem">IIA-standard audit report &mdash; assembled from Risk Analysis and Audit Plan context.</p>', unsafe_allow_html=True)
     _t3_mode = render_mode_toggle("mode_tab3")
     st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
 
@@ -5311,12 +5371,6 @@ with tab3:
                     with _f4:
                         _print_button()
 
-                st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
-                st.markdown('<div class="wk-btn">', unsafe_allow_html=True)
-                if st.button("📤 Export to Teammate+", key="wk_export_t3", help="Wolters Kluwer Teammate+ · synchronisation fictive"):
-                    st.success("✅ Données exportées vers Teammate+ (Wolters Kluwer) — intégration en cours de configuration.")
-                st.markdown("</div>", unsafe_allow_html=True)
-                st.caption("Wolters Kluwer Teammate+ · synchronisation fictive")
 
             # Static-enriched sections also shown in live mode
             if st.session_state.get("report_data"):
