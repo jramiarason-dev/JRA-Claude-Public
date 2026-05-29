@@ -39,6 +39,7 @@ _SS_DEFAULTS = {
     # Tab 3
     "t3_report": None,
     "t1_xlsx": None, "t1_pptx2": None, "t3_xlsx": None, "t3_pptx2": None,
+    "t1_pdf": None, "t2_pdf": None, "t3_pdf": None,
     "report_generated": False,
     "report_timestamp": None,
     "report_data": None,        # structured report dict assembled from static data
@@ -455,6 +456,9 @@ div[data-testid="stDownloadButton"] button {
   font-size: 13px; font-weight: 500;
 }
 div[data-testid="stDownloadButton"] button:hover { opacity: 0.82; }
+/* Uniform export bar button heights */
+div[data-testid="stDownloadButton"] button,
+div[data-testid="stButton"] button { min-height: 36px !important; }
 .wk-btn button {
   background: rgba(255,102,0,.08) !important;
   border: 1px solid rgba(255,102,0,.25) !important;
@@ -462,6 +466,7 @@ div[data-testid="stDownloadButton"] button:hover { opacity: 0.82; }
   border-radius: 8px !important;
   font-size: 13px !important;
   font-weight: 600 !important;
+  min-height: 36px !important;
 }
 .wk-btn button:hover {
   background: rgba(255,102,0,.15) !important;
@@ -1083,6 +1088,44 @@ OUTPUT_DIR = str(_HERE / "outputs")
 Path(OUTPUT_DIR).mkdir(exist_ok=True)
 
 # ── UI helpers ────────────────────────────────────────────────────────────────
+
+# ── Jurisdiction → flag emoji ─────────────────────────────────────────────────
+_JUR_FLAG = {
+    "CH / FINMA":      "🇨🇭",
+    "SG / MAS":        "🇸🇬",
+    "HK / SFC+HKMA":  "🇭🇰",
+    "Bahamas / SCB":   "🇧🇸",
+    "EU / DORA":       "🇪🇺",
+    "UK / FCA+PRA":    "🇬🇧",
+}
+
+def _make_pdf(title: str, sections: list) -> bytes:
+    """Generate a simple PDF. sections = [(heading, body_text), ...]"""
+    try:
+        from fpdf import FPDF
+        pdf = FPDF()
+        pdf.set_margins(18, 18, 18)
+        pdf.add_page()
+        # Title
+        pdf.set_font("Helvetica", style="B", size=16)
+        pdf.multi_cell(0, 10, title)
+        pdf.ln(4)
+        pdf.set_draw_color(80, 80, 200)
+        pdf.line(18, pdf.get_y(), 192, pdf.get_y())
+        pdf.ln(4)
+        for heading, body in sections:
+            if not body:
+                continue
+            pdf.set_font("Helvetica", style="B", size=11)
+            pdf.multi_cell(0, 7, heading)
+            pdf.set_font("Helvetica", size=9)
+            safe_body = body.encode("latin-1", errors="replace").decode("latin-1")
+            pdf.multi_cell(0, 5, safe_body)
+            pdf.ln(3)
+        return bytes(pdf.output())
+    except Exception:
+        return b""
+
 
 _ICON_MAP = {
     "shield": "🛡️", "search": "🔍", "file-text": "📄", "bar-chart": "📊",
@@ -2027,7 +2070,8 @@ def _show_regulatory_frameworks(jur_filter: str = "All", search: str = ""):
             filtered = [r for r in regs if q in (r.get("reference","") + r.get("title","") + " ".join(r.get("applies_to",[]))).lower()]
         if not filtered:
             continue
-        with st.expander(f"**{jur}** — {len(filtered)} texts", expanded=(jur_filter != "All")):
+        _jflag = _JUR_FLAG.get(jur, "🌐")
+        with st.expander(f"{_jflag} **{jur}** — {len(filtered)} texts", expanded=(jur_filter != "All")):
             rows = ""
             for r in filtered:
                 applies = " &nbsp;".join(f'<span class="badge-info">{t}</span>' for t in r.get("applies_to", []))
@@ -3419,23 +3463,6 @@ with st.sidebar:
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # ── OUTILS section ───────────────────────────────────────────────────────
-    st.markdown("""
-<div style="padding:16px 16px 4px">
-  <span style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d4a6b">Outils</span>
-</div>
-""", unsafe_allow_html=True)
-
-    st.markdown('<div class="nav-stub">', unsafe_allow_html=True)
-    st.button("📁  Documents", key="_nav_docs", disabled=True, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown('<div class="nav-stub">', unsafe_allow_html=True)
-    st.button("🕐  Historique", key="_nav_hist", disabled=True, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown('<div class="nav-stub">', unsafe_allow_html=True)
-    st.button("⚙  Paramètres", key="_nav_pref", disabled=True, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
     # ── Entity selector (compact selectbox) ──────────────────────────────────
     st.markdown("""
 <div style="padding:16px 16px 4px;border-top:1px solid rgba(255,255,255,0.05);margin-top:8px">
@@ -3507,7 +3534,7 @@ with st.sidebar:
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN HEADER (breadcrumb + new audit button)
 # ══════════════════════════════════════════════════════════════════════════════
-_hdr_left, _hdr_right = st.columns([7, 3], gap="small")
+_hdr_left, _hdr_right = st.columns([8, 2], gap="small")
 
 with _hdr_left:
     st.markdown(f"""
@@ -3520,16 +3547,11 @@ with _hdr_left:
 """, unsafe_allow_html=True)
 
 with _hdr_right:
-    _hr1, _hr2 = st.columns([1, 2], gap="small")
-    with _hr1:
-        _fr_en = st.session_state.get("help_lang", "Français")
-        if st.button("FR" if _fr_en == "Français" else "EN", key="_lang_toggle",
-                     help="Basculer la langue"):
-            st.session_state["help_lang"] = "English" if _fr_en == "Français" else "Français"
-            st.rerun()
-    with _hr2:
-        if st.button("＋ Nouvel audit", key="_new_audit_btn", use_container_width=True):
-            st.toast("✨ Prêt pour un nouvel audit — sélectionnez un onglet pour commencer.")
+    _fr_en = st.session_state.get("help_lang", "Français")
+    if st.button("FR" if _fr_en == "Français" else "EN", key="_lang_toggle",
+                 help="Basculer la langue", use_container_width=True):
+        st.session_state["help_lang"] = "English" if _fr_en == "Français" else "Français"
+        st.rerun()
 
 
 if st.session_state.get("voice_active", False):
@@ -4376,11 +4398,13 @@ elif _active == 1:
         "Risk mapping, applicable regulations, and public audit recommendations by topic.",
         [
             ("📗 Excel", st.session_state.get("t1_xlsx"),
-             f"Risk_Analysis.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+             "Risk_Analysis.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
             ("📝 Word", st.session_state.get("t1_docx"),
-             f"Risk_Analysis.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+             "Risk_Analysis.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
             ("📙 PPT", st.session_state.get("t1_pptx2"),
-             f"Risk_Analysis.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+             "Risk_Analysis.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+            ("📕 PDF", st.session_state.get("t1_pdf"),
+             "Risk_Analysis.pdf", "application/pdf"),
         ]
     )
     _t1_mode = render_mode_toggle("mode_tab1")
@@ -4706,6 +4730,21 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                         st.session_state.t1_pptx2 = Path(p_pptx).read_bytes()
                     except Exception:
                         pass
+                    try:
+                        _risks_txt = "\n".join(
+                            f"[{r.get('level','')}] {r.get('title','')} — {r.get('description','')}"
+                            for r in (st.session_state.t1_risks or [])
+                        )
+                        _regs_txt = "\n".join(
+                            r if isinstance(r, str) else f"{r.get('reference','')} — {r.get('title','')}"
+                            for r in (st.session_state.t1_regs or [])
+                        )
+                        st.session_state.t1_pdf = _make_pdf(
+                            f"Risk Analysis — {audit_topic}",
+                            [("Risks Identified", _risks_txt), ("Applicable Regulations", _regs_txt)],
+                        )
+                    except Exception:
+                        pass
 
                 except Exception:
                     st.error("An error occurred. Please try again.")
@@ -4814,6 +4853,8 @@ elif _active == 2:
              "Audit_Plan.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
             ("📗 Excel", st.session_state.get("t2_xlsx"),
              "Audit_Tests.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+            ("📕 PDF", st.session_state.get("t2_pdf"),
+             "Audit_Plan.pdf", "application/pdf"),
         ]
     )
     _t2_mode = render_mode_toggle("mode_tab2")
@@ -4868,8 +4909,9 @@ elif _active == 2:
         help="Define the perimeter of the audit: entities, geographies, processes, and systems in scope.",
     )
 
+    st.caption("📎 Supporting documents (optional — PDF, Word, Excel, TXT)")
     uploads2 = st.file_uploader(
-        "Supporting documents (optional — PDF, Word, Excel, TXT)",
+        "Supporting documents", label_visibility="collapsed",
         type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t2_upload",
     )
 
@@ -5104,6 +5146,15 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                         st.session_state.t2_pptx = Path(extra["ppt_path"]).read_bytes()
                     if "excel_path" in extra and Path(extra["excel_path"]).exists():
                         st.session_state.t2_xlsx = Path(extra["excel_path"]).read_bytes()
+                    try:
+                        _t2_sections = [(h, str(v)) for h, v in [
+                            ("Rationale",      st.session_state.t2_rationale or ""),
+                            ("Background",     st.session_state.t2_background or ""),
+                            ("Audit Programme",st.session_state.t2_org_plan   or ""),
+                        ] if v]
+                        st.session_state.t2_pdf = _make_pdf(f"Audit Plan — {topic2}", _t2_sections)
+                    except Exception:
+                        pass
 
                 except Exception:
                     st.error("An error occurred. Please try again.")
@@ -5202,6 +5253,8 @@ elif _active == 3:
              "Audit_Findings.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
             ("📙 PPT", st.session_state.get("t3_pptx2"),
              "Audit_Report.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+            ("📕 PDF", st.session_state.get("t3_pdf"),
+             "Audit_Report.pdf", "application/pdf"),
         ]
     )
     _t3_mode = render_mode_toggle("mode_tab3")
@@ -5502,6 +5555,16 @@ elif _active == 3:
                     try:
                         p_pptx3 = generate_report_pptx({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
                         st.session_state.t3_pptx2 = Path(p_pptx3).read_bytes()
+                    except Exception:
+                        pass
+                    try:
+                        _rd = st.session_state.get("report_data") or {}
+                        _t3_sections = [(k.replace("_"," ").title(), str(v))
+                                        for k, v in _rd.items()
+                                        if v and k not in ("findings","top3","detailed","theme_groups")]
+                        if not _t3_sections:
+                            _t3_sections = [("Findings", _t3_findings_raw)]
+                        st.session_state.t3_pdf = _make_pdf(audit_name or "Audit Report", _t3_sections)
                     except Exception:
                         pass
 
