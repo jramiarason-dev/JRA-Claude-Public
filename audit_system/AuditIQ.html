@@ -1425,6 +1425,51 @@ body {
 }
 
 </style>
+<style>
+/* ── Intelligence tabs ── */
+.aiq-tab-bar{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;}
+.aiq-tab{background:rgba(255,255,255,.03);border:1px solid var(--aiq-border);border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:600;color:var(--aiq-muted);cursor:pointer;transition:all .15s var(--ease);white-space:nowrap;}
+.aiq-tab:hover{color:var(--aiq-text);border-color:var(--aiq-border-2);}
+.aiq-tab[data-active="true"]{background:rgba(99,102,241,.18);border-color:rgba(99,102,241,.45);color:#fff;}
+/* mode toggle */
+.aiq-mode-toggle{display:inline-flex;background:rgba(255,255,255,.04);border:1px solid var(--aiq-border);border-radius:8px;padding:3px;}
+.aiq-mode-toggle button{background:transparent;border:0;font-family:inherit;font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;color:var(--aiq-muted);cursor:pointer;transition:all .15s var(--ease);}
+.aiq-mode-toggle button[data-active="true"]{background:var(--aiq-surface);color:var(--aiq-text);}
+/* risk cards */
+.aiq-risk-card{background:rgba(255,255,255,.02);border:1px solid var(--aiq-border);border-left-width:3px;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .15s var(--ease);}
+.aiq-risk-card:hover{border-color:var(--aiq-border-2);background:rgba(255,255,255,.04);}
+.aiq-risk-card[data-sev="critical"]{border-left-color:#ef4444;}
+.aiq-risk-card[data-sev="high"]{border-left-color:#f97316;}
+.aiq-risk-card[data-sev="medium"]{border-left-color:#eab308;}
+.aiq-risk-card[data-sev="low"]{border-left-color:#22c55e;}
+.aiq-risk-card .rc-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.aiq-risk-card .rc-body{font-size:13px;color:var(--aiq-muted);line-height:1.5;}
+.aiq-risk-card .rc-detail{margin-top:12px;padding-top:12px;border-top:1px solid var(--aiq-border);}
+.aiq-risk-card .rc-detail .rc-sec{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--aiq-faint);margin:8px 0 4px;}
+.aiq-risk-card .rc-detail ul{margin:0 0 4px;padding-left:18px;}
+.aiq-risk-card .rc-detail li{font-size:12px;color:var(--aiq-muted);margin-bottom:2px;line-height:1.45;}
+/* code block */
+.aiq-code{background:rgba(0,0,0,.4);border:1px solid var(--aiq-border);border-radius:8px;padding:12px 14px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:11.5px;color:#a5b4fc;overflow-x:auto;white-space:pre;line-height:1.55;margin:8px 0;}
+/* IIA banner */
+.aiq-iia-banner{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);border-radius:10px;padding:14px 16px;margin-bottom:16px;}
+.aiq-iia-banner .bh{font-size:13px;font-weight:700;color:var(--aiq-accent-2);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.aiq-iia-banner ul{margin:0;padding-left:18px;}
+.aiq-iia-banner li{font-size:12px;color:var(--aiq-text-2);margin-bottom:3px;line-height:1.4;}
+/* entity badge */
+.aiq-entity-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);color:var(--aiq-accent-2);}
+/* report section accordion */
+.aiq-report-sec .rsh{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:14px 16px;background:rgba(255,255,255,.03);border:1px solid var(--aiq-border);border-radius:10px;cursor:pointer;transition:all .15s var(--ease);margin-bottom:2px;}
+.aiq-report-sec .rsh:hover{background:rgba(255,255,255,.06);}
+.aiq-report-sec .rsb{border:1px solid var(--aiq-border);border-radius:0 0 10px 10px;padding:16px;background:rgba(255,255,255,.01);margin-bottom:8px;}
+/* coverage rows */
+.aiq-cov-row{display:grid;grid-template-columns:1fr 120px 80px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--aiq-border);}
+.aiq-cov-row:last-child{border-bottom:0;}
+/* spinner */
+.aiq-spinner{width:22px;height:22px;border:2.5px solid var(--aiq-border-2);border-top-color:var(--aiq-accent-2);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+/* search input small */
+.aiq-filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
+</style>
 <style>html,body{margin:0;padding:0;background:#07090f;overflow-x:hidden;}</style>
 </head>
 <body>
@@ -1864,6 +1909,131 @@ window.AIQ = {
       date: "30 avril 2026", status: "approved" },
   ],
 
+  entities: [
+    { id: "pb",  fr: "Banque privée",         en: "Private Banking",    icon: "🏦" },
+    { id: "am",  fr: "Gestion d'actifs",      en: "Asset Management",   icon: "📈" },
+    { id: "cb",  fr: "Banque corporative",    en: "Corporate Banking",  icon: "🏢" },
+    { id: "rb",  fr: "Banque de détail",      en: "Retail Banking",     icon: "🏪" },
+  ],
+
+  cves: [
+    { id:"CVE-2024-3400", date:"2024-04-12", sev:"critical", system:"PAN-OS (Palo Alto)",  action_fr:"Appliquer le patch 11.1.2-h3 immédiatement", action_en:"Apply patch 11.1.2-h3 immediately" },
+    { id:"CVE-2024-21762",date:"2024-02-08", sev:"critical", system:"FortiOS SSL VPN",     action_fr:"Mettre à jour vers FortiOS 7.4.3+",           action_en:"Upgrade to FortiOS 7.4.3+" },
+    { id:"CVE-2023-46805",date:"2023-10-19", sev:"critical", system:"Ivanti Connect Secure",action_fr:"Patch KB44755 requis",                        action_en:"Patch KB44755 required" },
+    { id:"CVE-2024-27198",date:"2024-03-04", sev:"critical", system:"JetBrains TeamCity", action_fr:"Mise à jour vers 2023.11.4",                    action_en:"Update to 2023.11.4" },
+    { id:"CVE-2023-34362",date:"2023-06-02", sev:"critical", system:"MOVEit Transfer",    action_fr:"Appliquer correctifs SQL injection",            action_en:"Apply SQL injection patches" },
+    { id:"CVE-2024-1709", date:"2024-02-19", sev:"critical", system:"ConnectWise ScreenConnect", action_fr:"Mise à jour 23.9.8+",                   action_en:"Update to 23.9.8+" },
+    { id:"CVE-2023-44487",date:"2023-10-10", sev:"high",     system:"HTTP/2 (Rapid Reset)",action_fr:"Configurer les limites de flux HTTP/2",       action_en:"Configure HTTP/2 stream limits" },
+    { id:"CVE-2024-20359",date:"2024-04-24", sev:"high",     system:"Cisco ASA",          action_fr:"Mettre à jour ASA 9.16.4.67+",                 action_en:"Upgrade ASA 9.16.4.67+" },
+    { id:"CVE-2023-35078",date:"2023-07-24", sev:"high",     system:"Ivanti EPMM (MobileIron)", action_fr:"Correctif RPM-11.x.x.x requis",         action_en:"Patch RPM-11.x.x.x required" },
+    { id:"CVE-2024-29895",date:"2024-05-07", sev:"high",     system:"Cacti Network Monitor",action_fr:"Mettre à jour vers 1.2.27+",                 action_en:"Update to 1.2.27+" },
+    { id:"CVE-2023-22515",date:"2023-10-04", sev:"high",     system:"Confluence Server",  action_fr:"Correctif 8.3.3+ obligatoire",                 action_en:"Patch 8.3.3+ mandatory" },
+    { id:"CVE-2024-6387", date:"2024-07-01", sev:"high",     system:"OpenSSH (regreSSHion)", action_fr:"Mettre à jour OpenSSH 9.8+",                action_en:"Update OpenSSH 9.8+" },
+    { id:"CVE-2023-23397",date:"2023-03-14", sev:"medium",   system:"Microsoft Outlook",  action_fr:"Appliquer KB5023754",                          action_en:"Apply KB5023754" },
+    { id:"CVE-2024-21887",date:"2024-01-12", sev:"medium",   system:"Ivanti Connect Secure (cmd injection)", action_fr:"Isolation réseau + patch", action_en:"Network isolation + patch" },
+    { id:"CVE-2023-4911", date:"2023-10-03", sev:"medium",   system:"GNU C Library (Looney Tunables)", action_fr:"Mise à jour glibc 2.34+",         action_en:"Update glibc 2.34+" },
+  ],
+
+  public_recommendations: [
+    { src:"FATF", theme:"aml", priority:"critical", fr:"Renforcer les contrôles sur les virements de fonds transfrontaliers et la surveillance des PEP.", en:"Strengthen controls on cross-border fund transfers and PEP monitoring." },
+    { src:"FATF", theme:"aml", priority:"high",     fr:"Mettre à jour les politiques de détection des transactions atypiques selon la Recommandation 20.", en:"Update atypical transaction detection policies per Recommendation 20." },
+    { src:"FINMA", theme:"aml", priority:"high",    fr:"Réviser les processus KYC conformément à la circulaire FINMA 2016/7 — Vidéo et communication en ligne.", en:"Revise KYC processes per FINMA Circular 2016/7 on video and online channels." },
+    { src:"MAS", theme:"aml",  priority:"critical", fr:"Renforcer l'efficacité des systèmes de transaction monitoring (MAS Notice 626).", en:"Enhance transaction monitoring systems effectiveness (MAS Notice 626)." },
+    { src:"EBA",  theme:"aml", priority:"high",     fr:"Adopter une approche basée sur le risque pour la surveillance des clients résidents dans des pays tiers.", en:"Adopt risk-based approach for third-country resident client monitoring." },
+    { src:"IIA",  theme:"aml", priority:"medium",   fr:"Documenter les procédures d'escalade SAR et tester leur efficacité semestriellement.", en:"Document SAR escalation procedures and test their effectiveness semi-annually." },
+    { src:"FINMA", theme:"cyber", priority:"critical", fr:"Intégrer la gestion du risque cyber dans le cadre ORSA de la banque (circulaire 2023/1).", en:"Integrate cyber risk management into the bank's ORSA framework (Circular 2023/1)." },
+    { src:"FCA",  theme:"cyber", priority:"high",   fr:"Mettre en place des contrôles d'accès stricts et la segmentation réseau (PS21/3).", en:"Implement strict access controls and network segmentation (PS21/3)." },
+    { src:"MAS",  theme:"cyber", priority:"high",   fr:"Effectuer des tests de pénétration annuels conformément à la TRM Notice (MAS TRM 2021).", en:"Conduct annual penetration tests per TRM Notice (MAS TRM 2021)." },
+    { src:"Basel", theme:"cyber", priority:"medium", fr:"Appliquer les principes de résilience opérationnelle du Comité de Bâle (mars 2021).", en:"Apply Basel Committee operational resilience principles (March 2021)." },
+    { src:"EBA",  theme:"credit", priority:"high",  fr:"Renforcer les méthodologies d'évaluation du risque de crédit (EBA/GL/2017/06).", en:"Strengthen credit risk assessment methodologies (EBA/GL/2017/06)." },
+    { src:"Basel", theme:"credit", priority:"critical", fr:"Implémenter les exigences Bâle IV sur les approches standardisées révisées (2025).", en:"Implement Basel IV requirements on revised standardised approaches (2025)." },
+    { src:"IMF",  theme:"credit", priority:"medium", fr:"Améliorer le suivi des expositions souveraines et des concentrations sectorielles.", en:"Improve monitoring of sovereign exposures and sectoral concentrations." },
+    { src:"FINMA", theme:"governance", priority:"high", fr:"Renforcer la gouvernance du conseil d'administration sur les risques IT (circ. 2023/1).", en:"Strengthen board governance over IT risks (Circular 2023/1)." },
+    { src:"FCA",  theme:"governance", priority:"high", fr:"Appliquer le cadre SM&CR — responsabilité personnelle des dirigeants.", en:"Apply SM&CR framework — personal accountability of senior managers." },
+    { src:"IIA",  theme:"governance", priority:"medium", fr:"Mettre en œuvre un suivi formalisé des recommandations d'audit (IIA Standard 2500).", en:"Implement formalised audit recommendation follow-up (IIA Standard 2500)." },
+  ],
+
+  reg_calendar: [
+    { date:"2025-01-17", auth:"EBA/ECB",   type:"Regulation",  jur:"eu",  priority:"critical", fr:"DORA — Pleine applicabilité ICT Risk Management", en:"DORA — Full ICT Risk Management applicability", impact_fr:"Obligation de tests TLPT, registres TIC, reporting incidents", impact_en:"TLPT tests, ICT registers, incident reporting mandatory" },
+    { date:"2025-03-31", auth:"FINMA",      type:"Circular",    jur:"ch",  priority:"high",     fr:"Rapport annuel risques cyber — Établissements catégorie 2-3", en:"Annual cyber risk report — Cat. 2-3 banks", impact_fr:"Dépôt obligatoire du rapport de gouvernance cyber", impact_en:"Mandatory submission of cyber governance report" },
+    { date:"2025-06-30", auth:"MAS",        type:"Guideline",   jur:"sg",  priority:"high",     fr:"MAS Notice 655 — Rapport ESG Climate Risk", en:"MAS Notice 655 — ESG Climate Risk Report", impact_fr:"Divulgation des expositions climatiques pour banques systémiques", impact_en:"Climate exposure disclosure for systemic banks" },
+    { date:"2025-07-01", auth:"HKMA",       type:"Circular",    jur:"hk",  priority:"high",     fr:"SPM IC-1 — Cadre de risque de liquidité révisé", en:"SPM IC-1 — Revised Liquidity Risk Framework", impact_fr:"Refonte des modèles LCR/NSFR internes", impact_en:"Overhaul of internal LCR/NSFR models" },
+    { date:"2025-09-30", auth:"FCA",        type:"Regulation",  jur:"uk",  priority:"critical", fr:"Consumer Duty — Extension aux fonds fermés", en:"Consumer Duty — Extension to closed-book products", impact_fr:"Revue de tous les produits en gestion extinctive", impact_en:"Review of all run-off products mandatory" },
+    { date:"2025-10-15", auth:"EBA",        type:"Guideline",   jur:"eu",  priority:"high",     fr:"EBA/GL/2025/xx — Lignes directrices ESG stress tests", en:"EBA/GL/2025/xx — ESG stress testing guidelines", impact_fr:"Intégration scénarios climatiques dans les stress tests", impact_en:"Climate scenario integration in stress tests" },
+    { date:"2025-12-31", auth:"FINMA",      type:"Regulation",  jur:"ch",  priority:"high",     fr:"FINMA — Transposition finale CRR3/Bâle IV", en:"FINMA — Final transposition CRR3/Basel IV", impact_fr:"Recalcul RWA selon approches standardisées révisées", impact_en:"RWA recalculation per revised standardised approaches" },
+    { date:"2026-01-01", auth:"EBA/ECB",   type:"Regulation",  jur:"eu",  priority:"critical", fr:"CRR3 — Bâle IV pleine applicabilité UE", en:"CRR3 — Basel IV full EU applicability", impact_fr:"Output floor 72.5%, Pilier 3 renforcé", impact_en:"72.5% output floor, enhanced Pillar 3" },
+    { date:"2026-03-31", auth:"MAS",        type:"Guideline",   jur:"sg",  priority:"medium",   fr:"MAS TRM — Révision gestion risque tiers (ICT)", en:"MAS TRM — Third-party ICT risk management revision", impact_fr:"Due diligence étendue sur fournisseurs cloud critiques", impact_en:"Extended due diligence on critical cloud providers" },
+    { date:"2026-06-30", auth:"CBB",        type:"Circular",    jur:"bs",  priority:"medium",   fr:"CBB — Conformité AML/CFT Recommandations GAFIC", en:"CBB — AML/CFT compliance CFATF Recommendations", impact_fr:"Plan d'action GAFIC — Mesures correctives requis", impact_en:"CFATF action plan — corrective measures required" },
+  ],
+
+  risk_indicators: [
+    { id:"r01", theme:"aml", sev:"critical", fr:"Surveillance insuffisante des transactions PEP", en:"Insufficient PEP transaction monitoring", controls_fr:["Système de screening automatisé PEP","Revue manuelle des alertes hebdomadaire","Rapport mensuel MLRO au Conseil"], controls_en:["Automated PEP screening system","Weekly manual alert review","Monthly MLRO report to Board"], redflags_fr:["Taux d'alertes faux positifs > 80%","Délais de revue > 5 jours ouvrés","Absence de documentation des décisions"], redflags_en:["False positive alert rate > 80%","Review delays > 5 business days","Absence of decision documentation"], entity:["pb"] },
+    { id:"r02", theme:"aml", sev:"critical", fr:"Données KYC obsolètes sur clients actifs", en:"Outdated KYC data on active clients", controls_fr:["Cycle de revue KYC basé sur le risque","Alertes automatiques à échéance","Blocage des opérations à la demande"], controls_en:["Risk-based KYC review cycle","Automatic expiry alerts","Transaction blocking on request"], redflags_fr:["Revues KYC > 3 ans sur clients HNW","Absence de revue déclencheur (trigger review)","Données bénéficiaires effectifs incomplètes"], redflags_en:["KYC reviews > 3 years for HNW clients","No trigger review process","Incomplete beneficial ownership data"], entity:["pb","am"] },
+    { id:"r03", theme:"aml", sev:"high",     fr:"Procédures de déclaration SAR inadéquates", en:"Inadequate SAR filing procedures", controls_fr:["Politique SAR documentée","Formation annuelle des équipes","Registre des SAR soumises et refusées"], controls_en:["Documented SAR policy","Annual team training","Register of submitted and declined SARs"], redflags_fr:["Absence de formation SAR > 12 mois","Pas de registre des décisions de non-déclaration","Délais de soumission > 7 jours"], redflags_en:["No SAR training > 12 months","No record of non-filing decisions","Submission delays > 7 days"], entity:["pb","cb"] },
+    { id:"r04", theme:"cyber", sev:"critical", fr:"Contrôles d'accès privilégiés insuffisants (PAM)", en:"Insufficient privileged access controls (PAM)", controls_fr:["Solution PAM (CyberArk/BeyondTrust)","Revue trimestrielle des accès","MFA obligatoire pour comptes admin"], controls_en:["PAM solution (CyberArk/BeyondTrust)","Quarterly access review","Mandatory MFA for admin accounts"], redflags_fr:["Comptes admin partagés","Accès permanents sans just-in-time","Logs d'accès non centralisés"], redflags_en:["Shared admin accounts","Permanent access without just-in-time","Non-centralised access logs"], entity:["pb","am","cb","rb"] },
+    { id:"r05", theme:"cyber", sev:"high",   fr:"Plan de continuité IT non testé", en:"Untested IT business continuity plan", controls_fr:["Tests BCP/DR annuels documentés","RPO/RTO définis par système critique","Scénarios de crise cyber inclus"], controls_en:["Documented annual BCP/DR tests","RPO/RTO defined per critical system","Cyber crisis scenarios included"], redflags_fr:["Dernier test BCP > 18 mois","RPO > 24h pour systèmes core","Absence de scénario ransomware"], redflags_en:["Last BCP test > 18 months","RPO > 24h for core systems","No ransomware scenario"], entity:["pb","am","cb","rb"] },
+    { id:"r06", theme:"cyber", sev:"high",   fr:"Gestion des vulnérabilités défaillante", en:"Deficient vulnerability management", controls_fr:["Scans de vulnérabilités mensuels","SLA de correction par criticité","Processus d'exception documenté"], controls_en:["Monthly vulnerability scans","Remediation SLA by criticality","Documented exception process"], redflags_fr:["CVE critiques non patchés > 30 jours","Absence d'inventaire des actifs IT","Pas de processus de gestion des exceptions"], redflags_en:["Critical CVEs unpatched > 30 days","No IT asset inventory","No exception management process"], entity:["pb","am","cb","rb"] },
+    { id:"r07", theme:"credit", sev:"high",  fr:"Concentration du portefeuille de crédit", en:"Credit portfolio concentration risk", controls_fr:["Limites de concentration par secteur","Rapport mensuel au comité des risques","Stress tests trimestriels"], controls_en:["Sector concentration limits","Monthly report to risk committee","Quarterly stress tests"], redflags_fr:["Exposition > 25% dans un seul secteur","Absence de limites individuelles documentées","Pas de stress test adverse > 12 mois"], redflags_en:["Exposure > 25% in a single sector","No documented individual limits","No adverse stress test > 12 months"], entity:["cb","rb"] },
+    { id:"r08", theme:"credit", sev:"medium", fr:"Méthodes de notation de crédit insuffisantes", en:"Insufficient credit rating methods", controls_fr:["Modèles de scoring validés annuellement","Back-testing des probabilités de défaut","Revue indépendante par la validation des risques"], controls_en:["Annually validated scoring models","Default probability back-testing","Independent review by risk validation"], redflags_fr:["Modèles non validés > 2 ans","Absence de comparaison avec défauts réels","Surpondération des facteurs qualitatifs"], redflags_en:["Models not validated > 2 years","No comparison with actual defaults","Overweighting of qualitative factors"], entity:["cb","rb"] },
+    { id:"r09", theme:"governance", sev:"high", fr:"Indépendance insuffisante de l'audit interne", en:"Insufficient internal audit independence", controls_fr:["Rattachement hiérarchique au CA","Budget d'audit approuvé par CA","Accès illimité aux données et systèmes"], controls_en:["Reporting line to Board","Board-approved audit budget","Unrestricted access to data and systems"], redflags_fr:["Approbation du plan d'audit par la direction","Ressources insuffisantes (< 1% des effectifs)","Restrictions d'accès à certaines données"], redflags_en:["Audit plan approved by management","Insufficient resources (< 1% of staff)","Restricted access to certain data"], entity:["pb","am","cb","rb"] },
+    { id:"r10", theme:"governance", sev:"medium", fr:"Suivi des recommandations d'audit insuffisant", en:"Insufficient audit recommendation follow-up", controls_fr:["Système de tracking des recommandations","Reporting trimestriel au comité d'audit","Escalade automatique en cas de dépassement"], controls_en:["Recommendation tracking system","Quarterly reporting to audit committee","Automatic escalation on overdue items"], redflags_fr:["Taux de recommandations ouvertes > 30%","Absence de dates cibles","Recommandations répétitives sur 2+ cycles"], redflags_en:["Open recommendation rate > 30%","No target dates","Repetitive findings across 2+ cycles"], entity:["pb","am","cb","rb"] },
+  ],
+
+  audit_tests: [
+    { cat_fr:"Planification", cat_en:"Planning", tests:[
+      { h_fr:"Cartographie des risques inhérents", h_en:"Inherent risk mapping", proc_fr:"Identifier et documenter tous les risques inhérents au périmètre via entretiens et revue documentaire.", proc_en:"Identify and document all inherent risks in scope via interviews and document review.", outcome_fr:"Matrice des risques inhérents validée", outcome_en:"Validated inherent risk matrix", dur:"2j", role:"Senior Auditor" },
+      { h_fr:"Revue des contrôles existants", h_en:"Review of existing controls", proc_fr:"Analyser la documentation des contrôles et évaluer leur conception par rapport aux risques identifiés.", proc_en:"Analyse control documentation and assess their design against identified risks.", outcome_fr:"Inventaire des contrôles clés + évaluation de conception", outcome_en:"Key controls inventory + design assessment", dur:"2j", role:"Senior Auditor" },
+      { h_fr:"Définition du plan de test", h_en:"Test plan definition", proc_fr:"Déterminer la nature, l'étendue et le calendrier des tests en fonction de l'évaluation du risque.", proc_en:"Determine the nature, extent and timing of tests based on risk assessment.", outcome_fr:"Programme de test approuvé", outcome_en:"Approved test programme", dur:"1j", role:"Audit Manager" },
+    ]},
+    { cat_fr:"Travaux de terrain", cat_en:"Fieldwork", tests:[
+      { h_fr:"Tests d'efficacité opérationnelle des contrôles", h_en:"Control operating effectiveness tests", proc_fr:"Sélectionner un échantillon aléatoire de transactions et vérifier l'exécution des contrôles clés.", proc_en:"Select a random sample of transactions and verify execution of key controls.", outcome_fr:"Résultats des tests avec exceptions documentées", outcome_en:"Test results with documented exceptions", dur:"4j", role:"Auditor" },
+      { h_fr:"Revue des données analytiques", h_en:"Analytical data review", proc_fr:"Exécuter les requêtes d'analyse de données pour détecter les anomalies et tendances atypiques.", proc_en:"Execute data analytics queries to detect anomalies and atypical trends.", outcome_fr:"Rapport d'anomalies + analyse des causes", outcome_en:"Anomaly report + root cause analysis", dur:"3j", role:"Data Analyst" },
+      { h_fr:"Entretiens avec les responsables", h_en:"Management interviews", proc_fr:"Conduire des entretiens structurés avec les responsables des processus pour valider les constats.", proc_en:"Conduct structured interviews with process owners to validate findings.", outcome_fr:"Notes d'entretien validées et signées", outcome_en:"Validated and signed interview notes", dur:"2j", role:"Senior Auditor" },
+      { h_fr:"Tests de l'environnement IT", h_en:"IT environment testing", proc_fr:"Vérifier les configurations des systèmes, droits d'accès et logs d'activité contre les politiques.", proc_en:"Verify system configurations, access rights and activity logs against policies.", outcome_fr:"Rapport de conformité IT avec écarts identifiés", outcome_en:"IT compliance report with identified gaps", dur:"3j", role:"IT Auditor" },
+    ]},
+    { cat_fr:"Reporting", cat_en:"Reporting", tests:[
+      { h_fr:"Validation des constats avec l'auditié", h_en:"Finding validation with auditee", proc_fr:"Partager les constats préliminaires avec la direction et obtenir leur position formelle.", proc_en:"Share preliminary findings with management and obtain their formal position.", outcome_fr:"Réponses de la direction documentées", outcome_en:"Documented management responses", dur:"2j", role:"Audit Manager" },
+      { h_fr:"Rédaction du rapport final", h_en:"Final report drafting", proc_fr:"Synthétiser les constats, recommandations et plan d'action dans le rapport exécutif.", proc_en:"Synthesise findings, recommendations and action plan in the executive report.", outcome_fr:"Rapport final validé et distribué", outcome_en:"Validated and distributed final report", dur:"3j", role:"Audit Manager" },
+      { h_fr:"Suivi post-audit", h_en:"Post-audit follow-up", proc_fr:"Planifier les jalons de suivi et créer les entrées dans le système de tracking des recommandations.", proc_en:"Schedule follow-up milestones and create entries in the recommendation tracking system.", outcome_fr:"Recommandations enregistrées avec dates cibles", outcome_en:"Recommendations logged with target dates", dur:"1j", role:"Senior Auditor" },
+    ]},
+  ],
+
+  da_scenarios: [
+    { id:"da01", theme:"aml", name_fr:"Transactions en ronde (smurfing)", name_en:"Round-tripping transactions (smurfing)", desc_fr:"Détecter les séquences de versements proches du seuil de déclaration réglementaire.", desc_en:"Detect sequences of deposits near the regulatory reporting threshold.", query:"SELECT account_id, txn_date, amount, COUNT(*) AS n_txns\nFROM transactions\nWHERE amount BETWEEN 8000 AND 9999\n  AND txn_date >= CURRENT_DATE - INTERVAL '30 days'\nGROUP BY account_id, txn_date\nHAVING COUNT(*) >= 3\nORDER BY n_txns DESC;", expected_fr:"Comptes avec ≥3 transactions / jour entre 8k-10k USD", expected_en:"Accounts with ≥3 daily transactions between 8k-10k USD", source_fr:"Core banking — table transactions", source_en:"Core banking — transactions table" },
+    { id:"da02", theme:"aml", name_fr:"Clients PEP sans revue récente", name_en:"PEP clients without recent review", desc_fr:"Identifier les clients PEP dont la dernière revue KYC date de plus de 12 mois.", desc_en:"Identify PEP clients whose last KYC review is more than 12 months old.", query:"SELECT c.client_id, c.name, c.pep_flag, k.last_review_date\nFROM clients c\nJOIN kyc_reviews k ON c.client_id = k.client_id\nWHERE c.pep_flag = TRUE\n  AND k.last_review_date < CURRENT_DATE - INTERVAL '12 months'\nORDER BY k.last_review_date ASC;", expected_fr:"Liste des PEP avec revue KYC expirée", expected_en:"List of PEPs with expired KYC review", source_fr:"CRM — tables clients & kyc_reviews", source_en:"CRM — clients & kyc_reviews tables" },
+    { id:"da03", theme:"cyber", name_fr:"Accès admin en dehors des heures ouvrées", name_en:"Admin access outside business hours", desc_fr:"Détecter les connexions administratives hors plage horaire autorisée (22h-6h, week-ends).", desc_en:"Detect admin logins outside authorised hours (22h-6h, weekends).", query:"SELECT username, login_time, ip_address, system_accessed\nFROM access_logs\nWHERE role IN ('admin','superuser','sysadmin')\n  AND (EXTRACT(HOUR FROM login_time) >= 22\n       OR EXTRACT(HOUR FROM login_time) < 6\n       OR EXTRACT(DOW FROM login_time) IN (0,6))\n  AND login_time >= CURRENT_DATE - INTERVAL '90 days'\nORDER BY login_time DESC;", expected_fr:"Connexions admin hors plage + comparaison tickets approuvés", expected_en:"Admin logins outside hours + comparison to approved tickets", source_fr:"SIEM — access_logs", source_en:"SIEM — access_logs" },
+    { id:"da04", theme:"credit", name_fr:"Concentrations sectorielles du portefeuille crédit", name_en:"Credit portfolio sectoral concentrations", desc_fr:"Calculer l'exposition par secteur économique et comparer aux limites internes.", desc_en:"Calculate exposure by economic sector and compare to internal limits.", query:"SELECT sector_code, sector_name,\n  SUM(exposure_eur) AS total_exp,\n  SUM(exposure_eur) / SUM(SUM(exposure_eur)) OVER() * 100 AS pct_portfolio\nFROM credit_portfolio\nWHERE status = 'active'\nGROUP BY sector_code, sector_name\nORDER BY total_exp DESC;", expected_fr:"Secteurs dépassant 20% du portefeuille total", expected_en:"Sectors exceeding 20% of total portfolio", source_fr:"Core banking — credit_portfolio", source_en:"Core banking — credit_portfolio" },
+    { id:"da05", theme:"governance", name_fr:"Recommandations d'audit sans date cible", name_en:"Audit recommendations without target date", desc_fr:"Identifier les recommandations ouvertes sans date cible ou dépassées.", desc_en:"Identify open recommendations with no target date or past due.", query:"SELECT rec_id, audit_id, finding_title, status,\n  target_date, CURRENT_DATE - target_date AS days_overdue\nFROM audit_recommendations\nWHERE status IN ('open','in_progress')\n  AND (target_date IS NULL OR target_date < CURRENT_DATE)\nORDER BY days_overdue DESC NULLS FIRST;", expected_fr:"Liste des recommandations en retard + responsables", expected_en:"Overdue recommendations list + owners", source_fr:"GRC — audit_recommendations", source_en:"GRC — audit_recommendations" },
+    { id:"da06", theme:"aml", name_fr:"Virements vers pays à haut risque", name_en:"Transfers to high-risk countries", desc_fr:"Détecter les virements sortants vers des juridictions classées risque élevé FATF.", desc_en:"Detect outbound transfers to FATF high-risk jurisdictions.", query:"SELECT t.txn_id, t.account_id, t.amount, t.currency,\n  t.beneficiary_country, t.txn_date\nFROM transactions t\nJOIN high_risk_countries hrc\n  ON t.beneficiary_country = hrc.country_code\nWHERE t.txn_type = 'WIRE_OUT'\n  AND t.txn_date >= CURRENT_DATE - INTERVAL '6 months'\n  AND t.amount > 10000\nORDER BY t.amount DESC;", expected_fr:"Virements vers pays liste FATF + justifications CDD", expected_en:"Transfers to FATF list countries + CDD justifications", source_fr:"Swift/Core banking — transactions", source_en:"Swift/Core banking — transactions" },
+  ],
+
+  workbench: [
+    { ctrl_fr:"Screening PEP automatisé", ctrl_en:"Automated PEP screening", design_fr:"Efficace", design_en:"Effective", oper_fr:"Partielle", oper_en:"Partial", tested:"2025-11-14", notes_fr:"Taux faux positifs élevé (87%)", notes_en:"High false positive rate (87%)" },
+    { ctrl_fr:"Revue KYC périodique", ctrl_en:"Periodic KYC review", design_fr:"Efficace", design_en:"Effective", oper_fr:"Inefficace", oper_en:"Ineffective", tested:"2025-10-22", notes_fr:"127 clients PEP sans revue > 18 mois", notes_en:"127 PEP clients without review > 18 months" },
+    { ctrl_fr:"MFA sur comptes admin", ctrl_en:"MFA on admin accounts", design_fr:"Efficace", design_en:"Effective", oper_fr:"Efficace", oper_en:"Effective", tested:"2025-12-01", notes_fr:"Conforme — 100% des comptes admin", notes_en:"Compliant — 100% of admin accounts" },
+    { ctrl_fr:"Tests BCP/DR annuels", ctrl_en:"Annual BCP/DR tests", design_fr:"Partielle", design_en:"Partial", oper_fr:"Inefficace", oper_en:"Ineffective", tested:"2024-09-30", notes_fr:"Dernier test il y a 20 mois, scénario cyber absent", notes_en:"Last test 20 months ago, no cyber scenario" },
+    { ctrl_fr:"Gestion des vulnérabilités", ctrl_en:"Vulnerability management", design_fr:"Efficace", design_en:"Effective", oper_fr:"Partielle", oper_en:"Partial", tested:"2025-11-28", notes_fr:"3 CVE critiques non patchés > 45 jours", notes_en:"3 critical CVEs unpatched > 45 days" },
+    { ctrl_fr:"Limites de concentration crédit", ctrl_en:"Credit concentration limits", design_fr:"Efficace", design_en:"Effective", oper_fr:"Efficace", oper_en:"Effective", tested:"2025-12-10", notes_fr:"Conforme aux limites internes", notes_en:"Compliant with internal limits" },
+    { ctrl_fr:"Escalade SAR documentée", ctrl_en:"Documented SAR escalation", design_fr:"Partielle", design_en:"Partial", oper_fr:"Inefficace", oper_en:"Ineffective", tested:"2025-10-15", notes_fr:"Procédure non formalisée pour décisions de non-déclaration", notes_en:"Non-filing decision procedure not formalised" },
+    { ctrl_fr:"Suivi des recommandations d'audit", ctrl_en:"Audit recommendation tracking", design_fr:"Efficace", design_en:"Effective", oper_fr:"Partielle", oper_en:"Partial", tested:"2025-11-05", notes_fr:"32% des recommandations ouvertes sans date cible", notes_en:"32% of open recommendations without target date" },
+  ],
+
+  iia_standards: [
+    { id:"1000", title_fr:"Objet, autorité et responsabilité", title_en:"Purpose, authority and responsibility", scope_fr:"Définit la mission de l'audit interne dans la charte d'audit", scope_en:"Defines internal audit mission in the audit charter", applicability_fr:"Tous les services d'audit interne", applicability_en:"All internal audit functions", guidance_fr:"La charte doit être approuvée par le conseil. Révisée annuellement.", guidance_en:"Charter must be Board-approved. Reviewed annually." },
+    { id:"1100", title_fr:"Indépendance et objectivité", title_en:"Independence and objectivity", scope_fr:"Indépendance organisationnelle et objectivité individuelle", scope_en:"Organisational independence and individual objectivity", applicability_fr:"CAE + auditeurs individuels", applicability_en:"CAE + individual auditors", guidance_fr:"Le CAE doit relever fonctionnellement du conseil d'administration.", guidance_en:"CAE must functionally report to the Board of Directors." },
+    { id:"1200", title_fr:"Compétences et conscience professionnelle", title_en:"Proficiency and due professional care", scope_fr:"Connaissances, aptitudes et compétences requises", scope_en:"Required knowledge, skills and competencies", applicability_fr:"Tous les auditeurs", applicability_en:"All auditors", guidance_fr:"La formation continue est obligatoire (≥ 40h/an CPE).", guidance_en:"Continuing education mandatory (≥ 40h/year CPE)." },
+    { id:"1300", title_fr:"Programme d'assurance et d'amélioration qualité", title_en:"Quality assurance and improvement programme", scope_fr:"Évaluations internes et externes du service d'audit", scope_en:"Internal and external assessments of the audit function", applicability_fr:"Service d'audit interne", applicability_en:"Internal audit function", guidance_fr:"Évaluation externe tous les 5 ans par pair qualifié.", guidance_en:"External assessment every 5 years by qualified peer." },
+    { id:"2000", title_fr:"Gestion du service d'audit interne", title_en:"Managing the internal audit activity", scope_fr:"Planification, communication et gestion des ressources", scope_en:"Planning, communication and resource management", applicability_fr:"CAE", applicability_en:"CAE", guidance_fr:"Plan d'audit basé sur le risque, approuvé annuellement.", guidance_en:"Risk-based audit plan, approved annually." },
+    { id:"2100", title_fr:"Nature du travail", title_en:"Nature of work", scope_fr:"Gouvernance, management des risques et contrôle interne", scope_en:"Governance, risk management and internal control", applicability_fr:"Tous les travaux d'audit", applicability_en:"All audit engagements", guidance_fr:"Évaluer l'efficacité des processus de gouvernance et gestion des risques.", guidance_en:"Evaluate effectiveness of governance and risk management processes." },
+    { id:"2200", title_fr:"Planification de la mission", title_en:"Engagement planning", scope_fr:"Objectifs, périmètre, ressources et programme de travail", scope_en:"Objectives, scope, resources and work programme", applicability_fr:"Chaque mission d'audit", applicability_en:"Each audit engagement", guidance_fr:"Les objectifs doivent aborder les risques associés à l'activité auditée.", guidance_en:"Objectives must address risks associated with the audited activity." },
+    { id:"2300", title_fr:"Exécution de la mission", title_en:"Performing the engagement", scope_fr:"Identification, analyse, évaluation et documentation", scope_en:"Identification, analysis, evaluation and documentation", applicability_fr:"Travaux de terrain", applicability_en:"Fieldwork", guidance_fr:"Les conclusions doivent être étayées par des preuves suffisantes et fiables.", guidance_en:"Conclusions must be supported by sufficient and reliable evidence." },
+    { id:"2400", title_fr:"Communication des résultats", title_en:"Communicating results", scope_fr:"Rapport d'audit — critères de qualité et distribution", scope_en:"Audit report — quality criteria and distribution", applicability_fr:"Tous les rapports d'audit", applicability_en:"All audit reports", guidance_fr:"Le rapport doit être précis, objectif, clair, concis et constructif.", guidance_en:"Report must be accurate, objective, clear, concise and constructive." },
+    { id:"2500", title_fr:"Surveillance de la mise en œuvre", title_en:"Monitoring progress", scope_fr:"Suivi des recommandations et plans d'action", scope_en:"Follow-up of recommendations and action plans", applicability_fr:"Post-mission", applicability_en:"Post-engagement", guidance_fr:"Établir un processus de suivi pour surveiller la disposition des résultats.", guidance_en:"Establish a follow-up process to monitor disposition of results." },
+    { id:"2600", title_fr:"Communication de l'acceptation des risques", title_en:"Communicating the acceptance of risks", scope_fr:"Risques résiduels non atténués acceptés par la direction", scope_en:"Residual risks not mitigated accepted by management", applicability_fr:"Risques significatifs", applicability_en:"Significant risks", guidance_fr:"Si le CAE estime que la direction accepte un risque excessif, il doit en informer le CA.", guidance_en:"If CAE believes management accepts excessive risk, must inform Board." },
+    { id:"TR-2", title_fr:"Topical Requirement — Cybersécurité", title_en:"Topical Requirement — Cybersecurity", scope_fr:"Exigences spécifiques pour les audits cyber", scope_en:"Specific requirements for cyber audits", applicability_fr:"Audits portant sur la cybersécurité", applicability_en:"Engagements covering cybersecurity", guidance_fr:"L'auditeur doit évaluer la gouvernance cyber, les contrôles techniques et la résilience opérationnelle.", guidance_en:"Auditor must assess cyber governance, technical controls and operational resilience." },
+    { id:"TR-5", title_fr:"Topical Requirement — Tiers & Fournisseurs", title_en:"Topical Requirement — Third Parties", scope_fr:"Exigences pour les audits de gestion des tiers", scope_en:"Requirements for third-party management audits", applicability_fr:"Audits portant sur les fournisseurs et tiers critiques", applicability_en:"Engagements covering vendors and critical third parties", guidance_fr:"Évaluer la due diligence initiale, la surveillance continue et les clauses contractuelles.", guidance_en:"Assess initial due diligence, ongoing monitoring and contractual clauses." },
+  ],
+
   // Activity feed
   activity: [
     { who: "Agent 3", what_fr: "Rapport généré pour AUD-2026-013",
@@ -2252,6 +2422,17 @@ const Sidebar = ({ route, setRoute, lang, open, onClose }) => {
       {navItem('dashboard', 'grid')}
       {navItem('audits', 'book', '4')}
 
+      <div className="aiq-nav-title">{lang==='fr'?'Analyse':'Analysis'}</div>
+      <button className="aiq-nav-item" data-active={route==='risk'} onClick={()=>{setRoute('risk');onClose&&onClose();}}>
+        <span className="ic">🎯</span><span className="lbl">{lang==='fr'?'Analyse risques':'Risk Analysis'}</span>
+      </button>
+      <button className="aiq-nav-item" data-active={route==='plan'} onClick={()=>{setRoute('plan');onClose&&onClose();}}>
+        <span className="ic">📋</span><span className="lbl">{lang==='fr'?'Plan d\'audit':'Audit Plan'}</span>
+      </button>
+      <button className="aiq-nav-item" data-active={route==='report'} onClick={()=>{setRoute('report');onClose&&onClose();}}>
+        <span className="ic">📊</span><span className="lbl">{lang==='fr'?'Rapport':'Report'}</span>
+      </button>
+
       <div className="aiq-nav-title">{t('agents_label')}</div>
       {agentItem('agent1', '#22d3a5')}
       {agentItem('agent2', '#4f7ef8')}
@@ -2289,10 +2470,13 @@ const Topbar = ({ route, lang, setLang, onMenu }) => {
         <span>AuditIQ</span>
         <span className="sep">/</span>
         <span className="here">{
-          t(route === 'agent1' ? 'regulatory'
-            : route === 'agent2' ? 'audit_plan'
-            : route === 'agent3' ? 'audit_report'
-            : route)
+          route === 'agent1' ? t('regulatory')
+          : route === 'agent2' ? t('audit_plan')
+          : route === 'agent3' ? t('audit_report')
+          : route === 'risk' ? (lang==='fr'?'Analyse des risques':'Risk Analysis')
+          : route === 'plan' ? (lang==='fr'?"Plan d'audit":'Audit Plan')
+          : route === 'report' ? (lang==='fr'?"Rapport d'audit":'Audit Report')
+          : t(route)
         }</span>
       </div>
       <div className="spacer" />
@@ -2516,6 +2700,14 @@ const DashboardScreen = ({ lang, setRoute }) => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Intelligence Reference Section */}
+      <div className="aiq-card" style={{marginTop:0}}>
+        <div className="aiq-card-head">
+          <h2 className="aiq-h2">🔍 {lang==='fr'?'Intelligence réglementaire':'Regulatory Intelligence'}</h2>
+        </div>
+        <window.AIQ_IntelligenceSection lang={lang} t={t} />
       </div>
 
       <div className="aiq-footer">{t('footer')}</div>
@@ -3152,6 +3344,999 @@ Object.assign(window, {
   AIQ_SettingsScreen: SettingsScreen,
 });
 </script>
+  <script type="text/babel" data-presets="react">
+// ── shared helpers ──
+const SevPill = ({ sev, t }) => {
+  const cls = sev==='critical'?'red':sev==='high'?'orange':sev==='medium'?'yellow':'green';
+  return <span className={`aiq-pill aiq-pill-${cls}`}>{t ? t(sev) : sev}</span>;
+};
+const ModeToggle = ({ mode, setMode, lang }) => (
+  <div className="aiq-mode-toggle">
+    <button data-active={mode==='static'} onClick={()=>setMode('static')}>{lang==='fr'?'Statique':'Static'}</button>
+    <button data-active={mode==='live'} onClick={()=>setMode('live')}>{lang==='fr'?'Live':'Live'}</button>
+  </div>
+);
+const FilterRow = ({ children }) => <div className="aiq-filter-row">{children}</div>;
+const useSimGen = () => {
+  const [busy, setBusy] = React.useState(false);
+  const [done, setDone] = React.useState(false);
+  const run = (cb) => {
+    setBusy(true); setDone(false);
+    setTimeout(() => { setBusy(false); setDone(true); cb && cb(); }, 2000);
+  };
+  return { busy, done, run, reset: ()=>setDone(false) };
+};
+
+// ── INTELLIGENCE DASHBOARD (replaces plain dashboard when tab selected) ──
+const IntelligenceSection = ({ lang, t }) => {
+  const [tab, setTab] = React.useState('cve');
+  const [mode, setMode] = React.useState('static');
+  const [cveFilter, setCveFilter] = React.useState('all');
+  const [cveSearch, setCveSearch] = React.useState('');
+  const [regJur, setRegJur] = React.useState('all');
+  const [regSearch, setRegSearch] = React.useState('');
+  const [recTheme, setRecTheme] = React.useState('all');
+  const [calJur, setCalJur] = React.useState('all');
+  const [calType, setCalType] = React.useState('all');
+  const [calPrio, setCalPrio] = React.useState('all');
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const tabs = [
+    { id:'cve',      fr:'CVE Bancaires', en:'Banking CVEs' },
+    { id:'regs',     fr:'Réglementations', en:'Regulations' },
+    { id:'recs',     fr:'Recommandations publiques', en:'Public Recommendations' },
+    { id:'calendar', fr:'Calendrier réglementaire', en:'Regulatory Calendar' },
+    { id:'snapshot', fr:'Dernier audit', en:'Latest audit' },
+  ];
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(()=>setRefreshing(false), 2200);
+  };
+
+  const cves = window.AIQ.cves.filter(c => {
+    const matchSev = cveFilter==='all' || c.sev===cveFilter;
+    const q = cveSearch.toLowerCase();
+    const matchQ = !q || c.id.toLowerCase().includes(q) || c.system.toLowerCase().includes(q);
+    return matchSev && matchQ;
+  });
+
+  const allRegs = Object.values(window.AIQ.regulations).flat();
+  const regs = allRegs.filter(r => {
+    const matchJur = regJur==='all' || r.jur===regJur;
+    const q = regSearch.toLowerCase();
+    const matchQ = !q || r.code.toLowerCase().includes(q) || r[lang].toLowerCase().includes(q);
+    return matchJur && matchQ;
+  });
+
+  const recs = window.AIQ.public_recommendations.filter(r => recTheme==='all' || r.theme===recTheme);
+
+  const cal = window.AIQ.reg_calendar.filter(c => {
+    const matchJur = calJur==='all' || c.jur===calJur;
+    const matchType = calType==='all' || c.type===calType;
+    const matchPrio = calPrio==='all' || c.priority===calPrio;
+    return matchJur && matchType && matchPrio;
+  });
+
+  const sevCls = s => s==='critical'?'red':s==='high'?'orange':s==='medium'?'yellow':'green';
+
+  return (
+    <div>
+      <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20,flexWrap:'wrap'}}>
+        <div className="aiq-tab-bar" style={{marginBottom:0,flex:1}}>
+          {tabs.map(tb=>(
+            <button key={tb.id} className="aiq-tab" data-active={tab===tb.id} onClick={()=>setTab(tb.id)}>
+              {tb[lang]}
+            </button>
+          ))}
+        </div>
+        <ModeToggle mode={mode} setMode={setMode} lang={lang} />
+        {mode==='live' && (
+          <button className="aiq-btn aiq-btn-ghost aiq-btn-sm" onClick={handleRefresh} disabled={refreshing}>
+            {refreshing ? <span className="aiq-spinner"/> : '↻'} {lang==='fr'?'Actualiser':'Refresh'}
+          </button>
+        )}
+      </div>
+
+      {/* A — CVE */}
+      {tab==='cve' && (
+        <div>
+          <FilterRow>
+            <input className="aiq-input" style={{maxWidth:260}} placeholder={lang==='fr'?'Rechercher CVE ou système…':'Search CVE or system…'} value={cveSearch} onChange={e=>setCveSearch(e.target.value)} />
+            <div className="aiq-mode-toggle">
+              {['all','critical','high','medium','low'].map(s=>(
+                <button key={s} data-active={cveFilter===s} onClick={()=>setCveFilter(s)}
+                        style={{padding:'6px 10px',fontSize:11}}>{s==='all'?(lang==='fr'?'Tous':'All'):s}</button>
+              ))}
+            </div>
+          </FilterRow>
+          <div className="aiq-card" style={{padding:0,overflowX:'auto'}}>
+            <table className="aiq-table">
+              <thead><tr>
+                <th>CVE ID</th><th>{lang==='fr'?'Date':'Date'}</th><th>{lang==='fr'?'Sévérité':'Severity'}</th>
+                <th>{lang==='fr'?'Système affecté':'Affected System'}</th><th>{lang==='fr'?'Action recommandée':'Recommended Action'}</th>
+              </tr></thead>
+              <tbody>
+                {cves.map(c=>(
+                  <tr key={c.id}>
+                    <td><span style={{fontFamily:'ui-monospace,Menlo,monospace',fontSize:12,color:'var(--aiq-accent-2)'}}>{c.id}</span></td>
+                    <td style={{whiteSpace:'nowrap',color:'var(--aiq-muted)',fontSize:12}}>{c.date}</td>
+                    <td><span className={`aiq-pill aiq-pill-${sevCls(c.sev)}`}>{c.sev}</span></td>
+                    <td style={{color:'var(--aiq-text)'}}>{c.system}</td>
+                    <td style={{color:'var(--aiq-muted)',fontSize:12}}>{c[`action_${lang}`]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* B — Regulations */}
+      {tab==='regs' && (
+        <div>
+          <FilterRow>
+            <input className="aiq-input" style={{maxWidth:260}} placeholder={lang==='fr'?'Rechercher…':'Search…'} value={regSearch} onChange={e=>setRegSearch(e.target.value)} />
+            <select className="aiq-select" style={{maxWidth:180}} value={regJur} onChange={e=>setRegJur(e.target.value)}>
+              <option value="all">{lang==='fr'?'Toutes juridictions':'All jurisdictions'}</option>
+              {window.AIQ.jurisdictions.map(j=><option key={j.id} value={j.id}>{j.flag} {j[lang]}</option>)}
+            </select>
+          </FilterRow>
+          <div className="aiq-card" style={{padding:0,overflowX:'auto'}}>
+            <table className="aiq-table">
+              <thead><tr>
+                <th>{lang==='fr'?'Juridiction':'Jurisdiction'}</th><th>Code</th>
+                <th>Titre</th><th>{lang==='fr'?'Sévérité':'Severity'}</th>
+                <th>{lang==='fr'?'MàJ':'Updated'}</th>
+              </tr></thead>
+              <tbody>
+                {regs.map((r,i)=>{
+                  const jur = window.AIQ.jurisdictions.find(x=>x.id===r.jur);
+                  return (
+                    <tr key={i}>
+                      <td><span style={{fontSize:16}}>{jur.flag}</span> <span style={{fontSize:11,color:'var(--aiq-faint)'}}>{jur.id.toUpperCase()}</span></td>
+                      <td><span style={{fontFamily:'ui-monospace,Menlo,monospace',fontSize:11,color:'var(--aiq-accent-2)'}}>{r.code}</span></td>
+                      <td style={{color:'var(--aiq-text)',maxWidth:320}}>{r[lang]}</td>
+                      <td><span className={`aiq-pill aiq-pill-${sevCls(r.severity)}`}>{r.severity}</span></td>
+                      <td style={{fontSize:11,color:'var(--aiq-muted)',whiteSpace:'nowrap'}}>{r.updated}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* C — Public Recommendations */}
+      {tab==='recs' && (
+        <div>
+          <FilterRow>
+            <select className="aiq-select" style={{maxWidth:200}} value={recTheme} onChange={e=>setRecTheme(e.target.value)}>
+              <option value="all">{lang==='fr'?'Tous les thèmes':'All themes'}</option>
+              <option value="aml">{lang==='fr'?'AML/KYC':'AML/KYC'}</option>
+              <option value="cyber">{lang==='fr'?'Cybersécurité':'Cybersecurity'}</option>
+              <option value="credit">{lang==='fr'?'Risque crédit':'Credit risk'}</option>
+              <option value="governance">{lang==='fr'?'Gouvernance':'Governance'}</option>
+            </select>
+          </FilterRow>
+          <div style={{display:'flex',flexDirection:'column',gap:10}}>
+            {recs.map((r,i)=>(
+              <div key={i} className="aiq-card aiq-card-tight" style={{display:'grid',gridTemplateColumns:'auto 80px 1fr auto',gap:14,alignItems:'start'}}>
+                <span style={{fontFamily:'ui-monospace,Menlo,monospace',fontSize:11,fontWeight:700,color:'var(--aiq-accent-2)',paddingTop:2}}>{r.src}</span>
+                <span className={`aiq-pill aiq-pill-${r.theme==='aml'?'indigo':r.theme==='cyber'?'red':r.theme==='credit'?'orange':'green'}`} style={{alignSelf:'center'}}>{r.theme.toUpperCase()}</span>
+                <span style={{fontSize:13,color:'var(--aiq-text-2)',lineHeight:1.5}}>{r[lang]}</span>
+                <span className={`aiq-pill aiq-pill-${sevCls(r.priority)}`} style={{alignSelf:'center'}}>{r.priority}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* D — Calendar */}
+      {tab==='calendar' && (
+        <div>
+          <FilterRow>
+            <select className="aiq-select" style={{maxWidth:180}} value={calJur} onChange={e=>setCalJur(e.target.value)}>
+              <option value="all">{lang==='fr'?'Toutes juridictions':'All jurisdictions'}</option>
+              {window.AIQ.jurisdictions.map(j=><option key={j.id} value={j.id}>{j.flag} {j[lang]}</option>)}
+            </select>
+            <select className="aiq-select" style={{maxWidth:160}} value={calType} onChange={e=>setCalType(e.target.value)}>
+              <option value="all">{lang==='fr'?'Tous types':'All types'}</option>
+              <option value="Regulation">Regulation</option>
+              <option value="Guideline">Guideline</option>
+              <option value="Circular">Circular</option>
+            </select>
+            <select className="aiq-select" style={{maxWidth:140}} value={calPrio} onChange={e=>setCalPrio(e.target.value)}>
+              <option value="all">{lang==='fr'?'Toute priorité':'All priority'}</option>
+              <option value="critical">Critical</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+            </select>
+          </FilterRow>
+          <div className="aiq-card" style={{padding:0,overflowX:'auto'}}>
+            <table className="aiq-table">
+              <thead><tr>
+                <th>Date</th><th>Autorité</th><th>Type</th><th>Titre</th>
+                <th>{lang==='fr'?'Impact clé':'Key Impact'}</th><th>{lang==='fr'?'Priorité':'Priority'}</th>
+              </tr></thead>
+              <tbody>
+                {cal.map((c,i)=>{
+                  const jur = window.AIQ.jurisdictions.find(x=>x.id===c.jur);
+                  return (
+                    <tr key={i}>
+                      <td style={{whiteSpace:'nowrap',fontSize:12,color:'var(--aiq-muted)'}}>{c.date}</td>
+                      <td><span style={{fontSize:14}}>{jur.flag}</span> <span style={{fontSize:11,color:'var(--aiq-faint)'}}>{c.auth}</span></td>
+                      <td><span className="aiq-pill aiq-pill-blue" style={{fontSize:10}}>{c.type}</span></td>
+                      <td style={{color:'var(--aiq-text)',maxWidth:260,fontSize:12}}>{c[lang]}</td>
+                      <td style={{color:'var(--aiq-muted)',fontSize:11,maxWidth:220}}>{c[`impact_${lang}`]}</td>
+                      <td><span className={`aiq-pill aiq-pill-${sevCls(c.priority)}`}>{c.priority}</span></td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* E — Latest Snapshot */}
+      {tab==='snapshot' && (
+        <div className="aiq-card" style={{textAlign:'center',padding:40}}>
+          <div style={{fontSize:36,marginBottom:12}}>📊</div>
+          <div style={{fontSize:15,fontWeight:600,color:'var(--aiq-text)',marginBottom:8}}>
+            {lang==='fr'?'AUD-2026-013 — Résilience opérationnelle (DORA)':'AUD-2026-013 — Operational resilience (DORA)'}
+          </div>
+          <div style={{display:'flex',gap:16,justifyContent:'center',flexWrap:'wrap',marginTop:16}}>
+            {[
+              {l:lang==='fr'?'Constats':'Findings', v:'8'},
+              {l:lang==='fr'?'Critiques':'Critical', v:'2'},
+              {l:lang==='fr'?'Élevés':'High', v:'3'},
+              {l:lang==='fr'?'Juridictions':'Jurisdictions', v:'EU'},
+            ].map(item=>(
+              <div key={item.l} className="aiq-card aiq-card-tight" style={{minWidth:100,textAlign:'center'}}>
+                <div style={{fontSize:22,fontWeight:800,color:'var(--aiq-text)'}}>{item.v}</div>
+                <div style={{fontSize:11,color:'var(--aiq-muted)',marginTop:4}}>{item.l}</div>
+              </div>
+            ))}
+          </div>
+          <button className="aiq-btn aiq-btn-ghost" style={{marginTop:20}}>
+            {lang==='fr'?'Ouvrir le rapport':'Open report'} →
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ── RISK ANALYSIS SCREEN ──
+const RiskScreen = ({ lang }) => {
+  const t = window.AIQ_useT(lang);
+  const [entity, setEntity] = React.useState('pb');
+  const [topic, setTopic] = React.useState('aml');
+  const [jurs, setJurs] = React.useState(['ch','sg']);
+  const [mode, setMode] = React.useState('static');
+  const [tab, setTab] = React.useState('risks');
+  const gen = useSimGen();
+  const [expanded, setExpanded] = React.useState({});
+
+  const toggleJur = id => setJurs(p => p.includes(id) ? p.filter(j=>j!==id) : [...p,id]);
+  const toggleExp = id => setExpanded(p => ({...p, [id]: !p[id]}));
+
+  const risks = window.AIQ.risk_indicators.filter(r => {
+    const matchTopic = r.theme === topic || (topic==='kyc' && r.theme==='aml') || (topic==='cyber' && r.theme==='cyber') || (topic==='credit' && r.theme==='credit') || r.theme==='governance';
+    const themeMap = { aml:'aml', kyc:'aml', cyber:'cyber', credit:'credit', icaap:'credit', ops:'governance', esg:'governance', dora:'cyber', mar:'governance' };
+    return r.theme === (themeMap[topic] || topic);
+  });
+  const filteredRisks = risks.length ? risks : window.AIQ.risk_indicators.slice(0,5);
+
+  const regs = Object.values(window.AIQ.regulations).flat().filter(r => jurs.includes(r.jur));
+  const recs = window.AIQ.public_recommendations.filter(r => {
+    const themeMap = { aml:'aml', kyc:'aml', cyber:'cyber', credit:'credit', icaap:'credit', ops:'governance', esg:'governance', dora:'cyber', mar:'governance' };
+    return r.theme === (themeMap[topic] || topic);
+  });
+
+  const sevCls = s => s==='critical'?'red':s==='high'?'orange':s==='medium'?'yellow':'green';
+
+  return (
+    <div className="aiq-page">
+      <div className="aiq-page-head">
+        <div>
+          <p className="aiq-sub" style={{marginBottom:6,color:'#22d3a5',letterSpacing:'.1em',textTransform:'uppercase',fontWeight:700,fontSize:11}}>🎯 {lang==='fr'?'ANALYSE DES RISQUES':'RISK ANALYSIS'}</p>
+          <h1 className="aiq-h1">{lang==='fr'?'Analyse des risques':'Risk Analysis'}</h1>
+          <p className="aiq-sub">{lang==='fr'?'Indicateurs de risque, réglementations applicables et couverture des tests.':'Risk indicators, applicable regulations and test coverage.'}</p>
+        </div>
+        <ModeToggle mode={mode} setMode={setMode} lang={lang} />
+      </div>
+
+      <div className="aiq-gen-split">
+        {/* Left — inputs */}
+        <div className="aiq-card">
+          <h2 className="aiq-h2" style={{marginBottom:16}}>{lang==='fr'?'Paramètres':'Parameters'}</h2>
+          <div className="aiq-field">
+            <label>{lang==='fr'?'Type d\'entité':'Entity type'}</label>
+            <select className="aiq-select" value={entity} onChange={e=>setEntity(e.target.value)}>
+              {window.AIQ.entities.map(en=><option key={en.id} value={en.id}>{en.icon} {en[lang]}</option>)}
+            </select>
+          </div>
+          <div className="aiq-field">
+            <label>{t('audit_subject')}</label>
+            <select className="aiq-select" value={topic} onChange={e=>setTopic(e.target.value)}>
+              {window.AIQ.topics.map(tp=><option key={tp.id} value={tp.id}>{tp[lang]}</option>)}
+            </select>
+          </div>
+          <div className="aiq-field">
+            <label>{t('jurisdiction')}</label>
+            <div className="aiq-chip-grid">
+              {window.AIQ.jurisdictions.map(j=>(
+                <button key={j.id} className="aiq-chip-check" data-checked={jurs.includes(j.id)} onClick={()=>toggleJur(j.id)} type="button">
+                  <span style={{fontSize:14}}>{j.flag}</span>{j[lang]}<span className="check">{jurs.includes(j.id)?'✓':''}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <button className="aiq-btn aiq-btn-primary aiq-btn-lg" style={{width:'100%',marginTop:8}}
+                  disabled={!jurs.length||gen.busy} onClick={()=>gen.run()}>
+            {gen.busy ? <React.Fragment><span className="aiq-spinner" style={{width:16,height:16,borderWidth:2}}/> {lang==='fr'?'Analyse…':'Analysing…'}</React.Fragment>
+                      : <React.Fragment>🎯 {lang==='fr'?'Lancer l\'analyse':'Run analysis'}</React.Fragment>}
+          </button>
+          {(gen.done||true) && (
+            <div style={{marginTop:14,padding:12,background:'rgba(34,211,165,.08)',border:'1px solid rgba(34,211,165,.25)',borderRadius:8}}>
+              <div style={{fontSize:11,fontWeight:700,color:'#22d3a5',marginBottom:4}}>{lang==='fr'?'Contexte entité':'Entity context'}</div>
+              <div style={{fontSize:12,color:'var(--aiq-muted)'}}>
+                {entity==='pb' && (lang==='fr'?'Banque privée : focus PEP, clients HNW, structures offshore.':'Private banking: PEP focus, HNW clients, offshore structures.')}
+                {entity==='am' && (lang==='fr'?'Gestion d\'actifs : focus gestion de mandats, benchmarks, conflits.':'Asset management: mandates, benchmarks, conflicts focus.')}
+                {entity==='cb' && (lang==='fr'?'Banque corporative : focus crédit, garanties, financement.':'Corporate banking: credit, guarantees, financing focus.')}
+                {entity==='rb' && (lang==='fr'?'Banque de détail : focus conformité produit, protection consommateur.':'Retail banking: product compliance, consumer protection focus.')}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Right — outputs */}
+        <div className="aiq-card aiq-output-card">
+          <div className="aiq-tab-bar" style={{marginBottom:16}}>
+            {[{id:'risks',fr:'A. Indicateurs de risque',en:'A. Risk Indicators'},
+              {id:'regs', fr:'B. Réglementations',       en:'B. Regulations'},
+              {id:'recs', fr:'C. Recommandations',        en:'C. Recommendations'},
+              {id:'cov',  fr:'D. Couverture des tests',   en:'D. Test Coverage'},
+            ].map(tb=>(
+              <button key={tb.id} className="aiq-tab" data-active={tab===tb.id} onClick={()=>setTab(tb.id)}>{tb[lang]}</button>
+            ))}
+          </div>
+
+          {tab==='risks' && (
+            <div style={{display:'flex',flexDirection:'column',gap:10}}>
+              {filteredRisks.map(r=>(
+                <div key={r.id} className="aiq-risk-card" data-sev={r.sev} onClick={()=>toggleExp(r.id)}>
+                  <div className="rc-head">
+                    <span className={`aiq-pill aiq-pill-${sevCls(r.sev)}`} style={{fontSize:10}}>{r.sev}</span>
+                    <span style={{fontWeight:600,color:'var(--aiq-text)',fontSize:13,flex:1}}>{r[`${lang==='fr'?'fr':'en'}`]}</span>
+                    {r.entity.includes(entity) && <span className="aiq-entity-badge">★ {lang==='fr'?'Pertinent':'Relevant'}</span>}
+                    <span style={{color:'var(--aiq-faint)',fontSize:12}}>{expanded[r.id]?'▲':'▼'}</span>
+                  </div>
+                  {expanded[r.id] && (
+                    <div className="rc-detail">
+                      <div className="rc-sec">{lang==='fr'?'Contrôles attendus':'Expected controls'}</div>
+                      <ul>{r[`controls_${lang}`].map((c,i)=><li key={i}>{c}</li>)}</ul>
+                      <div className="rc-sec">{lang==='fr'?'Signaux d\'alerte':'Red flags'}</div>
+                      <ul>{r[`redflags_${lang}`].map((f,i)=><li key={i} style={{color:'#fca5a5'}}>{f}</li>)}</ul>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {tab==='regs' && (
+            <div style={{display:'flex',flexDirection:'column',gap:10}}>
+              {regs.length===0 && <div style={{color:'var(--aiq-muted)',fontSize:13,textAlign:'center',padding:40}}>{lang==='fr'?'Sélectionnez des juridictions':'Select jurisdictions'}</div>}
+              {regs.map((r,i)=>{
+                const jur = window.AIQ.jurisdictions.find(x=>x.id===r.jur);
+                return (
+                  <div key={i} className="aiq-prev-item" style={{animationDelay:`${i*.07}s`}}>
+                    <span className="jur-tag">{jur.flag} {jur.id.toUpperCase()}</span>
+                    <span className="code">{r.code}</span>
+                    <div className="ttl">{r[lang]}</div>
+                    <div className="meta">
+                      <span>{jur.regulator}</span>
+                      <span>{lang==='fr'?'MàJ':'Updated'}: {r.updated}</span>
+                      <span className={`aiq-pill aiq-pill-${sevCls(r.severity)}`} style={{padding:'1px 7px',fontSize:9}}>{r.severity}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {tab==='recs' && (
+            <div style={{display:'flex',flexDirection:'column',gap:10}}>
+              {recs.length===0 && <div style={{color:'var(--aiq-muted)',fontSize:13,textAlign:'center',padding:40}}>{lang==='fr'?'Aucune recommandation pour ce thème':'No recommendations for this theme'}</div>}
+              {recs.map((r,i)=>(
+                <div key={i} className="aiq-card aiq-card-tight" style={{display:'grid',gridTemplateColumns:'60px 1fr auto',gap:12,alignItems:'start'}}>
+                  <span style={{fontFamily:'ui-monospace,Menlo,monospace',fontSize:11,fontWeight:700,color:'var(--aiq-accent-2)'}}>{r.src}</span>
+                  <span style={{fontSize:12.5,color:'var(--aiq-text-2)',lineHeight:1.5}}>{r[lang]}</span>
+                  <span className={`aiq-pill aiq-pill-${sevCls(r.priority)}`} style={{fontSize:10}}>{r.priority}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {tab==='cov' && (
+            <div>
+              <div style={{marginBottom:12,fontSize:12,color:'var(--aiq-muted)'}}>
+                {filteredRisks.length} {lang==='fr'?'risques · couverture estimée':'risks · estimated coverage'}
+              </div>
+              {filteredRisks.map((r,i)=>{
+                const pct = r.sev==='critical'?60:r.sev==='high'?75:r.sev==='medium'?85:95;
+                return (
+                  <div key={r.id} className="aiq-cov-row">
+                    <div>
+                      <div style={{fontSize:12.5,color:'var(--aiq-text)',fontWeight:600,marginBottom:2}}>{r[lang==='fr'?'fr':'en']}</div>
+                      <span className={`aiq-pill aiq-pill-${sevCls(r.sev)}`} style={{fontSize:9}}>{r.sev}</span>
+                    </div>
+                    <div>
+                      <div className="aiq-progress" style={{height:6}}>
+                        <span style={{width:`${pct}%`}}/>
+                      </div>
+                      <div style={{fontSize:10,color:'var(--aiq-faint)',marginTop:3,textAlign:'right'}}>{pct}%</div>
+                    </div>
+                    <span className={`aiq-pill aiq-pill-${pct>=80?'green':pct>=60?'yellow':'orange'}`} style={{fontSize:10}}>{pct>=80?(lang==='fr'?'Couvert':'Covered'):pct>=60?(lang==='fr'?'Partiel':'Partial'):(lang==='fr'?'Faible':'Low')}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="aiq-footer">{window.AIQ_useT(lang)('footer')}</div>
+    </div>
+  );
+};
+
+// ── AUDIT PLAN SCREEN ──
+const PlanScreen = ({ lang }) => {
+  const t = window.AIQ_useT(lang);
+  const [entity, setEntity] = React.useState('pb');
+  const [topic, setTopic] = React.useState('aml');
+  const [scope, setScope] = React.useState('');
+  const [jurs, setJurs] = React.useState(['ch','sg']);
+  const [mode, setMode] = React.useState('static');
+  const [tab, setTab] = React.useState('rationale');
+  const [openCat, setOpenCat] = React.useState({0:true});
+  const gen = useSimGen();
+
+  const toggleJur = id => setJurs(p=>p.includes(id)?p.filter(j=>j!==id):[...p,id]);
+  const iiaTopics = { cyber:'TR-2', dora:'TR-2', ops:'TR-5' };
+  const iiaBanner = iiaTopics[topic];
+
+  const rationale = {
+    fr: {
+      aml: `L'audit AML/KYC dans le contexte de la banque privée vise à évaluer la robustesse du dispositif de lutte contre le blanchiment de capitaux et le financement du terrorisme. Les risques inhérents sont particulièrement élevés compte tenu de la nature des clients (PEP, HNW, structures offshore) et des juridictions concernées. L'objectif est de s'assurer que les contrôles en place sont conçus et opèrent efficacement pour prévenir l'utilisation de la banque à des fins illicites.`,
+      cyber: `L'audit de cybersécurité vise à évaluer la maturité des contrôles de sécurité informatique face aux menaces actuelles. Dans un contexte bancaire, la protection des actifs informationnels, la continuité opérationnelle et la conformité réglementaire (DORA, MAS TRM) sont primordiales. Les résultats guideront les investissements prioritaires en sécurité.`,
+      default: `L'objectif de cet audit est d'évaluer l'efficacité des contrôles en place, identifier les écarts par rapport aux exigences réglementaires et recommander des améliorations pour renforcer le dispositif de gestion des risques.`,
+    },
+    en: {
+      aml: `The AML/KYC audit in the private banking context aims to assess the robustness of the anti-money laundering and counter-terrorism financing framework. Inherent risks are particularly high given the nature of clients (PEPs, HNW, offshore structures) and jurisdictions covered. The objective is to ensure that controls in place are designed and operating effectively to prevent use of the bank for illicit purposes.`,
+      cyber: `The cybersecurity audit aims to assess the maturity of IT security controls against current threats. In a banking context, protection of information assets, operational continuity and regulatory compliance (DORA, MAS TRM) are paramount. Results will guide priority security investments.`,
+      default: `The objective of this audit is to assess the effectiveness of controls in place, identify gaps against regulatory requirements and recommend improvements to strengthen the risk management framework.`,
+    },
+  };
+
+  const getRationale = () => {
+    const r = rationale[lang];
+    return r[topic] || r.default;
+  };
+
+  const daScenarios = window.AIQ.da_scenarios.filter(s => {
+    const themeMap = { aml:'aml', kyc:'aml', cyber:'cyber', credit:'credit', icaap:'credit', ops:'governance', esg:'governance', dora:'cyber', mar:'governance' };
+    return s.theme === (themeMap[topic] || topic);
+  });
+  const allDA = daScenarios.length ? daScenarios : window.AIQ.da_scenarios.slice(0,3);
+
+  return (
+    <div className="aiq-page">
+      <div className="aiq-page-head">
+        <div>
+          <p className="aiq-sub" style={{marginBottom:6,color:'#4f7ef8',letterSpacing:'.1em',textTransform:'uppercase',fontWeight:700,fontSize:11}}>📋 {lang==='fr'?'PLAN D\'AUDIT':'AUDIT PLAN'}</p>
+          <h1 className="aiq-h1">{lang==='fr'?'Plan d\'audit & Procédures':'Audit Plan & Procedures'}</h1>
+          <p className="aiq-sub">{lang==='fr'?'Programme de test, scénarios analytiques et workbench d\'évaluation.':'Test programme, analytics scenarios and assessment workbench.'}</p>
+        </div>
+        <ModeToggle mode={mode} setMode={setMode} lang={lang} />
+      </div>
+
+      <div className="aiq-gen-split">
+        {/* Left */}
+        <div className="aiq-card">
+          <h2 className="aiq-h2" style={{marginBottom:16}}>{lang==='fr'?'Paramètres':'Parameters'}</h2>
+          {iiaBanner && (
+            <div className="aiq-iia-banner">
+              <div className="bh">📌 IIA Topical Requirement {iiaBanner}</div>
+              <ul>
+                {topic==='cyber' ? [
+                  lang==='fr'?'Évaluer la gouvernance et la stratégie cyber':'Assess cyber governance and strategy',
+                  lang==='fr'?'Tester les contrôles de détection et réponse aux incidents':'Test incident detection and response controls',
+                  lang==='fr'?'Vérifier la résilience opérationnelle et les plans BCP/DR':'Verify operational resilience and BCP/DR plans',
+                ] : [
+                  lang==='fr'?'Évaluer la due diligence initiale des tiers':'Assess initial third-party due diligence',
+                  lang==='fr'?'Vérifier la surveillance continue des fournisseurs critiques':'Verify ongoing monitoring of critical vendors',
+                  lang==='fr'?'Contrôler les clauses contractuelles et les droits d\'audit':'Check contractual clauses and audit rights',
+                ].map((item,i)=><li key={i}>{item}</li>)}
+              </ul>
+            </div>
+          )}
+          <div className="aiq-field">
+            <label>{lang==='fr'?'Type d\'entité':'Entity type'}</label>
+            <select className="aiq-select" value={entity} onChange={e=>setEntity(e.target.value)}>
+              {window.AIQ.entities.map(en=><option key={en.id} value={en.id}>{en.icon} {en[lang]}</option>)}
+            </select>
+          </div>
+          <div className="aiq-field">
+            <label>{t('audit_subject')}</label>
+            <select className="aiq-select" value={topic} onChange={e=>setTopic(e.target.value)}>
+              {window.AIQ.topics.map(tp=><option key={tp.id} value={tp.id}>{tp[lang]}</option>)}
+            </select>
+          </div>
+          <div className="aiq-field">
+            <label>{t('audit_scope_opt')}</label>
+            <textarea className="aiq-textarea" placeholder={t('audit_scope_ph')} value={scope} onChange={e=>setScope(e.target.value)} />
+          </div>
+          <div className="aiq-field">
+            <label>{t('jurisdiction')}</label>
+            <div className="aiq-chip-grid">
+              {window.AIQ.jurisdictions.map(j=>(
+                <button key={j.id} className="aiq-chip-check" data-checked={jurs.includes(j.id)} onClick={()=>toggleJur(j.id)} type="button">
+                  <span style={{fontSize:14}}>{j.flag}</span>{j[lang]}<span className="check">{jurs.includes(j.id)?'✓':''}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <button className="aiq-btn aiq-btn-primary aiq-btn-lg" style={{width:'100%',marginTop:8}}
+                  disabled={!jurs.length||gen.busy} onClick={()=>gen.run()}>
+            {gen.busy ? <React.Fragment><span className="aiq-spinner" style={{width:16,height:16,borderWidth:2}}/> {lang==='fr'?'Génération…':'Generating…'}</React.Fragment>
+                      : <React.Fragment>📋 {lang==='fr'?'Générer le plan':'Generate plan'}</React.Fragment>}
+          </button>
+          <div style={{display:'flex',gap:8,marginTop:10}}>
+            <button className="aiq-btn aiq-btn-ghost aiq-btn-sm" disabled title={lang==='fr'?'Disponible en mode Live':'Available in Live mode'} style={{flex:1,cursor:'not-allowed',opacity:.5}}>
+              📊 {lang==='fr'?'Exporter XLSX':'Export XLSX'}
+            </button>
+            <button className="aiq-btn aiq-btn-ghost aiq-btn-sm" disabled title={lang==='fr'?'Disponible en mode Live':'Available in Live mode'} style={{flex:1,cursor:'not-allowed',opacity:.5}}>
+              📑 {lang==='fr'?'Exporter PPTX':'Export PPTX'}
+            </button>
+          </div>
+        </div>
+
+        {/* Right */}
+        <div className="aiq-card aiq-output-card">
+          <div className="aiq-tab-bar" style={{marginBottom:16}}>
+            {[{id:'rationale',fr:'A. Contexte',en:'A. Background'},
+              {id:'tests',    fr:'B. Programme',en:'B. Test Programme'},
+              {id:'da',       fr:'C. Data Analytics',en:'C. Data Analytics'},
+              {id:'bench',    fr:'D. Workbench',en:'D. Workbench'},
+            ].map(tb=>(
+              <button key={tb.id} className="aiq-tab" data-active={tab===tb.id} onClick={()=>setTab(tb.id)}>{tb[lang]}</button>
+            ))}
+          </div>
+
+          {tab==='rationale' && (
+            <div>
+              <div style={{display:'flex',gap:8,marginBottom:14,flexWrap:'wrap'}}>
+                <span className="aiq-entity-badge">{window.AIQ.entities.find(e=>e.id===entity)?.icon} {window.AIQ.entities.find(e=>e.id===entity)?.[lang]}</span>
+                <span className="aiq-pill aiq-pill-indigo">{window.AIQ.topics.find(t=>t.id===topic)?.[lang]}</span>
+                {jurs.map(j=>{const jr=window.AIQ.jurisdictions.find(x=>x.id===j);return <span key={j} className="aiq-pill aiq-pill-blue" style={{fontSize:10}}>{jr?.flag} {jr?.id.toUpperCase()}</span>;})}
+              </div>
+              <div style={{fontSize:13.5,color:'var(--aiq-text-2)',lineHeight:1.7,background:'rgba(255,255,255,.02)',padding:16,borderRadius:10,border:'1px solid var(--aiq-border)'}}>
+                {getRationale()}
+              </div>
+            </div>
+          )}
+
+          {tab==='tests' && (
+            <div style={{display:'flex',flexDirection:'column',gap:8}}>
+              {window.AIQ.audit_tests.map((cat,ci)=>(
+                <div key={ci}>
+                  <button onClick={()=>setOpenCat(p=>({...p,[ci]:!p[ci]}))}
+                          style={{width:'100%',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px',background:'rgba(255,255,255,.04)',border:'1px solid var(--aiq-border)',borderRadius:8,cursor:'pointer',color:'var(--aiq-text)',fontWeight:600,fontSize:13}}>
+                    <span>{cat[`cat_${lang}`]} <span style={{color:'var(--aiq-faint)',fontWeight:400,fontSize:12}}>({cat.tests.length} {lang==='fr'?'tests':'tests'})</span></span>
+                    <span style={{color:'var(--aiq-faint)'}}>{openCat[ci]?'▲':'▼'}</span>
+                  </button>
+                  {openCat[ci] && cat.tests.map((s,si)=>(
+                    <div key={si} className="aiq-step" style={{animationDelay:`${si*.06}s`}}>
+                      <div className="num">{ci*10+si+1}</div>
+                      <div className="body">
+                        <h4>{s[`h_${lang}`]}</h4>
+                        <p>{s[`proc_${lang}`]}</p>
+                        <div style={{marginTop:6,padding:'8px 10px',background:'rgba(255,255,255,.02)',borderRadius:6,border:'1px solid var(--aiq-border)',fontSize:12,color:'var(--aiq-text-2)'}}>
+                          ✓ {lang==='fr'?'Résultat attendu':'Expected outcome'}: {s[`outcome_${lang}`]}
+                        </div>
+                        <div className="meta"><span>⏱ {s.dur}</span><span>👤 {s.role}</span></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {tab==='da' && (
+            <div style={{display:'flex',flexDirection:'column',gap:14}}>
+              {allDA.map(s=>(
+                <div key={s.id} className="aiq-card aiq-card-tight">
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8}}>
+                    <span className="aiq-pill aiq-pill-indigo" style={{fontSize:10}}>DA</span>
+                    <span style={{fontWeight:600,color:'var(--aiq-text)',fontSize:13}}>{s[`name_${lang}`]}</span>
+                  </div>
+                  <p style={{fontSize:12.5,color:'var(--aiq-muted)',margin:'0 0 8px',lineHeight:1.5}}>{s[`desc_${lang}`]}</p>
+                  <div className="aiq-code">{s.query}</div>
+                  <div style={{display:'flex',gap:16,marginTop:8,fontSize:11,color:'var(--aiq-muted)'}}>
+                    <span>🎯 {s[`expected_${lang}`]}</span>
+                    <span>🗄 {s[`source_${lang}`]}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {tab==='bench' && (
+            <div className="aiq-card" style={{padding:0,overflowX:'auto'}}>
+              <table className="aiq-table">
+                <thead><tr>
+                  <th>{lang==='fr'?'Contrôle':'Control'}</th>
+                  <th>{lang==='fr'?'Conception':'Design'}</th>
+                  <th>{lang==='fr'?'Efficacité opér.':'Operating Eff.'}</th>
+                  <th>{lang==='fr'?'Dernier test':'Last test'}</th>
+                  <th>{lang==='fr'?'Notes':'Notes'}</th>
+                </tr></thead>
+                <tbody>
+                  {window.AIQ.workbench.map((w,i)=>{
+                    const dc = w[`design_${lang}`]==='Efficace'||w.design_en==='Effective'?'green':w[`design_${lang}`]==='Partielle'||w.design_en==='Partial'?'yellow':'red';
+                    const oc = w[`oper_${lang}`]==='Efficace'||w.oper_en==='Effective'?'green':w[`oper_${lang}`]==='Partielle'||w.oper_en==='Partial'?'yellow':'red';
+                    return (
+                      <tr key={i}>
+                        <td style={{color:'var(--aiq-text)',fontWeight:500}}>{w[`ctrl_${lang}`]}</td>
+                        <td><span className={`aiq-pill aiq-pill-${dc}`}>{w[`design_${lang}`]}</span></td>
+                        <td><span className={`aiq-pill aiq-pill-${oc}`}>{w[`oper_${lang}`]}</span></td>
+                        <td style={{fontSize:11,color:'var(--aiq-muted)',whiteSpace:'nowrap'}}>{w.tested}</td>
+                        <td style={{fontSize:11.5,color:'var(--aiq-muted)'}}>{w[`notes_${lang}`]}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="aiq-footer">{t('footer')}</div>
+    </div>
+  );
+};
+
+// ── AUDIT REPORT SCREEN ──
+const ReportScreen = ({ lang }) => {
+  const t = window.AIQ_useT(lang);
+  const [entity, setEntity] = React.useState('pb');
+  const [topic, setTopic] = React.useState('aml');
+  const [observations, setObservations] = React.useState('');
+  const [mode, setMode] = React.useState('static');
+  const [tab, setTab] = React.useState('s1');
+  const [openSec, setOpenSec] = React.useState({});
+  const [revision, setRevision] = React.useState('');
+  const [showRevision, setShowRevision] = React.useState(false);
+  const [iiaSearch, setIiaSearch] = React.useState('');
+  const [refSearch, setRefSearch] = React.useState('');
+  const gen = useSimGen();
+
+  const toggleSec = id => setOpenSec(p=>({...p,[id]:!p[id]}));
+
+  const findings = window.AIQ.findings;
+  const recommendations = findings.map((f,i)=>({
+    ...f, id:`R-${String(i+1).padStart(2,'0')}`,
+    rec_fr: `Mettre en place un plan correctif documenté, désigner un responsable et fixer une date cible de résolution pour le constat : "${f.title_fr}".`,
+    rec_en: `Establish a documented corrective plan, assign a responsible owner and set a target resolution date for finding: "${f.title_en}".`,
+    timeline_fr: i===0?'30 jours':i===1?'60 jours':i===2?'90 jours':'120 jours',
+    timeline_en: i===0?'30 days':i===1?'60 days':i===2?'90 days':'120 days',
+    owner: ['Direction Conformité','COO','DSI','CAE'][i%4],
+  }));
+
+  const iiaStds = window.AIQ.iia_standards.filter(s => {
+    const q = iiaSearch.toLowerCase();
+    return !q || s.id.toLowerCase().includes(q) || s[`title_${lang}`].toLowerCase().includes(q);
+  });
+  const allRegs = Object.values(window.AIQ.regulations).flat();
+  const refRegs = allRegs.filter(r => {
+    const q = refSearch.toLowerCase();
+    return !q || r.code.toLowerCase().includes(q) || r[lang].toLowerCase().includes(q);
+  });
+
+  const sevCls = s => s==='critical'?'red':s==='high'?'orange':s==='medium'?'yellow':'green';
+
+  const reportTabs = [
+    {id:'s1',fr:'1. Exec. Summary',en:'1. Exec. Summary'},
+    {id:'s2',fr:'2. Constats',en:'2. Findings'},
+    {id:'s3',fr:'3. Recommandations',en:'3. Recommendations'},
+    {id:'s4',fr:'4. Plan d\'action',en:'4. Action Plan'},
+    {id:'sa',fr:'A. Normes IIA',en:'A. IIA Standards'},
+    {id:'sb',fr:'B. Référentiel régl.',en:'B. Reg. Reference'},
+  ];
+
+  return (
+    <div className="aiq-page">
+      <div className="aiq-page-head">
+        <div>
+          <p className="aiq-sub" style={{marginBottom:6,color:'#a78bfa',letterSpacing:'.1em',textTransform:'uppercase',fontWeight:700,fontSize:11}}>📊 {lang==='fr'?'RAPPORT D\'AUDIT':'AUDIT REPORT'}</p>
+          <h1 className="aiq-h1">{lang==='fr'?'Rapport d\'audit':'Audit Report'}</h1>
+          <p className="aiq-sub">{lang==='fr'?'Constats, recommandations et plan d\'action.':'Findings, recommendations and action plan.'}</p>
+        </div>
+        <ModeToggle mode={mode} setMode={setMode} lang={lang} />
+      </div>
+
+      <div className="aiq-gen-split">
+        {/* Left */}
+        <div className="aiq-card">
+          <h2 className="aiq-h2" style={{marginBottom:16}}>{lang==='fr'?'Paramètres':'Parameters'}</h2>
+          <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:14}}>
+            <span className="aiq-entity-badge">{window.AIQ.entities.find(e=>e.id===entity)?.icon} {window.AIQ.entities.find(e=>e.id===entity)?.[lang]}</span>
+            <span className="aiq-pill aiq-pill-indigo">{window.AIQ.topics.find(tp=>tp.id===topic)?.[lang]}</span>
+            <span className="aiq-pill aiq-pill-blue">🇨🇭 CH · 🇸🇬 SG</span>
+          </div>
+          <div className="aiq-field">
+            <label>{lang==='fr'?'Type d\'entité':'Entity type'}</label>
+            <select className="aiq-select" value={entity} onChange={e=>setEntity(e.target.value)}>
+              {window.AIQ.entities.map(en=><option key={en.id} value={en.id}>{en.icon} {en[lang]}</option>)}
+            </select>
+          </div>
+          <div className="aiq-field">
+            <label>{t('audit_subject')}</label>
+            <select className="aiq-select" value={topic} onChange={e=>setTopic(e.target.value)}>
+              {window.AIQ.topics.map(tp=><option key={tp.id} value={tp.id}>{tp[lang]}</option>)}
+            </select>
+          </div>
+
+          {/* Typical findings panel */}
+          <div style={{marginBottom:14}}>
+            <button onClick={()=>toggleSec('typical')} style={{width:'100%',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 12px',background:'rgba(167,139,250,.08)',border:'1px solid rgba(167,139,250,.25)',borderRadius:8,cursor:'pointer',color:'#c4b5fd',fontSize:12,fontWeight:600}}>
+              <span>★ {lang==='fr'?'Constats typiques — Banque privée':'Typical findings — Private banking'}</span>
+              <span>{openSec['typical']?'▲':'▼'}</span>
+            </button>
+            {openSec['typical'] && (
+              <div style={{padding:'10px 12px',background:'rgba(167,139,250,.05)',border:'1px solid rgba(167,139,250,.2)',borderTop:0,borderRadius:'0 0 8px 8px'}}>
+                {findings.map((f,i)=>(
+                  <div key={i} style={{display:'flex',gap:8,alignItems:'center',padding:'6px 0',borderBottom:i<findings.length-1?'1px solid var(--aiq-border)':0}}>
+                    <span className={`aiq-pill aiq-pill-${sevCls(f.sev)}`} style={{fontSize:9,minWidth:52}}>{f.sev}</span>
+                    <span style={{fontSize:12,color:'var(--aiq-text-2)'}}>{f[`title_${lang}`]}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="aiq-field">
+            <label>{lang==='fr'?'Observations & constats':'Observations & findings'}</label>
+            <textarea className="aiq-textarea" style={{minHeight:120}} placeholder={lang==='fr'?'Saisir les observations de l\'audit…':'Enter audit observations…'} value={observations} onChange={e=>setObservations(e.target.value)} />
+          </div>
+          <button className="aiq-btn aiq-btn-primary aiq-btn-lg" style={{width:'100%'}}
+                  disabled={gen.busy} onClick={()=>gen.run(()=>setShowRevision(false))}>
+            {gen.busy ? <React.Fragment><span className="aiq-spinner" style={{width:16,height:16,borderWidth:2}}/> {lang==='fr'?'Génération…':'Generating…'}</React.Fragment>
+                      : <React.Fragment>📊 {lang==='fr'?'Générer le rapport':'Generate report'}</React.Fragment>}
+          </button>
+          {gen.done && (
+            <div style={{display:'flex',gap:8,marginTop:10,flexWrap:'wrap'}}>
+              <button className="aiq-btn aiq-btn-ghost aiq-btn-sm" style={{flex:1}}>📄 Word</button>
+              <button className="aiq-btn aiq-btn-ghost aiq-btn-sm" style={{flex:1}}>📈 Excel</button>
+              <button className="aiq-btn aiq-btn-ghost aiq-btn-sm" style={{flex:1}}>📊 PPT</button>
+            </div>
+          )}
+          {gen.done && (
+            <div style={{marginTop:12}}>
+              <button className="aiq-btn aiq-btn-ghost" style={{width:'100%',fontSize:12}} onClick={()=>setShowRevision(p=>!p)}>
+                ✏️ {lang==='fr'?'Réviser le rapport':'Revise report'}
+              </button>
+              {showRevision && (
+                <div style={{marginTop:10}}>
+                  <textarea className="aiq-textarea" placeholder={lang==='fr'?'Demandes de révision…':'Revision requests…'} value={revision} onChange={e=>setRevision(e.target.value)} />
+                  <button className="aiq-btn aiq-btn-primary" style={{width:'100%',marginTop:8}} onClick={()=>gen.run()}>
+                    {lang==='fr'?'Régénérer':'Re-generate'}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Right */}
+        <div className="aiq-card aiq-output-card">
+          <div className="aiq-tab-bar" style={{marginBottom:16,flexWrap:'wrap'}}>
+            {reportTabs.map(tb=>(
+              <button key={tb.id} className="aiq-tab" data-active={tab===tb.id} onClick={()=>setTab(tb.id)} style={{fontSize:11}}>{tb[lang]}</button>
+            ))}
+          </div>
+
+          {/* S1 — Executive Summary */}
+          {tab==='s1' && (
+            <div>
+              <div style={{display:'flex',gap:12,alignItems:'center',marginBottom:20,flexWrap:'wrap'}}>
+                <span className="aiq-pill aiq-pill-yellow" style={{fontSize:13,padding:'6px 16px'}}>
+                  ⚠ {lang==='fr'?'Améliorations nécessaires':'Needs Improvement'}
+                </span>
+                <span style={{fontSize:12,color:'var(--aiq-muted)'}}>
+                  {lang==='fr'?'Période : Jan–Avr 2026':'Period: Jan–Apr 2026'} · AUD-2026-014
+                </span>
+              </div>
+              <div className="aiq-stat-row" style={{marginBottom:20}}>
+                {[
+                  {l:lang==='fr'?'Total constats':'Total findings', v:findings.length, cls:''},
+                  {l:lang==='fr'?'Critiques':'Critical', v:findings.filter(f=>f.sev==='critical').length, cls:'red'},
+                  {l:lang==='fr'?'Élevés':'High', v:findings.filter(f=>f.sev==='high').length, cls:'orange'},
+                  {l:lang==='fr'?'Moyens':'Medium', v:findings.filter(f=>f.sev==='medium').length, cls:'yellow'},
+                ].map(item=>(
+                  <div key={item.l} className="aiq-stat" style={{padding:'14px 16px'}}>
+                    <div className="lbl">{item.l}</div>
+                    <div className="val" style={{fontSize:28,color:item.cls?`var(--jra-${item.cls})`:'var(--aiq-text)'}}>{item.v}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{padding:16,background:'rgba(255,255,255,.02)',border:'1px solid var(--aiq-border)',borderRadius:10,fontSize:13,color:'var(--aiq-text-2)',lineHeight:1.7}}>
+                {lang==='fr'
+                  ? `L'audit AML/KYC réalisé sur la période janvier–avril 2026 a permis d'identifier ${findings.length} constats dont ${findings.filter(f=>f.sev==='critical').length} de niveau critique nécessitant une action immédiate. Les principales faiblesses concernent la mise à jour des données KYC pour les clients PEP et la formalisation des procédures d'escalade SAR.`
+                  : `The AML/KYC audit conducted for the period January–April 2026 identified ${findings.length} findings including ${findings.filter(f=>f.sev==='critical').length} critical items requiring immediate action. Key weaknesses relate to KYC data updates for PEP clients and formalisation of SAR escalation procedures.`}
+              </div>
+            </div>
+          )}
+
+          {/* S2 — Summary of Findings */}
+          {tab==='s2' && (
+            <div className="aiq-card" style={{padding:0,overflowX:'auto'}}>
+              <table className="aiq-table">
+                <thead><tr>
+                  <th>ID</th><th>{lang==='fr'?'Constat':'Finding'}</th>
+                  <th>{lang==='fr'?'Catégorie':'Category'}</th>
+                  <th>{lang==='fr'?'Sévérité':'Severity'}</th>
+                  <th>{lang==='fr'?'Statut':'Status'}</th>
+                  <th>{lang==='fr'?'Responsable':'Owner'}</th>
+                </tr></thead>
+                <tbody>
+                  {recommendations.map(f=>(
+                    <tr key={f.id}>
+                      <td><span className="id">{f.id}</span></td>
+                      <td style={{color:'var(--aiq-text)',maxWidth:280,fontSize:12.5}}>{f[`title_${lang}`]}</td>
+                      <td><span className="aiq-pill aiq-pill-indigo" style={{fontSize:10}}>AML/KYC</span></td>
+                      <td><span className={`aiq-pill aiq-pill-${sevCls(f.sev)}`}>{f.sev}</span></td>
+                      <td><span className="aiq-pill aiq-pill-orange" style={{fontSize:10}}>{lang==='fr'?'Ouvert':'Open'}</span></td>
+                      <td style={{fontSize:12,color:'var(--aiq-muted)'}}>{f.owner}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* S3 — Detailed Recommendations */}
+          {tab==='s3' && (
+            <div style={{display:'flex',flexDirection:'column',gap:12}}>
+              {recommendations.map(f=>(
+                <div key={f.id} className="aiq-card aiq-card-tight">
+                  <div style={{display:'flex',gap:8,alignItems:'center',marginBottom:10,flexWrap:'wrap'}}>
+                    <span className="id">{f.id}</span>
+                    <span style={{fontWeight:700,color:'var(--aiq-text)',fontSize:13,flex:1}}>{f[`title_${lang}`]}</span>
+                    <span className={`aiq-pill aiq-pill-${sevCls(f.sev)}`}>{f.sev}</span>
+                  </div>
+                  <p style={{fontSize:12.5,color:'var(--aiq-muted)',margin:'0 0 10px',lineHeight:1.5}}>{f[`desc_${lang}`]}</p>
+                  <div style={{padding:'10px 12px',background:'rgba(99,102,241,.08)',border:'1px solid rgba(99,102,241,.2)',borderRadius:8,fontSize:12.5,color:'var(--aiq-text-2)',lineHeight:1.5,marginBottom:10}}>
+                    💡 {f[`rec_${lang}`]}
+                  </div>
+                  <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                    {f.jur.map(jid=>{const jr=window.AIQ.jurisdictions.find(x=>x.id===jid);return <span key={jid} style={{fontSize:15}}>{jr.flag}</span>;})}
+                    <span className="aiq-pill aiq-pill-blue" style={{fontSize:10}}>⏱ {f[`timeline_${lang}`]}</span>
+                    <span className="aiq-pill aiq-pill-gray" style={{fontSize:10}}>👤 {f.owner}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* S4 — Action Plan */}
+          {tab==='s4' && (
+            <div className="aiq-card" style={{padding:0,overflowX:'auto'}}>
+              <table className="aiq-table">
+                <thead><tr>
+                  <th>ID</th><th>{lang==='fr'?'Action':'Action'}</th>
+                  <th>{lang==='fr'?'Responsable':'Owner'}</th>
+                  <th>{lang==='fr'?'Échéance':'Due date'}</th>
+                  <th>{lang==='fr'?'Priorité':'Priority'}</th>
+                  <th>{lang==='fr'?'Statut':'Status'}</th>
+                </tr></thead>
+                <tbody>
+                  {recommendations.map((f,i)=>(
+                    <tr key={f.id}>
+                      <td><span className="id">{f.id}</span></td>
+                      <td style={{fontSize:12,color:'var(--aiq-text)',maxWidth:260}}>{f[`rec_${lang}`].substring(0,80)}…</td>
+                      <td style={{fontSize:12,color:'var(--aiq-muted)'}}>{f.owner}</td>
+                      <td style={{fontSize:11,color:'var(--aiq-muted)',whiteSpace:'nowrap'}}>
+                        {i===0?'2026-06-30':i===1?'2026-07-31':i===2?'2026-08-31':'2026-09-30'}
+                      </td>
+                      <td><span className={`aiq-pill aiq-pill-${sevCls(f.sev)}`}>{f.sev}</span></td>
+                      <td><span className="aiq-pill aiq-pill-orange" style={{fontSize:10}}>{lang==='fr'?'À lancer':'To start'}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* SA — IIA Standards */}
+          {tab==='sa' && (
+            <div>
+              <div style={{marginBottom:12}}>
+                <input className="aiq-input" placeholder={lang==='fr'?'Rechercher norme…':'Search standard…'} value={iiaSearch} onChange={e=>setIiaSearch(e.target.value)} />
+              </div>
+              <div className="aiq-card" style={{padding:0,overflowX:'auto'}}>
+                <table className="aiq-table">
+                  <thead><tr>
+                    <th>ID</th><th>Titre</th>
+                    <th>{lang==='fr'?'Périmètre':'Scope'}</th>
+                    <th>{lang==='fr'?'Application':'Applicability'}</th>
+                  </tr></thead>
+                  <tbody>
+                    {iiaStds.map(s=>(
+                      <tr key={s.id}>
+                        <td><span style={{fontFamily:'ui-monospace,Menlo,monospace',fontSize:11,color:'var(--aiq-accent-2)',fontWeight:700}}>{s.id}</span></td>
+                        <td style={{color:'var(--aiq-text)',fontWeight:500,fontSize:12.5}}>{s[`title_${lang}`]}</td>
+                        <td style={{fontSize:11.5,color:'var(--aiq-muted)',maxWidth:200}}>{s[`scope_${lang}`]}</td>
+                        <td style={{fontSize:11,color:'var(--aiq-faint)'}}>{s[`applicability_${lang}`]}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* SB — Regulatory Reference */}
+          {tab==='sb' && (
+            <div>
+              <div style={{marginBottom:12}}>
+                <input className="aiq-input" placeholder={lang==='fr'?'Rechercher réglementation…':'Search regulation…'} value={refSearch} onChange={e=>setRefSearch(e.target.value)} />
+              </div>
+              {window.AIQ.jurisdictions.map(jur=>{
+                const jRegs = refRegs.filter(r=>r.jur===jur.id);
+                if (!jRegs.length) return null;
+                return (
+                  <div key={jur.id} style={{marginBottom:16}}>
+                    <div style={{fontSize:13,fontWeight:700,color:'var(--aiq-text)',marginBottom:8}}>{jur.flag} {jur[lang]} · <span style={{color:'var(--aiq-faint)',fontWeight:400,fontSize:11}}>{jur.regulator}</span></div>
+                    <div className="aiq-card" style={{padding:0}}>
+                      <table className="aiq-table">
+                        <thead><tr><th>Référence</th><th>Titre</th><th>{lang==='fr'?'Sévérité':'Severity'}</th></tr></thead>
+                        <tbody>
+                          {jRegs.map((r,i)=>(
+                            <tr key={i}>
+                              <td><span style={{fontFamily:'ui-monospace,Menlo,monospace',fontSize:11,color:'var(--aiq-accent-2)'}}>{r.code}</span></td>
+                              <td style={{fontSize:12.5,color:'var(--aiq-text-2)'}}>{r[lang]}</td>
+                              <td><span className={`aiq-pill aiq-pill-${r.severity==='critical'?'red':r.severity==='high'?'orange':'yellow'}`} style={{fontSize:9}}>{r.severity}</span></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="aiq-footer">{t('footer')}</div>
+    </div>
+  );
+};
+
+Object.assign(window, {
+  AIQ_IntelligenceSection: IntelligenceSection,
+  AIQ_RiskScreen: RiskScreen,
+  AIQ_PlanScreen: PlanScreen,
+  AIQ_ReportScreen: ReportScreen,
+});
+</script>
   <script type="text/babel" data-presets="react">// app.jsx — AuditIQ root: sign-in cover → app shell with routing.
 const { useState: useStateApp, useEffect: useEffectApp } = React;
 
@@ -3169,6 +4354,9 @@ function AuditIQApp() {
     switch (route) {
       case 'dashboard': return <window.AIQ_DashboardScreen lang={lang} setRoute={setRoute} />;
       case 'audits':    return <window.AIQ_AuditsScreen lang={lang} setRoute={setRoute} />;
+      case 'risk':      return <window.AIQ_RiskScreen lang={lang} />;
+      case 'plan':      return <window.AIQ_PlanScreen lang={lang} />;
+      case 'report':    return <window.AIQ_ReportScreen lang={lang} />;
       case 'agent1':
       case 'agent2':
       case 'agent3':    return <window.AIQ_AgentScreen lang={lang} agentId={route} setRoute={setRoute} />;
