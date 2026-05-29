@@ -1,3 +1,51 @@
+# Julien Ramiarason
+
+**Internal Auditor · Builder · Geneva, Switzerland**
+
+> Automating audit workflows and building AI-powered tools — one project at a time.
+
+---
+
+## Projects
+
+| Project | Description | Stack | Status |
+|---|---|---|---|
+| [AuditIQ](https://audit-jra.streamlit.app) | AI-powered internal audit app — findings management, closing documents, workflow automation | `Streamlit` `Python` `Anthropic API` | 🟢 Live |
+| KidQuest Academy | Gamified learning app for 6-year-olds covering English, Geography, and Maths | `Streamlit` `Python` `Anthropic API` | 🟡 In progress |
+| CoachIQ | Sports coaching assistant app | `Streamlit` `Python` | 🟡 In progress |
+| CCT CPRC | Excel compliance checker for Swiss collective labor agreements | `Python` `openpyxl` | ✅ Delivered |
+
+---
+
+## Tech Stack
+
+`Python` · `Streamlit` · `Anthropic Claude API` · `SQLite` · `openpyxl` · `GitHub`
+
+---
+
+## About
+
+Internal auditor by day, builder by night.
+Focused on audit automation, AI-powered workflows, and tools that make compliance work less painful.
+Based in Geneva, working across Swiss financial services.
+
+---
+
+## Contact
+
+📍 Geneva, Switzerland
+
+---
+
+> All projects use anonymized or synthetic data. No confidential bank data is stored or shared.
+
+
+
+
+
+
+
+
 # 🎓 KidQuest Academy
 
 An interactive bilingual (FR/EN) edutainment platform for children aged 4–7, built with Streamlit.
