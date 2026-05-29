@@ -55,6 +55,9 @@ _SS_DEFAULTS = {
     "t3_docs_analysis": None,
     "t3_observations": [],
     "t4_recommendations": None,
+    "t2_test_statuses": {},
+    "t0_prior_recs": [],
+    "t4_exec_summary": None,
     # Auth
     "signed_in": False,
     # Help
@@ -4475,6 +4478,69 @@ if _active == 0:
         st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
+    with st.expander("🔄 Prior Recommendations Follow-up (N-1)", expanded=False):
+        st.markdown(
+            '<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">'
+            'Paste prior-cycle recommendations from Teammate+ to track implementation status. '
+            'Open items feed into the risk profile of the current audit.</div>',
+            unsafe_allow_html=True,
+        )
+        _prior_recs = list(st.session_state.get("t0_prior_recs") or [])
+        _raw_input = st.text_area(
+            "Paste prior recommendations (one per line)",
+            placeholder="e.g.\n1. Strengthen AML transaction monitoring thresholds — Owner: CCO — Due: 2025-06-30\n2. Update KYC refresh policy…",
+            height=100,
+            key="t0_prior_input",
+            label_visibility="collapsed",
+        )
+        if st.button("Import recommendations", key="t0_import_recs"):
+            if _raw_input.strip():
+                _lines = [l.strip() for l in _raw_input.strip().splitlines() if l.strip()]
+                _new_recs = []
+                for _idx, _line in enumerate(_lines):
+                    _new_recs.append({
+                        "id": str(_idx),
+                        "text": _line.lstrip("0123456789.-) "),
+                        "status": "Open",
+                        "note": "",
+                    })
+                st.session_state["t0_prior_recs"] = _new_recs
+                st.rerun()
+        if _prior_recs:
+            _STATUS_FOLLOW = ["Open", "Implemented", "Partially implemented", "Not implemented", "N/A"]
+            _f_cnt = {s: sum(1 for r in _prior_recs if r.get("status") == s) for s in _STATUS_FOLLOW}
+            _open_n = _f_cnt.get("Open", 0) + _f_cnt.get("Not implemented", 0) + _f_cnt.get("Partially implemented", 0)
+            if _open_n:
+                st.warning(f"⚠ {_open_n} open item(s) — consider including in current audit scope.")
+            _pr_updated = False
+            for _ri, _rec in enumerate(_prior_recs):
+                _fcol1, _fcol2, _fcol3 = st.columns([4, 2, 3])
+                _fcol1.markdown(
+                    f'<div style="font-size:12.5px;color:var(--text-secondary);padding-top:6px">{_rec.get("text","")}</div>',
+                    unsafe_allow_html=True,
+                )
+                _new_fs = _fcol2.selectbox(
+                    "Status", _STATUS_FOLLOW,
+                    index=_STATUS_FOLLOW.index(_rec.get("status", "Open")) if _rec.get("status", "Open") in _STATUS_FOLLOW else 0,
+                    key=f"t0_fs_{_ri}",
+                    label_visibility="collapsed",
+                )
+                _new_fn = _fcol3.text_input(
+                    "Note", value=_rec.get("note", ""),
+                    placeholder="Evidence or comment…",
+                    key=f"t0_fn_{_ri}",
+                    label_visibility="collapsed",
+                )
+                if _new_fs != _rec.get("status") or _new_fn != _rec.get("note", ""):
+                    _prior_recs[_ri]["status"] = _new_fs
+                    _prior_recs[_ri]["note"] = _new_fn
+                    _pr_updated = True
+            if _pr_updated:
+                st.session_state["t0_prior_recs"] = _prior_recs
+            if st.button("Clear all", key="t0_clear_recs"):
+                st.session_state["t0_prior_recs"] = []
+                st.rerun()
+
     # Public Audit Recommendations (populated from Risk Analysis live run)
     with st.expander("📋 Public Audit Recommendations", expanded=False):
         _dash_pub = st.session_state.get("t1_pub_recs") or []
@@ -5371,6 +5437,77 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
 
 
 
+    # ── Test Execution Tracker ────────────────────────────────────────────────
+    if st.session_state.get("t2_tests") or st.session_state.get("t2_org_plan"):
+        with st.expander("📋 Test Execution Tracker", expanded=False):
+            st.markdown(
+                '<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">'
+                'Track test progress locally — export to Teammate+ when complete.</div>',
+                unsafe_allow_html=True,
+            )
+            _tr_statuses = dict(st.session_state.get("t2_test_statuses") or {})
+            _tr_tests = list(st.session_state.get("t2_tests") or [])
+            _STATUS_OPTS = ["—", "In Progress", "Completed", "Exception", "N/A"]
+            _STATUS_COLOR = {"Completed": "#22d3a5", "Exception": "#ef4444", "In Progress": "#f97316", "N/A": "#5a6488", "—": "#3d4a6b"}
+            if not _tr_tests:
+                st.caption("Generate an Audit Plan (live mode) to populate tests here.")
+            else:
+                _tr_cnt = {s: sum(1 for v in _tr_statuses.values() if v.get("status") == s) for s in _STATUS_OPTS[1:]}
+                _tr_total = len(_tr_tests)
+                _tr_done = _tr_cnt.get("Completed", 0) + _tr_cnt.get("N/A", 0)
+                _tr_pills = "".join(
+                    f'<span style="background:{_STATUS_COLOR[s]}22;color:{_STATUS_COLOR[s]};border:1px solid {_STATUS_COLOR[s]}44;'
+                    f'border-radius:20px;padding:2px 10px;font-size:11px;font-weight:600;margin-right:6px">'
+                    f'{s}: {_tr_cnt.get(s, 0)}</span>'
+                    for s in _STATUS_OPTS[1:]
+                )
+                st.markdown(
+                    f'<div style="margin-bottom:14px">{_tr_pills}'
+                    f'<span style="font-size:11px;color:var(--text-muted);margin-left:8px">{_tr_done}/{_tr_total} complete</span></div>',
+                    unsafe_allow_html=True,
+                )
+                _tr_changed = False
+                for _t in _tr_tests:
+                    _tid = _t.get("test_id") or _t.get("id") or str(_tr_tests.index(_t))
+                    _cur_st = _tr_statuses.get(_tid, {}).get("status", "—")
+                    _cur_nt = _tr_statuses.get(_tid, {}).get("note", "")
+                    with st.expander(
+                        f'{_t.get("test_id", "?")} — {_t.get("title", "Test")}',
+                        expanded=(_cur_st == "Exception"),
+                    ):
+                        _ec1, _ec2 = st.columns([2, 4])
+                        _new_st = _ec1.selectbox(
+                            "Status", _STATUS_OPTS,
+                            index=_STATUS_OPTS.index(_cur_st) if _cur_st in _STATUS_OPTS else 0,
+                            key=f"t2_ts_sel_{_tid}",
+                            label_visibility="collapsed",
+                        )
+                        _new_nt = _ec2.text_input(
+                            "Note / exception detail",
+                            value=_cur_nt,
+                            placeholder="Brief note or exception detail…",
+                            key=f"t2_ts_note_{_tid}",
+                            label_visibility="collapsed",
+                        )
+                        if _new_st != _cur_st or _new_nt != _cur_nt:
+                            _tr_statuses[_tid] = {"status": _new_st, "note": _new_nt}
+                            _tr_changed = True
+                if _tr_changed:
+                    st.session_state["t2_test_statuses"] = _tr_statuses
+                if st.button("📤 Export tracker for Teammate+", key="t2_tracker_export"):
+                    _tr_lines = ["Test ID\tTitle\tStatus\tNote"]
+                    for _t in _tr_tests:
+                        _tid = _t.get("test_id") or str(_tr_tests.index(_t))
+                        _sv = _tr_statuses.get(_tid, {})
+                        _tr_lines.append(f'{_tid}\t{_t.get("title", "")}\t{_sv.get("status", "—")}\t{_sv.get("note", "")}')
+                    st.download_button(
+                        "↓ Download tracker (.tsv)",
+                        data="\n".join(_tr_lines).encode("utf-8"),
+                        file_name=f"Test_Tracker_{st.session_state.get('t1_topic', 'audit').replace(' ', '_')}.tsv",
+                        mime="text/tab-separated-values",
+                        key="t2_tracker_dl",
+                    )
+
 # TAB 3 — DOCUMENT ANALYSER
 # ─────────────────────────────────────────────────────────────────────────────
 elif _active == 3:
@@ -5500,7 +5637,7 @@ elif _active == 4:
     )
     _t4_section = st.radio(
         "Section",
-        ["📋 Recommendations", "📄 Generate Report"],
+        ["📋 Recommendations", "📄 Generate Report", "📊 Executive Summary"],
         horizontal=True,
         label_visibility="collapsed",
         key="t4_section_select",
@@ -5977,6 +6114,109 @@ elif _active == 4:
                                 st.rerun()
                             except Exception:
                                 st.error("An error occurred. Please try again.")
+
+    elif _t4_section == "📊 Executive Summary":
+        st.markdown(
+            '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">'
+            '1-page summary for the Audit Committee — generated from all data collected in this session.</div>',
+            unsafe_allow_html=True,
+        )
+        _t4_topic   = st.session_state.get("t1_topic") or "—"
+        _t4_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
+        _t4_jurs    = ", ".join(st.session_state.get("t1_jurs") or []) or "—"
+        _t4_n_risks = len(st.session_state.get("t1_risks") or [])
+        _t4_n_tests = len(st.session_state.get("t2_tests") or [])
+        _t4_n_obs   = len(st.session_state.get("t3_observations") or [])
+        _t4_n_prior = sum(1 for r in (st.session_state.get("t0_prior_recs") or [])
+                          if r.get("status") in ("Open", "Not implemented", "Partially implemented"))
+        _t4_tstat   = dict(st.session_state.get("t2_test_statuses") or {})
+        _t4_exc     = [tid for tid, sv in _t4_tstat.items() if sv.get("status") == "Exception"]
+        _t4_done_n  = sum(1 for sv in _t4_tstat.values() if sv.get("status") in ("Completed", "N/A"))
+        _exc_col    = "#ef4444" if _t4_exc else "#22d3a5"
+        _prior_col  = "#f97316" if _t4_n_prior else "#22d3a5"
+        st.markdown(f"""
+        <div class="agent-card" style="margin-bottom:20px">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center">
+            <div><div style="font-size:22px;font-weight:800;color:var(--accent-primary)">{_t4_n_risks}</div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px">Risks identified</div></div>
+            <div><div style="font-size:22px;font-weight:800;color:var(--accent-primary)">{_t4_n_tests}</div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px">Tests planned</div></div>
+            <div><div style="font-size:22px;font-weight:800;color:{_exc_col}">{len(_t4_exc)}</div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px">Exceptions</div></div>
+            <div><div style="font-size:22px;font-weight:800;color:{_prior_col}">{_t4_n_prior}</div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px">Open N-1 items</div></div>
+          </div>
+        </div>""", unsafe_allow_html=True)
+        st.markdown('<div class="gen-btn-wrap"><div class="gen-btn">', unsafe_allow_html=True)
+        if st.button("✦ Generate Executive Summary", disabled=_disabled or _t4_topic == "—", key="t4_exec_run"):
+            with st.spinner("Generating executive summary…"):
+                try:
+                    c = _client()
+                    _exc_detail = ""
+                    if _t4_exc:
+                        _exc_tests = [t for t in (st.session_state.get("t2_tests") or [])
+                                      if (t.get("test_id") or "") in _t4_exc]
+                        _exc_detail = "\nExceptions noted on: " + ", ".join(t.get("title", "") for t in _exc_tests)
+                    _obs_summary = "\n".join(
+                        f"- [{o.get('risk_level', '')}] {o.get('observation', '')}"
+                        for o in (st.session_state.get("t3_observations") or [])
+                    )
+                    _prior_summary = "\n".join(
+                        f"- {r.get('text', '')} [{r.get('status', '')}]"
+                        for r in (st.session_state.get("t0_prior_recs") or [])
+                        if r.get("status") in ("Open", "Not implemented", "Partially implemented")
+                    )
+                    _recs_text = st.session_state.get("t4_recommendations") or ""
+                    exec_raw = _call(c,
+                        f"Audit topic: {_t4_topic}\nEntity: {_t4_entity}\nJurisdictions: {_t4_jurs}\n"
+                        f"Risks identified: {_t4_n_risks} | Tests planned: {_t4_n_tests} | "
+                        f"Tests with exceptions: {len(_t4_exc)} | Observations: {_t4_n_obs}"
+                        + (_exc_detail or "")
+                        + (f"\n\nKey observations:\n{_obs_summary}" if _obs_summary else "")
+                        + (f"\n\nOpen prior-cycle items:\n{_prior_summary}" if _prior_summary else "")
+                        + (f"\n\nDraft recommendations summary:\n{_recs_text[:800]}" if _recs_text else "")
+                        + "\n\nWrite a concise Audit Committee Executive Summary (max 1 page). Structure:\n"
+                        "1. OVERALL AUDIT OPINION (1 sentence: Satisfactory / Partially Satisfactory / Unsatisfactory + rationale)\n"
+                        "2. SCOPE & OBJECTIVES (2-3 sentences)\n"
+                        "3. KEY FINDINGS (bullet points, max 5, ranked by risk)\n"
+                        "4. EXCEPTIONS NOTED (if any)\n"
+                        "5. PRIOR CYCLE FOLLOW-UP STATUS (if applicable)\n"
+                        "6. OVERALL CONCLUSION & NEXT STEPS (2-3 sentences)\n\n"
+                        "Tone: formal, concise, suitable for a board-level audience. No jargon.",
+                        system="You are a Chief Audit Executive writing an executive summary for the Audit Committee.",
+                        max_tokens=2000,
+                    )
+                    st.session_state["t4_exec_summary"] = exec_raw
+                except Exception:
+                    st.error("Generation failed. Please try again.")
+        st.markdown('</div></div>', unsafe_allow_html=True)
+        _t4_exec = st.session_state.get("t4_exec_summary")
+        if _t4_exec:
+            st.markdown("---")
+            st.markdown(
+                f'<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:10px;'
+                f'padding:24px 28px;font-size:13px;color:var(--text-secondary);white-space:pre-wrap;line-height:1.9">{_t4_exec}</div>',
+                unsafe_allow_html=True,
+            )
+            _ex1, _ex2 = st.columns(2)
+            _ex1.download_button(
+                "docx ↓  Executive Summary",
+                data=_t4_exec.encode("utf-8"),
+                file_name=f"ExecSummary_{_t4_topic.replace(' ', '_')}.txt",
+                mime="text/plain",
+                key="t4_exec_dl_txt",
+            )
+            try:
+                _exec_pdf = _make_pdf(
+                    f"Audit Committee — Executive Summary\n{_t4_topic}",
+                    [("Executive Summary", _t4_exec)],
+                )
+                if _exec_pdf:
+                    _ex2.download_button(
+                        "pdf ↓  Executive Summary",
+                        data=_exec_pdf,
+                        file_name=f"ExecSummary_{_t4_topic.replace(' ', '_')}.pdf",
+                        mime="application/pdf",
+                        key="t4_exec_dl_pdf",
+                    )
+            except Exception:
+                pass
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("---")
