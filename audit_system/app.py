@@ -4468,6 +4468,49 @@ if _active == 0:
 
     st.markdown("<div style='margin-top:0.4rem'></div>", unsafe_allow_html=True)
 
+    # ── Session context stats ──────────────────────────────────────────────────
+    _ds_n_risks  = len(st.session_state.get("t1_risks") or [])
+    _ds_n_tests  = len(st.session_state.get("t2_tests") or [])
+    _ds_n_obs    = len(st.session_state.get("t3_observations") or [])
+    _ds_n_prior  = sum(1 for r in (st.session_state.get("t0_prior_recs") or [])
+                       if r.get("status") in ("Open", "Not implemented", "Partially implemented"))
+    _ds_topic    = st.session_state.get("t1_topic") or ""
+    _ds_jurs     = st.session_state.get("t1_jurs") or []
+    if any([_ds_n_risks, _ds_n_tests, _ds_n_obs, _ds_n_prior, _ds_topic]):
+        _sc1, _sc2, _sc3, _sc4 = st.columns(4, gap="small")
+        _stat_style = "background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;padding:16px 20px;text-align:center;box-shadow:var(--shadow-card)"
+        _sc1.markdown(
+            f'<div style="{_stat_style}"><div style="font-size:26px;font-weight:800;color:var(--accent-secondary);letter-spacing:-0.03em;line-height:1">{_ds_n_risks or "—"}</div>'
+            f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-top:6px">Risks</div></div>',
+            unsafe_allow_html=True,
+        )
+        _sc2.markdown(
+            f'<div style="{_stat_style}"><div style="font-size:26px;font-weight:800;color:var(--accent-secondary);letter-spacing:-0.03em;line-height:1">{_ds_n_tests or "—"}</div>'
+            f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-top:6px">Tests</div></div>',
+            unsafe_allow_html=True,
+        )
+        _sc3.markdown(
+            f'<div style="{_stat_style}"><div style="font-size:26px;font-weight:800;color:var(--accent-secondary);letter-spacing:-0.03em;line-height:1">{_ds_n_obs or "—"}</div>'
+            f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-top:6px">Observations</div></div>',
+            unsafe_allow_html=True,
+        )
+        _sc4.markdown(
+            f'<div style="{_stat_style}"><div style="font-size:26px;font-weight:800;color:{"#f97316" if _ds_n_prior else "var(--accent-secondary)"};letter-spacing:-0.03em;line-height:1">{_ds_n_prior or "—"}</div>'
+            f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-top:6px">Open N-1</div></div>',
+            unsafe_allow_html=True,
+        )
+        if _ds_topic:
+            _jur_chips = " ".join(f'<span style="background:rgba(99,102,241,0.1);color:#818cf8;border:1px solid rgba(99,102,241,0.2);border-radius:20px;padding:1px 8px;font-size:11px">{_JUR_FLAG.get(j,"")}{j.split("/")[0].strip()}</span>' for j in _ds_jurs)
+            st.markdown(
+                f'<div style="margin-top:10px;padding:8px 16px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
+                f'<span style="color:var(--text-secondary);font-weight:600">Current audit:</span>'
+                f'<span style="color:var(--text-primary)">{_ds_topic}</span>'
+                + (f'<span style="color:var(--text-muted)">·</span>{_jur_chips}' if _jur_chips else "")
+                + '</div>',
+                unsafe_allow_html=True,
+            )
+        st.markdown("<div style='margin-top:16px'></div>", unsafe_allow_html=True)
+
     refresh = False  # only set inside the live branch below
 
     if st.session_state.dash_source == "static":
@@ -4776,100 +4819,102 @@ elif _active == 1:
     _t1_in_results = _t1_mode == "live" and _t1_has_results and not _t1_show_form
 
     if not _t1_in_results:
-        # ── Agent Card ──────────────────────────────────────────────────────────
-        _t1_status_pill = '<span class="agent-status-pill agent-status-live">⚡ Live</span>' if _t1_mode == "live" else '<span class="agent-status-pill agent-status-ready">📚 Static</span>'
-        st.markdown(f"""
-        <div class="agent-card">
-          <div class="agent-badge-pill">AGENT 1</div>
-          <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Agent 1 — Risk Analysis</div>
-          <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:14px">Identifies key risks, applicable regulations, and public audit recommendations for your selected topic and jurisdictions.</div>
-          <div>{_t1_status_pill}</div>
-        </div>""", unsafe_allow_html=True)
+        _t1_form_col, _t1_ctx_col = st.columns([11, 9], gap="large")
 
-        # ── Quick Start Template ─────────────────────────────────────────────────
-        tpl_name = st.selectbox(
-            "Quick Start Template",
-            options=list(TEMPLATES.keys()),
-            key="t1_tpl_select",
-            help="Pre-fill topic, jurisdictions and scope with a predefined audit template.",
-            format_func=lambda x: x,
-        )
-        if tpl_name not in _TPL_SEPARATORS and tpl_name != st.session_state._tpl_name:
-            tpl = TEMPLATES[tpl_name]
-            _cur_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
-            _tpl_topic_key = (TOPIC_KEY_MAPPING.get(tpl_name) or [None])[0]
-            _entity_ctx  = ENTITY_CONTEXT.get(_cur_entity, {})
-            _entity_scope = (
-                _entity_ctx.get("topics", {}).get(_tpl_topic_key, {}).get("scope_suggestion", "")
-                if _tpl_topic_key else ""
+        with _t1_ctx_col:
+            # ── Agent Card ──────────────────────────────────────────────────────
+            _t1_entity_name = st.session_state.get("entity_type", "🏦 Private Banking")
+            _t1_status_pill = '<span class="agent-status-pill agent-status-live">⚡ Live</span>' if _t1_mode == "live" else '<span class="agent-status-pill agent-status-ready">📚 Static</span>'
+            st.markdown(f"""
+            <div class="agent-card">
+              <div class="agent-badge-pill">AGENT 1</div>
+              <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Agent 1 — Risk Analysis</div>
+              <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:14px">Identifies key risks, applicable regulations, and public audit recommendations for your selected topic and jurisdictions.</div>
+              <div>{_t1_status_pill}</div>
+            </div>""", unsafe_allow_html=True)
+
+            # Entity context hint
+            _t1_entity   = st.session_state.get("entity_type", "🏦 Private Banking")
+            _t1_ent_ctx  = ENTITY_CONTEXT.get(_t1_entity, {})
+            _t1_reg_focus = _t1_ent_ctx.get("regulatory_focus", [])
+            if _t1_reg_focus:
+                _bg, _col = _ENTITY_COLORS.get(_t1_entity, ("#0a2540", "#818cf8"))
+                st.markdown(
+                    f'<div style="background:{_bg};border-left:3px solid {_col};border-radius:0 6px 6px 0;'
+                    f'padding:8px 12px;margin-bottom:12px;font-size:12px;color:#c8d0e8">'
+                    f'<span style="font-weight:700;color:{_col}">Regulatory focus:</span> '
+                    f'{" &middot; ".join(_t1_reg_focus[:5])}</div>',
+                    unsafe_allow_html=True,
+                )
+
+        with _t1_form_col:
+            # ── Quick Start Template ─────────────────────────────────────────────
+            tpl_name = st.selectbox(
+                "Quick Start Template",
+                options=list(TEMPLATES.keys()),
+                key="t1_tpl_select",
+                help="Pre-fill topic, jurisdictions and scope with a predefined audit template.",
+                format_func=lambda x: x,
             )
-            st.session_state["t1_topic_in"] = tpl.get("topic", "")
-            st.session_state["t1_jurs_pills"] = tpl.get("jurisdictions", JURISDICTIONS[:4])
-            st.session_state._tpl_name = tpl_name
-            st.session_state._tpl_scope = _entity_scope or tpl.get("scope", "")
-            st.rerun()
+            if tpl_name not in _TPL_SEPARATORS and tpl_name != st.session_state._tpl_name:
+                tpl = TEMPLATES[tpl_name]
+                _cur_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
+                _tpl_topic_key = (TOPIC_KEY_MAPPING.get(tpl_name) or [None])[0]
+                _entity_ctx  = ENTITY_CONTEXT.get(_cur_entity, {})
+                _entity_scope = (
+                    _entity_ctx.get("topics", {}).get(_tpl_topic_key, {}).get("scope_suggestion", "")
+                    if _tpl_topic_key else ""
+                )
+                st.session_state["t1_topic_in"] = tpl.get("topic", "")
+                st.session_state["t1_jurs_pills"] = tpl.get("jurisdictions", JURISDICTIONS[:4])
+                st.session_state._tpl_name = tpl_name
+                st.session_state._tpl_scope = _entity_scope or tpl.get("scope", "")
+                st.rerun()
 
-        _tpl_scope_default = st.session_state.get("_tpl_scope", "")
+            _tpl_scope_default = st.session_state.get("_tpl_scope", "")
 
-        audit_topic = st.text_input(
-            "Audit Topic",
-            placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity, Operational Risk…",
-            key="t1_topic_in",
-            help="Enter the main audit topic or domain to analyze (e.g. 'AML/KYC', 'Cyber Risk'). Must be at least 3 characters.",
-        )
-        # Propagate typed topic to Tab 2 pre-fill
-        st.session_state["topic_tab1"] = audit_topic or ""
-
-        # ── Jurisdiction pills ───────────────────────────────────────────────────
-        st.markdown('<div class="param-label">Jurisdictions</div>', unsafe_allow_html=True)
-        _jurs_selected = st.session_state.get("t1_jurs_pills") or JURISDICTIONS[:4]
-        if not isinstance(_jurs_selected, list):
-            _jurs_selected = list(_jurs_selected)
-        _jur_rows = [JURISDICTIONS[:3], JURISDICTIONS[3:]]
-        for _row_idx, _row_jurs in enumerate(_jur_rows):
-            _jur_cols = st.columns(3)
-            for _ji, _jur in enumerate(_row_jurs):
-                _global_ji = _row_idx * 3 + _ji
-                _flag = _JUR_FLAG.get(_jur, "🌐")
-                _is_sel = _jur in _jurs_selected
-                with _jur_cols[_ji]:
-                    if st.button(
-                        f"{_flag} {_jur.split('/')[0].strip()}",
-                        key=f"t1_jur_{_global_ji}",
-                        help=_jur,
-                    ):
-                        if _is_sel and len(_jurs_selected) > 1:
-                            _jurs_selected = [j for j in _jurs_selected if j != _jur]
-                        elif not _is_sel:
-                            _jurs_selected = _jurs_selected + [_jur]
-                        st.session_state["t1_jurs_pills"] = _jurs_selected
-                        st.rerun()
-        jurisdictions = _jurs_selected
-
-        st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
-
-        # Entity context hint
-        _t1_entity   = st.session_state.get("entity_type", "🏦 Private Banking")
-        _t1_ent_ctx  = ENTITY_CONTEXT.get(_t1_entity, {})
-        _t1_reg_focus = _t1_ent_ctx.get("regulatory_focus", [])
-        if _t1_reg_focus:
-            _bg, _col = _ENTITY_COLORS.get(_t1_entity, ("#0a2540", "#818cf8"))
-            st.markdown(
-                f'<div style="background:{_bg};border-left:3px solid {_col};border-radius:0 6px 6px 0;'
-                f'padding:8px 12px;margin-bottom:12px;font-size:12px;color:#c8d0e8">'
-                f'<span style="font-weight:700;color:{_col}">{_t1_entity} &mdash; regulatory focus:</span> '
-                f'{" &middot; ".join(_t1_reg_focus[:5])}</div>',
-                unsafe_allow_html=True,
+            audit_topic = st.text_input(
+                "Audit Topic",
+                placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity, Operational Risk…",
+                key="t1_topic_in",
+                help="Enter the main audit topic or domain to analyze. Must be at least 3 characters.",
             )
+            st.session_state["topic_tab1"] = audit_topic or ""
 
-        # Input validation
-        _t1_valid = True
-        if audit_topic and len(audit_topic.strip()) < 3:
-            st.warning("⚠ Audit topic must be at least 3 characters.")
-            _t1_valid = False
-        if not jurisdictions:
-            st.warning("⚠ Please select at least one jurisdiction.")
-            _t1_valid = False
+            # ── Jurisdiction pills ───────────────────────────────────────────────
+            st.markdown('<div class="param-label">Jurisdictions</div>', unsafe_allow_html=True)
+            _jurs_selected = st.session_state.get("t1_jurs_pills") or JURISDICTIONS[:4]
+            if not isinstance(_jurs_selected, list):
+                _jurs_selected = list(_jurs_selected)
+            _jur_rows = [JURISDICTIONS[:3], JURISDICTIONS[3:]]
+            for _row_idx, _row_jurs in enumerate(_jur_rows):
+                _jur_cols = st.columns(3)
+                for _ji, _jur in enumerate(_row_jurs):
+                    _global_ji = _row_idx * 3 + _ji
+                    _flag = _JUR_FLAG.get(_jur, "🌐")
+                    _is_sel = _jur in _jurs_selected
+                    with _jur_cols[_ji]:
+                        if st.button(
+                            f"{_flag} {_jur.split('/')[0].strip()}",
+                            key=f"t1_jur_{_global_ji}",
+                            help=_jur,
+                        ):
+                            if _is_sel and len(_jurs_selected) > 1:
+                                _jurs_selected = [j for j in _jurs_selected if j != _jur]
+                            elif not _is_sel:
+                                _jurs_selected = _jurs_selected + [_jur]
+                            st.session_state["t1_jurs_pills"] = _jurs_selected
+                            st.rerun()
+            jurisdictions = _jurs_selected
+
+            # Input validation
+            _t1_valid = True
+            if audit_topic and len(audit_topic.strip()) < 3:
+                st.warning("⚠ Audit topic must be at least 3 characters.")
+                _t1_valid = False
+            if not jurisdictions:
+                st.warning("⚠ Please select at least one jurisdiction.")
+                _t1_valid = False
 
         if _t1_mode == "live":
             st.markdown('<div class="gen-btn-wrap">', unsafe_allow_html=True)
@@ -5228,92 +5273,96 @@ elif _active == 2:
     _t2_in_results = _t2_mode == "live" and _t2_has_results and not _t2_show_form
 
     if not _t2_in_results:
-        # ── Agent Card ──────────────────────────────────────────────────────────
-        _t2_status_pill = '<span class="agent-status-pill agent-status-live">⚡ Live</span>' if _t2_mode == "live" else '<span class="agent-status-pill agent-status-ready">📚 Static</span>'
-        st.markdown(f"""
-        <div class="agent-card">
-          <div class="agent-badge-pill">AGENT 2</div>
-          <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Agent 2 — Audit Plan</div>
-          <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:14px">Generates a structured audit plan with rationale, background, test programme and data analytics scenarios tailored to your scope.</div>
-          <div>{_t2_status_pill}</div>
-        </div>""", unsafe_allow_html=True)
+        _t2_form_col, _t2_ctx_col = st.columns([11, 9], gap="large")
 
-        if st.session_state.t1_topic:
-            st.markdown(f'<div class="ctx-pill">&#10003; Topic: {st.session_state.t1_topic}</div>', unsafe_allow_html=True)
+        with _t2_ctx_col:
+            # ── Agent Card ──────────────────────────────────────────────────────
+            st.markdown("""
+            <div class="agent-card">
+              <div class="agent-badge-pill">AGENT 2</div>
+              <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Agent 2 — Audit Plan</div>
+              <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:14px">Generates a structured audit programme with test procedures, data analytics scenarios, and rationale tailored to your entity and scope.</div>
+            </div>""", unsafe_allow_html=True)
 
-        # Pre-fill from Tab 1 if Tab 2 field is still empty
-        if not st.session_state.get("t2_topic_in"):
-            _prefill = st.session_state.get("topic_tab1") or st.session_state.get("t1_topic") or ""
-            if _prefill:
-                st.session_state["t2_topic_in"] = _prefill
+            # Entity context hint for Tab 2 (right col)
+            _t2_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
+            _t2_ent_ctx = ENTITY_CONTEXT.get(_t2_entity, {})
 
-        topic2 = st.text_input(
-            "Audit Topic",
-            placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity…",
-            key="t2_topic_in",
-        )
-        if st.session_state.get("topic_tab1"):
-            st.markdown(
-                '<p style="color:#5a6488;font-size:11px;margin:-8px 0 8px">ℹ️ Pre-filled from Risk Analysis. You can modify it freely.</p>',
-                unsafe_allow_html=True,
+        with _t2_form_col:
+            if st.session_state.t1_topic:
+                st.markdown(f'<div class="ctx-pill">&#10003; Topic: {st.session_state.t1_topic}</div>', unsafe_allow_html=True)
+
+            # Pre-fill from Tab 1 if Tab 2 field is still empty
+            if not st.session_state.get("t2_topic_in"):
+                _prefill = st.session_state.get("topic_tab1") or st.session_state.get("t1_topic") or ""
+                if _prefill:
+                    st.session_state["t2_topic_in"] = _prefill
+
+            topic2 = st.text_input(
+                "Audit Topic",
+                placeholder="e.g. AML/KYC, Credit Risk, Cybersecurity…",
+                key="t2_topic_in",
+            )
+            if st.session_state.get("topic_tab1"):
+                st.markdown(
+                    '<p style="color:#5a6488;font-size:11px;margin:-8px 0 8px">ℹ️ Pre-filled from Risk Analysis. You can modify it freely.</p>',
+                    unsafe_allow_html=True,
+                )
+
+            # Entity context hint (left col — needs topic2 to compute theme)
+            _t2_theme   = _topic_to_theme(topic2 or "") or _topic_to_theme(st.session_state.get("topic_tab1", "") or "")
+            _t2_topic_data = _t2_ent_ctx.get("topics", {}).get(_t2_theme or "", {}) if _t2_theme else {}
+            _t2_test_emphasis = _t2_topic_data.get("risk_emphasis", [])
+            if _t2_test_emphasis:
+                _bg2, _col2 = _ENTITY_COLORS.get(_t2_entity, ("#0a2540", "#818cf8"))
+                st.markdown(
+                    f'<div style="background:{_bg2};border-left:3px solid {_col2};border-radius:0 6px 6px 0;'
+                    f'padding:8px 12px;margin:4px 0 10px;font-size:12px;color:#c8d0e8">'
+                    f'<span style="font-weight:700;color:{_col2}">{_t2_entity} &mdash; key risk areas:</span> '
+                    f'{" &middot; ".join(_t2_test_emphasis)}</div>',
+                    unsafe_allow_html=True,
+                )
+
+            # Resolve scope: template > entity context > empty
+            _t2_scope_default = st.session_state.get("_tpl_scope", "")
+            if not _t2_scope_default and _t2_theme and _t2_topic_data:
+                _t2_scope_default = _t2_topic_data.get("scope_suggestion", "")
+            scope = st.text_area(
+                "Audit Scope",
+                value=_t2_scope_default,
+                placeholder="e.g. All group entities in CH, SG and HK. Focus on client onboarding and transaction monitoring.",
+                height=80,
+                key="t2_scope_in",
+                help="Define the perimeter of the audit: entities, geographies, processes, and systems in scope.",
             )
 
-        # Entity context hint for Tab 2
-        _t2_entity  = st.session_state.get("entity_type", "🏦 Private Banking")
-        _t2_ent_ctx = ENTITY_CONTEXT.get(_t2_entity, {})
-        _t2_theme   = _topic_to_theme(topic2 or "") or _topic_to_theme(st.session_state.get("topic_tab1", "") or "")
-        _t2_topic_data = _t2_ent_ctx.get("topics", {}).get(_t2_theme or "", {}) if _t2_theme else {}
-        _t2_test_emphasis = _t2_topic_data.get("risk_emphasis", [])
-        if _t2_test_emphasis:
-            _bg2, _col2 = _ENTITY_COLORS.get(_t2_entity, ("#0a2540", "#818cf8"))
-            st.markdown(
-                f'<div style="background:{_bg2};border-left:3px solid {_col2};border-radius:0 6px 6px 0;'
-                f'padding:8px 12px;margin:4px 0 10px;font-size:12px;color:#c8d0e8">'
-                f'<span style="font-weight:700;color:{_col2}">{_t2_entity} &mdash; key risk areas:</span> '
-                f'{" &middot; ".join(_t2_test_emphasis)}</div>',
-                unsafe_allow_html=True,
+            st.caption("📎 Supporting documents (optional — PDF, Word, Excel, TXT)")
+            uploads2 = st.file_uploader(
+                "Supporting documents", label_visibility="collapsed",
+                type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t2_upload",
             )
 
-        # Resolve scope: template > entity context > empty
-        _t2_scope_default = st.session_state.get("_tpl_scope", "")
-        if not _t2_scope_default and _t2_theme and _t2_topic_data:
-            _t2_scope_default = _t2_topic_data.get("scope_suggestion", "")
-        scope = st.text_area(
-            "Audit Scope",
-            value=_t2_scope_default,
-            placeholder="e.g. All group entities in CH, SG and HK. Focus on client onboarding and transaction monitoring.",
-            height=80,
-            key="t2_scope_in",
-            help="Define the perimeter of the audit: entities, geographies, processes, and systems in scope.",
-        )
+            st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
 
-        st.caption("📎 Supporting documents (optional — PDF, Word, Excel, TXT)")
-        uploads2 = st.file_uploader(
-            "Supporting documents", label_visibility="collapsed",
-            type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t2_upload",
-        )
+            # Input validation
+            _t2_valid = True
+            if topic2 and not scope.strip():
+                st.warning("⚠ Please define the audit scope before generating the plan.")
+                _t2_valid = False
 
-        st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
-
-        # Input validation
-        _t2_valid = True
-        if topic2 and not scope.strip():
-            st.warning("⚠ Please define the audit scope before generating the plan.")
-            _t2_valid = False
-
-        # IIA Topical Requirement banner
-        _t2_topic_upper = (topic2 or "").upper()
-        _t2_tr_match = None
-        if any(k in _t2_topic_upper for k in ("CYBER", "ICT", "INFORMATION SECURITY", "DORA", "RANSOMWARE")):
-            _t2_tr_match = next((s for s in IIA_STANDARDS_2024 if s["standard_id"] == "TR-2"), None)
-            _t2_tr_label = "🔒 TR-Cyber"
-        elif any(k in _t2_topic_upper for k in ("THIRD", "VENDOR", "OUTSOURC", "SUPPLY CHAIN")):
-            _t2_tr_match = next((s for s in IIA_STANDARDS_2024 if s["standard_id"] == "TR-5"), None)
-            _t2_tr_label = "🤝 TR-Third"
-        if _t2_tr_match:
-            _tr_src = _t2_tr_match.get("source_guide", "IIA User Guide 2025")
-            _tr_keys = "".join(f"<li style='margin-bottom:3px'>{k}</li>" for k in _t2_tr_match.get("key_requirements", []))
-            st.markdown(f"""
+            # IIA Topical Requirement banner
+            _t2_topic_upper = (topic2 or "").upper()
+            _t2_tr_match = None
+            if any(k in _t2_topic_upper for k in ("CYBER", "ICT", "INFORMATION SECURITY", "DORA", "RANSOMWARE")):
+                _t2_tr_match = next((s for s in IIA_STANDARDS_2024 if s["standard_id"] == "TR-2"), None)
+                _t2_tr_label = "🔒 TR-Cyber"
+            elif any(k in _t2_topic_upper for k in ("THIRD", "VENDOR", "OUTSOURC", "SUPPLY CHAIN")):
+                _t2_tr_match = next((s for s in IIA_STANDARDS_2024 if s["standard_id"] == "TR-5"), None)
+                _t2_tr_label = "🤝 TR-Third"
+            if _t2_tr_match:
+                _tr_src = _t2_tr_match.get("source_guide", "IIA User Guide 2025")
+                _tr_keys = "".join(f"<li style='margin-bottom:3px'>{k}</li>" for k in _t2_tr_match.get("key_requirements", []))
+                st.markdown(f"""
             <div style="background:rgba(234,179,8,0.07);border:1px solid rgba(234,179,8,0.35);border-left:4px solid #eab308;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px">
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
                 <span style="background:rgba(234,179,8,0.18);color:#eab308;border:1px solid rgba(234,179,8,0.45);border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">⚠️ IIA TOPICAL REQUIREMENT APPLICABLE</span>
