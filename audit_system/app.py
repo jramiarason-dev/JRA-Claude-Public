@@ -246,46 +246,42 @@ _is_dark = st.session_state.theme == "dark"
 if _is_dark:
     _theme_vars = """
     :root {
-      /* Backgrounds — aligned with AuditIQ redesign tokens */
-      --bg-app:        #07090f;
-      --bg-primary:    #07090f;
-      --bg-secondary:  #0b0f1a;
-      --bg-card:       #10141f;
-      --bg-card-hover: #161b2a;
-      --bg-input:      #10141f;
-      --bg-sidebar:    #09101b;
-
-      /* Borders */
-      --border-subtle: rgba(255,255,255,0.08);
-      --border-medium: rgba(255,255,255,0.14);
-      --border-input:  rgba(255,255,255,0.08);
-      --border-accent: rgba(99,102,241,0.30);
-      --border-divider:rgba(255,255,255,0.05);
-
-      /* Accent — indigo per new design */
-      --accent-primary: #6366f1;
-      --accent-hover:   #818cf8;
-      --accent-glow:    rgba(99,102,241,0.18);
-      --accent-blue:    #6366f1;
-
-      /* Severity */
-      --critical:      #ef4444;
-      --critical-bg:   rgba(239,68,68,0.10);
-      --high:          #f97316;
-      --high-bg:       rgba(249,115,22,0.10);
-      --moderate:      #eab308;
-      --moderate-bg:   rgba(234,179,8,0.10);
-      --low:           #22c55e;
-      --low-bg:        rgba(34,197,94,0.10);
-
-      /* Text */
-      --text-primary:   #eef0f8;
-      --text-secondary: #c9cde0;
-      --text-muted:     #8392bb;
-      --text-accent:    #818cf8;
-      --text-label:     #8392bb;
-
-      /* Legacy aliases */
+      --bg-main:         #07090f;
+      --bg-app:          #07090f;
+      --bg-primary:      #07090f;
+      --bg-secondary:    #0b0f1a;
+      --bg-card:         #0d1117;
+      --bg-card-hover:   #131925;
+      --bg-input:        #0d1117;
+      --bg-sidebar:      #080b12;
+      --border-subtle:   rgba(255,255,255,0.06);
+      --border-medium:   rgba(255,255,255,0.10);
+      --border-input:    rgba(255,255,255,0.08);
+      --border-accent:   rgba(99,102,241,0.30);
+      --border-divider:  rgba(255,255,255,0.05);
+      --text-primary:    #eef2ff;
+      --text-secondary:  #94a3b8;
+      --text-muted:      #4a5568;
+      --text-accent:     #a5b4fc;
+      --text-label:      #8392bb;
+      --accent-primary:  #6366f1;
+      --accent-secondary:#818cf8;
+      --accent-hover:    #818cf8;
+      --accent-glow:     rgba(99,102,241,0.15);
+      --accent-blue:     #6366f1;
+      --shadow-card:     0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.25);
+      --shadow-elevated: 0 2px 8px rgba(0,0,0,0.5), 0 12px 32px rgba(0,0,0,0.3);
+      --radius-sm:       8px;
+      --radius-md:       12px;
+      --radius-lg:       16px;
+      --critical:        #ef4444;
+      --critical-bg:     rgba(239,68,68,0.10);
+      --high:            #f97316;
+      --high-bg:         rgba(249,115,22,0.10);
+      --moderate:        #eab308;
+      --moderate-bg:     rgba(234,179,8,0.10);
+      --low:             #22c55e;
+      --low-bg:          rgba(34,197,94,0.10);
       --tab-inactive:          #5a6488;
       --tab-active:            #818cf8;
       --tab-active-border:     #6366f1;
@@ -296,13 +292,13 @@ if _is_dark:
       --ctx-pill-bg:           rgba(34,211,165,0.07);
       --ctx-pill-border:       rgba(34,211,165,0.18);
       --ctx-pill-color:        #22d3a5;
-      --output-box-bg:         #10141f;
-      --output-box-border:     rgba(255,255,255,0.08);
-      --output-box-text:       #eef0f8;
-      --section-title-color:   #eef0f8;
-      --footer-color:          #5a6488;
+      --output-box-bg:         #0d1117;
+      --output-box-border:     rgba(255,255,255,0.06);
+      --output-box-text:       #eef2ff;
+      --section-title-color:   #eef2ff;
+      --footer-color:          #4a5568;
       --tbl-row-border:        rgba(255,255,255,0.05);
-      --sidebar-header-color:  #818cf8;
+      --sidebar-header-color:  #4a5568;
     }
     """
 else:
@@ -354,23 +350,21 @@ h1, h2, h3 {
   font-family: 'Plus Jakarta Sans', sans-serif !important;
   letter-spacing: -0.5px;
 }
-.stApp { background-color: var(--bg-app) !important; color: var(--text-primary); }
-.main .block-container { padding: 2rem 3rem 4rem; max-width: 1060px; }
+.stApp {
+  background: var(--bg-main) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+.main .block-container {
+  padding: 2rem 2.5rem 4rem !important;
+  max-width: 1100px !important;
+}
 
 /* ── Sidebar ── */
 section[data-testid="stSidebar"] {
-  background-color: var(--bg-sidebar) !important;
-  border-right: 1px solid var(--border-subtle);
+  background: var(--bg-sidebar) !important;
+  border-right: 1px solid var(--border-subtle) !important;
 }
 section[data-testid="stSidebar"] .stMarkdown p { color: var(--text-secondary); font-size: 13px; }
-section[data-testid="stSidebar"] button {
-  background: var(--btn-secondary-bg) !important;
-  color: var(--btn-secondary-color) !important;
-  border: 1px solid var(--btn-secondary-border) !important;
-  border-radius: 7px !important; font-size: 12px !important;
-  padding: 4px 10px !important; width: 100%; text-align: left;
-}
-section[data-testid="stSidebar"] button:hover { opacity: 0.82; }
 
 /* ── Tabs — glassmorphism pill style ── */
 .stTabs [data-baseweb="tab-list"] {
@@ -403,17 +397,20 @@ section[data-testid="stSidebar"] button:hover { opacity: 0.82; }
 .stTabs [data-baseweb="tab-highlight"] { display: none !important; }
 
 /* ── Inputs ── */
-.stTextInput input, .stTextArea textarea, .stSelectbox > div > div {
-  background-color: var(--bg-input) !important;
-  border: 1px solid var(--border-subtle) !important;
-  border-radius: 8px !important;
+[data-testid="stTextInput"] input,
+[data-testid="stTextArea"] textarea,
+[data-baseweb="select"] > div:first-child {
+  background: var(--bg-input) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: var(--radius-sm) !important;
   color: var(--text-primary) !important;
-  font-size: 13px !important;
-  transition: border-color 0.2s ease !important;
+  font-size: 13.5px !important;
+  transition: border-color 0.15s ease !important;
 }
-.stTextInput input:focus, .stTextArea textarea:focus {
-  border-color: var(--accent-primary) !important;
-  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+[data-testid="stTextInput"] input:focus,
+[data-testid="stTextArea"] textarea:focus {
+  border-color: rgba(99,102,241,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1) !important;
   outline: none !important;
 }
 .stTextInput label, .stTextArea label, .stSelectbox label, .stMultiSelect label,
@@ -424,49 +421,64 @@ label[data-testid="stWidgetLabel"] p {
   letter-spacing: 0.3px !important;
   text-transform: uppercase !important;
 }
+/* ── Labels ── */
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] label {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: var(--text-muted) !important;
+  margin-bottom: 4px !important;
+}
 ::placeholder { color: var(--text-muted) !important; font-style: italic; }
 
 /* ── Buttons ── */
-div[data-testid="stButton"] > button[kind="primary"],
-.stButton > button[kind="primary"] {
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
-  color: white !important;
-  border: none !important;
-  border-radius: 8px !important;
+div[data-testid="stButton"] > button {
+  border-radius: var(--radius-sm) !important;
   font-weight: 600 !important;
   font-size: 13px !important;
-  padding: 8px 20px !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 2px 8px rgba(99,102,241,0.25) !important;
+  letter-spacing: 0.01em !important;
+  transition: all 0.15s ease !important;
+  border: 1px solid var(--border-medium) !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: var(--text-secondary) !important;
+}
+div[data-testid="stButton"] > button:hover {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: var(--text-primary) !important;
+}
+div[data-testid="stButton"] > button[kind="primary"],
+.stButton > button[kind="primary"] {
+  background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: 0 2px 12px rgba(99,102,241,0.35) !important;
 }
 div[data-testid="stButton"] > button[kind="primary"]:hover {
+  box-shadow: 0 4px 20px rgba(99,102,241,0.5) !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.35) !important;
-  background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%) !important;
 }
 div[data-testid="stButton"] > button[kind="primary"]:active { transform: translateY(0) !important; }
 div[data-testid="stButton"] > button[kind="primary"]:disabled {
   background: #1a1f32 !important; color: #3a4566 !important;
 }
-div[data-testid="stButton"] > button:not([kind="primary"]) {
-  background: var(--btn-secondary-bg);
-  color: var(--btn-secondary-color);
-  border: 1px solid var(--btn-secondary-border);
-  border-radius: 8px; font-size: 13px; font-weight: 500;
-  transition: all 0.2s ease;
-}
-div[data-testid="stButton"] > button:not([kind="primary"]):hover {
-  transform: translateY(-1px);
-  border-color: rgba(99,102,241,0.5);
-}
 div[data-testid="stDownloadButton"] button {
-  background: var(--btn-secondary-bg); color: var(--btn-secondary-color);
-  border: 1px solid var(--btn-secondary-border); border-radius: 8px;
-  font-size: 13px; font-weight: 500;
+  border-radius: var(--radius-sm) !important;
+  font-weight: 600 !important;
+  font-size: 12.5px !important;
+  border: 1px solid var(--border-medium) !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: var(--text-secondary) !important;
+  min-height: 36px !important;
+  transition: all 0.15s ease !important;
 }
-div[data-testid="stDownloadButton"] button:hover { opacity: 0.82; }
+div[data-testid="stDownloadButton"] button:hover {
+  background: rgba(255,255,255,0.08) !important;
+  color: var(--text-primary) !important;
+}
 /* Uniform export bar button heights */
-div[data-testid="stDownloadButton"] button,
 div[data-testid="stButton"] button { min-height: 36px !important; }
 .wk-btn button {
   background: rgba(255,102,0,.08) !important;
@@ -485,7 +497,6 @@ div[data-testid="stFileUploader"] {
   border: 1px dashed var(--border-medium) !important;
   border-radius: 10px !important; background: var(--bg-input) !important;
 }
-div[data-testid="stAlert"] { border-radius: 9px !important; font-size: 13px !important; }
 hr { border: none; border-top: 1px solid var(--border-divider) !important; margin: 1.8rem 0; }
 
 /* ── Content blocks ── */
@@ -623,20 +634,7 @@ hr { border: none; border-top: 1px solid var(--border-divider) !important; margi
 /* ── Footer ── */
 .footer { font-size: 11px; color: var(--footer-color); text-align: center; margin-top: 2.5rem; letter-spacing: 0.3px; }
 
-/* ── Mode toggle radio ── */
-div[data-testid="stRadio"] > div {
-  display: flex; flex-direction: row; gap: 12px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px; padding: 6px 10px; width: fit-content;
-}
-div[data-testid="stRadio"] label {
-  color: var(--text-muted); font-size: 13px; font-weight: 500;
-  padding: 4px 12px; border-radius: 6px; cursor: pointer;
-}
-div[data-testid="stRadio"] label:has(input:checked) {
-  background: rgba(99,102,241,0.12); color: var(--text-accent); font-weight: 600;
-}
+/* ── Mode toggle radio — overridden by utility classes below ── */
 
 /* ── Sidebar section cards ── */
 .sidebar-section {
@@ -698,9 +696,10 @@ div[data-testid="stRadio"] label:has(input:checked) {
 
 /* ── Sidebar styling ── */
 section[data-testid="stSidebar"] {
-  background: #0b0f1a !important;
-  border-right: 1px solid rgba(255,255,255,0.07) !important;
-  width: 240px !important; min-width: 240px !important;
+  background: var(--bg-sidebar) !important;
+  border-right: 1px solid var(--border-subtle) !important;
+  width: 248px !important;
+  min-width: 248px !important;
 }
 section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
 [data-testid="collapsedControl"] { display: none !important; }
@@ -726,8 +725,13 @@ section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
 [data-testid="stMetric"] {
   background: var(--bg-card) !important;
   border: 1px solid var(--border-subtle) !important;
-  border-radius: 14px !important;
-  padding: 16px 20px !important;
+  border-radius: var(--radius-md) !important;
+  padding: 20px 24px !important;
+  box-shadow: var(--shadow-card) !important;
+  transition: box-shadow 0.2s ease !important;
+}
+[data-testid="stMetric"]:hover {
+  box-shadow: var(--shadow-elevated) !important;
 }
 [data-testid="stMetric"] label {
   font-size: 11px !important;
@@ -737,10 +741,10 @@ section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
   color: var(--text-muted) !important;
 }
 [data-testid="stMetricValue"] > div {
-  font-size: 28px !important;
+  font-size: 30px !important;
   font-weight: 800 !important;
   color: var(--text-primary) !important;
-  letter-spacing: -.03em !important;
+  letter-spacing: -0.04em !important;
 }
 [data-testid="stMetricDelta"] {
   font-size: 12px !important;
@@ -794,9 +798,11 @@ section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
 /* ── Expander (Streamlit 1.58 selectors) ── */
 [data-testid="stExpander"] {
   border: 1px solid var(--border-subtle) !important;
-  border-radius: 10px !important;
+  border-radius: var(--radius-md) !important;
   background: var(--bg-card) !important;
   overflow: hidden !important;
+  box-shadow: var(--shadow-card) !important;
+  margin-bottom: 10px !important;
 }
 [data-testid="stExpander"] summary,
 [data-testid="stExpander"] details > summary {
@@ -804,11 +810,12 @@ section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
   color: var(--text-secondary) !important;
   font-size: 13px !important;
   font-weight: 600 !important;
-  padding: 10px 14px 10px 32px !important;
+  padding: 12px 16px 12px 36px !important;
   list-style: none !important;
   display: block !important;
   position: relative !important;
   cursor: pointer !important;
+  letter-spacing: 0.01em !important;
 }
 /* Nuclear icon suppression: hide every child that is not the label p/span */
 [data-testid="stExpander"] summary::-webkit-details-marker { display:none !important; }
@@ -887,12 +894,7 @@ section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
   border: 1px solid var(--border-subtle) !important;
 }
 
-/* ── Info / warning / success / error boxes ── */
-[data-testid="stAlert"] {
-  border-radius: 10px !important;
-  border-width: 1px !important;
-  font-size: 13px !important;
-}
+/* ── Info / warning / success / error boxes — overridden by utility classes ── */
 
 /* ── Column vertical spacing ── */
 [data-testid="stVerticalBlock"] > [data-testid="stVerticalBlock"] {
@@ -906,11 +908,12 @@ section[data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
 
 /* ── Agent card layout ── */
 .agent-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(99,102,241,0.2);
-  border-radius: 14px;
-  padding: 20px 24px;
-  margin-bottom: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-card);
 }
 .agent-badge-pill {
   display: inline-block;
@@ -982,6 +985,123 @@ div[data-testid="stButton"].back-btn > button {
   border-radius: 8px !important;
   font-size: 13px !important;
   font-weight: 600 !important;
+}
+
+/* ── Page section header ── */
+.page-section-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin: 28px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ── Stat grid card ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-card);
+}
+.stat-card-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.stat-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+
+/* ── Nav item improvements ── */
+.nav-status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ── Section divider ── */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 24px 0;
+}
+
+/* ── Info banner ── */
+.info-banner {
+  background: rgba(99,102,241,0.06);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+/* ── Radio button group ── */
+div[data-testid="stRadio"] > div {
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+}
+div[data-testid="stRadio"] label {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 6px 16px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--text-secondary) !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+div[data-testid="stRadio"] label:has(input:checked) {
+  background: rgba(99,102,241,0.15) !important;
+  border-color: rgba(99,102,241,0.4) !important;
+  color: #a5b4fc !important;
+}
+div[data-testid="stRadio"] input[type="radio"] {
+  display: none !important;
+}
+
+/* ── Alert boxes ── */
+[data-testid="stAlert"] {
+  border-radius: var(--radius-sm) !important;
+  border-width: 1px !important;
+  font-size: 13px !important;
+  padding: 10px 16px !important;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+
+/* ── Caption text ── */
+[data-testid="stCaptionContainer"] p {
+  font-size: 11.5px !important;
+  color: var(--text-muted) !important;
+  line-height: 1.6 !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -3020,6 +3140,48 @@ html,body{font-family:'Inter',sans-serif!important;}
 .si-btn-sso button:hover{
   background:rgba(255,255,255,.08)!important;color:#eef0f8!important;
 }
+/* Refine login form card */
+.form-card {
+  background: rgba(13,17,23,0.95) !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
+  border-radius: 20px !important;
+  padding: 40px 44px !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.04) inset !important;
+  backdrop-filter: blur(20px) !important;
+}
+/* Brand title */
+.brand-title {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.04em !important;
+  color: #eef2ff !important;
+}
+/* Form inputs */
+.stTextInput input {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 10px !important;
+  color: #eef2ff !important;
+  font-size: 14px !important;
+  padding: 12px 16px !important;
+  height: 46px !important;
+}
+.stTextInput input:focus {
+  border-color: rgba(99,102,241,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1) !important;
+}
+/* Sign-in button */
+div[data-testid="stButton"] > button[kind="primary"] {
+  height: 46px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  border-radius: 10px !important;
+}
+/* Left panel gradient shape */
+.hero-bg {
+  background: radial-gradient(ellipse 80% 60% at 40% 50%, rgba(99,102,241,0.18) 0%, rgba(99,102,241,0.04) 60%, transparent 100%) !important;
+}
 /* Orb glow pulse */
 @keyframes si-pulse{
   0%,100%{box-shadow:0 0 50px 15px rgba(99,102,241,.22),0 0 100px 30px rgba(79,126,248,.08);}
@@ -3511,6 +3673,20 @@ with st.sidebar:
 </div>
 """, unsafe_allow_html=True)
 
+    # ── Workflow status for nav dots ─────────────────────────────────────────
+    _wf_status = {
+        0: "done" if (st.session_state.get("dash_regs") or st.session_state.get("t1_pub_recs")) else "idle",
+        1: "done" if st.session_state.get("t1_risks") else ("active" if _active == 1 else "idle"),
+        2: "done" if st.session_state.get("t2_tests") else ("active" if _active == 2 else "idle"),
+        3: "done" if st.session_state.get("t3_docs_analysis") else ("active" if _active == 3 else "idle"),
+        4: "done" if st.session_state.get("t3_report") else ("active" if _active == 4 else "idle"),
+    }
+    _WF_DOT = {
+        "done":   "background:#22d3a5",
+        "active": "background:#f97316",
+        "idle":   "background:#2d3a4e",
+    }
+
     # ── MENU section ─────────────────────────────────────────────────────────
     st.markdown("""
 <div style="padding:16px 16px 4px">
@@ -3524,6 +3700,10 @@ with st.sidebar:
         st.session_state["active_tab"] = 0
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+    if _wf_status[0] == "done":
+        st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
+    elif _wf_status[0] == "active":
+        st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
 
     _cls1 = "nav-active" if _active == 1 else "nav-item"
     st.markdown(f'<div class="{_cls1}">', unsafe_allow_html=True)
@@ -3531,6 +3711,10 @@ with st.sidebar:
         st.session_state["active_tab"] = 1
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+    if _wf_status[1] == "done":
+        st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
+    elif _wf_status[1] == "active":
+        st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
 
     # ── AGENTS IA section ────────────────────────────────────────────────────
     st.markdown("""
@@ -3545,6 +3729,10 @@ with st.sidebar:
         st.session_state["active_tab"] = 2
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+    if _wf_status[2] == "done":
+        st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
+    elif _wf_status[2] == "active":
+        st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
 
     _cls3 = "nav-active" if _active == 3 else "nav-item"
     st.markdown(f'<div class="{_cls3}">', unsafe_allow_html=True)
@@ -3552,6 +3740,10 @@ with st.sidebar:
         st.session_state["active_tab"] = 3
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+    if _wf_status[3] == "done":
+        st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
+    elif _wf_status[3] == "active":
+        st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
 
     _cls4 = "nav-active" if _active == 4 else "nav-item"
     st.markdown(f'<div class="{_cls4}">', unsafe_allow_html=True)
@@ -3559,6 +3751,10 @@ with st.sidebar:
         st.session_state["active_tab"] = 4
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+    if _wf_status[4] == "done":
+        st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
+    elif _wf_status[4] == "active":
+        st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
 
     # ── Entity selector (compact selectbox) ──────────────────────────────────
     st.markdown("""
@@ -4252,6 +4448,11 @@ _active = st.session_state.get("active_tab", 0)
 # TAB 0 — INTELLIGENCE DASHBOARD
 # ─────────────────────────────────────────────────────────────────────────────
 if _active == 0:
+    st.markdown(
+        '<div style="font-size:24px;font-weight:800;color:var(--text-primary);letter-spacing:-0.03em;margin-bottom:4px">Intelligence Dashboard</div>'
+        '<div style="font-size:13px;color:var(--text-muted);margin-bottom:28px">Overview of regulatory intelligence and audit activity</div>',
+        unsafe_allow_html=True,
+    )
     _tab_actions_bar("t0", "Stay informed before launching an audit — CVEs, regulations, recommendations.", [])
     # Source selector
     _src_c1, _src_c2, _ = st.columns([1.3, 1.5, 4])
