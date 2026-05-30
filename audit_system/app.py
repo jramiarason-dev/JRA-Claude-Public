@@ -54,6 +54,8 @@ _SS_DEFAULTS = {
     "t1_jurs_pills": None,
     "t3_docs_analysis": None,
     "t3_observations": [],
+    "t3_analysis_xlsx": None,
+    "t3_analysis_pdf": None,
     "t4_recommendations": None,
     "t2_test_statuses": {},
     "t0_prior_recs": [],
@@ -65,6 +67,7 @@ _SS_DEFAULTS = {
     "help_lang": "Français",
     # Stub UI features
     "voice_active": False,
+    "last_voice_transcript": "",
     "cowork_open": False,
     "active_tab": 0,
     "entity_type": "🏦 Private Banking",
@@ -78,6 +81,29 @@ _SS_DEFAULTS = {
 for _k, _v in _SS_DEFAULTS.items():
     if _k not in st.session_state:
         st.session_state[_k] = _v
+
+# ── Voice command query-param dispatch ───────────────────────────────────────
+_vc_raw = st.query_params.get("voice_cmd", "")
+if _vc_raw:
+    _vc = _vc_raw.strip().lower()
+    if any(w in _vc for w in ["dashboard", "tableau de bord", "accueil", "home"]):
+        st.session_state["active_tab"] = 0
+    elif any(w in _vc for w in ["risk", "risque", "analyse des risques", "risk analysis"]):
+        st.session_state["active_tab"] = 1
+    elif any(w in _vc for w in ["audit plan", "plan audit", "plan d'audit", "tests", "testing"]):
+        st.session_state["active_tab"] = 2
+    elif any(w in _vc for w in ["document", "analyser document", "document analyser"]):
+        st.session_state["active_tab"] = 3
+    elif any(w in _vc for w in ["rapport", "report", "recommandation"]):
+        st.session_state["active_tab"] = 4
+    elif any(w in _vc for w in ["help", "aide"]):
+        st.session_state["help_open"] = True
+    elif any(w in _vc for w in ["suggestion", "claude", "cowork"]):
+        st.session_state["cowork_open"] = True
+    st.session_state["last_voice_transcript"] = _vc_raw.strip()
+    st.session_state["voice_active"] = False
+    st.query_params.clear()
+    st.rerun()
 
 # ── Example cards (hardcoded, always visible, #0a2540 bg, #3b82f6 border) ─────
 _EX_S = "background:#0a2540;border-left:4px solid #3b82f6;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px"
@@ -1103,6 +1129,14 @@ div[data-testid="stRadio"] input[type="radio"] {
   color: var(--text-muted) !important;
   line-height: 1.6 !important;
 }
+
+/* ── Utility button active glow ─────────────────────────────── */
+.util-voice-active button, .util-cowork-active button, .util-help-active button {
+  background: rgba(99,102,241,0.18) !important;
+  border: 1px solid rgba(99,102,241,0.5) !important;
+  color: #818cf8 !important;
+  box-shadow: 0 0 8px rgba(99,102,241,0.35) !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -1279,8 +1313,8 @@ TAB_SUBTITLES = {
 }
 
 _TAB_NAMES = {
-    "Français": ["Tableau de bord", "Analyse des Risques", "Plan & Tests", "Rapport d'Audit"],
-    "English":  ["Dashboard", "Risk Analysis", "Audit Plan", "Audit Report"],
+    "Français": ["Tableau de bord", "Analyse des Risques", "Plan & Tests", "Document Analyser", "Rapport d'Audit"],
+    "English":  ["Dashboard", "Risk Analysis", "Audit Plan", "Document Analyser", "Audit Report"],
 }
 
 
@@ -3422,7 +3456,9 @@ _HELP = {
 - 🏦 **Recommandations** : bonnes pratiques publiques d'audit bancaire
 - 📋 **Snapshot** : résumé de votre dernier rapport généré
 
-💡 *Astuce : commencez ici pour identifier votre prochain sujet d'audit.*""",
+💡 *Astuce : commencez ici pour identifier votre prochain sujet d'audit.*
+
+**🎙️ Commande vocale :** Cliquez sur l'icône 🎙️ dans la barre latérale et dites : "Dashboard", "Analyse des Risques", "Audit Plan", "Document", "Rapport", "Help".""",
 
         "English": """**🌐 Intelligence Dashboard**
 
@@ -3439,7 +3475,9 @@ _HELP = {
 - 🏦 **Recommendations**: public banking audit best practices
 - 📋 **Snapshot**: summary of your last generated report
 
-💡 *Tip: start here to identify your next audit topic.*""",
+💡 *Tip: start here to identify your next audit topic.*
+
+**🎙️ Voice command:** Click the 🎙️ icon in the sidebar and say: "Dashboard", "Risk Analysis", "Audit Plan", "Document", "Report", "Help".""",
     },
     1: {  # Risk Analysis
         "Français": """**🔍 Analyse des Risques**
@@ -3511,44 +3549,75 @@ _HELP = {
 
 💡 *Tip: check the "Risk Coverage Summary" — every Critical risk must have at least 1 test.*""",
     },
-    3: {  # Audit Report
+    3: {  # Document Analyser
+        "Français": """**📂 Analyseur de Documents**
+
+**À quoi ça sert ?**
+→ Analyser des documents d'audit (politiques, rapports, données MIS) et identifier des observations.
+
+**Comment l'utiliser ?**
+- **Upload** : glissez-déposez vos fichiers (PDF, Word, Excel, TXT — multi-fichiers supportés)
+- **Topic** : pré-rempli depuis l'onglet 1, modifiable
+- **Context** : précisez un focus — ex. *"Concentrez-vous sur les écarts politique/pratique"*
+
+**Résultats obtenus :**
+- Observations par niveau de risque (Critical / High / Moderate / Low)
+- Lien automatique vers les tests du programme d'audit
+- Bouton **➕ Add to Report** pour pousser chaque observation vers l'onglet Rapport
+
+💡 *Astuce : uploadez des rapports précédents pour identifier les thèmes récurrents.*""",
+
+        "English": """**📂 Document Analyser**
+
+**What is it for?**
+→ Analyse audit documents (policies, reports, MIS data) and surface potential observations.
+
+**How to use it?**
+- **Upload**: drag-and-drop your files (PDF, Word, Excel, TXT — multiple files supported)
+- **Topic**: pre-filled from tab 1, editable
+- **Context**: specify a focus area — e.g. *"Focus on gaps between policy and practice"*
+
+**Results:**
+- Observations by risk level (Critical / High / Moderate / Low)
+- Automatic link to audit programme tests
+- **➕ Add to Report** button to push each observation to the Audit Report tab
+
+💡 *Tip: upload prior audit reports to surface recurring themes.*""",
+    },
+    4: {  # Audit Report
         "Français": """**📄 Rapport d'Audit**
 
 **À quoi ça sert ?**
-→ Générer le rapport final à partir de vos observations terrain.
+→ Assembler le rapport final, gérer les recommandations, et générer le résumé comité.
 
-**Comment remplir les champs ?**
-- **Observations & Findings** : saisissez vos observations de terrain, une par ligne
-  — ex. *"8 dossiers sur 30 sans documentation SoW à jour"*
-- Le rapport reprend automatiquement le contexte des onglets 1 et 2
+**Les 3 sections :**
+- **📋 Recommendations** : liste des observations (depuis l'onglet Document Analyser ou saisie manuelle)
+- **📄 Generate Report** : génère le rapport complet avec executive summary et fiches de constats
+- **📊 Executive Summary** : résumé pour le comité d'audit, exportable en PDF
 
-**Résultats obtenus :**
-- Executive Summary avec opinion (Unsatisfactory / Partially / Satisfactory)
-- Fiches détaillées par observation : risque associé, réglementation, impact, recommandations
-- Tableau récapitulatif des actions management
+**Exports disponibles :** Word (docx) · Excel (xlsx) · PowerPoint (pptx) · PDF
 
-**Exports :** docx · xlsx · pptx
+**🎙️ Commande vocale :**
+- Dites *"Rapport"* ou *"Report"* pour naviguer ici directement
 
-💡 *Astuce : complétez d'abord les onglets 1 et 2 pour un rapport plus riche.*""",
+💡 *Astuce : complétez d'abord les onglets 1, 2 et 3 pour un rapport plus riche et contextualisé.*""",
 
         "English": """**📄 Audit Report**
 
 **What is it for?**
-→ Generate the final report from your field observations.
+→ Assemble the final report, manage recommendations, and generate the committee summary.
 
-**How to fill in the fields?**
-- **Observations & Findings**: enter your field observations, one per line
-  — e.g. *"8 out of 30 files missing updated SoW documentation"*
-- Report automatically pulls context from tabs 1 and 2
+**The 3 sections:**
+- **📋 Recommendations**: list of observations (from Document Analyser tab or manual entry)
+- **📄 Generate Report**: generates the full report with executive summary and finding cards
+- **📊 Executive Summary**: committee-ready summary, exportable as PDF
 
-**Results:**
-- Executive Summary with opinion (Unsatisfactory / Partially / Satisfactory)
-- Detailed finding cards: associated risk, regulation, impact, recommendations
-- Action plan summary table
+**Available exports:** Word (docx) · Excel (xlsx) · PowerPoint (pptx) · PDF
 
-**Exports:** docx · xlsx · pptx
+**🎙️ Voice command:**
+- Say *"Report"* or *"Rapport"* to navigate here directly
 
-💡 *Tip: complete tabs 1 and 2 first for a richer, more contextualised report.*""",
+💡 *Tip: complete tabs 1, 2, and 3 first for a richer, more contextualised report.*""",
     },
 }
 
@@ -3793,15 +3862,13 @@ with st.sidebar:
         st.rerun()
 
     # ── Jurisdiction flags ───────────────────────────────────────────────────
-    _jurs_active = st.session_state.get("t1_jurs", [])
-    _flag_map = {
-        "Suisse": "🇨🇭", "Singapour": "🇸🇬", "Hong Kong": "🇭🇰",
-        "Bahamas": "🇧🇸", "Union Européenne": "🇪🇺", "Royaume-Uni": "🇬🇧",
-    }
+    _jurs_active = st.session_state.get("t1_jurs_pills") or st.session_state.get("t1_jurs") or []
+    if not isinstance(_jurs_active, list):
+        _jurs_active = list(_jurs_active)
     _flags_html = " ".join(
         f'<span title="{j}" style="font-size:16px;opacity:{1.0 if not _jurs_active or j in _jurs_active else 0.3}">'
-        f'{_flag_map.get(j, "🌐")}</span>'
-        for j in _flag_map
+        f'{_JUR_FLAG.get(j, "🌐")}</span>'
+        for j in JURISDICTIONS
     )
     st.markdown(
         f'<div style="padding:6px 16px 12px;display:flex;flex-wrap:wrap;gap:6px">{_flags_html}</div>',
@@ -3816,15 +3883,26 @@ with st.sidebar:
         if st.button(_theme_lbl, key="theme_toggle", help="Basculer thème"):
             st.session_state.theme = "light" if _is_dark else "dark"
             st.rerun()
+    _voice_cls = "util-voice-active" if st.session_state.get("voice_active") else ""
     with _sb_u2:
+        st.markdown(f'<div class="{_voice_cls}">', unsafe_allow_html=True)
         if st.button("🎙️", key="_voice_toggle_btn", help="Commande vocale"):
             st.session_state["voice_active"] = not st.session_state.get("voice_active", False)
+            if not st.session_state["voice_active"]:
+                st.session_state["last_voice_transcript"] = ""
+        st.markdown("</div>", unsafe_allow_html=True)
+    _cowork_cls = "util-cowork-active" if st.session_state.get("cowork_open") else ""
     with _sb_u3:
-        if st.button("✨", key="_cowork_toggle_btn", help="Suggestions"):
+        st.markdown(f'<div class="{_cowork_cls}">', unsafe_allow_html=True)
+        if st.button("✨", key="_cowork_toggle_btn", help="Suggestions Claude"):
             st.session_state["cowork_open"] = not st.session_state.get("cowork_open", False)
+        st.markdown("</div>", unsafe_allow_html=True)
+    _help_cls = "util-help-active" if st.session_state.get("help_open") else ""
     with _sb_u4:
+        st.markdown(f'<div class="{_help_cls}">', unsafe_allow_html=True)
         if st.button("❓", key="_help_toggle_btn", help="Help / Aide"):
             st.session_state["help_open"] = not st.session_state.get("help_open", False)
+        st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
     # ── User info ────────────────────────────────────────────────────────────
@@ -3864,7 +3942,61 @@ with st.container():
 
 
 if st.session_state.get("voice_active", False):
-    st.info("🎙️ Commande vocale — fonctionnalité à venir.")
+    st.components.v1.html("""
+<style>
+  body{margin:0;font-family:-apple-system,system-ui,sans-serif;background:transparent}
+  #vc-wrap{background:rgba(13,17,23,.95);border:1px solid rgba(99,102,241,.45);border-radius:12px;
+    padding:14px 18px;display:flex;align-items:center;gap:14px}
+  #vc-dot{width:10px;height:10px;border-radius:50%;background:#ef4444;
+    animation:pulse 1.2s ease-in-out infinite;flex-shrink:0}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0)}}
+  #vc-txt{font-size:13px;color:#94a3b8;flex:1}
+  #vc-transcript{font-size:14px;color:#eef2ff;font-weight:500;min-height:18px}
+  #vc-hint{font-size:10.5px;color:#4a5568;margin-top:3px}
+</style>
+<div id="vc-wrap">
+  <div id="vc-dot"></div>
+  <div id="vc-txt">
+    <div id="vc-transcript">Listening…</div>
+    <div id="vc-hint">Say: "Risk Analysis", "Audit Plan", "Dashboard", "Report", "Help"</div>
+  </div>
+</div>
+<script>
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (SR) {
+  const r = new SR();
+  r.lang = navigator.language || 'fr-FR';
+  r.continuous = false; r.interimResults = true;
+  r.onresult = e => {
+    const t = Array.from(e.results).map(x => x[0].transcript).join('');
+    document.getElementById('vc-transcript').textContent = t;
+    if (e.results[0].isFinal) {
+      const url = new URL(window.parent.location.href);
+      url.searchParams.set('voice_cmd', t);
+      window.parent.location.href = url.toString();
+    }
+  };
+  r.onerror = e => { document.getElementById('vc-transcript').textContent = '⚠ ' + e.error; };
+  r.start();
+} else {
+  document.getElementById('vc-transcript').textContent = '⚠ Web Speech API not supported in this browser.';
+  document.getElementById('vc-dot').style.background = '#eab308';
+}
+</script>""", height=90)
+
+if st.session_state.get("last_voice_transcript"):
+    _vt = st.session_state["last_voice_transcript"]
+    _active_tab_name = {0: "Dashboard", 1: "Risk Analysis", 2: "Audit Plan", 3: "Document Analyser", 4: "Audit Report"}.get(st.session_state.get("active_tab", 0), "")
+    st.markdown(f"""
+<div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);
+  border-radius:9px;padding:10px 16px;margin-bottom:8px;display:flex;align-items:center;gap:10px">
+  <span style="font-size:18px">🎙️</span>
+  <div>
+    <div style="font-size:13px;color:#818cf8;font-weight:600">Voice command received</div>
+    <div style="font-size:12.5px;color:#94a3b8">"{_vt}"
+      {f'→ <span style="color:#22d3a5">{_active_tab_name}</span>' if _active_tab_name else ""}</div>
+  </div>
+</div>""", unsafe_allow_html=True)
 
 if st.session_state.get("cowork_open", False):
     with st.expander("✨ Claude Cowork — Suggestions", expanded=True):
@@ -5183,6 +5315,8 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
         audit_topic = st.session_state.get("t1_topic", "") or ""
         jurisdictions = st.session_state.get("t1_jurs") or st.session_state.get("t1_jurs_pills") or JURISDICTIONS[:4]
         _t1_valid = True
+        _t1_theme = _topic_to_theme(audit_topic) if audit_topic else "AML_KYC"
+        _t1_theme = _t1_theme or "AML_KYC"
 
         _back_c, _ = st.columns([2, 6])
         with _back_c:
@@ -5232,6 +5366,34 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     json.dumps(st.session_state.t1_regs or [], indent=2),
                     "t1_regs_copy"
                 )
+
+        # ── Auto-generate static exports if not yet done ─────────────────────
+        if not st.session_state.t1_xlsx and _t1_theme and RISK_INDICATORS.get(_t1_theme):
+            try:
+                _static_risks = [
+                    {"level": r.get("level",""), "name": r.get("title",""),
+                     "description": r.get("description",""), "impact": "",
+                     "likelihood": r.get("probability",""), "control": ", ".join(r.get("expected_controls",[])[:2])}
+                    for r in RISK_INDICATORS.get(_t1_theme, [])
+                ]
+                p_xlsx = generate_risk_analysis_excel(
+                    {"topic": audit_topic or _t1_theme, "risks": _static_risks, "regs": [], "pub_recs": []},
+                    OUTPUT_DIR)
+                st.session_state.t1_xlsx = Path(p_xlsx).read_bytes()
+            except Exception:
+                pass
+        if not st.session_state.t1_pdf and _t1_theme and RISK_INDICATORS.get(_t1_theme):
+            try:
+                _pdf_risks_txt = "\n".join(
+                    f"[{r.get('level','')}] {r.get('title','')} — {r.get('description','')[:120]}"
+                    for r in RISK_INDICATORS.get(_t1_theme, [])
+                )
+                st.session_state.t1_pdf = _make_pdf(
+                    f"Risk Analysis — {audit_topic or _t1_theme}",
+                    [("Risk Indicators", _pdf_risks_txt)],
+                )
+            except Exception:
+                pass
 
         st.markdown("---")
         _t1_has_exports = st.session_state.t1_docx or st.session_state.t1_xlsx or st.session_state.t1_pptx2
@@ -5880,6 +6042,58 @@ elif _active == 3:
         _n_added = len(st.session_state.get("t3_observations") or [])
         if _n_added:
             st.success(f"{_n_added} observation(s) added to the Audit Report tab.")
+
+        # ── Exports for Document Analyser ─────────────────────────────────
+        if _t3_analysis:
+            st.markdown("---")
+            _t3_exp_cols = st.columns([2, 2, 2, 2])
+            # Excel export
+            if not st.session_state.get("t3_analysis_xlsx"):
+                try:
+                    import openpyxl
+                    from io import BytesIO
+                    wb = openpyxl.Workbook()
+                    ws = wb.active
+                    ws.title = "Observations"
+                    ws.append(["Risk Level", "Observation", "Detail", "Linked Tests", "Source"])
+                    for _o in _t3_analysis:
+                        ws.append([
+                            _o.get("risk_level",""), _o.get("observation",""),
+                            _o.get("detail",""), ", ".join(_o.get("linked_tests") or []),
+                            _o.get("source",""),
+                        ])
+                    _buf = BytesIO(); wb.save(_buf); _buf.seek(0)
+                    st.session_state["t3_analysis_xlsx"] = _buf.getvalue()
+                except Exception:
+                    pass
+            if not st.session_state.get("t3_analysis_pdf"):
+                try:
+                    _obs_txt = "\n".join(
+                        f"[{o.get('risk_level','')}] {o.get('observation','')} — {o.get('detail','')[:100]}"
+                        for o in _t3_analysis
+                    )
+                    st.session_state["t3_analysis_pdf"] = _make_pdf(
+                        f"Document Analysis — {t3_topic}",
+                        [("Observations", _obs_txt)],
+                    )
+                except Exception:
+                    pass
+            with _t3_exp_cols[0]:
+                if st.session_state.get("t3_analysis_xlsx"):
+                    st.download_button("📗 Excel", data=st.session_state["t3_analysis_xlsx"],
+                        file_name="Document_Analysis.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        use_container_width=True, key="t3_dl_xlsx")
+                else:
+                    st.button("📗 Excel", disabled=True, use_container_width=True, key="t3_dl_xlsx_dis")
+            with _t3_exp_cols[1]:
+                if st.session_state.get("t3_analysis_pdf"):
+                    st.download_button("📕 PDF", data=st.session_state["t3_analysis_pdf"],
+                        file_name="Document_Analysis.pdf",
+                        mime="application/pdf",
+                        use_container_width=True, key="t3_dl_pdf")
+                else:
+                    st.button("📕 PDF", disabled=True, use_container_width=True, key="t3_dl_pdf_dis")
 
 
 # TAB 4 — AUDIT REPORT
