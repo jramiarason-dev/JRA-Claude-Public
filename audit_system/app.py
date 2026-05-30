@@ -3313,30 +3313,13 @@ div[data-testid="stButton"] > button[kind="primary"] {
 
   <!-- jurisdiction flags -->
   <div style="display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:1">
-    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
-      border-radius:999px;background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
-      &#127464;&#127469; FINMA</span>
-    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
-      border-radius:999px;background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
-      &#127480;&#127468; MAS</span>
-    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
-      border-radius:999px;background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
-      &#127469;&#127472; SFC/HKMA</span>
-    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
-      border-radius:999px;background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
-      &#127463;&#127480; SCB</span>
-    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
-      border-radius:999px;background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
-      &#127466;&#127482; CSSF/BaFin</span>
-    <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
-      border-radius:999px;background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:700;color:#c9cde0">
-      &#127468;&#127463; FCA/PRA</span>
+""" + "".join(
+        f'<span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;'
+        f'border-radius:999px;background:rgba(255,255,255,.04);'
+        f'border:1px solid rgba(255,255,255,.08);font-size:13px;font-weight:700;color:#c9cde0">'
+        f'{_JUR_FLAG.get(j,"🌐")} {j.split("/")[1].strip()}</span>'
+        for j in JURISDICTIONS
+    ) + """
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -3413,15 +3396,12 @@ div[data-testid="stButton"] > button[kind="primary"] {
                 st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
 
-        # GIF globe rotatif + badges sécurité
+        # Security badges
         st.markdown("""
 <div style="padding:20px clamp(20px,4vw,52px) 32px;
   background:linear-gradient(180deg,rgba(11,15,26,.9),rgba(7,9,15,.96));
   border-left:1px solid rgba(255,255,255,.08);
   display:flex;flex-direction:column;align-items:center;gap:10px">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Rotating_earth_%28large%29.gif/200px-Rotating_earth_%28large%29.gif"
-    alt="Globe" style="width:80px;height:80px;border-radius:50%;
-    box-shadow:0 0 18px rgba(99,102,241,.35);opacity:0.85;margin-bottom:4px"/>
   <span style="display:inline-flex;align-items:center;gap:6px;font-size:9px;
     font-weight:700;letter-spacing:.06em;text-transform:uppercase;
     background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);
@@ -3878,14 +3858,9 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
 
-    # ── Utility buttons ──────────────────────────────────────────────────────
+    # ── Utility buttons (dark mode only — no theme toggle) ───────────────────
     st.markdown('<div style="padding:8px 8px 4px;border-top:1px solid rgba(255,255,255,0.05)">', unsafe_allow_html=True)
-    _sb_u1, _sb_u2, _sb_u3, _sb_u4 = st.columns(4, gap="small")
-    _theme_lbl = "☀️" if _is_dark else "🌙"
-    with _sb_u1:
-        if st.button(_theme_lbl, key="theme_toggle", help="Basculer thème"):
-            st.session_state.theme = "light" if _is_dark else "dark"
-            st.rerun()
+    _sb_u2, _sb_u3, _sb_u4 = st.columns(3, gap="small")
     _voice_cls = "util-voice-active" if st.session_state.get("voice_active") else ""
     with _sb_u2:
         st.markdown(f'<div class="{_voice_cls}">', unsafe_allow_html=True)
@@ -5399,15 +5374,16 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 pass
 
         st.markdown("---")
-        _t1_has_exports = st.session_state.t1_docx or st.session_state.t1_xlsx or st.session_state.t1_pptx2
+        _t1_has_exports = st.session_state.t1_docx or st.session_state.t1_xlsx or st.session_state.t1_pptx2 or st.session_state.t1_pdf
         if _t1_has_exports:
-            _e1, _e2, _e3 = st.columns([2, 2, 2])
+            _e1, _e2, _e3, _e4 = st.columns(4)
             if st.session_state.t1_docx:
                 _e1.download_button(
                     "📝 Word",
                     data=st.session_state.t1_docx,
                     file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.docx",
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    use_container_width=True,
                 )
             if st.session_state.t1_xlsx:
                 _e2.download_button(
@@ -5415,6 +5391,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     data=st.session_state.t1_xlsx,
                     file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    use_container_width=True,
                 )
             if st.session_state.t1_pptx2:
                 _e3.download_button(
@@ -5422,10 +5399,16 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     data=st.session_state.t1_pptx2,
                     file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    use_container_width=True,
                 )
-        else:
-            st.markdown("<div style='margin-top:1rem'>", unsafe_allow_html=True)
-            st.markdown("</div>", unsafe_allow_html=True)
+            if st.session_state.t1_pdf:
+                _e4.download_button(
+                    "📕 PDF",
+                    data=st.session_state.t1_pdf,
+                    file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.pdf",
+                    mime="application/pdf",
+                    use_container_width=True,
+                )
 
 
 
@@ -5845,24 +5828,31 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
 
         pptx = st.session_state.t2_pptx
         xlsx = st.session_state.t2_xlsx
-        if pptx or xlsx:
+        pdf2 = st.session_state.t2_pdf
+        if pptx or xlsx or pdf2:
             st.markdown("---")
-            ca, cb = st.columns([2, 2])
+            _t2_ecols = st.columns(4)
             if pptx:
-                ca.download_button(
+                _t2_ecols[0].download_button(
                     "📙 PPT", data=pptx,
                     file_name=f"Audit_Plan_{topic2_lbl.replace(' ', '_')}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    use_container_width=True,
                 )
             if xlsx:
-                cb.download_button(
+                _t2_ecols[1].download_button(
                     "📗 Excel", data=xlsx,
                     file_name=f"Audit_Tests_{topic2_lbl.replace(' ', '_')}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    use_container_width=True,
                 )
-        else:
-            st.markdown("<div style='margin-top:1rem'>", unsafe_allow_html=True)
-            st.markdown("</div>", unsafe_allow_html=True)
+            if pdf2:
+                _t2_ecols[2].download_button(
+                    "📕 PDF", data=pdf2,
+                    file_name=f"Audit_Plan_{topic2_lbl.replace(' ', '_')}.pdf",
+                    mime="application/pdf",
+                    use_container_width=True,
+                )
 
 
 
