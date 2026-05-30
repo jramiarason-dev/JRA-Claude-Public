@@ -1558,7 +1558,7 @@ def render_risk_cards(risks: list) -> None:
 
 
 # ── Templates ─────────────────────────────────────────────────────────────────
-_TPL_SEPARATORS = {"— Select a template —", "── CORE AUDIT TOPICS ──", "── SPECIALIZED TOPICS ──"}
+_TPL_SEPARATORS = {"— Select a template —", "── CORE AUDIT TOPICS ──", "── SPECIALIZED TOPICS ──", "── IT AUDIT ──"}
 
 TEMPLATES = {
     "— Select a template —": {},
@@ -1682,6 +1682,25 @@ TEMPLATES = {
             "Investment advisory and discretionary portfolio management for HNWI clients. "
             "Includes suitability assessment, investment recommendations, conflicts of "
             "interest management, product governance and client reporting."
+        ),
+    },
+    "── IT AUDIT ──": {},
+    "API Security & Open Banking": {
+        "topic": "API Security & Open Banking",
+        "jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA", "SG / MAS"],
+        "scope": (
+            "All production APIs including core banking APIs, open banking (PSD2) interfaces, "
+            "mobile banking APIs, and third-party integration endpoints. Covers authentication, "
+            "authorisation, input validation, data exposure, rate limiting, and API inventory management."
+        ),
+    },
+    "Payment Fraud & SWIFT CSP": {
+        "topic": "Payment Fraud & SWIFT CSP",
+        "jurisdictions": ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "EU / DORA", "UK / FCA+PRA"],
+        "scope": (
+            "SWIFT infrastructure and CSP CSCF v2025 compliance, payment fraud controls including "
+            "BEC prevention, dual-control on high-value payments, nostro reconciliation, "
+            "correspondent banking due diligence, and payment anomaly detection."
         ),
     },
 }
