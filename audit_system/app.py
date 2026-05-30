@@ -3343,24 +3343,23 @@ div[data-testid="stButton"] > button[kind="primary"] {
 
     # ── RIGHT: dark panel header + native Streamlit form ─────────────────────
     with _col_r:
+        # Header only — no min-height so fields sit immediately below
         st.markdown("""
 <div style="
-  padding-top:32px;padding-left:clamp(20px,4vw,52px);padding-right:clamp(20px,4vw,52px);padding-bottom:0;
+  padding:28px clamp(20px,4vw,52px) 0;
   background:linear-gradient(180deg,rgba(11,15,26,.9),rgba(7,9,15,.96));
-  border-left:1px solid rgba(255,255,255,.08);min-height:100vh;
-  box-sizing:border-box;display:flex;flex-direction:column;
-  justify-content:flex-start;align-items:flex-start;
-">
+  border-left:1px solid rgba(255,255,255,.08);
+  box-sizing:border-box;">
 <h2 style="font-size:26px;font-weight:800;letter-spacing:-.02em;color:#eef0f8;margin:0 0 6px">
   Connexion</h2>
-<p style="font-size:13.5px;color:#8392bb;margin:0 0 24px;line-height:1.5">
+<p style="font-size:13.5px;color:#8392bb;margin:0 0 20px;line-height:1.5">
   Accédez à votre espace d'audit sécurisé.</p>
-<p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:0 0 5px">
+<p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:0 0 4px">
   Adresse e-mail</p>
 </div>
 """, unsafe_allow_html=True)
 
-        st.markdown('<div class="si-field" style="padding:0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
+        st.markdown('<div class="si-field" style="padding:0 clamp(20px,4vw,52px);margin-top:-4px">', unsafe_allow_html=True)
         _email = st.text_input("email", value="lucas.brunner@helvetia-private.ch",
                                label_visibility="collapsed", key="si_email")
         st.markdown("</div>", unsafe_allow_html=True)
@@ -3369,12 +3368,12 @@ div[data-testid="stButton"] > button[kind="primary"] {
 <div style="padding:0 clamp(20px,4vw,52px);
   background:linear-gradient(180deg,rgba(11,15,26,.9),rgba(7,9,15,.96));
   border-left:1px solid rgba(255,255,255,.08)">
-<p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:12px 0 5px">
+<p style="font-size:12px;font-weight:600;color:#c9cde0;letter-spacing:.02em;margin:10px 0 4px">
   Mot de passe</p>
 </div>
 """, unsafe_allow_html=True)
 
-        st.markdown('<div class="si-field" style="padding:0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
+        st.markdown('<div class="si-field" style="padding:0 clamp(20px,4vw,52px);margin-top:-4px">', unsafe_allow_html=True)
         _pwd = st.text_input("pwd", value="auditiq-demo", type="password",
                              label_visibility="collapsed", key="si_pwd")
         st.markdown("</div>", unsafe_allow_html=True)
@@ -3414,11 +3413,15 @@ div[data-testid="stButton"] > button[kind="primary"] {
                 st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
 
+        # GIF globe rotatif + badges sécurité
         st.markdown("""
-<div style="padding:20px clamp(20px,4vw,52px) 40px;
+<div style="padding:20px clamp(20px,4vw,52px) 32px;
   background:linear-gradient(180deg,rgba(11,15,26,.9),rgba(7,9,15,.96));
-  border-left:1px solid rgba(255,255,255,.08);min-height:60px;
-  display:flex;flex-direction:column;align-items:center;gap:8px">
+  border-left:1px solid rgba(255,255,255,.08);
+  display:flex;flex-direction:column;align-items:center;gap:10px">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Rotating_earth_%28large%29.gif/200px-Rotating_earth_%28large%29.gif"
+    alt="Globe" style="width:80px;height:80px;border-radius:50%;
+    box-shadow:0 0 18px rgba(99,102,241,.35);opacity:0.85;margin-bottom:4px"/>
   <span style="display:inline-flex;align-items:center;gap:6px;font-size:9px;
     font-weight:700;letter-spacing:.06em;text-transform:uppercase;
     background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);
