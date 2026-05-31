@@ -9,6 +9,7 @@ import sys
 import os
 import json
 import tempfile
+import html as _html
 from datetime import datetime
 from pathlib import Path
 
@@ -52,6 +53,7 @@ _SS_DEFAULTS = {
     "t1_show_form": True,
     "t2_show_form": True,
     "t1_jurs_pills": None,
+    "t1_topic_in": "", "t2_topic_in": "",
     "t3_docs_analysis": None,
     "t3_observations": [],
     "t3_analysis_xlsx": None,
@@ -82,28 +84,6 @@ for _k, _v in _SS_DEFAULTS.items():
     if _k not in st.session_state:
         st.session_state[_k] = _v
 
-# ── Voice command query-param dispatch ───────────────────────────────────────
-_vc_raw = st.query_params.get("voice_cmd", "")
-if _vc_raw:
-    _vc = _vc_raw.strip().lower()
-    if any(w in _vc for w in ["dashboard", "tableau de bord", "accueil", "home"]):
-        st.session_state["active_tab"] = 0
-    elif any(w in _vc for w in ["risk", "risque", "analyse des risques", "risk analysis"]):
-        st.session_state["active_tab"] = 1
-    elif any(w in _vc for w in ["audit plan", "plan audit", "plan d'audit", "tests", "testing"]):
-        st.session_state["active_tab"] = 2
-    elif any(w in _vc for w in ["document", "analyser document", "document analyser"]):
-        st.session_state["active_tab"] = 3
-    elif any(w in _vc for w in ["rapport", "report", "recommandation"]):
-        st.session_state["active_tab"] = 4
-    elif any(w in _vc for w in ["help", "aide"]):
-        st.session_state["help_open"] = True
-    elif any(w in _vc for w in ["suggestion", "claude", "cowork"]):
-        st.session_state["cowork_open"] = True
-    st.session_state["last_voice_transcript"] = _vc_raw.strip()
-    st.session_state["voice_active"] = False
-    st.query_params.clear()
-    st.rerun()
 
 # ── Example cards (hardcoded, always visible, #0a2540 bg, #3b82f6 border) ─────
 _EX_S = "background:#0a2540;border-left:4px solid #3b82f6;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px"
@@ -1884,6 +1864,7 @@ def _topic_to_theme(topic: str) -> str | None:
     return None
 
 
+@st.cache_data(show_spinner=False)
 def get_data_for_topic(topic: str, entity_type: str = "🏦 Private Banking") -> dict:
     """Return aggregated risks, tests, DA scenarios, and entity-specific overlays for a topic."""
     # Initialise result with safe defaults for every expected key
@@ -3132,12 +3113,6 @@ def _analytics_table(scenarios):
 
 
 # ── Sign-in gate ─────────────────────────────────────────────────────────────
-_qp = st.query_params
-if _qp.get("auth") == "1":
-    st.session_state.signed_in = True
-    st.query_params.clear()
-    st.rerun()
-
 if not st.session_state.signed_in:
     # ── Hide Streamlit chrome (theme handles bg/colors) ────────────────────────
     st.markdown("""
@@ -3920,57 +3895,51 @@ with st.container():
 
 
 if st.session_state.get("voice_active", False):
-    st.components.v1.html("""
-<style>
-  body{margin:0;font-family:-apple-system,system-ui,sans-serif;background:transparent}
-  #vc-wrap{background:rgba(13,17,23,.95);border:1px solid rgba(99,102,241,.45);border-radius:12px;
-    padding:14px 18px;display:flex;align-items:center;gap:14px}
-  #vc-dot{width:10px;height:10px;border-radius:50%;background:#ef4444;
-    animation:pulse 1.2s ease-in-out infinite;flex-shrink:0}
-  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0)}}
-  #vc-txt{font-size:13px;color:#94a3b8;flex:1}
-  #vc-transcript{font-size:14px;color:#eef2ff;font-weight:500;min-height:18px}
-  #vc-hint{font-size:10.5px;color:#4a5568;margin-top:3px}
-</style>
-<div id="vc-wrap">
-  <div id="vc-dot"></div>
-  <div id="vc-txt">
-    <div id="vc-transcript">Listening…</div>
-    <div id="vc-hint">Say: "Risk Analysis", "Audit Plan", "Dashboard", "Report", "Help"</div>
+    st.markdown("""
+<div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.35);
+  border-radius:12px;padding:12px 18px;margin-bottom:10px;
+  display:flex;align-items:center;gap:12px">
+  <span style="font-size:18px">🎙️</span>
+  <div style="flex:1">
+    <div style="font-size:12px;font-weight:600;color:#818cf8;margin-bottom:4px">
+      Command — type a navigation command</div>
+    <div style="font-size:11px;color:#4a5568">
+      e.g. "Risk Analysis", "Audit Plan", "Dashboard", "Report", "Help"</div>
   </div>
-</div>
-<script>
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-if (SR) {
-  const r = new SR();
-  r.lang = navigator.language || 'fr-FR';
-  r.continuous = false; r.interimResults = true;
-  r.onresult = e => {
-    const t = Array.from(e.results).map(x => x[0].transcript).join('');
-    document.getElementById('vc-transcript').textContent = t;
-    if (e.results[0].isFinal) {
-      const url = new URL(window.parent.location.href);
-      url.searchParams.set('voice_cmd', t);
-      window.parent.location.href = url.toString();
-    }
-  };
-  r.onerror = e => { document.getElementById('vc-transcript').textContent = '⚠ ' + e.error; };
-  r.start();
-} else {
-  document.getElementById('vc-transcript').textContent = '⚠ Web Speech API not supported in this browser.';
-  document.getElementById('vc-dot').style.background = '#eab308';
-}
-</script>""", height=90)
+</div>""", unsafe_allow_html=True)
+    _vc_typed = st.text_input("Command", placeholder="e.g. Risk Analysis…",
+                               key="_vc_text_input", label_visibility="collapsed")
+    if _vc_typed:
+        _vc_t = _vc_typed.strip().lower()
+        if any(w in _vc_t for w in ["dashboard", "tableau de bord", "accueil", "home"]):
+            st.session_state["active_tab"] = 0
+        elif any(w in _vc_t for w in ["risk", "risque", "analyse des risques", "risk analysis"]):
+            st.session_state["active_tab"] = 1
+        elif any(w in _vc_t for w in ["audit plan", "plan audit", "tests", "testing"]):
+            st.session_state["active_tab"] = 2
+        elif any(w in _vc_t for w in ["document", "analyser document"]):
+            st.session_state["active_tab"] = 3
+        elif any(w in _vc_t for w in ["rapport", "report", "recommandation"]):
+            st.session_state["active_tab"] = 4
+        elif any(w in _vc_t for w in ["help", "aide"]):
+            st.session_state["help_open"] = True
+        elif any(w in _vc_t for w in ["suggestion", "claude", "cowork"]):
+            st.session_state["cowork_open"] = True
+        st.session_state["last_voice_transcript"] = _vc_typed.strip()
+        st.session_state["voice_active"] = False
+        st.rerun()
 
 if st.session_state.get("last_voice_transcript"):
     _vt = st.session_state["last_voice_transcript"]
-    _active_tab_name = {0: "Dashboard", 1: "Risk Analysis", 2: "Audit Plan", 3: "Document Analyser", 4: "Audit Report"}.get(st.session_state.get("active_tab", 0), "")
+    _active_tab_name = {0: "Dashboard", 1: "Risk Analysis", 2: "Audit Plan",
+                        3: "Document Analyser", 4: "Audit Report"}.get(
+                        st.session_state.get("active_tab", 0), "")
     st.markdown(f"""
 <div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);
   border-radius:9px;padding:10px 16px;margin-bottom:8px;display:flex;align-items:center;gap:10px">
   <span style="font-size:18px">🎙️</span>
   <div>
-    <div style="font-size:13px;color:#818cf8;font-weight:600">Voice command received</div>
+    <div style="font-size:13px;color:#818cf8;font-weight:600">Command received</div>
     <div style="font-size:12.5px;color:#94a3b8">"{_vt}"
       {f'→ <span style="color:#22d3a5">{_active_tab_name}</span>' if _active_tab_name else ""}</div>
   </div>
@@ -4103,6 +4072,7 @@ def _classify_opinion(findings: list) -> tuple:
     return "Satisfactory", "No Critical or High findings; control environment is broadly effective."
 
 
+@st.cache_data(show_spinner=False)
 def _get_best_risk(finding_text: str, theme: str) -> dict | None:
     """Match a finding to the best risk in RISK_INDICATORS via keyword overlap."""
     if not finding_text:
@@ -5001,6 +4971,7 @@ elif _active == 1:
                 )
                 st.session_state["t1_topic_in"] = tpl.get("topic", "")
                 st.session_state["t1_jurs_pills"] = tpl.get("jurisdictions", JURISDICTIONS[:4])
+                st.session_state["t1_jurs_in"] = tpl.get("jurisdictions", JURISDICTIONS[:4])
                 st.session_state._tpl_name = tpl_name
                 st.session_state._tpl_scope = _entity_scope or tpl.get("scope", "")
                 st.rerun()
@@ -5452,7 +5423,7 @@ elif _active == 2:
 
         with _t2_form_col:
             if st.session_state.t1_topic:
-                st.markdown(f'<div class="ctx-pill">&#10003; Topic: {st.session_state.t1_topic}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="ctx-pill">&#10003; Topic: {_html.escape(str(st.session_state.t1_topic or ""))}</div>', unsafe_allow_html=True)
 
             # Pre-fill from Tab 1 if Tab 2 field is still empty
             if not st.session_state.get("t2_topic_in"):
@@ -5775,17 +5746,17 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
 
         with st.expander("💡 1 — Rationale", expanded=True):
             st.markdown('<div class="section-title">1. Rationale</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="output-box">{st.session_state.t2_rationale}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="output-box">{_html.escape(st.session_state.t2_rationale or "")}</div>', unsafe_allow_html=True)
             _copy_button(st.session_state.t2_rationale, "t2_rat_copy")
 
         with st.expander("📖 2 — Background Information", expanded=False):
             st.markdown('<div class="section-title">2. Background Information</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="output-box">{st.session_state.t2_background}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="output-box">{_html.escape(st.session_state.t2_background or "")}</div>', unsafe_allow_html=True)
             _copy_button(st.session_state.t2_background or "", "t2_bg_copy")
 
         with st.expander("📋 3 — Audit Plan", expanded=False):
             st.markdown('<div class="section-title">3. Audit Plan</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="output-box">{st.session_state.t2_org_plan}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="output-box">{_html.escape(st.session_state.t2_org_plan or "")}</div>', unsafe_allow_html=True)
             _copy_button(st.session_state.t2_org_plan or "", "t2_plan_copy")
 
         with st.expander("🧪 4 — Test List", expanded=False):
@@ -5825,6 +5796,22 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
             _rl_map2   = {"All": "All", "🔴 Critical": "Critical", "🟠 High": "High", "🟡 Moderate": "Moderate"}
             _show_tests_library(_live_theme, search=_live_sq, level_filter=_live_slv, type_filter=_live_stype,
                                 risk_level_filter=_rl_map2[_live_rlv], live_risks=_live_risks)
+
+        # ── Auto-generate static exports if not yet done ─────────────────────
+        _t2_theme_static = _topic_to_theme(topic2) if topic2 else "CYBER_RISK"
+        _t2_theme_static = _t2_theme_static or "CYBER_RISK"
+        if not st.session_state.t2_pdf and _t2_theme_static and AUDIT_TESTS_LIBRARY.get(_t2_theme_static):
+            try:
+                _t2_tests_txt = "\n".join(
+                    f"[{t.get('level','')}] {t.get('id','')} — {t.get('objective','')[:120]}"
+                    for t in AUDIT_TESTS_LIBRARY.get(_t2_theme_static, [])
+                )
+                st.session_state.t2_pdf = _make_pdf(
+                    f"Audit Plan — {topic2 or _t2_theme_static}",
+                    [("Audit Tests", _t2_tests_txt)],
+                )
+            except Exception:
+                pass
 
         pptx = st.session_state.t2_pptx
         xlsx = st.session_state.t2_xlsx

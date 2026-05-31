@@ -7911,6 +7911,42 @@ DATA_ANALYTICS_SCENARIOS = {
         },
     ],
 
+    "LIQUIDITY_RISK": [
+        {
+            "id": "DA_LIQ_001",
+            "theme": "LIQUIDITY_RISK",
+            "title": "Intraday Liquidity Monitoring",
+            "objective": "Detect intraday liquidity shortfalls and stress patterns across nostro accounts.",
+            "data_sources": ["Core banking system", "Nostro account ledger", "SWIFT payment queue"],
+            "analysis_type": "Threshold",
+            "anomaly_searched": "Intraday liquidity buffer falling below 20% of daily average outflows; payment queue backlogs exceeding 30 minutes.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Medium",
+        },
+        {
+            "id": "DA_LIQ_002",
+            "theme": "LIQUIDITY_RISK",
+            "title": "LCR / NSFR Ratio Trend Analysis",
+            "objective": "Track Liquidity Coverage Ratio and Net Stable Funding Ratio trends to detect deterioration before regulatory breach.",
+            "data_sources": ["Treasury management system", "Regulatory reporting database", "Balance sheet data"],
+            "analysis_type": "Trend",
+            "anomaly_searched": "LCR declining >10pp month-on-month; NSFR approaching 100% floor; significant variance between reported and model-computed ratios.",
+            "tools": ["Python", "Excel"],
+            "complexity": "High",
+        },
+        {
+            "id": "DA_LIQ_003",
+            "theme": "LIQUIDITY_RISK",
+            "title": "Concentration Risk in Funding Sources",
+            "objective": "Identify over-reliance on single counterparties or funding instruments.",
+            "data_sources": ["Treasury system", "Interbank lending records", "Repo book"],
+            "analysis_type": "Concentration",
+            "anomaly_searched": "Single counterparty providing >25% of total short-term funding; funding maturity gap >30 days for instruments >CHF 100M.",
+            "tools": ["SQL", "Python"],
+            "complexity": "Medium",
+        },
+    ],
+
     "THIRD_PARTY_RISK": [
         {
             "id": "DA036",
