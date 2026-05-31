@@ -245,12 +245,10 @@ _EXAMPLE_DORA = f"""
 </div>
 """
 
-# ── Theme CSS injection ────────────────────────────────────────────────────────
-_is_dark = st.session_state.theme == "dark"
+# ── Theme CSS injection (dark only) ───────────────────────────────────────────
 
-# Part 1: CSS variables (f-string for theme-dependent values)
-if _is_dark:
-    _theme_vars = """
+# Part 1: CSS variables
+_theme_vars = """
     :root {
       --bg-main:         #07090f;
       --bg-app:          #07090f;
@@ -305,39 +303,6 @@ if _is_dark:
       --footer-color:          #4a5568;
       --tbl-row-border:        rgba(255,255,255,0.05);
       --sidebar-header-color:  #4a5568;
-    }
-    """
-else:
-    _theme_vars = """
-    :root {
-      --bg-app: #f5f7fa;
-      --bg-card: #ffffff;
-      --bg-input: #ffffff;
-      --bg-sidebar: #eef0f6;
-      --text-primary: #1a2040;
-      --text-secondary: #4a5580;
-      --text-muted: #8a95b8;
-      --text-label: #4a5580;
-      --border-subtle: rgba(0,0,0,0.07);
-      --border-input: rgba(0,0,0,0.12);
-      --border-divider: rgba(0,0,0,0.06);
-      --tab-inactive: #6b7599;
-      --tab-active: #2d54d4;
-      --tab-active-border: #2d54d4;
-      --btn-primary-bg: linear-gradient(135deg,#2d54d4 0%,#6366f1 100%);
-      --btn-secondary-bg: rgba(45,84,212,0.08);
-      --btn-secondary-color: #2d54d4;
-      --btn-secondary-border: rgba(45,84,212,0.25);
-      --ctx-pill-bg: rgba(34,211,165,0.08);
-      --ctx-pill-border: rgba(34,211,165,0.25);
-      --ctx-pill-color: #0d8f72;
-      --output-box-bg: #ffffff;
-      --output-box-border: rgba(0,0,0,0.08);
-      --output-box-text: #2a3050;
-      --section-title-color: #1a2040;
-      --footer-color: #a0a8c0;
-      --tbl-row-border: rgba(0,0,0,0.04);
-      --sidebar-header-color: #2d54d4;
     }
     """
 
