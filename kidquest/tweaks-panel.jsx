@@ -227,12 +227,14 @@ function TweaksPanel({ title = 'Tweaks', children }) {
 
   React.useEffect(() => {
     const onMsg = (e) => {
+      // Only accept messages from the same origin (parent Streamlit frame)
+      if (e.origin !== window.location.origin && e.origin !== 'null') return;
       const t = e?.data?.type;
       if (t === '__activate_edit_mode') setOpen(true);
       else if (t === '__deactivate_edit_mode') setOpen(false);
     };
     window.addEventListener('message', onMsg);
-    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    window.parent.postMessage({ type: '__edit_mode_available' }, window.location.origin || '*');
     return () => window.removeEventListener('message', onMsg);
   }, []);
 

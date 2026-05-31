@@ -762,8 +762,11 @@ def speak(text: str, lang: str = "fr"):
         buf = _io.BytesIO()
         gTTS(text=text, lang=lang, slow=False).write_to_fp(buf)
         b64 = base64.b64encode(buf.getvalue()).decode()
-        st.markdown(
-            f'<audio autoplay style="display:none">'
+        # Use a persistent placeholder so reruns replace instead of accumulate
+        if "audio_placeholder" not in st.session_state:
+            st.session_state.audio_placeholder = st.empty()
+        st.session_state.audio_placeholder.markdown(
+            f'<audio autoplay controls style="width:100%;margin-top:8px">'
             f'<source src="data:audio/mp3;base64,{b64}" type="audio/mp3"></audio>',
             unsafe_allow_html=True,
         )
@@ -2397,7 +2400,9 @@ def get_story_context() -> dict:
 
 def build_user_prompt(ctx: dict) -> str:
     av   = ctx["avatar"]
-    name = ctx["child_name"]
+    # Strip to alphanumeric + accents + spaces, max 20 chars — prevent prompt injection
+    raw_name = ctx["child_name"]
+    name = re.sub(r"[^\w\sÀ-ž'-]", "", raw_name, flags=re.UNICODE)[:20].strip() or "ami"
     parts = [f"Héros : {name}, avatar {av['emoji']} ({av['id']})."]
     if ctx["countries"]:
         parts.append(f"Pays vus aujourd'hui : {', '.join(ctx['countries'])}.")
@@ -2422,16 +2427,18 @@ def parse_story(raw: str) -> tuple[str, str]:
 
 
 def highlight_story(body: str, ctx: dict) -> str:
-    result = body
+    import html as _html
+    # Escape first so LLM output can never inject raw HTML
+    result = _html.escape(body)
     for w in ctx.get("eng_words", []):
         result = re.sub(
-            rf"\b({re.escape(w)})\b",
+            rf"\b({re.escape(_html.escape(w))})\b",
             r'<span style="color:#f59e0b;font-weight:700">\1</span>',
             result, flags=re.IGNORECASE
         )
     for c in ctx.get("countries", []):
         result = re.sub(
-            rf"\b({re.escape(c)})\b",
+            rf"\b({re.escape(_html.escape(c))})\b",
             r'<span style="color:#0d9488;font-weight:700">\1</span>',
             result, flags=re.IGNORECASE
         )
@@ -2473,7 +2480,7 @@ def generate_story_streaming(ctx: dict):
     full_text   = ""
     try:
         with client.messages.stream(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-6",
             max_tokens=600,
             system=STORY_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": prompt}],
@@ -2531,7 +2538,8 @@ def tab_histoire_du_soir():
     name = st.session_state.get("child_name", "ami")
     ctx  = get_story_context()
 
-    st.markdown(f"### {av['emoji']} Bonsoir, **{name}** ! Prêt·e pour ton histoire ?")
+    import html as _html
+    st.markdown(f"### {av['emoji']} Bonsoir, **{_html.escape(name)}** ! Prêt·e pour ton histoire ?")
 
     # Show context summary
     with st.expander("🎒 Ton aventure d'aujourd'hui / Today's adventure", expanded=False):
@@ -2669,7 +2677,9 @@ def main():
     # Title
     av = st.session_state.get("avatar") or {}
     name = st.session_state.get("child_name") or ""
-    greeting = f"{av.get('emoji','')} {name} !" if name else "🎓 KidQuest Academy"
+    import html as _html
+    _safe_name = _html.escape(name)
+    greeting = f"{av.get('emoji','')} {_safe_name} !" if _safe_name else "🎓 KidQuest Academy"
     st.markdown(f'<div class="kq-title">{greeting}</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="kq-subtitle">Apprends en t\'amusant ! / Learn while having fun! 🌟</div>',

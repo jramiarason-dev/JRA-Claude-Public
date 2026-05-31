@@ -569,15 +569,58 @@ const ProfileScreen = ({ lang, profile, progress, onChangeAvatar }) => {
   );
 };
 
+// ── PIN CHANGE ──
+const PinChangeCard = ({ lang }) => {
+  const [current, setCurrent] = React.useState('');
+  const [next1, setNext1]     = React.useState('');
+  const [next2, setNext2]     = React.useState('');
+  const [msg, setMsg]         = React.useState(null);
+
+  const save = () => {
+    const stored = localStorage.getItem('kq_parent_pin') || '1234';
+    if (current !== stored)       { setMsg({ ok: false, text: lang === 'fr' ? 'Code actuel incorrect' : 'Wrong current PIN' }); return; }
+    if (!/^\d{4}$/.test(next1))   { setMsg({ ok: false, text: lang === 'fr' ? 'Le nouveau code doit être 4 chiffres' : 'New PIN must be 4 digits' }); return; }
+    if (next1 !== next2)          { setMsg({ ok: false, text: lang === 'fr' ? 'Les codes ne correspondent pas' : 'PINs do not match' }); return; }
+    localStorage.setItem('kq_parent_pin', next1);
+    setCurrent(''); setNext1(''); setNext2('');
+    setMsg({ ok: true, text: lang === 'fr' ? 'Code mis à jour ✓' : 'PIN updated ✓' });
+  };
+
+  return (
+    <div className="kq-card" style={{ marginTop: 16 }}>
+      <h2 className="kq-h2" style={{ marginBottom: 12 }}>
+        {lang === 'fr' ? '🔑 Changer le code parental' : '🔑 Change parent PIN'}
+      </h2>
+      {[
+        [lang === 'fr' ? 'Code actuel' : 'Current PIN', current, setCurrent],
+        [lang === 'fr' ? 'Nouveau code' : 'New PIN',    next1,   setNext1],
+        [lang === 'fr' ? 'Confirmer'   : 'Confirm',     next2,   setNext2],
+      ].map(([label, val, set]) => (
+        <div key={label} className="kq-setting" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 4 }}>
+          <div className="label">{label}</div>
+          <input type="password" inputMode="numeric" maxLength={4}
+                 value={val} onChange={e => { set(e.target.value.replace(/[^\d]/g, '')); setMsg(null); }}
+                 style={{ fontSize: 20, letterSpacing: 8, width: 100, textAlign: 'center', borderRadius: 8, border: '1.5px solid #6366f1', padding: '4px 8px' }} />
+        </div>
+      ))}
+      <button onClick={save}
+              style={{ marginTop: 12, background: '#6366f1', color: '#fff', border: 'none', borderRadius: 10, padding: '8px 20px', fontSize: 15, cursor: 'pointer' }}>
+        {lang === 'fr' ? 'Enregistrer' : 'Save'}
+      </button>
+      {msg && <p style={{ marginTop: 8, fontSize: 13, color: msg.ok ? '#16a34a' : '#dc2626' }}>{msg.text}</p>}
+    </div>
+  );
+};
+
 // ── PARENT ZONE ──
 const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
   const t = useT(lang);
   const [unlocked, setUnlocked] = useState(false);
   const [pin, setPin] = useState(['','','','']);
 
-  // Simple PIN: 1234 (placeholder)
   const tryUnlock = (digits) => {
-    if (digits.every(d => d !== '') && digits.join('') === '1234') {
+    const stored = localStorage.getItem('kq_parent_pin') || '1234';
+    if (digits.every(d => d !== '') && digits.join('') === stored) {
       setUnlocked(true);
     }
   };
@@ -610,7 +653,7 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
             ))}
           </div>
           <p className="kq-sub" style={{ fontSize: 13 }}>
-            {lang === 'fr' ? 'Code par défaut : 1234' : 'Default code: 1234'}
+            {lang === 'fr' ? 'Réservé aux parents' : 'Parents only'}
           </p>
         </div>
       </section>
@@ -631,8 +674,8 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
       <div className="kq-stat-row">
         <div className="kq-stat"><div className="v">{doneLevels}</div><div className="l">{t('levels_done')}</div></div>
         <div className="kq-stat"><div className="v">{totalStars}</div><div className="l">⭐ {t('total_stars')}</div></div>
-        <div className="kq-stat"><div className="v">24</div><div className="l">{t('time_today')} ({t('minutes')})</div></div>
-        <div className="kq-stat"><div className="v">5</div><div className="l">🔥 {t('streak')}</div></div>
+        <div className="kq-stat"><div className="v">—</div><div className="l">{t('time_today')} ({t('minutes')})</div></div>
+        <div className="kq-stat"><div className="v">—</div><div className="l">🔥 {t('streak')}</div></div>
       </div>
 
       <div className="kq-card">
@@ -682,6 +725,8 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
                  onChange={e => setTweak('dailyLimit', parseInt(e.target.value, 10))} />
         </div>
       </div>
+
+      <PinChangeCard lang={lang} />
 
       <div className="kq-card" style={{ marginTop: 16 }}>
         <h2 className="kq-h2">{t('progress')}</h2>
