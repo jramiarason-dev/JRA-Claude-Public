@@ -94,7 +94,10 @@ const MatchCard = ({ match, lang, onClick }) => {
           <Crest code={match.home.code} color={match.home.color} />
           <div style={{ minWidth: 0 }}>
             <div className="team-name">{match.home.name}</div>
-            <div className="team-rank">#{match.home.rank} · <FormBar form={match.home.form} /></div>
+            <div className="team-rank">
+              {match.home.rank != null ? <><span className="muted">#{match.home.rank}</span>{' · '}</> : null}
+              <FormBar form={match.home.form} />
+            </div>
           </div>
         </div>
 
@@ -113,7 +116,10 @@ const MatchCard = ({ match, lang, onClick }) => {
           <Crest code={match.away.code} color={match.away.color} />
           <div style={{ minWidth: 0 }}>
             <div className="team-name">{match.away.name}</div>
-            <div className="team-rank"><FormBar form={match.away.form} /> · #{match.away.rank}</div>
+            <div className="team-rank">
+              <FormBar form={match.away.form} />
+              {match.away.rank != null ? <>{' · '}<span className="muted">#{match.away.rank}</span></> : null}
+            </div>
           </div>
         </div>
       </div>

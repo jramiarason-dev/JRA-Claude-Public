@@ -5074,99 +5074,6 @@ for _comp in TEAMS_BY_COMPETITION:
 # HELPERS
 # ══════════════════════════════════════════════════════════════════════════════
 
-def color_note(note):
-    if note >= 8.5: return "#CAFF33"
-    if note >= 7.5: return "#90ee2a"
-    if note >= 6.5: return "#f0c040"
-    if note >= 5.5: return "#e07030"
-    return "#e05050"
-
-def player_bar_pct(note):
-    return int((note / 10) * 100)
-
-def stat_bar_pct(home_val, away_val):
-    total = home_val + away_val
-    if total == 0: return 50, 50
-    return int(home_val / total * 100), int(away_val / total * 100)
-
-def _team_icon(t: dict, align: str = "left") -> str:
-    """Return a logo <img> if available, otherwise a colored badge with initials."""
-    logo = t.get("logo", "")
-    if logo:
-        return (
-            f'<img src="{logo}" '
-            f'style="width:44px;height:44px;object-fit:contain;flex-shrink:0;border-radius:6px;" '
-            f'alt="{t["name"]}" onerror="this.style.display=\'none\'">'
-        )
-    return f'<div class="team-badge" style="background:{t["color"]};flex-shrink:0;">{t["short"]}</div>'
-
-
-def render_match_card(mid: str, m: dict, selected: bool = False) -> str:
-    h, a = m["home"], m["away"]
-    sc_h = str(h["score"]) if h.get("score") is not None else "–"
-    sc_a = str(a["score"]) if a.get("score") is not None else "–"
-    status = m.get("status", "")
-    comp = m.get("competition", "")
-    time_str = m.get("time", "")
-
-    if status == "Live":
-        pill = '<span class="pill pill-live">● Live</span>'
-        score_cls = 'match-score live'
-    elif status == "Terminé":
-        pill = '<span class="pill pill-done">✓ Terminé</span>'
-        score_cls = 'match-score'
-    else:
-        pill = f'<span class="pill">{time_str}</span>'
-        score_cls = 'match-score'
-
-    border_top = f'border-top:3px solid {h["color"]};' if selected else ''
-    glow = f'box-shadow:0 0 0 1px {"var(--accent)"};' if selected else ''
-
-    return f'''<div class="card card-hover fade-in" style="{border_top}{glow}margin-bottom:.25rem;">
-  <div class="match-card">
-    <div class="match-meta">
-      <span class="comp">{comp}</span>
-      {pill}
-    </div>
-    <div class="match-teams">
-      <div style="display:flex;align-items:center;gap:10px;min-width:0;">
-        <div class="team-crest" style="background:{h["color"]};">{h["short"][:3]}</div>
-        <div style="min-width:0;">
-          <div style="font-weight:600;color:#fff;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{h["name"]}</div>
-        </div>
-      </div>
-      <div style="text-align:center;min-width:100px;">
-        <div class="{score_cls}">{sc_h} <span style="color:#333;">–</span> {sc_a}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;justify-content:flex-end;min-width:0;">
-        <div style="min-width:0;text-align:right;">
-          <div style="font-weight:600;color:#fff;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{a["name"]}</div>
-        </div>
-        <div class="team-crest" style="background:{a["color"]};">{a["short"][:3]}</div>
-      </div>
-    </div>
-  </div>
-</div>'''
-
-def render_formation(players, color, label):
-    if not players: return ""
-    # group into GK / def / mid / att rows based on position index
-    if len(players) == 11:
-        rows = [players[0:1], players[1:5], players[5:8], players[8:11]]
-    elif len(players) == 5:
-        rows = [players[0:1], players[1:3], players[3:5]]
-    else:
-        mid = len(players) // 2
-        rows = [players[0:1], players[1:mid], players[mid:]]
-    html = f'<div class="pitch"><div class="pitch-label">{label}</div>'
-    for row in reversed(rows):
-        html += '<div class="formation-row">'
-        for p in row:
-            html += f'<div class="player-dot" style="background:{color};"><div style="text-align:center;line-height:1.2;">{p[0].split()[-1][:6]}<br><span style="font-size:.55rem;opacity:.7;">{p[1]}</span></div></div>'
-        html += '</div>'
-    html += '<div class="pitch-label">⬆ Attaque</div></div>'
-    return html
-
 def generate_synthetic_analysis(mid: str, m: dict) -> dict:
     """Deterministic professional tactical analysis for any match."""
     rng = _rng_mod.Random(int(hashlib.md5(mid.encode()).hexdigest()[:8], 16))
@@ -5308,555 +5215,6 @@ def generate_synthetic_analysis(mid: str, m: dict) -> dict:
         return {"tactique": {"home_form": "XV de départ", "away_form": "Attaque structurée", "home_style": h_style, "away_style": a_style, "home_players": h_players, "away_players": a_players, "phases": phases, "home_stats": home_stats}, "joueurs": {"home": h_joueurs, "away": a_joueurs}, "bilan": bilan, "verdict": {"home_perf": hperf, "away_perf": aperf, "intensite": inten, "spectacle": spect, "home_txt": v_txt_w if hw else v_txt_l, "away_txt": v_txt_l if hw else v_txt_w, "coach_home": v_coach_w if hw else v_coach_l, "coach_away": v_coach_l if hw else v_coach_w}}
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# THESPORTSDB CONFIG
-# ══════════════════════════════════════════════════════════════════════════════
-TSDB_KEY  = os.environ.get("THESPORTSDB_KEY", "123")
-TSDB_BASE = f"https://www.thesportsdb.com/api/v1/json/{TSDB_KEY}"
-
-# TheSportsDB league ID → our competition name
-TSDB_LEAGUE_MAP: dict[str, str] = {
-    "4334": "Ligue 1",
-    "4328": "Premier League",
-    "4480": "Champions League",
-    "4335": "Super League Suisse",
-    "4387": "NBA",
-    "4422": "Euroleague",
-    "4391": "Betclic Elite",
-    "4481": "Top 14",
-}
-COMP_TO_LID: dict[str, str] = {v: k for k, v in TSDB_LEAGUE_MAP.items()}
-
-# TheSportsDB strSport values expected per CoachIQ sport tab
-TSDB_SPORT_NAMES: dict[str, set] = {
-    "⚽ Football": {"Soccer"},
-    "🏀 Basket": {"Basketball"},
-    "🏉 Rugby": {"Rugby Union", "Rugby League", "Rugby"},
-}
-
-# TheSportsDB raw status → our display status
-TSDB_STATUS_MAP: dict[str, str] = {
-    "Match Finished": "Terminé", "FT": "Terminé",
-    "AET": "Terminé", "PEN": "Terminé",
-    "1H": "Live", "2H": "Live", "HT": "Live",
-    "ET": "Live",  "P": "Live", "In Progress": "Live",
-    "NS": "À venir", "": "À venir",
-}
-
-# Primary team colours (fallback when no logo available)
-TEAM_COLORS: dict[str, str] = {
-    "Paris Saint-Germain": "#004174", "PSG": "#004174",
-    "Monaco": "#E4002B", "AS Monaco": "#E4002B",
-    "Marseille": "#2CBFEF", "Olympique de Marseille": "#2CBFEF",
-    "Lyon": "#1A1A1A", "Olympique Lyonnais": "#1A1A1A",
-    "Arsenal": "#EF0107", "Manchester City": "#6CABDD",
-    "Liverpool": "#C8102E", "Chelsea": "#034694",
-    "Tottenham Hotspur": "#132257", "Manchester United": "#DA291C",
-    "Real Madrid": "#FEBE10", "Barcelona": "#A50044",
-    "Bayern Munich": "#DC052D", "Borussia Dortmund": "#FDE100",
-    "Juventus": "#000000", "Inter": "#0033A0",
-    "AC Milan": "#AC0830", "Atletico Madrid": "#CB3524",
-    "FC Basel": "#CC0000", "BSC Young Boys": "#FFD700",
-    "Los Angeles Lakers": "#552583", "Golden State Warriors": "#1D428A",
-    "Boston Celtics": "#007A33", "New York Knicks": "#006BB6",
-    "Miami Heat": "#98002E", "Chicago Bulls": "#CE1141",
-    "LDLC ASVEL": "#003a70", "Monaco Basket": "#B5121B",
-    "Stade Toulousain": "#B60000", "Racing 92": "#0099CC",
-    "Union Bordeaux-Bègles": "#001F5B", "Stade Rochelais": "#FCD000",
-    "Stade Français": "#E1002B", "La Rochelle": "#FCD000",
-}
-
-def _team_color(name: str) -> str:
-    return TEAM_COLORS.get(name, "#2a2a2a")
-
-def _tsdb_status(raw: str) -> str:
-    return TSDB_STATUS_MAP.get(raw or "", "À venir")
-
-def _short(name: str) -> str:
-    """3-char abbreviation: first letter of each word, max 3."""
-    parts = (name or "???").split()
-    if len(parts) == 1:
-        return name[:3].upper()
-    return "".join(p[0] for p in parts[:3]).upper()
-
-
-# ── Cached API helpers ────────────────────────────────────────────────────────
-
-@st.cache_data(ttl=300, show_spinner=False)
-def _tsdb_day_league(date_str: str, league_id: str) -> list | None:
-    """Fetch events for a given date and league from TheSportsDB."""
-    try:
-        r = requests.get(
-            f"{TSDB_BASE}/eventsday.php",
-            params={"d": date_str, "l": league_id},
-            timeout=10,
-        )
-        r.raise_for_status()
-        return r.json().get("events") or []
-    except requests.exceptions.ConnectionError:
-        return None
-    except Exception:
-        return None
-
-@st.cache_data(ttl=600, show_spinner=False)
-def _tsdb_league_recent(league_id: str) -> list:
-    """Fetch last 5 + next 5 events for a league (for calendar dots)."""
-    events: list = []
-    for ep in ("eventspastleague.php", "eventsnextleague.php"):
-        try:
-            r = requests.get(f"{TSDB_BASE}/{ep}", params={"id": league_id}, timeout=10)
-            r.raise_for_status()
-            events += r.json().get("events") or []
-        except Exception:
-            pass
-    return events
-
-def _tsdb_to_match(ev: dict, comp: str, sport: str) -> dict:
-    home_score = away_score = None
-    if ev.get("intHomeScore") not in (None, "", "null"):
-        try:
-            home_score = int(ev["intHomeScore"])
-            away_score = int(ev.get("intAwayScore") or 0)
-        except (ValueError, TypeError):
-            pass
-    home_name = ev.get("strHomeTeam") or ""
-    away_name = ev.get("strAwayTeam") or ""
-    ev_date = (ev.get("strDate") or "")[:10]
-    status = _tsdb_status(ev.get("strStatus") or "")
-    # Correct stale "À venir" for past matches and generate plausible scores
-    if status == "À venir" and ev_date and ev_date < TODAY.isoformat():
-        status = "Terminé"
-        if home_score is None:
-            _r = _rng_mod.Random(hash(ev.get("idEvent") or ev.get("strEvent") or ev_date))
-            if "Basket" in sport:
-                base = _r.randint(88, 118)
-                home_score = base + _r.randint(-8, 8)
-                away_score = base + _r.randint(-8, 8)
-            elif "Rugby" in sport:
-                home_score = _r.randint(0, 6) * 3 + _r.randint(0, 3) * 5 + _r.randint(0, 2) * 7
-                away_score = _r.randint(0, 6) * 3 + _r.randint(0, 3) * 5 + _r.randint(0, 2) * 7
-            else:
-                home_score = _r.randint(0, 4)
-                away_score = _r.randint(0, 4)
-    return {
-        "sport": sport,
-        "competition": comp,
-        "date": ev_date,
-        "time": (ev.get("strTime") or "")[:5],
-        "stadium": ev.get("strVenue") or "",
-        "status": status,
-        "home": {
-            "name": home_name,
-            "short": _short(home_name),
-            "color": _team_color(home_name),
-            "score": home_score,
-            "logo": ev.get("strHomeTeamBadge") or "",
-        },
-        "away": {
-            "name": away_name,
-            "short": _short(away_name),
-            "color": _team_color(away_name),
-            "score": away_score,
-            "logo": ev.get("strAwayTeamBadge") or "",
-        },
-    }
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# DATA LAYER
-# ══════════════════════════════════════════════════════════════════════════════
-# COACHIQ_DATA_SOURCE=api  → TheSportsDB live data
-# COACHIQ_DATA_SOURCE=simulated (default) → hardcoded demo data
-DATA_SOURCE = os.environ.get("COACHIQ_DATA_SOURCE", "api")
-
-
-class DataLayer:
-    """Routes all data requests to TheSportsDB (api) or hardcoded demo (simulated)."""
-
-    @staticmethod
-    def get_matches(target_date: str, sport: str, competitions: set) -> dict:
-        if DATA_SOURCE == "api":
-            target_ids = {
-                COMP_TO_LID[c]: c
-                for c in competitions if c in COMP_TO_LID
-            }
-            result: dict = {}
-            connection_error = False
-
-            expected_sports = TSDB_SPORT_NAMES.get(sport, set())
-            for lid, comp in target_ids.items():
-                events = _tsdb_day_league(target_date, lid)
-                if events is None:
-                    connection_error = True
-                else:
-                    for ev in events:
-                        if expected_sports and ev.get("strSport", "") not in expected_sports:
-                            continue
-                        mid = str(ev.get("idEvent", f"{lid}_{ev.get('strEvent','')}"))
-                        result[mid] = _tsdb_to_match(ev, comp, sport)
-
-            if connection_error and not result:
-                st.error(
-                    "⚠️ **TheSportsDB inaccessible** — vérifiez votre connexion.",
-                    icon="🔌",
-                )
-
-            return result
-        # simulated fallback
-        return {
-            mid: m for mid, m in MATCHES.items()
-            if m["sport"] == sport and m["date"] == target_date and m["competition"] in competitions
-        }
-
-    @staticmethod
-    def get_all_for_sport(sport: str, competitions: set) -> dict:
-        """Recent + upcoming matches across all dates (for 'no matches' navigation)."""
-        if DATA_SOURCE == "api":
-            result: dict = {}
-            expected_sports = TSDB_SPORT_NAMES.get(sport, set())
-            for comp in competitions:
-                if comp not in COMP_TO_LID:
-                    continue
-                for ev in _tsdb_league_recent(COMP_TO_LID[comp]):
-                    if expected_sports and ev.get("strSport", "") not in expected_sports:
-                        continue
-                    mid = str(ev.get("idEvent", ""))
-                    if mid:
-                        result[mid] = _tsdb_to_match(ev, comp, sport)
-            return result
-        return {
-            mid: m for mid, m in MATCHES.items()
-            if m["sport"] == sport and m["competition"] in competitions
-        }
-
-    @staticmethod
-    def get_analysis(match_id: str, m: dict | None = None) -> dict | None:
-        if match_id in ANALYSIS:
-            return ANALYSIS[match_id]
-        if m is not None:
-            return generate_synthetic_analysis(match_id, m)
-        return None
-
-    @staticmethod
-    def match_dates() -> set:
-        """ISO date strings that have at least one match (for calendar dots)."""
-        if DATA_SOURCE == "api":
-            dates: set = set()
-            for lid in TSDB_LEAGUE_MAP:
-                for ev in _tsdb_league_recent(lid):
-                    d = ev.get("strDate")
-                    if d:
-                        dates.add(d)
-            return dates
-        return set(m["date"] for m in MATCHES.values())
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# SESSION STATE
-# ══════════════════════════════════════════════════════════════════════════════
-if "sport" not in st.session_state: st.session_state.sport = "⚽ Football"
-if "selected_match" not in st.session_state: st.session_state.selected_match = None
-if "selected_date" not in st.session_state: st.session_state.selected_date = TODAY
-if "cal_view" not in st.session_state: st.session_state.cal_view = TODAY.replace(day=1)
-if "comp_filter" not in st.session_state:
-    st.session_state.comp_filter = set()
-if "selected_team" not in st.session_state:
-    st.session_state.selected_team = None
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# RENDER MATCH ANALYSIS (called from Tab 1)
-# ══════════════════════════════════════════════════════════════════════════════
-def render_match_analysis(mid, m):
-    an = DataLayer.get_analysis(mid, m)
-    if not an:
-        st.info("Analyse non disponible.")
-        return
-    h, a = m["home"], m["away"]
-    sc_h = h["score"] if h.get("score") is not None else "–"
-    sc_a = a["score"] if a.get("score") is not None else "–"
-
-    t1, t2, t3, t4 = st.tabs(["⚙️ Tactique", "🌟 Joueurs", "📊 Bilan", "🧠 Verdict Coach"])
-
-    # ── Tab 1 : Tactique ──────────────────────────────────────────────────────
-    with t1:
-        tac = an["tactique"]
-        c1, c2 = st.columns(2)
-        _h_coach = COACHES.get(COACH_TEAM_LOOKUP.get(h["name"], ""))
-        _a_coach = COACHES.get(COACH_TEAM_LOOKUP.get(a["name"], ""))
-        with c1:
-            st.markdown(f'<p class="bbn" style="font-size:1.2rem;color:#CAFF33;">Formation {h["short"]} — {tac["home_form"]}</p>', unsafe_allow_html=True)
-            st.markdown(render_formation(tac.get("home_players", []), h["color"], h["short"]), unsafe_allow_html=True)
-            st.markdown(f'<p style="font-size:.85rem;color:#aaa;margin-top:.75rem;">{tac["home_style"]}</p>', unsafe_allow_html=True)
-            if _h_coach:
-                st.markdown(
-                    f'<div style="background:#111;border:1px solid #222;border-left:3px solid {h["color"]};'
-                    f'border-radius:8px;padding:.7rem 1rem;margin-top:.6rem;">'
-                    f'<p style="color:#888;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;">ENTRAÎNEUR</p>'
-                    f'<p style="color:#f0f0f0;font-size:.95rem;font-weight:700;margin:.1rem 0;">{_h_coach["nationality"]} {_h_coach["name"]}</p>'
-                    f'<p style="color:#888;font-size:.78rem;margin:0;">{_h_coach["style"]}</p></div>',
-                    unsafe_allow_html=True,
-                )
-        with c2:
-            st.markdown(f'<p class="bbn" style="font-size:1.2rem;color:#CAFF33;">Formation {a["short"]} — {tac["away_form"]}</p>', unsafe_allow_html=True)
-            st.markdown(render_formation(tac.get("away_players", []), a["color"], a["short"]), unsafe_allow_html=True)
-            st.markdown(f'<p style="font-size:.85rem;color:#aaa;margin-top:.75rem;">{tac["away_style"]}</p>', unsafe_allow_html=True)
-            if _a_coach:
-                st.markdown(
-                    f'<div style="background:#111;border:1px solid #222;border-left:3px solid {a["color"]};'
-                    f'border-radius:8px;padding:.7rem 1rem;margin-top:.6rem;">'
-                    f'<p style="color:#888;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;">ENTRAÎNEUR</p>'
-                    f'<p style="color:#f0f0f0;font-size:.95rem;font-weight:700;margin:.1rem 0;">{_a_coach["nationality"]} {_a_coach["name"]}</p>'
-                    f'<p style="color:#888;font-size:.78rem;margin:0;">{_a_coach["style"]}</p></div>',
-                    unsafe_allow_html=True,
-                )
-
-        st.markdown('<hr class="div-line">', unsafe_allow_html=True)
-        st.markdown('<p class="bbn" style="font-size:1.2rem;color:#CAFF33;">PHASES DE JEU</p>', unsafe_allow_html=True)
-        for phase, desc in tac["phases"].items():
-            st.markdown(
-                f'<div style="background:#141414;border:1px solid #1e1e1e;border-left:3px solid #CAFF33;'
-                f'border-radius:8px;padding:.85rem 1rem;margin-bottom:.6rem;">'
-                f'<p style="color:#CAFF33;font-weight:700;font-size:.8rem;text-transform:uppercase;'
-                f'letter-spacing:.08em;margin-bottom:.3rem;">{phase}</p>'
-                f'<p style="color:#ccc;font-size:.85rem;line-height:1.6;margin:0;">{desc}</p></div>',
-                unsafe_allow_html=True,
-            )
-
-        st.markdown('<hr class="div-line">', unsafe_allow_html=True)
-        st.markdown('<p class="bbn" style="font-size:1.2rem;color:#CAFF33;">STATISTIQUES CLÉS</p>', unsafe_allow_html=True)
-        for stat_name, (hv, av) in tac["home_stats"].items():
-            hp, ap = stat_bar_pct(hv, av)
-            st.markdown(
-                f'<div class="stat-row">'
-                f'<div class="stat-label"><span style="color:#CAFF33;">{h["short"]} {hv}</span><span>{stat_name}</span><span style="color:#3b82f6;">{a["short"]} {av}</span></div>'
-                f'<div class="stat-bar-bg"><div class="stat-bar-home" style="width:{hp}%;"></div>'
-                f'<div class="stat-bar-away" style="width:{ap}%;right:0;"></div></div></div>',
-                unsafe_allow_html=True,
-            )
-
-    # ── Tab 2 : Joueurs ───────────────────────────────────────────────────────
-    with t2:
-        jou = an["joueurs"]
-        c1, c2 = st.columns(2)
-        for col, team_key, team in [(c1, "home", h), (c2, "away", a)]:
-            with col:
-                st.markdown(
-                    f'<p class="bbn" style="font-size:1.2rem;color:#CAFF33;">'
-                    f'<span class="team-badge" style="background:{team["color"]};display:inline-flex;'
-                    f'width:28px;height:28px;font-size:.7rem;vertical-align:middle;margin-right:.4rem;">'
-                    f'{team["short"]}</span>{team["name"]}</p>',
-                    unsafe_allow_html=True,
-                )
-                for p in jou[team_key]:
-                    note_color = color_note(p["note"])
-                    bar_pct = player_bar_pct(p["note"])
-                    st.markdown(
-                        f'<div class="player-row">'
-                        f'<span class="player-poste" style="color:#555;">{p["poste"]}</span>'
-                        f'<span class="player-name">{p["nom"]}</span>'
-                        f'<div class="player-bar-wrap"><div class="player-bar" style="width:{bar_pct}%;background:{note_color};"></div></div>'
-                        f'<span class="player-note" style="color:{note_color};">{p["note"]}</span>'
-                        f'</div>'
-                        f'<div style="font-size:.72rem;color:#444;margin-bottom:.5rem;margin-left:calc(2rem + 130px);">{p["stats"]}</div>',
-                        unsafe_allow_html=True,
-                    )
-
-    # ── Tab 3 : Bilan ──────────────────────────────────────────────────────────
-    with t3:
-        bil = an["bilan"]
-        c1, c2 = st.columns(2)
-        with c1:
-            st.markdown(f'<p class="bbn" style="font-size:1.1rem;color:#CAFF33;">💪 {h["short"]} — Points Forts</p>', unsafe_allow_html=True)
-            for pt in bil["home_forts"]:
-                st.markdown(f'<div class="point-fort">✅ {pt}</div>', unsafe_allow_html=True)
-            st.markdown(f'<p class="bbn" style="font-size:1.1rem;color:#ef4444;margin-top:1rem;">⚠️ {h["short"]} — Points Faibles</p>', unsafe_allow_html=True)
-            for pt in bil["home_faibles"]:
-                st.markdown(f'<div class="point-faible">❌ {pt}</div>', unsafe_allow_html=True)
-        with c2:
-            st.markdown(f'<p class="bbn" style="font-size:1.1rem;color:#CAFF33;">💪 {a["short"]} — Points Forts</p>', unsafe_allow_html=True)
-            for pt in bil["away_forts"]:
-                st.markdown(f'<div class="point-fort">✅ {pt}</div>', unsafe_allow_html=True)
-            st.markdown(f'<p class="bbn" style="font-size:1.1rem;color:#ef4444;margin-top:1rem;">⚠️ {a["short"]} — Points Faibles</p>', unsafe_allow_html=True)
-            for pt in bil["away_faibles"]:
-                st.markdown(f'<div class="point-faible">❌ {pt}</div>', unsafe_allow_html=True)
-
-    # ── Tab 4 : Verdict Coach ─────────────────────────────────────────────────
-    with t4:
-        verd = an["verdict"]
-        sc1, sc2, sc3, sc4 = st.columns(4)
-        for col, label, val in [
-            (sc1, f"Perf. {h['short']}", verd["home_perf"]),
-            (sc2, f"Perf. {a['short']}", verd["away_perf"]),
-            (sc3, "Intensité", verd["intensite"]),
-            (sc4, "Spectacle", verd["spectacle"]),
-        ]:
-            with col:
-                st.markdown(
-                    f'<div class="verdict-score">'
-                    f'<div class="label">{label}</div>'
-                    f'<div class="value">{val}</div>'
-                    f'<div class="label">/10</div></div>',
-                    unsafe_allow_html=True,
-                )
-
-        st.markdown('<hr class="div-line">', unsafe_allow_html=True)
-
-        _vc_h = COACHES.get(COACH_TEAM_LOOKUP.get(h["name"], ""))
-        _vc_a = COACHES.get(COACH_TEAM_LOOKUP.get(a["name"], ""))
-        if _vc_h or _vc_a:
-            _pc1, _pc2 = st.columns(2)
-            for _pc, _vc, _team in [(_pc1, _vc_h, h), (_pc2, _vc_a, a)]:
-                with _pc:
-                    if _vc:
-                        _str_pills = "  ".join(f'<span style="background:#1a2a0a;color:#CAFF33;border-radius:4px;padding:.15rem .5rem;font-size:.72rem;">{s}</span>' for s in _vc["strengths"])
-                        _wk_pills  = "  ".join(f'<span style="background:#2a1010;color:#ef4444;border-radius:4px;padding:.15rem .5rem;font-size:.72rem;">{w}</span>' for w in _vc["weaknesses"])
-                        _kp_items  = "".join(f'<li style="margin:.2rem 0;">{kp}</li>' for kp in _vc["key_principles"])
-                        st.markdown(
-                            f'<div style="background:#111;border:1px solid #222;border-radius:10px;padding:1rem 1.1rem;margin-bottom:.8rem;">'
-                            f'<p style="color:#888;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3rem;">PROFIL COACH — {_team["short"]}</p>'
-                            f'<p style="color:#f0f0f0;font-size:1.1rem;font-weight:700;margin:.1rem 0;">{_vc["nationality"]} {_vc["name"]}</p>'
-                            f'<p style="color:#888;font-size:.78rem;margin-bottom:.6rem;">{_vc["formation"]} · {_vc["style"]}</p>'
-                            f'<p style="color:#ccc;font-size:.82rem;line-height:1.6;margin-bottom:.7rem;">{_vc["philosophy"]}</p>'
-                            f'<p style="margin-bottom:.3rem;">{_str_pills}</p>'
-                            f'<p style="margin-bottom:.7rem;">{_wk_pills}</p>'
-                            f'<p style="color:#888;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;">PRINCIPES CLÉS</p>'
-                            f'<ul style="color:#aaa;font-size:.8rem;padding-left:1.2rem;margin:0;">{_kp_items}</ul>'
-                            f'</div>',
-                            unsafe_allow_html=True,
-                        )
-            st.markdown('<hr class="div-line">', unsafe_allow_html=True)
-
-        c1, c2 = st.columns(2)
-        with c1:
-            st.markdown(f'<p class="bbn" style="font-size:1.1rem;color:#CAFF33;">📝 Analyse {h["short"]}</p>', unsafe_allow_html=True)
-            st.markdown(f'<div class="verdict-card">{verd["home_txt"]}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="verdict-card" style="border-color:#2a2a2a;">{verd["coach_home"]}</div>', unsafe_allow_html=True)
-        with c2:
-            st.markdown(f'<p class="bbn" style="font-size:1.1rem;color:#CAFF33;">📝 Analyse {a["short"]}</p>', unsafe_allow_html=True)
-            st.markdown(f'<div class="verdict-card">{verd["away_txt"]}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="verdict-card" style="border-color:#2a2a2a;">{verd["coach_away"]}</div>', unsafe_allow_html=True)
-
-        # ── Clés Tactiques (Football) ─────────────────────────────────────────
-        if "Football" in m.get("sport", ""):
-            _ftac_home_form = an["tactique"].get("home_form", "")
-            _ftac_away_form = an["tactique"].get("away_form", "")
-            _form_to_plays: dict[str, list[str]] = {
-                "4-3-3":   ["4-3-3", "high_press", "width_depth"],
-                "4-2-3-1": ["4-2-3-1", "mid_block", "counter_attacking"],
-                "4-4-2":   ["4-4-2", "compactness", "direct_play"],
-                "3-4-3":   ["3-4-3", "high_press", "overlaps"],
-                "3-5-2":   ["3-5-2", "positional_play", "half_space"],
-                "4-1-4-1": ["4-1-4-1", "positional_play", "third_man_runs"],
-                "5-3-2":   ["5-3-2", "low_block", "immediate_counter"],
-                "4-3-2-1": ["4-3-2-1", "half_space", "positional_play"],
-            }
-            _fh_plays = _form_to_plays.get(_ftac_home_form, ["positional_play", "high_press", "overlaps"])
-            _fa_plays = _form_to_plays.get(_ftac_away_form, ["mid_block", "counter_attacking", "compactness"])
-            _fall_plays = list(dict.fromkeys(_fh_plays + _fa_plays))[:5]
-            if _fall_plays:
-                st.markdown('<hr class="div-line">', unsafe_allow_html=True)
-                st.markdown('<p class="bbn" style="font-size:1.1rem;color:#CAFF33;">🗝️ Clés Tactiques du Match</p>', unsafe_allow_html=True)
-                _form_desc_h = _ftac_home_form if _ftac_home_form else "Formation"
-                _form_desc_a = _ftac_away_form if _ftac_away_form else "Formation"
-                st.markdown(
-                    f'<p style="color:#666;font-size:.78rem;margin-bottom:.75rem;">'
-                    f'Concepts tactiques clés identifiés pour {h["short"]} ({_form_desc_h}) '
-                    f'et {a["short"]} ({_form_desc_a})</p>',
-                    unsafe_allow_html=True,
-                )
-                _fplay_cols = st.columns(min(len(_fall_plays), 3))
-                for _fpi, _fpk in enumerate(_fall_plays[:3]):
-                    _fpd = FOOTBALL_PLAYBOOK.get(_fpk, {})
-                    if _fpd:
-                        with _fplay_cols[_fpi % 3]:
-                            _fplay_label = _fpk.replace("_", " ").replace("-", " ").title()
-                            st.markdown(
-                                f'<div style="background:#0d1a0d;border:1px solid #1a2a1a;border-top:2px solid #CAFF33;'
-                                f'border-radius:8px;padding:.8rem .9rem;margin-bottom:.5rem;height:100%;">'
-                                f'<p style="color:#CAFF33;font-size:.72rem;font-weight:700;text-transform:uppercase;'
-                                f'letter-spacing:.08em;margin-bottom:.2rem;">{_fplay_label}</p>'
-                                f'<p style="color:#888;font-size:.65rem;margin-bottom:.35rem;">{_fpd.get("categorie","")}</p>'
-                                f'<p style="color:#ddd;font-size:.78rem;line-height:1.5;margin-bottom:.35rem;">'
-                                f'<b style="color:#aaa;">Objectif :</b> {_fpd.get("objectif","")}</p>'
-                                f'<p style="color:#888;font-size:.74rem;line-height:1.4;margin:0;">'
-                                f'{_fpd.get("structure","")}</p>'
-                                f'</div>',
-                                unsafe_allow_html=True,
-                            )
-
-        # ── Clés Tactiques (Basketball) ───────────────────────────────────────
-        if "Basket" in m.get("sport", ""):
-            _tac_sys_home = an["tactique"].get("home_form", "")
-            _tac_sys_away = an["tactique"].get("away_form", "")
-            _sys_to_plays: dict[str, list[str]] = {
-                "Positionnel":        ["pick_and_roll", "post_up", "horns"],
-                "Motion Offense":     ["motion_offense", "flare_screen", "staggers"],
-                "Iso Ball":           ["isolation", "pick_and_roll", "handoff"],
-                "Pace & Space":       ["spread_offense", "dribble_drive", "transition_offense"],
-                "Pick & Roll":        ["pick_and_roll", "spain_pnr", "empty_side_pnr"],
-                "Transition Offense": ["transition_offense", "pistol_action", "double_drag"],
-            }
-            _h_plays = _sys_to_plays.get(_tac_sys_home, ["pick_and_roll", "motion_offense", "defense_homme"])
-            _a_plays = _sys_to_plays.get(_tac_sys_away, ["pick_and_roll", "motion_offense", "defense_homme"])
-            _all_plays = list(dict.fromkeys(_h_plays + _a_plays))[:5]
-            if _all_plays:
-                st.markdown('<hr class="div-line">', unsafe_allow_html=True)
-                st.markdown('<p class="bbn" style="font-size:1.1rem;color:#CAFF33;">🗝️ Clés Tactiques du Match</p>', unsafe_allow_html=True)
-                st.markdown(
-                    f'<p style="color:#666;font-size:.78rem;margin-bottom:.75rem;">'
-                    f'Concepts tactiques clés identifiés pour {h["short"]} ({_tac_sys_home}) '
-                    f'et {a["short"]} ({_tac_sys_away})</p>',
-                    unsafe_allow_html=True,
-                )
-                _play_cols = st.columns(min(len(_all_plays), 3))
-                for _pi, _pk in enumerate(_all_plays[:3]):
-                    _pd = PLAYBOOK.get(_pk, {})
-                    if _pd:
-                        with _play_cols[_pi % 3]:
-                            _play_label = _pk.replace("_", " ").title()
-                            st.markdown(
-                                f'<div style="background:#0d1a0d;border:1px solid #1a2a1a;border-top:2px solid #CAFF33;'
-                                f'border-radius:8px;padding:.8rem .9rem;margin-bottom:.5rem;height:100%;">'
-                                f'<p style="color:#CAFF33;font-size:.72rem;font-weight:700;text-transform:uppercase;'
-                                f'letter-spacing:.08em;margin-bottom:.2rem;">{_play_label}</p>'
-                                f'<p style="color:#888;font-size:.65rem;margin-bottom:.35rem;">{_pd.get("categorie","")}</p>'
-                                f'<p style="color:#ddd;font-size:.78rem;line-height:1.5;margin-bottom:.35rem;">'
-                                f'<b style="color:#aaa;">Objectif :</b> {_pd.get("objectif","")}</p>'
-                                f'<p style="color:#888;font-size:.74rem;line-height:1.4;margin:0;">'
-                                f'{_pd.get("principe","")}</p>'
-                                f'</div>',
-                                unsafe_allow_html=True,
-                            )
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# MAIN — 5 TAB NAVIGATION
-# ══════════════════════════════════════════════════════════════════════════════
-
-# ── Tab CSS ───────────────────────────────────────────────────────────────────
-st.markdown('''<style>
-.stTabs [data-baseweb="tab-list"] {
-    gap: 8px;
-    background-color: #0e1118;
-    padding: 8px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.07);
-}
-.stTabs [data-baseweb="tab"] {
-    background-color: #141820;
-    border-radius: 8px;
-    color: #8892b0;
-    font-weight: 500;
-    padding: 8px 16px;
-    border: 1px solid rgba(255,255,255,0.06);
-}
-.stTabs [aria-selected="true"] {
-    background-color: #e8ff3a !important;
-    color: #000000 !important;
-    font-weight: 700 !important;
-}
-</style>''', unsafe_allow_html=True)
 
 # ── Classement Ligue 1 2025-26 ───────────────────────────────────────────────
 LIGUE1_STANDINGS = [
@@ -5888,12 +5246,55 @@ LIGUE1_STANDINGS = [
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _build_js_matches() -> str:
-    """Convert Python MATCHES dict → window.MATCHES JS array for the React UI."""
+    """Convert Python MATCHES dict → window.MATCHES JS array for the React UI.
+
+    Enriches each team entry with:
+    - rank: position in LIGUE1_STANDINGS for Ligue 1 teams (None otherwise)
+    - form: last 5 results as V/N/D from MATCHES history, sorted descending by date
+    """
     sport_map  = {"⚽ Football": "football", "🏀 Basket": "basket", "🏉 Rugby": "rugby"}
     status_map = {"Terminé": "finished", "Live": "live", "À venir": "upcoming"}
     day_fr = ["Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam.", "Dim."]
     mon_fr = ["Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin",
               "Juil.", "Août", "Sep.", "Oct.", "Nov.", "Déc."]
+
+    # Build rank lookup from LIGUE1_STANDINGS
+    l1_rank: dict[str, int] = {row["team"]: row["pos"] for row in LIGUE1_STANDINGS}
+
+    # Build form lookup: team_name → [last-5 results newest-first]
+    # Only from finished matches where both scores are available
+    finished = [
+        (mid, m) for mid, m in MATCHES.items()
+        if m.get("status") == "Terminé"
+        and m["home"].get("score") is not None
+        and m["away"].get("score") is not None
+    ]
+    # Sort finished matches by date descending
+    def _sort_key(item):
+        try:
+            return datetime.strptime(item[1].get("date", ""), "%Y-%m-%d")
+        except Exception:
+            return datetime.min
+    finished.sort(key=_sort_key, reverse=True)
+
+    form_map: dict[str, list] = {}
+    for _mid, _m in finished:
+        hs = int(_m["home"]["score"])
+        as_ = int(_m["away"]["score"])
+        hn = _m["home"]["name"]
+        an = _m["away"]["name"]
+        for team, scored, conceded in [(hn, hs, as_), (an, as_, hs)]:
+            if len(form_map.get(team, [])) < 5:
+                if scored > conceded:
+                    r = "V"
+                elif scored == conceded:
+                    r = "N"
+                else:
+                    r = "D"
+                form_map.setdefault(team, []).append(r)
+    # Reverse so oldest→newest (left to right display)
+    for team in form_map:
+        form_map[team] = list(reversed(form_map[team]))
 
     grouped: dict = {"football": [], "basket": [], "rugby": []}
 
@@ -5922,11 +5323,15 @@ def _build_js_matches() -> str:
                 "code":  h.get("short", h["name"][:3].upper()),
                 "name":  h["name"],
                 "color": h.get("color", "#888"),
+                "rank":  l1_rank.get(h["name"]),
+                "form":  form_map.get(h["name"], []),
             },
             "away": {
                 "code":  a.get("short", a["name"][:3].upper()),
                 "name":  a["name"],
                 "color": a.get("color", "#888"),
+                "rank":  l1_rank.get(a["name"]),
+                "form":  form_map.get(a["name"], []),
             },
         }
 
@@ -5936,6 +5341,57 @@ def _build_js_matches() -> str:
         grouped[sport_key].append(entry)
 
     return f"window.MATCHES = {json.dumps(grouped, ensure_ascii=False)};"
+
+
+def _build_js_analyses() -> str:
+    """Generate synthetic analyses for all finished matches → window.ANALYSES."""
+    analyses: dict = {}
+    for mid, m in MATCHES.items():
+        if m.get("status") != "Terminé":
+            continue
+        if m["home"].get("score") is None or m["away"].get("score") is None:
+            continue
+        # Use pre-authored analysis if available, otherwise generate synthetic
+        if mid in ANALYSIS:
+            raw = ANALYSIS[mid]
+        else:
+            try:
+                raw = generate_synthetic_analysis(mid, m)
+            except Exception:
+                continue
+        # Serialise to a compact form for the React UI
+        tac = raw.get("tactique", {})
+        jou = raw.get("joueurs", {})
+        verd = raw.get("verdict", {})
+        analyses[mid] = {
+            "tactique": {
+                "home_form": tac.get("home_form", ""),
+                "away_form": tac.get("away_form", ""),
+            },
+            "joueurs": {
+                "home": [
+                    {"nom": p["nom"], "poste": p["poste"],
+                     "note": p["note"], "stats": p["stats"]}
+                    for p in jou.get("home", [])
+                ],
+                "away": [
+                    {"nom": p["nom"], "poste": p["poste"],
+                     "note": p["note"], "stats": p["stats"]}
+                    for p in jou.get("away", [])
+                ],
+            },
+            "verdict": {
+                "home_perf":  verd.get("home_perf"),
+                "away_perf":  verd.get("away_perf"),
+                "intensite":  verd.get("intensite"),
+                "spectacle":  verd.get("spectacle"),
+                "home_txt":   verd.get("home_txt", ""),
+                "away_txt":   verd.get("away_txt", ""),
+                "coach_home": verd.get("coach_home", ""),
+                "coach_away": verd.get("coach_away", ""),
+            },
+        }
+    return f"window.ANALYSES = {json.dumps(analyses, ensure_ascii=False)};"
 
 
 _ROOT = Path(__file__).parent
@@ -5957,7 +5413,8 @@ _JSX_POST   = _read("screen-postmatch.jsx")
 _JSX_MISC   = _read("screen-misc.jsx")
 _JSX_APP    = _read("app.jsx")
 
-_JS_REAL_MATCHES = _build_js_matches()
+_JS_REAL_MATCHES   = _build_js_matches()
+_JS_REAL_ANALYSES  = _build_js_analyses()
 
 _HTML = f"""<!doctype html>
 <html lang="fr">
@@ -5984,6 +5441,7 @@ _HTML = f"""<!doctype html>
 
   <script>{_JS_DATA}</script>
   <script>{_JS_REAL_MATCHES}</script>
+  <script>{_JS_REAL_ANALYSES}</script>
   <script type="text/babel" data-presets="react">{_JSX_TWEAKS}</script>
   <script type="text/babel" data-presets="react">{_JSX_UI}</script>
   <script type="text/babel" data-presets="react">{_JSX_SHELL}</script>
