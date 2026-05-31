@@ -674,8 +674,8 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
       <div className="kq-stat-row">
         <div className="kq-stat"><div className="v">{doneLevels}</div><div className="l">{t('levels_done')}</div></div>
         <div className="kq-stat"><div className="v">{totalStars}</div><div className="l">⭐ {t('total_stars')}</div></div>
-        <div className="kq-stat"><div className="v">24</div><div className="l">{t('time_today')} ({t('minutes')})</div></div>
-        <div className="kq-stat"><div className="v">5</div><div className="l">🔥 {t('streak')}</div></div>
+        <div className="kq-stat"><div className="v">—</div><div className="l">{t('time_today')} ({t('minutes')})</div></div>
+        <div className="kq-stat"><div className="v">—</div><div className="l">🔥 {t('streak')}</div></div>
       </div>
 
       <div className="kq-card">
