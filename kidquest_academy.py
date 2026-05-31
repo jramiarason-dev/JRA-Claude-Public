@@ -2473,7 +2473,7 @@ def generate_story_streaming(ctx: dict):
     full_text   = ""
     try:
         with client.messages.stream(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-6",
             max_tokens=600,
             system=STORY_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": prompt}],
@@ -2531,7 +2531,8 @@ def tab_histoire_du_soir():
     name = st.session_state.get("child_name", "ami")
     ctx  = get_story_context()
 
-    st.markdown(f"### {av['emoji']} Bonsoir, **{name}** ! Prêt·e pour ton histoire ?")
+    import html as _html
+    st.markdown(f"### {av['emoji']} Bonsoir, **{_html.escape(name)}** ! Prêt·e pour ton histoire ?")
 
     # Show context summary
     with st.expander("🎒 Ton aventure d'aujourd'hui / Today's adventure", expanded=False):
@@ -2669,7 +2670,9 @@ def main():
     # Title
     av = st.session_state.get("avatar") or {}
     name = st.session_state.get("child_name") or ""
-    greeting = f"{av.get('emoji','')} {name} !" if name else "🎓 KidQuest Academy"
+    import html as _html
+    _safe_name = _html.escape(name)
+    greeting = f"{av.get('emoji','')} {_safe_name} !" if _safe_name else "🎓 KidQuest Academy"
     st.markdown(f'<div class="kq-title">{greeting}</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="kq-subtitle">Apprends en t\'amusant ! / Learn while having fun! 🌟</div>',
