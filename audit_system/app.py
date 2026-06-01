@@ -1863,13 +1863,17 @@ def _client():
 
 
 def _call(client, prompt, system="You are an expert audit consultant specialising in financial services.", max_tokens=6000):
-    resp = client.messages.create(
+    # System sent as a cacheable block; stream + get_final_message avoids HTTP
+    # timeouts on large max_tokens while keeping an identical return contract.
+    system_blocks = [{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}]
+    with client.messages.stream(
         model=MODEL,
         max_tokens=max_tokens,
-        system=system,
+        system=system_blocks,
         messages=[{"role": "user", "content": prompt}],
-    )
-    return resp.content[0].text.strip()
+    ) as stream:
+        resp = stream.get_final_message()
+    return next((b.text for b in resp.content if getattr(b, "type", None) == "text"), "").strip()
 
 
 def _web_search_call(client, prompt, system="", max_tokens=6000):
@@ -1879,8 +1883,9 @@ def _web_search_call(client, prompt, system="", max_tokens=6000):
     for _ in range(8):
         kwargs = dict(model=MODEL, max_tokens=max_tokens, tools=ws_tool, messages=messages)
         if system:
-            kwargs["system"] = system
-        r = client.messages.create(**kwargs)
+            kwargs["system"] = [{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}]
+        with client.messages.stream(**kwargs) as stream:
+            r = stream.get_final_message()
         for b in r.content:
             if hasattr(b, "text") and b.text:
                 texts.append(b.text)
@@ -1944,16 +1949,18 @@ def _upload_sf(client, f):
 
 def _agentic_loop(client, sys_prompt, tools, messages, tool_fn):
     texts, extra = [], {}
+    system_blocks = [{"type": "text", "text": sys_prompt, "cache_control": {"type": "ephemeral"}}]
     while True:
-        r = client.beta.messages.create(
+        with client.beta.messages.stream(
             model=MODEL,
             max_tokens=16000,
             thinking={"type": "adaptive"},
-            system=sys_prompt,
+            system=system_blocks,
             messages=messages,
             tools=tools,
             betas=["files-api-2025-04-14"],
-        )
+        ) as stream:
+            r = stream.get_final_message()
         for b in r.content:
             if hasattr(b, "text") and b.text:
                 texts.append(b.text)

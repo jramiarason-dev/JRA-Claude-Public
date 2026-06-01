@@ -178,7 +178,7 @@ def run():
             model      = MODEL,
             max_tokens = 16000,
             thinking   = {"type": "adaptive"},
-            system     = SYSTEM_PROMPT,
+            system     = [{"type": "text", "text": SYSTEM_PROMPT, "cache_control": {"type": "ephemeral"}}],
             messages   = messages,
             tools      = TOOLS,
             betas      = ["files-api-2025-04-14"],

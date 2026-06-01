@@ -11,7 +11,7 @@ from rich.prompt import Prompt, Confirm
 from rich.text import Text
 from rich.rule import Rule
 
-MODEL   = "claude-opus-4-7"
+MODEL   = "claude-opus-4-8"
 console = Console()
 
 
@@ -121,11 +121,14 @@ def stream_and_collect(client: anthropic.Anthropic, system: str,
                         messages: list[dict], tools: list[dict] | None = None,
                         betas: list[str] | None = None) -> anthropic.types.Message:
     """Stream a Claude message and collect the final response."""
+    # Cache the (large, stable) system prompt so repeated agent turns reuse the
+    # prefix instead of re-billing it at full input price.
+    system_blocks = [{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}]
     kwargs = dict(
         model      = MODEL,
         max_tokens = 8192,
         thinking   = {"type": "adaptive"},
-        system     = system,
+        system     = system_blocks,
         messages   = messages,
     )
     if tools:
