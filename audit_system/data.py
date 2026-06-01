@@ -9488,6 +9488,38 @@ AUDIT_TESTS_LIBRARY = {
             "failure_criteria": "Alert unresolved >5 days, attestation completion <100%, or suppressed alerts without justification",
         },
     ],
+    "LIQUIDITY_RISK": [
+        {
+            "id": "T076",
+            "level": "Critical",
+            "category": "Standard",
+            "objective": "Verify LCR (Liquidity Coverage Ratio) calculation accuracy and regulatory compliance",
+            "procedure": "Recompute LCR for the latest 3 reporting dates: high-quality liquid assets (HQLA) divided by total net cash outflows over 30 days. Verify HQLA haircuts and level 1/2 caps applied per Basel III. Confirm LCR ≥ 100% and reconcile to regulatory submission.",
+            "population": "Daily LCR computations for the reporting quarter + regulatory returns",
+            "sample_size": "3 month-end reporting dates + 10 random daily computations",
+            "failure_criteria": "LCR < 100% without documented remediation, HQLA misclassification, or variance vs. regulatory submission > 2%",
+        },
+        {
+            "id": "T077",
+            "level": "High",
+            "category": "Standard",
+            "objective": "Test intraday liquidity monitoring and stress-testing assumptions",
+            "procedure": "Review intraday liquidity reports and the liquidity stress-testing framework. Verify stress scenarios (idiosyncratic, market-wide, combined) are run at least quarterly, assumptions are board-approved, and survival horizon is documented. Check counterbalancing capacity is quantified.",
+            "population": "Liquidity stress-test reports for the last 12 months",
+            "sample_size": "All quarterly stress runs + supporting assumptions",
+            "failure_criteria": "Stress tests not run quarterly, assumptions not approved, or survival horizon below board-set minimum",
+        },
+        {
+            "id": "T078",
+            "level": "Moderate",
+            "category": "Standard",
+            "objective": "Verify Contingency Funding Plan (CFP) exists, is current, and has been tested",
+            "procedure": "Review the Contingency Funding Plan. Confirm it identifies early-warning indicators, escalation triggers, and diversified funding sources. Verify it was reviewed/approved within the last 12 months and a dry-run or tabletop test was performed.",
+            "population": "CFP document, approval records, and test evidence",
+            "sample_size": "100% — single current CFP and its governance trail",
+            "failure_criteria": "CFP absent, approval > 12 months old, or no evidence of testing",
+        },
+    ],
     "THIRD_PARTY_RISK": [
         {
             "id": "T061", "level": "Critical", "category": "Standard",
