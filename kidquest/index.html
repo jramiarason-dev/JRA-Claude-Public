@@ -1756,12 +1756,13 @@ function TweaksPanel({ title = 'Tweaks', children }) {
 
   React.useEffect(() => {
     const onMsg = (e) => {
+      if (e.origin !== window.location.origin && e.origin !== 'null') return;
       const t = e?.data?.type;
       if (t === '__activate_edit_mode') setOpen(true);
       else if (t === '__deactivate_edit_mode') setOpen(false);
     };
     window.addEventListener('message', onMsg);
-    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    window.parent.postMessage({ type: '__edit_mode_available' }, window.location.origin || '*');
     return () => window.removeEventListener('message', onMsg);
   }, []);
 
@@ -2273,7 +2274,7 @@ const Topbar = ({ lang, setLang, t, profile, stars, streak, onProfile, hideHud }
         </div>
         {profile && (
           <button className="kq-profile-pill" onClick={onProfile} title={t('profile')}>
-            <div className="av">{profile.avatar}</div>
+            <div className="av">{profile.avatar?.emoji ?? profile.avatar}</div>
             <span>{profile.name}</span>
           </button>
         )}
@@ -2799,9 +2800,9 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
   const [unlocked, setUnlocked] = useState(false);
   const [pin, setPin] = useState(['','','','']);
 
-  // Simple PIN: 1234 (placeholder)
   const tryUnlock = (digits) => {
-    if (digits.every(d => d !== '') && digits.join('') === '1234') {
+    const stored = localStorage.getItem('kq_parent_pin') || '1234';
+    if (digits.every(d => d !== '') && digits.join('') === stored) {
       setUnlocked(true);
     }
   };
@@ -2834,7 +2835,7 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
             ))}
           </div>
           <p className="kq-sub" style={{ fontSize: 13 }}>
-            {lang === 'fr' ? 'Code par défaut : 1234' : 'Default code: 1234'}
+            {lang === 'fr' ? 'Réservé aux parents' : 'Parents only'}
           </p>
         </div>
       </section>
@@ -2855,8 +2856,8 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
       <div className="kq-stat-row">
         <div className="kq-stat"><div className="v">{doneLevels}</div><div className="l">{t('levels_done')}</div></div>
         <div className="kq-stat"><div className="v">{totalStars}</div><div className="l">⭐ {t('total_stars')}</div></div>
-        <div className="kq-stat"><div className="v">24</div><div className="l">{t('time_today')} ({t('minutes')})</div></div>
-        <div className="kq-stat"><div className="v">5</div><div className="l">🔥 {t('streak')}</div></div>
+        <div className="kq-stat"><div className="v">—</div><div className="l">{t('time_today')} ({t('minutes')})</div></div>
+        <div className="kq-stat"><div className="v">—</div><div className="l">🔥 {t('streak')}</div></div>
       </div>
 
       <div className="kq-card">
