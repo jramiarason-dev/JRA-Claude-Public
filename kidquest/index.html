@@ -1756,13 +1756,12 @@ function TweaksPanel({ title = 'Tweaks', children }) {
 
   React.useEffect(() => {
     const onMsg = (e) => {
-      if (e.origin !== window.location.origin && e.origin !== 'null') return;
-      const t = e?.data?.type;
+      const t = e && e.data && e.data.type;
       if (t === '__activate_edit_mode') setOpen(true);
       else if (t === '__deactivate_edit_mode') setOpen(false);
     };
     window.addEventListener('message', onMsg);
-    window.parent.postMessage({ type: '__edit_mode_available' }, window.location.origin || '*');
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
     return () => window.removeEventListener('message', onMsg);
   }, []);
 
@@ -2274,7 +2273,7 @@ const Topbar = ({ lang, setLang, t, profile, stars, streak, onProfile, hideHud }
         </div>
         {profile && (
           <button className="kq-profile-pill" onClick={onProfile} title={t('profile')}>
-            <div className="av">{profile.avatar?.emoji ?? profile.avatar}</div>
+            <div className="av">{profile.avatar && profile.avatar.emoji ? profile.avatar.emoji : profile.avatar}</div>
             <span>{profile.name}</span>
           </button>
         )}
