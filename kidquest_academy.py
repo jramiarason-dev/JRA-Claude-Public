@@ -4,7 +4,6 @@ New design: HTML/React prototype served full-bleed via Streamlit.
 Legacy Python game logic preserved below (reachable via kidquest/streamlit_app.py).
 """
 import streamlit as st
-import streamlit.components.v1 as components
 from pathlib import Path
 import random
 import requests
@@ -47,7 +46,7 @@ st.markdown(
 # ─── Serve the redesigned HTML/React app full-bleed ──────────────────────────
 _HTML_PATH = Path(__file__).parent / "kidquest" / "index.html"
 if _HTML_PATH.exists():
-    components.html(_HTML_PATH.read_text(encoding="utf-8"), height=1700, scrolling=True)
+    st.iframe(_HTML_PATH.read_text(encoding="utf-8"), height=1700, scrolling=True)
     st.stop()  # Don't render legacy Streamlit UI when design is available
 
 # ─── FALLBACK: legacy Streamlit app (runs only if kidquest/index.html missing) ─
