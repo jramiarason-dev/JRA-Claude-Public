@@ -26,6 +26,103 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# ── Demo Mode content ─────────────────────────────────────────────────────────
+_DEMO_CONTENT = {
+    "template": "Third Party & Vendor Risk",
+    "topic": "Third Party & Vendor Risk Management",
+    "jurisdictions": ["CH / FINMA", "EU / DORA", "UK / FCA+PRA"],
+    "entity": "🏦 Private Banking",
+    "t1_summary": """<b>Executive Summary</b><br>
+The Third Party & Vendor Risk assessment identifies <b>23 risk indicators</b> across 4 criticality tiers for the institution's outsourcing and vendor ecosystem. Critical gaps were identified in sub-outsourcing oversight, exit strategy documentation, and real-time SLA monitoring under DORA Article 28 requirements.<br><br>
+<b>Top 5 Risk Indicators:</b><br>
+• <span style='color:#ef4444;font-weight:600'>CRITICAL</span> — No documented exit strategy for Tier-1 cloud providers (AWS, Azure); lock-in risk not quantified<br>
+• <span style='color:#ef4444;font-weight:600'>CRITICAL</span> — Sub-outsourcing chains not fully mapped; 3 critical vendors identified with undisclosed fourth-party dependencies<br>
+• <span style='color:#f97316;font-weight:600'>HIGH</span> — SOC 2 Type II reports missing or expired for 7 of 19 critical vendors; last assessment >18 months<br>
+• <span style='color:#f97316;font-weight:600'>HIGH</span> — Contracts with IT vendors lack mandatory audit rights clauses per FINMA Circ. 2023/1<br>
+• <span style='color:#eab308;font-weight:600'>MODERATE</span> — Vendor performance SLA dashboards not integrated; manual quarterly reviews only<br><br>
+<b>Regulatory Exposure:</b> DORA (EU 2022/2554) Art. 28–30 · FINMA Circ. 2023/1 · FCA SS2/21 · EBA/GL/2019/02""",
+    "t2_rationale": """Third Party & Vendor Risk has been elevated to a Board-level priority following the DORA implementation deadline (Jan 2025) and a series of industry incidents linked to critical IT outsourcing failures. The institution's dependency on 3 hyper-scaler cloud providers and 19 critical vendors with cross-border data flows creates a concentrated systemic exposure requiring structured audit intervention.
+
+Regulatory pressure has intensified: FINMA issued targeted review letters in Q3 2024 to 12 private banks regarding sub-outsourcing transparency, and the FCA's 2024 Operational Resilience review flagged vendor concentration as a sector-wide vulnerability. This audit addresses both first-line control adequacy and second-line oversight effectiveness.""",
+    "t2_background": """The institution outsources approximately 68% of its IT infrastructure to third-party providers, with AWS (primary cloud), Temenos (core banking), and Bloomberg (market data) constituting Tier-1 critical dependencies. The vendor management framework was last comprehensively reviewed in 2021 and has not been updated to reflect DORA's enhanced ICT third-party risk requirements.
+
+Key structural gaps include: (1) the absence of a centralised vendor register with real-time risk scoring; (2) no automated alerting for vendor financial distress or adverse media; (3) exit and substitution strategies documented for only 4 of 11 Tier-1 vendors. Internal audit's prior recommendation (2023-AUD-047) to implement a vendor risk platform remains open after 14 months.""",
+    "t2_org_plan": """**Audit Organisation — Third Party & Vendor Risk**
+
+**Engagement Lead:** Senior IT Audit Manager
+**Team:** 2 IT auditors + 1 regulatory specialist (DORA)
+**Duration:** 6 weeks (Fieldwork: weeks 1–4 | Reporting: weeks 5–6)
+**Audit Universe Scope:** 19 critical vendors + vendor management function (IT Risk, Procurement, Legal)
+
+**Work Programme:**
+1. Vendor Register & Classification (Week 1) — Completeness, tiering criteria, DORA ICT mapping
+2. Contractual Compliance (Week 1–2) — Audit rights, SLA terms, data portability, exit clauses
+3. Due Diligence & Ongoing Monitoring (Week 2–3) — SOC 2 currency, cyber assessments, financial health
+4. Sub-outsourcing & Fourth-Party Risk (Week 3) — Chain mapping, approval records, concentration
+5. Exit Strategy Testing (Week 4) — Documentation, RTO/RPO feasibility, dry-run evidence
+6. DORA Art. 28 Compliance Check (Week 4) — Contractual requirements checklist vs. binding register""",
+    "t3_report": """# Internal Audit Report — Third Party & Vendor Risk Management
+**Reference:** AUD-2025-TPR-001 | **Status:** DRAFT FOR DISCUSSION
+**Audit Period:** Q1–Q2 2025 | **Fieldwork Completed:** May 2025
+
+---
+
+## Executive Summary
+Internal Audit conducted a full-scope review of the institution's Third Party & Vendor Risk management framework across 19 critical vendors and the supporting governance structure. The review identified **4 Critical findings, 6 High findings, and 9 Moderate/Low observations**, representing a significant deterioration from the prior audit cycle (2023: 1 Critical, 4 High).
+
+**Overall Audit Opinion: UNSATISFACTORY**
+
+The vendor management framework does not yet meet DORA Article 28–30 requirements or FINMA Circular 2023/1 expectations. Immediate remediation is required for exit strategy documentation and sub-outsourcing transparency.
+
+---
+
+## Key Findings
+
+### Finding 1 — CRITICAL: Absence of Viable Exit Strategies (DORA Art. 29)
+Exit and substitution plans are documented for only 4 of 11 Tier-1 critical vendors. No dry-run exercises have been conducted. For AWS (primary cloud provider), the estimated migration effort exceeds 18 months with no interim continuity measures.
+**Recommendation:** Complete exit strategy documentation for all Tier-1 vendors by Q3 2025; conduct tabletop exercise for top 3 critical vendors by Q4 2025.
+
+### Finding 2 — CRITICAL: Undisclosed Sub-outsourcing Chains
+Three critical vendors (anonymised: Vendor A, C, F) have material fourth-party dependencies not disclosed in contracts or communicated to the institution. These sub-processors handle production data, creating unassessed concentration and data residency risks.
+**Recommendation:** Mandate contractual notification of material sub-outsourcing within 30 days; conduct emergency assessment of identified chains.
+
+### Finding 3 — HIGH: Expired Due Diligence Documentation
+SOC 2 Type II reports are missing or older than 18 months for 7 of 19 critical vendors. Three vendors have had adverse media events (financial distress, data breach) with no documented impact assessment.
+**Recommendation:** Implement automated due diligence refresh workflow; escalate 3 vendors to enhanced monitoring.
+
+---
+
+## Management Response & Action Plan
+Management accepts all findings. A Vendor Risk Remediation Programme has been initiated with a dedicated budget of CHF 450,000 for FY2025–2026, including procurement of a third-party risk management platform (target: Q3 2025).""",
+    "dash_stats": {
+        "risks_identified": 23,
+        "audit_tests": 47,
+        "frameworks": 6,
+        "vendors_reviewed": 19,
+    },
+    "gen_steps_t1": [
+        ("🔍", "Scanning THIRD_PARTY_RISK indicator library…", 0.6),
+        ("📋", "Mapping to FINMA Circ. 2023/1 · DORA Art. 28 · FCA SS2/21…", 0.8),
+        ("⚖️", "Scoring 23 risk indicators across 4 criticality tiers…", 0.7),
+        ("📊", "Building risk heat-map and exposure matrix…", 0.5),
+        ("✅", "Finalising executive summary…", 0.4),
+    ],
+    "gen_steps_t2": [
+        ("🔍", "Loading audit tests library — THIRD_PARTY_RISK…", 0.5),
+        ("🧠", "Structuring engagement rationale and background…", 0.8),
+        ("📋", "Drafting 6-week work programme…", 0.7),
+        ("⚖️", "Validating against DORA ICT risk requirements…", 0.6),
+        ("✅", "Audit plan ready — 47 tests mapped…", 0.4),
+    ],
+    "gen_steps_t3": [
+        ("📂", "Compiling findings from fieldwork evidence…", 0.6),
+        ("⚖️", "Applying UNSATISFACTORY opinion criteria…", 0.5),
+        ("📝", "Drafting management responses and action plans…", 0.8),
+        ("🔍", "Cross-checking regulatory references…", 0.6),
+        ("✅", "Audit report finalised — ready for review…", 0.4),
+    ],
+}
+
 # ── Session state (init before CSS) ───────────────────────────────────────────
 _SS_DEFAULTS = {
     # Dashboard
@@ -62,6 +159,8 @@ _SS_DEFAULTS = {
     "t2_test_statuses": {},
     "t0_prior_recs": [],
     "t4_exec_summary": None,
+    # Demo
+    "demo_mode": False,
     # Auth
     "signed_in": False,
     # Help
@@ -1082,6 +1181,53 @@ div[data-testid="stRadio"] input[type="radio"] {
   color: #818cf8 !important;
   box-shadow: 0 0 8px rgba(99,102,241,0.35) !important;
 }
+
+/* ── Demo Mode button ── */
+.demo-btn button {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  color: #94a3b8 !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  width: 100% !important;
+}
+.demo-btn-active button {
+  background: rgba(255,140,0,.15) !important;
+  border: 1px solid rgba(255,140,0,.4) !important;
+  color: #ffaa33 !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  width: 100% !important;
+}
+
+/* ── Demo stat cards ── */
+@keyframes countup {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.demo-stat-card {
+  animation: countup 0.6s ease forwards;
+  background: rgba(99,102,241,.08);
+  border: 1px solid rgba(99,102,241,.2);
+  border-radius: 12px;
+  padding: 16px 20px;
+  text-align: center;
+}
+.demo-stat-number {
+  font-size: 32px;
+  font-weight: 800;
+  color: #818cf8;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.demo-stat-label {
+  font-size: 11px;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-top: 4px;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -1313,6 +1459,29 @@ def _make_pdf(title: str, sections: list) -> bytes:
         return bytes(pdf.output())
     except Exception:
         return b""
+
+
+def _demo_stream_generate(steps: list, result_key_values: dict):
+    """Show animated multi-step generation then write results to session_state."""
+    import time
+    prog = st.progress(0, text="")
+    status = st.empty()
+    n = len(steps)
+    for i, (icon, label, delay) in enumerate(steps):
+        status.markdown(
+            f'<div style="display:flex;align-items:center;gap:10px;'
+            f'padding:10px 14px;background:rgba(99,102,241,.07);'
+            f'border:1px solid rgba(99,102,241,.2);border-radius:10px;'
+            f'font-size:13px;color:#a5b4fc">'
+            f'<span style="font-size:16px">{icon}</span>{label}</div>',
+            unsafe_allow_html=True,
+        )
+        prog.progress(int((i + 1) / n * 100), text="")
+        time.sleep(delay)
+    prog.empty()
+    status.empty()
+    for k, v in result_key_values.items():
+        st.session_state[k] = v
 
 
 _ICON_MAP = {
@@ -3798,6 +3967,36 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
 
+    # ── Demo Mode toggle ──────────────────────────────────────────────────────
+    _demo_on = st.session_state.get("demo_mode", False)
+    _demo_cls = "demo-btn-active" if _demo_on else "demo-btn"
+    _demo_lbl = "🎬 Demo Mode: ON" if _demo_on else "🎬 Demo Mode"
+    st.markdown(f'<div style="padding:4px 8px 8px"><div class="{_demo_cls}">', unsafe_allow_html=True)
+    if st.button(_demo_lbl, key="_demo_mode_btn", use_container_width=True):
+        if not _demo_on:
+            # Activate demo mode
+            st.session_state["demo_mode"] = True
+            st.session_state["t1_topic_in"] = _DEMO_CONTENT["topic"]
+            st.session_state["t1_jurs_pills"] = _DEMO_CONTENT["jurisdictions"]
+            st.session_state["t1_jurs_in"] = _DEMO_CONTENT["jurisdictions"]
+            st.session_state["entity_type"] = _DEMO_CONTENT["entity"]
+            st.session_state["_tpl_name"] = _DEMO_CONTENT["template"]
+        else:
+            # Deactivate demo mode
+            st.session_state["demo_mode"] = False
+            st.session_state["t1_topic_in"] = ""
+            st.session_state["t1_jurs_pills"] = None
+            st.session_state["t1_jurs_in"] = []
+            st.session_state["entity_type"] = "🏦 Private Banking"
+            st.session_state["_tpl_name"] = ""
+            st.session_state["t1_risks"] = None
+            st.session_state["t2_rationale"] = None
+            st.session_state["t2_background"] = None
+            st.session_state["t2_org_plan"] = None
+            st.session_state["t3_report"] = None
+        st.rerun()
+    st.markdown("</div></div>", unsafe_allow_html=True)
+
     # ── Utility buttons (dark mode only — no theme toggle) ───────────────────
     st.markdown('<div style="padding:8px 8px 4px;border-top:1px solid rgba(255,255,255,0.05)">', unsafe_allow_html=True)
     _sb_u2, _sb_u3, _sb_u4 = st.columns(3, gap="small")
@@ -4665,6 +4864,29 @@ if _active == 0:
             )
             _show_audit_snapshot()
 
+        if st.session_state.get("demo_mode"):
+            st.markdown("<div style='margin-top:20px'></div>", unsafe_allow_html=True)
+            st.markdown(
+                '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;'
+                'color:var(--text-muted);margin-bottom:12px">🎬 Demo — Engagement Metrics</div>',
+                unsafe_allow_html=True,
+            )
+            _ds = _DEMO_CONTENT["dash_stats"]
+            _dc1, _dc2, _dc3, _dc4 = st.columns(4, gap="small")
+            for _col, _num, _lbl in [
+                (_dc1, _ds["risks_identified"], "Risks Identified"),
+                (_dc2, _ds["audit_tests"],      "Audit Tests"),
+                (_dc3, _ds["frameworks"],       "Frameworks"),
+                (_dc4, _ds["vendors_reviewed"], "Vendors Reviewed"),
+            ]:
+                _col.markdown(
+                    f'<div class="demo-stat-card">'
+                    f'<div class="demo-stat-number">{_num}</div>'
+                    f'<div class="demo-stat-label">{_lbl}</div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+
         st.markdown("<div class='no-print' style='margin-top:1rem'>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -4976,7 +5198,24 @@ elif _active == 1:
                 st.warning("⚠ Please select at least one jurisdiction.")
                 _t1_valid = False
 
-        if _t1_mode == "live":
+        if st.session_state.get("demo_mode") and _t1_mode == "live":
+            st.markdown('<div class="gen-btn-wrap">', unsafe_allow_html=True)
+            st.markdown('<div class="gen-btn">', unsafe_allow_html=True)
+            if st.button("✦ Generate Risk Analysis", key="t1_run_demo", use_container_width=True):
+                with st.spinner(""):
+                    _demo_stream_generate(
+                        _DEMO_CONTENT["gen_steps_t1"],
+                        {
+                            "t1_risks": _DEMO_CONTENT["t1_summary"],
+                            "t1_topic": _DEMO_CONTENT["topic"],
+                            "t1_jurs": _DEMO_CONTENT["jurisdictions"],
+                        }
+                    )
+                    st.session_state["t1_show_form"] = False
+                    st.rerun()
+            st.markdown("</div></div>", unsafe_allow_html=True)
+
+        if _t1_mode == "live" and not st.session_state.get("demo_mode"):
             st.markdown('<div class="gen-btn-wrap">', unsafe_allow_html=True)
             st.markdown('<div class="gen-btn">', unsafe_allow_html=True)
             if st.button("✦ Générer l'analyse", disabled=_disabled or not audit_topic or not _t1_valid, key="t1_run"):
@@ -5246,23 +5485,31 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
 
         # Risk Score Dashboard
         st.markdown('<div class="section-title">Risk Score</div>', unsafe_allow_html=True)
-        _risk_score_display(st.session_state.t1_risks, len(st.session_state.t1_jurs or []))
+        _t1_risks_val = st.session_state.t1_risks
+        _t1_risks_is_str = isinstance(_t1_risks_val, str)
+        if not _t1_risks_is_str:
+            _risk_score_display(_t1_risks_val, len(st.session_state.t1_jurs or []))
 
         with st.expander("🗺️ A — Risk Mapping", expanded=True):
             st.markdown('<div class="section-title">A. Risk Mapping</div>', unsafe_allow_html=True)
-            filtered_risks = _filter_data(
-                st.session_state.t1_risks or [],
-                ["name", "description", "impact", "control"],
-                "t1_risks",
-                level_field="level",
-            )
-            _risk_table(filtered_risks)
+            if _t1_risks_is_str and st.session_state.get("demo_mode"):
+                st.markdown(
+                    f'<div class="output-box" style="max-height:320px">{_t1_risks_val}</div>',
+                    unsafe_allow_html=True,
+                )
+            else:
+                filtered_risks = _filter_data(
+                    _t1_risks_val or [],
+                    ["name", "description", "impact", "control"],
+                    "t1_risks",
+                    level_field="level",
+                )
+                _risk_table(filtered_risks)
             col_copy_a, _ = st.columns([1, 5])
             with col_copy_a:
-                _copy_button(
-                    json.dumps(st.session_state.t1_risks or [], indent=2),
-                    "t1_risks_copy"
-                )
+                _copy_data = (st.session_state.t1_risks if isinstance(st.session_state.t1_risks, str)
+                              else json.dumps(st.session_state.t1_risks or [], indent=2))
+                _copy_button(_copy_data, "t1_risks_copy")
 
         with st.expander("📜 B — Applicable Regulations", expanded=False):
             st.markdown('<div class="section-title">B. Applicable Regulations</div>', unsafe_allow_html=True)
@@ -5472,7 +5719,24 @@ elif _active == 2:
               <div style="margin-top:8px;font-size:11px;color:#5a6488">See Tab 3 &#8594; IIA Standards Reference &#8594; {_t2_tr_match['standard_id']} for full requirements with framework mapping.</div>
             </div>""", unsafe_allow_html=True)
 
-        if _t2_mode == "live":
+        if st.session_state.get("demo_mode") and _t2_mode == "live":
+            st.markdown('<div class="gen-btn-wrap">', unsafe_allow_html=True)
+            st.markdown('<div class="gen-btn">', unsafe_allow_html=True)
+            if st.button("✦ Generate Audit Plan", key="t2_run_demo", use_container_width=True):
+                with st.spinner(""):
+                    _demo_stream_generate(
+                        _DEMO_CONTENT["gen_steps_t2"],
+                        {
+                            "t2_rationale": _DEMO_CONTENT["t2_rationale"],
+                            "t2_background": _DEMO_CONTENT["t2_background"],
+                            "t2_org_plan": _DEMO_CONTENT["t2_org_plan"],
+                        }
+                    )
+                    st.session_state["t2_show_form"] = False
+                    st.rerun()
+            st.markdown("</div></div>", unsafe_allow_html=True)
+
+        if _t2_mode == "live" and not st.session_state.get("demo_mode"):
             st.markdown('<div class="gen-btn-wrap">', unsafe_allow_html=True)
             st.markdown('<div class="gen-btn">', unsafe_allow_html=True)
             if st.button("✦ Générer le plan", disabled=_disabled or not topic2 or not _t2_valid, key="t2_run"):
@@ -6368,10 +6632,21 @@ elif _active == 4:
             st.markdown("<div style='margin-top:1.2rem'></div>", unsafe_allow_html=True)
 
             _t3_live_valid = bool(audit_name and _t3_findings_raw.strip())
-            if not _t3_live_valid:
+            if not _t3_live_valid and not st.session_state.get("demo_mode"):
                 st.warning("⚠ Enter a report title and at least one observation to generate the report.")
 
-            if st.button("Generate Report", type="primary",
+            if st.session_state.get("demo_mode"):
+                if st.button("✦ Generate Audit Report", key="t3_run_demo", use_container_width=True):
+                    with st.spinner(""):
+                        _demo_stream_generate(
+                            _DEMO_CONTENT["gen_steps_t3"],
+                            {
+                                "t3_report": {"text": _DEMO_CONTENT["t3_report"], "name": "AUD-2025-TPR-001"},
+                            }
+                        )
+                        st.rerun()
+
+            if not st.session_state.get("demo_mode") and st.button("Generate Report", type="primary",
                          disabled=_disabled or not _t3_live_valid, key="t3_run"):
                 with st.spinner("Generating report…"):
                     try:
