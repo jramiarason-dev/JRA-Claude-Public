@@ -1432,19 +1432,19 @@ window.KQ = {
   // Per-hub level lists (8 levels each, 4-6 ans logic)
   levels: {
     english: [
-      { n: 1, title_fr: "Les animaux", title_en: "Animals",   topic: "animals",   stars: 3, status: "done" },
-      { n: 2, title_fr: "Les couleurs", title_en: "Colours",  topic: "colors",    stars: 3, status: "done" },
-      { n: 3, title_fr: "Les chiffres", title_en: "Numbers",  topic: "numbers",   stars: 2, status: "done" },
-      { n: 4, title_fr: "La famille",  title_en: "Family",    topic: "family",    stars: 0, status: "current" },
+      { n: 1, title_fr: "Les animaux", title_en: "Animals",   topic: "animals",   stars: 0, status: "current" },
+      { n: 2, title_fr: "Les couleurs", title_en: "Colours",  topic: "colors",    stars: 0, status: "locked" },
+      { n: 3, title_fr: "Les chiffres", title_en: "Numbers",  topic: "numbers",   stars: 0, status: "locked" },
+      { n: 4, title_fr: "La famille",  title_en: "Family",    topic: "family",    stars: 0, status: "locked" },
       { n: 5, title_fr: "Les fruits",  title_en: "Fruits",    topic: "fruits",    stars: 0, status: "locked" },
       { n: 6, title_fr: "Le corps",    title_en: "The body",  topic: "body",      stars: 0, status: "locked" },
       { n: 7, title_fr: "Les saisons", title_en: "Seasons",   topic: "seasons",   stars: 0, status: "locked" },
       { n: 8, title_fr: "Le défi !",   title_en: "Big quiz",  topic: "challenge", stars: 0, status: "locked", boss: true },
     ],
     geo: [
-      { n: 1, title_fr: "L'Europe",        title_en: "Europe",         topic: "europe",  stars: 3, status: "done" },
-      { n: 2, title_fr: "L'Afrique",       title_en: "Africa",         topic: "africa",  stars: 2, status: "done" },
-      { n: 3, title_fr: "Les drapeaux",    title_en: "Flags",          topic: "flags",   stars: 0, status: "current" },
+      { n: 1, title_fr: "L'Europe",        title_en: "Europe",         topic: "europe",  stars: 0, status: "current" },
+      { n: 2, title_fr: "L'Afrique",       title_en: "Africa",         topic: "africa",  stars: 0, status: "locked" },
+      { n: 3, title_fr: "Les drapeaux",    title_en: "Flags",          topic: "flags",   stars: 0, status: "locked" },
       { n: 4, title_fr: "Les capitales",   title_en: "Capitals",       topic: "capitals",stars: 0, status: "locked" },
       { n: 5, title_fr: "L'Asie",          title_en: "Asia",           topic: "asia",    stars: 0, status: "locked" },
       { n: 6, title_fr: "L'Amérique",      title_en: "The Americas",   topic: "america", stars: 0, status: "locked" },
@@ -1452,10 +1452,10 @@ window.KQ = {
       { n: 8, title_fr: "Tour du monde !", title_en: "World tour",     topic: "world",   stars: 0, status: "locked", boss: true },
     ],
     math: [
-      { n: 1, title_fr: "Compter jusqu'à 10", title_en: "Count to 10",  topic: "count10",  stars: 3, status: "done" },
-      { n: 2, title_fr: "Plus grand, plus petit", title_en: "More or less", topic: "compare", stars: 3, status: "done" },
-      { n: 3, title_fr: "Les additions",     title_en: "Add it up",     topic: "add",      stars: 2, status: "done" },
-      { n: 4, title_fr: "Les formes",        title_en: "Shapes",        topic: "shapes",   stars: 1, status: "current" },
+      { n: 1, title_fr: "Compter jusqu'à 10", title_en: "Count to 10",  topic: "count10",  stars: 0, status: "current" },
+      { n: 2, title_fr: "Plus grand, plus petit", title_en: "More or less", topic: "compare", stars: 0, status: "locked" },
+      { n: 3, title_fr: "Les additions",     title_en: "Add it up",     topic: "add",      stars: 0, status: "locked" },
+      { n: 4, title_fr: "Les formes",        title_en: "Shapes",        topic: "shapes",   stars: 0, status: "locked" },
       { n: 5, title_fr: "Les soustractions", title_en: "Take away",     topic: "sub",      stars: 0, status: "locked" },
       { n: 6, title_fr: "Les suites",        title_en: "Patterns",      topic: "patterns", stars: 0, status: "locked" },
       { n: 7, title_fr: "L'heure",           title_en: "Telling time",  topic: "time",     stars: 0, status: "locked" },
@@ -1501,15 +1501,15 @@ window.KQ = {
   },
 
   trophies: [
-    { id: "first_step",   emoji: "👶", title_fr: "Premier pas",      title_en: "First step",        owned: true,
+    { id: "first_step",   emoji: "👶", title_fr: "Premier pas",      title_en: "First step",        owned: false,
       desc_fr: "Tu as fini ta première leçon !", desc_en: "You finished your first lesson!" },
-    { id: "english_star", emoji: "📚", title_fr: "Étoile d'anglais", title_en: "English star",      owned: true,
+    { id: "english_star", emoji: "📚", title_fr: "Étoile d'anglais", title_en: "English star",      owned: false,
       desc_fr: "3 leçons d'anglais finies",     desc_en: "3 English lessons done" },
-    { id: "globe_trotter",emoji: "🌍", title_fr: "Tour du monde",    title_en: "Globe trotter",     owned: true,
+    { id: "globe_trotter",emoji: "🌍", title_fr: "Tour du monde",    title_en: "Globe trotter",     owned: false,
       desc_fr: "Tu as visité 2 continents",     desc_en: "Visited 2 continents" },
-    { id: "math_genius",  emoji: "🧮", title_fr: "Génie des chiffres",title_en: "Math genius",      owned: true,
+    { id: "math_genius",  emoji: "🧮", title_fr: "Génie des chiffres",title_en: "Math genius",      owned: false,
       desc_fr: "10 additions correctes d'affilée", desc_en: "10 correct additions in a row" },
-    { id: "streak_7",     emoji: "🔥", title_fr: "Série de 7",       title_en: "7-day streak",      owned: true,
+    { id: "streak_7",     emoji: "🔥", title_fr: "Série de 7",       title_en: "7-day streak",      owned: false,
       desc_fr: "Tu as joué 7 jours d'affilée",  desc_en: "You played 7 days in a row" },
     { id: "perfect",      emoji: "💎", title_fr: "Score parfait",    title_en: "Perfect score",     owned: false,
       desc_fr: "Termine une leçon sans erreur", desc_en: "Finish a lesson with no mistake" },
@@ -2715,7 +2715,7 @@ const TrophiesScreen = ({ lang }) => {
 };
 
 // ── PROFILE ──
-const ProfileScreen = ({ lang, profile, progress, onChangeAvatar }) => {
+const ProfileScreen = ({ lang, profile, progress, streak, onChangeAvatar }) => {
   const t = useT(lang);
   const totalStars = Object.values(progress).reduce((s, h) =>
     s + h.reduce((ss, l) => ss + l.stars, 0), 0);
@@ -2732,7 +2732,7 @@ const ProfileScreen = ({ lang, profile, progress, onChangeAvatar }) => {
           <p className="sub">{t('hello_name', { name: '' }).replace(/[!\s]+$/, '')} 👋</p>
           <div className="chips">
             <span className="kq-chip gold"><span className="emoji">⭐</span><strong>{totalStars}</strong> {t('total_stars')}</span>
-            <span className="kq-chip fire"><span className="emoji">🔥</span><strong>5</strong> {t('streak')}</span>
+            <span className="kq-chip fire"><span className="emoji">🔥</span><strong>{streak}</strong> {t('streak')}</span>
           </div>
         </div>
       </div>
@@ -2741,7 +2741,7 @@ const ProfileScreen = ({ lang, profile, progress, onChangeAvatar }) => {
         <div className="kq-stat"><div className="v">{totalStars}</div><div className="l">⭐ {t('total_stars')}</div></div>
         <div className="kq-stat"><div className="v">{levelsDone}</div><div className="l">📍 {t('levels_done')}</div></div>
         <div className="kq-stat"><div className="v">{trophies}</div><div className="l">🏆 {t('trophies')}</div></div>
-        <div className="kq-stat"><div className="v">5</div><div className="l">🔥 {t('streak')}</div></div>
+        <div className="kq-stat"><div className="v">{streak}</div><div className="l">🔥 {t('streak')}</div></div>
       </div>
 
       <div className="kq-card">
@@ -3014,6 +3014,22 @@ function App() {
   const totalStars = Object.values(progress).reduce((s, h) =>
     s + h.reduce((ss, l) => ss + l.stars, 0), 0);
 
+  const streak = useMemo(() => {
+    try {
+      const dates = JSON.parse(localStorage.getItem('kq_dates') || '[]');
+      if (!dates.length) return 0;
+      const today = new Date().toISOString().slice(0, 10);
+      let count = 0, day = today;
+      while (dates.includes(day)) {
+        count++;
+        const d = new Date(day);
+        d.setDate(d.getDate() - 1);
+        day = d.toISOString().slice(0, 10);
+      }
+      return count;
+    } catch (e) { return 0; }
+  }, [progress]);
+
   const T = window.KQ_useT(lang);
 
   // ─── Handlers
@@ -3049,6 +3065,14 @@ function App() {
       next[activeHub] = list;
       return next;
     });
+    // Record today for streak
+    try {
+      const today = new Date().toISOString().slice(0, 10);
+      const dates = JSON.parse(localStorage.getItem('kq_dates') || '[]');
+      if (!dates.includes(today)) {
+        localStorage.setItem('kq_dates', JSON.stringify([today, ...dates].slice(0, 365)));
+      }
+    } catch (e) {}
     // Reward overlay
     setReward({
       stars,
@@ -3092,6 +3116,7 @@ function App() {
     screen = <window.TrophiesScreen lang={lang} />;
   } else if (mode === 'profile') {
     screen = <window.ProfileScreen lang={lang} profile={profile} progress={progress}
+                                   streak={streak}
                                    onChangeAvatar={handleChangeAvatar} />;
   } else if (mode === 'parent') {
     screen = <window.ParentScreen lang={lang} progress={progress}
@@ -3104,7 +3129,7 @@ function App() {
         <window.Topbar lang={lang} setLang={setLang}
                        t={T}
                        profile={profile}
-                       stars={totalStars} streak={5}
+                       stars={totalStars} streak={streak}
                        onProfile={() => setMode('profile')}
                        hideHud={hideHud || !profile} />
         {screen}
