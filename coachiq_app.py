@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as _st_components
 import os
 import re
 import hashlib
@@ -5454,4 +5453,4 @@ _HTML = f"""<!doctype html>
 </body>
 </html>"""
 
-_st_components.html(_HTML, height=1400, scrolling=True)
+st.iframe(_HTML, height=1400)
