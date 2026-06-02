@@ -2694,6 +2694,8 @@ const WorldMapScreen = ({ lang, profile, progress, onPickHub }) => {
 const QuestMapScreen = ({ lang, hubId, levels, profile, onBack, onPickLevel }) => {
   const t = useT(lang);
   const hub = window.KQ.hubs.find(h => h.id === hubId);
+  // Defensive: fall back to default level list if progress for this hub is missing.
+  levels = Array.isArray(levels) ? levels : (window.KQ.levels[hubId] || []);
   const hubStars = levels.reduce((s, l) => s + l.stars, 0);
   const done = levels.filter(l => l.status === 'done').length;
   const bgGrad = `linear-gradient(135deg, ${hub.colorSoft}, ${hub.color})`;
@@ -3355,7 +3357,15 @@ function App() {
         const s = JSON.parse(saved);
         if (s.lang) setLangRaw(s.lang);
         if (s.profile) setProfile(s.profile);
-        if (s.progress) setProgress(s.progress);
+        if (s.progress) setProgress(prev => {
+          // Merge saved progress over defaults so hubs added in a later
+          // version (e.g. "stories") are never missing for returning users.
+          const merged = { ...prev };
+          for (const hubId of Object.keys(prev)) {
+            if (Array.isArray(s.progress[hubId])) merged[hubId] = s.progress[hubId];
+          }
+          return merged;
+        });
         if (s.profile) setMode('world');
       }
     } catch (e) {}
