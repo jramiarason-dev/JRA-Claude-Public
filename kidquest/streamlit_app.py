@@ -4,7 +4,6 @@ Serves the redesigned HTML/React prototype full-bleed.
 """
 from pathlib import Path
 import streamlit as st
-import streamlit.components.v1 as components
 
 st.set_page_config(
     page_title="KidQuest — L'aventure du savoir",
@@ -31,4 +30,6 @@ st.markdown(
 HTML = (Path(__file__).parent / "index.html").read_text(encoding="utf-8")
 
 # Full-bleed render. Height is generous; internal scroll lives inside the app.
-components.html(HTML, height=1600, scrolling=True)
+# st.iframe replaces the deprecated st.components.v1.html; it accepts raw HTML
+# and auto-sandboxes it. (No `scrolling` param — the iframe scrolls by default.)
+st.iframe(HTML, height=1600)

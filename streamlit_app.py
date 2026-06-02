@@ -9,7 +9,6 @@ data.js when wired up.
 
 from pathlib import Path
 import streamlit as st
-import streamlit.components.v1 as components
 
 # ── Page setup ────────────────────────────────────────────────────
 st.set_page_config(
@@ -100,4 +99,4 @@ HTML = f"""<!doctype html>
 
 # ── Render full-bleed ────────────────────────────────────────────
 # Height is generous so internal scroll happens inside the prototype.
-components.html(HTML, height=1400, scrolling=True)
+st.iframe(HTML, height=1400)
