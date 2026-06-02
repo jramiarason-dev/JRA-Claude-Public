@@ -1205,6 +1205,25 @@ body {
 .kq-app[data-mode="onboard"] .kq-tabs,
 .kq-app[data-mode="quiz"] .kq-tabs { display: none; }
 
+/* Story page card */
+.kq-story-emoji {
+  font-size: 72px;
+  line-height: 1;
+  text-align: center;
+  margin-bottom: 18px;
+  animation: bobMascot 2.6s ease-in-out infinite;
+}
+.kq-story-text {
+  font-family: var(--font-fun);
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--kq-ink);
+  margin: 0 0 24px;
+  text-wrap: pretty;
+}
+
 </style>
 </head>
 <body data-product="kidquest">
@@ -1293,6 +1312,13 @@ window.KQ = {
       // Status
       done: "Fini",
       current: "Ici",
+      // Stories hub
+      stories_quest: "Contes & Aventures",
+      stories_sub: "Lis et joue !",
+      hub_stories: "Le monde des histoires",
+      story_page_of: "Page {a} sur {b}",
+      next_page: "Page suivante",
+      start_quiz: "Questions !",
       // Footer
       footer: "Propulsé par Claude AI · Anthropic",
     },
@@ -1363,6 +1389,13 @@ window.KQ = {
       minutes: "minutes",
       done: "Done",
       current: "Here",
+      // Stories hub
+      stories_quest: "Stories & Adventures",
+      stories_sub: "Read & play!",
+      hub_stories: "The Story world",
+      story_page_of: "Page {a} of {b}",
+      next_page: "Next page",
+      start_quiz: "Quiz time!",
       footer: "Powered by Claude AI · Anthropic",
     },
   },
@@ -1427,6 +1460,20 @@ window.KQ = {
       bgGrad: "linear-gradient(180deg, #ede8ff 0%, #d6cdff 100%)",
       bgGradDark: "linear-gradient(180deg, #1f1a3a 0%, #15102a 100%)",
     },
+    {
+      id: "stories",
+      mascot: "dragon",
+      mascotName: { fr: "Coco", en: "Coco" },
+      title_key: "stories_quest",
+      sub_key: "stories_sub",
+      hub_title_key: "hub_stories",
+      // Coral/rose family
+      color: "#FF6B6B",
+      colorDeep: "#E55252",
+      colorSoft: "#FFB4B4",
+      bgGrad: "linear-gradient(180deg, #ffe8e8 0%, #ffb4b4 100%)",
+      bgGradDark: "linear-gradient(180deg, #3a1818 0%, #2a1010 100%)",
+    },
   ],
 
   // Per-hub level lists (8 levels each, 4-6 ans logic)
@@ -1460,6 +1507,16 @@ window.KQ = {
       { n: 6, title_fr: "Les suites",        title_en: "Patterns",      topic: "patterns", stars: 0, status: "locked" },
       { n: 7, title_fr: "L'heure",           title_en: "Telling time",  topic: "time",     stars: 0, status: "locked" },
       { n: 8, title_fr: "Le grand défi",     title_en: "Big challenge", topic: "boss",     stars: 0, status: "locked", boss: true },
+    ],
+    stories: [
+      { n: 1, title_fr: "Léo le lion",          title_en: "Leo the lion",       topic: "story_leo",     stars: 0, status: "current" },
+      { n: 2, title_fr: "La maison de Globi",   title_en: "Globi's house",      topic: "story_house",   stars: 0, status: "locked" },
+      { n: 3, title_fr: "Les fruits magiques",  title_en: "Magic fruits",       topic: "story_fruits",  stars: 0, status: "locked" },
+      { n: 4, title_fr: "La famille de Pixel",  title_en: "Pixel's family",     topic: "story_family",  stars: 0, status: "locked" },
+      { n: 5, title_fr: "Le tour du monde",     title_en: "World tour",         topic: "story_world",   stars: 0, status: "locked" },
+      { n: 6, title_fr: "Les 4 saisons",        title_en: "The 4 seasons",      topic: "story_seasons", stars: 0, status: "locked" },
+      { n: 7, title_fr: "La fête des chiffres", title_en: "Number party",       topic: "story_numbers", stars: 0, status: "locked" },
+      { n: 8, title_fr: "La grande aventure",   title_en: "The big adventure",  topic: "story_boss",    stars: 0, status: "locked", boss: true },
     ],
   },
 
@@ -1499,6 +1556,137 @@ window.KQ = {
         correct: 1 },
     ],
   },
+
+  stories: [
+    {
+      id: "story_leo",
+      pages: [
+        { emoji: "🦁", text_fr: "Léo est un lion qui vit en Afrique. Il aime apprendre des mots en anglais.", text_en: "Leo is a lion who lives in Africa. He loves learning English words." },
+        { emoji: "🐘", text_fr: "Ses amis : 1 éléphant (elephant), 2 zèbres (zebras) et 3 singes (monkeys). Ils comptent ensemble !", text_en: "His friends: 1 elephant, 2 zebras and 3 monkeys. They count together!" },
+        { emoji: "🌅", text_fr: "'One, two, three !' crient-ils au coucher du soleil. L'Afrique est immense et belle !", text_en: "'One, two, three!' they shout at sunset. Africa is huge and beautiful!" },
+      ],
+      questions: [
+        { q_fr: "Où vit Léo le lion ?", q_en: "Where does Leo the lion live?",
+          opts: [{fr:"Afrique",en:"Africa",emoji:"🌍"},{fr:"Europe",en:"Europe",emoji:"🗺️"},{fr:"Asie",en:"Asia",emoji:"🌏"}], correct: 0 },
+        { q_fr: "Combien d'amis a Léo en tout ?", q_en: "How many friends does Leo have in total?",
+          opts: [{fr:"4",en:"4",emoji:"4️⃣"},{fr:"5",en:"5",emoji:"5️⃣"},{fr:"6",en:"6",emoji:"6️⃣"}], correct: 2 },
+        { q_fr: "Comment dit-on 'lion' en anglais ?", q_en: "What does 'lion' mean in French?",
+          opts: [{fr:"Tiger",en:"Tiger",emoji:"🐯"},{fr:"Lion",en:"Lion",emoji:"🦁"},{fr:"Bear",en:"Bear",emoji:"🐻"}], correct: 1 },
+      ],
+    },
+    {
+      id: "story_house",
+      pages: [
+        { emoji: "🐢", text_fr: "Globi la tortue habite en Europe. Elle construit une belle maison !", text_en: "Globi the turtle lives in Europe. She is building a beautiful house!" },
+        { emoji: "🏠", text_fr: "La porte est un rectangle. Les fenêtres sont des carrés. Le toit est un triangle !", text_en: "The door is a rectangle. The windows are squares. The roof is a triangle!" },
+        { emoji: "🇫🇷", text_fr: "Sur le mur, le drapeau de la France : bleu, blanc, rouge. Très joli !", text_en: "On the wall, the French flag: blue, white, red. So pretty!" },
+      ],
+      questions: [
+        { q_fr: "Où habite Globi ?", q_en: "Where does Globi live?",
+          opts: [{fr:"Europe",en:"Europe",emoji:"🗺️"},{fr:"Afrique",en:"Africa",emoji:"🌍"},{fr:"Asie",en:"Asia",emoji:"🌏"}], correct: 0 },
+        { q_fr: "Quelle forme est le toit de la maison ?", q_en: "What shape is the roof?",
+          opts: [{fr:"Carré",en:"Square",emoji:"⬜"},{fr:"Cercle",en:"Circle",emoji:"⭕"},{fr:"Triangle",en:"Triangle",emoji:"🔺"}], correct: 2 },
+        { q_fr: "De quelles couleurs est le drapeau français ?", q_en: "What are the colours of the French flag?",
+          opts: [{fr:"Rouge, blanc, bleu",en:"Red, white, blue",emoji:"🇫🇷"},{fr:"Vert, blanc, rouge",en:"Green, white, red",emoji:"🇮🇹"},{fr:"Jaune, noir, rouge",en:"Yellow, black, red",emoji:"🇩🇪"}], correct: 0 },
+      ],
+    },
+    {
+      id: "story_fruits",
+      pages: [
+        { emoji: "🦉", text_fr: "Lumi le hibou voyage en Asie. Il découvre un arbre magique chargé de fruits !", text_en: "Lumi the owl travels to Asia. She finds a magic tree full of fruits!" },
+        { emoji: "🍎", text_fr: "L'arbre a 4 pommes (apples) rouges, 3 bananes (bananas) jaunes et 2 oranges. Combien ?", text_en: "The tree has 4 red apples, 3 yellow bananas and 2 oranges. How many?" },
+        { emoji: "🌏", text_fr: "'4 + 3 + 2 = 9 fruits !' dit Lumi. L'Asie a les fruits les plus délicieux !", text_en: "'4 + 3 + 2 = 9 fruits!' says Lumi. Asia has the most delicious fruits!" },
+      ],
+      questions: [
+        { q_fr: "Où se trouve l'arbre magique ?", q_en: "Where is the magic tree?",
+          opts: [{fr:"Asie",en:"Asia",emoji:"🌏"},{fr:"Europe",en:"Europe",emoji:"🗺️"},{fr:"Amérique",en:"Americas",emoji:"🌎"}], correct: 0 },
+        { q_fr: "Combien de fruits y a-t-il en tout ?", q_en: "How many fruits are there in total?",
+          opts: [{fr:"7",en:"7",emoji:"7️⃣"},{fr:"8",en:"8",emoji:"8️⃣"},{fr:"9",en:"9",emoji:"9️⃣"}], correct: 2 },
+        { q_fr: "Comment dit-on 'pomme' en anglais ?", q_en: "What is 'pomme' in English?",
+          opts: [{fr:"Banana",en:"Banana",emoji:"🍌"},{fr:"Orange",en:"Orange",emoji:"🍊"},{fr:"Apple",en:"Apple",emoji:"🍎"}], correct: 2 },
+      ],
+    },
+    {
+      id: "story_family",
+      pages: [
+        { emoji: "🦊", text_fr: "Pixel le renard a une grande famille : maman, papa et 3 petits frères et sœurs !", text_en: "Pixel the fox has a big family: mum, dad and 3 brothers and sisters!" },
+        { emoji: "🏡", text_fr: "Ils habitent en France, en Europe. Pixel apprend les mots de la famille en anglais.", text_en: "They live in France, in Europe. Pixel learns family words in English." },
+        { emoji: "👨‍👩‍👧‍👦", text_fr: "'Mother, Father, Sister, Brother !' Et 1 + 1 + 3 = 5 membres dans la famille.", text_en: "'Mother, Father, Sister, Brother!' And 1 + 1 + 3 = 5 family members." },
+      ],
+      questions: [
+        { q_fr: "Comment dit-on 'mère' en anglais ?", q_en: "How do you say 'mère' in English?",
+          opts: [{fr:"Father",en:"Father",emoji:"👨"},{fr:"Sister",en:"Sister",emoji:"👧"},{fr:"Mother",en:"Mother",emoji:"👩"}], correct: 2 },
+        { q_fr: "Combien de membres dans la famille de Pixel ?", q_en: "How many members in Pixel's family?",
+          opts: [{fr:"3",en:"3",emoji:"3️⃣"},{fr:"5",en:"5",emoji:"5️⃣"},{fr:"4",en:"4",emoji:"4️⃣"}], correct: 1 },
+        { q_fr: "Sur quel continent habite Pixel ?", q_en: "On which continent does Pixel live?",
+          opts: [{fr:"Afrique",en:"Africa",emoji:"🌍"},{fr:"Europe",en:"Europe",emoji:"🗺️"},{fr:"Asie",en:"Asia",emoji:"🌏"}], correct: 1 },
+      ],
+    },
+    {
+      id: "story_world",
+      pages: [
+        { emoji: "✈️", text_fr: "Lumi, Globi et Pixel partent en voyage ! Premier arrêt : l'Afrique, chez Léo le lion !", text_en: "Lumi, Globi and Pixel go on a trip! First stop: Africa, with Leo the lion!" },
+        { emoji: "🌍", text_fr: "Deuxième arrêt : l'Asie. Troisième arrêt : l'Amérique. 1, 2, 3 continents visités !", text_en: "Second stop: Asia. Third stop: the Americas. 1, 2, 3 continents visited!" },
+        { emoji: "🌎", text_fr: "'Hello ! Bonjour !' Ils saluent leurs nouveaux amis partout dans le monde !", text_en: "'Hello! Bonjour!' They greet new friends all around the world!" },
+      ],
+      questions: [
+        { q_fr: "Combien de continents visitent-ils ?", q_en: "How many continents do they visit?",
+          opts: [{fr:"2",en:"2",emoji:"2️⃣"},{fr:"3",en:"3",emoji:"3️⃣"},{fr:"4",en:"4",emoji:"4️⃣"}], correct: 1 },
+        { q_fr: "Comment dit-on 'bonjour' en anglais ?", q_en: "What does 'hello' mean in French?",
+          opts: [{fr:"Au revoir",en:"Goodbye",emoji:"👋"},{fr:"Bonjour",en:"Hello",emoji:"😊"},{fr:"Merci",en:"Thank you",emoji:"🙏"}], correct: 1 },
+        { q_fr: "Quel animal habite en Afrique dans l'histoire ?", q_en: "Which animal lives in Africa in the story?",
+          opts: [{fr:"Hibou",en:"Owl",emoji:"🦉"},{fr:"Renard",en:"Fox",emoji:"🦊"},{fr:"Lion",en:"Lion",emoji:"🦁"}], correct: 2 },
+      ],
+    },
+    {
+      id: "story_seasons",
+      pages: [
+        { emoji: "🌸", text_fr: "Au printemps (Spring), les fleurs poussent. En été (Summer), le soleil brille fort !", text_en: "In spring, flowers grow. In summer, the sun shines bright!" },
+        { emoji: "🍂", text_fr: "En automne (Autumn), les feuilles tombent. En hiver (Winter), il neige et il fait froid !", text_en: "In autumn, leaves fall. In winter, it snows and it's cold!" },
+        { emoji: "📅", text_fr: "Une année a 4 saisons et 12 mois. Des enfants de tous les pays adorent chaque saison !", text_en: "A year has 4 seasons and 12 months. Children from every country love each season!" },
+      ],
+      questions: [
+        { q_fr: "Comment dit-on 'printemps' en anglais ?", q_en: "What is 'printemps' in English?",
+          opts: [{fr:"Winter",en:"Winter",emoji:"❄️"},{fr:"Autumn",en:"Autumn",emoji:"🍂"},{fr:"Spring",en:"Spring",emoji:"🌸"}], correct: 2 },
+        { q_fr: "Combien de saisons y a-t-il dans une année ?", q_en: "How many seasons are there in a year?",
+          opts: [{fr:"3",en:"3",emoji:"3️⃣"},{fr:"4",en:"4",emoji:"4️⃣"},{fr:"6",en:"6",emoji:"6️⃣"}], correct: 1 },
+        { q_fr: "Quelle saison vient après l'automne ?", q_en: "Which season comes after autumn?",
+          opts: [{fr:"Printemps",en:"Spring",emoji:"🌸"},{fr:"Été",en:"Summer",emoji:"☀️"},{fr:"Hiver",en:"Winter",emoji:"❄️"}], correct: 2 },
+      ],
+    },
+    {
+      id: "story_numbers",
+      pages: [
+        { emoji: "🎉", text_fr: "C'est la fête des chiffres ! Pixel a préparé 10 ballons de toutes les couleurs !", text_en: "It's the number party! Pixel has prepared 10 balloons in all colours!" },
+        { emoji: "🎈", text_fr: "Rouge (red), bleu (blue), jaune (yellow), vert (green)... Pixel chante en anglais !", text_en: "Red, blue, yellow, green... Pixel sings in English!" },
+        { emoji: "🔢", text_fr: "5 grandes tables avec 2 ballons chacune. 5 × 2 = 10 ballons en tout. Bravo Pixel !", text_en: "5 big tables with 2 balloons each. 5 × 2 = 10 balloons in all. Well done Pixel!" },
+      ],
+      questions: [
+        { q_fr: "Comment dit-on 'rouge' en anglais ?", q_en: "What is 'rouge' in English?",
+          opts: [{fr:"Blue",en:"Blue",emoji:"🔵"},{fr:"Green",en:"Green",emoji:"🟢"},{fr:"Red",en:"Red",emoji:"🔴"}], correct: 2 },
+        { q_fr: "Combien de ballons y a-t-il en tout ?", q_en: "How many balloons are there in total?",
+          opts: [{fr:"8",en:"8",emoji:"8️⃣"},{fr:"10",en:"10",emoji:"🔟"},{fr:"12",en:"12",emoji:"🔢"}], correct: 1 },
+        { q_fr: "Combien de ballons y a-t-il par table ?", q_en: "How many balloons per table?",
+          opts: [{fr:"2",en:"2",emoji:"2️⃣"},{fr:"3",en:"3",emoji:"3️⃣"},{fr:"5",en:"5",emoji:"5️⃣"}], correct: 0 },
+      ],
+    },
+    {
+      id: "story_boss",
+      pages: [
+        { emoji: "🗺️", text_fr: "La grande aventure commence ! Lumi, Globi et Pixel décident de faire le tour du monde !", text_en: "The big adventure begins! Lumi, Globi and Pixel decide to go around the world!" },
+        { emoji: "🌍", text_fr: "Ils visitent l'Europe, l'Afrique, l'Asie et l'Amérique : 4 continents en tout !", text_en: "They visit Europe, Africa, Asia and the Americas: 4 continents in total!" },
+        { emoji: "🏆", text_fr: "Ensemble ils apprennent les mots, les chiffres et les pays. Ils sont de vrais aventuriers !", text_en: "Together they learn words, numbers and countries. They are true adventurers!" },
+      ],
+      questions: [
+        { q_fr: "Combien de continents visitent-ils dans la grande aventure ?", q_en: "How many continents do they visit in the big adventure?",
+          opts: [{fr:"3",en:"3",emoji:"3️⃣"},{fr:"4",en:"4",emoji:"4️⃣"},{fr:"5",en:"5",emoji:"5️⃣"}], correct: 1 },
+        { q_fr: "Comment dit-on 'Afrique' en anglais ?", q_en: "What is 'Africa' in French?",
+          opts: [{fr:"Asia",en:"Asia",emoji:"🌏"},{fr:"Europe",en:"Europe",emoji:"🗺️"},{fr:"Africa",en:"Africa",emoji:"🌍"}], correct: 2 },
+        { q_fr: "3 + 4 + 2 + 1 = ?", q_en: "3 + 4 + 2 + 1 = ?",
+          opts: [{fr:"9",en:"9",emoji:"9️⃣"},{fr:"10",en:"10",emoji:"🔟"},{fr:"11",en:"11",emoji:"🔢"}], correct: 1 },
+      ],
+    },
+  ],
 
   trophies: [
     { id: "first_step",   emoji: "👶", title_fr: "Premier pas",      title_en: "First step",        owned: false,
@@ -2207,16 +2395,69 @@ const FoxMascot = ({ size = 120, mood = "happy", accent = "#A78BFA" }) => {
   );
 };
 
+const DragonMascot = ({ size = 120, mood = "happy", accent = "#FF6B6B" }) => {
+  const mouthD = mood === "wow"
+    ? "M 80 118 Q 100 134 120 118"
+    : "M 84 116 Q 100 128 116 116";
+  return (
+    <svg viewBox="0 0 200 200" width={size} height={size} className="kq-mascot">
+      {/* Shadow */}
+      <ellipse cx="100" cy="184" rx="52" ry="6" fill="#2A1F1F" opacity="0.10" />
+      {/* Tail */}
+      <path d="M 148 160 Q 175 158 178 140 Q 170 148 155 148 Z" fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      {/* Body */}
+      <ellipse cx="100" cy="140" rx="52" ry="44" fill={accent} stroke="#2A1F1F" strokeWidth="4" />
+      {/* Belly */}
+      <ellipse cx="100" cy="148" rx="32" ry="28" fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="3" />
+      {/* Wings */}
+      <path d="M 52 110 Q 20 80 28 50 Q 40 74 54 100 Z" fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      <path d="M 148 110 Q 180 80 172 50 Q 160 74 146 100 Z" fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      {/* Wing membrane lines */}
+      <path d="M 36 58 L 50 98" stroke="#2A1F1F" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+      <path d="M 164 58 L 150 98" stroke="#2A1F1F" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+      {/* Neck */}
+      <rect x="80" y="80" width="40" height="30" rx="16" fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      {/* Head */}
+      <circle cx="100" cy="72" r="42" fill={accent} stroke="#2A1F1F" strokeWidth="4" />
+      {/* Ear horns */}
+      <path d="M 66 42 L 72 22 L 80 42 Z" fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      <path d="M 134 42 L 128 22 L 120 42 Z" fill={accent} stroke="#2A1F1F" strokeWidth="3" />
+      {/* Eyes */}
+      <circle cx="82" cy="70" r="13" fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="3" />
+      <circle cx="118" cy="70" r="13" fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="3" />
+      <circle cx="84" cy="70" r={mood === "wow" ? 10 : 7} fill="#2A1F1F" />
+      <circle cx="120" cy="70" r={mood === "wow" ? 10 : 7} fill="#2A1F1F" />
+      {/* Pupils glints */}
+      <circle cx="86" cy="67" r="3" fill="#fff" />
+      <circle cx="122" cy="67" r="3" fill="#fff" />
+      {/* Nostrils */}
+      <circle cx="94" cy="90" r="3" fill="#2A1F1F" opacity="0.4" />
+      <circle cx="106" cy="90" r="3" fill="#2A1F1F" opacity="0.4" />
+      {/* Mouth */}
+      <path d={mouthD} stroke="#2A1F1F" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      {/* Book accessory */}
+      <rect x="74" y="154" width="52" height="34" rx="6" fill="#FEFCEC" stroke="#2A1F1F" strokeWidth="3" />
+      <line x1="100" y1="156" x2="100" y2="186" stroke="#2A1F1F" strokeWidth="2" />
+      <line x1="80" y1="163" x2="98" y2="163" stroke="#2A1F1F" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+      <line x1="80" y1="170" x2="98" y2="170" stroke="#2A1F1F" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+      <line x1="102" y1="163" x2="120" y2="163" stroke="#2A1F1F" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+      <line x1="102" y1="170" x2="120" y2="170" stroke="#2A1F1F" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+    </svg>
+  );
+};
+
 // Pick mascot for a hub
 const HubMascot = ({ hubId, ...rest }) => {
   if (hubId === "english") return <OwlMascot {...rest} />;
-  if (hubId === "geo") return <TurtleMascot {...rest} />;
+  if (hubId === "geo")     return <TurtleMascot {...rest} />;
+  if (hubId === "stories") return <DragonMascot {...rest} />;
   return <FoxMascot {...rest} />;
 };
 
 window.OwlMascot = OwlMascot;
 window.TurtleMascot = TurtleMascot;
 window.FoxMascot = FoxMascot;
+window.DragonMascot = DragonMascot;
 window.HubMascot = HubMascot;
 
   </script>
@@ -2931,10 +3172,136 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
   );
 };
 
+// ── STORY ──
+const StoryScreen = ({ lang, hubId, level, onExit, onComplete }) => {
+  const t = useT(lang);
+  const hub = window.KQ.hubs.find(h => h.id === hubId);
+  const story = window.KQ.stories.find(s => s.id === level.topic);
+
+  const [phase, setPhase] = useState('story'); // 'story' | 'quiz'
+  const [pageIdx, setPageIdx] = useState(0);
+  const [qi, setQi] = useState(0);
+  const [picked, setPicked] = useState(null);
+  const [qstate, setQstate] = useState('idle'); // idle | correct | wrong
+  const [hearts, setHearts] = useState(3);
+  const [correctCount, setCorrectCount] = useState(0);
+
+  const pages = story.pages;
+  const questions = story.questions;
+
+  if (phase === 'story') {
+    const page = pages[pageIdx];
+    const isLast = pageIdx === pages.length - 1;
+    return (
+      <section className="kq-quiz" style={{ "--hub-color": hub.color }}>
+        <div className="kq-quiz-bar">
+          <button className="kq-back-btn" onClick={onExit} aria-label="Quit">✕</button>
+          <div className="kq-progress">
+            <span style={{ width: `${((pageIdx + 1) / pages.length) * 100}%`, background: hub.color }} />
+          </div>
+          <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--kq-ink-soft)', whiteSpace: 'nowrap' }}>
+            {t('story_page_of', { a: pageIdx + 1, b: pages.length })}
+          </span>
+        </div>
+        <div className="kq-question-card">
+          <div className="kq-story-emoji">{page.emoji}</div>
+          <p className="kq-story-text">{page[`text_${lang}`]}</p>
+          <button className="kq-btn kq-btn-primary kq-btn-big"
+                  onClick={() => isLast ? setPhase('quiz') : setPageIdx(p => p + 1)}>
+            {isLast ? t('start_quiz') + ' 🧩' : t('next_page') + ' →'}
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  const q = questions[qi];
+  const total = questions.length;
+  const choose = (i) => { if (qstate !== 'idle') return; setPicked(i); };
+  const check = () => {
+    if (picked == null) return;
+    const right = picked === q.correct;
+    setQstate(right ? 'correct' : 'wrong');
+    if (right) setCorrectCount(c => c + 1);
+    else setHearts(h => Math.max(0, h - 1));
+  };
+  const cont = () => {
+    if (qi + 1 >= total) {
+      const stars = correctCount >= total ? 3 : correctCount >= total - 1 ? 2 : 1;
+      onComplete({ stars, correctCount, total });
+      return;
+    }
+    setQi(qi + 1);
+    setPicked(null);
+    setQstate('idle');
+  };
+
+  return (
+    <section className="kq-quiz" style={{ "--hub-color": hub.color }}>
+      <div className="kq-quiz-bar">
+        <button className="kq-back-btn" onClick={onExit} aria-label="Quit">✕</button>
+        <div className="kq-progress">
+          <span style={{ width: `${((qi + (qstate !== 'idle' ? 1 : 0)) / total) * 100}%`, background: hub.color }} />
+        </div>
+        <div className="kq-hearts">
+          {[0,1,2].map(i => <span key={i} className={i < hearts ? '' : 'empty'}>❤️</span>)}
+        </div>
+      </div>
+      <div className="kq-question-card">
+        <div className="kq-mascot-bubble">
+          <div className="speech">
+            {qstate === 'idle' && t('pick_answer')}
+            {qstate === 'correct' && t('correct') + ' 🎉'}
+            {qstate === 'wrong' && t('wrong')}
+          </div>
+          <window.HubMascot hubId={hubId} size={88} mood={qstate === 'wrong' ? 'wow' : 'happy'} accent={hub.color} />
+        </div>
+        <p style={{ fontSize: 12, color: 'var(--kq-ink-soft)', letterSpacing: '.1em',
+                    textTransform: 'uppercase', fontWeight: 700, margin: '0 0 8px' }}>
+          {t('question_of', { a: qi + 1, b: total })}
+        </p>
+        <h2 className="kq-question">{q[`q_${lang}`]}</h2>
+        <div className="kq-options">
+          {q.opts.map((opt, i) => {
+            const selected = picked === i;
+            let stateAttr;
+            if (qstate !== 'idle') {
+              if (i === q.correct) stateAttr = 'correct';
+              else if (selected && qstate === 'wrong') stateAttr = 'wrong';
+            }
+            return (
+              <button key={i} className="kq-option"
+                      data-selected={selected} data-state={stateAttr}
+                      onClick={() => choose(i)} disabled={qstate !== 'idle'}>
+                <span className="emoji">{opt.emoji}</span>
+                <span>{opt[lang]}</span>
+              </button>
+            );
+          })}
+        </div>
+        {qstate === 'idle' ? (
+          <button className="kq-btn kq-btn-primary kq-btn-big" disabled={picked == null} onClick={check}>
+            {t('check')} ✓
+          </button>
+        ) : (
+          <React.Fragment>
+            <div className={`kq-feedback ${qstate === 'correct' ? 'good' : 'bad'}`}>
+              {qstate === 'correct' ? t('correct') + ' 🌟' : t('wrong') + ' 💪'}
+            </div>
+            <button className="kq-btn kq-btn-primary kq-btn-big" onClick={cont}>
+              {qi + 1 >= total ? t('continue') + ' 🏁' : t('continue') + ' →'}
+            </button>
+          </React.Fragment>
+        )}
+      </div>
+    </section>
+  );
+};
+
 Object.assign(window, {
   KQ_useT: useT,
   Topbar, BottomTabs,
-  OnboardScreen, WorldMapScreen, QuestMapScreen, QuizScreen,
+  OnboardScreen, WorldMapScreen, QuestMapScreen, QuizScreen, StoryScreen,
   RewardOverlay, TrophiesScreen, ProfileScreen, ParentScreen,
 });
 
@@ -2977,6 +3344,7 @@ function App() {
     english: JSON.parse(JSON.stringify(window.KQ.levels.english)),
     geo:     JSON.parse(JSON.stringify(window.KQ.levels.geo)),
     math:    JSON.parse(JSON.stringify(window.KQ.levels.math)),
+    stories: JSON.parse(JSON.stringify(window.KQ.levels.stories)),
   }));
 
   // ─── Persistence
@@ -3109,9 +3477,13 @@ function App() {
                                     onBack={handleBackToWorld}
                                     onPickLevel={handlePickLevel} />;
   } else if (mode === 'quiz' && activeLevel) {
-    screen = <window.QuizScreen lang={lang} hubId={activeHub} level={activeLevel}
-                                onExit={handleExitQuiz}
-                                onComplete={handleQuizComplete} />;
+    screen = activeHub === 'stories'
+      ? <window.StoryScreen lang={lang} hubId={activeHub} level={activeLevel}
+                            onExit={handleExitQuiz}
+                            onComplete={handleQuizComplete} />
+      : <window.QuizScreen lang={lang} hubId={activeHub} level={activeLevel}
+                           onExit={handleExitQuiz}
+                           onComplete={handleQuizComplete} />;
   } else if (mode === 'trophies') {
     screen = <window.TrophiesScreen lang={lang} />;
   } else if (mode === 'profile') {
