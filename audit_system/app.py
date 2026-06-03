@@ -6193,19 +6193,111 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
 # TAB 3 — DOCUMENT ANALYSER
 # ─────────────────────────────────────────────────────────────────────────────
 elif _active == 3:
+    # Domain specialist profiles — keyed by domain, matched from audit topic keywords
+    _T3_SPECIALISTS = {
+        "aml_kyc": {
+            "kw": ["aml", "kyc", "cdd", "edd", "str", "sar", "pep", "sanction", "transaction monitor", "anti-money", "beneficial owner", "fatf"],
+            "name": "AML & KYC Compliance Specialist", "initials": "AK",
+            "color": "#818cf8", "bg": "#1a1a3e",
+            "domain": "Anti-Money Laundering · Know Your Customer · Sanctions",
+            "expertise": ["STR / SAR filing governance", "CDD / EDD frameworks", "PEP & sanctions screening", "Transaction monitoring systems", "MLRO governance & oversight"],
+            "credentials": ["CAMS", "CFCS", "Ex-FINMA supervisory team"],
+            "regs": ["FATF R.10 / R.16 / R.20", "FINMA Circ. 2011/1", "MAS Notice 626", "AMLD6", "UK POCA 2002"],
+            "role": "You are a senior AML & KYC compliance specialist with 20 years of experience in private banking. Expert in FATF recommendations, FINMA AML circular, CDD/EDD frameworks, STR/SAR obligations, and PEP screening.",
+        },
+        "third_party": {
+            "kw": ["third party", "vendor", "outsourc", "supplier", "counterparty", "sla", "clearstream", "swift", "temenos", "bloomberg"],
+            "name": "Third Party Risk Specialist", "initials": "TP",
+            "color": "#22d3a5", "bg": "#0d2b1d",
+            "domain": "Vendor Risk · Outsourcing · SLA Governance",
+            "expertise": ["Critical vendor assessment", "SLA breach analysis", "Exit strategy review", "Sub-outsourcing chain audit", "Concentration risk"],
+            "credentials": ["CRISC", "CTPRP", "Ex-MAS supervision"],
+            "regs": ["FINMA Circ. 2018/3", "MAS TRM Guidelines 2021", "FCA SS2/21", "DORA Art. 28-30", "EBA/GL/2019/02"],
+            "role": "You are a senior third-party and vendor risk specialist. Expert in outsourcing governance, SLA analysis, critical vendor assessment, and regulatory requirements under FINMA 2018/3, MAS TRM, FCA SS2/21, and DORA.",
+        },
+        "cyber": {
+            "kw": ["cyber", "it risk", "technology risk", "dora", "iso 27001", "nist", "penetrat", "privileged access", "infosec", "information security", "bcm", "bcp", "disaster recover", "ransomware", "cloud security"],
+            "name": "Cyber & Technology Risk Specialist", "initials": "CT",
+            "color": "#f97316", "bg": "#2e1f0a",
+            "domain": "Cyber Security · IT Risk · Operational Resilience",
+            "expertise": ["Penetration test review", "Privileged access management (PAM)", "DORA ICT governance", "Business continuity testing", "Cloud security posture"],
+            "credentials": ["CISSP", "CISM", "ISO 27001 Lead Auditor"],
+            "regs": ["DORA (EU 2022/2554)", "MAS TRM 2021", "NIST CSF 2.0", "ISO/IEC 27001:2022", "FINMA Circ. 2023/1"],
+            "role": "You are a senior cyber and technology risk specialist. Expert in DORA, ISO 27001, NIST CSF, privileged access management, and IT resilience frameworks for private banks.",
+        },
+        "credit_risk": {
+            "kw": ["credit risk", "lending", "loan", "impairment", "ecl", "ifrs 9", "provision", "collateral", "basel", "npl", "credit appetite", "rwa"],
+            "name": "Credit Risk & Capital Specialist", "initials": "CR",
+            "color": "#ef4444", "bg": "#3b0e0e",
+            "domain": "Credit Risk · Capital Adequacy · IFRS 9",
+            "expertise": ["ECL provisioning (IFRS 9)", "Credit appetite framework", "Collateral valuation", "Basel IV RWA computation", "Large exposure monitoring"],
+            "credentials": ["FRM", "CFA", "Ex-SNB banking supervision"],
+            "regs": ["Basel IV / CRR III", "FINMA CAO", "IFRS 9", "EBA/GL/2020/06", "MAS Notice 612"],
+            "role": "You are a senior credit risk and capital specialist. Expert in IFRS 9 ECL modelling, Basel IV, collateral frameworks, and credit governance in private banking.",
+        },
+        "market_risk": {
+            "kw": ["market risk", "var", "trading", "frtb", "interest rate risk", "fx risk", "derivative", "hedging", "limit breach", "stress test", "liquidity"],
+            "name": "Market & Liquidity Risk Specialist", "initials": "MR",
+            "color": "#eab308", "bg": "#2e2000",
+            "domain": "Market Risk · FRTB · Liquidity",
+            "expertise": ["VaR / CVaR governance", "FRTB SA / IMA implementation", "Limit framework review", "ILAAP / LCR / NSFR", "Stress testing & scenario analysis"],
+            "credentials": ["FRM", "PRM", "Ex-UBS Market Risk"],
+            "regs": ["Basel III/IV - FRTB", "FINMA Circ. 2019/2", "MAS Notice 637", "EBA/GL/2018/02 ILAAP"],
+            "role": "You are a senior market and liquidity risk specialist. Expert in VaR governance, FRTB, stress testing, and liquidity risk frameworks for private banks.",
+        },
+        "data_privacy": {
+            "kw": ["gdpr", "data privacy", "data protection", "personal data", "retention", "dpo", "consent", "data breach", "ndsg", "pdpa", "data subject"],
+            "name": "Data Privacy & GDPR Specialist", "initials": "DP",
+            "color": "#a78bfa", "bg": "#1a0e3b",
+            "domain": "GDPR · Data Privacy · Information Governance",
+            "expertise": ["GDPR Art. 13-22 data subject rights", "Retention schedule audit", "Data breach response review", "Cross-border transfer (SCCs)", "DPIA review"],
+            "credentials": ["CIPP/E", "CIPM", "Certified DPO"],
+            "regs": ["GDPR (EU 2016/679)", "UK GDPR / DPA 2018", "Swiss nDSG", "PDPA (SG)", "PIPL (CN)"],
+            "role": "You are a senior data privacy specialist. Expert in GDPR, UK GDPR, Swiss nDSG, and PDPA compliance, specialising in retention audits, data subject rights, and cross-border transfer mechanisms.",
+        },
+        "governance": {
+            "kw": ["governance", "board", "committee", "three line", "control framework", "rcsa", "risk appetite", "compliance framework", "regulatory", "policy"],
+            "name": "Governance & Regulatory Compliance Specialist", "initials": "GR",
+            "color": "#38bdf8", "bg": "#0a2540",
+            "domain": "Corporate Governance · Risk Framework · Regulatory Affairs",
+            "expertise": ["Three Lines Model design", "RCSA framework review", "Risk appetite statement", "Board & committee governance", "Regulatory engagement strategy"],
+            "credentials": ["CIA", "CRMA", "Ex-FINMA enforcement"],
+            "regs": ["COSO 2017", "IIA Standards 2024", "FINMA Corporate Governance Circ.", "MAS Corp. Gov. Guidelines", "FCA SYSC"],
+            "role": "You are a senior governance and regulatory compliance specialist. Expert in corporate governance, three-lines-of-defence, COSO, IIA standards, and multi-jurisdictional regulatory requirements.",
+        },
+        "operational_risk": {
+            "kw": ["operational risk", "op risk", "bcp", "bcm", "rto", "rpo", "incident", "operational resilience", "process gap", "procedure", "important business service"],
+            "name": "Operational Resilience Specialist", "initials": "OR",
+            "color": "#fb923c", "bg": "#2a1505",
+            "domain": "Operational Risk · Business Continuity · Resilience",
+            "expertise": ["BIA & BCP testing review", "RTO / RPO gap analysis", "Incident management governance", "Important business services (IBS)", "Scenario & stress analysis"],
+            "credentials": ["MBCI", "ISO 22301 Lead Auditor", "Ex-PRA supervision"],
+            "regs": ["FCA/PRA SS1/21 Op. Resilience", "DORA Art. 11-14", "MAS Notice 634", "FINMA Circ. 2023/1"],
+            "role": "You are a senior operational resilience specialist. Expert in BCP/BCM testing, important business services mapping, RTO/RPO governance, and multi-jurisdictional resilience requirements.",
+        },
+    }
+    _T3_DEFAULT_SPEC = {
+        "name": "Senior Internal Audit Specialist", "initials": "IA",
+        "color": "#818cf8", "bg": "#1a1a3e",
+        "domain": "Internal Audit · Risk & Control · Multi-domain",
+        "expertise": ["Control framework assessment", "Risk-based audit approach", "Regulatory compliance review", "Observation & finding writing", "IIA Standards application"],
+        "credentials": ["CIA", "CISA", "CFE"],
+        "regs": ["IIA Standards 2024", "COSO 2017", "FINMA · MAS · FCA · DORA"],
+        "role": "You are a senior internal auditor with broad expertise across all risk domains in private banking. Analyse documents through a risk-based audit lens.",
+    }
+
+    def _t3_detect_specialist(topic: str) -> dict:
+        t = topic.lower()
+        for _sp in _T3_SPECIALISTS.values():
+            if any(kw in t for kw in _sp["kw"]):
+                return _sp
+        return _T3_DEFAULT_SPEC
+
     st.markdown(
         '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">'
-        'Upload audit documents — the AI maps findings to your audit tests and surfaces potential observations.</div>',
+        'Upload audit documents — a domain specialist AI analyses findings, maps them to your audit tests, and surfaces observations.</div>',
         unsafe_allow_html=True,
     )
-    st.markdown("""
-    <div class="agent-card">
-      <div class="agent-badge-pill">AGENT 3</div>
-      <div style="font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Agent 3 — Document Analyser</div>
-      <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:14px">
-        Analyses audit documents (policies, reports, MIS data), maps findings to the audit test programme, and surfaces potential observations that can be pushed to the Audit Report.
-      </div>
-    </div>""", unsafe_allow_html=True)
 
     st.caption("📎 Upload documents to analyse (PDF, Word, Excel, TXT — multiple files)")
     t3_uploads = st.file_uploader(
@@ -6216,9 +6308,46 @@ elif _active == 3:
     t3_topic = st.text_input(
         "Audit Topic / Context",
         value=_t3_topic_default,
-        placeholder="e.g. AML/KYC, Credit Risk…",
+        placeholder="e.g. AML/KYC, Credit Risk, Cyber, Third Party…",
         key="t3_topic_in",
     )
+
+    # Specialist card — auto-detected from current topic value, updates on rerun
+    _t3_cur_topic = st.session_state.get("t3_topic_in") or t3_topic or ""
+    _t3_spec = _t3_detect_specialist(_t3_cur_topic)
+    _sp_exp_html = "".join([f'<li style="margin-bottom:3px">{e}</li>' for e in _t3_spec["expertise"]])
+    _sp_creds_html = "  ".join([f'<span style="background:{_t3_spec["bg"]};color:{_t3_spec["color"]};border:1px solid {_t3_spec["color"]}55;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700">{c}</span>' for c in _t3_spec["credentials"]])
+    _sp_regs_html = "  ".join([f'<span style="color:#4a5568;font-size:10.5px">* {r}</span>' for r in _t3_spec["regs"]])
+    st.markdown(f"""
+<div style="background:var(--bg-card);border:1px solid {_t3_spec["color"]}44;border-radius:12px;padding:18px 22px;margin:12px 0 16px;position:relative;overflow:hidden">
+  <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:{_t3_spec["color"]}"></div>
+  <div style="display:flex;gap:16px;align-items:flex-start">
+    <div style="min-width:52px;height:52px;border-radius:50%;background:{_t3_spec["bg"]};border:2px solid {_t3_spec["color"]};
+         display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:{_t3_spec["color"]};flex-shrink:0">
+      {_t3_spec["initials"]}
+    </div>
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+        <span style="font-size:15px;font-weight:700;color:#eef0f8">{_t3_spec["name"]}</span>
+        <span style="background:{_t3_spec["bg"]};color:{_t3_spec["color"]};border:1px solid {_t3_spec["color"]}55;border-radius:6px;padding:2px 9px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Domain Specialist</span>
+      </div>
+      <div style="font-size:11.5px;color:{_t3_spec["color"]};font-weight:600;margin-bottom:10px">{_t3_spec["domain"]}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:11.5px">
+        <div>
+          <div style="color:#6b7a99;font-weight:700;text-transform:uppercase;font-size:10px;letter-spacing:.06em;margin-bottom:4px">Expertise</div>
+          <ul style="margin:0;padding-left:14px;color:#eef0f8;line-height:1.7">{_sp_exp_html}</ul>
+        </div>
+        <div>
+          <div style="color:#6b7a99;font-weight:700;text-transform:uppercase;font-size:10px;letter-spacing:.06em;margin-bottom:6px">Credentials</div>
+          <div style="margin-bottom:10px">{_sp_creds_html}</div>
+          <div style="color:#6b7a99;font-weight:700;text-transform:uppercase;font-size:10px;letter-spacing:.06em;margin-bottom:4px">Regulatory frame</div>
+          <div style="line-height:1.9">{_sp_regs_html}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>""", unsafe_allow_html=True)
+
     t3_notes = st.text_area(
         "Additional context or focus areas (optional)",
         placeholder="e.g. Focus on gaps between policy and practice. Cross-reference with FINMA Circular 2011/1.",
@@ -6228,7 +6357,7 @@ elif _active == 3:
     st.markdown('<div class="gen-btn-wrap"><div class="gen-btn">', unsafe_allow_html=True)
     _t3_can_run = bool(t3_uploads) and bool(t3_topic)
     if st.button("✦ Analyser les documents", disabled=_disabled or not _t3_can_run, key="t3_run"):
-        with st.spinner("Analysing documents…"):
+        with st.spinner(f"{_t3_spec['name']} is reviewing the documents..."):
             try:
                 c = _client()
                 file_ids3 = []
@@ -6253,7 +6382,7 @@ elif _active == 3:
                     "For each observation link it to relevant audit tests where possible.\n"
                     "Respond ONLY with valid JSON:\n"
                     '[{"observation":"<concise observation title>","detail":"<2-3 sentences>","risk_level":"Critical|High|Moderate|Low","linked_tests":["<test id or title>"],"source":"<document name or inferred>"}]',
-                    system="You are a senior internal auditor. Analyse documents and identify potential audit observations. Return ONLY a valid JSON array.",
+                    system=_t3_spec["role"] + " Analyse documents and identify potential audit observations. Return ONLY a valid JSON array.",
                     max_tokens=4000,
                 )
                 st.session_state["t3_docs_analysis"] = _parse_json(analysis_raw) or []
