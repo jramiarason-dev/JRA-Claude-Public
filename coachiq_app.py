@@ -5047,6 +5047,287 @@ def _build_js_timelines() -> str:
     return f"window.TIMELINES = {json.dumps(out, ensure_ascii=False)};"
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# RUGBY PLAYBOOK (le foot et le basket existent déjà : FOOTBALL_PLAYBOOK / PLAYBOOK)
+# ══════════════════════════════════════════════════════════════════════════════
+RUGBY_PLAYBOOK: dict[str, dict] = {
+    "maul_offensif": {
+        "categorie": "Conquête / Touche",
+        "objectif": "Avancer collectivement ballon porté après une touche pour marquer ou gagner une pénalité",
+        "principe": "Après réception en touche, les avants se lient autour du porteur et poussent en bloc vers l'en-but adverse",
+        "avantages": "Très difficile à défendre légalement, gagne du terrain et des pénalités, use le pack adverse",
+        "limites": "Risque de maul écroulé sanctionné, dépend d'une touche maîtrisée",
+        "reconnaitre": "Touche proche des 5m, alignement qui se regroupe immédiatement après la prise",
+        "contre_mesures": "Sack immédiat sur le receveur, défendre en biais, ne pas s'engager (laisser filer)",
+    },
+    "touche_lancee": {
+        "categorie": "Conquête / Touche",
+        "objectif": "Sécuriser une possession propre et créer une plateforme de lancement de jeu",
+        "principe": "Alignement codé, sauteur soulevé par deux relayeurs, lancer précis du talonneur",
+        "avantages": "Possession garantie si bien exécutée, base de tous les systèmes offensifs",
+        "limites": "Vulnérable au contest si timing imparfait, lancer sous pression difficile",
+        "reconnaitre": "Mouvements de leurre dans l'alignement, signaux codés du sauteur",
+        "contre_mesures": "Contest sur le sauteur principal, lecture des codes, pression sur le lanceur",
+    },
+    "melee_offensive": {
+        "categorie": "Conquête / Mêlée",
+        "objectif": "Dominer la mêlée fermée pour gagner du terrain, des pénalités ou lancer le jeu",
+        "principe": "Les 8 avants poussent de façon coordonnée à l'introduction pour reculer le pack adverse",
+        "avantages": "Arme psychologique et territoriale majeure, source de pénalités",
+        "limites": "Très technique, sanctions sévères si désaxée ou écroulée",
+        "reconnaitre": "Pack qui cherche systématiquement la pénalité plutôt que le ballon rapide",
+        "contre_mesures": "Stabilité du pack, introduction rapide, sortie immédiate du ballon par le N°8",
+    },
+    "jeu_au_pied_occupation": {
+        "categorie": "Jeu au pied / Territoire",
+        "objectif": "Gérer le territoire et mettre l'adversaire sous pression dans son camp",
+        "principe": "Coups de pied de déplacement (touches, diagonales, chandelles) pour reculer l'adversaire",
+        "avantages": "Réduit le risque, force des sorties de camp sous pression, récupère des ballons hauts",
+        "limites": "Rend le ballon à l'adversaire, prévisible si trop systématique",
+        "reconnaitre": "Ouvreur qui tape dès la 2e ou 3e phase, ailes qui montent sur la chandelle",
+        "contre_mesures": "Bon arrière sous les ballons hauts, contre-attaque rapide, fixer avant de taper",
+    },
+    "jeu_deploye": {
+        "categorie": "Attaque / Jeu à la main",
+        "objectif": "Créer le surnombre sur les extérieurs par une circulation rapide du ballon",
+        "principe": "Fixation au centre puis transmission rapide vers les ailes avec des lignes de course croisées",
+        "avantages": "Exploite la largeur, met les ailiers rapides en un-contre-un, spectaculaire",
+        "limites": "Exige précision des passes et timing, risque d'interception",
+        "reconnaitre": "Trois-quarts alignés en profondeur, ballon qui voyage vite après contact",
+        "contre_mesures": "Défense montante agressive, pression sur le premier centre, glissement coordonné",
+    },
+    "defense_montante": {
+        "categorie": "Défense",
+        "objectif": "Étouffer l'attaque adverse en réduisant son temps et son espace",
+        "principe": "La ligne défensive monte vite et en bloc (rush defense) pour plaquer derrière la ligne d'avantage",
+        "avantages": "Crée des turnovers, force l'erreur et le jeu au pied précipité",
+        "limites": "Vulnérable aux passes après-contact et au jeu au pied par-dessus",
+        "reconnaitre": "Défenseurs qui jaillissent dès la sortie de ruck, fermeture rapide des intervalles",
+        "contre_mesures": "Jeu au pied à ras ou par-dessus, passes sautées, attaquer l'épaule intérieure",
+    },
+    "defense_glissee": {
+        "categorie": "Défense",
+        "objectif": "Couvrir la largeur et neutraliser le surnombre adverse sur les extérieurs",
+        "principe": "Les défenseurs glissent vers l'extérieur en marquant l'adversaire d'un cran décalé",
+        "avantages": "Solide contre le jeu déployé, évite d'être débordé sur les ailes",
+        "limites": "Crée des brèches intérieures, exposée aux courses à contre",
+        "reconnaitre": "Ligne qui se décale latéralement plutôt que de monter franchement",
+        "contre_mesures": "Course à contre, jeu au près sur le ruck, fixer l'extérieur puis repiquer",
+    },
+    "ruck_rapide": {
+        "categorie": "Continuité / Ruck",
+        "objectif": "Conserver et accélérer la sortie du ballon pour jouer face à une défense non replacée",
+        "principe": "Nettoyage explosif et bas du ruck, demi de mêlée prêt à relancer en moins de 3 secondes",
+        "avantages": "Empêche la défense de se replacer, crée des temps de retard exploitables",
+        "limites": "Coûteux physiquement, risque de grattage si soutien lent",
+        "reconnaitre": "Demi de mêlée déjà sur le ballon, soutiens qui arrivent groupés et bas",
+        "contre_mesures": "Gratteur posté sur chaque ruck (jackal), ralentir la sortie légalement",
+    },
+    "pick_and_go": {
+        "categorie": "Attaque / Jeu au près",
+        "objectif": "Avancer en zone proche par des charges répétées pour fixer et fatiguer la défense",
+        "principe": "Les avants ramassent au ras du ruck et percutent sur un ou deux temps de jeu successifs",
+        "avantages": "Fixe les défenseurs au centre, ouvre les extérieurs, idéal proche de l'en-but",
+        "limites": "Faible gain au mètre, prévisible, expose aux grattages",
+        "reconnaitre": "Avants qui jouent au ras sur plusieurs phases consécutives près de la ligne",
+        "contre_mesures": "Défense basse et dominante, gratteur sur le porteur isolé, tenir la ligne",
+    },
+    "contre_attaque": {
+        "categorie": "Transition",
+        "objectif": "Exploiter une récupération ou un ballon de pied adverse mal négocié",
+        "principe": "Relance immédiate depuis l'arrière, soutiens qui remontent, recherche des espaces non couverts",
+        "avantages": "Très payante contre une défense désorganisée, prend l'adversaire à contre-pied",
+        "limites": "Risquée dans son propre camp, exige une lecture parfaite",
+        "reconnaitre": "Arrière qui relance balle en main au lieu de taper, soutiens lancés",
+        "contre_mesures": "Monter en filet sur le relanceur, jeu au pied précis, repli organisé",
+    },
+    "sortie_de_camp": {
+        "categorie": "Gestion / Territoire",
+        "objectif": "Sortir proprement de sa zone défensive sous pression",
+        "principe": "Sécuriser une phase, puis taper en touche long ou jouer quelques temps pour gagner du champ",
+        "avantages": "Soulage la défense, inverse la pression territoriale",
+        "limites": "Risque de charge contrée, touche manquée coûteuse",
+        "reconnaitre": "Jeu au pied dès la récupération dans les 22m, recherche de la ligne de touche",
+        "contre_mesures": "Charge sur le botteur, montée sur réception, contre sur touche non trouvée",
+    },
+    "offload": {
+        "categorie": "Attaque / Continuité",
+        "objectif": "Maintenir la continuité en passant après contact avant d'aller au sol",
+        "principe": "Le porteur résiste au plaquage et libère le ballon pour un soutien lancé",
+        "avantages": "Casse la ligne défensive, supprime le temps de ruck, dynamise le jeu",
+        "limites": "Risque élevé de turnover si soutien absent ou passe forcée",
+        "reconnaitre": "Porteurs qui cherchent le bras libre dans le contact, soutiens proches",
+        "contre_mesures": "Plaquage à deux (un sur le ballon), enchaîner bas pour empêcher l'offload",
+    },
+}
+
+# Quelles équipes (réelles, présentes dans l'app) emploient nettement chaque tactique
+TACTIC_TEAMS: dict[str, list] = {
+    # Football
+    "positional_play": ["Manchester City", "FC Barcelona", "Paris Saint-Germain"],
+    "high_press": ["Liverpool FC", "Paris Saint-Germain", "Bayern Munich", "Arsenal FC"],
+    "low_block": ["Atlético de Madrid", "OGC Nice"],
+    "counter_attacking": ["Real Madrid CF", "Inter Milan", "AS Monaco"],
+    "direct_play": ["RC Lens", "Newcastle United"],
+    "build_up_court": ["Manchester City", "FC Barcelona", "Liverpool FC"],
+    "inverted_fullbacks": ["Manchester City", "Bayern Munich"],
+    "counter_press": ["Liverpool FC", "Bayern Munich", "Arsenal FC"],
+    "mid_block": ["Juventus FC", "Aston Villa"],
+    "overlaps": ["Liverpool FC", "Real Madrid CF"],
+    "switch_play": ["Manchester City", "Real Madrid CF"],
+    "trigger_pressing": ["Atalanta", "RB Leipzig"],
+    # Basket
+    "pick_and_roll": ["Denver Nuggets", "Dallas Mavericks", "AS Monaco Basket"],
+    "spain_pnr": ["Boston Celtics", "Real Madrid Baloncesto"],
+    "motion_offense": ["Golden State Warriors", "San Antonio Spurs"],
+    "spread_offense": ["Boston Celtics", "Oklahoma City Thunder"],
+    "transition_offense": ["Indiana Pacers", "Golden State Warriors"],
+    "iso": ["Dallas Mavericks", "Phoenix Suns"],
+    "isolation": ["Dallas Mavericks", "Phoenix Suns"],
+    "post_up": ["Denver Nuggets", "Philadelphia 76ers"],
+    "drop": ["Minnesota Timberwolves", "Cleveland Cavaliers"],
+    "switch": ["Boston Celtics", "Oklahoma City Thunder"],
+    "zone_offense": ["Olympiacos BC", "Panathinaikos"],
+    # Rugby
+    "maul_offensif": ["Stade Toulousain", "Stade Rochelais", "Montpellier Hérault Rugby"],
+    "jeu_deploye": ["Stade Toulousain", "Bordeaux-Bègles"],
+    "jeu_au_pied_occupation": ["Stade Rochelais", "Racing 92"],
+    "defense_montante": ["Stade Rochelais", "Clermont Auvergne"],
+    "ruck_rapide": ["Stade Toulousain", "Lyon OU"],
+    "melee_offensive": ["Castres Olympique", "Aviron Bayonnais"],
+    "contre_attaque": ["Stade Toulousain", "Racing 92"],
+}
+
+# id de tactique → type de schéma SVG (rendu côté React)
+def _diagram_for(sport_key: str, tid: str, categorie: str) -> str:
+    c = (categorie or "").lower()
+    if sport_key == "football":
+        if "press" in tid or "press" in c: return "fb_press"
+        if "block" in tid: return "fb_block"
+        if "build" in tid or "possession" in tid or "positional" in tid: return "fb_buildup"
+        if "counter" in tid or "transition" in tid or "direct" in tid: return "fb_counter"
+        if "corner" in tid or "free_kick" in tid or "throw" in tid or "phases" in c or "arrêté" in c: return "fb_setpiece"
+        if "width" in tid or "overlap" in tid or "switch" in tid or "cross" in tid or "half_space" in tid: return "fb_width"
+        return "fb_buildup"
+    if sport_key == "basket":
+        if "pnr" in tid or "pick" in tid or "roll" in tid or "drag" in tid or "spain" in tid: return "bk_pnr"
+        if "iso" in tid: return "bk_iso"
+        if "post" in tid: return "bk_post"
+        if "motion" in tid or "princeton" in tid or "flex" in tid or "spread" in tid: return "bk_motion"
+        if "zone" in tid or "trap" in tid or "press" in tid or "switch" in tid or "drop" in tid or "hedge" in tid or "ice" in tid or "defense" in tid: return "bk_defense"
+        if "transition" in tid: return "bk_transition"
+        return "bk_motion"
+    # rugby
+    if "maul" in tid or "touche" in tid: return "rg_lineout"
+    if "melee" in tid: return "rg_scrum"
+    if "pied" in tid or "sortie" in tid: return "rg_kick"
+    if "defense" in tid: return "rg_defense"
+    if "ruck" in tid or "pick" in tid or "offload" in tid: return "rg_ruck"
+    return "rg_backline"
+
+
+def _norm_tactic(sport_key: str, tid: str, d: dict) -> dict:
+    name = tid.replace("_", " ").title()
+    cat = d.get("categorie", "")
+    return {
+        "id": tid,
+        "name": name,
+        "categorie": cat,
+        "objectif": d.get("objectif", ""),
+        "principe": d.get("principe", d.get("structure", "")),
+        "avantages": d.get("avantages", ""),
+        "limites": d.get("limites", ""),
+        "reconnaitre": d.get("reconnaitre", d.get("reconnaître", "")),
+        "contre_mesures": d.get("contre_mesures", ""),
+        "teams": TACTIC_TEAMS.get(tid, []),
+        "diagram": _diagram_for(sport_key, tid, cat),
+    }
+
+
+def _build_js_playbooks() -> str:
+    """Football + basket + rugby tactics → window.PLAYBOOKS (with teams + diagram)."""
+    out = {
+        "football": [_norm_tactic("football", k, v) for k, v in FOOTBALL_PLAYBOOK.items()],
+        "basket":   [_norm_tactic("basket", k, v) for k, v in PLAYBOOK.items()],
+        "rugby":    [_norm_tactic("rugby", k, v) for k, v in RUGBY_PLAYBOOK.items()],
+    }
+    return f"window.PLAYBOOKS = {json.dumps(out, ensure_ascii=False)};"
+
+
+def _build_js_squads() -> str:
+    """Real squads per team → window.SQUADS (for the tactical simulator/lineup editor)."""
+    # team → sport, derived from MATCHES
+    team_sport: dict[str, str] = {}
+    sport_map = {"⚽ Football": "football", "🏀 Basket": "basket", "🏉 Rugby": "rugby"}
+    for m in MATCHES.values():
+        sk = sport_map.get(m.get("sport", ""), "football")
+        for side in ("home", "away"):
+            team_sport.setdefault(m[side]["name"], sk)
+    out: dict = {}
+    for team, players in TEAM_SQUADS.items():
+        # infer sport from squad size/positions if not in MATCHES
+        sk = team_sport.get(team)
+        if sk is None:
+            sk = "basket" if len(players) == 5 else ("rugby" if len(players) in (8, 9) else "football")
+        out[team] = {"sport": sk, "players": [[p[0], p[1]] for p in players]}
+    return f"window.SQUADS = {json.dumps(out, ensure_ascii=False)};"
+
+
+def _build_js_teamstats() -> str:
+    """Aggregate per-team season stats from finished MATCHES → window.TEAMSTATS.
+
+    Powers the comparator and season-trends screens (computed client-side from this).
+    """
+    stats: dict = {}
+    sport_map = {"⚽ Football": "football", "🏀 Basket": "basket", "🏉 Rugby": "rugby"}
+
+    def _row(team, sport_key, comp):
+        return stats.setdefault(team, {
+            "sport": sport_key, "competition": comp,
+            "played": 0, "w": 0, "d": 0, "l": 0,
+            "pf": 0, "pa": 0, "form": [], "results": [],
+        })
+
+    finished = [
+        (mid, m) for mid, m in MATCHES.items()
+        if m.get("status") == "Terminé"
+        and m["home"].get("score") is not None
+        and m["away"].get("score") is not None
+    ]
+    def _sk(item):
+        try:
+            return datetime.strptime(item[1].get("date", ""), "%Y-%m-%d")
+        except Exception:
+            return datetime.min
+    finished.sort(key=_sk)
+
+    for _mid, m in finished:
+        sk = sport_map.get(m.get("sport", ""), "football")
+        comp = m.get("competition", "")
+        hs, as_ = int(m["home"]["score"]), int(m["away"]["score"])
+        for team, gf, ga, opp in [
+            (m["home"]["name"], hs, as_, m["away"]["name"]),
+            (m["away"]["name"], as_, hs, m["home"]["name"]),
+        ]:
+            r = _row(team, sk, comp)
+            r["played"] += 1
+            r["pf"] += gf; r["pa"] += ga
+            res = "V" if gf > ga else ("N" if gf == ga else "D")
+            r["w"] += res == "V"; r["d"] += res == "N"; r["l"] += res == "D"
+            r["form"].append(res)
+            r["results"].append({"gf": gf, "ga": ga, "res": res, "opp": opp,
+                                  "date": m.get("date", "")})
+    for r in stats.values():
+        r["form"] = r["form"][-5:]
+    return f"window.TEAMSTATS = {json.dumps(stats, ensure_ascii=False)};"
+
+
+def _build_js_standings() -> str:
+    """Explicit league tables → window.STANDINGS (Ligue 1 authored; others derived)."""
+    out: dict = {"Ligue 1": LIGUE1_STANDINGS}
+    return f"window.STANDINGS = {json.dumps(out, ensure_ascii=False)};"
+
+
 _ROOT = Path(__file__).parent
 
 def _read(rel: str) -> str:
@@ -5071,6 +5352,10 @@ _JS_REAL_ANALYSES  = _build_js_analyses()
 _JS_REAL_LINEUPS   = _build_js_lineups()
 _JS_REAL_MATCHUPS  = _build_js_matchups()
 _JS_REAL_TIMELINES = _build_js_timelines()
+_JS_PLAYBOOKS      = _build_js_playbooks()
+_JS_SQUADS         = _build_js_squads()
+_JS_TEAMSTATS      = _build_js_teamstats()
+_JS_STANDINGS      = _build_js_standings()
 
 _HTML = f"""<!doctype html>
 <html lang="fr">
@@ -5101,6 +5386,10 @@ _HTML = f"""<!doctype html>
   <script>{_JS_REAL_LINEUPS}</script>
   <script>{_JS_REAL_MATCHUPS}</script>
   <script>{_JS_REAL_TIMELINES}</script>
+  <script>{_JS_PLAYBOOKS}</script>
+  <script>{_JS_SQUADS}</script>
+  <script>{_JS_TEAMSTATS}</script>
+  <script>{_JS_STANDINGS}</script>
   <script type="text/babel" data-presets="react">{_JSX_TWEAKS}</script>
   <script type="text/babel" data-presets="react">{_JSX_UI}</script>
   <script type="text/babel" data-presets="react">{_JSX_SHELL}</script>
