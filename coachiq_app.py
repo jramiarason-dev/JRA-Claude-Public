@@ -4839,6 +4839,17 @@ def _build_js_matches() -> str:
         if h.get("score") is not None and a.get("score") is not None:
             entry["score"] = {"home": h["score"], "away": a["score"]}
 
+        # Deterministic predicted scoreline (used by the pre-match screen)
+        prng = _rng_mod.Random(int(hashlib.md5(("P" + mid).encode()).hexdigest()[:8], 16))
+        _sp = m.get("sport", "")
+        if "Basket" in _sp:
+            base = prng.randint(96, 114)
+            entry["predicted"] = f"{base + prng.randint(-6, 9)} – {base + prng.randint(-9, 6)}"
+        elif "Rugby" in _sp:
+            entry["predicted"] = f"{prng.randint(16, 32)} – {prng.randint(12, 27)}"
+        else:
+            entry["predicted"] = f"{prng.randint(0, 3)} – {prng.randint(0, 2)}"
+
         grouped[sport_key].append(entry)
 
     return f"window.MATCHES = {json.dumps(grouped, ensure_ascii=False)};"
@@ -4895,6 +4906,147 @@ def _build_js_analyses() -> str:
     return f"window.ANALYSES = {json.dumps(analyses, ensure_ascii=False)};"
 
 
+# ── Formation coordinate templates (football pitch %, GK bottom y=92) ─────────
+_FORMATION_COORDS = {
+    "4-3-3":   [(50,92),(12,72),(36,76),(64,76),(88,72),(28,52),(50,56),(72,52),(20,26),(50,18),(80,26)],
+    "4-2-3-1": [(50,92),(12,72),(36,76),(64,76),(88,72),(36,58),(64,58),(20,38),(50,34),(80,38),(50,16)],
+    "4-4-2":   [(50,92),(12,72),(36,76),(64,76),(88,72),(14,50),(38,52),(62,52),(86,50),(38,22),(62,22)],
+    "3-5-2":   [(50,92),(26,76),(50,78),(74,76),(8,52),(32,56),(50,58),(68,56),(92,52),(38,22),(62,22)],
+    "4-1-4-1": [(50,92),(12,72),(36,76),(64,76),(88,72),(50,62),(16,46),(40,44),(60,44),(84,46),(50,18)],
+}
+_FOOT_FORMS = ["4-3-3", "4-2-3-1", "4-4-2", "3-5-2", "4-1-4-1"]
+
+
+def _mid_rng(mid: str, salt: str) -> "_rng_mod.Random":
+    return _rng_mod.Random(int(hashlib.md5((salt + mid).encode()).hexdigest()[:8], 16))
+
+
+def _build_js_lineups() -> str:
+    """Per-match probable XI with pitch coordinates → window.LINEUPS (football)."""
+    out: dict = {}
+    for mid, m in MATCHES.items():
+        if "Football" not in m.get("sport", ""):
+            continue
+        rng = _mid_rng(mid, "L")
+        sides: dict = {}
+        for side in ("home", "away"):
+            squad = TEAM_SQUADS.get(m[side]["name"])
+            if not squad or len(squad) < 11:
+                continue
+            form = rng.choice(_FOOT_FORMS)
+            coords = _FORMATION_COORDS[form]
+            players = [
+                {"name": squad[i][0], "pos": squad[i][1], "num": i + 1,
+                 "x": coords[i][0], "y": coords[i][1]}
+                for i in range(11)
+            ]
+            sides[side] = {"formation": form, "players": players}
+        if "home" in sides and "away" in sides:
+            out[mid] = sides
+    return f"window.LINEUPS = {json.dumps(out, ensure_ascii=False)};"
+
+
+def _build_js_matchups() -> str:
+    """Per-match key individual duels with real players → window.MATCHUPS."""
+    notes_fb = [
+        "Verticalité supérieure en zone 14", "Profondeur sur le couloir",
+        "Duel physique 50/50", "Avantage à la course", "Bataille au pressing",
+        "Supériorité dans les airs", "Création vs récupération",
+    ]
+    notes_bk = [
+        "Avantage de taille sous le cercle", "Vitesse balle en main supérieure",
+        "Mismatch à exploiter en iso", "Duel de scoreurs", "Bataille au rebond",
+        "Adresse extérieure décisive",
+    ]
+    notes_rg = [
+        "Domination au contact", "Vitesse dans les intervalles",
+        "Bataille des rucks", "Duel de buteurs", "Supériorité en touche",
+        "Plaquage offensif clé",
+    ]
+    out: dict = {}
+    for mid, m in MATCHES.items():
+        rng = _mid_rng(mid, "M")
+        hsq = TEAM_SQUADS.get(m["home"]["name"])
+        asq = TEAM_SQUADS.get(m["away"]["name"])
+        if not hsq or not asq:
+            continue
+        sport = m.get("sport", "")
+        if "Football" in sport and len(hsq) >= 11 and len(asq) >= 11:
+            pairs, notes = [(9, 3), (6, 6), (2, 9)], notes_fb       # att/def, mid/mid, def/att
+        elif "Basket" in sport and len(hsq) >= 5 and len(asq) >= 5:
+            pairs, notes = [(0, 0), (2, 2), (4, 4)], notes_bk        # PG, SF, C
+        elif len(hsq) >= 8 and len(asq) >= 8:
+            pairs, notes = [(0, 0), (2, 2), (5, 5)], notes_rg        # rugby lines
+        else:
+            continue
+        picked = rng.sample(notes, k=min(3, len(notes)))
+        duels = []
+        for k, (hi, ai) in enumerate(pairs):
+            hi = min(hi, len(hsq) - 1); ai = min(ai, len(asq) - 1)
+            duels.append({
+                "home": {"name": hsq[hi][0], "pos": hsq[hi][1]},
+                "away": {"name": asq[ai][0], "pos": asq[ai][1]},
+                "edge": rng.choice(["home", "away", "neutral"]),
+                "note": picked[k] if k < len(picked) else "",
+            })
+        out[mid] = duels
+    return f"window.MATCHUPS = {json.dumps(out, ensure_ascii=False)};"
+
+
+def _build_js_timelines() -> str:
+    """Per-match chronology with real scorers → window.TIMELINES (finished only)."""
+    out: dict = {}
+    for mid, m in MATCHES.items():
+        if m.get("status") != "Terminé":
+            continue
+        if m["home"].get("score") is None or m["away"].get("score") is None:
+            continue
+        rng = _mid_rng(mid, "T")
+        sport = m.get("sport", "")
+        hs, as_ = int(m["home"]["score"]), int(m["away"]["score"])
+        hcode, acode = m["home"]["short"], m["away"]["short"]
+        hsq = TEAM_SQUADS.get(m["home"]["name"]) or []
+        asq = TEAM_SQUADS.get(m["away"]["name"]) or []
+        ev: list = []
+
+        if "Football" in sport:
+            def _att(sq):
+                a = [p[0] for p in sq if p[1] in ("BU", "AD", "AG", "MO")]
+                return a or [p[0] for p in sq[-3:]] or ["?"]
+            ha, aa = _att(hsq), _att(asq)
+            ng = hs + as_
+            mins = sorted(rng.sample(range(3, 91), min(ng, 8))) if ng else []
+            goals = [("home", hcode, ha)] * hs + [("away", acode, aa)] * as_
+            rng.shuffle(goals)
+            for i, mn in enumerate(mins[:len(goals)]):
+                _side, code, pool = goals[i]
+                ev.append({"min": f"{mn}'", "event": f"⚽ {rng.choice(pool)} ({code})", "accent": True})
+            if hsq and asq:
+                cm = rng.randint(20, 80); cc = rng.choice([hcode, acode])
+                cpool = hsq if cc == hcode else asq
+                ev.append({"min": f"{cm}'", "event": f"🟨 {rng.choice(cpool)[0]} ({cc})", "accent": False})
+            ev.sort(key=lambda e: int(e["min"].rstrip("'")))
+        elif "Basket" in sport:
+            htop = hsq[0][0] if hsq else "?"; atop = asq[0][0] if asq else "?"
+            lead = hcode if hs > as_ else acode
+            ev = [
+                {"min": "Q1", "event": f"Échanges serrés, {htop} chaud d'entrée", "accent": False},
+                {"min": "Q2", "event": f"Run {rng.randint(10,16)}-{rng.randint(2,6)} mené par {htop if hs>=as_ else atop}", "accent": True},
+                {"min": "Q3", "event": f"{atop} maintient {acode} au contact", "accent": False},
+                {"min": "Q4", "event": f"{lead} fait la différence dans le money time", "accent": True},
+            ]
+        else:  # rugby
+            hpool = [p[0] for p in hsq] or ["?"]; apool = [p[0] for p in asq] or ["?"]
+            ev = [
+                {"min": f"{rng.randint(5,20)}'", "event": f"🏉 Essai {rng.choice(hpool)} ({hcode})", "accent": True},
+                {"min": f"{rng.randint(22,38)}'", "event": f"🥅 Pénalité {rng.choice(apool)} ({acode})", "accent": False},
+                {"min": f"{rng.randint(45,60)}'", "event": f"🏉 Essai {rng.choice(apool)} ({acode})", "accent": True},
+                {"min": f"{rng.randint(62,78)}'", "event": f"🏉 Essai {rng.choice(hpool)} ({hcode})", "accent": True},
+            ]
+        out[mid] = ev
+    return f"window.TIMELINES = {json.dumps(out, ensure_ascii=False)};"
+
+
 _ROOT = Path(__file__).parent
 
 def _read(rel: str) -> str:
@@ -4916,6 +5068,9 @@ _JSX_APP    = _read("app.jsx")
 
 _JS_REAL_MATCHES   = _build_js_matches()
 _JS_REAL_ANALYSES  = _build_js_analyses()
+_JS_REAL_LINEUPS   = _build_js_lineups()
+_JS_REAL_MATCHUPS  = _build_js_matchups()
+_JS_REAL_TIMELINES = _build_js_timelines()
 
 _HTML = f"""<!doctype html>
 <html lang="fr">
@@ -4943,6 +5098,9 @@ _HTML = f"""<!doctype html>
   <script>{_JS_DATA}</script>
   <script>{_JS_REAL_MATCHES}</script>
   <script>{_JS_REAL_ANALYSES}</script>
+  <script>{_JS_REAL_LINEUPS}</script>
+  <script>{_JS_REAL_MATCHUPS}</script>
+  <script>{_JS_REAL_TIMELINES}</script>
   <script type="text/babel" data-presets="react">{_JSX_TWEAKS}</script>
   <script type="text/babel" data-presets="react">{_JSX_UI}</script>
   <script type="text/babel" data-presets="react">{_JSX_SHELL}</script>

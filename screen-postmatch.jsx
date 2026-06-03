@@ -63,26 +63,8 @@ const PostMatchScreen = ({ lang, matchId, setRoute, sport }) => {
     })),
   ] : _fallbackPerformers;
 
-  const timeline = sportType === 'football' ? [
-    { min: "12'", event: lang==='fr'?'⚽ Salah (LIV) — passe d\'Alexander-Arnold':'⚽ Salah (LIV) — Alexander-Arnold assist', accent: true },
-    { min: "28'", event: lang==='fr'?'🟨 Bissouma (TOT) — faute tactique':'🟨 Bissouma (TOT) — tactical foul' },
-    { min: "41'", event: lang==='fr'?'⚽ Son (TOT) — contre rapide, égalisation':'⚽ Son (TOT) — quick counter, equaliser', accent: true },
-    { min: "58'", event: lang==='fr'?'🔁 Salah → Diaz · changement offensif':'🔁 Salah → Diaz · attacking switch' },
-    { min: "67'", event: lang==='fr'?'⚽ Diaz (LIV) — tête sur corner':'⚽ Diaz (LIV) — header on corner', accent: true },
-    { min: "82'", event: lang==='fr'?'⚽ Salah (LIV) — penalty':'⚽ Salah (LIV) — penalty', accent: true },
-    { min: "90+3'", event: lang==='fr'?'Fin de match · victoire LIV 3-1':'Final whistle · LIV win 3-1' },
-  ] : sportType === 'basket' ? [
-    { min: 'Q1', event: lang==='fr'?'Nuggets prennent les commandes 32-24':'Nuggets take the lead 32-24', accent: true },
-    { min: 'Q2', event: lang==='fr'?'Run 14-2 mené par Jokic':'14-2 run led by Jokic', accent: true },
-    { min: 'Q3', event: lang==='fr'?'Antetokounmpo revient à 7 pts':'Antetokounmpo cuts deficit to 7' },
-    { min: 'Q4', event: lang==='fr'?'Murray + Jokic ferment le match':'Murray + Jokic close the game', accent: true },
-  ] : [
-    { min: "8'",  event: lang==='fr'?'🏉 Essai Dupont (FRA), transformation Ramos':'🏉 Try Dupont (FRA), Ramos conversion', accent: true },
-    { min: "24'", event: lang==='fr'?'🏉 Essai Ioane (NZL), pénalité réussie':'🏉 Try Ioane (NZL), penalty successful', accent: true },
-    { min: "48'", event: lang==='fr'?'Carton jaune Savea (NZL) — plaquage haut':'Yellow card Savea (NZL) — high tackle' },
-    { min: "67'", event: lang==='fr'?'🏉 Essai Penaud (FRA) — action collective':'🏉 Try Penaud (FRA) — team move', accent: true },
-    { min: "80'", event: lang==='fr'?'Coup de sifflet final · FRA 31-28 NZL':'Final whistle · FRA 31-28 NZL' },
-  ];
+  // Per-match chronology generated server-side from real squads
+  const timeline = (window.TIMELINES && window.TIMELINES[matchId]) || [];
 
   return (
     <div className="page">
@@ -220,6 +202,9 @@ const PostMatchScreen = ({ lang, matchId, setRoute, sport }) => {
               <h3 className="card-title">{t.timeline}</h3>
             </div>
             <div className="timeline">
+              {timeline.length === 0 && (
+                <div style={{ color: '#666', fontSize: 13 }}>{t.no_data}</div>
+              )}
               {timeline.map((ev, i) => (
                 <div key={i} className={`timeline-item ${ev.accent ? 'accent' : ''}`}>
                   <div className="timeline-min">{ev.min}</div>

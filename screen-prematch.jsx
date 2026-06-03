@@ -31,6 +31,7 @@ const PreMatchScreen = ({ lang, matchId, setRoute, sport }) => {
 
   if (!match) return <div className="page"><div className="card">{t.no_data}</div></div>;
   const lineup = window.LINEUPS[matchId];
+  const matchups = (window.MATCHUPS && window.MATCHUPS[matchId]) || [];
   const odds = match.odds || { home: 2.0, draw: 3.5, away: 3.0 };
   const total = (1/odds.home) + (odds.draw ? 1/odds.draw : 0) + (1/odds.away);
   const probs = {
@@ -138,11 +139,10 @@ const PreMatchScreen = ({ lang, matchId, setRoute, sport }) => {
               <h3 className="card-title">{t.key_matchups}</h3>
             </div>
             <div className="col" style={{ gap: 10 }}>
-              {[
-                { home: { name: 'Vitinha', pos: 'MC' }, away: { name: 'Veretout', pos: 'MC' }, edge: 'home', note: lang==='fr'?'Verticalité supérieure en zone 14':'Superior verticality in zone 14' },
-                { home: { name: 'Hakimi', pos: 'AD' }, away: { name: 'Lodi', pos: 'LG' }, edge: 'home', note: lang==='fr'?'Profondeur sur le couloir droit':'Right wing depth' },
-                { home: { name: 'Skriniar', pos: 'DC' }, away: { name: 'Aubameyang', pos: 'BU' }, edge: 'neutral', note: lang==='fr'?'Duel physique 50/50':'50/50 physical duel' },
-              ].map((d, i) => (
+              {matchups.length === 0 && (
+                <div style={{ color: '#666', fontSize: 13 }}>{t.no_data}</div>
+              )}
+              {matchups.map((d, i) => (
                 <div key={i} className="tile" style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 14, alignItems: 'center' }}>
                   <div>
                     <div className="kv-val">{d.home.name}</div>
@@ -229,9 +229,14 @@ const PreMatchScreen = ({ lang, matchId, setRoute, sport }) => {
                   {t.watch_for}
                 </div>
                 <p style={{ margin: 0, fontSize: 13, color: '#d0d0d0', lineHeight: 1.6 }}>
-                  {lang==='fr'
-                    ? "Vulnérabilité dans l'axe en l'absence d'un n°6 défensif. Marquinhos isolé exposé aux courses de Sarr."
-                    : "Central vulnerability without a defensive #6. Marquinhos isolated against Sarr's runs."}
+                  {(() => {
+                    const duel = matchups[2] || matchups[0];
+                    const def = duel ? duel.home.name : match.home.name;
+                    const att = duel ? duel.away.name : match.away.name;
+                    return lang === 'fr'
+                      ? `Vulnérabilité possible dans l'axe : ${def} (${match.home.code}) devra contenir les appels de ${att} (${match.away.code}) dans le dos de la défense.`
+                      : `Possible central vulnerability: ${def} (${match.home.code}) must contain ${att}'s (${match.away.code}) runs in behind.`;
+                  })()}
                 </p>
               </div>
             </div>
