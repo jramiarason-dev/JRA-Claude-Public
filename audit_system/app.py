@@ -1394,6 +1394,9 @@ TAB_TITLES = {
     1: "🔍 Risk Analysis",
     2: "📋 Audit Plan & Testing",
     3: "📄 Audit Report",
+    5: "📡 Continuous Audit",
+    6: "🏢 Third Party & Vendor 360",
+    7: "🔍 KYC / AML Compliance",
 }
 
 TAB_SUBTITLES = {
@@ -1401,11 +1404,14 @@ TAB_SUBTITLES = {
     1: "Identify risks and applicable regulations for your audit topic",
     2: "Build your audit plan and test programme",
     3: "Generate your formal audit report",
+    5: "Real-time monitoring · Risk KPIs · Alert feed",
+    6: "Vendor risk scoring · KYC · Outsourcing oversight",
+    7: "Client risk · PEP · Sanctions · Remediation pipeline",
 }
 
 _TAB_NAMES = {
-    "Français": ["Tableau de bord", "Analyse des Risques", "Plan & Tests", "Document Analyser", "Rapport d'Audit"],
-    "English":  ["Dashboard", "Risk Analysis", "Audit Plan", "Document Analyser", "Audit Report"],
+    "Français": ["Tableau de bord", "Analyse des Risques", "Plan & Tests", "Document Analyser", "Rapport d'Audit", "Audit Continu", "Tiers & Fournisseurs", "KYC / AML"],
+    "English":  ["Dashboard", "Risk Analysis", "Audit Plan", "Document Analyser", "Audit Report", "Continuous Audit", "Vendor 360", "KYC / AML"],
 }
 
 
@@ -3868,6 +3874,9 @@ with st.sidebar:
         2: "done" if st.session_state.get("t2_tests") else ("active" if _active == 2 else "idle"),
         3: "done" if st.session_state.get("t3_docs_analysis") else ("active" if _active == 3 else "idle"),
         4: "done" if st.session_state.get("t3_report") else ("active" if _active == 4 else "idle"),
+        5: "done",
+        6: "done",
+        7: "done",
     }
     _WF_DOT = {
         "done":   "background:#22d3a5",
@@ -3943,6 +3952,37 @@ with st.sidebar:
         st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
     elif _wf_status[4] == "active":
         st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
+
+    # ── MONITORING section ───────────────────────────────────────────────────
+    st.markdown("""
+<div style="padding:16px 16px 4px;border-top:1px solid rgba(255,255,255,0.05);margin-top:8px">
+  <span style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d4a6b">Monitoring</span>
+</div>
+""", unsafe_allow_html=True)
+
+    _cls5 = "nav-active" if _active == 5 else "nav-item"
+    st.markdown(f'<div class="{_cls5}">', unsafe_allow_html=True)
+    if st.button("📡  Continuous Audit", key="_nav5", use_container_width=True):
+        st.session_state["active_tab"] = 5
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ live</div>', unsafe_allow_html=True)
+
+    _cls6 = "nav-active" if _active == 6 else "nav-item"
+    st.markdown(f'<div class="{_cls6}">', unsafe_allow_html=True)
+    if st.button("🏢  Vendor 360", key="_nav6", use_container_width=True):
+        st.session_state["active_tab"] = 6
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ live</div>', unsafe_allow_html=True)
+
+    _cls7 = "nav-active" if _active == 7 else "nav-item"
+    st.markdown(f'<div class="{_cls7}">', unsafe_allow_html=True)
+    if st.button("🔍  KYC / AML", key="_nav7", use_container_width=True):
+        st.session_state["active_tab"] = 7
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ live</div>', unsafe_allow_html=True)
 
     # ── Entity selector (compact selectbox) ──────────────────────────────────
     st.markdown("""
@@ -6922,6 +6962,361 @@ elif _active == 4:
                     )
             except Exception:
                 pass
+
+
+# TAB 5 — CONTINUOUS AUDIT DASHBOARD
+# ─────────────────────────────────────────────────────────────────────────────
+elif _active == 5:
+    _t5_kpis = [
+        {"label": "Controls Tested", "value": "247", "delta": "+12 this week", "color": "#818cf8"},
+        {"label": "Issues Open",     "value": "12",  "delta": "3 new",         "color": "#f97316"},
+        {"label": "Critical Alerts", "value": "3",   "delta": "↓ from 5",      "color": "#ef4444"},
+        {"label": "Frameworks",      "value": "18",  "delta": "FINMA · MAS · FCA", "color": "#22d3a5"},
+    ]
+    _t5_alerts = [
+        {"id": "ALT-001", "level": "Critical", "domain": "AML / KYC",        "description": "STR filing delay > 30 days — SG entity",            "date": "2026-06-02", "assignee": "M. Dubois"},
+        {"id": "ALT-002", "level": "Critical", "domain": "Cyber",             "description": "Privileged access review overdue — 47 accounts",      "date": "2026-06-01", "assignee": "L. Chen"},
+        {"id": "ALT-003", "level": "Critical", "domain": "Third Party",       "description": "Vendor Clearstream: SLA breach — uptime 94.1%",        "date": "2026-05-30", "assignee": "S. Keller"},
+        {"id": "ALT-004", "level": "High",     "domain": "Market Risk",       "description": "VaR limit exceeded — HK trading desk, 3 consecutive days", "date": "2026-05-29", "assignee": "R. Patel"},
+        {"id": "ALT-005", "level": "High",     "domain": "Data Privacy",      "description": "GDPR data retention breach — 12k records > 7yr threshold", "date": "2026-05-28", "assignee": "A. Moreau"},
+        {"id": "ALT-006", "level": "Moderate", "domain": "Operational Risk",  "description": "BCP test fail — Bahamas entity, RTO exceeded by 4h",   "date": "2026-05-27", "assignee": "J. Williams"},
+        {"id": "ALT-007", "level": "Moderate", "domain": "Governance",        "description": "Board minutes not approved within SLA — Q1 2026",       "date": "2026-05-25", "assignee": "C. Müller"},
+        {"id": "ALT-008", "level": "Moderate", "domain": "Access Mgmt",       "description": "Dormant privileged accounts — 8 accounts not deprovisioned", "date": "2026-05-23", "assignee": "T. Nakamura"},
+    ]
+    _t5_trends = [
+        {"name": "AML / KYC Score",      "score": 78, "color": "#f97316"},
+        {"name": "Cyber Resilience",     "score": 64, "color": "#ef4444"},
+        {"name": "Third Party Risk",     "score": 82, "color": "#22d3a5"},
+        {"name": "Operational Risk",     "score": 71, "color": "#818cf8"},
+        {"name": "Data Privacy",         "score": 88, "color": "#22d3a5"},
+    ]
+    _t5_calendar = [
+        {"date": "09 Jun 2026", "entity": "CH / FINMA",     "audit": "AML Programme Review",         "status": "Scheduled"},
+        {"date": "16 Jun 2026", "entity": "SG / MAS",       "audit": "Technology Risk Assessment",   "status": "Scheduled"},
+        {"date": "23 Jun 2026", "entity": "HK / SFC",       "audit": "Wealth Advisory Controls",     "status": "Pending"},
+        {"date": "07 Jul 2026", "entity": "UK / FCA",       "audit": "Operational Resilience",       "status": "Pending"},
+        {"date": "14 Jul 2026", "entity": "EU / DORA",      "audit": "ICT Risk & Third Party",       "status": "Planned"},
+    ]
+
+    _badge_color = {"Critical": ("#3b0e0e", "#ef4444"), "High": ("#3b1f0a", "#f97316"), "Moderate": ("#1a2e1a", "#22d3a5")}
+
+    st.markdown(f"""
+<div style="margin-bottom:24px">
+  <div style="font-size:22px;font-weight:800;color:#eef0f8;margin-bottom:4px">📡 Continuous Audit Dashboard</div>
+  <div style="font-size:13px;color:#6b7a99">Real-time monitoring · Risk KPIs · Alert feed</div>
+</div>
+""", unsafe_allow_html=True)
+
+    # KPI cards
+    _kpi_cols = st.columns(4, gap="small")
+    for _i, _kpi in enumerate(_t5_kpis):
+        _kpi_cols[_i].markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;
+     padding:18px 20px;text-align:center;box-shadow:var(--shadow-card)">
+  <div style="font-size:32px;font-weight:800;color:{_kpi['color']}">{_kpi['value']}</div>
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+       color:#6b7a99;margin:4px 0">{_kpi['label']}</div>
+  <div style="font-size:11px;color:#4a5568">{_kpi['delta']}</div>
+</div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>⚠ Active Alerts</span></div>", unsafe_allow_html=True)
+
+    # Alert table
+    _rows = ""
+    for _a in _t5_alerts:
+        _bg, _cl = _badge_color.get(_a["level"], ("#1a1a2e", "#818cf8"))
+        _badge = f'<span style="background:{_bg};color:{_cl};border:1px solid {_cl}55;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700">{_a["level"]}</span>'
+        _rows += f'<tr><td style="padding:10px 12px;color:#6b7a99;font-size:12px">{_a["id"]}</td><td style="padding:10px 12px">{_badge}</td><td style="padding:10px 12px;color:#818cf8;font-size:12px;font-weight:600">{_a["domain"]}</td><td style="padding:10px 12px;color:#eef0f8;font-size:12px">{_a["description"]}</td><td style="padding:10px 12px;color:#4a5568;font-size:11px">{_a["date"]}</td><td style="padding:10px 12px;color:#6b7a99;font-size:12px">{_a["assignee"]}</td></tr>'
+
+    st.markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden">
+<table style="width:100%;border-collapse:collapse;font-family:inherit">
+  <thead><tr style="background:rgba(99,102,241,.08);border-bottom:1px solid var(--border-subtle)">
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">ID</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Level</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Domain</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Description</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Date</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Assignee</th>
+  </tr></thead>
+  <tbody>{_rows}</tbody>
+</table></div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>📊 Risk Scores by Domain</span></div>", unsafe_allow_html=True)
+
+    # Risk trend bars
+    for _t in _t5_trends:
+        _pct = _t["score"]
+        _col = _t["color"]
+        st.markdown(f"""
+<div style="margin-bottom:12px">
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+    <span style="font-size:12px;color:#eef0f8;font-weight:600">{_t['name']}</span>
+    <span style="font-size:12px;color:{_col};font-weight:700">{_pct}%</span>
+  </div>
+  <div style="background:rgba(255,255,255,.06);border-radius:4px;height:8px;overflow:hidden">
+    <div style="width:{_pct}%;height:100%;background:{_col};border-radius:4px"></div>
+  </div>
+</div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>📅 Upcoming Audit Schedule</span></div>", unsafe_allow_html=True)
+
+    # Calendar
+    _cal_rows = ""
+    for _c in _t5_calendar:
+        _s_color = "#22d3a5" if _c["status"] == "Scheduled" else ("#818cf8" if _c["status"] == "Pending" else "#4a5568")
+        _cal_rows += f'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:10px 12px;color:#818cf8;font-size:12px;font-weight:600">{_c["date"]}</td><td style="padding:10px 12px;color:#eef0f8;font-size:12px">{_c["entity"]}</td><td style="padding:10px 12px;color:#eef0f8;font-size:12px">{_c["audit"]}</td><td style="padding:10px 12px"><span style="color:{_s_color};font-size:11px;font-weight:700">{_c["status"]}</span></td></tr>'
+    st.markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden">
+<table style="width:100%;border-collapse:collapse;font-family:inherit">
+  <thead><tr style="background:rgba(99,102,241,.08);border-bottom:1px solid var(--border-subtle)">
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Date</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Entity</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Audit Programme</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Status</th>
+  </tr></thead>
+  <tbody>{_cal_rows}</tbody>
+</table></div>""", unsafe_allow_html=True)
+
+
+# TAB 6 — THIRD PARTY & VENDOR 360
+# ─────────────────────────────────────────────────────────────────────────────
+elif _active == 6:
+    _t6_kpis = [
+        {"label": "Total Vendors",    "value": "143", "delta": "+4 onboarded Q2",   "color": "#818cf8"},
+        {"label": "Critical Vendors", "value": "23",  "delta": "Tier 1 — FINMA reg", "color": "#ef4444"},
+        {"label": "Due Reviews",      "value": "11",  "delta": "Next 30 days",       "color": "#f97316"},
+        {"label": "SLA Breaches",     "value": "3",   "delta": "↑ from 1 last qtr",  "color": "#ef4444"},
+    ]
+    _t6_vendors = [
+        {"name": "Clearstream Banking", "cat": "Custody",       "score": 91, "kyc": "Approved", "review": "2026-03-15", "sla": "Breach",    "critical": True},
+        {"name": "Bloomberg L.P.",      "cat": "Data / Market", "score": 96, "kyc": "Approved", "review": "2026-01-20", "sla": "OK",        "critical": True},
+        {"name": "SWIFT SCRL",          "cat": "Messaging",     "score": 89, "kyc": "Approved", "review": "2026-02-10", "sla": "OK",        "critical": True},
+        {"name": "Temenos AG",          "cat": "Core Banking",  "score": 84, "kyc": "Approved", "review": "2026-04-01", "sla": "OK",        "critical": True},
+        {"name": "AWS (Amazon)",        "cat": "Cloud / Infra", "score": 88, "kyc": "Approved", "review": "2026-03-28", "sla": "OK",        "critical": True},
+        {"name": "Refinitiv (LSEG)",    "cat": "Data / KYC",    "score": 77, "kyc": "In Review","review": "2026-05-05", "sla": "Warning",   "critical": False},
+        {"name": "Finastra",            "cat": "Software",      "score": 72, "kyc": "Approved", "review": "2026-02-28", "sla": "OK",        "critical": False},
+        {"name": "Deloitte SA",         "cat": "Consulting",    "score": 85, "kyc": "Approved", "review": "2026-04-15", "sla": "OK",        "critical": False},
+    ]
+    _t6_actions = [
+        {"id": "ACT-001", "priority": "Critical", "desc": "Escalate SLA breach to Clearstream — uptime 94.1% vs 99.5% contracted", "due": "2026-06-10"},
+        {"id": "ACT-002", "priority": "High",     "desc": "Complete Refinitiv annual KYC review — pending legal sign-off",         "due": "2026-06-20"},
+        {"id": "ACT-003", "priority": "High",     "desc": "Update exit strategy plan — Clearstream & Temenos (FINMA Art.8b)",      "due": "2026-06-30"},
+    ]
+    _t6_regs = ["FINMA Circ. 2018/3 — Outsourcing", "MAS TRM Guidelines 2021", "FCA SS2/21 — Outsourcing", "DORA Art. 28–30 — ICT Third Party", "EBA/GL/2019/02 — Outsourcing"]
+
+    _kyc_color = {"Approved": "#22d3a5", "In Review": "#f97316", "Pending": "#ef4444"}
+
+    st.markdown("""
+<div style="margin-bottom:24px">
+  <div style="font-size:22px;font-weight:800;color:#eef0f8;margin-bottom:4px">🏢 Third Party &amp; Vendor 360</div>
+  <div style="font-size:13px;color:#6b7a99">Vendor risk scoring · KYC · Outsourcing oversight</div>
+</div>
+""", unsafe_allow_html=True)
+
+    # KPI cards
+    _t6c = st.columns(4, gap="small")
+    for _i, _kpi in enumerate(_t6_kpis):
+        _t6c[_i].markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;
+     padding:18px 20px;text-align:center;box-shadow:var(--shadow-card)">
+  <div style="font-size:32px;font-weight:800;color:{_kpi['color']}">{_kpi['value']}</div>
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+       color:#6b7a99;margin:4px 0">{_kpi['label']}</div>
+  <div style="font-size:11px;color:#4a5568">{_kpi['delta']}</div>
+</div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>🏦 Vendor Scorecard</span></div>", unsafe_allow_html=True)
+
+    # Vendor table
+    _v_rows = ""
+    for _v in _t6_vendors:
+        _s = _v["score"]
+        _s_color = "#22d3a5" if _s >= 85 else ("#f97316" if _s >= 70 else "#ef4444")
+        _k_color = _kyc_color.get(_v["kyc"], "#6b7a99")
+        _sla_color = "#ef4444" if _v["sla"] == "Breach" else ("#f97316" if _v["sla"] == "Warning" else "#22d3a5")
+        _crit = '<span style="color:#ef4444;font-weight:700;font-size:11px">● Critical</span>' if _v["critical"] else '<span style="color:#4a5568;font-size:11px">—</span>'
+        _v_rows += f'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:10px 12px;color:#eef0f8;font-size:12px;font-weight:600">{_v["name"]}</td><td style="padding:10px 12px;color:#6b7a99;font-size:11px">{_v["cat"]}</td><td style="padding:10px 12px;text-align:center"><span style="font-size:16px;font-weight:800;color:{_s_color}">{_s}</span></td><td style="padding:10px 12px"><span style="color:{_k_color};font-size:11px;font-weight:700">{_v["kyc"]}</span></td><td style="padding:10px 12px;color:#4a5568;font-size:11px">{_v["review"]}</td><td style="padding:10px 12px"><span style="color:{_sla_color};font-size:11px;font-weight:700">{_v["sla"]}</span></td><td style="padding:10px 12px">{_crit}</td></tr>'
+
+    st.markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden">
+<table style="width:100%;border-collapse:collapse;font-family:inherit">
+  <thead><tr style="background:rgba(99,102,241,.08);border-bottom:1px solid var(--border-subtle)">
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Vendor</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Category</th>
+    <th style="padding:10px 12px;text-align:center;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Score</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">KYC Status</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Last Review</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">SLA</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Tier</th>
+  </tr></thead>
+  <tbody>{_v_rows}</tbody>
+</table></div>""", unsafe_allow_html=True)
+
+    # Critical vendor drill-down
+    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>🔎 Critical Vendor — Clearstream Banking</span></div>", unsafe_allow_html=True)
+
+    _dcol1, _dcol2 = st.columns([2, 1], gap="medium")
+    with _dcol1:
+        st.markdown("""
+<div style="background:var(--bg-card);border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:20px 24px">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+    <span style="font-size:18px;font-weight:800;color:#eef0f8">Clearstream Banking S.A.</span>
+    <span style="background:#3b0e0e;color:#ef4444;border:1px solid #ef444455;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700">Critical</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px">
+    <div><span style="color:#6b7a99">Category</span><br><span style="color:#eef0f8;font-weight:600">Custody &amp; Settlement</span></div>
+    <div><span style="color:#6b7a99">Risk Score</span><br><span style="color:#f97316;font-weight:800;font-size:18px">91 / 100</span></div>
+    <div><span style="color:#6b7a99">KYC Status</span><br><span style="color:#22d3a5;font-weight:600">Approved (2025-09-15)</span></div>
+    <div><span style="color:#6b7a99">Contract Value</span><br><span style="color:#eef0f8;font-weight:600">CHF 4.2M / year</span></div>
+    <div><span style="color:#6b7a99">SLA Uptime</span><br><span style="color:#ef4444;font-weight:700">94.1% (contracted 99.5%)</span></div>
+    <div><span style="color:#6b7a99">Exit Strategy</span><br><span style="color:#f97316;font-weight:600">Draft — in review</span></div>
+    <div><span style="color:#6b7a99">Jurisdictions</span><br><span style="color:#eef0f8">CH · LU · SG · HK</span></div>
+    <div><span style="color:#6b7a99">Next Review</span><br><span style="color:#818cf8;font-weight:600">2026-09-15</span></div>
+  </div>
+</div>""", unsafe_allow_html=True)
+
+    with _dcol2:
+        _a_rows = ""
+        for _ac in _t6_actions:
+            _ac_color = "#ef4444" if _ac["priority"] == "Critical" else "#f97316"
+            _a_rows += f'<div style="border-left:3px solid {_ac_color};padding:10px 12px;margin-bottom:8px;background:rgba(255,255,255,.03);border-radius:0 8px 8px 0"><div style="font-size:11px;color:{_ac_color};font-weight:700;margin-bottom:4px">{_ac["id"]} · {_ac["priority"]}</div><div style="font-size:11px;color:#eef0f8">{_ac["desc"]}</div><div style="font-size:10px;color:#4a5568;margin-top:4px">Due: {_ac["due"]}</div></div>'
+        st.markdown(f'<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;padding:16px"><div style="font-size:12px;font-weight:700;color:#eef0f8;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em">Open Actions</div>{_a_rows}</div>', unsafe_allow_html=True)
+
+    # Regulatory refs
+    st.markdown("<div style='margin:24px 0 10px'><span style='font-size:12px;color:#6b7a99;font-weight:600'>Regulatory references:</span></div>", unsafe_allow_html=True)
+    _reg_pills = " ".join([f'<span style="background:rgba(99,102,241,.1);color:#818cf8;border:1px solid rgba(99,102,241,.25);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600;margin-right:6px">{_r}</span>' for _r in _t6_regs])
+    st.markdown(f'<div style="display:flex;flex-wrap:wrap;gap:6px">{_reg_pills}</div>', unsafe_allow_html=True)
+
+
+# TAB 7 — KYC / AML COMPLIANCE
+# ─────────────────────────────────────────────────────────────────────────────
+elif _active == 7:
+    _t7_kpis = [
+        {"label": "Clients Reviewed", "value": "2,847", "delta": "Q2 2026",           "color": "#818cf8"},
+        {"label": "PEP Flagged",      "value": "34",    "delta": "12 high-risk",       "color": "#f97316"},
+        {"label": "Sanctions Hits",   "value": "7",     "delta": "3 pending escalation","color": "#ef4444"},
+        {"label": "Remediation Open", "value": "18",    "delta": "↓ 5 closed this week","color": "#f97316"},
+    ]
+    _t7_alerts = [
+        {"ref": "CLI-0047", "level": "Critical", "flag": "Sanctions",      "jurisdiction": "CH / FINMA", "status": "Escalated",   "days": 3},
+        {"ref": "CLI-0123", "level": "Critical", "flag": "PEP — Tier 1",   "jurisdiction": "SG / MAS",   "status": "Escalated",   "days": 7},
+        {"ref": "CLI-0291", "level": "High",     "flag": "Adverse Media",   "jurisdiction": "HK / SFC",   "status": "In Review",   "days": 14},
+        {"ref": "CLI-0388", "level": "High",     "flag": "PEP — Tier 2",   "jurisdiction": "UK / FCA",   "status": "In Review",   "days": 21},
+        {"ref": "CLI-0512", "level": "High",     "flag": "Sanctions",      "jurisdiction": "EU / DORA",  "status": "Pending",     "days": 5},
+        {"ref": "CLI-0601", "level": "Moderate", "flag": "Adverse Media",   "jurisdiction": "Bahamas",    "status": "Assigned",    "days": 30},
+    ]
+    _t7_kanban = {
+        "To Review": [
+            {"ref": "CLI-0512", "level": "High",     "flag": "Sanctions — OFAC list",  "since": "2 days"},
+            {"ref": "CLI-0644", "level": "Moderate", "flag": "PEP — indirect exposure","since": "5 days"},
+            {"ref": "CLI-0701", "level": "High",     "flag": "Adverse Media — press",  "since": "1 day"},
+        ],
+        "In Progress": [
+            {"ref": "CLI-0291", "level": "High",     "flag": "EDD under way — HK",     "since": "14 days"},
+            {"ref": "CLI-0388", "level": "High",     "flag": "PEP interview scheduled","since": "21 days"},
+            {"ref": "CLI-0123", "level": "Critical", "flag": "MLRO sign-off pending",  "since": "7 days"},
+        ],
+        "Closed": [
+            {"ref": "CLI-0205", "level": "Moderate", "flag": "CDD renewed — cleared",  "since": "3 days ago"},
+            {"ref": "CLI-0317", "level": "High",     "flag": "Exited relationship",     "since": "5 days ago"},
+            {"ref": "CLI-0482", "level": "Moderate", "flag": "False positive confirmed","since": "8 days ago"},
+        ],
+    }
+    _t7_regs = ["FATF Rec. 10 — CDD", "FINMA AML Circular 2011/1", "MAS Notice 626", "JMLSG Guidance (UK)", "AMLD6 (EU)"]
+
+    _lvl_color = {"Critical": ("#3b0e0e", "#ef4444"), "High": ("#3b1f0a", "#f97316"), "Moderate": ("#1a2e1a", "#22d3a5")}
+    _kanban_col_color = {"To Review": "#f97316", "In Progress": "#818cf8", "Closed": "#22d3a5"}
+
+    st.markdown("""
+<div style="margin-bottom:24px">
+  <div style="font-size:22px;font-weight:800;color:#eef0f8;margin-bottom:4px">🔍 KYC / AML Compliance</div>
+  <div style="font-size:13px;color:#6b7a99">Client risk · PEP · Sanctions · Remediation pipeline</div>
+</div>
+""", unsafe_allow_html=True)
+
+    # KPI cards
+    _t7c = st.columns(4, gap="small")
+    for _i, _kpi in enumerate(_t7_kpis):
+        _t7c[_i].markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;
+     padding:18px 20px;text-align:center;box-shadow:var(--shadow-card)">
+  <div style="font-size:32px;font-weight:800;color:{_kpi['color']}">{_kpi['value']}</div>
+  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+       color:#6b7a99;margin:4px 0">{_kpi['label']}</div>
+  <div style="font-size:11px;color:#4a5568">{_kpi['delta']}</div>
+</div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>🚨 PEP / Sanctions Alert Queue</span></div>", unsafe_allow_html=True)
+
+    # Alert table
+    _st_color = {"Escalated": "#ef4444", "In Review": "#818cf8", "Pending": "#f97316", "Assigned": "#22d3a5"}
+    _al_rows = ""
+    for _al in _t7_alerts:
+        _bg, _cl = _lvl_color.get(_al["level"], ("#1a1a2e", "#818cf8"))
+        _badge = f'<span style="background:{_bg};color:{_cl};border:1px solid {_cl}55;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700">{_al["level"]}</span>'
+        _sc = _st_color.get(_al["status"], "#6b7a99")
+        _al_rows += f'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:10px 12px;color:#818cf8;font-size:12px;font-weight:600">{_al["ref"]}</td><td style="padding:10px 12px">{_badge}</td><td style="padding:10px 12px;color:#eef0f8;font-size:12px">{_al["flag"]}</td><td style="padding:10px 12px;color:#6b7a99;font-size:11px">{_al["jurisdiction"]}</td><td style="padding:10px 12px"><span style="color:{_sc};font-size:11px;font-weight:700">{_al["status"]}</span></td><td style="padding:10px 12px;color:#4a5568;font-size:11px">{_al["days"]}d open</td></tr>'
+
+    st.markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden">
+<table style="width:100%;border-collapse:collapse;font-family:inherit">
+  <thead><tr style="background:rgba(99,102,241,.08);border-bottom:1px solid var(--border-subtle)">
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Client Ref</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Level</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Flag Type</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Jurisdiction</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Status</th>
+    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Age</th>
+  </tr></thead>
+  <tbody>{_al_rows}</tbody>
+</table></div>""", unsafe_allow_html=True)
+
+    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>🔄 Remediation Pipeline</span></div>", unsafe_allow_html=True)
+
+    # Kanban
+    _k_cols = st.columns(3, gap="medium")
+    for _ki, (_col_name, _cases) in enumerate(_t7_kanban.items()):
+        _hdr_color = _kanban_col_color[_col_name]
+        _cards_html = ""
+        for _case in _cases:
+            _cbg, _ccl = _lvl_color.get(_case["level"], ("#1a1a2e", "#818cf8"))
+            _cards_html += f'<div style="border-left:3px solid {_ccl};background:rgba(255,255,255,.03);border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:8px"><div style="font-size:11px;color:#818cf8;font-weight:700;margin-bottom:4px">{_case["ref"]}</div><div style="font-size:11px;color:#eef0f8">{_case["flag"]}</div><div style="font-size:10px;color:#4a5568;margin-top:4px">{_case["since"]}</div></div>'
+        _k_cols[_ki].markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;padding:16px">
+  <div style="font-size:12px;font-weight:700;color:{_hdr_color};margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:8px">{_col_name}</div>
+  {_cards_html}
+</div>""", unsafe_allow_html=True)
+
+    # CDD coverage
+    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>📋 CDD / EDD Coverage</span></div>", unsafe_allow_html=True)
+    _cdd_data = [
+        ("Standard CDD",   94, "#22d3a5"),
+        ("Enhanced EDD",   81, "#818cf8"),
+        ("PEP Review",     76, "#f97316"),
+        ("Sanctions Screen",97,"#22d3a5"),
+    ]
+    _cdd_cols = st.columns(4, gap="small")
+    for _ci, (_lbl, _pct, _col) in enumerate(_cdd_data):
+        _cdd_cols[_ci].markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;padding:16px 20px;text-align:center">
+  <div style="position:relative;width:72px;height:72px;margin:0 auto 10px">
+    <svg viewBox="0 0 36 36" style="width:72px;height:72px;transform:rotate(-90deg)">
+      <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="3"/>
+      <circle cx="18" cy="18" r="15.9" fill="none" stroke="{_col}" stroke-width="3"
+        stroke-dasharray="{_pct} {100 - _pct}" stroke-linecap="round"/>
+    </svg>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+         font-size:14px;font-weight:800;color:{_col}">{_pct}%</div>
+  </div>
+  <div style="font-size:11px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.05em">{_lbl}</div>
+</div>""", unsafe_allow_html=True)
+
+    # Regulatory footer
+    st.markdown("<div style='margin:24px 0 10px'><span style='font-size:12px;color:#6b7a99;font-weight:600'>Regulatory references:</span></div>", unsafe_allow_html=True)
+    _t7_reg_pills = " ".join([f'<span style="background:rgba(99,102,241,.1);color:#818cf8;border:1px solid rgba(99,102,241,.25);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600;margin-right:6px">{_r}</span>' for _r in _t7_regs])
+    st.markdown(f'<div style="display:flex;flex-wrap:wrap;gap:6px">{_t7_reg_pills}</div>', unsafe_allow_html=True)
+
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("---")
