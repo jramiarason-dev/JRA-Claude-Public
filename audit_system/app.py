@@ -171,6 +171,7 @@ _SS_DEFAULTS = {
     "voice_active": False,
     "last_voice_transcript": "",
     "cowork_open": False,
+    "whats_new_dismissed": False,
     "active_tab": 0,
     "entity_type": "🏦 Private Banking",
     # Static data
@@ -3723,10 +3724,15 @@ The AI selects the right expert profile based on the topic you enter:
 **À quoi ça sert ?**
 → Assembler le rapport final, gérer les recommandations, et générer le résumé comité.
 
-**Les 3 sections :**
-- **📋 Recommendations** : liste des observations (depuis l'onglet Document Analyser ou saisie manuelle)
-- **📄 Generate Report** : génère le rapport complet avec executive summary et fiches de constats
-- **📊 Executive Summary** : résumé pour le comité d'audit, exportable en PDF
+**📋 Recommendations**
+- **📝 My Observations** : vos observations (depuis Document Analyser ou saisie manuelle) + génération des recommandations
+- **📄 Example Report** : exemple de constat IIA-standard pré-rempli, comme modèle de référence
+
+**📄 Report** — 4 sous-sections :
+1. **Executive Summary** : résumé 1 page pour le comité d'audit, exportable en PDF
+2. **Narrative & Findings** : storytelling du rapport complet + fiches de constats
+3. **Recommendation Details** : détail structuré de chaque observation (repris en direct du sous-onglet Recommendations)
+4. **KPIs** : métriques de la mission — risques, couverture des tests, constats par criticité, recos N-1 ouvertes
 
 **Exports disponibles :** Word (docx) · Excel (xlsx) · PowerPoint (pptx) · PDF
 
@@ -3741,10 +3747,15 @@ The AI selects the right expert profile based on the topic you enter:
 **What is it for?**
 → Assemble the final report, manage recommendations, and generate the committee summary.
 
-**The 3 sections:**
-- **📋 Recommendations**: list of observations (from Document Analyser tab or manual entry)
-- **📄 Generate Report**: generates the full report with executive summary and finding cards
-- **📊 Executive Summary**: committee-ready summary, exportable as PDF
+**📋 Recommendations**
+- **📝 My Observations**: your observations (from Document Analyser or manual entry) + recommendation generation
+- **📄 Example Report**: a pre-filled IIA-standard finding shown as a reference template
+
+**📄 Report** — 4 sub-sections:
+1. **Executive Summary**: 1-page committee-ready summary, exportable as PDF
+2. **Narrative & Findings**: full report storytelling + finding cards
+3. **Recommendation Details**: structured detail for every observation (pulled live from the Recommendations tab)
+4. **KPIs**: engagement metrics — risks, test coverage, findings by criticality, open N-1 recommendations
 
 **Available exports:** Word (docx) · Excel (xlsx) · PowerPoint (pptx) · PDF
 
@@ -4927,6 +4938,43 @@ if _active == 0:
         unsafe_allow_html=True,
     )
     _tab_actions_bar("t0", "Stay informed before launching an audit — CVEs, regulations, recommendations.", [])
+
+    # ── "What's New" banner (dismissible) ─────────────────────────────────────
+    if not st.session_state.get("whats_new_dismissed", False):
+        _whats_new = [
+            (5, "📡 Continuous Audit", "Automated control testing, exception feed & 12-week health trends"),
+            (6, "🏢 Vendor 360", "Third-party risk scoring, KYC status & outsourcing oversight"),
+            (7, "🔍 KYC / AML", "PEP/sanctions queue, remediation pipeline & CDD coverage"),
+            (3, "📂 Document Analyser", "Now auto-assigns a domain specialist based on your audit topic"),
+        ]
+        _wn_items = "".join(
+            f'<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px">'
+            f'<span style="font-size:13px;font-weight:700;color:#eef0f8;white-space:nowrap">{_t}</span>'
+            f'<span style="font-size:12px;color:#94a3b8">— {_d}</span></div>'
+            for _, _t, _d in _whats_new
+        )
+        st.markdown(
+            f'<div style="background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(34,211,165,.06));'
+            f'border:1px solid rgba(99,102,241,.3);border-radius:14px;padding:18px 22px;margin-bottom:18px">'
+            f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'
+            f'<span style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;'
+            f'background:rgba(34,211,165,.15);color:#22d3a5;border:1px solid rgba(34,211,165,.4);'
+            f'border-radius:20px;padding:3px 12px">✨ What\'s New</span>'
+            f'<span style="font-size:13px;color:#6b7a99">Recently added to AuditIQ</span></div>'
+            f'{_wn_items}</div>',
+            unsafe_allow_html=True,
+        )
+        _wn_cols = st.columns([1, 1, 1, 1, 1.4], gap="small")
+        for _ci, (_idx, _title, _) in enumerate(_whats_new):
+            if _wn_cols[_ci].button(f"Open {_title.split(' ',1)[1]}", key=f"_wn_go_{_idx}", use_container_width=True):
+                st.session_state["active_tab"] = _idx
+                st.session_state["whats_new_dismissed"] = True
+                st.rerun()
+        if _wn_cols[4].button("✓ Got it, dismiss", key="_wn_dismiss", use_container_width=True):
+            st.session_state["whats_new_dismissed"] = True
+            st.rerun()
+        st.markdown("<div style='margin-top:14px'></div>", unsafe_allow_html=True)
+
     # Source selector
     _src_c1, _src_c2, _ = st.columns([1.3, 1.5, 4])
     _t0_static = st.session_state.dash_source == "static"
@@ -6673,14 +6721,35 @@ elif _active == 4:
     )
     _t4_section = st.radio(
         "Section",
-        ["📋 Recommendations", "📄 Generate Report", "📊 Executive Summary"],
+        ["📋 Recommendations", "📄 Report"],
         horizontal=True,
         label_visibility="collapsed",
         key="t4_section_select",
     )
+    st.markdown("<div style='margin-bottom:12px'></div>", unsafe_allow_html=True)
+
+    # Inner navigation per section
+    _t4_rec_view = None
+    _t4_rep_view = None
+    if _t4_section == "📋 Recommendations":
+        _t4_rec_view = st.radio(
+            "View",
+            ["📝 My Observations", "📄 Example Report"],
+            horizontal=True,
+            label_visibility="collapsed",
+            key="t4_rec_view_select",
+        )
+    elif _t4_section == "📄 Report":
+        _t4_rep_view = st.radio(
+            "View",
+            ["1 · Executive Summary", "2 · Narrative & Findings", "3 · Recommendation Details", "4 · KPIs"],
+            horizontal=True,
+            label_visibility="collapsed",
+            key="t4_rep_view_select",
+        )
     st.markdown("<div style='margin-bottom:16px'></div>", unsafe_allow_html=True)
 
-    if _t4_section == "📋 Recommendations":
+    if _t4_rec_view == "📝 My Observations":
         # Show observations from Document Analyser + allow manual add
         _t4_obs = list(st.session_state.get("t3_observations") or [])
         if _t4_obs:
@@ -6759,7 +6828,53 @@ elif _active == 4:
                 key="t4_recs_dl",
             )
 
-    elif _t4_section == "📄 Generate Report":
+    elif _t4_rec_view == "📄 Example Report":
+        st.markdown(
+            '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">'
+            'Reference example — a fully written IIA-standard audit finding, to illustrate the expected structure and tone.</div>',
+            unsafe_allow_html=True,
+        )
+        _ex_findings = [
+            {
+                "ref": "F-01", "level": "High", "title": "Incomplete source-of-wealth documentation for high-risk PEP clients",
+                "condition": "For 8 of 25 PEP client files sampled (32%), source-of-wealth (SoW) documentation was either missing or not refreshed within the mandatory 12-month cycle. In 3 cases, the SoW corroboration relied solely on client self-declaration without independent evidence.",
+                "criteria": "FINMA Circular 2011/1 and the bank's AML Policy require documented, independently corroborated SoW for all PEP relationships, refreshed annually as part of enhanced due diligence (EDD).",
+                "cause": "The periodic review workflow did not enforce SoW refresh as a blocking control; relationship managers could close a review without uploading updated evidence.",
+                "effect": "Heightened exposure to money-laundering and reputational risk; potential regulatory finding and remediation order in the event of a FINMA inspection.",
+                "recommendation": "Implement a blocking control in the client lifecycle system preventing periodic-review sign-off until corroborated SoW evidence is attached. Remediate the 8 flagged files within 60 days.",
+                "response": "Agreed. Compliance to deploy the blocking control by Q3 2026; flagged files remediated within 60 days. Owner: Head of Compliance.",
+            },
+            {
+                "ref": "F-02", "level": "Moderate", "title": "Delayed off-boarding of dormant privileged access",
+                "condition": "Testing of privileged access revealed 12 accounts belonging to leavers or role-changers that remained active between 14 and 47 days beyond the personnel change effective date.",
+                "criteria": "The Information Security Policy mandates deactivation of privileged access within 24 hours of a leaver/mover event.",
+                "cause": "The HR-to-IAM off-boarding trigger was manual and reliant on email notification, with no automated reconciliation against the HR master.",
+                "effect": "Window of unauthorised access to sensitive systems, increasing insider-threat and data-exfiltration risk.",
+                "recommendation": "Automate the HR-to-IAM leaver/mover feed with a daily reconciliation exception report reviewed by IT Security.",
+                "response": "Agreed. IT to implement automated feed and daily reconciliation by Q4 2026. Owner: CISO.",
+            },
+        ]
+        _ex_lvlc = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308", "Low": "#22d3a5"}
+        for _f in _ex_findings:
+            _fc = _ex_lvlc.get(_f["level"], "#8392bb")
+            st.markdown(
+                f'<div style="border:1px solid {_fc}33;border-radius:12px;padding:18px 22px;margin-bottom:14px;background:{_fc}08">'
+                f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'
+                f'<span style="background:{_fc}22;color:{_fc};border:1px solid {_fc}55;border-radius:6px;padding:2px 10px;font-size:11px;font-weight:700">{_f["ref"]} · {_f["level"]}</span>'
+                f'<span style="font-size:14px;font-weight:700;color:#eef0f8">{_f["title"]}</span></div>'
+                f'<div style="font-size:12.5px;line-height:1.8;color:#94a3b8">'
+                f'<p style="margin:0 0 6px"><b style="color:#cbd5e1">Condition:</b> {_f["condition"]}</p>'
+                f'<p style="margin:0 0 6px"><b style="color:#cbd5e1">Criteria:</b> {_f["criteria"]}</p>'
+                f'<p style="margin:0 0 6px"><b style="color:#cbd5e1">Cause:</b> {_f["cause"]}</p>'
+                f'<p style="margin:0 0 6px"><b style="color:#cbd5e1">Effect:</b> {_f["effect"]}</p>'
+                f'<p style="margin:0 0 6px"><b style="color:{_fc}">Recommendation:</b> {_f["recommendation"]}</p>'
+                f'<p style="margin:0"><b style="color:#22d3a5">Management Response:</b> {_f["response"]}</p>'
+                f'</div></div>',
+                unsafe_allow_html=True,
+            )
+        st.caption("💡 This is a static reference example. Use 'My Observations' to build your own findings from the Document Analyser or manual entry.")
+
+    elif _t4_rep_view == "2 · Narrative & Findings":
         _t3_mode = render_mode_toggle("mode_tab3")
         st.markdown("<div style='margin-top:0.8rem'></div>", unsafe_allow_html=True)
 
@@ -7162,7 +7277,7 @@ elif _active == 4:
                             except Exception:
                                 st.error("An error occurred. Please try again.")
 
-    elif _t4_section == "📊 Executive Summary":
+    elif _t4_rep_view == "1 · Executive Summary":
         st.markdown(
             '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">'
             '1-page summary for the Audit Committee — generated from all data collected in this session.</div>',
@@ -7264,6 +7379,91 @@ elif _active == 4:
                     )
             except Exception:
                 pass
+
+    elif _t4_rep_view == "3 · Recommendation Details":
+        st.markdown(
+            '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">'
+            'Structured detail for every observation — pulled live from the Recommendations tab.</div>',
+            unsafe_allow_html=True,
+        )
+        _rd_obs = list(st.session_state.get("t3_observations") or [])
+        if not _rd_obs:
+            st.info("No observations yet. Add them in **📋 Recommendations → My Observations** (from the Document Analyser or manually).")
+        else:
+            _rd_lvlc = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308", "Low": "#22d3a5"}
+            for _ri, _ob in enumerate(_rd_obs):
+                _rc = _rd_lvlc.get(_ob.get("risk_level", ""), "#8392bb")
+                _tests = ", ".join(_ob.get("linked_tests") or []) or "—"
+                _detail = _ob.get("detail") or "—"
+                st.markdown(
+                    f'<div style="border:1px solid {_rc}33;border-left:4px solid {_rc};border-radius:10px;'
+                    f'padding:16px 20px;margin-bottom:12px;background:{_rc}08">'
+                    f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+                    f'<span style="background:{_rc}22;color:{_rc};border:1px solid {_rc}55;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:700">R-{_ri+1:02d} · {_ob.get("risk_level","")}</span>'
+                    f'<span style="font-size:13.5px;font-weight:700;color:#eef0f8">{_ob.get("observation","")}</span></div>'
+                    f'<p style="font-size:12.5px;color:#94a3b8;line-height:1.7;margin:0 0 8px">{_detail}</p>'
+                    f'<div style="font-size:11.5px;color:#6b7a99">🔗 Linked tests: {_tests} &nbsp;·&nbsp; 📄 Source: {_ob.get("source","—")}</div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+
+    elif _t4_rep_view == "4 · KPIs":
+        st.markdown(
+            '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">'
+            'Audit engagement metrics — computed from this session\'s data.</div>',
+            unsafe_allow_html=True,
+        )
+        _kp_risks = st.session_state.get("t1_risks") or []
+        _kp_tests = st.session_state.get("t2_tests") or []
+        _kp_obs   = st.session_state.get("t3_observations") or []
+        _kp_prior = st.session_state.get("t0_prior_recs") or []
+        _kp_tstat = dict(st.session_state.get("t2_test_statuses") or {})
+        # Findings by criticality
+        _kp_by_lvl = {"Critical": 0, "High": 0, "Moderate": 0, "Low": 0}
+        for _o in _kp_obs:
+            _lv = _o.get("risk_level", "")
+            if _lv in _kp_by_lvl:
+                _kp_by_lvl[_lv] += 1
+        # Test completion
+        _kp_done = sum(1 for _s in _kp_tstat.values() if str(_s).lower() in ("done", "complete", "completed", "pass", "passed"))
+        _kp_test_pct = int(round(100 * _kp_done / len(_kp_tests))) if _kp_tests else 0
+        # Prior recs open
+        _kp_open_prior = sum(1 for r in _kp_prior if r.get("status") in ("Open", "Not implemented", "Partially implemented"))
+
+        _kp_cards = [
+            ("Risks Identified", len(_kp_risks), "#818cf8", "from Risk Analysis"),
+            ("Tests in Programme", len(_kp_tests), "#818cf8", f"{_kp_test_pct}% marked complete"),
+            ("Observations Raised", len(_kp_obs), "#f97316", "from Document Analyser"),
+            ("Prior Recs Open (N-1)", _kp_open_prior, "#ef4444" if _kp_open_prior else "#22d3a5", "follow-up required"),
+        ]
+        _kp_cols = st.columns(4, gap="small")
+        for _kc, (_lbl, _val, _col, _sub) in enumerate(_kp_cards):
+            _kp_cols[_kc].markdown(
+                f'<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;'
+                f'padding:18px 20px;text-align:center;box-shadow:var(--shadow-card)">'
+                f'<div style="font-size:30px;font-weight:800;color:{_col};line-height:1">{_val}</div>'
+                f'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6b7a99;margin:6px 0 2px">{_lbl}</div>'
+                f'<div style="font-size:10.5px;color:#4a5568">{_sub}</div></div>',
+                unsafe_allow_html=True,
+            )
+
+        st.markdown("<div style='margin:24px 0 10px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>Findings by Criticality</span></div>", unsafe_allow_html=True)
+        _kp_lvlc = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308", "Low": "#22d3a5"}
+        _kp_max = max(_kp_by_lvl.values()) or 1
+        for _lvl, _cnt in _kp_by_lvl.items():
+            _lc = _kp_lvlc[_lvl]
+            _pct = int(round(100 * _cnt / _kp_max)) if _cnt else 0
+            st.markdown(
+                f'<div style="margin-bottom:10px">'
+                f'<div style="display:flex;justify-content:space-between;margin-bottom:4px">'
+                f'<span style="font-size:12px;color:#eef0f8;font-weight:600">{_lvl}</span>'
+                f'<span style="font-size:12px;color:{_lc};font-weight:700">{_cnt}</span></div>'
+                f'<div style="background:rgba(255,255,255,.06);border-radius:4px;height:8px;overflow:hidden">'
+                f'<div style="width:{_pct}%;height:100%;background:{_lc};border-radius:4px"></div></div></div>',
+                unsafe_allow_html=True,
+            )
+        if not _kp_obs:
+            st.caption("No observations yet — criticality breakdown will populate as findings are raised.")
 
 
 # TAB 5 — CONTINUOUS AUDIT DASHBOARD
