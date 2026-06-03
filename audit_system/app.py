@@ -6967,116 +6967,168 @@ elif _active == 4:
 # TAB 5 — CONTINUOUS AUDIT DASHBOARD
 # ─────────────────────────────────────────────────────────────────────────────
 elif _active == 5:
-    _t5_kpis = [
-        {"label": "Controls Tested", "value": "247", "delta": "+12 this week", "color": "#818cf8"},
-        {"label": "Issues Open",     "value": "12",  "delta": "3 new",         "color": "#f97316"},
-        {"label": "Critical Alerts", "value": "3",   "delta": "↓ from 5",      "color": "#ef4444"},
-        {"label": "Frameworks",      "value": "18",  "delta": "FINMA · MAS · FCA", "color": "#22d3a5"},
+    # Automated control test results
+    _t5_controls = [
+        {"id": "CTL-001", "process": "AML Transaction Monitoring",  "freq": "Daily",   "last_run": "2026-06-03 06:00", "coverage": 100, "result": "Exception", "exceptions": 3},
+        {"id": "CTL-002", "process": "Privileged Access Review",     "freq": "Weekly",  "last_run": "2026-06-02 22:00", "coverage": 97,  "result": "Fail",      "exceptions": 47},
+        {"id": "CTL-003", "process": "Reconciliation CHF/USD T+1",   "freq": "Daily",   "last_run": "2026-06-03 07:30", "coverage": 100, "result": "Exception", "exceptions": 3},
+        {"id": "CTL-004", "process": "Sanctions Screening (OFAC/EU)","freq": "Daily",   "last_run": "2026-06-03 06:30", "coverage": 100, "result": "Pass",      "exceptions": 0},
+        {"id": "CTL-005", "process": "VaR Limit Monitoring",         "freq": "Daily",   "last_run": "2026-06-03 05:45", "coverage": 100, "result": "Fail",      "exceptions": 1},
+        {"id": "CTL-006", "process": "KYC Periodic Review SLA",      "freq": "Weekly",  "last_run": "2026-06-02 20:00", "coverage": 89,  "result": "Exception", "exceptions": 12},
+        {"id": "CTL-007", "process": "Segregation of Duties (SoD)",  "freq": "Monthly", "last_run": "2026-06-01 02:00", "coverage": 95,  "result": "Pass",      "exceptions": 0},
+        {"id": "CTL-008", "process": "GDPR Data Retention Check",    "freq": "Monthly", "last_run": "2026-06-01 03:00", "coverage": 84,  "result": "Fail",      "exceptions": 2},
+        {"id": "CTL-009", "process": "Dormant Account Review",       "freq": "Weekly",  "last_run": "2026-06-02 21:00", "coverage": 100, "result": "Pass",      "exceptions": 0},
+        {"id": "CTL-010", "process": "Outsourcing SLA Monitor",      "freq": "Daily",   "last_run": "2026-06-03 06:15", "coverage": 100, "result": "Exception", "exceptions": 1},
     ]
-    _t5_alerts = [
-        {"id": "ALT-001", "level": "Critical", "domain": "AML / KYC",        "description": "STR filing delay > 30 days — SG entity",            "date": "2026-06-02", "assignee": "M. Dubois"},
-        {"id": "ALT-002", "level": "Critical", "domain": "Cyber",             "description": "Privileged access review overdue — 47 accounts",      "date": "2026-06-01", "assignee": "L. Chen"},
-        {"id": "ALT-003", "level": "Critical", "domain": "Third Party",       "description": "Vendor Clearstream: SLA breach — uptime 94.1%",        "date": "2026-05-30", "assignee": "S. Keller"},
-        {"id": "ALT-004", "level": "High",     "domain": "Market Risk",       "description": "VaR limit exceeded — HK trading desk, 3 consecutive days", "date": "2026-05-29", "assignee": "R. Patel"},
-        {"id": "ALT-005", "level": "High",     "domain": "Data Privacy",      "description": "GDPR data retention breach — 12k records > 7yr threshold", "date": "2026-05-28", "assignee": "A. Moreau"},
-        {"id": "ALT-006", "level": "Moderate", "domain": "Operational Risk",  "description": "BCP test fail — Bahamas entity, RTO exceeded by 4h",   "date": "2026-05-27", "assignee": "J. Williams"},
-        {"id": "ALT-007", "level": "Moderate", "domain": "Governance",        "description": "Board minutes not approved within SLA — Q1 2026",       "date": "2026-05-25", "assignee": "C. Müller"},
-        {"id": "ALT-008", "level": "Moderate", "domain": "Access Mgmt",       "description": "Dormant privileged accounts — 8 accounts not deprovisioned", "date": "2026-05-23", "assignee": "T. Nakamura"},
+    # Exception & anomaly feed (specific automated test outputs)
+    _t5_exceptions = [
+        {"ts": "03 Jun 06:00", "ctl": "CTL-001", "type": "STR Delay",         "entity": "SG / MAS",   "desc": "3 STR filings overdue > 30 days — CHF 2.1M aggregate",                  "impact": "CHF 2.1M",   "status": "Escalated"},
+        {"ts": "02 Jun 22:00", "ctl": "CTL-002", "type": "Access Anomaly",    "entity": "CH / FINMA", "desc": "47 privileged accounts active without JIRA ticket — no change window",    "impact": "—",          "status": "Assigned"},
+        {"ts": "03 Jun 07:30", "ctl": "CTL-003", "type": "Rec Break",         "entity": "HK / SFC",   "desc": "3 T+1 breaks — CHF 142k unmatched, counterparty: Deutsche Bank HK",       "impact": "CHF 142k",   "status": "In Review"},
+        {"ts": "03 Jun 05:45", "ctl": "CTL-005", "type": "Limit Breach",      "entity": "HK / SFC",   "desc": "VaR CHF 8.4M vs limit CHF 7.0M — 3rd consecutive breach, HK desk",        "impact": "CHF 1.4M ↑", "status": "Escalated"},
+        {"ts": "02 Jun 20:00", "ctl": "CTL-006", "type": "SLA Overrun",       "entity": "CH / FINMA", "desc": "12 clients: KYC review > 365 days overdue — enhanced CDD required",        "impact": "—",          "status": "Assigned"},
+        {"ts": "01 Jun 03:00", "ctl": "CTL-008", "type": "Retention Breach",  "entity": "EU / DORA",  "desc": "2 datasets retained beyond 7-yr GDPR limit — 12,400 records flagged",       "impact": "—",          "status": "In Review"},
+        {"ts": "03 Jun 06:15", "ctl": "CTL-010", "type": "SLA Breach",        "entity": "CH / FINMA", "desc": "Clearstream uptime 94.1% vs 99.5% SLA — cumulative loss CHF 38k",          "impact": "CHF 38k",    "status": "Escalated"},
     ]
-    _t5_trends = [
-        {"name": "AML / KYC Score",      "score": 78, "color": "#f97316"},
-        {"name": "Cyber Resilience",     "score": 64, "color": "#ef4444"},
-        {"name": "Third Party Risk",     "score": 82, "color": "#22d3a5"},
-        {"name": "Operational Risk",     "score": 71, "color": "#818cf8"},
-        {"name": "Data Privacy",         "score": 88, "color": "#22d3a5"},
+    # Control health: 12-week sparkline data (P=pass, W=warning, F=fail)
+    _t5_health = [
+        {"id": "CTL-001", "name": "AML Txn Monitoring",   "weeks": list("PPPPPPPPWWPF")},
+        {"id": "CTL-002", "name": "Privileged Access",    "weeks": list("PPWWPPPPPPWF")},
+        {"id": "CTL-003", "name": "Reconciliation T+1",   "weeks": list("PPPPPPWPPWPW")},
+        {"id": "CTL-004", "name": "Sanctions Screening",  "weeks": list("PPPPPPPPPPPP")},
+        {"id": "CTL-005", "name": "VaR Limit Monitor",    "weeks": list("PPPPWWPPPWWF")},
+        {"id": "CTL-006", "name": "KYC Review SLA",       "weeks": list("PWWPPPWWWWWW")},
+        {"id": "CTL-007", "name": "SoD Check",            "weeks": list("PPPPPPPPPPPP")},
+        {"id": "CTL-008", "name": "GDPR Retention",       "weeks": list("PPPPPPWWWWWF")},
     ]
-    _t5_calendar = [
-        {"date": "09 Jun 2026", "entity": "CH / FINMA",     "audit": "AML Programme Review",         "status": "Scheduled"},
-        {"date": "16 Jun 2026", "entity": "SG / MAS",       "audit": "Technology Risk Assessment",   "status": "Scheduled"},
-        {"date": "23 Jun 2026", "entity": "HK / SFC",       "audit": "Wealth Advisory Controls",     "status": "Pending"},
-        {"date": "07 Jul 2026", "entity": "UK / FCA",       "audit": "Operational Resilience",       "status": "Pending"},
-        {"date": "14 Jul 2026", "entity": "EU / DORA",      "audit": "ICT Risk & Third Party",       "status": "Planned"},
+    # Audit universe coverage matrix
+    _t5_entities = ["CH / FINMA", "SG / MAS", "HK / SFC", "UK / FCA", "EU / DORA", "Bahamas"]
+    _t5_processes = ["AML/KYC", "Market Risk", "Credit Risk", "Cyber/IT", "Third Party", "GDPR/Data", "Op. Risk"]
+    # C=continuous, P=periodic, G=gap, N=none
+    _t5_matrix = [
+        ["C","C","P","C","C","P","P"],  # CH / FINMA
+        ["C","P","P","C","C","P","P"],  # SG / MAS
+        ["C","C","P","P","P","G","P"],  # HK / SFC
+        ["C","P","G","C","P","C","P"],  # UK / FCA
+        ["P","P","G","C","C","C","P"],  # EU / DORA
+        ["P","G","N","G","G","N","G"],  # Bahamas
     ]
+    _t5_matrix_legend = {"C": ("#0d2b1d","#22d3a5","Continuous"), "P": ("#1a2340","#818cf8","Periodic"), "G": ("#2e1f0a","#f97316","Gap"), "N": ("#1a0a0a","#ef4444","None")}
 
-    _badge_color = {"Critical": ("#3b0e0e", "#ef4444"), "High": ("#3b1f0a", "#f97316"), "Moderate": ("#1a2e1a", "#22d3a5")}
+    _t5_badge = {"Exception": ("#2e1f0a","#f97316"), "Fail": ("#3b0e0e","#ef4444"), "Pass": ("#0d2b1d","#22d3a5")}
+    _t5_st_color = {"Escalated": "#ef4444", "Assigned": "#f97316", "In Review": "#818cf8", "Closed": "#22d3a5"}
+    _t5_dot = {"P": "#22d3a5", "W": "#f97316", "F": "#ef4444"}
 
-    st.markdown(f"""
+    st.markdown("""
 <div style="margin-bottom:24px">
   <div style="font-size:22px;font-weight:800;color:#eef0f8;margin-bottom:4px">📡 Continuous Audit Dashboard</div>
-  <div style="font-size:13px;color:#6b7a99">Real-time monitoring · Risk KPIs · Alert feed</div>
+  <div style="font-size:13px;color:#6b7a99">Automated control testing · Exception detection · Coverage monitoring</div>
 </div>
 """, unsafe_allow_html=True)
 
-    # KPI cards
-    _kpi_cols = st.columns(4, gap="small")
-    for _i, _kpi in enumerate(_t5_kpis):
-        _kpi_cols[_i].markdown(f"""
-<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;
-     padding:18px 20px;text-align:center;box-shadow:var(--shadow-card)">
-  <div style="font-size:32px;font-weight:800;color:{_kpi['color']}">{_kpi['value']}</div>
-  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
-       color:#6b7a99;margin:4px 0">{_kpi['label']}</div>
-  <div style="font-size:11px;color:#4a5568">{_kpi['delta']}</div>
-</div>""", unsafe_allow_html=True)
-
-    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>⚠ Active Alerts</span></div>", unsafe_allow_html=True)
-
-    # Alert table
-    _rows = ""
-    for _a in _t5_alerts:
-        _bg, _cl = _badge_color.get(_a["level"], ("#1a1a2e", "#818cf8"))
-        _badge = f'<span style="background:{_bg};color:{_cl};border:1px solid {_cl}55;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700">{_a["level"]}</span>'
-        _rows += f'<tr><td style="padding:10px 12px;color:#6b7a99;font-size:12px">{_a["id"]}</td><td style="padding:10px 12px">{_badge}</td><td style="padding:10px 12px;color:#818cf8;font-size:12px;font-weight:600">{_a["domain"]}</td><td style="padding:10px 12px;color:#eef0f8;font-size:12px">{_a["description"]}</td><td style="padding:10px 12px;color:#4a5568;font-size:11px">{_a["date"]}</td><td style="padding:10px 12px;color:#6b7a99;font-size:12px">{_a["assignee"]}</td></tr>'
-
+    # ── Block 1: Automated Control Test Results ───────────────────────────────
+    st.markdown("<div style='margin:0 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>⚙ Automated Control Test Results</span></div>", unsafe_allow_html=True)
+    _ctl_rows = ""
+    for _c in _t5_controls:
+        _rbg, _rcl = _t5_badge.get(_c["result"], ("#1a1a2e", "#818cf8"))
+        _rbadge = f'<span style="background:{_rbg};color:{_rcl};border:1px solid {_rcl}55;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700">{_c["result"]}</span>'
+        _cov_col = "#22d3a5" if _c["coverage"] >= 95 else ("#f97316" if _c["coverage"] >= 85 else "#ef4444")
+        _exc_col = "#ef4444" if _c["exceptions"] > 10 else ("#f97316" if _c["exceptions"] > 0 else "#22d3a5")
+        _exc_val = f'<span style="color:{_exc_col};font-weight:700">{_c["exceptions"]}</span>' if _c["exceptions"] > 0 else '<span style="color:#22d3a5">—</span>'
+        _ctl_rows += f'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:9px 12px;color:#818cf8;font-size:11px;font-weight:700">{_c["id"]}</td><td style="padding:9px 12px;color:#eef0f8;font-size:12px">{_c["process"]}</td><td style="padding:9px 12px;color:#6b7a99;font-size:11px">{_c["freq"]}</td><td style="padding:9px 12px;color:#4a5568;font-size:11px">{_c["last_run"]}</td><td style="padding:9px 12px;text-align:center"><span style="color:{_cov_col};font-weight:700;font-size:12px">{_c["coverage"]}%</span></td><td style="padding:9px 12px">{_rbadge}</td><td style="padding:9px 12px;text-align:center">{_exc_val}</td></tr>'
     st.markdown(f"""
-<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden">
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-bottom:28px">
 <table style="width:100%;border-collapse:collapse;font-family:inherit">
   <thead><tr style="background:rgba(99,102,241,.08);border-bottom:1px solid var(--border-subtle)">
-    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">ID</th>
-    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Level</th>
-    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Domain</th>
-    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Description</th>
-    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Date</th>
-    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Assignee</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Control</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Process</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Frequency</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Last Run</th>
+    <th style="padding:9px 12px;text-align:center;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Coverage</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Result</th>
+    <th style="padding:9px 12px;text-align:center;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Exceptions</th>
   </tr></thead>
-  <tbody>{_rows}</tbody>
+  <tbody>{_ctl_rows}</tbody>
 </table></div>""", unsafe_allow_html=True)
 
-    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>📊 Risk Scores by Domain</span></div>", unsafe_allow_html=True)
+    # ── Block 2: Exception & Anomaly Feed ────────────────────────────────────
+    st.markdown("<div style='margin:0 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>🔴 Exception &amp; Anomaly Feed</span></div>", unsafe_allow_html=True)
+    _exc_rows = ""
+    for _e in _t5_exceptions:
+        _sc = _t5_st_color.get(_e["status"], "#6b7a99")
+        _exc_rows += f'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:9px 12px;color:#4a5568;font-size:11px;white-space:nowrap">{_e["ts"]}</td><td style="padding:9px 12px;color:#818cf8;font-size:11px;font-weight:700">{_e["ctl"]}</td><td style="padding:9px 12px;color:#f97316;font-size:11px;font-weight:600">{_e["type"]}</td><td style="padding:9px 12px;color:#6b7a99;font-size:11px">{_e["entity"]}</td><td style="padding:9px 12px;color:#eef0f8;font-size:11px">{_e["desc"]}</td><td style="padding:9px 12px;color:#ef4444;font-size:11px;font-weight:700;white-space:nowrap">{_e["impact"]}</td><td style="padding:9px 12px"><span style="color:{_sc};font-size:11px;font-weight:700">{_e["status"]}</span></td></tr>'
+    st.markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-bottom:28px">
+<table style="width:100%;border-collapse:collapse;font-family:inherit">
+  <thead><tr style="background:rgba(239,68,68,.06);border-bottom:1px solid var(--border-subtle)">
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Timestamp</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Control</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Type</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Entity</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Anomaly Detected</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Impact</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Status</th>
+  </tr></thead>
+  <tbody>{_exc_rows}</tbody>
+</table></div>""", unsafe_allow_html=True)
 
-    # Risk trend bars
-    for _t in _t5_trends:
-        _pct = _t["score"]
-        _col = _t["color"]
-        st.markdown(f"""
-<div style="margin-bottom:12px">
-  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-    <span style="font-size:12px;color:#eef0f8;font-weight:600">{_t['name']}</span>
-    <span style="font-size:12px;color:{_col};font-weight:700">{_pct}%</span>
-  </div>
-  <div style="background:rgba(255,255,255,.06);border-radius:4px;height:8px;overflow:hidden">
-    <div style="width:{_pct}%;height:100%;background:{_col};border-radius:4px"></div>
-  </div>
+    # ── Block 3: Control Health Trend (12-week sparklines) ───────────────────
+    st.markdown("<div style='margin:0 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>📈 Control Health — 12-Week Trend</span></div>", unsafe_allow_html=True)
+    _wk_labels = "".join([f'<td style="padding:0 2px;text-align:center;font-size:9px;color:#4a5568">W{i+1}</td>' for i in range(12)])
+    _health_rows = ""
+    for _h in _t5_health:
+        _dots = "".join([f'<td style="padding:3px 2px;text-align:center"><div style="width:10px;height:10px;border-radius:2px;background:{_t5_dot.get(_w,"#2d3a4e")};margin:0 auto"></div></td>' for _w in _h["weeks"]])
+        _last_w = _h["weeks"][-1]
+        _trend_col = _t5_dot.get(_last_w, "#4a5568")
+        _trend_lbl = {"P": "Pass", "W": "Warn", "F": "Fail"}.get(_last_w, "—")
+        _health_rows += f'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:8px 12px;color:#6b7a99;font-size:11px;font-weight:600;white-space:nowrap">{_h["id"]}</td><td style="padding:8px 12px;color:#eef0f8;font-size:12px">{_h["name"]}</td>{_dots}<td style="padding:8px 12px;text-align:center"><span style="color:{_trend_col};font-size:11px;font-weight:700">{_trend_lbl}</span></td></tr>'
+    st.markdown(f"""
+<div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-bottom:28px">
+<table style="width:100%;border-collapse:collapse;font-family:inherit">
+  <thead><tr style="background:rgba(99,102,241,.08);border-bottom:1px solid var(--border-subtle)">
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">ID</th>
+    <th style="padding:9px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Control</th>
+    {_wk_labels}
+    <th style="padding:9px 12px;text-align:center;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Latest</th>
+  </tr></thead>
+  <tbody>{_health_rows}</tbody>
+</table>
+<div style="padding:8px 12px;display:flex;gap:16px;border-top:1px solid rgba(255,255,255,.04)">
+  <span style="font-size:10px;color:#6b7a99">Legend:</span>
+  <span style="font-size:10px;color:#22d3a5">■ Pass</span>
+  <span style="font-size:10px;color:#f97316">■ Warning</span>
+  <span style="font-size:10px;color:#ef4444">■ Fail</span>
+</div>
 </div>""", unsafe_allow_html=True)
 
-    st.markdown("<div style='margin:28px 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>📅 Upcoming Audit Schedule</span></div>", unsafe_allow_html=True)
-
-    # Calendar
-    _cal_rows = ""
-    for _c in _t5_calendar:
-        _s_color = "#22d3a5" if _c["status"] == "Scheduled" else ("#818cf8" if _c["status"] == "Pending" else "#4a5568")
-        _cal_rows += f'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:10px 12px;color:#818cf8;font-size:12px;font-weight:600">{_c["date"]}</td><td style="padding:10px 12px;color:#eef0f8;font-size:12px">{_c["entity"]}</td><td style="padding:10px 12px;color:#eef0f8;font-size:12px">{_c["audit"]}</td><td style="padding:10px 12px"><span style="color:{_s_color};font-size:11px;font-weight:700">{_c["status"]}</span></td></tr>'
+    # ── Block 4: Audit Universe Coverage Matrix ───────────────────────────────
+    st.markdown("<div style='margin:0 0 12px'><span style='font-size:13px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.06em'>🗺 Audit Universe Coverage</span></div>", unsafe_allow_html=True)
+    _proc_headers = "".join([f'<th style="padding:10px 8px;text-align:center;font-size:10px;color:#6b7a99;font-weight:700;text-transform:uppercase;white-space:nowrap">{_p}</th>' for _p in _t5_processes])
+    _matrix_rows = ""
+    for _ei, _ent in enumerate(_t5_entities):
+        _cells = ""
+        for _ci, _code in enumerate(_t5_matrix[_ei]):
+            _mbg, _mcl, _mlbl = _t5_matrix_legend[_code]
+            _cells += f'<td style="padding:10px 8px;text-align:center"><span style="background:{_mbg};color:{_mcl};border:1px solid {_mcl}55;border-radius:6px;padding:3px 10px;font-size:10px;font-weight:700;white-space:nowrap">{_mlbl}</span></td>'
+        _matrix_rows += f'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:10px 12px;color:#eef0f8;font-size:12px;font-weight:600;white-space:nowrap">{_ent}</td>{_cells}</tr>'
     st.markdown(f"""
 <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden">
 <table style="width:100%;border-collapse:collapse;font-family:inherit">
   <thead><tr style="background:rgba(99,102,241,.08);border-bottom:1px solid var(--border-subtle)">
-    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Date</th>
     <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Entity</th>
-    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Audit Programme</th>
-    <th style="padding:10px 12px;text-align:left;font-size:11px;color:#6b7a99;font-weight:700;text-transform:uppercase">Status</th>
+    {_proc_headers}
   </tr></thead>
-  <tbody>{_cal_rows}</tbody>
-</table></div>""", unsafe_allow_html=True)
+  <tbody>{_matrix_rows}</tbody>
+</table>
+<div style="padding:8px 12px;display:flex;gap:16px;border-top:1px solid rgba(255,255,255,.04)">
+  <span style="font-size:10px;color:#6b7a99">Coverage type:</span>
+  <span style="font-size:10px;color:#22d3a5">■ Continuous</span>
+  <span style="font-size:10px;color:#818cf8">■ Periodic</span>
+  <span style="font-size:10px;color:#f97316">■ Gap identified</span>
+  <span style="font-size:10px;color:#ef4444">■ No coverage</span>
+</div>
+</div>
+""", unsafe_allow_html=True)
 
 
 # TAB 6 — THIRD PARTY & VENDOR 360
