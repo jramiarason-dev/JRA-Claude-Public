@@ -14,6 +14,7 @@ from datetime import datetime
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 _HERE = Path(__file__).parent.resolve()
 if str(_HERE) not in sys.path:
@@ -4982,6 +4983,21 @@ if _active == 0:
                 unsafe_allow_html=True,
             )
         st.markdown("<div style='margin-top:16px'></div>", unsafe_allow_html=True)
+
+    # ── Live cyberthreat map (Kaspersky) ──────────────────────────────────────
+    st.markdown(
+        '<div style="display:flex;align-items:center;gap:10px;margin:8px 0 12px">'
+        '<span style="font-size:14px;font-weight:700;color:var(--text-primary);text-transform:uppercase;letter-spacing:.06em">🌍 Live Cyberthreat Map</span>'
+        '<span style="font-size:11px;color:var(--text-muted)">Real-time global threat activity · source: Kaspersky</span>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+    components.iframe(
+        "https://cybermap.kaspersky.com/en/widget/dynamic/dark",
+        height=560,
+        scrolling=False,
+    )
+    st.markdown("<div style='margin-top:20px'></div>", unsafe_allow_html=True)
 
     refresh = False  # only set inside the live branch below
 
