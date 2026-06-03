@@ -3880,38 +3880,37 @@ The AI selects the right expert profile based on the topic you enter:
 }
 
 def _show_help_panel():
-    """Render the contextual help panel below the header."""
+    """Render the contextual help panel in the sidebar."""
     lang = st.session_state.get("help_lang", "Français")
     tab_idx = st.session_state.get("active_tab", 0)
 
-    # Language selector
-    lcol1, lcol2 = st.columns([1, 5])
-    with lcol1:
-        new_lang = st.radio(
-            "Language", ["🇫🇷 Français", "🇬🇧 English"],
-            index=0 if lang == "Français" else 1,
-            horizontal=True, label_visibility="collapsed",
-            key="_help_lang_radio",
-        )
-        st.session_state["help_lang"] = "English" if "English" in new_lang else "Français"
-        lang = st.session_state["help_lang"]
-
-    # Tab selector inside panel
-    tab_labels = _TAB_NAMES[lang]
-    selected_tab = st.radio(
-        "Section", tab_labels,
-        index=tab_idx,
+    # Language selector — compact, full sidebar width
+    new_lang = st.radio(
+        "Language", ["🇫🇷 Français", "🇬🇧 English"],
+        index=0 if lang == "Français" else 1,
         horizontal=True, label_visibility="collapsed",
-        key="_help_tab_radio",
+        key="_help_lang_radio",
+    )
+    st.session_state["help_lang"] = "English" if "English" in new_lang else "Français"
+    lang = st.session_state["help_lang"]
+
+    # Tab selector — selectbox fits the narrow sidebar width
+    tab_labels = _TAB_NAMES[lang]
+    _safe_idx = tab_idx if tab_idx < len(tab_labels) else 0
+    selected_tab = st.selectbox(
+        "Section", tab_labels,
+        index=_safe_idx,
+        label_visibility="collapsed",
+        key="_help_tab_select",
     )
     selected_idx = tab_labels.index(selected_tab)
 
     # Render content
     content = _HELP.get(selected_idx, {}).get(lang, "")
-    st.markdown('<hr style="border:0;border-top:1px solid rgba(127,168,251,0.2);margin:8px 0 14px"/>', unsafe_allow_html=True)
+    st.markdown('<hr style="border:0;border-top:1px solid rgba(127,168,251,0.2);margin:8px 0 10px"/>', unsafe_allow_html=True)
     st.markdown(content)
 
-    if st.button("✕ Close", key="_help_close"):
+    if st.button("✕ Close help", key="_help_close", use_container_width=True):
         st.session_state["help_open"] = False
         st.rerun()
 
@@ -4243,6 +4242,73 @@ with st.sidebar:
         st.session_state["signed_in"] = False
         st.rerun()
 
+    # ── Voice command panel ───────────────────────────────────────────────────
+    if st.session_state.get("voice_active", False):
+        st.markdown("""
+<div style="border-top:1px solid rgba(255,255,255,.07);margin-top:12px;padding-top:12px">
+  <span style="font-size:10px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:#818cf8">🎙️ Voice Command</span>
+</div>""", unsafe_allow_html=True)
+        _vc_typed = st.text_input(
+            "Command", placeholder="e.g. Risk Analysis, Dashboard…",
+            key="_vc_text_input", label_visibility="collapsed",
+        )
+        st.caption("Try: Dashboard · Risk · Audit Plan · Document · Report · Help")
+        if _vc_typed:
+            _vc_t = _vc_typed.strip().lower()
+            if any(w in _vc_t for w in ["dashboard", "tableau de bord", "accueil", "home"]):
+                st.session_state["active_tab"] = 0
+            elif any(w in _vc_t for w in ["risk", "risque", "analyse des risques", "risk analysis"]):
+                st.session_state["active_tab"] = 1
+            elif any(w in _vc_t for w in ["audit plan", "plan audit", "tests", "testing"]):
+                st.session_state["active_tab"] = 2
+            elif any(w in _vc_t for w in ["document", "analyser document"]):
+                st.session_state["active_tab"] = 3
+            elif any(w in _vc_t for w in ["rapport", "report", "recommandation"]):
+                st.session_state["active_tab"] = 4
+            elif any(w in _vc_t for w in ["help", "aide"]):
+                st.session_state["help_open"] = True
+            elif any(w in _vc_t for w in ["suggestion", "claude", "cowork"]):
+                st.session_state["cowork_open"] = True
+            st.session_state["last_voice_transcript"] = _vc_typed.strip()
+            st.session_state["voice_active"] = False
+            st.rerun()
+
+    if st.session_state.get("last_voice_transcript") and not st.session_state.get("voice_active", False):
+        _vt = st.session_state["last_voice_transcript"]
+        _active_tab_name = {0: "Dashboard", 1: "Risk Analysis", 2: "Audit Plan",
+                            3: "Document Analyser", 4: "Audit Report",
+                            5: "Continuous Audit", 6: "Vendor 360", 7: "KYC / AML"}.get(
+                            st.session_state.get("active_tab", 0), "")
+        st.markdown(f"""
+<div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);
+  border-radius:8px;padding:8px 12px;margin-top:6px;font-size:11px">
+  <span style="color:#818cf8;font-weight:600">✓</span>
+  <span style="color:#94a3b8"> "{_vt}"</span>
+  {f'<span style="color:#22d3a5"> → {_active_tab_name}</span>' if _active_tab_name else ""}
+</div>""", unsafe_allow_html=True)
+
+    # ── Claude Cowork panel ───────────────────────────────────────────────────
+    if st.session_state.get("cowork_open", False):
+        st.markdown("""
+<div style="border-top:1px solid rgba(255,255,255,.07);margin-top:12px;padding-top:12px">
+  <span style="font-size:10px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:#f97316">✨ Claude Suggestions</span>
+</div>""", unsafe_allow_html=True)
+        st.markdown(
+            '<div style="font-size:11.5px;color:#6b7a99;margin:6px 0 8px;line-height:1.6">'
+            'Context-aware suggestions will appear here. Integration in progress.</div>',
+            unsafe_allow_html=True,
+        )
+        st.button("Generate suggestions", disabled=True, key="_cowork_generate_btn",
+                  use_container_width=True)
+
+    # ── Help panel ────────────────────────────────────────────────────────────
+    if st.session_state.get("help_open", False):
+        st.markdown("""
+<div style="border-top:1px solid rgba(255,255,255,.07);margin-top:12px;padding-top:12px">
+  <span style="font-size:10px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:#22d3a5">❓ Help</span>
+</div>""", unsafe_allow_html=True)
+        _show_help_panel()
+
 # ══════════════════════════════════════════════════════════════════════════════
 # MAIN HEADER (breadcrumb + new audit button)
 # ══════════════════════════════════════════════════════════════════════════════
@@ -4257,68 +4323,6 @@ with st.container():
 </div>
 """, unsafe_allow_html=True)
 
-
-if st.session_state.get("voice_active", False):
-    st.markdown("""
-<div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.35);
-  border-radius:12px;padding:12px 18px;margin-bottom:10px;
-  display:flex;align-items:center;gap:12px">
-  <span style="font-size:18px">🎙️</span>
-  <div style="flex:1">
-    <div style="font-size:12px;font-weight:600;color:#818cf8;margin-bottom:4px">
-      Command — type a navigation command</div>
-    <div style="font-size:11px;color:#4a5568">
-      e.g. "Risk Analysis", "Audit Plan", "Dashboard", "Report", "Help"</div>
-  </div>
-</div>""", unsafe_allow_html=True)
-    _vc_typed = st.text_input("Command", placeholder="e.g. Risk Analysis…",
-                               key="_vc_text_input", label_visibility="collapsed")
-    if _vc_typed:
-        _vc_t = _vc_typed.strip().lower()
-        if any(w in _vc_t for w in ["dashboard", "tableau de bord", "accueil", "home"]):
-            st.session_state["active_tab"] = 0
-        elif any(w in _vc_t for w in ["risk", "risque", "analyse des risques", "risk analysis"]):
-            st.session_state["active_tab"] = 1
-        elif any(w in _vc_t for w in ["audit plan", "plan audit", "tests", "testing"]):
-            st.session_state["active_tab"] = 2
-        elif any(w in _vc_t for w in ["document", "analyser document"]):
-            st.session_state["active_tab"] = 3
-        elif any(w in _vc_t for w in ["rapport", "report", "recommandation"]):
-            st.session_state["active_tab"] = 4
-        elif any(w in _vc_t for w in ["help", "aide"]):
-            st.session_state["help_open"] = True
-        elif any(w in _vc_t for w in ["suggestion", "claude", "cowork"]):
-            st.session_state["cowork_open"] = True
-        st.session_state["last_voice_transcript"] = _vc_typed.strip()
-        st.session_state["voice_active"] = False
-        st.rerun()
-
-if st.session_state.get("last_voice_transcript"):
-    _vt = st.session_state["last_voice_transcript"]
-    _active_tab_name = {0: "Dashboard", 1: "Risk Analysis", 2: "Audit Plan",
-                        3: "Document Analyser", 4: "Audit Report"}.get(
-                        st.session_state.get("active_tab", 0), "")
-    st.markdown(f"""
-<div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);
-  border-radius:9px;padding:10px 16px;margin-bottom:8px;display:flex;align-items:center;gap:10px">
-  <span style="font-size:18px">🎙️</span>
-  <div>
-    <div style="font-size:13px;color:#818cf8;font-weight:600">Command received</div>
-    <div style="font-size:12.5px;color:#94a3b8">"{_vt}"
-      {f'→ <span style="color:#22d3a5">{_active_tab_name}</span>' if _active_tab_name else ""}</div>
-  </div>
-</div>""", unsafe_allow_html=True)
-
-if st.session_state.get("cowork_open", False):
-    with st.expander("✨ Claude Cowork — Suggestions", expanded=True):
-        st.markdown(
-            "💡 Les suggestions d'actions Claude seront disponibles ici.\n\n"
-            "Ce module est en cours d'intégration avec l'API Anthropic."
-        )
-        st.button("Générer des suggestions", disabled=True, key="_cowork_generate_btn")
-
-if st.session_state.get("help_open", False):
-    _show_help_panel()
 
 if not _api_key:
     st.error("Access not configured. Please contact your administrator.")
