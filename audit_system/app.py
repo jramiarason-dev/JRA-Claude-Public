@@ -3547,9 +3547,10 @@ div[data-testid="stButton"] > button[kind="primary"] {
 _HELP = {
     0: {  # Intelligence Dashboard
         "Français": """**🌐 Tableau de bord Intelligence**
+*Votre veille réglementaire et cyber en un coup d'œil — avant même d'ouvrir un dossier.*
 
 **À quoi ça sert ?**
-→ Rester informé avant de lancer un audit.
+→ Rester informé avant de lancer un audit : régulations récentes, CVEs, recommandations publiques.
 
 **Comment l'utiliser ?**
 - 📚 **Données statiques** : référentiel intégré, disponible sans connexion
@@ -3566,9 +3567,10 @@ _HELP = {
 **🎙️ Commande vocale :** Cliquez sur l'icône 🎙️ dans la barre latérale et dites : "Dashboard", "Analyse des Risques", "Audit Plan", "Document", "Rapport", "Help".""",
 
         "English": """**🌐 Intelligence Dashboard**
+*Your regulatory and cyber radar — know what's moving before you open a file.*
 
 **What is it for?**
-→ Stay informed before launching an audit.
+→ Stay informed before launching an audit: recent regulations, CVEs, public recommendations.
 
 **How to use it?**
 - 📚 **Static data**: built-in knowledge base, no internet required
@@ -3586,6 +3588,7 @@ _HELP = {
     },
     1: {  # Risk Analysis
         "Français": """**🔍 Analyse des Risques**
+*En 30 secondes, obtenez la cartographie complète des risques et des réglementations applicables à votre mission.*
 
 **À quoi ça sert ?**
 → Identifier les risques et réglementations applicables à votre sujet d'audit.
@@ -3603,6 +3606,7 @@ _HELP = {
 💡 *Astuce : les données statiques suffisent pour 80% des missions. Utilisez Live uniquement pour les sujets très récents.*""",
 
         "English": """**🔍 Risk Analysis**
+*In 30 seconds, get a full risk map and the exact regulations that apply to your engagement.*
 
 **What is it for?**
 → Identify risks and applicable regulations for your audit topic.
@@ -3621,6 +3625,7 @@ _HELP = {
     },
     2: {  # Audit Plan & Testing
         "Français": """**📋 Plan d'Audit & Tests**
+*De l'analyse des risques au programme de tests complet — prêt à exporter en quelques clics.*
 
 **À quoi ça sert ?**
 → Construire le plan d'audit et la liste des tests à réaliser.
@@ -3638,6 +3643,7 @@ _HELP = {
 💡 *Astuce : vérifiez le "Risk Coverage Summary" — tout risque Critical doit avoir au moins 1 test.*""",
 
         "English": """**📋 Audit Plan & Testing**
+*From risk analysis to a complete test programme — ready to export in a few clicks.*
 
 **What is it for?**
 → Build the audit plan and test list.
@@ -3656,26 +3662,46 @@ _HELP = {
     },
     3: {  # Document Analyser
         "Français": """**📂 Analyseur de Documents**
+*Déposez vos documents — le bon spécialiste IA prend le relais automatiquement selon votre domaine.*
 
 **À quoi ça sert ?**
-→ Analyser des documents d'audit (politiques, rapports, données MIS) et identifier des observations.
+→ Analyser des documents d'audit (politiques, rapports, données MIS) et identifier des observations, avec un expert IA adapté au domaine.
+
+**Détection automatique du spécialiste**
+L'IA sélectionne le bon profil d'expert selon le topic saisi :
+- *AML/KYC* → **Spécialiste AML & KYC** (CAMS · FATF · FINMA 2011/1)
+- *Cyber / DORA* → **Spécialiste Cyber & Tech Risk** (CISSP · ISO 27001 · DORA)
+- *Third Party* → **Spécialiste Third Party Risk** (CRISC · FINMA 2018/3)
+- *Credit Risk* → **Spécialiste Crédit & Capital** (FRM · Bâle IV · IFRS 9)
+- *GDPR* → **Spécialiste Data Privacy** (CIPP/E · RGPD · nDSG)
+- *Governance / Op Risk / Market Risk* → profils dédiés
 
 **Comment l'utiliser ?**
-- **Upload** : glissez-déposez vos fichiers (PDF, Word, Excel, TXT — multi-fichiers supportés)
+- **Upload** : glissez-déposez vos fichiers (PDF, Word, Excel, TXT — multi-fichiers)
 - **Topic** : pré-rempli depuis l'onglet 1, modifiable
 - **Context** : précisez un focus — ex. *"Concentrez-vous sur les écarts politique/pratique"*
 
 **Résultats obtenus :**
 - Observations par niveau de risque (Critical / High / Moderate / Low)
 - Lien automatique vers les tests du programme d'audit
-- Bouton **➕ Add to Report** pour pousser chaque observation vers l'onglet Rapport
+- **➕ Add to Report** pour pousser chaque observation vers l'onglet Rapport
 
 💡 *Astuce : uploadez des rapports précédents pour identifier les thèmes récurrents.*""",
 
         "English": """**📂 Document Analyser**
+*Drop your documents — the right AI specialist steps in automatically based on your audit domain.*
 
 **What is it for?**
-→ Analyse audit documents (policies, reports, MIS data) and surface potential observations.
+→ Analyse audit documents (policies, reports, MIS data) and surface observations, with a domain-matched AI expert.
+
+**Automatic specialist detection**
+The AI selects the right expert profile based on the topic you enter:
+- *AML/KYC* → **AML & KYC Compliance Specialist** (CAMS · FATF · FINMA 2011/1)
+- *Cyber / DORA* → **Cyber & Technology Risk Specialist** (CISSP · ISO 27001 · DORA)
+- *Third Party* → **Third Party Risk Specialist** (CRISC · FINMA 2018/3)
+- *Credit Risk* → **Credit Risk & Capital Specialist** (FRM · Basel IV · IFRS 9)
+- *GDPR* → **Data Privacy Specialist** (CIPP/E · GDPR · nDSG)
+- *Governance / Op Risk / Market Risk* → dedicated profiles
 
 **How to use it?**
 - **Upload**: drag-and-drop your files (PDF, Word, Excel, TXT — multiple files supported)
@@ -3691,6 +3717,7 @@ _HELP = {
     },
     4: {  # Audit Report
         "Français": """**📄 Rapport d'Audit**
+*Du constat brut au rapport IIA-standard prêt pour le comité — en un seul écran.*
 
 **À quoi ça sert ?**
 → Assembler le rapport final, gérer les recommandations, et générer le résumé comité.
@@ -3708,6 +3735,7 @@ _HELP = {
 💡 *Astuce : complétez d'abord les onglets 1, 2 et 3 pour un rapport plus riche et contextualisé.*""",
 
         "English": """**📄 Audit Report**
+*From raw findings to an IIA-standard report ready for the audit committee — in one screen.*
 
 **What is it for?**
 → Assemble the final report, manage recommendations, and generate the committee summary.
@@ -3723,6 +3751,131 @@ _HELP = {
 - Say *"Report"* or *"Rapport"* to navigate here directly
 
 💡 *Tip: complete tabs 1, 2, and 3 first for a richer, more contextualised report.*""",
+    },
+    5: {  # Continuous Audit Dashboard
+        "Français": """**📡 Audit Continu**
+*Vos contrôles tournent 24h/24 — cet écran vous dit ce qui a échoué cette nuit.*
+
+**À quoi ça sert ?**
+→ Superviser en temps réel l'efficacité des contrôles automatisés et détecter les anomalies avant qu'elles deviennent des constats d'audit.
+
+**Les 4 blocs :**
+- **⚙ Automated Control Tests** : résultats des contrôles automatisés (fréquence, couverture population, Pass / Fail / Exception)
+- **🔴 Exception Feed** : sorties brutes des tests — breaks de réconciliation, retards STR, dépassements VaR, avec impact CHF
+- **📈 Control Health — 12 semaines** : sparklines colorées par contrôle pour visualiser les tendances de dégradation
+- **🗺 Coverage Matrix** : grille Entités × Processus — identifiez d'un coup d'œil les zones sans monitoring continu
+
+**Comment lire la matrice de couverture ?**
+- 🟢 **Continuous** : contrôle automatisé actif
+- 🔵 **Periodic** : audit périodique planifié
+- 🟠 **Gap** : lacune identifiée, action requise
+- 🔴 **None** : aucune couverture
+
+💡 *Astuce : un contrôle en rouge 3 semaines de suite dans les sparklines doit déclencher une mission d'audit ciblée.*""",
+
+        "English": """**📡 Continuous Audit Dashboard**
+*Your controls run 24/7 — this screen tells you what failed last night.*
+
+**What is it for?**
+→ Monitor automated control effectiveness in real time and detect anomalies before they become audit findings.
+
+**The 4 blocks:**
+- **⚙ Automated Control Tests**: automated control results (frequency, population coverage, Pass / Fail / Exception)
+- **🔴 Exception Feed**: raw test outputs — reconciliation breaks, STR delays, VaR breaches, with CHF impact
+- **📈 Control Health — 12 weeks**: colour-coded sparklines per control to visualise degradation trends
+- **🗺 Coverage Matrix**: Entities × Processes grid — spot coverage gaps at a glance
+
+**How to read the coverage matrix:**
+- 🟢 **Continuous**: active automated control
+- 🔵 **Periodic**: periodic audit scheduled
+- 🟠 **Gap**: gap identified, action needed
+- 🔴 **None**: no coverage at all
+
+💡 *Tip: a control showing red 3 weeks in a row in the sparklines should trigger a targeted audit engagement.*""",
+    },
+    6: {  # Third Party & Vendor 360
+        "Français": """**🏢 Third Party & Vendor 360**
+*Chaque fournisseur est un vecteur de risque — cet écran le rend visible avant que le régulateur ne le signale.*
+
+**À quoi ça sert ?**
+→ Piloter le risque tiers en un seul écran : scoring de risque, statut KYC, SLA, actions ouvertes et couverture réglementaire.
+
+**Les sections :**
+- **KPI row** : nombre de fournisseurs, critiques, révisions dues, brèches SLA
+- **Vendor Scorecard** : tableau de bord des 8 principaux fournisseurs avec score de risque (0–100), statut KYC, état SLA
+- **Critical vendor drill-down** : fiche détaillée Clearstream avec valeur contrat, entités, plan de sortie et actions ouvertes
+- **Regulatory refs** : FINMA 2018/3 · MAS TRM · FCA SS2/21 · DORA Art. 28-30 · EBA
+
+**Comment lire le score de risque ?**
+- 🟢 ≥ 85 : risque faible
+- 🟠 70–84 : surveillance renforcée
+- 🔴 < 70 : action immédiate requise
+
+💡 *Astuce : un fournisseur avec SLA "Breach" et score < 80 doit être escaladé au responsable des achats et au MLRO.*""",
+
+        "English": """**🏢 Third Party & Vendor 360**
+*Every vendor is a risk vector — this screen makes it visible before the regulator flags it.*
+
+**What is it for?**
+→ Manage third-party risk in a single screen: risk scoring, KYC status, SLA, open actions, and regulatory coverage.
+
+**Sections:**
+- **KPI row**: number of vendors, critical vendors, due reviews, SLA breaches
+- **Vendor Scorecard**: dashboard of top vendors with risk score (0–100), KYC status, SLA health
+- **Critical vendor drill-down**: Clearstream detail card with contract value, entities, exit plan, and open actions
+- **Regulatory refs**: FINMA 2018/3 · MAS TRM · FCA SS2/21 · DORA Art. 28-30 · EBA
+
+**How to read the risk score?**
+- 🟢 ≥ 85: low risk
+- 🟠 70–84: enhanced monitoring needed
+- 🔴 < 70: immediate action required
+
+💡 *Tip: a vendor with SLA "Breach" and score below 80 should be escalated to the procurement lead and MLRO.*""",
+    },
+    7: {  # KYC / AML Compliance
+        "Français": """**🔍 KYC / AML Compliance**
+*Détectez la criminalité financière avant que le régulateur ne vous pose la question.*
+
+**À quoi ça sert ?**
+→ Superviser la file PEP/Sanctions, piloter la pipeline de remédiation et suivre la couverture CDD/EDD.
+
+**Les sections :**
+- **KPI row** : clients revus, PEP flaggés, hits sanctions, remédiations ouvertes
+- **PEP / Sanctions Alert Queue** : tableau des alertes actives avec niveau de risque, type (PEP / Sanctions / Adverse Media), juridiction, statut et ancienneté
+- **Remediation Pipeline** : Kanban en 3 colonnes — *To Review / In Progress / Closed* — avec priorité colorée par risque
+- **CDD / EDD Coverage** : jauges SVG de couverture CDD standard, EDD renforcée, revues PEP, screening sanctions
+
+**Comment lire les statuts de la file ?**
+- 🔴 **Escalated** : dossier remonté au MLRO ou à la direction
+- 🔵 **In Review** : EDD ou entretien client en cours
+- 🟠 **Pending** : en attente d'affectation
+- 🟢 **Assigned** : auditeur désigné
+
+**Références réglementaires :** FATF R.10 · FINMA AML Circ. 2011/1 · MAS Notice 626 · AMLD6 · UK POCA 2002
+
+💡 *Astuce : tout client avec statut "Escalated" depuis > 5 jours doit faire l'objet d'un suivi écrit dans le système de gestion des incidents.*""",
+
+        "English": """**🔍 KYC / AML Compliance**
+*Catch financial crime before the regulator asks the question.*
+
+**What is it for?**
+→ Monitor the PEP/Sanctions alert queue, drive the remediation pipeline, and track CDD/EDD coverage.
+
+**Sections:**
+- **KPI row**: clients reviewed, PEP flagged, sanctions hits, open remediations
+- **PEP / Sanctions Alert Queue**: active alert table with risk level, flag type (PEP / Sanctions / Adverse Media), jurisdiction, status, and age
+- **Remediation Pipeline**: 3-column Kanban — *To Review / In Progress / Closed* — with colour-coded risk priority
+- **CDD / EDD Coverage**: SVG gauge charts for standard CDD, enhanced EDD, PEP reviews, sanctions screening
+
+**How to read alert queue statuses?**
+- 🔴 **Escalated**: case referred to MLRO or senior management
+- 🔵 **In Review**: EDD or client interview in progress
+- 🟠 **Pending**: awaiting assignment
+- 🟢 **Assigned**: auditor designated
+
+**Regulatory references:** FATF R.10 · FINMA AML Circ. 2011/1 · MAS Notice 626 · AMLD6 · UK POCA 2002
+
+💡 *Tip: any client with "Escalated" status for more than 5 days must have a written follow-up logged in the incident management system.*""",
     },
 }
 
