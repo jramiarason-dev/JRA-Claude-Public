@@ -5345,6 +5345,10 @@ _JSX_MATCH  = _read("screen-matches.jsx")
 _JSX_PRE    = _read("screen-prematch.jsx")
 _JSX_POST   = _read("screen-postmatch.jsx")
 _JSX_MISC   = _read("screen-misc.jsx")
+_JSX_TACTICS= _read("screen-tactics.jsx")
+_JSX_COMPARE= _read("screen-compare.jsx")
+_JSX_TRENDS = _read("screen-trends.jsx")
+_JSX_SIM    = _read("screen-simulator.jsx")
 _JSX_APP    = _read("app.jsx")
 
 _JS_REAL_MATCHES   = _build_js_matches()
@@ -5398,6 +5402,10 @@ _HTML = f"""<!doctype html>
   <script type="text/babel" data-presets="react">{_JSX_PRE}</script>
   <script type="text/babel" data-presets="react">{_JSX_POST}</script>
   <script type="text/babel" data-presets="react">{_JSX_MISC}</script>
+  <script type="text/babel" data-presets="react">{_JSX_TACTICS}</script>
+  <script type="text/babel" data-presets="react">{_JSX_COMPARE}</script>
+  <script type="text/babel" data-presets="react">{_JSX_TRENDS}</script>
+  <script type="text/babel" data-presets="react">{_JSX_SIM}</script>
   <script type="text/babel" data-presets="react">{_JSX_APP}</script>
 </body>
 </html>"""

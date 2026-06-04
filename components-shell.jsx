@@ -4,6 +4,7 @@ const NAV = [
   { id: "dashboard", icon: "home" },
   { id: "matches",   icon: "matches", count: "12" },
   { id: "analysis",  icon: "analysis" },
+  { id: "tactics",   icon: "target" },
   { id: "history",   icon: "history" },
   { id: "settings",  icon: "settings" },
 ];

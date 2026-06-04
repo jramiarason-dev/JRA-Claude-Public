@@ -71,15 +71,23 @@ function App() {
     case 'pre-match': screen = <PreMatchScreen {...props} matchId={openMatchId} />; break;
     case 'post-match':screen = <PostMatchScreen {...props} matchId={openMatchId} />; break;
     case 'analysis':  screen = <AnalysisScreen {...props} />; break;
+    case 'tactics':   screen = <TacticsScreen {...props} />; break;
+    case 'compare':   screen = <CompareScreen {...props} />; break;
+    case 'simulator': screen = <SimulatorScreen {...props} />; break;
+    case 'trends':    screen = <TrendsScreen {...props} />; break;
     case 'history':   screen = <HistoryScreen {...props} />; break;
     case 'settings':  screen = <SettingsScreen {...props} />; break;
     default:          screen = <DashboardScreen {...props} />;
   }
 
+  // Deep screens that highlight a parent nav entry
+  const _analysisChildren = ['compare', 'simulator', 'trends'];
+  const _matchChildren = ['pre-match', 'post-match'];
   // Crumb route id for header
-  const headerRoute = route === 'pre-match' || route === 'post-match' ? 'matches' : route;
+  const headerRoute = _matchChildren.includes(route) ? 'matches'
+    : _analysisChildren.includes(route) ? 'analysis' : route;
   // navigation highlight maps deep screens to their parent
-  const navRoute = route === 'pre-match' || route === 'post-match' ? 'matches' : route;
+  const navRoute = headerRoute;
 
   return (
     <React.Fragment>

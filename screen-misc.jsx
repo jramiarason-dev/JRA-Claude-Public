@@ -93,9 +93,9 @@ const AnalysisScreen = ({ lang, sport, setRoute }) => {
       <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
         {[
           { icon: 'matches', title: lang==='fr'?'Analyser un match':'Analyse a match', desc: lang==='fr'?'Choisissez un match passé ou à venir':'Pick a past or upcoming match', cta: setRoute.bind(null, 'matches') },
-          { icon: 'target',  title: lang==='fr'?'Comparer deux équipes':'Compare two teams', desc: lang==='fr'?'Forme, stats, head-to-head':'Form, stats, head-to-head', cta: () => {} },
-          { icon: 'sparkle', title: lang==='fr'?'Simulateur tactique':'Tactical simulator', desc: lang==='fr'?'Testez un onze, une formation':'Test a lineup, a formation', cta: () => {} },
-          { icon: 'trend',   title: lang==='fr'?'Tendances saisonnières':'Season trends', desc: lang==='fr'?'Analyse longitudinale des KPIs':'Longitudinal KPI analysis', cta: () => {} },
+          { icon: 'target',  title: lang==='fr'?'Comparer deux équipes':'Compare two teams', desc: lang==='fr'?'Forme, stats, head-to-head':'Form, stats, head-to-head', cta: setRoute.bind(null, 'compare') },
+          { icon: 'sparkle', title: lang==='fr'?'Simulateur tactique':'Tactical simulator', desc: lang==='fr'?'Testez un onze, une formation':'Test a lineup, a formation', cta: setRoute.bind(null, 'simulator') },
+          { icon: 'trend',   title: lang==='fr'?'Tendances saisonnières':'Season trends', desc: lang==='fr'?'Analyse longitudinale des KPIs':'Longitudinal KPI analysis', cta: setRoute.bind(null, 'trends') },
         ].map((c, i) => (
           <div key={i} className="card card-hover fade-in" style={{ animationDelay: `${i*.06}s` }} onClick={c.cta}>
             <div className="brand-mark" style={{ background: '#1a1a1a', color: 'var(--accent)', marginBottom: 16 }}>
