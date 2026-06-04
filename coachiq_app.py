@@ -51,7 +51,7 @@ D_P7  = (TODAY + timedelta(days=7)).isoformat()
 SPORTS = ["⚽ Football", "🏀 Basket", "🏉 Rugby"]
 
 COMPETITIONS_BY_SPORT = {
-    "⚽ Football": ["Ligue 1", "La Liga", "Champions League", "Premier League", "Super League Suisse"],
+    "⚽ Football": ["Ligue 1", "La Liga", "Champions League", "Premier League", "Super League Suisse", "Coupe du Monde 2026"],
     "🏀 Basket": ["NBA", "Euroleague", "Betclic Elite"],
     "🏉 Rugby": ["Top 14", "Pro D2", "Champions Cup"],
 }
@@ -498,6 +498,125 @@ MATCHES = {
         "date": "2026-02-08", "time": "21:00", "stadium": "Parc des Princes, Paris", "status": "Terminé",
         "home": {"name": "Paris Saint-Germain", "short": "PSG", "color": "#004174", "score": 5},
         "away": {"name": "Olympique de Marseille", "short": "OM", "color": "#009BDE", "score": 0},
+    },
+    # ── Coupe du Monde 2026 ───────────────────────────────────────────────────
+    # Groupe A
+    "cdm_mex_rsa": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-11", "time": "21:00", "stadium": "Estadio Azteca, Mexico City", "status": "À venir",
+        "home": {"name": "Mexique",          "short": "MEX", "color": "#006847", "score": None},
+        "away": {"name": "Afrique du Sud",   "short": "RSA", "color": "#007A4D", "score": None},
+    },
+    "cdm_kor_cze": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-11", "time": "22:00", "stadium": "Estadio Akron, Guadalajara", "status": "À venir",
+        "home": {"name": "Corée du Sud",     "short": "KOR", "color": "#003478", "score": None},
+        "away": {"name": "Tchéquie",         "short": "CZE", "color": "#D7141A", "score": None},
+    },
+    # Groupe C
+    "cdm_bra_mar": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-13", "time": "22:00", "stadium": "MetLife Stadium, New Jersey", "status": "À venir",
+        "home": {"name": "Brésil",           "short": "BRA", "color": "#009C3B", "score": None},
+        "away": {"name": "Maroc",            "short": "MAR", "color": "#C1272D", "score": None},
+    },
+    # Groupe E
+    "cdm_ger_civ": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-20", "time": "22:00", "stadium": "BMO Field, Toronto", "status": "À venir",
+        "home": {"name": "Allemagne",        "short": "GER", "color": "#1C1C1C", "score": None},
+        "away": {"name": "Côte d'Ivoire",    "short": "CIV", "color": "#F77F00", "score": None},
+    },
+    "cdm_ecu_ger": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-25", "time": "22:00", "stadium": "MetLife Stadium, New Jersey", "status": "À venir",
+        "home": {"name": "Équateur",         "short": "ECU", "color": "#FFD100", "score": None},
+        "away": {"name": "Allemagne",        "short": "GER", "color": "#1C1C1C", "score": None},
+    },
+    # Groupe F
+    "cdm_ned_jap": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-14", "time": "22:00", "stadium": "AT&T Stadium, Dallas", "status": "À venir",
+        "home": {"name": "Pays-Bas",         "short": "NED", "color": "#FF6600", "score": None},
+        "away": {"name": "Japon",            "short": "JPN", "color": "#BC002D", "score": None},
+    },
+    # Groupe G
+    "cdm_bel_egy": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-15", "time": "22:00", "stadium": "Lumen Field, Seattle", "status": "À venir",
+        "home": {"name": "Belgique",         "short": "BEL", "color": "#ED2939", "score": None},
+        "away": {"name": "Égypte",           "short": "EGY", "color": "#CE1126", "score": None},
+    },
+    # Groupe H
+    "cdm_esp_cpv": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-15", "time": "19:00", "stadium": "Mercedes-Benz Stadium, Atlanta", "status": "À venir",
+        "home": {"name": "Espagne",          "short": "ESP", "color": "#C60B1E", "score": None},
+        "away": {"name": "Cap-Vert",         "short": "CPV", "color": "#003893", "score": None},
+    },
+    "cdm_uru_esp": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-26", "time": "22:00", "stadium": "Estadio Akron, Guadalajara", "status": "À venir",
+        "home": {"name": "Uruguay",          "short": "URU", "color": "#5EB6E4", "score": None},
+        "away": {"name": "Espagne",          "short": "ESP", "color": "#C60B1E", "score": None},
+    },
+    # Groupe I
+    "cdm_fra_sen": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-16", "time": "22:00", "stadium": "MetLife Stadium, New Jersey", "status": "À venir",
+        "home": {"name": "France",           "short": "FRA", "color": "#003189", "score": None},
+        "away": {"name": "Sénégal",          "short": "SEN", "color": "#00853F", "score": None},
+    },
+    "cdm_fra_irq": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-22", "time": "22:00", "stadium": "Lincoln Financial Field, Philadelphie", "status": "À venir",
+        "home": {"name": "France",           "short": "FRA", "color": "#003189", "score": None},
+        "away": {"name": "Irak",             "short": "IRQ", "color": "#007A3D", "score": None},
+    },
+    "cdm_nor_fra": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-26", "time": "22:00", "stadium": "Gillette Stadium, Boston", "status": "À venir",
+        "home": {"name": "Norvège",          "short": "NOR", "color": "#BA0C2F", "score": None},
+        "away": {"name": "France",           "short": "FRA", "color": "#003189", "score": None},
+    },
+    # Groupe J
+    "cdm_arg_alg": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-16", "time": "19:00", "stadium": "Arrowhead Stadium, Kansas City", "status": "À venir",
+        "home": {"name": "Argentine",        "short": "ARG", "color": "#43A1D5", "score": None},
+        "away": {"name": "Algérie",          "short": "ALG", "color": "#006233", "score": None},
+    },
+    "cdm_arg_aut": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-22", "time": "19:00", "stadium": "AT&T Stadium, Dallas", "status": "À venir",
+        "home": {"name": "Argentine",        "short": "ARG", "color": "#43A1D5", "score": None},
+        "away": {"name": "Autriche",         "short": "AUT", "color": "#ED2939", "score": None},
+    },
+    # Groupe K
+    "cdm_por_cod": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-17", "time": "22:00", "stadium": "NRG Stadium, Houston", "status": "À venir",
+        "home": {"name": "Portugal",         "short": "POR", "color": "#006600", "score": None},
+        "away": {"name": "RD Congo",         "short": "COD", "color": "#007FFF", "score": None},
+    },
+    "cdm_col_por": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-27", "time": "22:00", "stadium": "Hard Rock Stadium, Miami", "status": "À venir",
+        "home": {"name": "Colombie",         "short": "COL", "color": "#FCD116", "score": None},
+        "away": {"name": "Portugal",         "short": "POR", "color": "#006600", "score": None},
+    },
+    # Groupe L
+    "cdm_eng_cro": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-17", "time": "19:00", "stadium": "AT&T Stadium, Dallas", "status": "À venir",
+        "home": {"name": "Angleterre",       "short": "ENG", "color": "#003189", "score": None},
+        "away": {"name": "Croatie",          "short": "CRO", "color": "#003399", "score": None},
+    },
+    "cdm_eng_gha": {
+        "sport": "⚽ Football", "competition": "Coupe du Monde 2026",
+        "date": "2026-06-23", "time": "19:00", "stadium": "Gillette Stadium, Boston", "status": "À venir",
+        "home": {"name": "Angleterre",       "short": "ENG", "color": "#003189", "score": None},
+        "away": {"name": "Ghana",            "short": "GHA", "color": "#006B3F", "score": None},
     },
 }
 
@@ -4555,6 +4674,163 @@ TEAM_SQUADS: dict[str, list] = {
         ["Urdapilleta","DO"],["Bézy","DM"],["Nakosi","AI"],
         ["Grosso","CE"],["Malié","AI"],
         ["Babillot","F"],["Gazzotti","2e L."],["Tichit","TL"],["Combezou","N°8"],
+    ],
+    # ── Coupe du Monde 2026 — Sélections nationales ───────────────────────────
+    "France": [
+        ["Maignan","GB"],["Koundé","RD"],["Saliba","DC"],
+        ["Upamecano","DC"],["Theo Hernandez","LD"],
+        ["Kanté","MDC"],["Tchouaméni","MC"],["Zaïre-Emery","MC"],
+        ["Dembélé","AD"],["Mbappé","BU"],["Olise","AG"],
+    ],
+    "Espagne": [
+        ["Unai Simón","GB"],["Porro","RD"],["Cubarsí","DC"],
+        ["Laporte","DC"],["Grimaldo","LD"],
+        ["Rodri","MDC"],["Pedri","MC"],["Fabián Ruiz","MC"],
+        ["Lamine Yamal","AD"],["Morata","BU"],["Nico Williams","AG"],
+    ],
+    "Angleterre": [
+        ["Pickford","GB"],["Reece James","RD"],["Stones","DC"],
+        ["Guehi","DC"],["O'Reilly","LD"],
+        ["Rice","MDC"],["Bellingham","MC"],["Mainoo","MC"],
+        ["Saka","AD"],["Kane","BU"],["Rashford","AG"],
+    ],
+    "Allemagne": [
+        ["Baumann","GB"],["Kimmich","RD"],["Tah","DC"],
+        ["Rüdiger","DC"],["Raum","LD"],
+        ["Pavlović","MDC"],["Stiller","MC"],["Goretzka","MC"],
+        ["Musiala","AD"],["Havertz","BU"],["Wirtz","AG"],
+    ],
+    "Portugal": [
+        ["Diogo Costa","GB"],["Dalot","RD"],["Rúben Dias","DC"],
+        ["Gonçalo Inácio","DC"],["Nuno Mendes","LD"],
+        ["Rúben Neves","MDC"],["Vitinha","MC"],["João Neves","MC"],
+        ["F. Conceição","AD"],["Ronaldo","BU"],["Rafael Leão","AG"],
+    ],
+    "Pays-Bas": [
+        ["Verbruggen","GB"],["Dumfries","RD"],["Van Dijk","DC"],
+        ["Van de Ven","DC"],["Timber","LD"],
+        ["Reijnders","MDC"],["Gravenberch","MC"],["De Jong","MC"],
+        ["Kluivert","AD"],["Weghorst","BU"],["Gakpo","AG"],
+    ],
+    "Belgique": [
+        ["Courtois","GB"],["Castagne","RD"],["Debast","DC"],
+        ["Mechele","DC"],["Theate","LD"],
+        ["Onana","MDC"],["De Bruyne","MC"],["Tielemans","MC"],
+        ["Doku","AD"],["Lukaku","BU"],["De Ketelaere","AG"],
+    ],
+    "Croatie": [
+        ["Livaković","GB"],["Stanišić","RD"],["Šutalo","DC"],
+        ["Gvardiol","DC"],["Jakić","LD"],
+        ["Modrić","MDC"],["Kovačić","MC"],["Pašalić","MC"],
+        ["Perišić","AD"],["Kramarić","BU"],["Vlašić","AG"],
+    ],
+    "Brésil": [
+        ["Alisson","GB"],["Danilo","RD"],["Marquinhos","DC"],
+        ["Gabriel Magalhães","DC"],["Alex Sandro","LD"],
+        ["Casemiro","MDC"],["Bruno Guimarães","MC"],["Paquetá","MC"],
+        ["Raphinha","AD"],["Vinícius Jr","BU"],["Martinelli","AG"],
+    ],
+    "Argentine": [
+        ["E. Martínez","GB"],["Montiel","RD"],["Romero","DC"],
+        ["L. Martínez","DC"],["Tagliafico","LD"],
+        ["Paredes","MDC"],["Enzo Fernández","MC"],["Mac Allister","MC"],
+        ["Messi","MO"],["Lautaro","BU"],["Julián Álvarez","AG"],
+    ],
+    "Uruguay": [
+        ["Rochet","GB"],["Varela","RD"],["R. Araújo","DC"],
+        ["J.M. Giménez","DC"],["Olivera","LD"],
+        ["Ugarte","MDC"],["Valverde","MC"],["Bentancur","MC"],
+        ["De Arrascaeta","AD"],["Darwin Núñez","BU"],["De la Cruz","AG"],
+    ],
+    "Colombie": [
+        ["Ospina","GB"],["D. Muñoz","RD"],["D. Sánchez","DC"],
+        ["Lucumí","DC"],["Mojica","LD"],
+        ["Lerma","MDC"],["Ríos","MC"],["Carrascal","MC"],
+        ["James Rodríguez","MO"],["Luis Díaz","AG"],["Borja","BU"],
+    ],
+    "Équateur": [
+        ["Galíndez","GB"],["Preciado","RD"],["Pacho","DC"],
+        ["Hincapié","DC"],["Estupiñán","LD"],
+        ["M. Caicedo","MDC"],["A. Franco","MC"],["Plata","MC"],
+        ["Kendry Páez","AD"],["E. Valencia","BU"],["K. Rodríguez","AG"],
+    ],
+    "Maroc": [
+        ["Bounou","GB"],["Hakimi","RD"],["Aguerd","DC"],
+        ["Riad","DC"],["Mazraoui","LD"],
+        ["Amrabat","MDC"],["El Khannouss","MC"],["Bouaddi","MC"],
+        ["Brahim Díaz","AD"],["El Kaabi","BU"],["Ezzalzouli","AG"],
+    ],
+    "Sénégal": [
+        ["E. Mendy","GB"],["Diatta","RD"],["Koulibaly","DC"],
+        ["Niakhaté","DC"],["Jakobs","LD"],
+        ["Gueye","MDC"],["P.M. Sarr","MC"],["L. Camara","MC"],
+        ["I. Sarr","AD"],["Mané","BU"],["N. Jackson","AG"],
+    ],
+    "Égypte": [
+        ["El Shenawy","GB"],["Abdelmaguid","RD"],["Y. Ibrahim","DC"],
+        ["Abdelmonem","DC"],["Hany","LD"],
+        ["Attia","MDC"],["Emam Ashour","MC"],["Zizo","MC"],
+        ["Ibrahim Adel","AD"],["Salah","BU"],["Marmoush","AG"],
+    ],
+    "Mexique": [
+        ["Ochoa","GB"],["E. Sánchez","RD"],["C. Montes","DC"],
+        ["J. Vásquez","DC"],["Gallardo","LD"],
+        ["E. Álvarez","MDC"],["C. Rodríguez","MC"],["Pineda","MC"],
+        ["Mora","AD"],["S. Giménez","BU"],["Jiménez","AG"],
+    ],
+    "Côte d'Ivoire": [
+        ["Y. Fofana","GB"],["Singo","RD"],["Diomande O.","DC"],
+        ["Agbadou","DC"],["Konan","LD"],
+        ["Kessié","MDC"],["S. Fofana","MC"],["Sangaré","MC"],
+        ["Amad Diallo","AD"],["Y. Diomande","BU"],["Adingra","AG"],
+    ],
+    "Algérie": [
+        ["L. Zidane","GB"],["Mandi","RD"],["Bensebaïni","DC"],
+        ["Benlamri","DC"],["Aït-Nouri","LD"],
+        ["Aouar","MDC"],["Ounahi","MC"],["Gouiri","MC"],
+        ["Hadj-Moussa","AD"],["Amoura","BU"],["Mahrez","AG"],
+    ],
+    "Japon": [
+        ["Gonda","GB"],["Nagatomo","RD"],["Itakura","DC"],
+        ["Taniguchi","DC"],["Mitoma","LD"],
+        ["Endo","MDC"],["Ao Tanaka","MC"],["Kamada","MC"],
+        ["Kubo","AD"],["Ueda","BU"],["Dōan","AG"],
+    ],
+    "Corée du Sud": [
+        ["Jo Hyeon-woo","GB"],["Kim Moon-hwan","RD"],["Kim Min-jae","DC"],
+        ["Jung Seung-hyun","DC"],["Kim Jin-su","LD"],
+        ["Jung Woo-young","MDC"],["Lee Jae-sung","MC"],["Lee Kang-in","MC"],
+        ["Hwang Hee-chan","AD"],["Son Heung-min","BU"],["Oh Hyeon-gyu","AG"],
+    ],
+    "USA": [
+        ["Turner","GB"],["Dest","RD"],["Richards","DC"],
+        ["McKenzie","DC"],["Robinson","LD"],
+        ["T. Adams","MDC"],["McKennie","MC"],["Reyna","MC"],
+        ["Weah","AD"],["Pulisic","BU"],["Balogun","AG"],
+    ],
+    "Canada": [
+        ["St. Clair","GB"],["Johnston","RD"],["Bombito","DC"],
+        ["Cornelius","DC"],["Davies","LD"],
+        ["Eustáquio","MDC"],["Koné","MC"],["Buchanan","MC"],
+        ["Shaffelburg","AD"],["Jonathan David","BU"],["Larin","AG"],
+    ],
+    "Afrique du Sud": [
+        ["R. Williams","GB"],["Mokoena","RD"],["Sithole","DC"],
+        ["Hadebe","DC"],["Mobbie","LD"],
+        ["Zungu","MDC"],["Vilakazi","MC"],["Grobler","MC"],
+        ["Dolly","AD"],["Tau","BU"],["Zuma","AG"],
+    ],
+    "Ghana": [
+        ["Ati-Zigi","GB"],["Alidu Seidu","RD"],["Mensah","DC"],
+        ["Salisu","DC"],["Gideon Mensah","LD"],
+        ["T. Partey","MDC"],["Semenyo","MC"],["Fatawu Issahaku","MC"],
+        ["Kamaldeen","AD"],["Jordan Ayew","BU"],["I. Williams","AG"],
+    ],
+    "Panama": [
+        ["Mosquera","GB"],["Murillo","RD"],["Escobar","DC"],
+        ["Córdoba","DC"],["Davis","LD"],
+        ["Godoy","MDC"],["Bárcenas","MC"],["Taylor","MC"],
+        ["Quintero","AD"],["Fajardo","BU"],["Syms","AG"],
     ],
 }
 
