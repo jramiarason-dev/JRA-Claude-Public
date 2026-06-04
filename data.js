@@ -93,6 +93,7 @@ window.I18N = {
     footer: "Propulsé par Claude AI · Anthropic",
     no_data: "Aucun match pour cette sélection.",
     loading: "Analyse en cours…",
+    cdm2026: "Coupe du Monde 2026",
   },
   en: {
     dashboard: "Dashboard",
@@ -176,6 +177,7 @@ window.I18N = {
     footer: "Powered by Claude AI · Anthropic",
     no_data: "No match for this selection.",
     loading: "Analysis in progress…",
+    cdm2026: "World Cup 2026",
   },
 };
 
@@ -188,8 +190,9 @@ window.SPORTS = [
 // (window.MATCHES & window.LINEUPS are injected with real data by coachiq_app.py)
 
 window.COMPETITIONS = [
-  { id: "all",  fr: "Toutes",          en: "All",            sports: ["football","basket","rugby"] },
-  { id: "l1",   fr: "Ligue 1",         en: "Ligue 1",        sports: ["football"] },
+  { id: "all",    fr: "Toutes",              en: "All",              sports: ["football","basket","rugby"] },
+  { id: "cdm2026",fr: "Coupe du Monde 2026", en: "World Cup 2026",   sports: ["football"] },
+  { id: "l1",    fr: "Ligue 1",             en: "Ligue 1",          sports: ["football"] },
   { id: "pl",   fr: "Premier League",  en: "Premier League", sports: ["football"] },
   { id: "ll",   fr: "LaLiga",          en: "LaLiga",         sports: ["football"] },
   { id: "ucl",  fr: "Champions L.",    en: "Champions L.",   sports: ["football"] },
