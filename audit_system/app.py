@@ -156,6 +156,7 @@ _SS_DEFAULTS = {
     "t3_observations": [],
     "t3_analysis_xlsx": None,
     "t3_analysis_pdf": None,
+    "t3_mode": "📡 AI Analysis (API)",
     "t4_recommendations": None,
     "t2_test_statuses": {},
     "t0_prior_recs": [],
@@ -1990,6 +1991,169 @@ def _agentic_loop(client, sys_prompt, tools, messages, tool_fn):
         else:
             break
     return "\n".join(texts), extra
+
+
+# ── Local document extraction (no API) ───────────────────────────────────────
+
+def extract_text_from_file(uploaded_file) -> dict:
+    """Extract plain text from PDF, DOCX, XLSX, TXT/CSV/MD — no API calls."""
+    result = {"filename": uploaded_file.name, "text": "", "pages": 0, "status": "ok", "error": ""}
+    name = uploaded_file.name.lower()
+    try:
+        if name.endswith(".pdf"):
+            from pypdf import PdfReader
+            reader = PdfReader(uploaded_file)
+            result["pages"] = len(reader.pages)
+            result["text"] = "\n".join(page.extract_text() or "" for page in reader.pages)
+        elif name.endswith(".docx"):
+            from docx import Document
+            doc = Document(uploaded_file)
+            paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
+            for table in doc.tables:
+                for row in table.rows:
+                    paragraphs.append(" | ".join(c.text for c in row.cells))
+            result["text"] = "\n".join(paragraphs)
+        elif name.endswith((".xlsx", ".xls")):
+            import openpyxl
+            wb = openpyxl.load_workbook(uploaded_file, data_only=True)
+            lines = []
+            for sheet in wb.worksheets:
+                lines.append(f"[Sheet: {sheet.title}]")
+                for row in sheet.iter_rows(values_only=True):
+                    cells = [str(c) for c in row if c is not None]
+                    if cells:
+                        lines.append(" | ".join(cells))
+            result["text"] = "\n".join(lines)
+        elif name.endswith((".txt", ".csv", ".md")):
+            result["text"] = uploaded_file.read().decode("utf-8", errors="ignore")
+        else:
+            result["status"] = "unsupported"
+            result["error"] = "Unsupported file type"
+    except Exception as e:
+        result["status"] = "error"
+        result["error"] = str(e)
+    return result
+
+
+def analyze_document_static(doc_text: str, topic: str, entity_type: str, analysis_mode: str) -> dict:
+    """
+    Keyword-based document analysis against the static reference library — no API calls.
+
+    analysis_mode:
+      'observations' → scan for risk red-flags → return audit observations (Tab 3)
+      'risk'         → score matched risk indicators (Tab 1 supplementary)
+      'tests'        → surface relevant audit tests (Tab 2 supplementary)
+    """
+    from data import RISK_INDICATORS, AUDIT_TESTS_LIBRARY, HNWI_RED_FLAGS, TOPIC_THEME_MAP
+
+    text_lower = doc_text.lower()
+    topic_upper = topic.upper()
+
+    # Detect theme key
+    theme_key: str = "AML_KYC"
+    for k, v in TOPIC_THEME_MAP.items():
+        if k in topic_upper:
+            theme_key = v
+            break
+    else:
+        # Fallback: scan document text for topic keywords
+        for k, v in TOPIC_THEME_MAP.items():
+            if k.lower() in text_lower:
+                theme_key = v
+                break
+
+    _LEVEL_ORDER = {"Critical": 0, "High": 1, "Moderate": 2, "Low": 3}
+
+    def _kw_hits(phrase: str, min_hits: int = 2) -> bool:
+        kws = [w for w in phrase.lower().split() if len(w) > 4][:4]
+        if not kws:
+            return False
+        return sum(1 for kw in kws if kw in text_lower) >= min(min_hits, len(kws))
+
+    if analysis_mode == "observations":
+        indicators = RISK_INDICATORS.get(theme_key, [])
+        observations = []
+
+        for ind in indicators:
+            hit_flags = [rf for rf in ind.get("red_flags", []) if _kw_hits(rf, 2)]
+            hit_ctrls = [c for c in ind.get("expected_controls", []) if _kw_hits(c, 2)]
+
+            if hit_flags or len(hit_ctrls) >= 2:
+                linked = []
+                tests = AUDIT_TESTS_LIBRARY.get(theme_key, [])
+                ind_lower = ind["title"].lower()
+                for t in tests:
+                    if any(w in t.get("objective", "").lower() for w in ind_lower.split() if len(w) > 5):
+                        linked.append(t["id"])
+                    if len(linked) >= 2:
+                        break
+
+                observations.append({
+                    "observation": ind["title"],
+                    "detail": ind["description"],
+                    "risk_level": ind["level"],
+                    "linked_tests": linked,
+                    "source": "Static scan · " + ind["id"],
+                    "evidence": hit_flags[:2],
+                })
+
+        observations.sort(key=lambda x: _LEVEL_ORDER.get(x["risk_level"], 4))
+
+        # Fallback: return top 3 topic-baseline indicators if nothing matched
+        if not observations:
+            indicators_sorted = sorted(indicators, key=lambda x: _LEVEL_ORDER.get(x["level"], 4))
+            for ind in indicators_sorted[:3]:
+                observations.append({
+                    "observation": ind["title"],
+                    "detail": ind["description"],
+                    "risk_level": ind["level"],
+                    "linked_tests": [],
+                    "source": "Topic baseline · " + ind["id"],
+                    "evidence": [],
+                })
+
+        # HNWI red flags — extra layer for private banking
+        if "private" in entity_type.lower() or "banking" in entity_type.lower():
+            hnwi_hits = [
+                rf for rf in HNWI_RED_FLAGS
+                if isinstance(rf, dict) and _kw_hits(rf.get("title", ""), 1)
+            ]
+            if hnwi_hits:
+                titles = [rf["title"] for rf in hnwi_hits[:3]]
+                observations.insert(0, {
+                    "observation": f"HNWI Red Flags — {len(hnwi_hits)} pattern(s) detected",
+                    "detail": "Document signals match HNWI red-flag patterns from the reference library: " + "; ".join(titles) + ".",
+                    "risk_level": "High",
+                    "linked_tests": [],
+                    "source": "HNWI Red Flag Library",
+                    "evidence": titles,
+                })
+
+        return {"mode": "observations", "observations": observations, "theme": theme_key}
+
+    elif analysis_mode == "risk":
+        indicators = RISK_INDICATORS.get(theme_key, [])
+        matched = []
+        for ind in indicators:
+            hits = [rf for rf in ind.get("red_flags", []) if _kw_hits(rf, 1)]
+            if hits:
+                matched.append({**ind, "evidence": hits[:2], "score": len(hits)})
+        matched.sort(key=lambda x: (-x["score"], _LEVEL_ORDER.get(x["level"], 4)))
+        return {"mode": "risk", "matches": matched[:10], "theme": theme_key}
+
+    elif analysis_mode == "tests":
+        tests = AUDIT_TESTS_LIBRARY.get(theme_key, [])
+        relevant = []
+        for t in tests:
+            combined = (t.get("procedure", "") + " " + t.get("objective", "")).lower()
+            kws = [w for w in combined.split() if len(w) > 5][:30]
+            score = sum(1 for kw in kws if kw in text_lower)
+            if score >= 3:
+                relevant.append({**t, "_score": score})
+        relevant.sort(key=lambda x: -x["_score"])
+        return {"mode": "tests", "tests": relevant[:8], "theme": theme_key}
+
+    return {"mode": analysis_mode, "error": "Unknown analysis mode"}
 
 
 # ── Static data helpers ───────────────────────────────────────────────────────
@@ -6575,40 +6739,79 @@ elif _active == 3:
         height=80,
         key="t3_notes_in",
     )
+
+    # Analysis mode selector
+    _t3_mode_col, _ = st.columns([3, 5])
+    with _t3_mode_col:
+        _t3_mode = st.radio(
+            "Analysis mode",
+            ["📡 AI Analysis (API)", "🔒 Static Analysis (No API)"],
+            horizontal=True,
+            label_visibility="collapsed",
+            key="t3_mode",
+            help="Static mode extracts text locally and matches against the built-in reference library — no API key needed.",
+        )
+
     st.markdown('<div class="gen-btn-wrap"><div class="gen-btn">', unsafe_allow_html=True)
     _t3_can_run = bool(t3_uploads) and bool(t3_topic)
-    if st.button("✦ Analyser les documents", disabled=_disabled or not _t3_can_run, key="t3_run"):
-        with st.spinner(f"{_t3_spec['name']} is reviewing the documents..."):
-            try:
-                c = _client()
-                file_ids3 = []
+    _t3_btn_label = "✦ Analyser les documents" if _t3_mode == "📡 AI Analysis (API)" else "🔒 Analyse statique (No API)"
+    if st.button(_t3_btn_label, disabled=(_disabled and _t3_mode == "📡 AI Analysis (API)") or not _t3_can_run, key="t3_run"):
+        if _t3_mode == "🔒 Static Analysis (No API)":
+            # ── Static path: local text extraction + keyword matching ──────────
+            with st.spinner("Extracting text and scanning reference library…"):
+                _combined_text = ""
+                _extract_errors = []
                 for uf in (t3_uploads or []):
-                    fm = _upload_sf(c, uf)
-                    if fm:
-                        file_ids3.append(fm)
-                _t3_tests_ctx = ""
-                if st.session_state.get("t2_tests"):
-                    _tests_sample = st.session_state.t2_tests[:5] if isinstance(st.session_state.t2_tests, list) else []
-                    if _tests_sample:
-                        _t3_tests_ctx = "\n\nAudit tests in programme:\n" + "\n".join(
-                            f"- {t.get('test_id', '')}: {t.get('title', '')}" for t in _tests_sample
-                        )
-                _t3_inst = _entity_institution_str(jurs=st.session_state.get("t1_jurs") or JURISDICTIONS[:4])
-                doc_note = f"{len(file_ids3)} document(s) provided." if file_ids3 else "No documents attached — analyse based on topic only."
-                analysis_raw = _call(c,
-                    f"Audit topic: {t3_topic}\nInstitution: {_t3_inst}\n{doc_note}"
-                    + (f"\nAdditional context: {t3_notes}" if t3_notes else "")
-                    + _t3_tests_ctx
-                    + "\n\nAnalyse the provided documents. Identify key findings, control gaps, and potential audit observations. "
-                    "For each observation link it to relevant audit tests where possible.\n"
-                    "Respond ONLY with valid JSON:\n"
-                    '[{"observation":"<concise observation title>","detail":"<2-3 sentences>","risk_level":"Critical|High|Moderate|Low","linked_tests":["<test id or title>"],"source":"<document name or inferred>"}]',
-                    system=_t3_spec["role"] + " Analyse documents and identify potential audit observations. Return ONLY a valid JSON array.",
-                    max_tokens=4000,
-                )
-                st.session_state["t3_docs_analysis"] = _parse_json(analysis_raw) or []
-            except Exception:
-                st.error("Analysis failed. Please try again.")
+                    _res = extract_text_from_file(uf)
+                    if _res["status"] == "ok":
+                        _combined_text += f"\n\n--- {_res['filename']} ---\n" + _res["text"]
+                    else:
+                        _extract_errors.append(f"{_res['filename']}: {_res['error']}")
+                if _extract_errors:
+                    st.warning("Some files could not be read: " + "; ".join(_extract_errors))
+                if _combined_text.strip():
+                    _entity = st.session_state.get("t1_entity_type") or st.session_state.get("entity_type") or "🏦 Private Banking"
+                    _static_result = analyze_document_static(_combined_text, t3_topic, _entity, "observations")
+                    st.session_state["t3_docs_analysis"] = _static_result.get("observations") or []
+                    st.session_state["t3_analysis_xlsx"] = None
+                    st.session_state["t3_analysis_pdf"] = None
+                else:
+                    st.error("Could not extract text from the uploaded file(s). Please check the format.")
+        else:
+            # ── AI path: upload to API and call Claude ─────────────────────────
+            with st.spinner(f"{_t3_spec['name']} is reviewing the documents..."):
+                try:
+                    c = _client()
+                    file_ids3 = []
+                    for uf in (t3_uploads or []):
+                        fm = _upload_sf(c, uf)
+                        if fm:
+                            file_ids3.append(fm)
+                    _t3_tests_ctx = ""
+                    if st.session_state.get("t2_tests"):
+                        _tests_sample = st.session_state.t2_tests[:5] if isinstance(st.session_state.t2_tests, list) else []
+                        if _tests_sample:
+                            _t3_tests_ctx = "\n\nAudit tests in programme:\n" + "\n".join(
+                                f"- {t.get('test_id', '')}: {t.get('title', '')}" for t in _tests_sample
+                            )
+                    _t3_inst = _entity_institution_str(jurs=st.session_state.get("t1_jurs") or JURISDICTIONS[:4])
+                    doc_note = f"{len(file_ids3)} document(s) provided." if file_ids3 else "No documents attached — analyse based on topic only."
+                    analysis_raw = _call(c,
+                        f"Audit topic: {t3_topic}\nInstitution: {_t3_inst}\n{doc_note}"
+                        + (f"\nAdditional context: {t3_notes}" if t3_notes else "")
+                        + _t3_tests_ctx
+                        + "\n\nAnalyse the provided documents. Identify key findings, control gaps, and potential audit observations. "
+                        "For each observation link it to relevant audit tests where possible.\n"
+                        "Respond ONLY with valid JSON:\n"
+                        '[{"observation":"<concise observation title>","detail":"<2-3 sentences>","risk_level":"Critical|High|Moderate|Low","linked_tests":["<test id or title>"],"source":"<document name or inferred>"}]',
+                        system=_t3_spec["role"] + " Analyse documents and identify potential audit observations. Return ONLY a valid JSON array.",
+                        max_tokens=4000,
+                    )
+                    st.session_state["t3_docs_analysis"] = _parse_json(analysis_raw) or []
+                    st.session_state["t3_analysis_xlsx"] = None
+                    st.session_state["t3_analysis_pdf"] = None
+                except Exception:
+                    st.error("Analysis failed. Please try again.")
     st.markdown('</div></div>', unsafe_allow_html=True)
 
     _t3_analysis = st.session_state.get("t3_docs_analysis") or []
@@ -6630,6 +6833,7 @@ elif _active == 3:
               </div>
               <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{_obs.get("detail","")}</p>
               <div style="font-size:11.5px;color:var(--text-muted)">🔗 Linked tests: {_tests_str} &nbsp;·&nbsp; 📄 Source: {_obs.get("source","—")}</div>
+              {"".join(f'<div style="font-size:11px;color:#94a3b8;margin-top:4px;padding-left:4px">⚠ {ev}</div>' for ev in (_obs.get("evidence") or [])[:2]) if _obs.get("evidence") else ""}
             </div>""", unsafe_allow_html=True)
             if not _already_added:
                 if st.button("➕ Add to Report", key=f"t3_add_obs_{_i}"):
