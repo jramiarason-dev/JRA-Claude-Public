@@ -4832,6 +4832,42 @@ TEAM_SQUADS: dict[str, list] = {
         ["Godoy","MDC"],["Bárcenas","MC"],["Taylor","MC"],
         ["Quintero","AD"],["Fajardo","BU"],["Syms","AG"],
     ],
+    "Norvège": [
+        ["Nyland","GB"],["Ryerson","RD"],["Ajer","DC"],
+        ["Østigård","DC"],["Bjørkan","LD"],
+        ["Berge","MDC"],["Ødegaard","MC"],["Aasgaard","MC"],
+        ["Bobb","AD"],["Haaland","BU"],["Sørloth","AG"],
+    ],
+    "Autriche": [
+        ["A. Schlager","GB"],["Posch","RD"],["Danso","DC"],
+        ["Alaba","DC"],["Mwene","LD"],
+        ["Seiwald","MDC"],["X. Schlager","MC"],["Sabitzer","MC"],
+        ["Laimer","AD"],["Arnautović","BU"],["Baumgartner","AG"],
+    ],
+    "Tchéquie": [
+        ["Staněk","GB"],["Coufal","RD"],["Krejčí","DC"],
+        ["Hranáč","DC"],["Douděra","LD"],
+        ["Souček","MDC"],["Barák","MC"],["Provod","MC"],
+        ["Lingr","AD"],["Schick","BU"],["Hložek","AG"],
+    ],
+    "Cap-Vert": [
+        ["Vozinha","GB"],["Moreira","RD"],["Logan Costa","DC"],
+        ["Pico Lopes","DC"],["Stopira","LD"],
+        ["Kenny Rocha","MDC"],["Jamiro Monteiro","MC"],["Deroy Duarte","MC"],
+        ["Garry Rodrigues","AD"],["Livramento","BU"],["Ryan Mendes","AG"],
+    ],
+    "Irak": [
+        ["Jalal Hassan","GB"],["Zaid Tahseen","RD"],["Sulaka","DC"],
+        ["Manaf Younis","DC"],["Doski","LD"],
+        ["Al-Ammari","MDC"],["Zidane Iqbal","MC"],["Bayesh","MC"],
+        ["Ali Jasim","AD"],["Al-Hamadi","BU"],["Youssef Amyn","AG"],
+    ],
+    "RD Congo": [
+        ["Mpasi","GB"],["Wan-Bissaka","RD"],["Mbemba","DC"],
+        ["Tuanzebe","DC"],["Masuaku","LD"],
+        ["Pickel","MDC"],["Sadiki","MC"],["Edo Kayembe","MC"],
+        ["Elia","AD"],["Wissa","BU"],["Bakambu","AG"],
+    ],
 }
 
 # ── Teams per competition (built from MATCHES) ────────────────────────────────

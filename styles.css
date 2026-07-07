@@ -758,6 +758,9 @@ a { color: inherit; text-decoration: none; }
   .team-name { font-size: 12px; }
   .match-actions { justify-content: stretch; }
   .page-head { flex-direction: column; align-items: flex-start; gap: 14px; }
+  /* !important requis : les écrans posent grid-template-columns en style
+     inline (2fr/1fr…), qui sinon gagne sur toute règle du media query */
+  .grid { grid-template-columns: 1fr !important; }
 }
 
 /* ── Footer ───────────────────────────────────────────────── */

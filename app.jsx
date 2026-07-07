@@ -92,8 +92,11 @@ function App() {
   return (
     <React.Fragment>
       {t.showNoise && <div className="noise" />}
-      <div className={`scrim ${sidebarOpen ? 'open' : ''}`} onClick={() => setSidebarOpen(false)} />
       <div className="shell">
+        {/* scrim doit vivre dans .shell : ce dernier crée un contexte
+            d'empilement (z-index:2), donc un scrim frère passerait
+            au-dessus de la sidebar (z-index:11) et bloquerait ses clics */}
+        <div className={`scrim ${sidebarOpen ? 'open' : ''}`} onClick={() => setSidebarOpen(false)} />
         <Sidebar sport={sport} setSport={setSport}
                  route={navRoute} setRoute={setRoute}
                  lang={lang}
