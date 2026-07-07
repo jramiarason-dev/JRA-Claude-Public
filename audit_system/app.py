@@ -2113,10 +2113,10 @@ def analyze_document_static(doc_text: str, topic: str, entity_type: str, analysi
                 })
 
         # HNWI red flags — extra layer for private banking
-        if "private" in entity_type.lower() or "banking" in entity_type.lower():
+        if "private" in entity_type.lower():
             hnwi_hits = [
                 rf for rf in HNWI_RED_FLAGS
-                if isinstance(rf, dict) and _kw_hits(rf.get("title", ""), 1)
+                if isinstance(rf, dict) and _kw_hits(rf.get("title", ""), 2)
             ]
             if hnwi_hits:
                 titles = [rf["title"] for rf in hnwi_hits[:3]]
