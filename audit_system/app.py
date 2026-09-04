@@ -9,6 +9,7 @@ import sys
 import os
 import hmac
 import json
+import logging
 import tempfile
 import html as _html
 from datetime import datetime
@@ -22,6 +23,8 @@ import streamlit.components.v1 as components
 _HERE = Path(__file__).parent.resolve()
 if str(_HERE) not in sys.path:
     sys.path.insert(0, str(_HERE))
+
+_log = logging.getLogger("auditiq")
 
 st.set_page_config(
     page_title="AuditIQ",
@@ -5176,7 +5179,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                             }, OUTPUT_DIR)
                             st.session_state.t1_xlsx = Path(p_xlsx).read_bytes()
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
                         try:
                             p_pptx = generate_tab1_pptx({
                                 "topic": audit_topic,
@@ -5186,7 +5189,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                             }, OUTPUT_DIR)
                             st.session_state.t1_pptx2 = Path(p_pptx).read_bytes()
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
                         try:
                             _risks_txt = "\n".join(
                                 f"[{r.get('level','')}] {r.get('title','')} — {r.get('description','')}"
@@ -5201,7 +5204,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                                 [("Risks Identified", _risks_txt), ("Applicable Regulations", _regs_txt)],
                             )
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
 
                         st.session_state["t1_show_form"] = False
                         st.rerun()
@@ -5424,7 +5427,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     OUTPUT_DIR)
                 st.session_state.t1_xlsx = Path(p_xlsx).read_bytes()
             except Exception:
-                pass
+                _log.exception("export generation failed")
         if not st.session_state.t1_pdf and _t1_theme and RISK_INDICATORS.get(_t1_theme):
             try:
                 _pdf_risks_txt = "\n".join(
@@ -5436,7 +5439,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     [("Risk Indicators", _pdf_risks_txt)],
                 )
             except Exception:
-                pass
+                _log.exception("export generation failed")
 
         st.markdown("---")
         _t1_has_exports = st.session_state.t1_docx or st.session_state.t1_xlsx or st.session_state.t1_pptx2 or st.session_state.t1_pdf
@@ -5742,7 +5745,7 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                             ] if v]
                             st.session_state.t2_pdf = _make_pdf(f"Audit Plan — {topic2}", _t2_sections)
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
 
                         st.session_state["t2_show_form"] = False
                         st.rerun()
@@ -5922,7 +5925,7 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                     [("Audit Tests", _t2_tests_txt)],
                 )
             except Exception:
-                pass
+                _log.exception("export generation failed")
 
         pptx = st.session_state.t2_pptx
         xlsx = st.session_state.t2_xlsx
@@ -6356,7 +6359,7 @@ elif _active == AUDIT_REPORT:
                                          file_name=f"{rname}_ActionPlan.xlsx",
                                          mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 except Exception:
-                    pass
+                    _log.exception("export generation failed")
                 _fe3.caption("pptx — available after live generation")
 
             else:
@@ -6503,12 +6506,12 @@ elif _active == AUDIT_REPORT:
                             p_xlsx3 = generate_audit_findings_excel({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
                             st.session_state.t3_xlsx = Path(p_xlsx3).read_bytes()
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
                         try:
                             p_pptx3 = generate_report_pptx({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
                             st.session_state.t3_pptx2 = Path(p_pptx3).read_bytes()
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
                         try:
                             _rd = st.session_state.get("report_data") or {}
                             _t3_sections = [(k.replace("_"," ").title(), str(v))
@@ -6518,7 +6521,7 @@ elif _active == AUDIT_REPORT:
                                 _t3_sections = [("Findings", _t3_findings_raw)]
                             st.session_state.t3_pdf = _make_pdf(audit_name or "Audit Report", _t3_sections)
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
 
                     except Exception:
                         st.error("An error occurred. Please try again.")
@@ -6701,7 +6704,7 @@ elif _active == AUDIT_REPORT:
                         key="t4_exec_dl_pdf",
                     )
             except Exception:
-                pass
+                _log.exception("export generation failed")
 
     elif _t4_rep_view == "3 · Recommendation Details":
         st.markdown(
