@@ -12,16 +12,17 @@ const NAV = [
 const Sidebar = ({ sport, setSport, route, setRoute, lang, open, onClose }) => {
   const t = window.I18N[lang];
   return (
-    <aside className={`sidebar ${open ? 'open' : ''}`}>
+    <aside id="app-sidebar" className={`sidebar ${open ? 'open' : ''}`}>
       <div className="brand">
         <div className="brand-mark">C</div>
         <div className="brand-name">COACH<span className="brand-suffix">IQ</span></div>
       </div>
 
-      <div className="sport-tabs" role="tablist">
+      <div className="sport-tabs" role="group" aria-label="Sport">
         {window.SPORTS.map(s => (
           <button key={s.id}
                   className="sport-tab"
+                  aria-pressed={sport === s.id}
                   data-active={sport === s.id}
                   onClick={() => setSport(s.id)}>
             <span className="emoji">{s.emoji}</span>
@@ -30,11 +31,12 @@ const Sidebar = ({ sport, setSport, route, setRoute, lang, open, onClose }) => {
         ))}
       </div>
 
-      <nav className="nav">
+      <nav className="nav" aria-label="Menu">
         <div className="nav-title">Menu</div>
         {NAV.map(item => (
           <button key={item.id}
                   className="nav-item"
+                  aria-current={route === item.id ? 'page' : undefined}
                   data-active={route === item.id}
                   onClick={() => { setRoute(item.id); onClose && onClose(); }}>
             <span className="nav-icon"><Icon name={item.icon} size={17} /></span>
@@ -58,12 +60,15 @@ const Sidebar = ({ sport, setSport, route, setRoute, lang, open, onClose }) => {
   );
 };
 
-const Topbar = ({ route, lang, setLang, sport, onMenu }) => {
+const Topbar = ({ route, lang, setLang, sport, onMenu, menuOpen }) => {
   const t = window.I18N[lang];
   const sportLabel = window.SPORTS.find(s => s.id === sport);
   return (
     <header className="topbar">
-      <button className="mobile-menu-btn" onClick={onMenu}>
+      <button className="mobile-menu-btn" onClick={onMenu}
+              aria-label={menuOpen ? (lang === 'fr' ? 'Fermer le menu' : 'Close menu')
+                                  : (lang === 'fr' ? 'Ouvrir le menu' : 'Open menu')}
+              aria-expanded={!!menuOpen} aria-controls="app-sidebar">
         <Icon name="burger" size={18} />
       </button>
       <div className="crumbs">
@@ -74,14 +79,16 @@ const Topbar = ({ route, lang, setLang, sport, onMenu }) => {
       <div className="spacer" />
       <div className="search">
         <span className="icon"><Icon name="search" size={14} /></span>
-        <input placeholder={t.search} />
+        <input placeholder={t.search} aria-label={t.search} />
       </div>
-      <div className="lang-toggle">
-        <button data-active={lang === 'fr'} onClick={() => setLang('fr')}>FR</button>
-        <button data-active={lang === 'en'} onClick={() => setLang('en')}>EN</button>
+      <div className="lang-toggle" role="group"
+           aria-label={lang === 'fr' ? 'Langue' : 'Language'}>
+        <button aria-pressed={lang === 'fr'} data-active={lang === 'fr'} onClick={() => setLang('fr')}>FR</button>
+        <button aria-pressed={lang === 'en'} data-active={lang === 'en'} onClick={() => setLang('en')}>EN</button>
       </div>
-      <button className="btn btn-primary btn-sm" style={{display: 'inline-flex'}}>
-        <Icon name="plus" size={14} /> {t.new_analysis}
+      <button className="btn btn-primary btn-sm topbar-cta" aria-label={t.new_analysis}>
+        <Icon name="plus" size={14} />
+        <span className="topbar-cta-label">{t.new_analysis}</span>
       </button>
     </header>
   );

@@ -1,12 +1,11 @@
 import streamlit as st
-import os
 import re
 import hashlib
 import random as _rng_mod
 import json
-from pathlib import Path
 from datetime import date, datetime, timedelta
-import calendar as cal_mod
+
+from coachiq_shell import build_html
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -5640,86 +5639,16 @@ def _build_js_standings() -> str:
     return f"window.STANDINGS = {json.dumps(out, ensure_ascii=False)};"
 
 
-_ROOT = Path(__file__).parent
-
-def _read(rel: str) -> str:
-    return (_ROOT / rel).read_text(encoding="utf-8")
-
-
-_CSS_TOKENS = _read("tokens.css")
-_CSS_STYLES = _read("styles.css")
-_JS_DATA    = _read("data.js")
-_JSX_TWEAKS = _read("tweaks-panel.jsx")
-_JSX_UI     = _read("components-ui.jsx")
-_JSX_SHELL  = _read("components-shell.jsx")
-_JSX_DASH   = _read("screen-dashboard.jsx")
-_JSX_MATCH  = _read("screen-matches.jsx")
-_JSX_PRE    = _read("screen-prematch.jsx")
-_JSX_POST   = _read("screen-postmatch.jsx")
-_JSX_MISC   = _read("screen-misc.jsx")
-_JSX_TACTICS= _read("screen-tactics.jsx")
-_JSX_COMPARE= _read("screen-compare.jsx")
-_JSX_TRENDS = _read("screen-trends.jsx")
-_JSX_SIM    = _read("screen-simulator.jsx")
-_JSX_APP    = _read("app.jsx")
-
-_JS_REAL_MATCHES   = _build_js_matches()
-_JS_REAL_ANALYSES  = _build_js_analyses()
-_JS_REAL_LINEUPS   = _build_js_lineups()
-_JS_REAL_MATCHUPS  = _build_js_matchups()
-_JS_REAL_TIMELINES = _build_js_timelines()
-_JS_PLAYBOOKS      = _build_js_playbooks()
-_JS_SQUADS         = _build_js_squads()
-_JS_TEAMSTATS      = _build_js_teamstats()
-_JS_STANDINGS      = _build_js_standings()
-
-_HTML = f"""<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CoachIQ</title>
-<style>{_CSS_TOKENS}</style>
-<style>{_CSS_STYLES}</style>
-<style>html,body{{margin:0;padding:0;overflow-x:hidden}}</style>
-</head>
-<body data-product="coachiq">
-  <div id="root"></div>
-
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"
-          integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
-          crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
-          integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
-          crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
-          integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
-          crossorigin="anonymous"></script>
-
-  <script>{_JS_DATA}</script>
-  <script>{_JS_REAL_MATCHES}</script>
-  <script>{_JS_REAL_ANALYSES}</script>
-  <script>{_JS_REAL_LINEUPS}</script>
-  <script>{_JS_REAL_MATCHUPS}</script>
-  <script>{_JS_REAL_TIMELINES}</script>
-  <script>{_JS_PLAYBOOKS}</script>
-  <script>{_JS_SQUADS}</script>
-  <script>{_JS_TEAMSTATS}</script>
-  <script>{_JS_STANDINGS}</script>
-  <script type="text/babel" data-presets="react">{_JSX_TWEAKS}</script>
-  <script type="text/babel" data-presets="react">{_JSX_UI}</script>
-  <script type="text/babel" data-presets="react">{_JSX_SHELL}</script>
-  <script type="text/babel" data-presets="react">{_JSX_DASH}</script>
-  <script type="text/babel" data-presets="react">{_JSX_MATCH}</script>
-  <script type="text/babel" data-presets="react">{_JSX_PRE}</script>
-  <script type="text/babel" data-presets="react">{_JSX_POST}</script>
-  <script type="text/babel" data-presets="react">{_JSX_MISC}</script>
-  <script type="text/babel" data-presets="react">{_JSX_TACTICS}</script>
-  <script type="text/babel" data-presets="react">{_JSX_COMPARE}</script>
-  <script type="text/babel" data-presets="react">{_JSX_TRENDS}</script>
-  <script type="text/babel" data-presets="react">{_JSX_SIM}</script>
-  <script type="text/babel" data-presets="react">{_JSX_APP}</script>
-</body>
-</html>"""
+_HTML = build_html([
+    _build_js_matches(),
+    _build_js_analyses(),
+    _build_js_lineups(),
+    _build_js_matchups(),
+    _build_js_timelines(),
+    _build_js_playbooks(),
+    _build_js_squads(),
+    _build_js_teamstats(),
+    _build_js_standings(),
+])
 
 st.iframe(_HTML, height=1400)

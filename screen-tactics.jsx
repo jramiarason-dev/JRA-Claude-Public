@@ -2,7 +2,8 @@
 
 // ── Hand-drawn-style schematic for each tactic type ──────────────────────────
 const TacticDiagram = ({ diagram, color }) => {
-  const ACC = color || '#CAFF33';
+  const accent = useAccent();
+  const ACC = color || accent;
   const OPP = '#7a7a7a';
   const LINE = '#2c2c2c';
   const BG = '#0d0d0d';
@@ -267,7 +268,7 @@ function TacticsScreen({ lang, sport, setRoute }) {
             <Icon name="target" size={22} />
           </div>
           <div style={{ maxWidth: 460, margin: '12px auto 0' }}>
-            <TacticDiagram diagram={tac.diagram} color="#CAFF33" />
+            <TacticDiagram diagram={tac.diagram} />
           </div>
         </div>
 
@@ -313,7 +314,7 @@ function TacticsScreen({ lang, sport, setRoute }) {
           <Pill kind="accent">{tac.categorie}</Pill>
         </div>
         <div style={{ margin: '10px 0' }}>
-          <TacticDiagram diagram={tac.diagram} color="#CAFF33" />
+          <TacticDiagram diagram={tac.diagram} />
         </div>
         <div className="card-sub" style={{ lineHeight: 1.45, minHeight: 38 }}>
           {truncate(tac.objectif, 110)}
