@@ -444,7 +444,7 @@ body {
   opacity: .45; cursor: not-allowed;
   transform: none; box-shadow: 0 var(--kq-shadow-y) 0 var(--kq-line);
 }
-.kq-btn-primary { background: var(--kq-primary); color: #FEFCEC; }
+.kq-btn-primary { background: var(--kq-primary); color: var(--kq-on-primary, #FEFCEC); }
 .kq-btn-gold    { background: var(--kq-soft); color: var(--kq-ink); }
 .kq-btn-teal    { background: #4ECDC4; color: var(--kq-ink); }
 .kq-btn-purple  { background: #A78BFA; color: #FEFCEC; }
@@ -614,9 +614,11 @@ body {
 
 .kq-islands {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* Two across so the four worlds form a balanced 2x2 — a 3-column grid
+     left the fourth island stranded alone on its own row. */
+  grid-template-columns: repeat(2, 1fr);
   gap: 22px;
-  max-width: 1100px;
+  max-width: 880px;
   margin: 0 auto;
 }
 .kq-island {
@@ -1133,7 +1135,7 @@ body {
   color: var(--kq-ink-soft);
 }
 .kq-seg button[data-active="true"] {
-  background: var(--kq-primary); color: #FEFCEC;
+  background: var(--kq-primary); color: var(--kq-on-primary, #FEFCEC);
 }
 
 /* ── Bottom tab bar (mobile/tablet primary nav) ──────────────────── */
@@ -1162,7 +1164,7 @@ body {
   cursor: pointer;
 }
 .kq-tabs button[data-active="true"] {
-  background: var(--kq-primary); color: #FEFCEC;
+  background: var(--kq-primary); color: var(--kq-on-primary, #FEFCEC);
 }
 .kq-tabs button .emoji { font-size: 18px; }
 
@@ -1178,10 +1180,57 @@ body {
   .kq-profile-hero .chips { justify-content: center; }
   .kq-options { grid-template-columns: repeat(2, 1fr); }
 }
+@media (max-width: 560px) {
+  /* The zig-zag offset pushed the lesson title card past the screen edge,
+     where overflow-x:hidden silently clipped half the lesson names. */
+  .kq-path .kq-level { transform: none !important; }
+}
 @media (max-width: 520px) {
   .kq-tabs button { padding: 10px 12px; font-size: 12px; }
   .kq-tabs button span:not(.emoji) { display: none; }
   .kq-brand .name { font-size: 20px; }
+}
+
+/* Switches are real buttons now (keyboard + screen-reader reachable). */
+button.kq-switch { appearance: none; padding: 0; font: inherit; cursor: pointer; }
+
+/* ── Question row + listen button ────────────────────────────────── */
+.kq-q-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+}
+.kq-q-row .kq-question,
+.kq-q-row .kq-story-text { flex: 1; }
+.kq-listen {
+  flex: none;
+  appearance: none;
+  cursor: pointer;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 1;
+  background: var(--kq-surface);
+  border: var(--kq-border-w) solid var(--kq-line);
+  box-shadow: 0 4px 0 var(--kq-line);
+  transition: transform .12s var(--ease);
+}
+.kq-listen:hover  { transform: translateY(-2px); }
+.kq-listen:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--kq-line); }
+
+/* ── Dark mode: surfaces that stay light need dark ink ───────────── */
+/* These keep a pastel or gradient background in both themes, so they must
+   not inherit the cream --kq-ink that dark mode sets globally. */
+[data-dark="true"] .kq-island,
+[data-dark="true"] .kq-island-title,
+[data-dark="true"] .kq-island-sub,
+[data-dark="true"] .kq-profile-hero,
+[data-dark="true"] .kq-profile-hero h1,
+[data-dark="true"] .kq-profile-hero .sub,
+[data-dark="true"] .kq-mascot-bubble .speech,
+[data-dark="true"] .kq-option[data-selected="true"] {
+  color: #2A1F1F;
 }
 
 /* ── Confetti dots (reward bg) ───────────────────────────────────── */
@@ -1319,6 +1368,15 @@ window.KQ = {
       story_page_of: "Page {a} sur {b}",
       next_page: "Page suivante",
       start_quiz: "Questions !",
+      // Voice + retry + parent time
+      quit: "Quitter",
+      listen: "Écouter",
+      out_of_hearts: "Plus de cœurs !",
+      try_again_together: "On recommence ensemble ?",
+      restart_level: "Recommencer",
+      time_up_title: "C'est l'heure de la pause !",
+      time_up_sub: "Tu as bien joué aujourd'hui. À demain !",
+      keep_playing: "Continuer quand même",
       // Footer
       footer: "Propulsé par Claude AI · Anthropic",
     },
@@ -1396,6 +1454,15 @@ window.KQ = {
       story_page_of: "Page {a} of {b}",
       next_page: "Next page",
       start_quiz: "Quiz time!",
+      // Voice + retry + parent time
+      quit: "Quit",
+      listen: "Listen",
+      out_of_hearts: "Out of hearts!",
+      try_again_together: "Shall we start over together?",
+      restart_level: "Start over",
+      time_up_title: "Time for a break!",
+      time_up_sub: "You played well today. See you tomorrow!",
+      keep_playing: "Keep playing anyway",
       footer: "Powered by Claude AI · Anthropic",
     },
   },
@@ -1866,8 +1933,8 @@ window.KQ = {
       questions: [
         { q_fr: "Combien de continents visitent-ils ?", q_en: "How many continents do they visit?",
           opts: [{fr:"2",en:"2",emoji:"2️⃣"},{fr:"3",en:"3",emoji:"3️⃣"},{fr:"4",en:"4",emoji:"4️⃣"}], correct: 1 },
-        { q_fr: "Comment dit-on 'bonjour' en anglais ?", q_en: "What does 'hello' mean in French?",
-          opts: [{fr:"Au revoir",en:"Goodbye",emoji:"👋"},{fr:"Bonjour",en:"Hello",emoji:"😊"},{fr:"Merci",en:"Thank you",emoji:"🙏"}], correct: 1 },
+        { q_fr: "Comment dit-on 'bonjour' en anglais ?", q_en: "Which one means 'bonjour' in English?",
+          opts: [{fr:"Goodbye",en:"Goodbye",emoji:"👋"},{fr:"Hello",en:"Hello",emoji:"😊"},{fr:"Thank you",en:"Thank you",emoji:"🙏"}], correct: 1 },
         { q_fr: "Quel animal habite en Afrique dans l'histoire ?", q_en: "Which animal lives in Africa in the story?",
           opts: [{fr:"Hibou",en:"Owl",emoji:"🦉"},{fr:"Renard",en:"Fox",emoji:"🦊"},{fr:"Lion",en:"Lion",emoji:"🦁"}], correct: 2 },
       ],
@@ -1914,7 +1981,7 @@ window.KQ = {
       questions: [
         { q_fr: "Combien de continents visitent-ils dans la grande aventure ?", q_en: "How many continents do they visit in the big adventure?",
           opts: [{fr:"3",en:"3",emoji:"3️⃣"},{fr:"4",en:"4",emoji:"4️⃣"},{fr:"5",en:"5",emoji:"5️⃣"}], correct: 1 },
-        { q_fr: "Comment dit-on 'Afrique' en anglais ?", q_en: "What is 'Africa' in French?",
+        { q_fr: "Comment dit-on 'Afrique' en anglais ?", q_en: "How do you say 'Afrique' in English?",
           opts: [{fr:"Asia",en:"Asia",emoji:"🌏"},{fr:"Europe",en:"Europe",emoji:"🗺️"},{fr:"Africa",en:"Africa",emoji:"🌍"}], correct: 2 },
         { q_fr: "3 + 4 + 2 + 1 = ?", q_en: "3 + 4 + 2 + 1 = ?",
           opts: [{fr:"9",en:"9",emoji:"9️⃣"},{fr:"10",en:"10",emoji:"🔟"},{fr:"11",en:"11",emoji:"🔢"}], correct: 1 },
@@ -1930,7 +1997,7 @@ window.KQ = {
     { id: "globe_trotter",emoji: "🌍", title_fr: "Tour du monde",    title_en: "Globe trotter",     owned: false,
       desc_fr: "Tu as visité 2 continents",     desc_en: "Visited 2 continents" },
     { id: "math_genius",  emoji: "🧮", title_fr: "Génie des chiffres",title_en: "Math genius",      owned: false,
-      desc_fr: "10 additions correctes d'affilée", desc_en: "10 correct additions in a row" },
+      desc_fr: "3 leçons de maths finies",      desc_en: "3 maths lessons done" },
     { id: "streak_7",     emoji: "🔥", title_fr: "Série de 7",       title_en: "7-day streak",      owned: false,
       desc_fr: "Tu as joué 7 jours d'affilée",  desc_en: "You played 7 days in a row" },
     { id: "perfect",      emoji: "💎", title_fr: "Score parfait",    title_en: "Perfect score",     owned: false,
@@ -1940,7 +2007,7 @@ window.KQ = {
     { id: "speedster",    emoji: "⚡", title_fr: "Éclair",           title_en: "Speedster",         owned: false,
       desc_fr: "Termine une leçon en 1 min",    desc_en: "Finish a lesson in 1 min" },
     { id: "wordsmith",    emoji: "🪄", title_fr: "Magicien des mots",title_en: "Wordsmith",        owned: false,
-      desc_fr: "Apprends 50 mots d'anglais",    desc_en: "Learn 50 English words" },
+      desc_fr: "Finis toutes les leçons d'anglais", desc_en: "Finish every English lesson" },
     { id: "all_stars",    emoji: "🏆", title_fr: "Tout en étoiles",  title_en: "All stars",         owned: false,
       desc_fr: "Gagne 3 étoiles sur tous les niveaux", desc_en: "Earn 3 stars on every level" },
   ],
@@ -2730,6 +2797,115 @@ const Stars = ({ n, max = 3, size = 16 }) => (
   </span>
 );
 
+// ── GAME HELPERS ──
+
+// Read a line aloud with the browser's built-in speech engine (no network).
+// Silently does nothing where the API is unavailable (older browsers, some iframes).
+const speak = (text, lang) => {
+  try {
+    const synth = window.speechSynthesis;
+    if (!synth || !text) return;
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(String(text));
+    u.lang = lang === 'fr' ? 'fr-FR' : 'en-US';
+    u.rate = 0.9;   // a touch slower — the audience is 4-6 years old
+    u.pitch = 1.1;
+    synth.speak(u);
+  } catch (e) { /* speech is a bonus, never a hard dependency */ }
+};
+
+const stopSpeaking = () => {
+  try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) {}
+};
+
+// Hearts allowed per difficulty. More forgiving for the youngest.
+const heartsFor = (difficulty) =>
+  difficulty === 'easy' ? 5 : difficulty === 'hard' ? 2 : 3;
+
+// Adapt an authored question to the chosen difficulty.
+//   easy   → 2 options (the right one + a single distractor)
+//   medium → the 3 authored options in their authored order
+//   hard   → the same 3 options, deterministically shuffled
+// `seed` (the question index) keeps the result stable across re-renders, so a
+// child's selection never jumps to a different option mid-question.
+const shapeQuestion = (q, difficulty, seed) => {
+  if (!q || !Array.isArray(q.opts) || q.correct == null
+      || q.correct < 0 || q.correct >= q.opts.length) {
+    return { opts: (q && q.opts) || [], correct: (q && q.correct) || 0 };
+  }
+  const tagged = q.opts.map((o, i) => ({ ...o, _orig: i }));
+  let list = tagged;
+  if (difficulty === 'easy' && tagged.length > 2) {
+    const right = tagged[q.correct];
+    const others = tagged.filter((_, i) => i !== q.correct);
+    const distractor = others[seed % others.length];
+    list = (seed % 2 === 0) ? [right, distractor] : [distractor, right];
+  } else if (difficulty === 'hard') {
+    list = [...tagged];
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = (seed * 7 + i * 13) % (i + 1);
+      const tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+    }
+  }
+  return { opts: list, correct: list.findIndex(o => o._orig === q.correct) };
+};
+
+// Which trophies are earned, derived from real progress. Deriving rather than
+// storing means the collection can never drift out of sync with the game.
+const computeTrophies = (progress, streak, flags) => {
+  const owned = new Set();
+  const hubs = progress || {};
+  const all = Object.values(hubs).filter(Array.isArray).flat();
+  const doneIn  = id => (hubs[id] || []).filter(l => l.status === 'done').length;
+  const sizeOf  = id => (hubs[id] || []).length;
+  const doneAll = all.filter(l => l.status === 'done').length;
+
+  if (doneAll >= 1)                                   owned.add('first_step');
+  if (doneIn('english') >= 3)                         owned.add('english_star');
+  if (doneIn('geo') >= 2)                             owned.add('globe_trotter');
+  if (doneIn('math') >= 3)                            owned.add('math_genius');
+  if ((streak || 0) >= 7)                             owned.add('streak_7');
+  if (all.some(l => l.stars >= 3))                    owned.add('perfect');
+  if (sizeOf('geo') && doneIn('geo') === sizeOf('geo'))         owned.add('explorer');
+  if (flags && flags.speedster)                       owned.add('speedster');
+  if (sizeOf('english') && doneIn('english') === sizeOf('english')) owned.add('wordsmith');
+  if (all.length && all.every(l => l.stars >= 3))     owned.add('all_stars');
+  return owned;
+};
+
+// Relative luminance of a #rrggbb colour — used to pick ink that stays legible
+// on the chosen primary (cream on the yellow palette was invisible).
+const luminanceOf = (hex) => {
+  const m = /^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(hex || '');
+  if (!m) return 0;
+  const [r, g, b] = m.slice(1).map(h => parseInt(h, 16) / 255);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+
+// Local calendar day as YYYY-MM-DD. Deliberately not toISOString(), which is
+// UTC: for a player west of UTC an evening session lands on tomorrow's date and
+// silently punches a hole in their streak.
+const localDayKey = (d) => {
+  const x = d || new Date();
+  const p = (n) => String(n).padStart(2, '0');
+  return `${x.getFullYear()}-${p(x.getMonth() + 1)}-${p(x.getDate())}`;
+};
+
+// Consecutive local days played, counting back from today.
+const readStreak = () => {
+  try {
+    const dates = JSON.parse(localStorage.getItem('kq_dates') || '[]');
+    if (!dates.length) return 0;
+    let count = 0;
+    const cursor = new Date();
+    while (dates.includes(localDayKey(cursor))) {
+      count++;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    return count;
+  } catch (e) { return 0; }
+};
+
 // ── TOPBAR ──
 const Topbar = ({ lang, setLang, t, profile, stars, streak, onProfile, hideHud }) => (
   <div className="kq-topbar">
@@ -2772,7 +2948,8 @@ const BottomTabs = ({ active, onPick, t }) => (
       { id: "profile",  emoji: "👤", label: t('profile') },
       { id: "parent",   emoji: "🔒", label: t('parent_zone') },
     ].map(tab => (
-      <button key={tab.id} data-active={active === tab.id} onClick={() => onPick(tab.id)}>
+      <button key={tab.id} data-active={active === tab.id} aria-label={tab.label}
+              onClick={() => onPick(tab.id)}>
         <span className="emoji">{tab.emoji}</span>
         <span>{tab.label}</span>
       </button>
@@ -2963,7 +3140,7 @@ const QuestMapScreen = ({ lang, hubId, levels, profile, onBack, onPickLevel }) =
           </div>
         </div>
         <div className="stats">
-          <span className="kq-chip teal">{t('level')} {done + 1}</span>
+          <span className="kq-chip teal">{t('level')} {Math.min(done + 1, levels.length)}</span>
         </div>
       </div>
 
@@ -3009,7 +3186,7 @@ const QuestMapScreen = ({ lang, hubId, levels, profile, onBack, onPickLevel }) =
 };
 
 // ── QUIZ ──
-const QuizScreen = ({ lang, hubId, level, onExit, onComplete }) => {
+const QuizScreen = ({ lang, hubId, level, difficulty, voice, onExit, onComplete }) => {
   const t = useT(lang);
   const hub = window.KQ.hubs.find(h => h.id === hubId);
   // Fallback: if no question bank, generate placeholders matching the topic count
@@ -3035,14 +3212,27 @@ const QuizScreen = ({ lang, hubId, level, onExit, onComplete }) => {
       ], correct: 1 },
   ];
 
+  const maxHearts = heartsFor(difficulty);
   const [qi, setQi] = useState(0);
   const [picked, setPicked] = useState(null);
   const [state, setState] = useState("idle"); // idle | correct | wrong
-  const [hearts, setHearts] = useState(3);
+  const [hearts, setHearts] = useState(maxHearts);
   const [correctCount, setCorrectCount] = useState(0);
+  const [lost, setLost] = useState(false);
+  const startedAt = React.useRef(Date.now());
 
-  const q = bank[qi];
+  const raw = bank[qi];
   const total = bank.length;
+  // Memoised so the options keep a stable order while the child is choosing —
+  // without this, every re-render would reshuffle them under their finger.
+  const q = useMemo(() => shapeQuestion(raw, difficulty, qi), [raw, difficulty, qi]);
+  const questionText = raw ? raw[`q_${lang}`] : '';
+
+  // Read each new question aloud — most of the audience cannot read yet.
+  useEffect(() => {
+    if (voice && questionText && !lost) speak(questionText, lang);
+    return stopSpeaking;
+  }, [questionText, voice, lang, lost]);
 
   const choose = (i) => {
     if (state !== 'idle') return;
@@ -3052,15 +3242,29 @@ const QuizScreen = ({ lang, hubId, level, onExit, onComplete }) => {
     if (picked == null) return;
     const right = picked === q.correct;
     setState(right ? 'correct' : 'wrong');
-    if (right) setCorrectCount(c => c + 1);
-    else setHearts(h => Math.max(0, h - 1));
+    if (right) {
+      setCorrectCount(c => c + 1);
+    } else {
+      const left = Math.max(0, hearts - 1);
+      setHearts(left);
+      if (left === 0) setLost(true);
+    }
+  };
+  const restart = () => {
+    stopSpeaking();
+    setQi(0); setPicked(null); setState('idle');
+    setHearts(maxHearts); setCorrectCount(0); setLost(false);
+    startedAt.current = Date.now();
   };
   const cont = () => {
     if (qi + 1 >= total) {
-      // Compute stars: 3 if perfect, 2 if 1 mistake, 1 if 2+ mistakes
-      const stars = correctCount + (state === 'correct' ? 0 : 0) === total
-        ? 3 : correctCount >= total - 1 ? 2 : 1;
-      onComplete({ stars, correctCount: correctCount + (state === 'correct' ? 0 : 0), total });
+      // correctCount already includes the answer just confirmed, because
+      // check() committed it in the render before this click.
+      const stars = correctCount === total ? 3
+                  : correctCount >= total - 1 ? 2
+                  : 1;
+      stopSpeaking();
+      onComplete({ stars, correctCount, total, elapsedMs: Date.now() - startedAt.current });
       return;
     }
     setQi(qi + 1);
@@ -3068,15 +3272,42 @@ const QuizScreen = ({ lang, hubId, level, onExit, onComplete }) => {
     setState('idle');
   };
 
+  // Out of hearts: no punishment, no lost progress — just a warm restart.
+  if (lost) {
+    return (
+      <section className="kq-quiz">
+        <div className="kq-quiz-bar">
+          <button className="kq-back-btn" onClick={onExit} aria-label={t('back')}>✕</button>
+        </div>
+        <div className="kq-question-card">
+          <div className="kq-mascot-bubble">
+            <div className="speech">{t('try_again_together')}</div>
+            <window.HubMascot hubId={hubId} size={88} mood="wow" accent={hub.color} />
+          </div>
+          <div style={{ fontSize: 60, lineHeight: 1, marginBottom: 6 }}>💪</div>
+          <h2 className="kq-question">{t('out_of_hearts')}</h2>
+          <button className="kq-btn kq-btn-primary kq-btn-big" onClick={restart}>
+            {t('restart_level')} 🔄
+          </button>
+          <button className="kq-btn kq-btn-big" onClick={onExit} style={{ marginTop: 10 }}>
+            {t('back_to_map')} 🗺️
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="kq-quiz">
       <div className="kq-quiz-bar">
-        <button className="kq-back-btn" onClick={onExit} aria-label="Quit">✕</button>
+        <button className="kq-back-btn" onClick={onExit} aria-label={t('quit')}>✕</button>
         <div className="kq-progress">
           <span style={{ width: `${((qi + (state !== 'idle' ? 1 : 0))/total) * 100}%`, background: hub.color }} />
         </div>
         <div className="kq-hearts">
-          {[0,1,2].map(i => <span key={i} className={i < hearts ? '' : 'empty'}>❤️</span>)}
+          {Array.from({ length: maxHearts }, (_, i) => (
+            <span key={i} className={i < hearts ? '' : 'empty'}>❤️</span>
+          ))}
         </div>
       </div>
 
@@ -3094,7 +3325,11 @@ const QuizScreen = ({ lang, hubId, level, onExit, onComplete }) => {
                     textTransform: 'uppercase', fontWeight: 700, margin: '0 0 8px' }}>
           {t('question_of', { a: qi + 1, b: total })}
         </p>
-        <h2 className="kq-question">{q[`q_${lang}`]}</h2>
+        <div className="kq-q-row">
+          <h2 className="kq-question">{questionText}</h2>
+          <button className="kq-listen" onClick={() => speak(questionText, lang)}
+                  aria-label={t('listen')} title={t('listen')}>🔊</button>
+        </div>
 
         <div className="kq-options">
           {q.opts.map((opt, i) => {
@@ -3169,9 +3404,11 @@ const RewardOverlay = ({ lang, stars, newBadge, onClose }) => {
 };
 
 // ── TROPHIES / COLLECTION ──
-const TrophiesScreen = ({ lang }) => {
+const TrophiesScreen = ({ lang, progress, streak, flags }) => {
   const t = useT(lang);
-  const owned = window.KQ.trophies.filter(tr => tr.owned).length;
+  // Derived from real progress, so the collection can never drift out of sync.
+  const earned = computeTrophies(progress, streak, flags);
+  const owned = window.KQ.trophies.filter(tr => earned.has(tr.id)).length;
   return (
     <section style={{ paddingBottom: 40 }}>
       <h1 className="kq-h1 rainbow" style={{ textAlign: 'center' }}>{t('trophies')}</h1>
@@ -3180,7 +3417,7 @@ const TrophiesScreen = ({ lang }) => {
       </p>
       <div className="kq-trophies">
         {window.KQ.trophies.map(tr => (
-          <div key={tr.id} className={`kq-trophy ${tr.owned ? '' : 'locked'}`}>
+          <div key={tr.id} className={`kq-trophy ${earned.has(tr.id) ? '' : 'locked'}`}>
             <div className="emoji">{tr.emoji}</div>
             <h4>{tr[`title_${lang}`]}</h4>
             <p>{tr[`desc_${lang}`]}</p>
@@ -3192,13 +3429,13 @@ const TrophiesScreen = ({ lang }) => {
 };
 
 // ── PROFILE ──
-const ProfileScreen = ({ lang, profile, progress, streak, onChangeAvatar }) => {
+const ProfileScreen = ({ lang, profile, progress, streak, flags, onChangeAvatar }) => {
   const t = useT(lang);
   const totalStars = Object.values(progress).reduce((s, h) =>
     s + h.reduce((ss, l) => ss + l.stars, 0), 0);
   const levelsDone = Object.values(progress).reduce((s, h) =>
     s + h.filter(l => l.status === 'done').length, 0);
-  const trophies = window.KQ.trophies.filter(tr => tr.owned).length;
+  const trophies = computeTrophies(progress, streak, flags).size;
 
   return (
     <section style={{ paddingBottom: 40 }}>
@@ -3225,9 +3462,9 @@ const ProfileScreen = ({ lang, profile, progress, streak, onChangeAvatar }) => {
         <h2 className="kq-h2">{t('progress')}</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 14 }}>
           {window.KQ.hubs.map(hub => {
-            const levels = progress[hub.id];
+            const levels = progress[hub.id] || window.KQ.levels[hub.id] || [];
             const done = levels.filter(l => l.status === 'done').length;
-            const pct = (done / levels.length) * 100;
+            const pct = levels.length ? (done / levels.length) * 100 : 0;
             return (
               <div key={hub.id}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
@@ -3271,7 +3508,7 @@ const ProfileScreen = ({ lang, profile, progress, streak, onChangeAvatar }) => {
 };
 
 // ── PARENT ZONE ──
-const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
+const ParentScreen = ({ lang, tweaks, setTweak, progress, streak, minutesToday }) => {
   const t = useT(lang);
   const [unlocked, setUnlocked] = useState(false);
   const [pin, setPin] = useState(['','','','']);
@@ -3332,8 +3569,8 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
       <div className="kq-stat-row">
         <div className="kq-stat"><div className="v">{doneLevels}</div><div className="l">{t('levels_done')}</div></div>
         <div className="kq-stat"><div className="v">{totalStars}</div><div className="l">⭐ {t('total_stars')}</div></div>
-        <div className="kq-stat"><div className="v">—</div><div className="l">{t('time_today')} ({t('minutes')})</div></div>
-        <div className="kq-stat"><div className="v">—</div><div className="l">🔥 {t('streak')}</div></div>
+        <div className="kq-stat"><div className="v">{minutesToday || 0}</div><div className="l">{t('time_today')} ({t('minutes')})</div></div>
+        <div className="kq-stat"><div className="v">{streak || 0}</div><div className="l">🔥 {t('streak')}</div></div>
       </div>
 
       <div className="kq-card">
@@ -3360,8 +3597,10 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
             <div className="label">{lang === 'fr' ? 'Mode sombre' : 'Dark mode'}</div>
             <div className="desc">{lang === 'fr' ? 'Repos pour les yeux le soir' : 'Easier on the eyes at night'}</div>
           </div>
-          <div className="kq-switch" data-on={tweaks.dark}
-               onClick={() => setTweak('dark', !tweaks.dark)} />
+          <button type="button" className="kq-switch" role="switch"
+                  aria-checked={!!tweaks.dark} data-on={tweaks.dark}
+                  aria-label={lang === 'fr' ? 'Mode sombre' : 'Dark mode'}
+                  onClick={() => setTweak('dark', !tweaks.dark)} />
         </div>
 
         <div className="kq-setting">
@@ -3369,8 +3608,10 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
             <div className="label">{lang === 'fr' ? 'Lecture vocale' : 'Voice reader'}</div>
             <div className="desc">{lang === 'fr' ? 'Lit les questions à voix haute' : 'Reads questions aloud'}</div>
           </div>
-          <div className="kq-switch" data-on={tweaks.voice}
-               onClick={() => setTweak('voice', !tweaks.voice)} />
+          <button type="button" className="kq-switch" role="switch"
+                  aria-checked={!!tweaks.voice} data-on={tweaks.voice}
+                  aria-label={lang === 'fr' ? 'Lecture vocale' : 'Voice reader'}
+                  onClick={() => setTweak('voice', !tweaks.voice)} />
         </div>
 
         <div className="kq-setting">
@@ -3388,7 +3629,7 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
         <h2 className="kq-h2">{t('progress')}</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 12 }}>
           {window.KQ.hubs.map(hub => {
-            const levels = progress[hub.id];
+            const levels = progress[hub.id] || window.KQ.levels[hub.id] || [];
             const done = levels.filter(l => l.status === 'done').length;
             return (
               <div key={hub.id} className="kq-setting">
@@ -3397,7 +3638,7 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
                   <div className="desc">{done} / {levels.length} {lang==='fr'?'leçons':'lessons'}</div>
                 </div>
                 <strong style={{ color: hub.color, fontSize: 22 }}>
-                  {Math.round((done/levels.length)*100)}%
+                  {levels.length ? Math.round((done/levels.length)*100) : 0}%
                 </strong>
               </div>
             );
@@ -3409,29 +3650,46 @@ const ParentScreen = ({ lang, tweaks, setTweak, progress }) => {
 };
 
 // ── STORY ──
-const StoryScreen = ({ lang, hubId, level, onExit, onComplete }) => {
+const StoryScreen = ({ lang, hubId, level, difficulty, voice, onExit, onComplete }) => {
   const t = useT(lang);
   const hub = window.KQ.hubs.find(h => h.id === hubId);
   const story = window.KQ.stories.find(s => s.id === level.topic);
 
+  const maxHearts = heartsFor(difficulty);
   const [phase, setPhase] = useState('story'); // 'story' | 'quiz'
   const [pageIdx, setPageIdx] = useState(0);
   const [qi, setQi] = useState(0);
   const [picked, setPicked] = useState(null);
   const [qstate, setQstate] = useState('idle'); // idle | correct | wrong
-  const [hearts, setHearts] = useState(3);
+  const [hearts, setHearts] = useState(maxHearts);
   const [correctCount, setCorrectCount] = useState(0);
+  const [lost, setLost] = useState(false);
+  const startedAt = React.useRef(Date.now());
 
   const pages = story.pages;
   const questions = story.questions;
+  const page = pages[pageIdx];
+  const rawQ = questions[qi];
+  // Memoised so the options keep a stable order while the child is choosing.
+  const q = useMemo(() => shapeQuestion(rawQ, difficulty, qi), [rawQ, difficulty, qi]);
+
+  // Whatever text is on screen right now — a story page or a question.
+  const spokenText = phase === 'story'
+    ? (page ? page[`text_${lang}`] : '')
+    : (rawQ ? rawQ[`q_${lang}`] : '');
+
+  // Declared before every early return below, so hook order stays stable.
+  useEffect(() => {
+    if (voice && spokenText && !lost) speak(spokenText, lang);
+    return stopSpeaking;
+  }, [spokenText, voice, lang, lost]);
 
   if (phase === 'story') {
-    const page = pages[pageIdx];
     const isLast = pageIdx === pages.length - 1;
     return (
       <section className="kq-quiz" style={{ "--hub-color": hub.color }}>
         <div className="kq-quiz-bar">
-          <button className="kq-back-btn" onClick={onExit} aria-label="Quit">✕</button>
+          <button className="kq-back-btn" onClick={onExit} aria-label={t('quit')}>✕</button>
           <div className="kq-progress">
             <span style={{ width: `${((pageIdx + 1) / pages.length) * 100}%`, background: hub.color }} />
           </div>
@@ -3441,9 +3699,16 @@ const StoryScreen = ({ lang, hubId, level, onExit, onComplete }) => {
         </div>
         <div className="kq-question-card">
           <div className="kq-story-emoji">{page.emoji}</div>
-          <p className="kq-story-text">{page[`text_${lang}`]}</p>
+          <div className="kq-q-row">
+            <p className="kq-story-text">{spokenText}</p>
+            <button className="kq-listen" onClick={() => speak(spokenText, lang)}
+                    aria-label={t('listen')} title={t('listen')}>🔊</button>
+          </div>
           <button className="kq-btn kq-btn-primary kq-btn-big"
-                  onClick={() => isLast ? setPhase('quiz') : setPageIdx(p => p + 1)}>
+                  onClick={() => {
+                    stopSpeaking();
+                    if (isLast) setPhase('quiz'); else setPageIdx(p => p + 1);
+                  }}>
             {isLast ? t('start_quiz') + ' 🧩' : t('next_page') + ' →'}
           </button>
         </div>
@@ -3451,20 +3716,32 @@ const StoryScreen = ({ lang, hubId, level, onExit, onComplete }) => {
     );
   }
 
-  const q = questions[qi];
   const total = questions.length;
   const choose = (i) => { if (qstate !== 'idle') return; setPicked(i); };
   const check = () => {
     if (picked == null) return;
     const right = picked === q.correct;
     setQstate(right ? 'correct' : 'wrong');
-    if (right) setCorrectCount(c => c + 1);
-    else setHearts(h => Math.max(0, h - 1));
+    if (right) {
+      setCorrectCount(c => c + 1);
+    } else {
+      const left = Math.max(0, hearts - 1);
+      setHearts(left);
+      if (left === 0) setLost(true);
+    }
+  };
+  const restart = () => {
+    stopSpeaking();
+    setPhase('story'); setPageIdx(0);
+    setQi(0); setPicked(null); setQstate('idle');
+    setHearts(maxHearts); setCorrectCount(0); setLost(false);
+    startedAt.current = Date.now();
   };
   const cont = () => {
     if (qi + 1 >= total) {
       const stars = correctCount >= total ? 3 : correctCount >= total - 1 ? 2 : 1;
-      onComplete({ stars, correctCount, total });
+      stopSpeaking();
+      onComplete({ stars, correctCount, total, elapsedMs: Date.now() - startedAt.current });
       return;
     }
     setQi(qi + 1);
@@ -3472,15 +3749,42 @@ const StoryScreen = ({ lang, hubId, level, onExit, onComplete }) => {
     setQstate('idle');
   };
 
+  // Out of hearts: replay the story from the start, nothing lost.
+  if (lost) {
+    return (
+      <section className="kq-quiz" style={{ "--hub-color": hub.color }}>
+        <div className="kq-quiz-bar">
+          <button className="kq-back-btn" onClick={onExit} aria-label={t('quit')}>✕</button>
+        </div>
+        <div className="kq-question-card">
+          <div className="kq-mascot-bubble">
+            <div className="speech">{t('try_again_together')}</div>
+            <window.HubMascot hubId={hubId} size={88} mood="wow" accent={hub.color} />
+          </div>
+          <div style={{ fontSize: 60, lineHeight: 1, marginBottom: 6 }}>💪</div>
+          <h2 className="kq-question">{t('out_of_hearts')}</h2>
+          <button className="kq-btn kq-btn-primary kq-btn-big" onClick={restart}>
+            {t('restart_level')} 🔄
+          </button>
+          <button className="kq-btn kq-btn-big" onClick={onExit} style={{ marginTop: 10 }}>
+            {t('back_to_map')} 🗺️
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="kq-quiz" style={{ "--hub-color": hub.color }}>
       <div className="kq-quiz-bar">
-        <button className="kq-back-btn" onClick={onExit} aria-label="Quit">✕</button>
+        <button className="kq-back-btn" onClick={onExit} aria-label={t('quit')}>✕</button>
         <div className="kq-progress">
           <span style={{ width: `${((qi + (qstate !== 'idle' ? 1 : 0)) / total) * 100}%`, background: hub.color }} />
         </div>
         <div className="kq-hearts">
-          {[0,1,2].map(i => <span key={i} className={i < hearts ? '' : 'empty'}>❤️</span>)}
+          {Array.from({ length: maxHearts }, (_, i) => (
+            <span key={i} className={i < hearts ? '' : 'empty'}>❤️</span>
+          ))}
         </div>
       </div>
       <div className="kq-question-card">
@@ -3496,7 +3800,11 @@ const StoryScreen = ({ lang, hubId, level, onExit, onComplete }) => {
                     textTransform: 'uppercase', fontWeight: 700, margin: '0 0 8px' }}>
           {t('question_of', { a: qi + 1, b: total })}
         </p>
-        <h2 className="kq-question">{q[`q_${lang}`]}</h2>
+        <div className="kq-q-row">
+          <h2 className="kq-question">{spokenText}</h2>
+          <button className="kq-listen" onClick={() => speak(spokenText, lang)}
+                  aria-label={t('listen')} title={t('listen')}>🔊</button>
+        </div>
         <div className="kq-options">
           {q.opts.map((opt, i) => {
             const selected = picked === i;
@@ -3552,7 +3860,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "palette": ["#FF6B35", "#FF8E53", "#FFD93D"],
   "dark": false,
   "mascotStyle": "default",
-  "difficulty": "easy",
+  "difficulty": "medium",
   "voice": false,
   "dailyLimit": 30
 }/*EDITMODE-END*/;
@@ -3565,8 +3873,16 @@ const PALETTES = [
   ["#FFD93D", "#FF8E53", "#4ECDC4"], // yellow
 ];
 
+// Parent settings must survive a reload — seed the panel from storage.
+const STORED_TWEAKS = (() => {
+  try {
+    const raw = localStorage.getItem('kq_tweaks');
+    return raw ? { ...TWEAK_DEFAULTS, ...JSON.parse(raw) } : TWEAK_DEFAULTS;
+  } catch (e) { return TWEAK_DEFAULTS; }
+})();
+
 function App() {
-  const [t, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+  const [t, setTweak] = window.useTweaks(STORED_TWEAKS);
 
   const [lang, setLangRaw] = useState('fr');
   const [profile, setProfile] = useState(null);
@@ -3575,15 +3891,22 @@ function App() {
   const [activeLevel, setActiveLevel] = useState(null);
   const [reward, setReward] = useState(null);
 
-  // Progress is a copy of the data levels per hub, mutable
-  const [progress, setProgress] = useState(() => ({
-    english: JSON.parse(JSON.stringify(window.KQ.levels.english)),
-    geo:     JSON.parse(JSON.stringify(window.KQ.levels.geo)),
-    math:    JSON.parse(JSON.stringify(window.KQ.levels.math)),
-    stories: JSON.parse(JSON.stringify(window.KQ.levels.stories)),
-  }));
+  // Progress is a deep copy of the authored levels, one entry per hub. Built by
+  // walking KQ.hubs so a newly added world can never be missing from state.
+  const [progress, setProgress] = useState(() => {
+    const init = {};
+    window.KQ.hubs.forEach(h => {
+      init[h.id] = JSON.parse(JSON.stringify(window.KQ.levels[h.id] || []));
+    });
+    return init;
+  });
+  // Achievements that progress alone can't express (a timed run).
+  const [flags, setFlags] = useState({});
+  const [minutesToday, setMinutesToday] = useState(0);
+  const [limitDismissed, setLimitDismissed] = useState(false);
+  const loaded = React.useRef(false);
 
-  // ─── Persistence
+  // ─── Persistence: load once
   useEffect(() => {
     try {
       const saved = localStorage.getItem('kq_state');
@@ -3603,12 +3926,48 @@ function App() {
         if (s.profile) setMode('world');
       }
     } catch (e) {}
+    try { setFlags(JSON.parse(localStorage.getItem('kq_flags') || '{}') || {}); } catch (e) {}
+    try {
+      const tm = JSON.parse(localStorage.getItem('kq_time') || 'null');
+      if (tm && tm.day === localDayKey()) setMinutesToday(tm.minutes || 0);
+    } catch (e) {}
+    loaded.current = true;
   }, []);
+
+  // ─── Persistence: save. Gated on `loaded` so the first render — which still
+  // holds the defaults — cannot clobber a real save before it has been read.
   useEffect(() => {
+    if (!loaded.current) return;
     try {
       localStorage.setItem('kq_state', JSON.stringify({ lang, profile, progress }));
     } catch (e) {}
   }, [lang, profile, progress]);
+
+  useEffect(() => {
+    if (!loaded.current) return;
+    try { localStorage.setItem('kq_flags', JSON.stringify(flags)); } catch (e) {}
+  }, [flags]);
+
+  // Parent settings persist too (dark mode, difficulty, voice, daily limit).
+  const tweaksJson = JSON.stringify(t);
+  useEffect(() => {
+    if (!loaded.current) return;
+    try { localStorage.setItem('kq_tweaks', tweaksJson); } catch (e) {}
+  }, [tweaksJson]);
+
+  // ─── Real play time today, for the parent dashboard and the daily limit.
+  useEffect(() => {
+    if (!profile || mode === 'onboard') return;
+    const id = setInterval(() => setMinutesToday(m => m + 1), 60000);
+    return () => clearInterval(id);
+  }, [profile, mode]);
+
+  useEffect(() => {
+    if (!loaded.current || !minutesToday) return;
+    try {
+      localStorage.setItem('kq_time', JSON.stringify({ day: localDayKey(), minutes: minutesToday }));
+    } catch (e) {}
+  }, [minutesToday]);
 
   const setLang = (l) => setLangRaw(l);
 
@@ -3619,28 +3978,16 @@ function App() {
     root.style.setProperty('--kq-primary', p);
     root.style.setProperty('--kq-primary-deep', pd);
     root.style.setProperty('--kq-soft', soft);
+    // A light primary (the yellow palette) needs dark ink on buttons and pills.
+    root.style.setProperty('--kq-on-primary', luminanceOf(p) > 0.6 ? '#2A1F1F' : '#FEFCEC');
     root.dataset.dark = String(!!t.dark);
   }, [t.palette, t.dark]);
 
   // ─── Stats for HUD
-  const totalStars = Object.values(progress).reduce((s, h) =>
-    s + h.reduce((ss, l) => ss + l.stars, 0), 0);
+  const totalStars = Object.values(progress).filter(Array.isArray).reduce((s, h) =>
+    s + h.reduce((ss, l) => ss + (l.stars || 0), 0), 0);
 
-  const streak = useMemo(() => {
-    try {
-      const dates = JSON.parse(localStorage.getItem('kq_dates') || '[]');
-      if (!dates.length) return 0;
-      const today = new Date().toISOString().slice(0, 10);
-      let count = 0, day = today;
-      while (dates.includes(day)) {
-        count++;
-        const d = new Date(day);
-        d.setDate(d.getDate() - 1);
-        day = d.toISOString().slice(0, 10);
-      }
-      return count;
-    } catch (e) { return 0; }
-  }, [progress]);
+  const streak = useMemo(() => readStreak(), [progress]);
 
   const T = window.KQ_useT(lang);
 
@@ -3661,37 +4008,43 @@ function App() {
     setActiveLevel(lv);
     setMode('quiz');
   };
-  const handleQuizComplete = ({ stars, correctCount, total }) => {
-    // Update progress
-    setProgress(prev => {
-      const next = { ...prev };
-      const list = [...next[activeHub]];
-      const i = list.findIndex(l => l.n === activeLevel.n);
-      if (i >= 0) {
-        list[i] = { ...list[i], status: 'done', stars: Math.max(list[i].stars || 0, stars) };
-        // Unlock next
-        if (i + 1 < list.length && list[i+1].status === 'locked') {
-          list[i+1] = { ...list[i+1], status: 'current' };
-        }
+  const handleQuizComplete = ({ stars, correctCount, total, elapsedMs }) => {
+    // Snapshot the collection before this run so we can spot what is genuinely new.
+    const before = computeTrophies(progress, streak, flags);
+
+    // A run under a minute earns the Speedster badge (can't be derived from progress).
+    let nextFlags = flags;
+    if (elapsedMs != null && elapsedMs < 60000 && !flags.speedster) {
+      nextFlags = { ...flags, speedster: true };
+      setFlags(nextFlags);
+    }
+
+    // Apply the result. Math.max keeps a replay from ever downgrading stars.
+    const next = { ...progress };
+    const list = [...(next[activeHub] || [])];
+    const i = list.findIndex(l => l.n === activeLevel.n);
+    if (i >= 0) {
+      list[i] = { ...list[i], status: 'done', stars: Math.max(list[i].stars || 0, stars) };
+      if (i + 1 < list.length && list[i + 1].status === 'locked') {
+        list[i + 1] = { ...list[i + 1], status: 'current' };
       }
-      next[activeHub] = list;
-      return next;
-    });
-    // Record today for streak
+    }
+    next[activeHub] = list;
+    setProgress(next);
+
+    // Record today's local calendar day for the streak.
     try {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = localDayKey();
       const dates = JSON.parse(localStorage.getItem('kq_dates') || '[]');
       if (!dates.includes(today)) {
         localStorage.setItem('kq_dates', JSON.stringify([today, ...dates].slice(0, 365)));
       }
     } catch (e) {}
-    // Reward overlay
-    setReward({
-      stars,
-      newBadge: stars === 3
-        ? { emoji: '💎', title_fr: 'Score parfait', title_en: 'Perfect score' }
-        : null,
-    });
+
+    // Announce a real, newly unlocked trophy — never the same one twice.
+    const after = computeTrophies(next, readStreak(), nextFlags);
+    const fresh = window.KQ.trophies.find(tr => after.has(tr.id) && !before.has(tr.id));
+    setReward({ stars, newBadge: fresh || null });
     setMode('quest');
   };
   const handleExitQuiz = () => { setActiveLevel(null); setMode('quest'); };
@@ -3723,19 +4076,23 @@ function App() {
   } else if (mode === 'quiz' && activeLevel) {
     screen = activeHub === 'stories'
       ? <window.StoryScreen lang={lang} hubId={activeHub} level={activeLevel}
+                            difficulty={t.difficulty} voice={t.voice}
                             onExit={handleExitQuiz}
                             onComplete={handleQuizComplete} />
       : <window.QuizScreen lang={lang} hubId={activeHub} level={activeLevel}
+                           difficulty={t.difficulty} voice={t.voice}
                            onExit={handleExitQuiz}
                            onComplete={handleQuizComplete} />;
   } else if (mode === 'trophies') {
-    screen = <window.TrophiesScreen lang={lang} />;
+    screen = <window.TrophiesScreen lang={lang} progress={progress}
+                                    streak={streak} flags={flags} />;
   } else if (mode === 'profile') {
     screen = <window.ProfileScreen lang={lang} profile={profile} progress={progress}
-                                   streak={streak}
+                                   streak={streak} flags={flags}
                                    onChangeAvatar={handleChangeAvatar} />;
   } else if (mode === 'parent') {
     screen = <window.ParentScreen lang={lang} progress={progress}
+                                  streak={streak} minutesToday={minutesToday}
                                   tweaks={t} setTweak={setTweak} />;
   }
 
@@ -3757,6 +4114,23 @@ function App() {
                               stars={reward.stars}
                               newBadge={reward.newBadge}
                               onClose={handleCloseReward} />
+      )}
+
+      {/* Daily time limit: a gentle nudge, never a hard lock-out. */}
+      {profile && mode !== 'onboard' && !limitDismissed
+        && t.dailyLimit && minutesToday >= t.dailyLimit && (
+        <div className="kq-reward" onClick={() => setLimitDismissed(true)}>
+          <div className="kq-reward-card" onClick={e => e.stopPropagation()}>
+            <div style={{ fontSize: 64, lineHeight: 1 }}>🌙</div>
+            <h2 className="kq-h1">{T('time_up_title')}</h2>
+            <p className="kq-sub">{T('time_up_sub')}</p>
+            <button className="kq-btn kq-btn-primary kq-btn-big"
+                    onClick={() => setLimitDismissed(true)}
+                    style={{ marginTop: 14 }}>
+              {T('keep_playing')}
+            </button>
+          </div>
+        </div>
       )}
 
       <window.TweaksPanel title="Tweaks">
@@ -3784,7 +4158,12 @@ function App() {
                             onChange={(v) => setTweak('dailyLimit', v)} />
         <window.TweakButton label={lang === 'fr' ? 'Réinitialiser' : 'Reset'}
                             onClick={() => {
-                              try { localStorage.removeItem('kq_state'); } catch {}
+                              // Clear every key, or a "reset" profile inherits
+                              // the old streak, badges and play time.
+                              try {
+                                ['kq_state', 'kq_dates', 'kq_flags', 'kq_time', 'kq_tweaks']
+                                  .forEach(k => localStorage.removeItem(k));
+                              } catch (e) {}
                               location.reload();
                             }} />
       </window.TweaksPanel>
