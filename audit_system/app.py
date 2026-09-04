@@ -12,7 +12,9 @@ import json
 import tempfile
 import html as _html
 from datetime import datetime
+import re
 from pathlib import Path
+from urllib.parse import urlparse
 
 import streamlit as st
 import streamlit.components.v1 as components
@@ -1450,6 +1452,38 @@ def _section_names(lang: str) -> list:
     return [s[lang] for s in _SECTIONS]
 
 
+def _e(value) -> str:
+    """Escape a value for interpolation into an unsafe_allow_html block.
+
+    Everything a user types — audit topic, scope, findings, observations — ends
+    up inside an f-string that Streamlit renders as raw HTML, so it has to be
+    escaped at the point of rendering rather than at the point of capture: the
+    same values are handed unescaped to the Word/Excel/PowerPoint exporters.
+    """
+    return _html.escape("" if value is None else str(value))
+
+
+def _slug(text: str, limit: int = 60) -> str:
+    """A filename-safe slug — download names are built from free-text topics."""
+    cleaned = re.sub(r"[^A-Za-z0-9._-]+", "_", (text or "").strip()).strip("._-")
+    return cleaned[:limit] or "audit"
+
+
+def _safe_link(url: str) -> str:
+    """An http(s) URL escaped for an href attribute, or "" if it is not one.
+
+    Link targets in the intelligence tables come from web-search results, i.e.
+    from pages the model read — never trusted enough to drop into an attribute
+    as-is (a javascript: scheme, or a quote closing the attribute early).
+    """
+    url = (url or "").strip()
+    try:
+        scheme = urlparse(url).scheme
+    except ValueError:
+        return ""
+    return _html.escape(url, quote=True) if scheme in ("http", "https") else ""
+
+
 def _entity_badge_html(entity_type: str, size: str = "13px") -> str:
     bg, col = _ENTITY_COLORS.get(entity_type, ("#0a2540", "#818cf8"))
     return (
@@ -1976,16 +2010,18 @@ def _parse_json(text):
 
 
 def _upload_sf(client, f):
+    """Upload a Streamlit file to the API via a temporary copy on disk.
+
+    The copy holds confidential audit working papers, so it lives inside a
+    TemporaryDirectory: it is removed even if the upload raises, which the
+    previous delete=False + os.unlink pairing did not guarantee.
+    """
     if not f:
         return None
-    suf = Path(f.name).suffix
-    with tempfile.NamedTemporaryFile(delete=False, suffix=suf) as tmp:
-        tmp.write(f.read())
-        tmp_path = tmp.name
-    try:
-        return _upload_file(client, tmp_path)
-    finally:
-        os.unlink(tmp_path)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir) / f"upload{Path(f.name).suffix}"
+        tmp_path.write_bytes(f.read())
+        return _upload_file(client, str(tmp_path))
 
 
 def _agentic_loop(client, sys_prompt, tools, messages, tool_fn):
@@ -3051,16 +3087,17 @@ def _cve_table(cves):
         sev = c.get("severity", "")
         badge = _SEV_BADGE.get(sev, f'<span class="badge-info">{sev}</span>')
         link = c.get("source", "")
-        src_html = (f'<a href="{link}" target="_blank" style="color:#818cf8;font-size:11px">{link[:40]}&hellip;</a>'
-                    if link.startswith("http") else f'<span style="color:#424d72;font-size:11.5px">{link}</span>')
+        href = _safe_link(link)
+        src_html = (f'<a href="{href}" target="_blank" rel="noopener noreferrer" style="color:#818cf8;font-size:11px">{_e(link[:40])}&hellip;</a>'
+                    if href else f'<span style="color:#424d72;font-size:11.5px">{_e(link)}</span>')
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:600;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{c.get("cve_id","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{c.get("date","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:600;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(c.get("cve_id",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(c.get("date",""))}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{badge}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("system","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("description","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("action","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(c.get("system",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(c.get("description",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(c.get("action",""))}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{src_html}</td>'
             f'</tr>'
         )
@@ -3093,16 +3130,16 @@ def _reg_updates_table(regs, type_filter=None):
         type_badge = _TYPE_BADGE.get(rtype, f'<span class="badge-info">{rtype}</span>')
         open_until = r.get("open_until", "") or ""
         open_badge = f'&nbsp;<span class="badge-open">Open until {open_until}</span>' if open_until else ""
-        link = r.get("link", "") or ""
-        title_html = (f'<a href="{link}" target="_blank" style="color:var(--text-primary);text-decoration:underline;text-underline-offset:2px">{r.get("title","")}</a>'
-                      if link.startswith("http") else f'<span style="color:var(--text-primary)">{r.get("title","")}</span>')
+        href = _safe_link(r.get("link", ""))
+        title_html = (f'<a href="{href}" target="_blank" rel="noopener noreferrer" style="color:var(--text-primary);text-decoration:underline;text-underline-offset:2px">{_e(r.get("title",""))}</a>'
+                      if href else f'<span style="color:var(--text-primary)">{_e(r.get("title",""))}</span>')
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("date","")}</td>'
-            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("authority","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("date",""))}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("authority",""))}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{type_badge}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{title_html}{open_badge}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("key_impact","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("key_impact",""))}</td>'
             f'</tr>'
         )
     st.markdown(f"""
@@ -3129,10 +3166,10 @@ def _audit_recs_table(recs):
         badge = _SEV_BADGE.get(pri, _SEV_BADGE.get(f"{pri} Priority", f'<span class="badge-info">{pri}</span>'))
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("date","")}</td>'
-            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("theme","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("recommendation","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("date",""))}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("source",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("theme",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("recommendation",""))}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{badge}</td>'
             f'</tr>'
         )
@@ -3158,10 +3195,10 @@ def _pub_recs_table(recs):
     for r in recs:
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;text-align:center;border-bottom:1px solid var(--tbl-row-border)">{r.get("year","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("recommendation","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("applicability","")}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("source",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;text-align:center;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("year",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("recommendation",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("applicability",""))}</td>'
             f'</tr>'
         )
     st.markdown(f"""
@@ -3187,11 +3224,11 @@ def _risk_table(risks):
         col, bg, border = _LEVEL_STYLE.get(level, ("#6b7280", "rgba(107,114,128,0.08)", "rgba(107,114,128,0.2)"))
         rows = "".join(
             f'<tr>'
-            f'<td style="padding:10px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("name","")}</td>'
-            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("description","")}</td>'
-            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("impact","")}</td>'
-            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;text-align:center;border-bottom:1px solid var(--tbl-row-border)">{r.get("likelihood","")}</td>'
-            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("control","")}</td>'
+            f'<td style="padding:10px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("name",""))}</td>'
+            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("description",""))}</td>'
+            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("impact",""))}</td>'
+            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;text-align:center;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("likelihood",""))}</td>'
+            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("control",""))}</td>'
             f'</tr>'
             for r in bucket
         )
@@ -3218,10 +3255,10 @@ def _reg_table(regs):
         return
     rows = "".join(
         f'<tr>'
-        f'<td style="padding:10px 13px;color:#818cf8;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("jurisdiction","")}</td>'
-        f'<td style="padding:10px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("text","")}</td>'
-        f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
-        f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("requirement","")}</td>'
+        f'<td style="padding:10px 13px;color:#818cf8;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("jurisdiction",""))}</td>'
+        f'<td style="padding:10px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("text",""))}</td>'
+        f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("reference",""))}</td>'
+        f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("requirement",""))}</td>'
         f'</tr>'
         for r in regs
     )
@@ -3243,12 +3280,12 @@ def _tests_table(tests):
         return
     rows = "".join(
         f'<tr>'
-        f'<td style="padding:9px 10px;color:#818cf8;font-weight:600;text-align:center;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("num","")}</td>'
-        f'<td style="padding:9px 10px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("objective","")}</td>'
-        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("procedure","")}</td>'
-        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("population","")}</td>'
-        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("sample_size","")}</td>'
-        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("failure_criteria","")}</td>'
+        f'<td style="padding:9px 10px;color:#818cf8;font-weight:600;text-align:center;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("num",""))}</td>'
+        f'<td style="padding:9px 10px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("objective",""))}</td>'
+        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("procedure",""))}</td>'
+        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("population",""))}</td>'
+        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("sample_size",""))}</td>'
+        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("failure_criteria",""))}</td>'
         f'</tr>'
         for t in tests
     )
@@ -3272,11 +3309,11 @@ def _analytics_table(scenarios):
         return
     rows = "".join(
         f'<tr>'
-        f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("scenario","")}</td>'
-        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("objective","")}</td>'
-        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("data_source","")}</td>'
-        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("analysis_type","")}</td>'
-        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("anomaly","")}</td>'
+        f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(s.get("scenario",""))}</td>'
+        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(s.get("objective",""))}</td>'
+        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(s.get("data_source",""))}</td>'
+        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(s.get("analysis_type",""))}</td>'
+        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(s.get("anomaly",""))}</td>'
         f'</tr>'
         for s in scenarios
     )
@@ -4539,8 +4576,8 @@ def _show_report_section1(rd: dict):
         f'border-bottom:1px solid rgba(255,255,255,0.05)">{k}</td>'
         f'<td style="padding:7px 14px;color:var(--text-primary);font-size:12.5px;font-weight:500;'
         f'border-bottom:1px solid rgba(255,255,255,0.05)">{v}</td></tr>'
-        for k, v in [("Audit Topic", rd["topic"]), ("Jurisdictions", rd["jurisdictions"]),
-                     ("Audit Scope", rd["scope"]), ("Period", rd["period"])]
+        for k, v in [("Audit Topic", _e(rd["topic"])), ("Jurisdictions", _e(rd["jurisdictions"])),
+                     ("Audit Scope", _e(rd["scope"])), ("Period", _e(rd["period"]))]
     )
     st.markdown(f"""
     <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:18px">
@@ -4549,7 +4586,7 @@ def _show_report_section1(rd: dict):
     </div>""", unsafe_allow_html=True)
 
     # B — Overall Context
-    ctx_paras = rd["overall_context"].replace("\n\n","</p><p style='margin:0 0 10px;font-size:13px;color:var(--text-secondary);line-height:1.8'>")
+    ctx_paras = _e(rd["overall_context"]).replace("\n\n","</p><p style='margin:0 0 10px;font-size:13px;color:var(--text-secondary);line-height:1.8'>")
     st.markdown(f"""
     <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:18px">
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#818cf8;margin-bottom:12px">B &mdash; Overall Context</div>
@@ -4560,7 +4597,7 @@ def _show_report_section1(rd: dict):
     top3_html = "".join(
         f'<li style="margin-bottom:5px;font-size:12.5px;color:var(--text-secondary)">'
         f'<span style="color:{_LEVEL_COLOR.get(f["criticality"],"#8392bb")};font-weight:700">'
-        f'{_LEVEL_EMOJI.get(f["criticality"],"")} F{f["idx"]}</span> &mdash; {f["title"]}</li>'
+        f'{_LEVEL_EMOJI.get(f["criticality"],"")} F{f["idx"]}</span> &mdash; {_e(f["title"])}</li>'
         for f in rd["top3"]
     )
     st.markdown(f"""
@@ -4755,7 +4792,7 @@ def _show_report_section4(rd: dict):
         rows += (
             f'<tr>'
             f'<td style="padding:8px 12px;color:#818cf8;font-weight:700;text-align:center;border-bottom:1px solid var(--tbl-row-border)">F{f["idx"]}</td>'
-            f'<td style="padding:8px 12px;color:var(--text-primary);border-bottom:1px solid var(--tbl-row-border)">{f["title"]}</td>'
+            f'<td style="padding:8px 12px;color:var(--text-primary);border-bottom:1px solid var(--tbl-row-border)">{_e(f["title"])}</td>'
             f'<td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--tbl-row-border)"><span style="background:{_LEVEL_BG.get(crit,"transparent")};color:{col};border:1px solid {col}44;border-radius:4px;padding:1px 8px;font-size:11px;font-weight:700">{emoji} {crit}</span></td>'
             f'<td style="padding:8px 12px;color:var(--text-secondary);font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">'
             + (f'{acts[0]["action"][:70]}&hellip;' if acts and len(acts[0].get("action",""))>70 else (acts[0].get("action","&mdash;") if acts else "&mdash;")) +
@@ -4797,19 +4834,19 @@ def _show_audit_snapshot():
     top_html = "".join(
         f'<li style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">'
         f'<span style="color:{_LEVEL_COLOR.get(f["criticality"],"#8392bb")};font-weight:700">'
-        f'{_LEVEL_EMOJI.get(f["criticality"],"")} F{f["idx"]}</span> &mdash; {f["title"]}</li>'
+        f'{_LEVEL_EMOJI.get(f["criticality"],"")} F{f["idx"]}</span> &mdash; {_e(f["title"])}</li>'
         for f in rd.get("top3",[])
     )
-    ctx_text = rd.get("overall_context","")[:400] + ("…" if len(rd.get("overall_context",""))>400 else "")
+    ctx_text = _e(rd.get("overall_context","")[:400]) + ("…" if len(rd.get("overall_context",""))>400 else "")
 
     st.markdown(f"""
     <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:18px 22px">
       <div style="font-size:11px;font-weight:700;color:#818cf8;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px">📋 Latest Audit Snapshot</div>
-      <div style="font-size:12px;color:#5a6488;margin-bottom:14px">Based on: <strong style="color:#8392bb">{rd["topic"]}</strong> &middot; Generated: {ts}</div>
+      <div style="font-size:12px;color:#5a6488;margin-bottom:14px">Based on: <strong style="color:#8392bb">{_e(rd["topic"])}</strong> &middot; Generated: {ts}</div>
 
       <div style="font-size:10.5px;font-weight:700;color:#5a6488;text-transform:uppercase;margin-bottom:6px">── Audit Context ──</div>
       <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:12px">
-        <span style="color:#8392bb">Topic:</span> {rd["topic"]} &nbsp;&middot;&nbsp;
+        <span style="color:#8392bb">Topic:</span> {_e(rd["topic"])} &nbsp;&middot;&nbsp;
         <span style="color:#8392bb">Scope:</span> {rd["scope"]} &nbsp;&middot;&nbsp;
         <span style="color:#8392bb">Jurisdictions:</span> {rd["jurisdictions"]}
       </div>
@@ -5745,7 +5782,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 _e1.download_button(
                     "📝 Word",
                     data=st.session_state.t1_docx,
-                    file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.docx",
+                    file_name=f"Risk_Analysis_{_slug(topic_lbl)}.docx",
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                     use_container_width=True,
                 )
@@ -5753,7 +5790,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 _e2.download_button(
                     "📗 Excel",
                     data=st.session_state.t1_xlsx,
-                    file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.xlsx",
+                    file_name=f"Risk_Analysis_{_slug(topic_lbl)}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     use_container_width=True,
                 )
@@ -5761,7 +5798,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 _e3.download_button(
                     "📙 PPT",
                     data=st.session_state.t1_pptx2,
-                    file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.pptx",
+                    file_name=f"Risk_Analysis_{_slug(topic_lbl)}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
                     use_container_width=True,
                 )
@@ -5769,7 +5806,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 _e4.download_button(
                     "📕 PDF",
                     data=st.session_state.t1_pdf,
-                    file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.pdf",
+                    file_name=f"Risk_Analysis_{_slug(topic_lbl)}.pdf",
                     mime="application/pdf",
                     use_container_width=True,
                 )
@@ -6232,21 +6269,21 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
             if pptx:
                 _t2_ecols[0].download_button(
                     "📙 PPT", data=pptx,
-                    file_name=f"Audit_Plan_{topic2_lbl.replace(' ', '_')}.pptx",
+                    file_name=f"Audit_Plan_{_slug(topic2_lbl)}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
                     use_container_width=True,
                 )
             if xlsx:
                 _t2_ecols[1].download_button(
                     "📗 Excel", data=xlsx,
-                    file_name=f"Audit_Tests_{topic2_lbl.replace(' ', '_')}.xlsx",
+                    file_name=f"Audit_Tests_{_slug(topic2_lbl)}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     use_container_width=True,
                 )
             if pdf2:
                 _t2_ecols[2].download_button(
                     "📕 PDF", data=pdf2,
-                    file_name=f"Audit_Plan_{topic2_lbl.replace(' ', '_')}.pdf",
+                    file_name=f"Audit_Plan_{_slug(topic2_lbl)}.pdf",
                     mime="application/pdf",
                     use_container_width=True,
                 )
@@ -6319,7 +6356,7 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                     st.download_button(
                         "↓ Download tracker (.tsv)",
                         data="\n".join(_tr_lines).encode("utf-8"),
-                        file_name=f"Test_Tracker_{st.session_state.get('t1_topic', 'audit').replace(' ', '_')}.tsv",
+                        file_name=f"Test_Tracker_{_slug(st.session_state.get('t1_topic') or 'audit')}.tsv",
                         mime="text/tab-separated-values",
                         key="t2_tracker_dl",
                     )
@@ -6380,8 +6417,8 @@ elif _active == AUDIT_REPORT:
                 _ocol2 = {"Critical":"#ef4444","High":"#f97316","Moderate":"#eab308","Low":"#22d3a5"}.get(_ob.get("risk_level",""), "#8392bb")
                 st.markdown(
                     f'<div style="border:1px solid {_ocol2}33;border-radius:8px;padding:10px 16px;margin-bottom:8px;background:{_ocol2}08">'
-                    f'<span style="font-size:12.5px;font-weight:600;color:var(--text-primary)">{_ob.get("observation","")}</span>'
-                    f'<span style="font-size:11px;color:var(--text-muted);margin-left:10px">— {_ob.get("source","")}</span></div>',
+                    f'<span style="font-size:12.5px;font-weight:600;color:var(--text-primary)">{_e(_ob.get("observation",""))}</span>'
+                    f'<span style="font-size:11px;color:var(--text-muted);margin-left:10px">— {_e(_ob.get("source",""))}</span></div>',
                     unsafe_allow_html=True,
                 )
         else:
@@ -6483,7 +6520,7 @@ elif _active == AUDIT_REPORT:
                 f'<div style="border:1px solid {_fc}33;border-radius:12px;padding:18px 22px;margin-bottom:14px;background:{_fc}08">'
                 f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'
                 f'<span style="background:{_fc}22;color:{_fc};border:1px solid {_fc}55;border-radius:6px;padding:2px 10px;font-size:11px;font-weight:700">{_f["ref"]} · {_f["level"]}</span>'
-                f'<span style="font-size:14px;font-weight:700;color:#eef0f8">{_f["title"]}</span></div>'
+                f'<span style="font-size:14px;font-weight:700;color:#eef0f8">{_e(_f["title"])}</span></div>'
                 f'<div style="font-size:12.5px;line-height:1.8;color:#94a3b8">'
                 f'<p style="margin:0 0 6px"><b style="color:#cbd5e1">Condition:</b> {_f["condition"]}</p>'
                 f'<p style="margin:0 0 6px"><b style="color:#cbd5e1">Criteria:</b> {_f["criteria"]}</p>'
@@ -6570,11 +6607,11 @@ elif _active == AUDIT_REPORT:
             if st.session_state.get("report_generated") and st.session_state.get("report_data"):
                 rd    = st.session_state["report_data"]
                 ts    = st.session_state.get("report_timestamp","")
-                rname = f"Audit_Report_{rd['topic'].replace(' ','_')}"
+                rname = f"Audit_Report_{_slug(rd['topic'])}"
                 st.markdown("---")
                 st.markdown(
                     f'<div style="font-size:11px;color:#5a6488;margin-bottom:16px">Report generated: {ts} &nbsp;&middot;&nbsp; '
-                    f'Topic: <strong style="color:#8392bb">{rd["topic"]}</strong> &nbsp;&middot;&nbsp; '
+                    f'Topic: <strong style="color:#8392bb">{_e(rd["topic"])}</strong> &nbsp;&middot;&nbsp; '
                     f'{rd["n_total"]} finding(s)</div>',
                     unsafe_allow_html=True,
                 )
@@ -6842,15 +6879,15 @@ elif _active == AUDIT_REPORT:
                         _f1, _f2, _f3 = st.columns([2, 2, 2])
                         if res.get("docx_bytes"):
                             _f1.download_button("📝 Word", data=res["docx_bytes"],
-                                                file_name=f"Audit_Report_{name.replace(' ','_')}.docx",
+                                                file_name=f"Audit_Report_{_slug(name)}.docx",
                                                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                         if st.session_state.t3_xlsx:
                             _f2.download_button("📗 Excel", data=st.session_state.t3_xlsx,
-                                                file_name=f"Audit_Findings_{name.replace(' ','_')}.xlsx",
+                                                file_name=f"Audit_Findings_{_slug(name)}.xlsx",
                                                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                         if st.session_state.t3_pptx2:
                             _f3.download_button("📙 PPT", data=st.session_state.t3_pptx2,
-                                                file_name=f"Audit_Report_{name.replace(' ','_')}.pptx",
+                                                file_name=f"Audit_Report_{_slug(name)}.pptx",
                                                 mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
 
 
@@ -6982,7 +7019,7 @@ elif _active == AUDIT_REPORT:
             _ex1.download_button(
                 "docx ↓  Executive Summary",
                 data=_t4_exec.encode("utf-8"),
-                file_name=f"ExecSummary_{_t4_topic.replace(' ', '_')}.txt",
+                file_name=f"ExecSummary_{_slug(_t4_topic)}.txt",
                 mime="text/plain",
                 key="t4_exec_dl_txt",
             )
@@ -6995,7 +7032,7 @@ elif _active == AUDIT_REPORT:
                     _ex2.download_button(
                         "pdf ↓  Executive Summary",
                         data=_exec_pdf,
-                        file_name=f"ExecSummary_{_t4_topic.replace(' ', '_')}.pdf",
+                        file_name=f"ExecSummary_{_slug(_t4_topic)}.pdf",
                         mime="application/pdf",
                         key="t4_exec_dl_pdf",
                     )
@@ -7015,16 +7052,16 @@ elif _active == AUDIT_REPORT:
             _rd_lvlc = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308", "Low": "#22d3a5"}
             for _ri, _ob in enumerate(_rd_obs):
                 _rc = _rd_lvlc.get(_ob.get("risk_level", ""), "#8392bb")
-                _tests = ", ".join(_ob.get("linked_tests") or []) or "—"
-                _detail = _ob.get("detail") or "—"
+                _tests = _e(", ".join(_ob.get("linked_tests") or []) or "—")
+                _detail = _e(_ob.get("detail") or "—")
                 st.markdown(
                     f'<div style="border:1px solid {_rc}33;border-left:4px solid {_rc};border-radius:10px;'
                     f'padding:16px 20px;margin-bottom:12px;background:{_rc}08">'
                     f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
                     f'<span style="background:{_rc}22;color:{_rc};border:1px solid {_rc}55;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:700">R-{_ri+1:02d} · {_ob.get("risk_level","")}</span>'
-                    f'<span style="font-size:13.5px;font-weight:700;color:#eef0f8">{_ob.get("observation","")}</span></div>'
+                    f'<span style="font-size:13.5px;font-weight:700;color:#eef0f8">{_e(_ob.get("observation",""))}</span></div>'
                     f'<p style="font-size:12.5px;color:#94a3b8;line-height:1.7;margin:0 0 8px">{_detail}</p>'
-                    f'<div style="font-size:11.5px;color:#6b7a99">🔗 Linked tests: {_tests} &nbsp;·&nbsp; 📄 Source: {_ob.get("source","—")}</div>'
+                    f'<div style="font-size:11.5px;color:#6b7a99">🔗 Linked tests: {_tests} &nbsp;·&nbsp; 📄 Source: {_e(_ob.get("source","—"))}</div>'
                     f'</div>',
                     unsafe_allow_html=True,
                 )

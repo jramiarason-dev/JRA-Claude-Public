@@ -153,6 +153,25 @@ class TestSignInGate(unittest.TestCase):
         self.assertTrue(at.session_state["signed_in"])
 
 
+class TestOutputEscaping(unittest.TestCase):
+    """User and model text reaches the page through unsafe_allow_html blocks."""
+
+    def test_free_text_is_escaped_before_rendering(self):
+        at = _render(0)
+        at.session_state["last_voice_transcript"] = "<img src=x onerror=alert(1)>"
+        at.run()
+        rendered = "\n".join(m.value for m in at.markdown)
+        self.assertNotIn("<img src=x onerror=alert(1)>", rendered)
+        self.assertIn("&lt;img src=x onerror=alert(1)&gt;", rendered)
+
+    def test_no_raw_link_interpolation_left(self):
+        """href attributes must go through _safe_link, never a bare field."""
+        with open(APP, encoding="utf-8") as fh:
+            src = fh.read()
+        self.assertNotIn('href="{link}"', src)
+        self.assertIn("def _safe_link(", src)
+
+
 class TestDocumentAnalyserRemoved(unittest.TestCase):
     """The Document Analyser was removed; nothing may reference it again."""
 
