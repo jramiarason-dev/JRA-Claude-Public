@@ -31,7 +31,7 @@ const CompareScreen = ({ lang, sport, setRoute }) => {
   };
 
   const ACCENT = 'var(--accent)';
-  const RIGHT = '#3b82f6';
+  const RIGHT = '#9aa0aa';  // neutre : #3b82f6 se confondait avec l'accent indigo
 
   const sa = TS[a];
   const sb = TS[b];
@@ -139,7 +139,7 @@ const CompareScreen = ({ lang, sport, setRoute }) => {
       ) : (
         <>
           <div className="card" style={{ marginBottom: 18 }}>
-            <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div className="grid grid-halves" style={{ gap: 16 }}>
               <div>
                 <div className="kv-key" style={{ marginBottom: 6 }}>{lang === 'fr' ? 'Équipe A' : 'Team A'}</div>
                 <select className="field" value={a} onChange={e => setA(e.target.value)}>
@@ -163,7 +163,7 @@ const CompareScreen = ({ lang, sport, setRoute }) => {
                 marginBottom: 18,
                 background: `linear-gradient(135deg, ${colorOf(a)}22, transparent 45%, transparent 55%, ${colorOf(b)}22)`,
               }}>
-                <div className="grid" style={{ gridTemplateColumns: '1fr auto 1fr', gap: 16, alignItems: 'center' }}>
+                <div className="grid grid-versus" style={{ gap: 16, alignItems: 'center' }}>
                   <TeamHead name={a} />
                   <div style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: '#666', letterSpacing: '.12em' }}>VS</div>
                   <TeamHead name={b} />

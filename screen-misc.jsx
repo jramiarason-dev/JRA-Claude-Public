@@ -17,12 +17,12 @@ const HistoryScreen = ({ lang, sport, openMatch }) => {
         </div>
       </div>
 
-      <div className="card" style={{padding: 0}}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div className="card table-scroll" style={{padding: 0}}>
+        <table style={{ width: '100%', minWidth: 760, borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)' }}>
-              {[t.matches, lang==='fr'?'Compétition':'Competition', lang==='fr'?'Date':'Date', lang==='fr'?'Résultat':'Result', t.verdict, ''].map(h => (
-                <th key={h} style={{
+              {[t.matches, lang==='fr'?'Compétition':'Competition', lang==='fr'?'Date':'Date', lang==='fr'?'Résultat':'Result', t.verdict, ''].map((h, i) => (
+                <th key={i} style={{
                   textAlign: 'left', padding: '14px 16px',
                   fontSize: 10, letterSpacing: '.1em',
                   color: '#666', fontWeight: 700, textTransform: 'uppercase',
@@ -34,7 +34,7 @@ const HistoryScreen = ({ lang, sport, openMatch }) => {
             {finished.map((m, i) => (
               <tr key={m.id} style={{ borderBottom: '1px solid var(--border)' }}
                   className="card-hover" onClick={() => openMatch(m.id, 'post')}>
-                <td style={{ padding: '14px 16px' }}>
+                <td style={{ padding: '14px 16px', whiteSpace: 'nowrap' }}>
                   <div className="row" style={{gap: 10, alignItems: 'center'}}>
                     <Crest code={m.home.code} color={m.home.color} />
                     <span style={{fontSize: 13, color: '#888'}}>vs</span>
@@ -61,7 +61,8 @@ const HistoryScreen = ({ lang, sport, openMatch }) => {
                   </span>
                 </td>
                 <td style={{ padding: '14px 16px', textAlign: 'right' }}>
-                  <button className="btn btn-ghost btn-sm">
+                  <button className="btn btn-ghost btn-sm"
+                          onClick={() => openMatch(m.id, 'post')}>
                     {t.review} <Icon name="chevron" size={12} />
                   </button>
                 </td>
