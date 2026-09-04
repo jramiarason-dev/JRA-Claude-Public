@@ -7,6 +7,7 @@ Launch: streamlit run app.py (from audit_system/)
 
 import sys
 import os
+import hmac
 import json
 import tempfile
 import html as _html
@@ -1242,6 +1243,28 @@ except Exception:
 
 if _api_key:
     os.environ["ANTHROPIC_API_KEY"] = _api_key
+
+
+# ── Access control ────────────────────────────────────────────────────────────
+def _access_password() -> str:
+    """Shared sign-in password, from Streamlit secrets or the environment.
+
+    Empty means none is configured: the sign-in screen then runs as an open
+    demo instead of pretending to authenticate.
+    """
+    try:
+        return str(st.secrets["AUDITIQ_PASSWORD"])
+    except Exception:
+        return os.environ.get("AUDITIQ_PASSWORD", "")
+
+
+def _grant_access(submitted: str) -> bool:
+    """True when `submitted` matches the configured password, or when none is set."""
+    expected = _access_password()
+    if not expected:
+        return True
+    return hmac.compare_digest(submitted.encode("utf-8"), expected.encode("utf-8"))
+
 
 # ── Module imports ────────────────────────────────────────────────────────────
 _READY = False
@@ -3631,7 +3654,7 @@ div[data-testid="stButton"] > button[kind="primary"] {
 """, unsafe_allow_html=True)
 
         st.markdown('<div class="si-field" style="padding:0 clamp(20px,4vw,52px);margin-top:-4px">', unsafe_allow_html=True)
-        _email = st.text_input("email", value="lucas.brunner@helvetia-private.ch",
+        _email = st.text_input("email", placeholder="prenom.nom@banque.ch",
                                label_visibility="collapsed", key="si_email")
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -3645,7 +3668,7 @@ div[data-testid="stButton"] > button[kind="primary"] {
 """, unsafe_allow_html=True)
 
         st.markdown('<div class="si-field" style="padding:0 clamp(20px,4vw,52px);margin-top:-4px">', unsafe_allow_html=True)
-        _pwd = st.text_input("pwd", value="auditiq-demo", type="password",
+        _pwd = st.text_input("pwd", placeholder="••••••••", type="password",
                              label_visibility="collapsed", key="si_pwd")
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -3653,9 +3676,18 @@ div[data-testid="stButton"] > button[kind="primary"] {
 
         st.markdown('<div class="si-btn-submit" style="padding:0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
         if st.button("Se connecter  →", key="si_submit", use_container_width=True):
-            st.session_state.signed_in = True
-            st.rerun()
+            if _grant_access(_pwd):
+                st.session_state.signed_in = True
+                st.rerun()
+            else:
+                st.session_state["si_error"] = "Identifiants invalides."
         st.markdown("</div>", unsafe_allow_html=True)
+
+        if st.session_state.get("si_error"):
+            with st.container():
+                st.markdown('<div style="padding:0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
+                st.error(st.session_state["si_error"])
+                st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("""
 <div style="padding:10px clamp(20px,4vw,52px) 0;
@@ -3674,14 +3706,22 @@ div[data-testid="stButton"] > button[kind="primary"] {
         with _c1:
             st.markdown('<div class="si-btn-sso" style="padding:0 0 0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
             if st.button("🔑  SSO", key="si_sso1", use_container_width=True):
-                st.session_state.signed_in = True
-                st.rerun()
+                # Mock-up: no IdP is wired in, so it must not bypass the password.
+                if _access_password():
+                    st.session_state["si_error"] = "SSO non configuré — utilisez le mot de passe."
+                else:
+                    st.session_state.signed_in = True
+                    st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
         with _c2:
             st.markdown('<div class="si-btn-sso">', unsafe_allow_html=True)
             if st.button("🪪  Carte", key="si_sso2", use_container_width=True):
-                st.session_state.signed_in = True
-                st.rerun()
+                # Mock-up: no card reader is wired in, same rule as SSO above.
+                if _access_password():
+                    st.session_state["si_error"] = "Carte non configurée — utilisez le mot de passe."
+                else:
+                    st.session_state.signed_in = True
+                    st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
 
         # Security badges
