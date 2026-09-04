@@ -234,21 +234,6 @@ _EXAMPLE_REGULATION = f"""
 </div>
 """
 
-_EXAMPLE_PUB_REC = f"""
-<div style="{_EX_S}">
-{_EX_L}
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
-    <span style="font-size:13px;font-weight:600;color:#818cf8">FATF Guidance &mdash; Private Banking</span>
-    <span style="font-size:11.5px;color:#8392bb">2023</span>
-    <span style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.35);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">🔴 High Priority</span>
-  </div>
-  <p style="font-size:12.5px;color:#c8d0e8;line-height:1.85;margin:0 0 8px;font-style:italic">
-    "Private banks must implement risk-based EDD for all HNWI clients with assets above USD 1M, including source of wealth verification and mandatory annual review. Beneficial ownership must be verified at onboarding and upon material change."
-  </p>
-  <div style="font-size:11.5px;color:#8392bb">Private Banking Relevance: <span style="color:#ef4444;font-weight:600">Critical</span></div>
-</div>
-"""
-
 _EXAMPLE_RATIONALE = f"""
 <div style="{_EX_S}">
 {_EX_L}
@@ -1289,12 +1274,14 @@ except ImportError as e:
 
 # ── Static data (always available, zero API calls) ────────────────────────────
 try:
+    # data.HNWI_RED_FLAGS and data.AUDIT_TEMPLATES are deliberately not imported:
+    # no screen reads them today. They stay in data.py for a future screen.
     from data import (
-        REGULATORY_FRAMEWORKS, AUDIT_TEMPLATES as _DATA_TEMPLATES,
+        REGULATORY_FRAMEWORKS,
         RISK_INDICATORS, PUBLIC_AUDIT_RECOMMENDATIONS,
         CVE_BANKING, IIA_STANDARDS_2024, DATA_ANALYTICS_SCENARIOS,
         AUDIT_TESTS_LIBRARY, TOPIC_THEME_MAP, TOPIC_KEY_MAPPING,
-        THEMATIC_BACKGROUND, REGULATORY_CALENDAR, HNWI_RED_FLAGS,
+        THEMATIC_BACKGROUND, REGULATORY_CALENDAR,
         MANAGEMENT_ACTION_TEMPLATES, ENTITY_CONTEXT,
     )
 except ImportError as _data_err:
@@ -1559,81 +1546,6 @@ def _demo_stream_generate(steps: list, result_key_values: dict):
         st.session_state[k] = v
 
 
-_ICON_MAP = {
-    "shield": "🛡️", "search": "🔍", "file-text": "📄", "bar-chart": "📊",
-    "alert-triangle": "⚠️", "check-circle": "✅", "info": "ℹ️",
-    "download": "⬇️", "upload": "⬆️", "globe": "🌐", "lock": "🔒",
-    "users": "👥", "building": "🏦", "calendar": "📅", "clock": "🕐",
-    "double-arrow-right": "»", "arrow-right": "›", "chevron-right": "›",
-    "zap": "⚡", "star": "★", "flag": "🚩", "target": "🎯",
-}
-
-def lucide_icon(name: str, size: int = 16, color: str = "currentColor") -> str:
-    """Returns an emoji icon (Lucide removed — not compatible with Streamlit CSP)."""
-    emoji = _ICON_MAP.get(name, "•")
-    return (
-        f'<span style="font-size:{size}px;color:{color};'
-        f'vertical-align:middle;display:inline-block;">{emoji}</span>'
-    )
-
-
-def severity_badge(level: str, size: str = "normal") -> str:
-    """Returns a styled severity badge HTML span."""
-    _colors = {
-        "Critical": ("#ef4444", "rgba(239,68,68,0.12)"),
-        "High":     ("#f97316", "rgba(249,115,22,0.12)"),
-        "Moderate": ("#eab308", "rgba(234,179,8,0.12)"),
-        "Low":      ("#22c55e", "rgba(34,197,94,0.12)"),
-    }
-    color, bg = _colors.get(level, ("#94a3b8", "rgba(148,163,184,0.12)"))
-    font_size = "10px" if size == "small" else "11px"
-    return (
-        f'<span style="display:inline-flex;align-items:center;gap:4px;'
-        f'background:{bg};color:{color};border:1px solid {color}40;'
-        f'border-radius:20px;padding:2px 8px;font-size:{font_size};'
-        f'font-weight:700;letter-spacing:0.5px;box-shadow:0 0 8px {color}20;">'
-        f'<span style="width:5px;height:5px;border-radius:50%;background:{color};'
-        f'box-shadow:0 0 4px {color};display:inline-block;"></span>'
-        f'{level.upper()}</span>'
-    )
-
-
-def section_header(icon_name: str, title: str, subtitle: str = "", count: int = None) -> str:
-    """Returns a styled section header HTML block with Lucide icon."""
-    count_html = (
-        f'<span class="section-count-badge">{count}</span>'
-        if count is not None else ""
-    )
-    subtitle_html = (
-        f'<div style="font-size:12px;color:#475569;margin-top:2px;">{subtitle}</div>'
-        if subtitle else ""
-    )
-    return f"""
-    <div class="section-header">
-      <div class="section-header-icon">
-        <span style="font-size:16px;color:#6366f1;">{_ICON_MAP.get(icon_name, "•")}</span>
-      </div>
-      <div>
-        <div style="font-size:15px;font-weight:700;color:#e2e8f0;
-                    display:flex;align-items:center;">
-          {title}{count_html}
-        </div>
-        {subtitle_html}
-      </div>
-    </div>
-    """
-
-
-def show_loading(message: str) -> None:
-    """Render a styled loading indicator."""
-    st.markdown(f"""
-    <div class="loading-spinner">
-      <div class="loading-spinner-dot"></div>
-      <span style="font-size:13px;color:#818cf8;font-weight:500;">{message}</span>
-    </div>
-    """, unsafe_allow_html=True)
-
-
 def _tab_actions_bar(tab_key: str, subtitle: str, exports: list) -> None:
     """Render tab header: entity badge + subtitle left, export buttons right.
 
@@ -1675,109 +1587,6 @@ def _tab_actions_bar(tab_key: str, subtitle: str, exports: list) -> None:
                          use_container_width=True):
                 st.toast("✅ Données exportées vers Teammate+ (Wolters Kluwer)", icon="📤")
             st.markdown("</div>", unsafe_allow_html=True)
-
-
-def render_table(headers: list, rows: list, highlight_col: int = None) -> str:
-    """Render a styled HTML table for use with st.markdown(..., unsafe_allow_html=True)."""
-    header_html = "".join(
-        f'<th style="padding:10px 14px;font-size:11px;font-weight:700;'
-        f'letter-spacing:0.8px;text-transform:uppercase;color:#475569;'
-        f'border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap;">{h}</th>'
-        for h in headers
-    )
-    rows_html = ""
-    for i, row in enumerate(rows):
-        cells = ""
-        for j, cell in enumerate(row):
-            is_hi = (j == highlight_col)
-            cells += (
-                f'<td style="padding:10px 14px;font-size:13px;'
-                f'color:{"#e2e8f0" if is_hi else "#94a3b8"};'
-                f'font-weight:{"600" if is_hi else "400"};'
-                f'border-bottom:1px solid rgba(255,255,255,0.03);">{cell}</td>'
-            )
-        bg = "rgba(255,255,255,0.01)" if i % 2 else "transparent"
-        rows_html += f'<tr style="background:{bg};">{cells}</tr>'
-    return (
-        f'<div style="overflow-x:auto;border-radius:10px;'
-        f'border:1px solid rgba(255,255,255,0.06);">'
-        f'<table style="width:100%;border-collapse:collapse;background:var(--bg-card);">'
-        f'<thead><tr>{header_html}</tr></thead>'
-        f'<tbody>{rows_html}</tbody></table></div>'
-    )
-
-
-def render_risk_cards(risks: list) -> None:
-    """Render risk indicators as glassmorphism cards grouped by severity."""
-    if not risks:
-        st.markdown(
-            '<div style="text-align:center;padding:40px;color:#475569;">'
-            'No risks found for this topic.</div>',
-            unsafe_allow_html=True,
-        )
-        return
-
-    critical = [r for r in risks if r.get("level") == "Critical"]
-    high     = [r for r in risks if r.get("level") == "High"]
-    moderate = [r for r in risks if r.get("level") == "Moderate"]
-
-    for group, color, label in [
-        (critical, "#ef4444", "Critical"),
-        (high,     "#f97316", "High"),
-        (moderate, "#eab308", "Moderate"),
-    ]:
-        if not group:
-            continue
-        st.markdown(f"""
-        <div style="display:flex;align-items:center;gap:8px;margin:20px 0 12px 0;">
-          <div style="width:8px;height:8px;border-radius:50%;background:{color};
-                      box-shadow:0 0 8px {color}88;"></div>
-          <span style="font-size:11px;font-weight:700;letter-spacing:1.5px;
-                        color:{color};">{label.upper()}</span>
-          <span style="font-size:11px;color:#475569;">({len(group)} risks)</span>
-        </div>
-        """, unsafe_allow_html=True)
-
-        ncols = min(len(group), 3)
-        cols = st.columns(ncols)
-        for i, risk in enumerate(group):
-            controls  = risk.get("expected_controls", [])
-            red_flags = risk.get("red_flags", [])
-            desc      = risk.get("description", "")
-            desc_short = desc[:120] + ("..." if len(desc) > 120 else "")
-            with cols[i % ncols]:
-                st.markdown(f"""
-                <div class="risk-card risk-card-{label.lower()}"
-                     style="border:1px solid {color}22;">
-                  <div style="font-size:11px;font-weight:700;color:{color};
-                              letter-spacing:1px;margin-bottom:6px;">{label.upper()}</div>
-                  <div style="font-size:14px;font-weight:600;color:#e2e8f0;
-                              margin-bottom:8px;line-height:1.3;">
-                    {risk.get("title", "")}
-                  </div>
-                  <div style="font-size:12px;color:#64748b;margin-bottom:10px;
-                              line-height:1.5;">{desc_short}</div>
-                  <div style="font-size:11px;color:#475569;margin-bottom:4px;">
-                    PROBABILITY · {risk.get("probability","N/A")}
-                    &nbsp;·&nbsp; IMPACT · {risk.get("impact","N/A")}
-                  </div>
-                  <div style="border-top:1px solid rgba(255,255,255,0.05);
-                              margin-top:10px;padding-top:10px;
-                              font-size:11px;color:#475569;">
-                    {len(controls)} controls expected &nbsp;·&nbsp;
-                    {len(red_flags)} red flags
-                  </div>
-                </div>
-                """, unsafe_allow_html=True)
-                with st.expander("View details", expanded=False):
-                    if controls:
-                        st.markdown("**Expected Controls**")
-                        for c in controls:
-                            st.markdown(f"• {c}")
-                    if red_flags:
-                        st.markdown("**Red Flags**")
-                        for f in red_flags:
-                            st.markdown(f"⚠ {f}")
 
 
 # ── Templates ─────────────────────────────────────────────────────────────────
@@ -2152,60 +1961,6 @@ def _static_label():
     )
 
 
-def _show_risk_indicators(theme: str, search: str = ""):
-    """Display RISK_INDICATORS for a given theme with optional search filter."""
-    risks = RISK_INDICATORS.get(theme, [])
-    if search:
-        q = search.lower()
-        risks = [r for r in risks if q in (r.get("title","") + r.get("description","") + r.get("private_banking_specifics","")).lower()]
-    if not risks:
-        st.caption("No matching risks.")
-        return
-
-    _LEVEL_COLOR = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308"}
-    _LEVEL_BG    = {"Critical": "rgba(239,68,68,0.08)", "High": "rgba(249,115,22,0.08)", "Moderate": "rgba(234,179,8,0.06)"}
-
-    for r in risks:
-        col = _LEVEL_COLOR.get(r["level"], "#8392bb")
-        bg  = _LEVEL_BG.get(r["level"], "transparent")
-        prob_color  = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(r.get("probability",""), "#8392bb")
-        impact_color = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(r.get("impact",""), "#8392bb")
-
-        controls_html = "".join(f"<li>{c}</li>" for c in r.get("expected_controls", []))
-        flags_html    = "".join(f"<li>{f}</li>" for f in r.get("red_flags", []))
-
-        st.markdown(f"""
-        <div style="border:1px solid {col}33;border-radius:9px;padding:14px 18px;margin-bottom:12px;background:{bg}">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <span style="background:{col}22;color:{col};border:1px solid {col}44;border-radius:4px;
-                   padding:2px 9px;font-size:11px;font-weight:700">{r["level"]}</span>
-            <span style="font-size:13.5px;font-weight:600;color:var(--text-primary)">{r.get("id","")} &mdash; {r["title"]}</span>
-            <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">
-              Prob: <span style="color:{prob_color};font-weight:600">{r.get("probability","")}</span>
-              &nbsp;&middot;&nbsp; Impact: <span style="color:{impact_color};font-weight:600">{r.get("impact","")}</span>
-            </span>
-          </div>
-          <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.7">{r["description"]}</p>
-          <details style="margin-bottom:6px">
-            <summary style="font-size:12px;color:#818cf8;cursor:pointer;font-weight:500">Controls &amp; Red Flags</summary>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-              <div>
-                <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px">EXPECTED CONTROLS</div>
-                <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{controls_html}</ul>
-              </div>
-              <div>
-                <div style="font-size:11px;font-weight:600;color:#ef4444aa;margin-bottom:4px">RED FLAGS</div>
-                <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{flags_html}</ul>
-              </div>
-            </div>
-            <div style="margin-top:10px;font-size:11.5px;color:var(--text-muted);font-style:italic">
-              🏦 {r.get("private_banking_specifics","")}
-            </div>
-          </details>
-        </div>
-        """, unsafe_allow_html=True)
-
-
 def _show_pub_recs(theme: str, search: str = ""):
     """Display PUBLIC_AUDIT_RECOMMENDATIONS filtered by theme and search."""
     recs = [r for r in PUBLIC_AUDIT_RECOMMENDATIONS if r.get("theme") == theme]
@@ -2406,65 +2161,6 @@ def _show_regulatory_calendar(jur_filter="All", type_filter="All", prio_filter="
 
 
 # ── HNWI Red Flags helper ─────────────────────────────────────────────────────
-def _show_red_flags(cat_filter="All", level_filter="All", search=""):
-    """Render HNWI_RED_FLAGS with filters, coloured badges, and italic examples."""
-    _RL_C  = {"Critical": "#ef4444", "High": "#f97316", "Medium": "#eab308"}
-    _RL_BG = {"Critical": "rgba(239,68,68,0.07)", "High": "rgba(249,115,22,0.07)", "Medium": "rgba(234,179,8,0.06)"}
-    _CAT_C = {"AML": "#818cf8", "Fraud": "#ef4444", "Suitability": "#a78bfa", "Tax": "#22d3a5", "Conduct": "#f97316"}
-
-    entries = list(HNWI_RED_FLAGS)
-    if cat_filter   != "All": entries = [e for e in entries if e["category"] == cat_filter]
-    if level_filter != "All": entries = [e for e in entries if e["risk_level"] == level_filter]
-    if search:
-        q = search.lower()
-        entries = [e for e in entries if q in (e.get("title","") + e.get("description","") + e.get("private_banking_context","")).lower()]
-
-    if not entries:
-        st.caption("No red flags match the selected filters.")
-        return
-
-    for e in entries:
-        rl  = e.get("risk_level", "High")
-        cat = e.get("category", "")
-        rc  = _RL_C.get(rl, "#8392bb")
-        rbg = _RL_BG.get(rl, "transparent")
-        cc  = _CAT_C.get(cat, "#8392bb")
-
-        examples_html = "".join(
-            f'<li style="color:#6b7899;font-style:italic;font-size:11.5px;margin-bottom:2px">{ex}</li>'
-            for ex in (e.get("examples") or [])
-        )
-
-        st.markdown(f"""
-        <div style="border:1px solid {rc}33;border-radius:9px;padding:13px 17px;margin-bottom:10px;background:{rbg}">
-          <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px">
-            <span style="background:{rc}20;color:{rc};border:1px solid {rc}44;border-radius:4px;
-                  padding:2px 8px;font-size:10px;font-weight:700">{rl}</span>
-            <span style="background:{cc}18;color:{cc};border:1px solid {cc}33;border-radius:4px;
-                  padding:2px 8px;font-size:10px;font-weight:600">{cat}</span>
-            <span style="font-size:13px;font-weight:600;color:#dde3f5">{e.get("rf_id","")} &mdash; {e.get("title","")}</span>
-          </div>
-          <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{e.get("description","")}</p>
-          <details>
-            <summary style="font-size:11.5px;color:#818cf8;cursor:pointer;font-weight:500">Detection &middot; Regulation &middot; PB context &middot; Examples</summary>
-            <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div>
-                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Detection Method</div>
-                <p style="font-size:11.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.65">{e.get("detection_method","")}</p>
-                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Regulatory Reference</div>
-                <p style="font-size:11.5px;color:#a8b4d8;margin:0;line-height:1.65">{e.get("regulatory_reference","")}</p>
-              </div>
-              <div>
-                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Private Banking Context</div>
-                <p style="font-size:11.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.65">{e.get("private_banking_context","")}</p>
-                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Examples</div>
-                <ul style="margin:0;padding-left:15px;line-height:1.8">{examples_html}</ul>
-              </div>
-            </div>
-          </details>
-        </div>""", unsafe_allow_html=True)
-
-
 # ── Thematic Background helper ────────────────────────────────────────────────
 def _show_thematic_background(theme_key: str):
     """Render a THEMATIC_BACKGROUND card with all subsections."""
@@ -2837,6 +2533,8 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
     _show_risk_coverage_summary(theme, risk_map, live_risks)
 
 
+# ── UX helpers ────────────────────────────────────────────────────────────────
+
 def _render_iia_standard(s):
     """Render a single IIA standard entry — handles both plain and sectioned (TR) structures."""
     is_tr = s.get("topical_requirement", False) and s.get("sections")
@@ -2879,14 +2577,6 @@ def _render_iia_standard(s):
             </div>""", unsafe_allow_html=True)
 
 
-def _show_iia_standards():
-    """Display IIA_STANDARDS_2024 in expandable cards."""
-    for s in IIA_STANDARDS_2024:
-        _render_iia_standard(s)
-
-
-# ── UX helpers ────────────────────────────────────────────────────────────────
-
 def _save_history(topic, jurs, risks, regs, pub_recs):
     """Save current analysis to FIFO history (max 5)."""
     n_critical = sum(1 for r in (risks or []) if r.get("level") == "Critical")
@@ -2903,32 +2593,6 @@ def _save_history(topic, jurs, risks, regs, pub_recs):
     hist = [h for h in hist if h.get("topic") != topic]
     hist.insert(0, entry)
     st.session_state.history = hist[:5]
-
-
-def _build_progress_bar():
-    """Render step indicator above tabs."""
-    t1_done = bool(st.session_state.t1_risks or st.session_state.t1_regs)
-    t2_done = bool(st.session_state.t2_rationale)
-    t3_done = bool(st.session_state.t3_report)
-
-    def _step(label, icon, state):
-        cls = {"done": "pb-step done", "active": "pb-step active", "pending": "pb-step pending"}[state]
-        return f'<div class="{cls}">{icon} {label}</div>'
-
-    s1 = "done" if t1_done else "active"
-    s2 = "done" if t2_done else ("active" if t1_done else "pending")
-    s3 = "done" if t3_done else ("active" if t2_done else "pending")
-
-    html = (
-        '<div class="progress-bar-wrap no-print">'
-        + _step("Risk Analysis", "&#10003;" if t1_done else "1", s1)
-        + '<div class="pb-connector"></div>'
-        + _step("Audit Plan", "&#10003;" if t2_done else "2", s2)
-        + '<div class="pb-connector"></div>'
-        + _step("Audit Report", "&#10003;" if t3_done else "3", s3)
-        + '</div>'
-    )
-    st.markdown(html, unsafe_allow_html=True)
 
 
 def _risk_score_display(risks, n_jurs):
