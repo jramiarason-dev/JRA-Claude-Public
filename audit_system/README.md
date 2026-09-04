@@ -103,7 +103,6 @@ Two things live outside the folder and would need to come along: the CI workflow
 - **Generated reports accumulate in `outputs/`**, one directory shared by every
   session, named by timestamp and never cleaned up. Fine for a single-user demo;
   not fine for a multi-user deployment.
-- **The dashboard embeds a third-party iframe** (`cybermap.kaspersky.com`). Every
-  page view sends the viewer's IP, User-Agent and referring hostname to that
-  vendor, and the frame runs remote JavaScript with no sandbox or CSP. Worth a
-  deliberate decision before this is pointed at anything but demo data.
+- **No third-party embeds.** The app loads nothing from an external origin at
+  runtime. Keep it that way: an iframe or remote script here would run beside
+  audit working papers with no sandbox and no CSP to contain it.

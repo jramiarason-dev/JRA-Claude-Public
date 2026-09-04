@@ -18,7 +18,6 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import streamlit as st
-import streamlit.components.v1 as components
 
 _HERE = Path(__file__).parent.resolve()
 if str(_HERE) not in sys.path:
@@ -1277,14 +1276,13 @@ except ImportError as e:
 
 # ── Static data (always available, zero API calls) ────────────────────────────
 try:
-    # data.HNWI_RED_FLAGS and data.AUDIT_TEMPLATES are deliberately not imported:
-    # no screen reads them today. They stay in data.py for a future screen.
+    # data.AUDIT_TEMPLATES is deliberately not imported: no screen reads it.
     from data import (
         REGULATORY_FRAMEWORKS,
         RISK_INDICATORS, PUBLIC_AUDIT_RECOMMENDATIONS,
         CVE_BANKING, IIA_STANDARDS_2024, DATA_ANALYTICS_SCENARIOS,
         AUDIT_TESTS_LIBRARY, TOPIC_THEME_MAP, TOPIC_KEY_MAPPING,
-        THEMATIC_BACKGROUND, REGULATORY_CALENDAR,
+        THEMATIC_BACKGROUND, REGULATORY_CALENDAR, HNWI_RED_FLAGS,
         MANAGEMENT_ACTION_TEMPLATES, ENTITY_CONTEXT,
     )
 except ImportError as _data_err:
@@ -2164,6 +2162,70 @@ def _show_regulatory_calendar(jur_filter="All", type_filter="All", prio_filter="
 
 
 # ── HNWI Red Flags helper ─────────────────────────────────────────────────────
+def _show_red_flags(cat_filter: str = "All", level_filter: str = "All", search: str = ""):
+    """Render HNWI_RED_FLAGS with filters, coloured badges, and italic examples."""
+    _RL_C  = {"Critical": "#ef4444", "High": "#f97316", "Medium": "#eab308"}
+    _RL_BG = {"Critical": "rgba(239,68,68,0.07)", "High": "rgba(249,115,22,0.07)", "Medium": "rgba(234,179,8,0.06)"}
+    _CAT_C = {"AML": "#818cf8", "Fraud": "#ef4444", "Suitability": "#a78bfa", "Tax": "#22d3a5", "Conduct": "#f97316"}
+
+    entries = list(HNWI_RED_FLAGS)
+    if cat_filter != "All":
+        entries = [e for e in entries if e.get("category") == cat_filter]
+    if level_filter != "All":
+        entries = [e for e in entries if e.get("risk_level") == level_filter]
+    if search:
+        q = search.lower()
+        entries = [
+            e for e in entries
+            if q in (e.get("title", "") + e.get("description", "") + e.get("private_banking_context", "")).lower()
+        ]
+
+    if not entries:
+        st.caption("No red flags match the selected filters.")
+        return
+
+    for e in entries:
+        rl  = e.get("risk_level", "High")
+        cat = e.get("category", "")
+        rc  = _RL_C.get(rl, "#8392bb")
+        rbg = _RL_BG.get(rl, "transparent")
+        cc  = _CAT_C.get(cat, "#8392bb")
+
+        examples_html = "".join(
+            f'<li style="color:#6b7899;font-style:italic;font-size:11.5px;margin-bottom:2px">{_e(ex)}</li>'
+            for ex in (e.get("examples") or [])
+        )
+
+        st.markdown(f"""
+        <div style="border:1px solid {rc}33;border-radius:9px;padding:13px 17px;margin-bottom:10px;background:{rbg}">
+          <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px">
+            <span style="background:{rc}20;color:{rc};border:1px solid {rc}44;border-radius:4px;
+                  padding:2px 8px;font-size:10px;font-weight:700">{_e(rl)}</span>
+            <span style="background:{cc}18;color:{cc};border:1px solid {cc}33;border-radius:4px;
+                  padding:2px 8px;font-size:10px;font-weight:600">{_e(cat)}</span>
+            <span style="font-size:13px;font-weight:600;color:#dde3f5">{_e(e.get("rf_id",""))} &mdash; {_e(e.get("title",""))}</span>
+          </div>
+          <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{_e(e.get("description",""))}</p>
+          <details>
+            <summary style="font-size:11.5px;color:#818cf8;cursor:pointer;font-weight:500">Detection &middot; Regulation &middot; PB context &middot; Examples</summary>
+            <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Detection Method</div>
+                <p style="font-size:11.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.65">{_e(e.get("detection_method",""))}</p>
+                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Regulatory Reference</div>
+                <p style="font-size:11.5px;color:#a8b4d8;margin:0;line-height:1.65">{_e(e.get("regulatory_reference",""))}</p>
+              </div>
+              <div>
+                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Private Banking Context</div>
+                <p style="font-size:11.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.65">{_e(e.get("private_banking_context",""))}</p>
+                <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Examples</div>
+                <ul style="margin:0;padding-left:15px;line-height:1.8">{examples_html}</ul>
+              </div>
+            </div>
+          </details>
+        </div>""", unsafe_allow_html=True)
+
+
 # ── Thematic Background helper ────────────────────────────────────────────────
 def _show_thematic_background(theme_key: str):
     """Render a THEMATIC_BACKGROUND card with all subsections."""
@@ -4642,27 +4704,12 @@ if _active == DASHBOARD:
             st.markdown(
                 f'<div style="margin-top:10px;padding:8px 16px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
                 f'<span style="color:var(--text-secondary);font-weight:600">Current audit:</span>'
-                f'<span style="color:var(--text-primary)">{_ds_topic}</span>'
+                f'<span style="color:var(--text-primary)">{_e(_ds_topic)}</span>'
                 + (f'<span style="color:var(--text-muted)">·</span>{_jur_chips}' if _jur_chips else "")
                 + '</div>',
                 unsafe_allow_html=True,
             )
         st.markdown("<div style='margin-top:16px'></div>", unsafe_allow_html=True)
-
-    # ── Live cyberthreat map (Kaspersky) ──────────────────────────────────────
-    st.markdown(
-        '<div style="display:flex;align-items:center;gap:10px;margin:8px 0 12px">'
-        '<span style="font-size:14px;font-weight:700;color:var(--text-primary);text-transform:uppercase;letter-spacing:.06em">🌍 Live Cyberthreat Map</span>'
-        '<span style="font-size:11px;color:var(--text-muted)">Real-time global threat activity · source: Kaspersky</span>'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-    components.iframe(
-        "https://cybermap.kaspersky.com/en/widget/dynamic/dark",
-        height=560,
-        scrolling=False,
-    )
-    st.markdown("<div style='margin-top:20px'></div>", unsafe_allow_html=True)
 
     refresh = False  # only set inside the live branch below
 
@@ -7191,6 +7238,24 @@ elif _active == KYC_AML:
   </div>
   <div style="font-size:11px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.05em">{_lbl}</div>
 </div>""", unsafe_allow_html=True)
+
+    # ── HNWI red-flag reference library (static, zero API calls) ──────────────
+    st.markdown("<div style='margin-top:24px'></div>", unsafe_allow_html=True)
+    with st.expander(f"🚩 HNWI Red Flag Library — {len(HNWI_RED_FLAGS)} indicators", expanded=False):
+        _rf_c1, _rf_c2, _rf_c3 = st.columns([1, 1, 2])
+        _rf_cat = _rf_c1.selectbox(
+            "Category", ["All"] + sorted({_f.get("category", "") for _f in HNWI_RED_FLAGS} - {""}),
+            key="t7_rf_cat", label_visibility="collapsed",
+        )
+        _rf_lvl = _rf_c2.selectbox(
+            "Risk level", ["All", "Critical", "High", "Medium"],
+            key="t7_rf_lvl", label_visibility="collapsed",
+        )
+        _rf_q = _rf_c3.text_input(
+            "Search", placeholder="Filter red flags…",
+            key="t7_rf_search", label_visibility="collapsed",
+        )
+        _show_red_flags(_rf_cat, _rf_lvl, _rf_q)
 
     # Regulatory footer
     st.markdown("<div style='margin:24px 0 10px'><span style='font-size:12px;color:#6b7a99;font-weight:600'>Regulatory references:</span></div>", unsafe_allow_html=True)
