@@ -9,11 +9,14 @@ the affected template.
 Runs with the standard library only (no pytest):  python3 -m unittest -v
 """
 
+import ast
+import collections
 import os
 import sys
 import unittest
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
 
 import data  # noqa: E402
 
@@ -91,6 +94,40 @@ class TestAuditTestSchema(unittest.TestCase):
         ids = [t["id"] for tests in data.AUDIT_TESTS_LIBRARY.values() for t in tests]
         dupes = {i for i in ids if ids.count(i) > 1}
         self.assertEqual(dupes, set(), f"Duplicate audit-test ids: {dupes}")
+
+
+class TestNoShadowedDefinitions(unittest.TestCase):
+    """A constant assigned twice at module level silently loses its first value.
+
+    ENTITY_CONTEXT was defined twice for months; the first (six entity types,
+    keyed by uppercase slug) was dead code shadowed by the second (four entity
+    types, keyed by emoji label). Nothing failed — the overlay just went quiet.
+    """
+
+    def test_no_duplicate_module_level_assignments(self):
+        with open(os.path.join(ROOT, "data.py"), encoding="utf-8") as fh:
+            tree = ast.parse(fh.read(), filename="data.py")
+        names = [
+            target.id
+            for node in tree.body
+            if isinstance(node, ast.Assign)
+            for target in node.targets
+            if isinstance(target, ast.Name)
+        ]
+        dupes = [n for n, c in collections.Counter(names).items() if c > 1]
+        self.assertEqual(dupes, [], f"data.py re-assigns at module level: {dupes}")
+
+
+class TestEntityContext(unittest.TestCase):
+    """The entity overlay is keyed by the exact labels the UI offers."""
+
+    def test_keys_are_emoji_labels(self):
+        for key in data.ENTITY_CONTEXT:
+            self.assertRegex(key, r"^\W", f"ENTITY_CONTEXT key {key!r} is not an emoji label")
+
+    def test_entries_carry_background_angle(self):
+        for key, ctx in data.ENTITY_CONTEXT.items():
+            self.assertIn("background_angle", ctx, f"{key} has no background_angle")
 
 
 if __name__ == "__main__":
