@@ -7,18 +7,23 @@ Launch: streamlit run app.py (from audit_system/)
 
 import sys
 import os
+import hmac
 import json
+import logging
 import tempfile
 import html as _html
 from datetime import datetime
+import re
 from pathlib import Path
+from urllib.parse import urlparse
 
 import streamlit as st
-import streamlit.components.v1 as components
 
 _HERE = Path(__file__).parent.resolve()
 if str(_HERE) not in sys.path:
     sys.path.insert(0, str(_HERE))
+
+_log = logging.getLogger("auditiq")
 
 st.set_page_config(
     page_title="AuditIQ",
@@ -152,11 +157,7 @@ _SS_DEFAULTS = {
     "t2_show_form": True,
     "t1_jurs_pills": None,
     "t1_topic_in": "", "t2_topic_in": "",
-    "t3_docs_analysis": None,
     "t3_observations": [],
-    "t3_analysis_xlsx": None,
-    "t3_analysis_pdf": None,
-    "t3_mode": "📡 AI Analysis (API)",
     "t4_recommendations": None,
     "t2_test_statuses": {},
     "t0_prior_recs": [],
@@ -232,21 +233,6 @@ _EXAMPLE_REGULATION = f"""
     <li>10-year document retention</li>
   </ul>
   <div style="margin-top:8px;font-size:11px;color:#5a6488">Applies to: AML &middot; KYC &middot; PEP &middot; Correspondent Banking</div>
-</div>
-"""
-
-_EXAMPLE_PUB_REC = f"""
-<div style="{_EX_S}">
-{_EX_L}
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
-    <span style="font-size:13px;font-weight:600;color:#818cf8">FATF Guidance &mdash; Private Banking</span>
-    <span style="font-size:11.5px;color:#8392bb">2023</span>
-    <span style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.35);border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700">🔴 High Priority</span>
-  </div>
-  <p style="font-size:12.5px;color:#c8d0e8;line-height:1.85;margin:0 0 8px;font-style:italic">
-    "Private banks must implement risk-based EDD for all HNWI clients with assets above USD 1M, including source of wealth verification and mandatory annual review. Beneficial ownership must be verified at onboarding and upon material change."
-  </p>
-  <div style="font-size:11.5px;color:#8392bb">Private Banking Relevance: <span style="color:#ef4444;font-weight:600">Critical</span></div>
 </div>
 """
 
@@ -1243,6 +1229,28 @@ except Exception:
 if _api_key:
     os.environ["ANTHROPIC_API_KEY"] = _api_key
 
+
+# ── Access control ────────────────────────────────────────────────────────────
+def _access_password() -> str:
+    """Shared sign-in password, from Streamlit secrets or the environment.
+
+    Empty means none is configured: the sign-in screen then runs as an open
+    demo instead of pretending to authenticate.
+    """
+    try:
+        return str(st.secrets["AUDITIQ_PASSWORD"])
+    except Exception:
+        return os.environ.get("AUDITIQ_PASSWORD", "")
+
+
+def _grant_access(submitted: str) -> bool:
+    """True when `submitted` matches the configured password, or when none is set."""
+    expected = _access_password()
+    if not expected:
+        return True
+    return hmac.compare_digest(submitted.encode("utf-8"), expected.encode("utf-8"))
+
+
 # ── Module imports ────────────────────────────────────────────────────────────
 _READY = False
 _ERR = ""
@@ -1268,8 +1276,9 @@ except ImportError as e:
 
 # ── Static data (always available, zero API calls) ────────────────────────────
 try:
+    # data.AUDIT_TEMPLATES is deliberately not imported: no screen reads it.
     from data import (
-        REGULATORY_FRAMEWORKS, AUDIT_TEMPLATES as _DATA_TEMPLATES,
+        REGULATORY_FRAMEWORKS,
         RISK_INDICATORS, PUBLIC_AUDIT_RECOMMENDATIONS,
         CVE_BANKING, IIA_STANDARDS_2024, DATA_ANALYTICS_SCENARIOS,
         AUDIT_TESTS_LIBRARY, TOPIC_THEME_MAP, TOPIC_KEY_MAPPING,
@@ -1392,30 +1401,75 @@ div[data-testid="stButton"]>button[kind="primary"]:hover{{
 _inject_entity_theme()
 
 
-TAB_TITLES = {
-    0: "🌐 Intelligence Dashboard",
-    1: "🔍 Risk Analysis",
-    2: "📋 Audit Plan & Testing",
-    3: "📄 Audit Report",
-    5: "📡 Continuous Audit",
-    6: "🏢 Third Party & Vendor 360",
-    7: "🔍 KYC / AML Compliance",
-}
+# ── Sections ──────────────────────────────────────────────────────────────────
+# Single source of truth for the sidebar nav, the breadcrumb and the help panel.
+# The index into this tuple *is* the section id stored in st.session_state
+# ["active_tab"], so adding or removing a section here is the only edit needed.
+#
+# done_key: session-state keys whose presence turns the nav dot green. An empty
+# tuple means the section is always live (the monitoring dashboards).
+_SECTIONS = (
+    {"group": "Menu", "nav": "⊞  Tableau de bord", "name": "Intelligence Dashboard",
+     "Français": "Tableau de bord", "English": "Dashboard",
+     "done_key": ("dash_regs", "t1_pub_recs")},
+    {"group": "Menu", "nav": "≡  Risk Analysis", "name": "Risk Analysis",
+     "Français": "Analyse des Risques", "English": "Risk Analysis",
+     "done_key": ("t1_risks",)},
+    {"group": "Agents IA", "nav": "📋  Audit Plan & Testing", "name": "Audit Plan & Testing",
+     "Français": "Plan & Tests", "English": "Audit Plan",
+     "done_key": ("t2_tests",)},
+    {"group": "Agents IA", "nav": "📄  Rapport d'audit", "name": "Audit Report",
+     "Français": "Rapport d'Audit", "English": "Audit Report",
+     "done_key": ("t3_report",)},
+    {"group": "Monitoring", "nav": "📡  Continuous Audit", "name": "Continuous Audit",
+     "Français": "Audit Continu", "English": "Continuous Audit",
+     "done_key": ()},
+    {"group": "Monitoring", "nav": "🏢  Vendor 360", "name": "Third Party & Vendor 360",
+     "Français": "Tiers & Fournisseurs", "English": "Vendor 360",
+     "done_key": ()},
+    {"group": "Monitoring", "nav": "🔍  KYC / AML", "name": "KYC / AML Compliance",
+     "Français": "KYC / AML", "English": "KYC / AML",
+     "done_key": ()},
+)
 
-TAB_SUBTITLES = {
-    0: "Stay informed before launching an audit",
-    1: "Identify risks and applicable regulations for your audit topic",
-    2: "Build your audit plan and test programme",
-    3: "Generate your formal audit report",
-    5: "Real-time monitoring · Risk KPIs · Alert feed",
-    6: "Vendor risk scoring · KYC · Outsourcing oversight",
-    7: "Client risk · PEP · Sanctions · Remediation pipeline",
-}
+DASHBOARD, RISK_ANALYSIS, AUDIT_PLAN, AUDIT_REPORT, CONTINUOUS_AUDIT, VENDOR_360, KYC_AML = range(len(_SECTIONS))
 
-_TAB_NAMES = {
-    "Français": ["Tableau de bord", "Analyse des Risques", "Plan & Tests", "Document Analyser", "Rapport d'Audit", "Audit Continu", "Tiers & Fournisseurs", "KYC / AML"],
-    "English":  ["Dashboard", "Risk Analysis", "Audit Plan", "Document Analyser", "Audit Report", "Continuous Audit", "Vendor 360", "KYC / AML"],
-}
+
+def _section_names(lang: str) -> list:
+    """Section labels in `lang`, ordered by section id."""
+    return [s[lang] for s in _SECTIONS]
+
+
+def _e(value) -> str:
+    """Escape a value for interpolation into an unsafe_allow_html block.
+
+    Everything a user types — audit topic, scope, findings, observations — ends
+    up inside an f-string that Streamlit renders as raw HTML, so it has to be
+    escaped at the point of rendering rather than at the point of capture: the
+    same values are handed unescaped to the Word/Excel/PowerPoint exporters.
+    """
+    return _html.escape("" if value is None else str(value))
+
+
+def _slug(text: str, limit: int = 60) -> str:
+    """A filename-safe slug — download names are built from free-text topics."""
+    cleaned = re.sub(r"[^A-Za-z0-9._-]+", "_", (text or "").strip()).strip("._-")
+    return cleaned[:limit] or "audit"
+
+
+def _safe_link(url: str) -> str:
+    """An http(s) URL escaped for an href attribute, or "" if it is not one.
+
+    Link targets in the intelligence tables come from web-search results, i.e.
+    from pages the model read — never trusted enough to drop into an attribute
+    as-is (a javascript: scheme, or a quote closing the attribute early).
+    """
+    url = (url or "").strip()
+    try:
+        scheme = urlparse(url).scheme
+    except ValueError:
+        return ""
+    return _html.escape(url, quote=True) if scheme in ("http", "https") else ""
 
 
 def _entity_badge_html(entity_type: str, size: str = "13px") -> str:
@@ -1493,81 +1547,6 @@ def _demo_stream_generate(steps: list, result_key_values: dict):
         st.session_state[k] = v
 
 
-_ICON_MAP = {
-    "shield": "🛡️", "search": "🔍", "file-text": "📄", "bar-chart": "📊",
-    "alert-triangle": "⚠️", "check-circle": "✅", "info": "ℹ️",
-    "download": "⬇️", "upload": "⬆️", "globe": "🌐", "lock": "🔒",
-    "users": "👥", "building": "🏦", "calendar": "📅", "clock": "🕐",
-    "double-arrow-right": "»", "arrow-right": "›", "chevron-right": "›",
-    "zap": "⚡", "star": "★", "flag": "🚩", "target": "🎯",
-}
-
-def lucide_icon(name: str, size: int = 16, color: str = "currentColor") -> str:
-    """Returns an emoji icon (Lucide removed — not compatible with Streamlit CSP)."""
-    emoji = _ICON_MAP.get(name, "•")
-    return (
-        f'<span style="font-size:{size}px;color:{color};'
-        f'vertical-align:middle;display:inline-block;">{emoji}</span>'
-    )
-
-
-def severity_badge(level: str, size: str = "normal") -> str:
-    """Returns a styled severity badge HTML span."""
-    _colors = {
-        "Critical": ("#ef4444", "rgba(239,68,68,0.12)"),
-        "High":     ("#f97316", "rgba(249,115,22,0.12)"),
-        "Moderate": ("#eab308", "rgba(234,179,8,0.12)"),
-        "Low":      ("#22c55e", "rgba(34,197,94,0.12)"),
-    }
-    color, bg = _colors.get(level, ("#94a3b8", "rgba(148,163,184,0.12)"))
-    font_size = "10px" if size == "small" else "11px"
-    return (
-        f'<span style="display:inline-flex;align-items:center;gap:4px;'
-        f'background:{bg};color:{color};border:1px solid {color}40;'
-        f'border-radius:20px;padding:2px 8px;font-size:{font_size};'
-        f'font-weight:700;letter-spacing:0.5px;box-shadow:0 0 8px {color}20;">'
-        f'<span style="width:5px;height:5px;border-radius:50%;background:{color};'
-        f'box-shadow:0 0 4px {color};display:inline-block;"></span>'
-        f'{level.upper()}</span>'
-    )
-
-
-def section_header(icon_name: str, title: str, subtitle: str = "", count: int = None) -> str:
-    """Returns a styled section header HTML block with Lucide icon."""
-    count_html = (
-        f'<span class="section-count-badge">{count}</span>'
-        if count is not None else ""
-    )
-    subtitle_html = (
-        f'<div style="font-size:12px;color:#475569;margin-top:2px;">{subtitle}</div>'
-        if subtitle else ""
-    )
-    return f"""
-    <div class="section-header">
-      <div class="section-header-icon">
-        <span style="font-size:16px;color:#6366f1;">{_ICON_MAP.get(icon_name, "•")}</span>
-      </div>
-      <div>
-        <div style="font-size:15px;font-weight:700;color:#e2e8f0;
-                    display:flex;align-items:center;">
-          {title}{count_html}
-        </div>
-        {subtitle_html}
-      </div>
-    </div>
-    """
-
-
-def show_loading(message: str) -> None:
-    """Render a styled loading indicator."""
-    st.markdown(f"""
-    <div class="loading-spinner">
-      <div class="loading-spinner-dot"></div>
-      <span style="font-size:13px;color:#818cf8;font-weight:500;">{message}</span>
-    </div>
-    """, unsafe_allow_html=True)
-
-
 def _tab_actions_bar(tab_key: str, subtitle: str, exports: list) -> None:
     """Render tab header: entity badge + subtitle left, export buttons right.
 
@@ -1609,109 +1588,6 @@ def _tab_actions_bar(tab_key: str, subtitle: str, exports: list) -> None:
                          use_container_width=True):
                 st.toast("✅ Données exportées vers Teammate+ (Wolters Kluwer)", icon="📤")
             st.markdown("</div>", unsafe_allow_html=True)
-
-
-def render_table(headers: list, rows: list, highlight_col: int = None) -> str:
-    """Render a styled HTML table for use with st.markdown(..., unsafe_allow_html=True)."""
-    header_html = "".join(
-        f'<th style="padding:10px 14px;font-size:11px;font-weight:700;'
-        f'letter-spacing:0.8px;text-transform:uppercase;color:#475569;'
-        f'border-bottom:1px solid rgba(255,255,255,0.06);white-space:nowrap;">{h}</th>'
-        for h in headers
-    )
-    rows_html = ""
-    for i, row in enumerate(rows):
-        cells = ""
-        for j, cell in enumerate(row):
-            is_hi = (j == highlight_col)
-            cells += (
-                f'<td style="padding:10px 14px;font-size:13px;'
-                f'color:{"#e2e8f0" if is_hi else "#94a3b8"};'
-                f'font-weight:{"600" if is_hi else "400"};'
-                f'border-bottom:1px solid rgba(255,255,255,0.03);">{cell}</td>'
-            )
-        bg = "rgba(255,255,255,0.01)" if i % 2 else "transparent"
-        rows_html += f'<tr style="background:{bg};">{cells}</tr>'
-    return (
-        f'<div style="overflow-x:auto;border-radius:10px;'
-        f'border:1px solid rgba(255,255,255,0.06);">'
-        f'<table style="width:100%;border-collapse:collapse;background:var(--bg-card);">'
-        f'<thead><tr>{header_html}</tr></thead>'
-        f'<tbody>{rows_html}</tbody></table></div>'
-    )
-
-
-def render_risk_cards(risks: list) -> None:
-    """Render risk indicators as glassmorphism cards grouped by severity."""
-    if not risks:
-        st.markdown(
-            '<div style="text-align:center;padding:40px;color:#475569;">'
-            'No risks found for this topic.</div>',
-            unsafe_allow_html=True,
-        )
-        return
-
-    critical = [r for r in risks if r.get("level") == "Critical"]
-    high     = [r for r in risks if r.get("level") == "High"]
-    moderate = [r for r in risks if r.get("level") == "Moderate"]
-
-    for group, color, label in [
-        (critical, "#ef4444", "Critical"),
-        (high,     "#f97316", "High"),
-        (moderate, "#eab308", "Moderate"),
-    ]:
-        if not group:
-            continue
-        st.markdown(f"""
-        <div style="display:flex;align-items:center;gap:8px;margin:20px 0 12px 0;">
-          <div style="width:8px;height:8px;border-radius:50%;background:{color};
-                      box-shadow:0 0 8px {color}88;"></div>
-          <span style="font-size:11px;font-weight:700;letter-spacing:1.5px;
-                        color:{color};">{label.upper()}</span>
-          <span style="font-size:11px;color:#475569;">({len(group)} risks)</span>
-        </div>
-        """, unsafe_allow_html=True)
-
-        ncols = min(len(group), 3)
-        cols = st.columns(ncols)
-        for i, risk in enumerate(group):
-            controls  = risk.get("expected_controls", [])
-            red_flags = risk.get("red_flags", [])
-            desc      = risk.get("description", "")
-            desc_short = desc[:120] + ("..." if len(desc) > 120 else "")
-            with cols[i % ncols]:
-                st.markdown(f"""
-                <div class="risk-card risk-card-{label.lower()}"
-                     style="border:1px solid {color}22;">
-                  <div style="font-size:11px;font-weight:700;color:{color};
-                              letter-spacing:1px;margin-bottom:6px;">{label.upper()}</div>
-                  <div style="font-size:14px;font-weight:600;color:#e2e8f0;
-                              margin-bottom:8px;line-height:1.3;">
-                    {risk.get("title", "")}
-                  </div>
-                  <div style="font-size:12px;color:#64748b;margin-bottom:10px;
-                              line-height:1.5;">{desc_short}</div>
-                  <div style="font-size:11px;color:#475569;margin-bottom:4px;">
-                    PROBABILITY · {risk.get("probability","N/A")}
-                    &nbsp;·&nbsp; IMPACT · {risk.get("impact","N/A")}
-                  </div>
-                  <div style="border-top:1px solid rgba(255,255,255,0.05);
-                              margin-top:10px;padding-top:10px;
-                              font-size:11px;color:#475569;">
-                    {len(controls)} controls expected &nbsp;·&nbsp;
-                    {len(red_flags)} red flags
-                  </div>
-                </div>
-                """, unsafe_allow_html=True)
-                with st.expander("View details", expanded=False):
-                    if controls:
-                        st.markdown("**Expected Controls**")
-                        for c in controls:
-                            st.markdown(f"• {c}")
-                    if red_flags:
-                        st.markdown("**Red Flags**")
-                        for f in red_flags:
-                            st.markdown(f"⚠ {f}")
 
 
 # ── Templates ─────────────────────────────────────────────────────────────────
@@ -1944,16 +1820,18 @@ def _parse_json(text):
 
 
 def _upload_sf(client, f):
+    """Upload a Streamlit file to the API via a temporary copy on disk.
+
+    The copy holds confidential audit working papers, so it lives inside a
+    TemporaryDirectory: it is removed even if the upload raises, which the
+    previous delete=False + os.unlink pairing did not guarantee.
+    """
     if not f:
         return None
-    suf = Path(f.name).suffix
-    with tempfile.NamedTemporaryFile(delete=False, suffix=suf) as tmp:
-        tmp.write(f.read())
-        tmp_path = tmp.name
-    try:
-        return _upload_file(client, tmp_path)
-    finally:
-        os.unlink(tmp_path)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_path = Path(tmpdir) / f"upload{Path(f.name).suffix}"
+        tmp_path.write_bytes(f.read())
+        return _upload_file(client, str(tmp_path))
 
 
 def _agentic_loop(client, sys_prompt, tools, messages, tool_fn):
@@ -1991,169 +1869,6 @@ def _agentic_loop(client, sys_prompt, tools, messages, tool_fn):
         else:
             break
     return "\n".join(texts), extra
-
-
-# ── Local document extraction (no API) ───────────────────────────────────────
-
-def extract_text_from_file(uploaded_file) -> dict:
-    """Extract plain text from PDF, DOCX, XLSX, TXT/CSV/MD — no API calls."""
-    result = {"filename": uploaded_file.name, "text": "", "pages": 0, "status": "ok", "error": ""}
-    name = uploaded_file.name.lower()
-    try:
-        if name.endswith(".pdf"):
-            from pypdf import PdfReader
-            reader = PdfReader(uploaded_file)
-            result["pages"] = len(reader.pages)
-            result["text"] = "\n".join(page.extract_text() or "" for page in reader.pages)
-        elif name.endswith(".docx"):
-            from docx import Document
-            doc = Document(uploaded_file)
-            paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
-            for table in doc.tables:
-                for row in table.rows:
-                    paragraphs.append(" | ".join(c.text for c in row.cells))
-            result["text"] = "\n".join(paragraphs)
-        elif name.endswith((".xlsx", ".xls")):
-            import openpyxl
-            wb = openpyxl.load_workbook(uploaded_file, data_only=True)
-            lines = []
-            for sheet in wb.worksheets:
-                lines.append(f"[Sheet: {sheet.title}]")
-                for row in sheet.iter_rows(values_only=True):
-                    cells = [str(c) for c in row if c is not None]
-                    if cells:
-                        lines.append(" | ".join(cells))
-            result["text"] = "\n".join(lines)
-        elif name.endswith((".txt", ".csv", ".md")):
-            result["text"] = uploaded_file.read().decode("utf-8", errors="ignore")
-        else:
-            result["status"] = "unsupported"
-            result["error"] = "Unsupported file type"
-    except Exception as e:
-        result["status"] = "error"
-        result["error"] = str(e)
-    return result
-
-
-def analyze_document_static(doc_text: str, topic: str, entity_type: str, analysis_mode: str) -> dict:
-    """
-    Keyword-based document analysis against the static reference library — no API calls.
-
-    analysis_mode:
-      'observations' → scan for risk red-flags → return audit observations (Tab 3)
-      'risk'         → score matched risk indicators (Tab 1 supplementary)
-      'tests'        → surface relevant audit tests (Tab 2 supplementary)
-    """
-    from data import RISK_INDICATORS, AUDIT_TESTS_LIBRARY, HNWI_RED_FLAGS, TOPIC_THEME_MAP
-
-    text_lower = doc_text.lower()
-    topic_upper = topic.upper()
-
-    # Detect theme key
-    theme_key: str = "AML_KYC"
-    for k, v in TOPIC_THEME_MAP.items():
-        if k in topic_upper:
-            theme_key = v
-            break
-    else:
-        # Fallback: scan document text for topic keywords
-        for k, v in TOPIC_THEME_MAP.items():
-            if k.lower() in text_lower:
-                theme_key = v
-                break
-
-    _LEVEL_ORDER = {"Critical": 0, "High": 1, "Moderate": 2, "Low": 3}
-
-    def _kw_hits(phrase: str, min_hits: int = 2) -> bool:
-        kws = [w for w in phrase.lower().split() if len(w) > 4][:4]
-        if not kws:
-            return False
-        return sum(1 for kw in kws if kw in text_lower) >= min(min_hits, len(kws))
-
-    if analysis_mode == "observations":
-        indicators = RISK_INDICATORS.get(theme_key, [])
-        observations = []
-
-        for ind in indicators:
-            hit_flags = [rf for rf in ind.get("red_flags", []) if _kw_hits(rf, 2)]
-            hit_ctrls = [c for c in ind.get("expected_controls", []) if _kw_hits(c, 2)]
-
-            if hit_flags or len(hit_ctrls) >= 2:
-                linked = []
-                tests = AUDIT_TESTS_LIBRARY.get(theme_key, [])
-                ind_lower = ind["title"].lower()
-                for t in tests:
-                    if any(w in t.get("objective", "").lower() for w in ind_lower.split() if len(w) > 5):
-                        linked.append(t["id"])
-                    if len(linked) >= 2:
-                        break
-
-                observations.append({
-                    "observation": ind["title"],
-                    "detail": ind["description"],
-                    "risk_level": ind["level"],
-                    "linked_tests": linked,
-                    "source": "Static scan · " + ind["id"],
-                    "evidence": hit_flags[:2],
-                })
-
-        observations.sort(key=lambda x: _LEVEL_ORDER.get(x["risk_level"], 4))
-
-        # Fallback: return top 3 topic-baseline indicators if nothing matched
-        if not observations:
-            indicators_sorted = sorted(indicators, key=lambda x: _LEVEL_ORDER.get(x["level"], 4))
-            for ind in indicators_sorted[:3]:
-                observations.append({
-                    "observation": ind["title"],
-                    "detail": ind["description"],
-                    "risk_level": ind["level"],
-                    "linked_tests": [],
-                    "source": "Topic baseline · " + ind["id"],
-                    "evidence": [],
-                })
-
-        # HNWI red flags — extra layer for private banking
-        if "private" in entity_type.lower() or "banking" in entity_type.lower():
-            hnwi_hits = [
-                rf for rf in HNWI_RED_FLAGS
-                if isinstance(rf, dict) and _kw_hits(rf.get("title", ""), 1)
-            ]
-            if hnwi_hits:
-                titles = [rf["title"] for rf in hnwi_hits[:3]]
-                observations.insert(0, {
-                    "observation": f"HNWI Red Flags — {len(hnwi_hits)} pattern(s) detected",
-                    "detail": "Document signals match HNWI red-flag patterns from the reference library: " + "; ".join(titles) + ".",
-                    "risk_level": "High",
-                    "linked_tests": [],
-                    "source": "HNWI Red Flag Library",
-                    "evidence": titles,
-                })
-
-        return {"mode": "observations", "observations": observations, "theme": theme_key}
-
-    elif analysis_mode == "risk":
-        indicators = RISK_INDICATORS.get(theme_key, [])
-        matched = []
-        for ind in indicators:
-            hits = [rf for rf in ind.get("red_flags", []) if _kw_hits(rf, 1)]
-            if hits:
-                matched.append({**ind, "evidence": hits[:2], "score": len(hits)})
-        matched.sort(key=lambda x: (-x["score"], _LEVEL_ORDER.get(x["level"], 4)))
-        return {"mode": "risk", "matches": matched[:10], "theme": theme_key}
-
-    elif analysis_mode == "tests":
-        tests = AUDIT_TESTS_LIBRARY.get(theme_key, [])
-        relevant = []
-        for t in tests:
-            combined = (t.get("procedure", "") + " " + t.get("objective", "")).lower()
-            kws = [w for w in combined.split() if len(w) > 5][:30]
-            score = sum(1 for kw in kws if kw in text_lower)
-            if score >= 3:
-                relevant.append({**t, "_score": score})
-        relevant.sort(key=lambda x: -x["_score"])
-        return {"mode": "tests", "tests": relevant[:8], "theme": theme_key}
-
-    return {"mode": analysis_mode, "error": "Unknown analysis mode"}
 
 
 # ── Static data helpers ───────────────────────────────────────────────────────
@@ -2245,60 +1960,6 @@ def _static_label():
         '📚 Reference Data</span>',
         unsafe_allow_html=True,
     )
-
-
-def _show_risk_indicators(theme: str, search: str = ""):
-    """Display RISK_INDICATORS for a given theme with optional search filter."""
-    risks = RISK_INDICATORS.get(theme, [])
-    if search:
-        q = search.lower()
-        risks = [r for r in risks if q in (r.get("title","") + r.get("description","") + r.get("private_banking_specifics","")).lower()]
-    if not risks:
-        st.caption("No matching risks.")
-        return
-
-    _LEVEL_COLOR = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308"}
-    _LEVEL_BG    = {"Critical": "rgba(239,68,68,0.08)", "High": "rgba(249,115,22,0.08)", "Moderate": "rgba(234,179,8,0.06)"}
-
-    for r in risks:
-        col = _LEVEL_COLOR.get(r["level"], "#8392bb")
-        bg  = _LEVEL_BG.get(r["level"], "transparent")
-        prob_color  = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(r.get("probability",""), "#8392bb")
-        impact_color = {"High": "#ef4444", "Medium": "#eab308", "Low": "#22d3a5"}.get(r.get("impact",""), "#8392bb")
-
-        controls_html = "".join(f"<li>{c}</li>" for c in r.get("expected_controls", []))
-        flags_html    = "".join(f"<li>{f}</li>" for f in r.get("red_flags", []))
-
-        st.markdown(f"""
-        <div style="border:1px solid {col}33;border-radius:9px;padding:14px 18px;margin-bottom:12px;background:{bg}">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <span style="background:{col}22;color:{col};border:1px solid {col}44;border-radius:4px;
-                   padding:2px 9px;font-size:11px;font-weight:700">{r["level"]}</span>
-            <span style="font-size:13.5px;font-weight:600;color:var(--text-primary)">{r.get("id","")} &mdash; {r["title"]}</span>
-            <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">
-              Prob: <span style="color:{prob_color};font-weight:600">{r.get("probability","")}</span>
-              &nbsp;&middot;&nbsp; Impact: <span style="color:{impact_color};font-weight:600">{r.get("impact","")}</span>
-            </span>
-          </div>
-          <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.7">{r["description"]}</p>
-          <details style="margin-bottom:6px">
-            <summary style="font-size:12px;color:#818cf8;cursor:pointer;font-weight:500">Controls &amp; Red Flags</summary>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-              <div>
-                <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px">EXPECTED CONTROLS</div>
-                <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{controls_html}</ul>
-              </div>
-              <div>
-                <div style="font-size:11px;font-weight:600;color:#ef4444aa;margin-bottom:4px">RED FLAGS</div>
-                <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text-secondary);line-height:1.8">{flags_html}</ul>
-              </div>
-            </div>
-            <div style="margin-top:10px;font-size:11.5px;color:var(--text-muted);font-style:italic">
-              🏦 {r.get("private_banking_specifics","")}
-            </div>
-          </details>
-        </div>
-        """, unsafe_allow_html=True)
 
 
 def _show_pub_recs(theme: str, search: str = ""):
@@ -2501,18 +2162,23 @@ def _show_regulatory_calendar(jur_filter="All", type_filter="All", prio_filter="
 
 
 # ── HNWI Red Flags helper ─────────────────────────────────────────────────────
-def _show_red_flags(cat_filter="All", level_filter="All", search=""):
+def _show_red_flags(cat_filter: str = "All", level_filter: str = "All", search: str = ""):
     """Render HNWI_RED_FLAGS with filters, coloured badges, and italic examples."""
     _RL_C  = {"Critical": "#ef4444", "High": "#f97316", "Medium": "#eab308"}
     _RL_BG = {"Critical": "rgba(239,68,68,0.07)", "High": "rgba(249,115,22,0.07)", "Medium": "rgba(234,179,8,0.06)"}
     _CAT_C = {"AML": "#818cf8", "Fraud": "#ef4444", "Suitability": "#a78bfa", "Tax": "#22d3a5", "Conduct": "#f97316"}
 
     entries = list(HNWI_RED_FLAGS)
-    if cat_filter   != "All": entries = [e for e in entries if e["category"] == cat_filter]
-    if level_filter != "All": entries = [e for e in entries if e["risk_level"] == level_filter]
+    if cat_filter != "All":
+        entries = [e for e in entries if e.get("category") == cat_filter]
+    if level_filter != "All":
+        entries = [e for e in entries if e.get("risk_level") == level_filter]
     if search:
         q = search.lower()
-        entries = [e for e in entries if q in (e.get("title","") + e.get("description","") + e.get("private_banking_context","")).lower()]
+        entries = [
+            e for e in entries
+            if q in (e.get("title", "") + e.get("description", "") + e.get("private_banking_context", "")).lower()
+        ]
 
     if not entries:
         st.caption("No red flags match the selected filters.")
@@ -2526,7 +2192,7 @@ def _show_red_flags(cat_filter="All", level_filter="All", search=""):
         cc  = _CAT_C.get(cat, "#8392bb")
 
         examples_html = "".join(
-            f'<li style="color:#6b7899;font-style:italic;font-size:11.5px;margin-bottom:2px">{ex}</li>'
+            f'<li style="color:#6b7899;font-style:italic;font-size:11.5px;margin-bottom:2px">{_e(ex)}</li>'
             for ex in (e.get("examples") or [])
         )
 
@@ -2534,24 +2200,24 @@ def _show_red_flags(cat_filter="All", level_filter="All", search=""):
         <div style="border:1px solid {rc}33;border-radius:9px;padding:13px 17px;margin-bottom:10px;background:{rbg}">
           <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px">
             <span style="background:{rc}20;color:{rc};border:1px solid {rc}44;border-radius:4px;
-                  padding:2px 8px;font-size:10px;font-weight:700">{rl}</span>
+                  padding:2px 8px;font-size:10px;font-weight:700">{_e(rl)}</span>
             <span style="background:{cc}18;color:{cc};border:1px solid {cc}33;border-radius:4px;
-                  padding:2px 8px;font-size:10px;font-weight:600">{cat}</span>
-            <span style="font-size:13px;font-weight:600;color:#dde3f5">{e.get("rf_id","")} &mdash; {e.get("title","")}</span>
+                  padding:2px 8px;font-size:10px;font-weight:600">{_e(cat)}</span>
+            <span style="font-size:13px;font-weight:600;color:#dde3f5">{_e(e.get("rf_id",""))} &mdash; {_e(e.get("title",""))}</span>
           </div>
-          <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{e.get("description","")}</p>
+          <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{_e(e.get("description",""))}</p>
           <details>
             <summary style="font-size:11.5px;color:#818cf8;cursor:pointer;font-weight:500">Detection &middot; Regulation &middot; PB context &middot; Examples</summary>
             <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
               <div>
                 <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Detection Method</div>
-                <p style="font-size:11.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.65">{e.get("detection_method","")}</p>
+                <p style="font-size:11.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.65">{_e(e.get("detection_method",""))}</p>
                 <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Regulatory Reference</div>
-                <p style="font-size:11.5px;color:#a8b4d8;margin:0;line-height:1.65">{e.get("regulatory_reference","")}</p>
+                <p style="font-size:11.5px;color:#a8b4d8;margin:0;line-height:1.65">{_e(e.get("regulatory_reference",""))}</p>
               </div>
               <div>
                 <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Private Banking Context</div>
-                <p style="font-size:11.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.65">{e.get("private_banking_context","")}</p>
+                <p style="font-size:11.5px;color:var(--text-secondary);margin:0 0 10px;line-height:1.65">{_e(e.get("private_banking_context",""))}</p>
                 <div style="font-size:10px;font-weight:700;color:#5a6488;margin-bottom:4px;text-transform:uppercase">Examples</div>
                 <ul style="margin:0;padding-left:15px;line-height:1.8">{examples_html}</ul>
               </div>
@@ -2932,6 +2598,8 @@ def _show_tests_library(theme: str, search: str = "", level_filter: str = "All",
     _show_risk_coverage_summary(theme, risk_map, live_risks)
 
 
+# ── UX helpers ────────────────────────────────────────────────────────────────
+
 def _render_iia_standard(s):
     """Render a single IIA standard entry — handles both plain and sectioned (TR) structures."""
     is_tr = s.get("topical_requirement", False) and s.get("sections")
@@ -2974,14 +2642,6 @@ def _render_iia_standard(s):
             </div>""", unsafe_allow_html=True)
 
 
-def _show_iia_standards():
-    """Display IIA_STANDARDS_2024 in expandable cards."""
-    for s in IIA_STANDARDS_2024:
-        _render_iia_standard(s)
-
-
-# ── UX helpers ────────────────────────────────────────────────────────────────
-
 def _save_history(topic, jurs, risks, regs, pub_recs):
     """Save current analysis to FIFO history (max 5)."""
     n_critical = sum(1 for r in (risks or []) if r.get("level") == "Critical")
@@ -2998,32 +2658,6 @@ def _save_history(topic, jurs, risks, regs, pub_recs):
     hist = [h for h in hist if h.get("topic") != topic]
     hist.insert(0, entry)
     st.session_state.history = hist[:5]
-
-
-def _build_progress_bar():
-    """Render step indicator above tabs."""
-    t1_done = bool(st.session_state.t1_risks or st.session_state.t1_regs)
-    t2_done = bool(st.session_state.t2_rationale)
-    t3_done = bool(st.session_state.t3_report)
-
-    def _step(label, icon, state):
-        cls = {"done": "pb-step done", "active": "pb-step active", "pending": "pb-step pending"}[state]
-        return f'<div class="{cls}">{icon} {label}</div>'
-
-    s1 = "done" if t1_done else "active"
-    s2 = "done" if t2_done else ("active" if t1_done else "pending")
-    s3 = "done" if t3_done else ("active" if t2_done else "pending")
-
-    html = (
-        '<div class="progress-bar-wrap no-print">'
-        + _step("Risk Analysis", "&#10003;" if t1_done else "1", s1)
-        + '<div class="pb-connector"></div>'
-        + _step("Audit Plan", "&#10003;" if t2_done else "2", s2)
-        + '<div class="pb-connector"></div>'
-        + _step("Audit Report", "&#10003;" if t3_done else "3", s3)
-        + '</div>'
-    )
-    st.markdown(html, unsafe_allow_html=True)
 
 
 def _risk_score_display(risks, n_jurs):
@@ -3182,16 +2816,17 @@ def _cve_table(cves):
         sev = c.get("severity", "")
         badge = _SEV_BADGE.get(sev, f'<span class="badge-info">{sev}</span>')
         link = c.get("source", "")
-        src_html = (f'<a href="{link}" target="_blank" style="color:#818cf8;font-size:11px">{link[:40]}&hellip;</a>'
-                    if link.startswith("http") else f'<span style="color:#424d72;font-size:11.5px">{link}</span>')
+        href = _safe_link(link)
+        src_html = (f'<a href="{href}" target="_blank" rel="noopener noreferrer" style="color:#818cf8;font-size:11px">{_e(link[:40])}&hellip;</a>'
+                    if href else f'<span style="color:#424d72;font-size:11.5px">{_e(link)}</span>')
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:600;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{c.get("cve_id","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{c.get("date","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:600;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(c.get("cve_id",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(c.get("date",""))}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{badge}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("system","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("description","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{c.get("action","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(c.get("system",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(c.get("description",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(c.get("action",""))}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{src_html}</td>'
             f'</tr>'
         )
@@ -3224,16 +2859,16 @@ def _reg_updates_table(regs, type_filter=None):
         type_badge = _TYPE_BADGE.get(rtype, f'<span class="badge-info">{rtype}</span>')
         open_until = r.get("open_until", "") or ""
         open_badge = f'&nbsp;<span class="badge-open">Open until {open_until}</span>' if open_until else ""
-        link = r.get("link", "") or ""
-        title_html = (f'<a href="{link}" target="_blank" style="color:var(--text-primary);text-decoration:underline;text-underline-offset:2px">{r.get("title","")}</a>'
-                      if link.startswith("http") else f'<span style="color:var(--text-primary)">{r.get("title","")}</span>')
+        href = _safe_link(r.get("link", ""))
+        title_html = (f'<a href="{href}" target="_blank" rel="noopener noreferrer" style="color:var(--text-primary);text-decoration:underline;text-underline-offset:2px">{_e(r.get("title",""))}</a>'
+                      if href else f'<span style="color:var(--text-primary)">{_e(r.get("title",""))}</span>')
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("date","")}</td>'
-            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("authority","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("date",""))}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("authority",""))}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{type_badge}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{title_html}{open_badge}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("key_impact","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("key_impact",""))}</td>'
             f'</tr>'
         )
     st.markdown(f"""
@@ -3260,10 +2895,10 @@ def _audit_recs_table(recs):
         badge = _SEV_BADGE.get(pri, _SEV_BADGE.get(f"{pri} Priority", f'<span class="badge-info">{pri}</span>'))
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("date","")}</td>'
-            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("theme","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("recommendation","")}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("date",""))}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("source",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("theme",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("recommendation",""))}</td>'
             f'<td style="padding:9px 13px;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{badge}</td>'
             f'</tr>'
         )
@@ -3289,10 +2924,10 @@ def _pub_recs_table(recs):
     for r in recs:
         rows += (
             f'<tr>'
-            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("source","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;text-align:center;border-bottom:1px solid var(--tbl-row-border)">{r.get("year","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("recommendation","")}</td>'
-            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("applicability","")}</td>'
+            f'<td style="padding:9px 13px;color:#818cf8;font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("source",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;text-align:center;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("year",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("recommendation",""))}</td>'
+            f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("applicability",""))}</td>'
             f'</tr>'
         )
     st.markdown(f"""
@@ -3318,11 +2953,11 @@ def _risk_table(risks):
         col, bg, border = _LEVEL_STYLE.get(level, ("#6b7280", "rgba(107,114,128,0.08)", "rgba(107,114,128,0.2)"))
         rows = "".join(
             f'<tr>'
-            f'<td style="padding:10px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("name","")}</td>'
-            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("description","")}</td>'
-            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("impact","")}</td>'
-            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;text-align:center;border-bottom:1px solid var(--tbl-row-border)">{r.get("likelihood","")}</td>'
-            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("control","")}</td>'
+            f'<td style="padding:10px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("name",""))}</td>'
+            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("description",""))}</td>'
+            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("impact",""))}</td>'
+            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;text-align:center;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("likelihood",""))}</td>'
+            f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("control",""))}</td>'
             f'</tr>'
             for r in bucket
         )
@@ -3349,10 +2984,10 @@ def _reg_table(regs):
         return
     rows = "".join(
         f'<tr>'
-        f'<td style="padding:10px 13px;color:#818cf8;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{r.get("jurisdiction","")}</td>'
-        f'<td style="padding:10px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("text","")}</td>'
-        f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">{r.get("reference","")}</td>'
-        f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{r.get("requirement","")}</td>'
+        f'<td style="padding:10px 13px;color:#818cf8;font-weight:500;vertical-align:top;white-space:nowrap;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("jurisdiction",""))}</td>'
+        f'<td style="padding:10px 13px;color:var(--text-primary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("text",""))}</td>'
+        f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("reference",""))}</td>'
+        f'<td style="padding:10px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(r.get("requirement",""))}</td>'
         f'</tr>'
         for r in regs
     )
@@ -3374,12 +3009,12 @@ def _tests_table(tests):
         return
     rows = "".join(
         f'<tr>'
-        f'<td style="padding:9px 10px;color:#818cf8;font-weight:600;text-align:center;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("num","")}</td>'
-        f'<td style="padding:9px 10px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("objective","")}</td>'
-        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("procedure","")}</td>'
-        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("population","")}</td>'
-        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("sample_size","")}</td>'
-        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{t.get("failure_criteria","")}</td>'
+        f'<td style="padding:9px 10px;color:#818cf8;font-weight:600;text-align:center;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("num",""))}</td>'
+        f'<td style="padding:9px 10px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("objective",""))}</td>'
+        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("procedure",""))}</td>'
+        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("population",""))}</td>'
+        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("sample_size",""))}</td>'
+        f'<td style="padding:9px 10px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(t.get("failure_criteria",""))}</td>'
         f'</tr>'
         for t in tests
     )
@@ -3403,11 +3038,11 @@ def _analytics_table(scenarios):
         return
     rows = "".join(
         f'<tr>'
-        f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("scenario","")}</td>'
-        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("objective","")}</td>'
-        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("data_source","")}</td>'
-        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("analysis_type","")}</td>'
-        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{s.get("anomaly","")}</td>'
+        f'<td style="padding:9px 13px;color:var(--text-primary);font-weight:500;vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(s.get("scenario",""))}</td>'
+        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(s.get("objective",""))}</td>'
+        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(s.get("data_source",""))}</td>'
+        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(s.get("analysis_type",""))}</td>'
+        f'<td style="padding:9px 13px;color:var(--text-secondary);vertical-align:top;border-bottom:1px solid var(--tbl-row-border)">{_e(s.get("anomaly",""))}</td>'
         f'</tr>'
         for s in scenarios
     )
@@ -3631,7 +3266,7 @@ div[data-testid="stButton"] > button[kind="primary"] {
 """, unsafe_allow_html=True)
 
         st.markdown('<div class="si-field" style="padding:0 clamp(20px,4vw,52px);margin-top:-4px">', unsafe_allow_html=True)
-        _email = st.text_input("email", value="lucas.brunner@helvetia-private.ch",
+        _email = st.text_input("email", placeholder="prenom.nom@banque.ch",
                                label_visibility="collapsed", key="si_email")
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -3645,7 +3280,7 @@ div[data-testid="stButton"] > button[kind="primary"] {
 """, unsafe_allow_html=True)
 
         st.markdown('<div class="si-field" style="padding:0 clamp(20px,4vw,52px);margin-top:-4px">', unsafe_allow_html=True)
-        _pwd = st.text_input("pwd", value="auditiq-demo", type="password",
+        _pwd = st.text_input("pwd", placeholder="••••••••", type="password",
                              label_visibility="collapsed", key="si_pwd")
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -3653,9 +3288,18 @@ div[data-testid="stButton"] > button[kind="primary"] {
 
         st.markdown('<div class="si-btn-submit" style="padding:0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
         if st.button("Se connecter  →", key="si_submit", use_container_width=True):
-            st.session_state.signed_in = True
-            st.rerun()
+            if _grant_access(_pwd):
+                st.session_state.signed_in = True
+                st.rerun()
+            else:
+                st.session_state["si_error"] = "Identifiants invalides."
         st.markdown("</div>", unsafe_allow_html=True)
+
+        if st.session_state.get("si_error"):
+            with st.container():
+                st.markdown('<div style="padding:0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
+                st.error(st.session_state["si_error"])
+                st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("""
 <div style="padding:10px clamp(20px,4vw,52px) 0;
@@ -3674,14 +3318,22 @@ div[data-testid="stButton"] > button[kind="primary"] {
         with _c1:
             st.markdown('<div class="si-btn-sso" style="padding:0 0 0 clamp(20px,4vw,52px)">', unsafe_allow_html=True)
             if st.button("🔑  SSO", key="si_sso1", use_container_width=True):
-                st.session_state.signed_in = True
-                st.rerun()
+                # Mock-up: no IdP is wired in, so it must not bypass the password.
+                if _access_password():
+                    st.session_state["si_error"] = "SSO non configuré — utilisez le mot de passe."
+                else:
+                    st.session_state.signed_in = True
+                    st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
         with _c2:
             st.markdown('<div class="si-btn-sso">', unsafe_allow_html=True)
             if st.button("🪪  Carte", key="si_sso2", use_container_width=True):
-                st.session_state.signed_in = True
-                st.rerun()
+                # Mock-up: no card reader is wired in, same rule as SSO above.
+                if _access_password():
+                    st.session_state["si_error"] = "Carte non configurée — utilisez le mot de passe."
+                else:
+                    st.session_state.signed_in = True
+                    st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
 
         # Security badges
@@ -3826,62 +3478,7 @@ _HELP = {
 
 💡 *Tip: check the "Risk Coverage Summary" — every Critical risk must have at least 1 test.*""",
     },
-    3: {  # Document Analyser
-        "Français": """**📂 Analyseur de Documents**
-*Déposez vos documents — le bon spécialiste IA prend le relais automatiquement selon votre domaine.*
-
-**À quoi ça sert ?**
-→ Analyser des documents d'audit (politiques, rapports, données MIS) et identifier des observations, avec un expert IA adapté au domaine.
-
-**Détection automatique du spécialiste**
-L'IA sélectionne le bon profil d'expert selon le topic saisi :
-- *AML/KYC* → **Spécialiste AML & KYC** (CAMS · FATF · FINMA 2011/1)
-- *Cyber / DORA* → **Spécialiste Cyber & Tech Risk** (CISSP · ISO 27001 · DORA)
-- *Third Party* → **Spécialiste Third Party Risk** (CRISC · FINMA 2018/3)
-- *Credit Risk* → **Spécialiste Crédit & Capital** (FRM · Bâle IV · IFRS 9)
-- *GDPR* → **Spécialiste Data Privacy** (CIPP/E · RGPD · nDSG)
-- *Governance / Op Risk / Market Risk* → profils dédiés
-
-**Comment l'utiliser ?**
-- **Upload** : glissez-déposez vos fichiers (PDF, Word, Excel, TXT — multi-fichiers)
-- **Topic** : pré-rempli depuis l'onglet 1, modifiable
-- **Context** : précisez un focus — ex. *"Concentrez-vous sur les écarts politique/pratique"*
-
-**Résultats obtenus :**
-- Observations par niveau de risque (Critical / High / Moderate / Low)
-- Lien automatique vers les tests du programme d'audit
-- **➕ Add to Report** pour pousser chaque observation vers l'onglet Rapport
-
-💡 *Astuce : uploadez des rapports précédents pour identifier les thèmes récurrents.*""",
-
-        "English": """**📂 Document Analyser**
-*Drop your documents — the right AI specialist steps in automatically based on your audit domain.*
-
-**What is it for?**
-→ Analyse audit documents (policies, reports, MIS data) and surface observations, with a domain-matched AI expert.
-
-**Automatic specialist detection**
-The AI selects the right expert profile based on the topic you enter:
-- *AML/KYC* → **AML & KYC Compliance Specialist** (CAMS · FATF · FINMA 2011/1)
-- *Cyber / DORA* → **Cyber & Technology Risk Specialist** (CISSP · ISO 27001 · DORA)
-- *Third Party* → **Third Party Risk Specialist** (CRISC · FINMA 2018/3)
-- *Credit Risk* → **Credit Risk & Capital Specialist** (FRM · Basel IV · IFRS 9)
-- *GDPR* → **Data Privacy Specialist** (CIPP/E · GDPR · nDSG)
-- *Governance / Op Risk / Market Risk* → dedicated profiles
-
-**How to use it?**
-- **Upload**: drag-and-drop your files (PDF, Word, Excel, TXT — multiple files supported)
-- **Topic**: pre-filled from tab 1, editable
-- **Context**: specify a focus area — e.g. *"Focus on gaps between policy and practice"*
-
-**Results:**
-- Observations by risk level (Critical / High / Moderate / Low)
-- Automatic link to audit programme tests
-- **➕ Add to Report** button to push each observation to the Audit Report tab
-
-💡 *Tip: upload prior audit reports to surface recurring themes.*""",
-    },
-    4: {  # Audit Report
+    3: {  # Audit Report
         "Français": """**📄 Rapport d'Audit**
 *Du constat brut au rapport IIA-standard prêt pour le comité — en un seul écran.*
 
@@ -3889,7 +3486,7 @@ The AI selects the right expert profile based on the topic you enter:
 → Assembler le rapport final, gérer les recommandations, et générer le résumé comité.
 
 **📋 Recommendations**
-- **📝 My Observations** : vos observations (depuis Document Analyser ou saisie manuelle) + génération des recommandations
+- **📝 My Observations** : vos observations saisies + génération des recommandations
 - **📄 Example Report** : exemple de constat IIA-standard pré-rempli, comme modèle de référence
 
 **📄 Report** — 4 sous-sections :
@@ -3912,7 +3509,7 @@ The AI selects the right expert profile based on the topic you enter:
 → Assemble the final report, manage recommendations, and generate the committee summary.
 
 **📋 Recommendations**
-- **📝 My Observations**: your observations (from Document Analyser or manual entry) + recommendation generation
+- **📝 My Observations**: the observations you captured + recommendation generation
 - **📄 Example Report**: a pre-filled IIA-standard finding shown as a reference template
 
 **📄 Report** — 4 sub-sections:
@@ -3928,7 +3525,7 @@ The AI selects the right expert profile based on the topic you enter:
 
 💡 *Tip: complete tabs 1, 2, and 3 first for a richer, more contextualised report.*""",
     },
-    5: {  # Continuous Audit Dashboard
+    4: {  # Continuous Audit Dashboard
         "Français": """**📡 Audit Continu**
 *Vos contrôles tournent 24h/24 — cet écran vous dit ce qui a échoué cette nuit.*
 
@@ -3969,7 +3566,7 @@ The AI selects the right expert profile based on the topic you enter:
 
 💡 *Tip: a control showing red 3 weeks in a row in the sparklines should trigger a targeted audit engagement.*""",
     },
-    6: {  # Third Party & Vendor 360
+    5: {  # Third Party & Vendor 360
         "Français": """**🏢 Third Party & Vendor 360**
 *Chaque fournisseur est un vecteur de risque — cet écran le rend visible avant que le régulateur ne le signale.*
 
@@ -4008,7 +3605,7 @@ The AI selects the right expert profile based on the topic you enter:
 
 💡 *Tip: a vendor with SLA "Breach" and score below 80 should be escalated to the procurement lead and MLRO.*""",
     },
-    7: {  # KYC / AML Compliance
+    6: {  # KYC / AML Compliance
         "Français": """**🔍 KYC / AML Compliance**
 *Détectez la criminalité financière avant que le régulateur ne vous pose la question.*
 
@@ -4071,8 +3668,8 @@ def _show_help_panel():
     lang = st.session_state["help_lang"]
 
     # Tab selector — selectbox fits the narrow sidebar width
-    tab_labels = _TAB_NAMES[lang]
-    _safe_idx = tab_idx if tab_idx < len(tab_labels) else 0
+    tab_labels = _section_names(lang)
+    _safe_idx = tab_idx if 0 <= tab_idx < len(tab_labels) else 0
     selected_tab = st.selectbox(
         "Section", tab_labels,
         index=_safe_idx,
@@ -4095,13 +3692,9 @@ def _show_help_panel():
 _cur_ent   = st.session_state.get("entity_type", "🏦 Private Banking")
 _cur_t     = _ENTITY_THEMES.get(_cur_ent, _ENTITY_THEMES["🏦 Private Banking"])
 _active    = st.session_state.get("active_tab", 0)
-_NAV_NAMES = {
-    0: "Intelligence Dashboard",
-    1: "Risk Analysis",
-    2: "Audit Plan & Testing",
-    3: "Document Analyser",
-    4: "Audit Report",
-}
+if not 0 <= _active < len(_SECTIONS):
+    _active = DASHBOARD
+    st.session_state["active_tab"] = DASHBOARD
 
 # ── Entity switcher CSS (sidebar pills) ──────────────────────────────────────
 _ent_btn_css = ""
@@ -4195,122 +3788,49 @@ with st.sidebar:
 </div>
 """, unsafe_allow_html=True)
 
-    # ── Workflow status for nav dots ─────────────────────────────────────────
-    _wf_status = {
-        0: "done" if (st.session_state.get("dash_regs") or st.session_state.get("t1_pub_recs")) else "idle",
-        1: "done" if st.session_state.get("t1_risks") else ("active" if _active == 1 else "idle"),
-        2: "done" if st.session_state.get("t2_tests") else ("active" if _active == 2 else "idle"),
-        3: "done" if st.session_state.get("t3_docs_analysis") else ("active" if _active == 3 else "idle"),
-        4: "done" if st.session_state.get("t3_report") else ("active" if _active == 4 else "idle"),
-        5: "done",
-        6: "done",
-        7: "done",
-    }
+    # ── Navigation ───────────────────────────────────────────────────────────
     _WF_DOT = {
-        "done":   "background:#22d3a5",
-        "active": "background:#f97316",
-        "idle":   "background:#2d3a4e",
+        "done":   ("#22d3a5", "✓ up to date"),
+        "live":   ("#22d3a5", "✓ live"),
+        "active": ("#f97316", "● active"),
     }
+    _group = None
+    for _sid, _sec in enumerate(_SECTIONS):
+        if _sec["group"] != _group:
+            _group = _sec["group"]
+            _border = ("border-top:1px solid rgba(255,255,255,0.05);margin-top:8px"
+                       if _group == "Monitoring" else "")
+            st.markdown(
+                f'''<div style="padding:16px 16px 4px;{_border}">
+  <span style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d4a6b">{_group}</span>
+</div>''',
+                unsafe_allow_html=True,
+            )
 
-    # ── MENU section ─────────────────────────────────────────────────────────
-    st.markdown("""
-<div style="padding:16px 16px 4px">
-  <span style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d4a6b">Menu</span>
-</div>
-""", unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="{"nav-active" if _active == _sid else "nav-item"}">',
+            unsafe_allow_html=True,
+        )
+        if st.button(_sec["nav"], key=f"_nav{_sid}", use_container_width=True):
+            st.session_state["active_tab"] = _sid
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    _cls0 = "nav-active" if _active == 0 else "nav-item"
-    st.markdown(f'<div class="{_cls0}">', unsafe_allow_html=True)
-    if st.button("⊞  Tableau de bord", key="_nav0", use_container_width=True):
-        st.session_state["active_tab"] = 0
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-    if _wf_status[0] == "done":
-        st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
-    elif _wf_status[0] == "active":
-        st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
-
-    _cls1 = "nav-active" if _active == 1 else "nav-item"
-    st.markdown(f'<div class="{_cls1}">', unsafe_allow_html=True)
-    if st.button("≡  Risk Analysis", key="_nav1", use_container_width=True):
-        st.session_state["active_tab"] = 1
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-    if _wf_status[1] == "done":
-        st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
-    elif _wf_status[1] == "active":
-        st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
-
-    # ── AGENTS IA section ────────────────────────────────────────────────────
-    st.markdown("""
-<div style="padding:16px 16px 4px">
-  <span style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d4a6b">Agents IA</span>
-</div>
-""", unsafe_allow_html=True)
-
-    _cls2 = "nav-active" if _active == 2 else "nav-item"
-    st.markdown(f'<div class="{_cls2}">', unsafe_allow_html=True)
-    if st.button("📋  Audit Plan & Testing", key="_nav2", use_container_width=True):
-        st.session_state["active_tab"] = 2
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-    if _wf_status[2] == "done":
-        st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
-    elif _wf_status[2] == "active":
-        st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
-
-    _cls3 = "nav-active" if _active == 3 else "nav-item"
-    st.markdown(f'<div class="{_cls3}">', unsafe_allow_html=True)
-    if st.button("🔍  Document Analyser", key="nav_3", use_container_width=True):
-        st.session_state["active_tab"] = 3
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-    if _wf_status[3] == "done":
-        st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
-    elif _wf_status[3] == "active":
-        st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
-
-    _cls4 = "nav-active" if _active == 4 else "nav-item"
-    st.markdown(f'<div class="{_cls4}">', unsafe_allow_html=True)
-    if st.button("📄  Rapport d'audit", key="_nav3", use_container_width=True):
-        st.session_state["active_tab"] = 4
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-    if _wf_status[4] == "done":
-        st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ up to date</div>', unsafe_allow_html=True)
-    elif _wf_status[4] == "active":
-        st.markdown('<div style="font-size:10px;color:#f97316;margin:-12px 0 4px 14px;font-weight:600">● active</div>', unsafe_allow_html=True)
-
-    # ── MONITORING section ───────────────────────────────────────────────────
-    st.markdown("""
-<div style="padding:16px 16px 4px;border-top:1px solid rgba(255,255,255,0.05);margin-top:8px">
-  <span style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3d4a6b">Monitoring</span>
-</div>
-""", unsafe_allow_html=True)
-
-    _cls5 = "nav-active" if _active == 5 else "nav-item"
-    st.markdown(f'<div class="{_cls5}">', unsafe_allow_html=True)
-    if st.button("📡  Continuous Audit", key="_nav5", use_container_width=True):
-        st.session_state["active_tab"] = 5
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ live</div>', unsafe_allow_html=True)
-
-    _cls6 = "nav-active" if _active == 6 else "nav-item"
-    st.markdown(f'<div class="{_cls6}">', unsafe_allow_html=True)
-    if st.button("🏢  Vendor 360", key="_nav6", use_container_width=True):
-        st.session_state["active_tab"] = 6
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ live</div>', unsafe_allow_html=True)
-
-    _cls7 = "nav-active" if _active == 7 else "nav-item"
-    st.markdown(f'<div class="{_cls7}">', unsafe_allow_html=True)
-    if st.button("🔍  KYC / AML", key="_nav7", use_container_width=True):
-        st.session_state["active_tab"] = 7
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown('<div style="font-size:10px;color:#22d3a5;margin:-12px 0 4px 14px;font-weight:600">✓ live</div>', unsafe_allow_html=True)
+        _keys = _sec["done_key"]
+        if not _keys:
+            _state = "live"
+        elif any(st.session_state.get(k) for k in _keys):
+            _state = "done"
+        elif _active == _sid:
+            _state = "active"
+        else:
+            _state = None
+        if _state:
+            _col, _txt = _WF_DOT[_state]
+            st.markdown(
+                f'<div style="font-size:10px;color:{_col};margin:-12px 0 4px 14px;font-weight:600">{_txt}</div>',
+                unsafe_allow_html=True,
+            )
 
     # ── Entity selector (compact selectbox) ──────────────────────────────────
     st.markdown("""
@@ -4428,19 +3948,17 @@ with st.sidebar:
             "Command", placeholder="e.g. Risk Analysis, Dashboard…",
             key="_vc_text_input", label_visibility="collapsed",
         )
-        st.caption("Try: Dashboard · Risk · Audit Plan · Document · Report · Help")
+        st.caption("Try: Dashboard · Risk · Audit Plan · Report · Help")
         if _vc_typed:
             _vc_t = _vc_typed.strip().lower()
             if any(w in _vc_t for w in ["dashboard", "tableau de bord", "accueil", "home"]):
-                st.session_state["active_tab"] = 0
+                st.session_state["active_tab"] = DASHBOARD
             elif any(w in _vc_t for w in ["risk", "risque", "analyse des risques", "risk analysis"]):
-                st.session_state["active_tab"] = 1
+                st.session_state["active_tab"] = RISK_ANALYSIS
             elif any(w in _vc_t for w in ["audit plan", "plan audit", "tests", "testing"]):
-                st.session_state["active_tab"] = 2
-            elif any(w in _vc_t for w in ["document", "analyser document"]):
-                st.session_state["active_tab"] = 3
+                st.session_state["active_tab"] = AUDIT_PLAN
             elif any(w in _vc_t for w in ["rapport", "report", "recommandation"]):
-                st.session_state["active_tab"] = 4
+                st.session_state["active_tab"] = AUDIT_REPORT
             elif any(w in _vc_t for w in ["help", "aide"]):
                 st.session_state["help_open"] = True
             elif any(w in _vc_t for w in ["suggestion", "claude", "cowork"]):
@@ -4450,11 +3968,9 @@ with st.sidebar:
             st.rerun()
 
     if st.session_state.get("last_voice_transcript") and not st.session_state.get("voice_active", False):
-        _vt = st.session_state["last_voice_transcript"]
-        _active_tab_name = {0: "Dashboard", 1: "Risk Analysis", 2: "Audit Plan",
-                            3: "Document Analyser", 4: "Audit Report",
-                            5: "Continuous Audit", 6: "Vendor 360", 7: "KYC / AML"}.get(
-                            st.session_state.get("active_tab", 0), "")
+        _vt = _html.escape(st.session_state["last_voice_transcript"])
+        _vt_idx = st.session_state.get("active_tab", DASHBOARD)
+        _active_tab_name = _SECTIONS[_vt_idx]["English"] if 0 <= _vt_idx < len(_SECTIONS) else ""
         st.markdown(f"""
 <div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);
   border-radius:8px;padding:8px 12px;margin-top:6px;font-size:11px">
@@ -4494,7 +4010,7 @@ with st.container():
 <div style="display:flex;align-items:center;gap:6px;padding:16px 0 8px">
   <span style="font-size:13px;color:#5a6488;font-weight:500">AuditIQ</span>
   <span style="color:#3d4a6b;font-size:13px">/</span>
-  <span style="font-size:13px;font-weight:700;color:#eef0f8">{_NAV_NAMES.get(_active, "Dashboard")}</span>
+  <span style="font-size:13px;font-weight:700;color:#eef0f8">{_SECTIONS[_active]["name"]}</span>
   {_entity_badge_html(_ent_display)}
 </div>
 """, unsafe_allow_html=True)
@@ -4789,8 +4305,8 @@ def _show_report_section1(rd: dict):
         f'border-bottom:1px solid rgba(255,255,255,0.05)">{k}</td>'
         f'<td style="padding:7px 14px;color:var(--text-primary);font-size:12.5px;font-weight:500;'
         f'border-bottom:1px solid rgba(255,255,255,0.05)">{v}</td></tr>'
-        for k, v in [("Audit Topic", rd["topic"]), ("Jurisdictions", rd["jurisdictions"]),
-                     ("Audit Scope", rd["scope"]), ("Period", rd["period"])]
+        for k, v in [("Audit Topic", _e(rd["topic"])), ("Jurisdictions", _e(rd["jurisdictions"])),
+                     ("Audit Scope", _e(rd["scope"])), ("Period", _e(rd["period"]))]
     )
     st.markdown(f"""
     <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:18px">
@@ -4799,7 +4315,7 @@ def _show_report_section1(rd: dict):
     </div>""", unsafe_allow_html=True)
 
     # B — Overall Context
-    ctx_paras = rd["overall_context"].replace("\n\n","</p><p style='margin:0 0 10px;font-size:13px;color:var(--text-secondary);line-height:1.8'>")
+    ctx_paras = _e(rd["overall_context"]).replace("\n\n","</p><p style='margin:0 0 10px;font-size:13px;color:var(--text-secondary);line-height:1.8'>")
     st.markdown(f"""
     <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:18px">
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#818cf8;margin-bottom:12px">B &mdash; Overall Context</div>
@@ -4810,7 +4326,7 @@ def _show_report_section1(rd: dict):
     top3_html = "".join(
         f'<li style="margin-bottom:5px;font-size:12.5px;color:var(--text-secondary)">'
         f'<span style="color:{_LEVEL_COLOR.get(f["criticality"],"#8392bb")};font-weight:700">'
-        f'{_LEVEL_EMOJI.get(f["criticality"],"")} F{f["idx"]}</span> &mdash; {f["title"]}</li>'
+        f'{_LEVEL_EMOJI.get(f["criticality"],"")} F{f["idx"]}</span> &mdash; {_e(f["title"])}</li>'
         for f in rd["top3"]
     )
     st.markdown(f"""
@@ -5005,7 +4521,7 @@ def _show_report_section4(rd: dict):
         rows += (
             f'<tr>'
             f'<td style="padding:8px 12px;color:#818cf8;font-weight:700;text-align:center;border-bottom:1px solid var(--tbl-row-border)">F{f["idx"]}</td>'
-            f'<td style="padding:8px 12px;color:var(--text-primary);border-bottom:1px solid var(--tbl-row-border)">{f["title"]}</td>'
+            f'<td style="padding:8px 12px;color:var(--text-primary);border-bottom:1px solid var(--tbl-row-border)">{_e(f["title"])}</td>'
             f'<td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--tbl-row-border)"><span style="background:{_LEVEL_BG.get(crit,"transparent")};color:{col};border:1px solid {col}44;border-radius:4px;padding:1px 8px;font-size:11px;font-weight:700">{emoji} {crit}</span></td>'
             f'<td style="padding:8px 12px;color:var(--text-secondary);font-size:11.5px;border-bottom:1px solid var(--tbl-row-border)">'
             + (f'{acts[0]["action"][:70]}&hellip;' if acts and len(acts[0].get("action",""))>70 else (acts[0].get("action","&mdash;") if acts else "&mdash;")) +
@@ -5047,19 +4563,19 @@ def _show_audit_snapshot():
     top_html = "".join(
         f'<li style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">'
         f'<span style="color:{_LEVEL_COLOR.get(f["criticality"],"#8392bb")};font-weight:700">'
-        f'{_LEVEL_EMOJI.get(f["criticality"],"")} F{f["idx"]}</span> &mdash; {f["title"]}</li>'
+        f'{_LEVEL_EMOJI.get(f["criticality"],"")} F{f["idx"]}</span> &mdash; {_e(f["title"])}</li>'
         for f in rd.get("top3",[])
     )
-    ctx_text = rd.get("overall_context","")[:400] + ("…" if len(rd.get("overall_context",""))>400 else "")
+    ctx_text = _e(rd.get("overall_context","")[:400]) + ("…" if len(rd.get("overall_context",""))>400 else "")
 
     st.markdown(f"""
     <div style="background:#0f1423;border-left:4px solid #818cf8;border-radius:0 10px 10px 0;padding:18px 22px">
       <div style="font-size:11px;font-weight:700;color:#818cf8;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px">📋 Latest Audit Snapshot</div>
-      <div style="font-size:12px;color:#5a6488;margin-bottom:14px">Based on: <strong style="color:#8392bb">{rd["topic"]}</strong> &middot; Generated: {ts}</div>
+      <div style="font-size:12px;color:#5a6488;margin-bottom:14px">Based on: <strong style="color:#8392bb">{_e(rd["topic"])}</strong> &middot; Generated: {ts}</div>
 
       <div style="font-size:10.5px;font-weight:700;color:#5a6488;text-transform:uppercase;margin-bottom:6px">── Audit Context ──</div>
       <div style="font-size:12.5px;color:var(--text-secondary);margin-bottom:12px">
-        <span style="color:#8392bb">Topic:</span> {rd["topic"]} &nbsp;&middot;&nbsp;
+        <span style="color:#8392bb">Topic:</span> {_e(rd["topic"])} &nbsp;&middot;&nbsp;
         <span style="color:#8392bb">Scope:</span> {rd["scope"]} &nbsp;&middot;&nbsp;
         <span style="color:#8392bb">Jurisdictions:</span> {rd["jurisdictions"]}
       </div>
@@ -5093,9 +4609,9 @@ _active = st.session_state.get("active_tab", 0)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# TAB 0 — INTELLIGENCE DASHBOARD
+# SECTION — INTELLIGENCE DASHBOARD
 # ─────────────────────────────────────────────────────────────────────────────
-if _active == 0:
+if _active == DASHBOARD:
     st.markdown(
         '<div style="font-size:24px;font-weight:800;color:var(--text-primary);letter-spacing:-0.03em;margin-bottom:4px">Intelligence Dashboard</div>'
         '<div style="font-size:13px;color:var(--text-muted);margin-bottom:28px">Overview of regulatory intelligence and audit activity</div>',
@@ -5106,10 +4622,9 @@ if _active == 0:
     # ── "What's New" banner (dismissible) ─────────────────────────────────────
     if not st.session_state.get("whats_new_dismissed", False):
         _whats_new = [
-            (5, "📡 Continuous Audit", "Automated control testing, exception feed & 12-week health trends"),
-            (6, "🏢 Vendor 360", "Third-party risk scoring, KYC status & outsourcing oversight"),
-            (7, "🔍 KYC / AML", "PEP/sanctions queue, remediation pipeline & CDD coverage"),
-            (3, "📂 Document Analyser", "Now auto-assigns a domain specialist based on your audit topic"),
+            (CONTINUOUS_AUDIT, "📡 Continuous Audit", "Automated control testing, exception feed & 12-week health trends"),
+            (VENDOR_360, "🏢 Vendor 360", "Third-party risk scoring, KYC status & outsourcing oversight"),
+            (KYC_AML, "🔍 KYC / AML", "PEP/sanctions queue, remediation pipeline & CDD coverage"),
         ]
         _wn_items = "".join(
             f'<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px">'
@@ -5128,13 +4643,13 @@ if _active == 0:
             f'{_wn_items}</div>',
             unsafe_allow_html=True,
         )
-        _wn_cols = st.columns([1, 1, 1, 1, 1.4], gap="small")
+        _wn_cols = st.columns([1] * len(_whats_new) + [1.4], gap="small")
         for _ci, (_idx, _title, _) in enumerate(_whats_new):
             if _wn_cols[_ci].button(f"Open {_title.split(' ',1)[1]}", key=f"_wn_go_{_idx}", use_container_width=True):
                 st.session_state["active_tab"] = _idx
                 st.session_state["whats_new_dismissed"] = True
                 st.rerun()
-        if _wn_cols[4].button("✓ Got it, dismiss", key="_wn_dismiss", use_container_width=True):
+        if _wn_cols[-1].button("✓ Got it, dismiss", key="_wn_dismiss", use_container_width=True):
             st.session_state["whats_new_dismissed"] = True
             st.rerun()
         st.markdown("<div style='margin-top:14px'></div>", unsafe_allow_html=True)
@@ -5189,27 +4704,12 @@ if _active == 0:
             st.markdown(
                 f'<div style="margin-top:10px;padding:8px 16px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
                 f'<span style="color:var(--text-secondary);font-weight:600">Current audit:</span>'
-                f'<span style="color:var(--text-primary)">{_ds_topic}</span>'
+                f'<span style="color:var(--text-primary)">{_e(_ds_topic)}</span>'
                 + (f'<span style="color:var(--text-muted)">·</span>{_jur_chips}' if _jur_chips else "")
                 + '</div>',
                 unsafe_allow_html=True,
             )
         st.markdown("<div style='margin-top:16px'></div>", unsafe_allow_html=True)
-
-    # ── Live cyberthreat map (Kaspersky) ──────────────────────────────────────
-    st.markdown(
-        '<div style="display:flex;align-items:center;gap:10px;margin:8px 0 12px">'
-        '<span style="font-size:14px;font-weight:700;color:var(--text-primary);text-transform:uppercase;letter-spacing:.06em">🌍 Live Cyberthreat Map</span>'
-        '<span style="font-size:11px;color:var(--text-muted)">Real-time global threat activity · source: Kaspersky</span>'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-    components.iframe(
-        "https://cybermap.kaspersky.com/en/widget/dynamic/dark",
-        height=560,
-        scrolling=False,
-    )
-    st.markdown("<div style='margin-top:20px'></div>", unsafe_allow_html=True)
 
     refresh = False  # only set inside the live branch below
 
@@ -5518,9 +5018,9 @@ if _active == 0:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# TAB 1 — RISK ANALYSIS
+# SECTION — RISK ANALYSIS
 # ─────────────────────────────────────────────────────────────────────────────
-elif _active == 1:
+elif _active == RISK_ANALYSIS:
     _tab_actions_bar("t1",
         "Risk mapping, applicable regulations, and public audit recommendations by topic.",
         [
@@ -5726,7 +5226,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                             }, OUTPUT_DIR)
                             st.session_state.t1_xlsx = Path(p_xlsx).read_bytes()
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
                         try:
                             p_pptx = generate_tab1_pptx({
                                 "topic": audit_topic,
@@ -5736,7 +5236,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                             }, OUTPUT_DIR)
                             st.session_state.t1_pptx2 = Path(p_pptx).read_bytes()
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
                         try:
                             _risks_txt = "\n".join(
                                 f"[{r.get('level','')}] {r.get('title','')} — {r.get('description','')}"
@@ -5751,7 +5251,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                                 [("Risks Identified", _risks_txt), ("Applicable Regulations", _regs_txt)],
                             )
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
 
                         st.session_state["t1_show_form"] = False
                         st.rerun()
@@ -5974,7 +5474,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     OUTPUT_DIR)
                 st.session_state.t1_xlsx = Path(p_xlsx).read_bytes()
             except Exception:
-                pass
+                _log.exception("export generation failed")
         if not st.session_state.t1_pdf and _t1_theme and RISK_INDICATORS.get(_t1_theme):
             try:
                 _pdf_risks_txt = "\n".join(
@@ -5986,7 +5486,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                     [("Risk Indicators", _pdf_risks_txt)],
                 )
             except Exception:
-                pass
+                _log.exception("export generation failed")
 
         st.markdown("---")
         _t1_has_exports = st.session_state.t1_docx or st.session_state.t1_xlsx or st.session_state.t1_pptx2 or st.session_state.t1_pdf
@@ -5996,7 +5496,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 _e1.download_button(
                     "📝 Word",
                     data=st.session_state.t1_docx,
-                    file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.docx",
+                    file_name=f"Risk_Analysis_{_slug(topic_lbl)}.docx",
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                     use_container_width=True,
                 )
@@ -6004,7 +5504,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 _e2.download_button(
                     "📗 Excel",
                     data=st.session_state.t1_xlsx,
-                    file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.xlsx",
+                    file_name=f"Risk_Analysis_{_slug(topic_lbl)}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     use_container_width=True,
                 )
@@ -6012,7 +5512,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 _e3.download_button(
                     "📙 PPT",
                     data=st.session_state.t1_pptx2,
-                    file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.pptx",
+                    file_name=f"Risk_Analysis_{_slug(topic_lbl)}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
                     use_container_width=True,
                 )
@@ -6020,7 +5520,7 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                 _e4.download_button(
                     "📕 PDF",
                     data=st.session_state.t1_pdf,
-                    file_name=f"Risk_Analysis_{topic_lbl.replace(' ', '_')}.pdf",
+                    file_name=f"Risk_Analysis_{_slug(topic_lbl)}.pdf",
                     mime="application/pdf",
                     use_container_width=True,
                 )
@@ -6028,9 +5528,9 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# TAB 2 — AUDIT PLAN
+# SECTION — AUDIT PLAN
 # ─────────────────────────────────────────────────────────────────────────────
-elif _active == 2:
+elif _active == AUDIT_PLAN:
     _tab_actions_bar("t2",
         "Structured audit planning, test programme, and data analytics scenarios.",
         [
@@ -6292,7 +5792,7 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                             ] if v]
                             st.session_state.t2_pdf = _make_pdf(f"Audit Plan — {topic2}", _t2_sections)
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
 
                         st.session_state["t2_show_form"] = False
                         st.rerun()
@@ -6472,7 +5972,7 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                     [("Audit Tests", _t2_tests_txt)],
                 )
             except Exception:
-                pass
+                _log.exception("export generation failed")
 
         pptx = st.session_state.t2_pptx
         xlsx = st.session_state.t2_xlsx
@@ -6483,21 +5983,21 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
             if pptx:
                 _t2_ecols[0].download_button(
                     "📙 PPT", data=pptx,
-                    file_name=f"Audit_Plan_{topic2_lbl.replace(' ', '_')}.pptx",
+                    file_name=f"Audit_Plan_{_slug(topic2_lbl)}.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
                     use_container_width=True,
                 )
             if xlsx:
                 _t2_ecols[1].download_button(
                     "📗 Excel", data=xlsx,
-                    file_name=f"Audit_Tests_{topic2_lbl.replace(' ', '_')}.xlsx",
+                    file_name=f"Audit_Tests_{_slug(topic2_lbl)}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     use_container_width=True,
                 )
             if pdf2:
                 _t2_ecols[2].download_button(
                     "📕 PDF", data=pdf2,
-                    file_name=f"Audit_Plan_{topic2_lbl.replace(' ', '_')}.pdf",
+                    file_name=f"Audit_Plan_{_slug(topic2_lbl)}.pdf",
                     mime="application/pdf",
                     use_container_width=True,
                 )
@@ -6570,345 +6070,14 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                     st.download_button(
                         "↓ Download tracker (.tsv)",
                         data="\n".join(_tr_lines).encode("utf-8"),
-                        file_name=f"Test_Tracker_{st.session_state.get('t1_topic', 'audit').replace(' ', '_')}.tsv",
+                        file_name=f"Test_Tracker_{_slug(st.session_state.get('t1_topic') or 'audit')}.tsv",
                         mime="text/tab-separated-values",
                         key="t2_tracker_dl",
                     )
 
-# TAB 3 — DOCUMENT ANALYSER
+# SECTION — AUDIT REPORT
 # ─────────────────────────────────────────────────────────────────────────────
-elif _active == 3:
-    # Domain specialist profiles — keyed by domain, matched from audit topic keywords
-    _T3_SPECIALISTS = {
-        "aml_kyc": {
-            "kw": ["aml", "kyc", "cdd", "edd", "str", "sar", "pep", "sanction", "transaction monitor", "anti-money", "beneficial owner", "fatf"],
-            "name": "AML & KYC Compliance Specialist", "initials": "AK",
-            "color": "#818cf8", "bg": "#1a1a3e",
-            "domain": "Anti-Money Laundering · Know Your Customer · Sanctions",
-            "expertise": ["STR / SAR filing governance", "CDD / EDD frameworks", "PEP & sanctions screening", "Transaction monitoring systems", "MLRO governance & oversight"],
-            "credentials": ["CAMS", "CFCS", "Ex-FINMA supervisory team"],
-            "regs": ["FATF R.10 / R.16 / R.20", "FINMA Circ. 2011/1", "MAS Notice 626", "AMLD6", "UK POCA 2002"],
-            "role": "You are a senior AML & KYC compliance specialist with 20 years of experience in private banking. Expert in FATF recommendations, FINMA AML circular, CDD/EDD frameworks, STR/SAR obligations, and PEP screening.",
-        },
-        "third_party": {
-            "kw": ["third party", "vendor", "outsourc", "supplier", "counterparty", "sla", "clearstream", "swift", "temenos", "bloomberg"],
-            "name": "Third Party Risk Specialist", "initials": "TP",
-            "color": "#22d3a5", "bg": "#0d2b1d",
-            "domain": "Vendor Risk · Outsourcing · SLA Governance",
-            "expertise": ["Critical vendor assessment", "SLA breach analysis", "Exit strategy review", "Sub-outsourcing chain audit", "Concentration risk"],
-            "credentials": ["CRISC", "CTPRP", "Ex-MAS supervision"],
-            "regs": ["FINMA Circ. 2018/3", "MAS TRM Guidelines 2021", "FCA SS2/21", "DORA Art. 28-30", "EBA/GL/2019/02"],
-            "role": "You are a senior third-party and vendor risk specialist. Expert in outsourcing governance, SLA analysis, critical vendor assessment, and regulatory requirements under FINMA 2018/3, MAS TRM, FCA SS2/21, and DORA.",
-        },
-        "cyber": {
-            "kw": ["cyber", "it risk", "technology risk", "dora", "iso 27001", "nist", "penetrat", "privileged access", "infosec", "information security", "bcm", "bcp", "disaster recover", "ransomware", "cloud security"],
-            "name": "Cyber & Technology Risk Specialist", "initials": "CT",
-            "color": "#f97316", "bg": "#2e1f0a",
-            "domain": "Cyber Security · IT Risk · Operational Resilience",
-            "expertise": ["Penetration test review", "Privileged access management (PAM)", "DORA ICT governance", "Business continuity testing", "Cloud security posture"],
-            "credentials": ["CISSP", "CISM", "ISO 27001 Lead Auditor"],
-            "regs": ["DORA (EU 2022/2554)", "MAS TRM 2021", "NIST CSF 2.0", "ISO/IEC 27001:2022", "FINMA Circ. 2023/1"],
-            "role": "You are a senior cyber and technology risk specialist. Expert in DORA, ISO 27001, NIST CSF, privileged access management, and IT resilience frameworks for private banks.",
-        },
-        "credit_risk": {
-            "kw": ["credit risk", "lending", "loan", "impairment", "ecl", "ifrs 9", "provision", "collateral", "basel", "npl", "credit appetite", "rwa"],
-            "name": "Credit Risk & Capital Specialist", "initials": "CR",
-            "color": "#ef4444", "bg": "#3b0e0e",
-            "domain": "Credit Risk · Capital Adequacy · IFRS 9",
-            "expertise": ["ECL provisioning (IFRS 9)", "Credit appetite framework", "Collateral valuation", "Basel IV RWA computation", "Large exposure monitoring"],
-            "credentials": ["FRM", "CFA", "Ex-SNB banking supervision"],
-            "regs": ["Basel IV / CRR III", "FINMA CAO", "IFRS 9", "EBA/GL/2020/06", "MAS Notice 612"],
-            "role": "You are a senior credit risk and capital specialist. Expert in IFRS 9 ECL modelling, Basel IV, collateral frameworks, and credit governance in private banking.",
-        },
-        "market_risk": {
-            "kw": ["market risk", "var", "trading", "frtb", "interest rate risk", "fx risk", "derivative", "hedging", "limit breach", "stress test", "liquidity"],
-            "name": "Market & Liquidity Risk Specialist", "initials": "MR",
-            "color": "#eab308", "bg": "#2e2000",
-            "domain": "Market Risk · FRTB · Liquidity",
-            "expertise": ["VaR / CVaR governance", "FRTB SA / IMA implementation", "Limit framework review", "ILAAP / LCR / NSFR", "Stress testing & scenario analysis"],
-            "credentials": ["FRM", "PRM", "Ex-UBS Market Risk"],
-            "regs": ["Basel III/IV - FRTB", "FINMA Circ. 2019/2", "MAS Notice 637", "EBA/GL/2018/02 ILAAP"],
-            "role": "You are a senior market and liquidity risk specialist. Expert in VaR governance, FRTB, stress testing, and liquidity risk frameworks for private banks.",
-        },
-        "data_privacy": {
-            "kw": ["gdpr", "data privacy", "data protection", "personal data", "retention", "dpo", "consent", "data breach", "ndsg", "pdpa", "data subject"],
-            "name": "Data Privacy & GDPR Specialist", "initials": "DP",
-            "color": "#a78bfa", "bg": "#1a0e3b",
-            "domain": "GDPR · Data Privacy · Information Governance",
-            "expertise": ["GDPR Art. 13-22 data subject rights", "Retention schedule audit", "Data breach response review", "Cross-border transfer (SCCs)", "DPIA review"],
-            "credentials": ["CIPP/E", "CIPM", "Certified DPO"],
-            "regs": ["GDPR (EU 2016/679)", "UK GDPR / DPA 2018", "Swiss nDSG", "PDPA (SG)", "PIPL (CN)"],
-            "role": "You are a senior data privacy specialist. Expert in GDPR, UK GDPR, Swiss nDSG, and PDPA compliance, specialising in retention audits, data subject rights, and cross-border transfer mechanisms.",
-        },
-        "governance": {
-            "kw": ["governance", "board", "committee", "three line", "control framework", "rcsa", "risk appetite", "compliance framework", "regulatory", "policy"],
-            "name": "Governance & Regulatory Compliance Specialist", "initials": "GR",
-            "color": "#38bdf8", "bg": "#0a2540",
-            "domain": "Corporate Governance · Risk Framework · Regulatory Affairs",
-            "expertise": ["Three Lines Model design", "RCSA framework review", "Risk appetite statement", "Board & committee governance", "Regulatory engagement strategy"],
-            "credentials": ["CIA", "CRMA", "Ex-FINMA enforcement"],
-            "regs": ["COSO 2017", "IIA Standards 2024", "FINMA Corporate Governance Circ.", "MAS Corp. Gov. Guidelines", "FCA SYSC"],
-            "role": "You are a senior governance and regulatory compliance specialist. Expert in corporate governance, three-lines-of-defence, COSO, IIA standards, and multi-jurisdictional regulatory requirements.",
-        },
-        "operational_risk": {
-            "kw": ["operational risk", "op risk", "bcp", "bcm", "rto", "rpo", "incident", "operational resilience", "process gap", "procedure", "important business service"],
-            "name": "Operational Resilience Specialist", "initials": "OR",
-            "color": "#fb923c", "bg": "#2a1505",
-            "domain": "Operational Risk · Business Continuity · Resilience",
-            "expertise": ["BIA & BCP testing review", "RTO / RPO gap analysis", "Incident management governance", "Important business services (IBS)", "Scenario & stress analysis"],
-            "credentials": ["MBCI", "ISO 22301 Lead Auditor", "Ex-PRA supervision"],
-            "regs": ["FCA/PRA SS1/21 Op. Resilience", "DORA Art. 11-14", "MAS Notice 634", "FINMA Circ. 2023/1"],
-            "role": "You are a senior operational resilience specialist. Expert in BCP/BCM testing, important business services mapping, RTO/RPO governance, and multi-jurisdictional resilience requirements.",
-        },
-    }
-    _T3_DEFAULT_SPEC = {
-        "name": "Senior Internal Audit Specialist", "initials": "IA",
-        "color": "#818cf8", "bg": "#1a1a3e",
-        "domain": "Internal Audit · Risk & Control · Multi-domain",
-        "expertise": ["Control framework assessment", "Risk-based audit approach", "Regulatory compliance review", "Observation & finding writing", "IIA Standards application"],
-        "credentials": ["CIA", "CISA", "CFE"],
-        "regs": ["IIA Standards 2024", "COSO 2017", "FINMA · MAS · FCA · DORA"],
-        "role": "You are a senior internal auditor with broad expertise across all risk domains in private banking. Analyse documents through a risk-based audit lens.",
-    }
-
-    def _t3_detect_specialist(topic: str) -> dict:
-        t = topic.lower()
-        for _sp in _T3_SPECIALISTS.values():
-            if any(kw in t for kw in _sp["kw"]):
-                return _sp
-        return _T3_DEFAULT_SPEC
-
-    st.markdown(
-        '<div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">'
-        'Upload audit documents — a domain specialist AI analyses findings, maps them to your audit tests, and surfaces observations.</div>',
-        unsafe_allow_html=True,
-    )
-
-    st.caption("📎 Upload documents to analyse (PDF, Word, Excel, TXT — multiple files)")
-    t3_uploads = st.file_uploader(
-        "Documents", label_visibility="collapsed",
-        type=["pdf", "docx", "xlsx", "txt"], accept_multiple_files=True, key="t3_upload_docs",
-    )
-    _t3_topic_default = st.session_state.get("t1_topic") or st.session_state.get("topic_tab1") or ""
-    t3_topic = st.text_input(
-        "Audit Topic / Context",
-        value=_t3_topic_default,
-        placeholder="e.g. AML/KYC, Credit Risk, Cyber, Third Party…",
-        key="t3_topic_in",
-    )
-
-    # Specialist card — auto-detected from current topic value, updates on rerun
-    _t3_cur_topic = st.session_state.get("t3_topic_in") or t3_topic or ""
-    _t3_spec = _t3_detect_specialist(_t3_cur_topic)
-    _sp_exp_html = "".join([f'<li style="margin-bottom:3px">{e}</li>' for e in _t3_spec["expertise"]])
-    _sp_creds_html = "  ".join([f'<span style="background:{_t3_spec["bg"]};color:{_t3_spec["color"]};border:1px solid {_t3_spec["color"]}55;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700">{c}</span>' for c in _t3_spec["credentials"]])
-    _sp_regs_html = "  ".join([f'<span style="color:#4a5568;font-size:10.5px">* {r}</span>' for r in _t3_spec["regs"]])
-    st.markdown(f"""
-<div style="background:var(--bg-card);border:1px solid {_t3_spec["color"]}44;border-radius:12px;padding:18px 22px;margin:12px 0 16px;position:relative;overflow:hidden">
-  <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:{_t3_spec["color"]}"></div>
-  <div style="display:flex;gap:16px;align-items:flex-start">
-    <div style="min-width:52px;height:52px;border-radius:50%;background:{_t3_spec["bg"]};border:2px solid {_t3_spec["color"]};
-         display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:{_t3_spec["color"]};flex-shrink:0">
-      {_t3_spec["initials"]}
-    </div>
-    <div style="flex:1;min-width:0">
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
-        <span style="font-size:15px;font-weight:700;color:#eef0f8">{_t3_spec["name"]}</span>
-        <span style="background:{_t3_spec["bg"]};color:{_t3_spec["color"]};border:1px solid {_t3_spec["color"]}55;border-radius:6px;padding:2px 9px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Domain Specialist</span>
-      </div>
-      <div style="font-size:11.5px;color:{_t3_spec["color"]};font-weight:600;margin-bottom:10px">{_t3_spec["domain"]}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:11.5px">
-        <div>
-          <div style="color:#6b7a99;font-weight:700;text-transform:uppercase;font-size:10px;letter-spacing:.06em;margin-bottom:4px">Expertise</div>
-          <ul style="margin:0;padding-left:14px;color:#eef0f8;line-height:1.7">{_sp_exp_html}</ul>
-        </div>
-        <div>
-          <div style="color:#6b7a99;font-weight:700;text-transform:uppercase;font-size:10px;letter-spacing:.06em;margin-bottom:6px">Credentials</div>
-          <div style="margin-bottom:10px">{_sp_creds_html}</div>
-          <div style="color:#6b7a99;font-weight:700;text-transform:uppercase;font-size:10px;letter-spacing:.06em;margin-bottom:4px">Regulatory frame</div>
-          <div style="line-height:1.9">{_sp_regs_html}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>""", unsafe_allow_html=True)
-
-    t3_notes = st.text_area(
-        "Additional context or focus areas (optional)",
-        placeholder="e.g. Focus on gaps between policy and practice. Cross-reference with FINMA Circular 2011/1.",
-        height=80,
-        key="t3_notes_in",
-    )
-
-    # Analysis mode selector
-    _t3_mode_col, _ = st.columns([3, 5])
-    with _t3_mode_col:
-        _t3_mode = st.radio(
-            "Analysis mode",
-            ["📡 AI Analysis (API)", "🔒 Static Analysis (No API)"],
-            horizontal=True,
-            label_visibility="collapsed",
-            key="t3_mode",
-            help="Static mode extracts text locally and matches against the built-in reference library — no API key needed.",
-        )
-
-    st.markdown('<div class="gen-btn-wrap"><div class="gen-btn">', unsafe_allow_html=True)
-    _t3_can_run = bool(t3_uploads) and bool(t3_topic)
-    _t3_btn_label = "✦ Analyser les documents" if _t3_mode == "📡 AI Analysis (API)" else "🔒 Analyse statique (No API)"
-    if st.button(_t3_btn_label, disabled=(_disabled and _t3_mode == "📡 AI Analysis (API)") or not _t3_can_run, key="t3_run"):
-        if _t3_mode == "🔒 Static Analysis (No API)":
-            # ── Static path: local text extraction + keyword matching ──────────
-            with st.spinner("Extracting text and scanning reference library…"):
-                _combined_text = ""
-                _extract_errors = []
-                for uf in (t3_uploads or []):
-                    _res = extract_text_from_file(uf)
-                    if _res["status"] == "ok":
-                        _combined_text += f"\n\n--- {_res['filename']} ---\n" + _res["text"]
-                    else:
-                        _extract_errors.append(f"{_res['filename']}: {_res['error']}")
-                if _extract_errors:
-                    st.warning("Some files could not be read: " + "; ".join(_extract_errors))
-                if _combined_text.strip():
-                    _entity = st.session_state.get("t1_entity_type") or st.session_state.get("entity_type") or "🏦 Private Banking"
-                    _static_result = analyze_document_static(_combined_text, t3_topic, _entity, "observations")
-                    st.session_state["t3_docs_analysis"] = _static_result.get("observations") or []
-                    st.session_state["t3_analysis_xlsx"] = None
-                    st.session_state["t3_analysis_pdf"] = None
-                else:
-                    st.error("Could not extract text from the uploaded file(s). Please check the format.")
-        else:
-            # ── AI path: upload to API and call Claude ─────────────────────────
-            with st.spinner(f"{_t3_spec['name']} is reviewing the documents..."):
-                try:
-                    c = _client()
-                    file_ids3 = []
-                    for uf in (t3_uploads or []):
-                        fm = _upload_sf(c, uf)
-                        if fm:
-                            file_ids3.append(fm)
-                    _t3_tests_ctx = ""
-                    if st.session_state.get("t2_tests"):
-                        _tests_sample = st.session_state.t2_tests[:5] if isinstance(st.session_state.t2_tests, list) else []
-                        if _tests_sample:
-                            _t3_tests_ctx = "\n\nAudit tests in programme:\n" + "\n".join(
-                                f"- {t.get('test_id', '')}: {t.get('title', '')}" for t in _tests_sample
-                            )
-                    _t3_inst = _entity_institution_str(jurs=st.session_state.get("t1_jurs") or JURISDICTIONS[:4])
-                    doc_note = f"{len(file_ids3)} document(s) provided." if file_ids3 else "No documents attached — analyse based on topic only."
-                    analysis_raw = _call(c,
-                        f"Audit topic: {t3_topic}\nInstitution: {_t3_inst}\n{doc_note}"
-                        + (f"\nAdditional context: {t3_notes}" if t3_notes else "")
-                        + _t3_tests_ctx
-                        + "\n\nAnalyse the provided documents. Identify key findings, control gaps, and potential audit observations. "
-                        "For each observation link it to relevant audit tests where possible.\n"
-                        "Respond ONLY with valid JSON:\n"
-                        '[{"observation":"<concise observation title>","detail":"<2-3 sentences>","risk_level":"Critical|High|Moderate|Low","linked_tests":["<test id or title>"],"source":"<document name or inferred>"}]',
-                        system=_t3_spec["role"] + " Analyse documents and identify potential audit observations. Return ONLY a valid JSON array.",
-                        max_tokens=4000,
-                    )
-                    st.session_state["t3_docs_analysis"] = _parse_json(analysis_raw) or []
-                    st.session_state["t3_analysis_xlsx"] = None
-                    st.session_state["t3_analysis_pdf"] = None
-                except Exception:
-                    st.error("Analysis failed. Please try again.")
-    st.markdown('</div></div>', unsafe_allow_html=True)
-
-    _t3_analysis = st.session_state.get("t3_docs_analysis") or []
-    if _t3_analysis:
-        st.markdown("---")
-        st.markdown('<div class="section-title">Observations & Findings</div>', unsafe_allow_html=True)
-        _LVLC4 = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308", "Low": "#22d3a5"}
-        _obs_list = list(st.session_state.get("t3_observations") or [])
-        _obs_ids = {o["id"] for o in _obs_list}
-        for _i, _obs in enumerate(_t3_analysis):
-            _ocol = _LVLC4.get(_obs.get("risk_level", ""), "#8392bb")
-            _tests_str = ", ".join(_obs.get("linked_tests") or []) or "—"
-            _already_added = str(_i) in _obs_ids
-            st.markdown(f"""
-            <div style="border:1px solid {_ocol}33;border-radius:9px;padding:14px 18px;margin-bottom:10px;background:{_ocol}08">
-              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-                <span style="background:{_ocol}22;color:{_ocol};border:1px solid {_ocol}44;border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700">{_obs.get("risk_level","")}</span>
-                <span style="font-size:13.5px;font-weight:600;color:var(--text-primary)">{_obs.get("observation","")}</span>
-              </div>
-              <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 8px;line-height:1.7">{_obs.get("detail","")}</p>
-              <div style="font-size:11.5px;color:var(--text-muted)">🔗 Linked tests: {_tests_str} &nbsp;·&nbsp; 📄 Source: {_obs.get("source","—")}</div>
-              {"".join(f'<div style="font-size:11px;color:#94a3b8;margin-top:4px;padding-left:4px">⚠ {ev}</div>' for ev in (_obs.get("evidence") or [])[:2]) if _obs.get("evidence") else ""}
-            </div>""", unsafe_allow_html=True)
-            if not _already_added:
-                if st.button("➕ Add to Report", key=f"t3_add_obs_{_i}"):
-                    _obs_list.append({
-                        "id": str(_i),
-                        "observation": _obs.get("observation", ""),
-                        "detail": _obs.get("detail", ""),
-                        "risk_level": _obs.get("risk_level", ""),
-                        "linked_tests": _obs.get("linked_tests", []),
-                        "source": _obs.get("source", "Document Analyser"),
-                    })
-                    st.session_state["t3_observations"] = _obs_list
-                    st.rerun()
-            else:
-                st.caption("✓ Added to Report")
-        _n_added = len(st.session_state.get("t3_observations") or [])
-        if _n_added:
-            st.success(f"{_n_added} observation(s) added to the Audit Report tab.")
-
-        # ── Exports for Document Analyser ─────────────────────────────────
-        if _t3_analysis:
-            st.markdown("---")
-            _t3_exp_cols = st.columns([2, 2, 2, 2])
-            # Excel export
-            if not st.session_state.get("t3_analysis_xlsx"):
-                try:
-                    import openpyxl
-                    from io import BytesIO
-                    wb = openpyxl.Workbook()
-                    ws = wb.active
-                    ws.title = "Observations"
-                    ws.append(["Risk Level", "Observation", "Detail", "Linked Tests", "Source"])
-                    for _o in _t3_analysis:
-                        ws.append([
-                            _o.get("risk_level",""), _o.get("observation",""),
-                            _o.get("detail",""), ", ".join(_o.get("linked_tests") or []),
-                            _o.get("source",""),
-                        ])
-                    _buf = BytesIO(); wb.save(_buf); _buf.seek(0)
-                    st.session_state["t3_analysis_xlsx"] = _buf.getvalue()
-                except Exception:
-                    pass
-            if not st.session_state.get("t3_analysis_pdf"):
-                try:
-                    _obs_txt = "\n".join(
-                        f"[{o.get('risk_level','')}] {o.get('observation','')} — {o.get('detail','')[:100]}"
-                        for o in _t3_analysis
-                    )
-                    st.session_state["t3_analysis_pdf"] = _make_pdf(
-                        f"Document Analysis — {t3_topic}",
-                        [("Observations", _obs_txt)],
-                    )
-                except Exception:
-                    pass
-            with _t3_exp_cols[0]:
-                if st.session_state.get("t3_analysis_xlsx"):
-                    st.download_button("📗 Excel", data=st.session_state["t3_analysis_xlsx"],
-                        file_name="Document_Analysis.xlsx",
-                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        use_container_width=True, key="t3_dl_xlsx")
-                else:
-                    st.button("📗 Excel", disabled=True, use_container_width=True, key="t3_dl_xlsx_dis")
-            with _t3_exp_cols[1]:
-                if st.session_state.get("t3_analysis_pdf"):
-                    st.download_button("📕 PDF", data=st.session_state["t3_analysis_pdf"],
-                        file_name="Document_Analysis.pdf",
-                        mime="application/pdf",
-                        use_container_width=True, key="t3_dl_pdf")
-                else:
-                    st.button("📕 PDF", disabled=True, use_container_width=True, key="t3_dl_pdf_dis")
-
-
-# TAB 4 — AUDIT REPORT
-# ─────────────────────────────────────────────────────────────────────────────
-elif _active == 4:
+elif _active == AUDIT_REPORT:
     _tab_actions_bar("t3",
         "IIA-standard audit report — assembled from Risk Analysis and Audit Plan context.",
         [
@@ -6954,7 +6123,7 @@ elif _active == 4:
     st.markdown("<div style='margin-bottom:16px'></div>", unsafe_allow_html=True)
 
     if _t4_rec_view == "📝 My Observations":
-        # Show observations from Document Analyser + allow manual add
+        # Observations captured for the report
         _t4_obs = list(st.session_state.get("t3_observations") or [])
         if _t4_obs:
             st.markdown('<div class="section-title">Observations</div>', unsafe_allow_html=True)
@@ -6962,12 +6131,12 @@ elif _active == 4:
                 _ocol2 = {"Critical":"#ef4444","High":"#f97316","Moderate":"#eab308","Low":"#22d3a5"}.get(_ob.get("risk_level",""), "#8392bb")
                 st.markdown(
                     f'<div style="border:1px solid {_ocol2}33;border-radius:8px;padding:10px 16px;margin-bottom:8px;background:{_ocol2}08">'
-                    f'<span style="font-size:12.5px;font-weight:600;color:var(--text-primary)">{_ob.get("observation","")}</span>'
-                    f'<span style="font-size:11px;color:var(--text-muted);margin-left:10px">— {_ob.get("source","")}</span></div>',
+                    f'<span style="font-size:12.5px;font-weight:600;color:var(--text-primary)">{_e(_ob.get("observation",""))}</span>'
+                    f'<span style="font-size:11px;color:var(--text-muted);margin-left:10px">— {_e(_ob.get("source",""))}</span></div>',
                     unsafe_allow_html=True,
                 )
         else:
-            st.caption("No observations yet. Add them from Document Analyser or manually below.")
+            st.caption("No observations yet — add one below.")
 
         st.markdown("**Add observation manually**")
         _t4_manual = st.text_area("Observation text", placeholder="Describe the finding…", height=80, key="t4_manual_obs")
@@ -7065,7 +6234,7 @@ elif _active == 4:
                 f'<div style="border:1px solid {_fc}33;border-radius:12px;padding:18px 22px;margin-bottom:14px;background:{_fc}08">'
                 f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'
                 f'<span style="background:{_fc}22;color:{_fc};border:1px solid {_fc}55;border-radius:6px;padding:2px 10px;font-size:11px;font-weight:700">{_f["ref"]} · {_f["level"]}</span>'
-                f'<span style="font-size:14px;font-weight:700;color:#eef0f8">{_f["title"]}</span></div>'
+                f'<span style="font-size:14px;font-weight:700;color:#eef0f8">{_e(_f["title"])}</span></div>'
                 f'<div style="font-size:12.5px;line-height:1.8;color:#94a3b8">'
                 f'<p style="margin:0 0 6px"><b style="color:#cbd5e1">Condition:</b> {_f["condition"]}</p>'
                 f'<p style="margin:0 0 6px"><b style="color:#cbd5e1">Criteria:</b> {_f["criteria"]}</p>'
@@ -7076,7 +6245,7 @@ elif _active == 4:
                 f'</div></div>',
                 unsafe_allow_html=True,
             )
-        st.caption("💡 This is a static reference example. Use 'My Observations' to build your own findings from the Document Analyser or manual entry.")
+        st.caption("💡 This is a static reference example. Use 'My Observations' to build your own findings.")
 
     elif _t4_rep_view == "2 · Narrative & Findings":
         _t3_mode = render_mode_toggle("mode_tab3")
@@ -7152,11 +6321,11 @@ elif _active == 4:
             if st.session_state.get("report_generated") and st.session_state.get("report_data"):
                 rd    = st.session_state["report_data"]
                 ts    = st.session_state.get("report_timestamp","")
-                rname = f"Audit_Report_{rd['topic'].replace(' ','_')}"
+                rname = f"Audit_Report_{_slug(rd['topic'])}"
                 st.markdown("---")
                 st.markdown(
                     f'<div style="font-size:11px;color:#5a6488;margin-bottom:16px">Report generated: {ts} &nbsp;&middot;&nbsp; '
-                    f'Topic: <strong style="color:#8392bb">{rd["topic"]}</strong> &nbsp;&middot;&nbsp; '
+                    f'Topic: <strong style="color:#8392bb">{_e(rd["topic"])}</strong> &nbsp;&middot;&nbsp; '
                     f'{rd["n_total"]} finding(s)</div>',
                     unsafe_allow_html=True,
                 )
@@ -7237,7 +6406,7 @@ elif _active == 4:
                                          file_name=f"{rname}_ActionPlan.xlsx",
                                          mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 except Exception:
-                    pass
+                    _log.exception("export generation failed")
                 _fe3.caption("pptx — available after live generation")
 
             else:
@@ -7384,12 +6553,12 @@ elif _active == 4:
                             p_xlsx3 = generate_audit_findings_excel({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
                             st.session_state.t3_xlsx = Path(p_xlsx3).read_bytes()
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
                         try:
                             p_pptx3 = generate_report_pptx({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
                             st.session_state.t3_pptx2 = Path(p_pptx3).read_bytes()
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
                         try:
                             _rd = st.session_state.get("report_data") or {}
                             _t3_sections = [(k.replace("_"," ").title(), str(v))
@@ -7399,7 +6568,7 @@ elif _active == 4:
                                 _t3_sections = [("Findings", _t3_findings_raw)]
                             st.session_state.t3_pdf = _make_pdf(audit_name or "Audit Report", _t3_sections)
                         except Exception:
-                            pass
+                            _log.exception("export generation failed")
 
                     except Exception:
                         st.error("An error occurred. Please try again.")
@@ -7424,15 +6593,15 @@ elif _active == 4:
                         _f1, _f2, _f3 = st.columns([2, 2, 2])
                         if res.get("docx_bytes"):
                             _f1.download_button("📝 Word", data=res["docx_bytes"],
-                                                file_name=f"Audit_Report_{name.replace(' ','_')}.docx",
+                                                file_name=f"Audit_Report_{_slug(name)}.docx",
                                                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                         if st.session_state.t3_xlsx:
                             _f2.download_button("📗 Excel", data=st.session_state.t3_xlsx,
-                                                file_name=f"Audit_Findings_{name.replace(' ','_')}.xlsx",
+                                                file_name=f"Audit_Findings_{_slug(name)}.xlsx",
                                                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                         if st.session_state.t3_pptx2:
                             _f3.download_button("📙 PPT", data=st.session_state.t3_pptx2,
-                                                file_name=f"Audit_Report_{name.replace(' ','_')}.pptx",
+                                                file_name=f"Audit_Report_{_slug(name)}.pptx",
                                                 mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
 
 
@@ -7564,7 +6733,7 @@ elif _active == 4:
             _ex1.download_button(
                 "docx ↓  Executive Summary",
                 data=_t4_exec.encode("utf-8"),
-                file_name=f"ExecSummary_{_t4_topic.replace(' ', '_')}.txt",
+                file_name=f"ExecSummary_{_slug(_t4_topic)}.txt",
                 mime="text/plain",
                 key="t4_exec_dl_txt",
             )
@@ -7577,12 +6746,12 @@ elif _active == 4:
                     _ex2.download_button(
                         "pdf ↓  Executive Summary",
                         data=_exec_pdf,
-                        file_name=f"ExecSummary_{_t4_topic.replace(' ', '_')}.pdf",
+                        file_name=f"ExecSummary_{_slug(_t4_topic)}.pdf",
                         mime="application/pdf",
                         key="t4_exec_dl_pdf",
                     )
             except Exception:
-                pass
+                _log.exception("export generation failed")
 
     elif _t4_rep_view == "3 · Recommendation Details":
         st.markdown(
@@ -7592,21 +6761,21 @@ elif _active == 4:
         )
         _rd_obs = list(st.session_state.get("t3_observations") or [])
         if not _rd_obs:
-            st.info("No observations yet. Add them in **📋 Recommendations → My Observations** (from the Document Analyser or manually).")
+            st.info("No observations yet. Add them in **📋 Recommendations → My Observations**.")
         else:
             _rd_lvlc = {"Critical": "#ef4444", "High": "#f97316", "Moderate": "#eab308", "Low": "#22d3a5"}
             for _ri, _ob in enumerate(_rd_obs):
                 _rc = _rd_lvlc.get(_ob.get("risk_level", ""), "#8392bb")
-                _tests = ", ".join(_ob.get("linked_tests") or []) or "—"
-                _detail = _ob.get("detail") or "—"
+                _tests = _e(", ".join(_ob.get("linked_tests") or []) or "—")
+                _detail = _e(_ob.get("detail") or "—")
                 st.markdown(
                     f'<div style="border:1px solid {_rc}33;border-left:4px solid {_rc};border-radius:10px;'
                     f'padding:16px 20px;margin-bottom:12px;background:{_rc}08">'
                     f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
                     f'<span style="background:{_rc}22;color:{_rc};border:1px solid {_rc}55;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:700">R-{_ri+1:02d} · {_ob.get("risk_level","")}</span>'
-                    f'<span style="font-size:13.5px;font-weight:700;color:#eef0f8">{_ob.get("observation","")}</span></div>'
+                    f'<span style="font-size:13.5px;font-weight:700;color:#eef0f8">{_e(_ob.get("observation",""))}</span></div>'
                     f'<p style="font-size:12.5px;color:#94a3b8;line-height:1.7;margin:0 0 8px">{_detail}</p>'
-                    f'<div style="font-size:11.5px;color:#6b7a99">🔗 Linked tests: {_tests} &nbsp;·&nbsp; 📄 Source: {_ob.get("source","—")}</div>'
+                    f'<div style="font-size:11.5px;color:#6b7a99">🔗 Linked tests: {_tests} &nbsp;·&nbsp; 📄 Source: {_e(_ob.get("source","—"))}</div>'
                     f'</div>',
                     unsafe_allow_html=True,
                 )
@@ -7637,7 +6806,7 @@ elif _active == 4:
         _kp_cards = [
             ("Risks Identified", len(_kp_risks), "#818cf8", "from Risk Analysis"),
             ("Tests in Programme", len(_kp_tests), "#818cf8", f"{_kp_test_pct}% marked complete"),
-            ("Observations Raised", len(_kp_obs), "#f97316", "from Document Analyser"),
+            ("Observations Raised", len(_kp_obs), "#f97316", "captured manually"),
             ("Prior Recs Open (N-1)", _kp_open_prior, "#ef4444" if _kp_open_prior else "#22d3a5", "follow-up required"),
         ]
         _kp_cols = st.columns(4, gap="small")
@@ -7670,9 +6839,9 @@ elif _active == 4:
             st.caption("No observations yet — criticality breakdown will populate as findings are raised.")
 
 
-# TAB 5 — CONTINUOUS AUDIT DASHBOARD
+# SECTION — CONTINUOUS AUDIT DASHBOARD
 # ─────────────────────────────────────────────────────────────────────────────
-elif _active == 5:
+elif _active == CONTINUOUS_AUDIT:
     # Automated control test results
     _t5_controls = [
         {"id": "CTL-001", "process": "AML Transaction Monitoring",  "freq": "Daily",   "last_run": "2026-06-03 06:00", "coverage": 100, "result": "Exception", "exceptions": 3},
@@ -7837,9 +7006,9 @@ elif _active == 5:
 """, unsafe_allow_html=True)
 
 
-# TAB 6 — THIRD PARTY & VENDOR 360
+# SECTION — THIRD PARTY & VENDOR 360
 # ─────────────────────────────────────────────────────────────────────────────
-elif _active == 6:
+elif _active == VENDOR_360:
     _t6_kpis = [
         {"label": "Total Vendors",    "value": "143", "delta": "+4 onboarded Q2",   "color": "#818cf8"},
         {"label": "Critical Vendors", "value": "23",  "delta": "Tier 1 — FINMA reg", "color": "#ef4444"},
@@ -7947,9 +7116,9 @@ elif _active == 6:
     st.markdown(f'<div style="display:flex;flex-wrap:wrap;gap:6px">{_reg_pills}</div>', unsafe_allow_html=True)
 
 
-# TAB 7 — KYC / AML COMPLIANCE
+# SECTION — KYC / AML COMPLIANCE
 # ─────────────────────────────────────────────────────────────────────────────
-elif _active == 7:
+elif _active == KYC_AML:
     _t7_kpis = [
         {"label": "Clients Reviewed", "value": "2,847", "delta": "Q2 2026",           "color": "#818cf8"},
         {"label": "PEP Flagged",      "value": "34",    "delta": "12 high-risk",       "color": "#f97316"},
@@ -8069,6 +7238,24 @@ elif _active == 7:
   </div>
   <div style="font-size:11px;font-weight:700;color:#eef0f8;text-transform:uppercase;letter-spacing:.05em">{_lbl}</div>
 </div>""", unsafe_allow_html=True)
+
+    # ── HNWI red-flag reference library (static, zero API calls) ──────────────
+    st.markdown("<div style='margin-top:24px'></div>", unsafe_allow_html=True)
+    with st.expander(f"🚩 HNWI Red Flag Library — {len(HNWI_RED_FLAGS)} indicators", expanded=False):
+        _rf_c1, _rf_c2, _rf_c3 = st.columns([1, 1, 2])
+        _rf_cat = _rf_c1.selectbox(
+            "Category", ["All"] + sorted({_f.get("category", "") for _f in HNWI_RED_FLAGS} - {""}),
+            key="t7_rf_cat", label_visibility="collapsed",
+        )
+        _rf_lvl = _rf_c2.selectbox(
+            "Risk level", ["All", "Critical", "High", "Medium"],
+            key="t7_rf_lvl", label_visibility="collapsed",
+        )
+        _rf_q = _rf_c3.text_input(
+            "Search", placeholder="Filter red flags…",
+            key="t7_rf_search", label_visibility="collapsed",
+        )
+        _show_red_flags(_rf_cat, _rf_lvl, _rf_q)
 
     # Regulatory footer
     st.markdown("<div style='margin:24px 0 10px'><span style='font-size:12px;color:#6b7a99;font-weight:600'>Regulatory references:</span></div>", unsafe_allow_html=True)

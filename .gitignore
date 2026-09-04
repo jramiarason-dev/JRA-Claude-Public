@@ -5,11 +5,15 @@ __pycache__/
 .env
 .env.*
 !.env.example
-.streamlit/secrets.toml
+# A leading path segment anchors to this file's directory, so the pattern has
+# to be recursive to also cover audit_system/.streamlit/secrets.toml.
+**/.streamlit/secrets.toml
+
+# Generated audit reports (Word/Excel/PowerPoint) — never source.
+audit_system/outputs/
 *.egg-info/
 dist/
 build/
 .venv/
 venv/
 .claude/
-audit_system/AuditIQ.html
