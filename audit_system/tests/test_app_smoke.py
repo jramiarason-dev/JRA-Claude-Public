@@ -5,8 +5,9 @@ break a section is to actually run the script for each one. Streamlit's AppTest
 does that headlessly — no browser, no server, and (because every section is
 exercised in static mode) no Anthropic API call.
 
-The app refuses to start without ANTHROPIC_API_KEY, so a placeholder is set
-here. Nothing in these tests reaches the network.
+A placeholder ANTHROPIC_API_KEY is set so most tests exercise the app in its
+key-configured shape. It is not required to start — TestDegradesWithoutOptional
+Packages removes it deliberately — and nothing here reaches the network.
 
 Runs with the standard library only (no pytest):  python3 -m unittest -v
 """
