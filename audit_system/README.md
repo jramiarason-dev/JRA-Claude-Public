@@ -100,9 +100,14 @@ Two things live outside the folder and would need to come along: the CI workflow
 - **Everything user-typed is rendered through `unsafe_allow_html`.** Escape with
   `_e()` at the render site, and build link targets with `_safe_link()`. Do not
   escape at capture — the same values go unescaped to the exporters.
-- **Generated reports accumulate in `outputs/`**, one directory shared by every
-  session, named by timestamp and never cleaned up. Fine for a single-user demo;
-  not fine for a multi-user deployment.
+- **The app writes no report to disk.** Exports are staged in a private
+  temporary directory by `_export_bytes()`, read into session state and served
+  from memory; the staging directory is removed as soon as the bytes are read.
+  Add new exports through that helper rather than a shared directory — the
+  documents are audit working papers, and a directory shared by every session
+  of the process leaves one user's reports readable to the next. (The `main.py`
+  CLI is different on purpose: it writes to `outputs/` because producing files
+  is the point.)
 - **No third-party embeds.** The app loads nothing from an external origin at
   runtime. Keep it that way: an iframe or remote script here would run beside
   audit working papers with no sandbox and no CSP to contain it.

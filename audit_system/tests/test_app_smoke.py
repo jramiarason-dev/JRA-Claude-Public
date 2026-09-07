@@ -13,7 +13,9 @@ Runs with the standard library only (no pytest):  python3 -m unittest -v
 
 import ast
 import os
+import pathlib
 import sys
+import tempfile
 import unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -170,6 +172,59 @@ class TestOutputEscaping(unittest.TestCase):
             src = fh.read()
         self.assertNotIn('href="{link}"', src)
         self.assertIn("def _safe_link(", src)
+
+
+class TestExportStaging(unittest.TestCase):
+    """Generated reports must not survive on disk in a shared directory."""
+
+    def _export_bytes(self):
+        """Compile _export_bytes out of app.py — importing app.py needs Streamlit."""
+        for node in _module().body:
+            if isinstance(node, ast.FunctionDef) and node.name == "_export_bytes":
+                ns = {"tempfile": tempfile, "Path": pathlib.Path}
+                exec(compile(ast.Module([node], []), "app.py", "exec"), ns)
+                return ns["_export_bytes"]
+        raise AssertionError("_export_bytes not found in app.py")
+
+    def test_returns_bytes_and_removes_the_staging_directory(self):
+        seen = {}
+
+        def fake_generator(payload, outdir):
+            seen["outdir"] = outdir
+            target = pathlib.Path(outdir) / "report.docx"
+            target.write_bytes(b"PK\x03\x04" + payload["name"].encode())
+            return str(target)
+
+        out = self._export_bytes()(fake_generator, {"name": "audit"})
+        self.assertEqual(out, b"PK\x03\x04audit")
+        self.assertFalse(
+            pathlib.Path(seen["outdir"]).exists(),
+            "staging directory outlived the export",
+        )
+
+    def test_staging_directory_is_not_inside_the_project(self):
+        seen = {}
+
+        def fake_generator(payload, outdir):
+            seen["outdir"] = outdir
+            target = pathlib.Path(outdir) / "r.xlsx"
+            target.write_bytes(b"x")
+            return str(target)
+
+        self._export_bytes()(fake_generator, {})
+        self.assertNotIn(
+            pathlib.Path(ROOT).resolve(), pathlib.Path(seen["outdir"]).resolve().parents,
+            "exports are staged inside the repository",
+        )
+
+    def test_no_shared_output_directory(self):
+        with open(APP, encoding="utf-8") as fh:
+            src = fh.read()
+        self.assertNotIn("OUTPUT_DIR", src, "app.py still uses a process-wide output directory")
+        self.assertNotIn(
+            '_path"]', src,
+            "an export still travels as a filesystem path rather than bytes",
+        )
 
 
 class TestDocumentAnalyserRemoved(unittest.TestCase):

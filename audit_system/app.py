@@ -1481,8 +1481,20 @@ def _entity_badge_html(entity_type: str, size: str = "13px") -> str:
     )
 
 JURISDICTIONS = ["CH / FINMA", "SG / MAS", "HK / SFC+HKMA", "Bahamas / SCB", "EU / DORA", "UK / FCA+PRA"]
-OUTPUT_DIR = str(_HERE / "outputs")
-Path(OUTPUT_DIR).mkdir(exist_ok=True)
+
+
+def _export_bytes(generate, payload) -> bytes:
+    """Run an export generator and return its output as bytes, leaving no file.
+
+    Every generator writes a document and returns its path; every caller reads
+    it straight into session state and serves the download from memory, so the
+    file on disk has no reader after that. Staging it in a private temporary
+    directory — rather than one `outputs/` shared by every session of the
+    process — means one user's audit reports neither accumulate nor stay
+    readable to the next.
+    """
+    with tempfile.TemporaryDirectory(prefix="auditiq-export-") as outdir:
+        return Path(generate(payload, outdir)).read_bytes()
 
 # ── UI helpers ────────────────────────────────────────────────────────────────
 
@@ -5198,8 +5210,8 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                         def _h1(name, inp):
                             if name == "save_regulatory_framework":
                                 try:
-                                    p = generate_regulatory_framework_docx(inp, OUTPUT_DIR)
-                                    return f"Saved: {p}", {"docx_path": p}
+                                    return "Saved.", {"docx_bytes": _export_bytes(
+                                        generate_regulatory_framework_docx, inp)}
                                 except Exception as ex:
                                     return f"Error: {ex}", {}
                             return "Unknown tool", {}
@@ -5214,27 +5226,25 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                                 f"Then call save_regulatory_framework to export."
                             )}]}], _h1)
 
-                        if "docx_path" in extra and Path(extra["docx_path"]).exists():
-                            st.session_state.t1_docx = Path(extra["docx_path"]).read_bytes()
+                        if "docx_bytes" in extra:
+                            st.session_state.t1_docx = extra["docx_bytes"]
 
                         try:
-                            p_xlsx = generate_risk_analysis_excel({
+                            st.session_state.t1_xlsx = _export_bytes(generate_risk_analysis_excel, {
                                 "topic": audit_topic,
                                 "risks": st.session_state.t1_risks or [],
                                 "regs": st.session_state.t1_regs or [],
                                 "pub_recs": st.session_state.t1_pub_recs or [],
-                            }, OUTPUT_DIR)
-                            st.session_state.t1_xlsx = Path(p_xlsx).read_bytes()
+                            })
                         except Exception:
                             _log.exception("export generation failed")
                         try:
-                            p_pptx = generate_tab1_pptx({
+                            st.session_state.t1_pptx2 = _export_bytes(generate_tab1_pptx, {
                                 "topic": audit_topic,
                                 "jurs": jurisdictions,
                                 "risks": st.session_state.t1_risks or [],
                                 "regs": st.session_state.t1_regs or [],
-                            }, OUTPUT_DIR)
-                            st.session_state.t1_pptx2 = Path(p_pptx).read_bytes()
+                            })
                         except Exception:
                             _log.exception("export generation failed")
                         try:
@@ -5469,10 +5479,9 @@ Respond ONLY with a valid JSON array — 12-18 entries, no markdown:
                      "likelihood": r.get("probability",""), "control": ", ".join(r.get("expected_controls",[])[:2])}
                     for r in RISK_INDICATORS.get(_t1_theme, [])
                 ]
-                p_xlsx = generate_risk_analysis_excel(
-                    {"topic": audit_topic or _t1_theme, "risks": _static_risks, "regs": [], "pub_recs": []},
-                    OUTPUT_DIR)
-                st.session_state.t1_xlsx = Path(p_xlsx).read_bytes()
+                st.session_state.t1_xlsx = _export_bytes(
+                    generate_risk_analysis_excel,
+                    {"topic": audit_topic or _t1_theme, "risks": _static_risks, "regs": [], "pub_recs": []})
             except Exception:
                 _log.exception("export generation failed")
         if not st.session_state.t1_pdf and _t1_theme and RISK_INDICATORS.get(_t1_theme):
@@ -5758,14 +5767,14 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                         def _h2(name, inp):
                             if name == "generate_audit_plan_ppt":
                                 try:
-                                    p = generate_audit_plan_ppt(inp, OUTPUT_DIR)
-                                    return f"PPT saved: {p}. Now generate Excel.", {"ppt_path": p}
+                                    return "PPT saved. Now generate Excel.", {"ppt_bytes": _export_bytes(
+                                        generate_audit_plan_ppt, inp)}
                                 except Exception as ex:
                                     return f"Error: {ex}", {}
                             elif name == "generate_audit_procedures_excel":
                                 try:
-                                    p = generate_audit_procedures_excel(inp, OUTPUT_DIR)
-                                    return f"Excel saved: {p}.", {"excel_path": p}
+                                    return "Excel saved.", {"excel_bytes": _export_bytes(
+                                        generate_audit_procedures_excel, inp)}
                                 except Exception as ex:
                                     return f"Error: {ex}", {}
                             return "Unknown tool", {}
@@ -5780,10 +5789,10 @@ Generate 6-8 data analytics scenarios. ONLY valid JSON array, no markdown:
                                 f"2. For each design 4-8 procedures → call generate_audit_procedures_excel."
                             )}]}], _h2)
 
-                        if "ppt_path" in extra and Path(extra["ppt_path"]).exists():
-                            st.session_state.t2_pptx = Path(extra["ppt_path"]).read_bytes()
-                        if "excel_path" in extra and Path(extra["excel_path"]).exists():
-                            st.session_state.t2_xlsx = Path(extra["excel_path"]).read_bytes()
+                        if "ppt_bytes" in extra:
+                            st.session_state.t2_pptx = extra["ppt_bytes"]
+                        if "excel_bytes" in extra:
+                            st.session_state.t2_xlsx = extra["excel_bytes"]
                         try:
                             _t2_sections = [(h, str(v)) for h, v in [
                                 ("Rationale",      st.session_state.t2_rationale or ""),
@@ -6524,8 +6533,8 @@ elif _active == AUDIT_REPORT:
                         def _h3(name, inp):
                             if name == "generate_audit_report":
                                 try:
-                                    p = generate_audit_report_docx(inp, OUTPUT_DIR)
-                                    return f"Saved: {p}", {"docx_path": p}
+                                    return "Saved.", {"docx_bytes": _export_bytes(
+                                        generate_audit_report_docx, inp)}
                                 except Exception as ex:
                                     return f"Error: {ex}", {}
                             return "Unknown tool", {}
@@ -6534,8 +6543,8 @@ elif _active == AUDIT_REPORT:
                             [{"role": "user", "content": user_content}], _h3)
 
                         result = {"text": text_out, "name": audit_name}
-                        if "docx_path" in extra and Path(extra["docx_path"]).exists():
-                            result["docx_bytes"] = Path(extra["docx_path"]).read_bytes()
+                        if "docx_bytes" in extra:
+                            result["docx_bytes"] = extra["docx_bytes"]
                         st.session_state.t3_report = result
 
                         # Also build static enrichment for snapshot / Tab 0
@@ -6550,13 +6559,15 @@ elif _active == AUDIT_REPORT:
                         _findings_export = [{"title": ln[:80], "rating": "High", "observation": ln,
                                              "risk":"","recommendation":"","owner":"","due_date":""} for ln in _obs_lines if ln]
                         try:
-                            p_xlsx3 = generate_audit_findings_excel({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
-                            st.session_state.t3_xlsx = Path(p_xlsx3).read_bytes()
+                            st.session_state.t3_xlsx = _export_bytes(
+                                generate_audit_findings_excel,
+                                {"name": audit_name, "findings": _findings_export})
                         except Exception:
                             _log.exception("export generation failed")
                         try:
-                            p_pptx3 = generate_report_pptx({"name": audit_name, "findings": _findings_export}, OUTPUT_DIR)
-                            st.session_state.t3_pptx2 = Path(p_pptx3).read_bytes()
+                            st.session_state.t3_pptx2 = _export_bytes(
+                                generate_report_pptx,
+                                {"name": audit_name, "findings": _findings_export})
                         except Exception:
                             _log.exception("export generation failed")
                         try:
@@ -6634,8 +6645,8 @@ elif _active == AUDIT_REPORT:
                                 def _h3r(name, inp):
                                     if name == "generate_audit_report":
                                         try:
-                                            p = generate_audit_report_docx(inp, OUTPUT_DIR)
-                                            return f"Saved: {p}", {"docx_path": p}
+                                            return "Saved.", {"docx_bytes": _export_bytes(
+                                                generate_audit_report_docx, inp)}
                                         except Exception as ex:
                                             return f"Error: {ex}", {}
                                     return "Unknown tool", {}
@@ -6643,8 +6654,8 @@ elif _active == AUDIT_REPORT:
                                 text2, extra2 = _agentic_loop(c, _a3.SYSTEM_PROMPT, _a3.TOOLS,
                                     [{"role":"user","content":rev_content}], _h3r)
                                 res2 = {"text": text2, "name": name}
-                                if "docx_path" in extra2 and Path(extra2["docx_path"]).exists():
-                                    res2["docx_bytes"] = Path(extra2["docx_path"]).read_bytes()
+                                if "docx_bytes" in extra2:
+                                    res2["docx_bytes"] = extra2["docx_bytes"]
                                 st.session_state.t3_report = res2
                                 st.rerun()
                             except Exception:
