@@ -78,18 +78,34 @@ push (`.github/workflows/ci.yml`).
 
 ## Extracting this project
 
-`audit_system/` is self-contained: it carries its own `requirements.txt`,
+`audit_system/` is self-contained: it carries its own dependency manifests,
 `.streamlit/config.toml`, `.env.example` and tests, adds its own directory to
-`sys.path`, and imports nothing from the parent repository. Moving it to its own
-repository is a copy:
+`sys.path`, and imports nothing from the parent repository.
 
 ```bash
-cp -r audit_system/ ../auditiq && cd ../auditiq && git init
+audit_system/extract.sh              # everything: app + tests + docs
+audit_system/extract.sh --snowflake  # only what belongs on a Snowflake stage
 ```
 
-Two things live outside the folder and would need to come along: the CI workflow
-(`.github/workflows/ci.yml`, whose `working-directory` would drop to `.`) and the
-`.gitignore` rules for `.env`, `**/.streamlit/secrets.toml` and `outputs/`.
+Both write a dated `.zip` next to you and print its size and SHA-256. Caches,
+`.env` files, `secrets.toml` and generated reports are excluded by construction,
+so the archive is safe to send on. The review archive is verified to stand
+alone — unzip it anywhere and `python -m unittest discover -s tests` passes
+without the repository.
+
+To keep it as a git repository instead, `cp -r audit_system/ ../auditiq`. Two
+things live outside the folder and would need to come along: the CI workflow
+(`.github/workflows/ci.yml`, whose `working-directory` would drop to `.`) and
+the `.gitignore` rules for `.env`, `**/.streamlit/secrets.toml` and `outputs/`.
+
+## Streamlit in Snowflake
+
+See [SNOWFLAKE.md](SNOWFLAKE.md). In short: the app deploys and runs there with
+no code changes and no API key, in static reference mode — the reference
+library, audit tests and report assembly all work, and the ✦ AI buttons stay
+disabled behind a banner until an administrator enables outbound access to
+`api.anthropic.com` and the `anthropic` package. `environment.yml` is the
+manifest Snowflake reads; `requirements.txt` is for local development and CI.
 
 ## Security notes
 
@@ -100,9 +116,14 @@ Two things live outside the folder and would need to come along: the CI workflow
 - **Everything user-typed is rendered through `unsafe_allow_html`.** Escape with
   `_e()` at the render site, and build link targets with `_safe_link()`. Do not
   escape at capture — the same values go unescaped to the exporters.
-- **Generated reports accumulate in `outputs/`**, one directory shared by every
-  session, named by timestamp and never cleaned up. Fine for a single-user demo;
-  not fine for a multi-user deployment.
+- **The app writes no report to disk.** Exports are staged in a private
+  temporary directory by `_export_bytes()`, read into session state and served
+  from memory; the staging directory is removed as soon as the bytes are read.
+  Add new exports through that helper rather than a shared directory — the
+  documents are audit working papers, and a directory shared by every session
+  of the process leaves one user's reports readable to the next. (The `main.py`
+  CLI is different on purpose: it writes to `outputs/` because producing files
+  is the point.)
 - **No third-party embeds.** The app loads nothing from an external origin at
   runtime. Keep it that way: an iframe or remote script here would run beside
   audit working papers with no sandbox and no CSP to contain it.

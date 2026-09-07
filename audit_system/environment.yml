@@ -1,0 +1,25 @@
+# Dependency manifest for Streamlit in Snowflake.
+#
+# Snowflake reads this file (not requirements.txt) from the app's stage. The
+# warehouse runtime resolves every name against the Snowflake Anaconda channel
+# and nothing else, so each entry below must exist there — verify before
+# deploying: https://repo.anaconda.com/pkgs/snowflake/
+#
+# The four export libraries are the app's only hard third-party requirement
+# beyond Streamlit itself.
+#
+# `anthropic` is deliberately NOT listed. It is generally absent from the
+# Snowflake channel, and it is only needed for the ✦ AI generation buttons —
+# without it the app runs in static reference mode (see SNOWFLAKE.md). To
+# enable the AI features, use the container runtime, which can install from
+# PyPI through an external access integration; the same integration is what
+# lets the app reach api.anthropic.com at all.
+name: app_environment
+channels:
+  - snowflake
+dependencies:
+  - streamlit
+  - python-docx
+  - python-pptx
+  - openpyxl
+  - fpdf2
