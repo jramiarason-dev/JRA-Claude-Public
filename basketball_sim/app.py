@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import random
 
@@ -17,8 +18,11 @@ from nba_dream.teams import (ROLES, generate_team_offers, generate_draft_offers,
                              strength_label, market_value)
 from nba_dream.sponsors import (generate_sponsor_offers, sponsor_income,
                                 MAX_ACTIVE_SPONSORS, TIER_COLORS)
+from nba_dream.tactics import TACTICS, fit_score, fit_label
+from nba_dream.interviews import pick_interview, apply_answer, SENTIMENT_ICON
 from nba_dream.simulator import (run_season, run_draft, check_promotion_eligibility,
-                                 is_nba_ready, draft_eligibility_age)
+                                 is_nba_ready, draft_eligibility_age,
+                                 can_enter_draft, can_sign_nba_contract, DRAFT_MAX_AGE)
 
 st.set_page_config(page_title="NBA Dream — Career Simulator", page_icon="🏀",
                    layout="wide", initial_sidebar_state="collapsed")
@@ -121,6 +125,22 @@ hr { border-color:#2e2e3a !important; }
 .event-neutral { background:linear-gradient(140deg,#05101d,#0b1a2c); border-left:4px solid #3a7ae0; padding:.9rem 1.1rem; border-radius:0 8px 8px 0; margin:.5rem 0; }
 .playoff-champ { background:linear-gradient(140deg,#1d1503,#3a2a05); border:2px solid #d08a1e; border-radius:12px; padding:1.2rem; margin:.5rem 0; text-align:center; }
 .level-up { background:linear-gradient(140deg,#160020,#280038); border:2px solid #c040e0; border-radius:12px; padding:1rem; margin:.5rem 0; text-align:center; }
+.badge-captain{ background:#c9a227; color:#1a1005; }
+.badge-legend { background:linear-gradient(90deg,#ef4444,#f59e0b); color:#fff; }
+.presser { background:linear-gradient(140deg,#0c0c14,#16161f); border:1px solid #2e2e3a; border-left:5px solid #b4b4c0;
+           border-radius:10px; padding:1.1rem 1.3rem; margin:.6rem 0; }
+.presser-q { font-family:'Barlow Condensed',sans-serif; font-size:1.45rem; font-weight:700; color:#fff; line-height:1.25; }
+.mic { font-size:.7rem; color:#8a8a96; text-transform:uppercase; letter-spacing:.14em; margin-bottom:.35rem; }
+.answer-card { background:#141418; border:1px solid #2e2e3a; border-radius:9px; padding:.85rem 1rem;
+               margin-bottom:.5rem; min-height:118px; }
+.reaction { border-radius:8px; padding:.75rem 1rem; margin:.4rem 0; font-size:.85rem; }
+.reaction-positive{ background:#04180c; border-left:4px solid #2fa35c; }
+.reaction-neutral { background:#15151c; border-left:4px solid #8a8a96; }
+.reaction-negative{ background:#1d0505; border-left:4px solid #e0492c; }
+.tactic-card { background:#141418; border:1px solid #2e2e3a; border-radius:9px; padding:.8rem .9rem;
+               margin-bottom:.5rem; min-height:172px; }
+.verdict { background:linear-gradient(140deg,#0d0d14,#17171f); border:1px solid #2e2e3a; border-left:5px solid #e07a1e;
+           border-radius:10px; padding:1.1rem 1.3rem; margin:.6rem 0; font-size:.92rem; line-height:1.7; color:#c8c8d2; }
 
 .boxscore { width:100%; border-collapse:collapse; font-size:.76rem; }
 .boxscore th { background:#15151c; color:#e07a1e; padding:8px 9px; text-align:left; border-bottom:2px solid #2e2e3a;
@@ -139,7 +159,8 @@ def init_state():
         "screen": "home", "player": None,
         "team_offers": None, "offer_context": None,
         "sponsor_offers": None, "season_result": None,
-        "training_choice": None, "draft_result": None,
+        "training_choice": None, "tactic_choice": None,
+        "draft_result": None, "interview": None, "interview_result": None,
     }
     for k, v in defaults.items():
         st.session_state.setdefault(k, v)
@@ -151,6 +172,11 @@ init_state()
 def goto(screen):
     st.session_state.screen = screen
     st.rerun()
+
+
+def rich(text):
+    """Render the **bold** markers used in career prose as real HTML."""
+    return re.sub(r"\*\*(.+?)\*\*", r"<strong style='color:#fff'>\1</strong>", text)
 
 
 def money(v):
@@ -193,30 +219,38 @@ def player_header(p):
     champs = p.total_championships()
     role = ROLES.get(p.current_role, ROLES["Titulaire"])
     champ_str = " " + "🏆" * min(champs, 5) if champs else ""
+    status = p.club_status()
+    badge_cls = {"Légende du club": "badge-legend", "Capitaine": "badge-captain"}.get(status, "badge-gray")
+    status_badge = (f'<span class="badge {badge_cls}">{status} · {p.seasons_with_team} sais.</span>'
+                    if status else "")
 
-    st.markdown(f"""<div class="court"><div class="court-inner">
-    <div style="display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap">
-      <div class="jersey"><div class="jersey-num">{p.jersey}</div><div class="jersey-pos">{p.position}</div></div>
-      <div style="flex:1;min-width:230px">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:2.1rem;font-weight:800;color:#fff;line-height:1.05">
-          {flag} {p.name}{champ_str}</div>
-        <div style="margin-top:.3rem">
-          <span class="badge badge-orange">{role['icon']} {p.current_role}</span>
-          <span class="badge badge-gray">{p.current_team}</span>
-          <span class="badge badge-gray">{LEAGUES.get(p.current_league,{}).get('name',p.current_league)}</span>
-          <span class="badge badge-purple">Niv.{p.level}</span>
-        </div>
-      </div>
-      <div style="text-align:center;min-width:76px">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:#fff;line-height:1">{p.overall_rating()}</div>
-        <div style="font-size:.6rem;color:#2a1806;font-weight:800;letter-spacing:.1em">OVERALL</div></div>
-      <div style="text-align:center;min-width:76px">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:#fff;line-height:1">{p.age}</div>
-        <div style="font-size:.6rem;color:#2a1806;font-weight:800;letter-spacing:.1em">ANS</div></div>
-      <div style="text-align:center;min-width:76px">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:#fff;line-height:1">S{p.season_number}</div>
-        <div style="font-size:.6rem;color:#2a1806;font-weight:800;letter-spacing:.1em">SAISON</div></div>
-    </div></div></div>""", unsafe_allow_html=True)
+    def stat_block(value, label):
+        return (f'<div style="text-align:center;min-width:76px">'
+                f'<div style="font-family:\'JetBrains Mono\',monospace;font-size:2.3rem;'
+                f'font-weight:700;color:#fff;line-height:1">{value}</div>'
+                f'<div style="font-size:.6rem;color:#2a1806;font-weight:800;'
+                f'letter-spacing:.1em">{label}</div></div>')
+
+    # Emitted as one unindented line: an empty interpolation followed by an indented
+    # line would be read as a markdown code block and printed as raw HTML.
+    st.markdown(
+        f'<div class="court"><div class="court-inner">'
+        f'<div style="display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap">'
+        f'<div class="jersey"><div class="jersey-num">{p.jersey}</div>'
+        f'<div class="jersey-pos">{p.position}</div></div>'
+        f'<div style="flex:1;min-width:230px">'
+        f'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:2.1rem;'
+        f'font-weight:800;color:#fff;line-height:1.05">{flag} {p.name}{champ_str}</div>'
+        f'<div style="margin-top:.3rem">'
+        f'<span class="badge badge-orange">{role["icon"]} {p.current_role}</span>'
+        f'<span class="badge badge-gray">{p.current_team}</span>'
+        f'<span class="badge badge-gray">'
+        f'{LEAGUES.get(p.current_league, {}).get("name", p.current_league)}</span>'
+        f'<span class="badge badge-purple">Niv.{p.level}</span>{status_badge}</div></div>'
+        + stat_block(p.overall_rating(), "OVERALL")
+        + stat_block(p.age, "ANS")
+        + stat_block(f"S{p.season_number}", "SAISON")
+        + '</div></div></div>', unsafe_allow_html=True)
 
     c1, c2 = st.columns(2)
     with c1:
@@ -340,7 +374,8 @@ def screen_offers():
     league_name = LEAGUES.get(ctx.get("league", p.current_league), {}).get("name", "")
 
     titles = {"start": "Tes premières offres", "expiry": "Fin de contrat — le marché s'ouvre",
-              "promotion": "Tu montes d'un cran", "draft": "Offres post-draft"}
+              "promotion": "Tu montes d'un cran", "draft": "Offres post-draft",
+              "nba_contract": "Des franchises NBA t'appellent"}
     st.markdown(f'<div class="title-nba">{titles.get(ctx.get("kind"), "Offres de clubs")}</div>',
                 unsafe_allow_html=True)
     st.markdown(f'<div class="subtitle">{league_name} — le rôle que tu acceptes décide de ta saison</div>',
@@ -495,7 +530,36 @@ def screen_prepare():
     p = st.session_state.player
     player_header(p)
     st.markdown("## 🏋️ Intersaison")
-    st.caption("Ton axe de travail détermine les gains d'attributs et une partie de l'XP. "
+
+    # ─ Tactical system
+    st.markdown('<div class="section-header">Système de jeu de l\'équipe</div>', unsafe_allow_html=True)
+    st.caption("Le système décide de ce qu'on attend de toi. Le « fit » compare ses exigences "
+               "à **tes points forts** : bien choisi il gonfle tes stats, tes XP et les chances "
+               "de l'équipe ; à contre-emploi, il te bride toute la saison.")
+
+    tactic = st.session_state.tactic_choice or p.current_tactic
+    cols = st.columns(len(TACTICS))
+    for col, (name, t) in zip(cols, TACTICS.items()):
+        with col:
+            fit = fit_score(p, name)
+            label, color = fit_label(fit)
+            border = "#e07a1e" if tactic == name else "#2e2e3a"
+            st.markdown(f'<div class="tactic-card" style="border-color:{border}">'
+                        f'<div style="font-size:1.6rem">{t["icon"]}</div>'
+                        f'<div style="font-weight:700;color:#fff;font-size:.92rem">{name}</div>'
+                        f'<div style="color:#8a8a96;font-size:.72rem;line-height:1.4;min-height:48px">{t["desc"]}</div>'
+                        f'<div style="margin-top:.4rem;font-size:.75rem;color:{color};font-weight:700">'
+                        f'Fit {fit:.0f} — {label}</div>'
+                        f'<div class="bar-bg" style="margin-top:3px"><div class="bar-fill" '
+                        f'style="width:{fit}%;background:{color}"></div></div></div>',
+                        unsafe_allow_html=True)
+            if st.button("Adopter", key=f"tac_{name}"):
+                st.session_state.tactic_choice = name
+                st.rerun()
+
+    # ─ Training
+    st.markdown('<div class="section-header">Axe de travail</div>', unsafe_allow_html=True)
+    st.caption("Détermine les gains d'attributs et une partie de l'XP. "
                "Après 27 ans, les gains physiques ralentissent nettement.")
 
     selected = st.session_state.training_choice
@@ -509,7 +573,7 @@ def screen_prepare():
                         f'<div style="color:#8a8a96;font-size:.74rem">{d["desc"]}</div>'
                         f'<div style="color:#ffa53a;font-size:.7rem;margin-top:5px">{d["boosts"]}</div></div>',
                         unsafe_allow_html=True)
-            if st.button(f"Choisir", key=f"tr_{key}"):
+            if st.button("Choisir", key=f"tr_{key}"):
                 st.session_state.training_choice = key
                 st.rerun()
 
@@ -521,9 +585,12 @@ def screen_prepare():
     with c2:
         if not selected:
             st.warning("Sélectionne un axe d'entraînement.")
-        elif st.button(f"🏀 Jouer la saison — {selected}", key="play"):
-            st.session_state.season_result = run_season(p, selected)
+        elif st.button(f"🏀 Jouer la saison — {TACTICS[tactic]['icon']} {tactic} / {selected}", key="play"):
+            st.session_state.season_result = run_season(p, selected, tactic=tactic)
             st.session_state.training_choice = None
+            st.session_state.tactic_choice = None
+            st.session_state.interview = None
+            st.session_state.interview_result = None
             goto("season_result")
 
 
@@ -577,6 +644,19 @@ def screen_season_result():
                 f'<div style="margin-top:8px;font-size:.78rem">Réputation {rb:+d} · Moral {mb:+d}</div></div>',
                 unsafe_allow_html=True)
 
+    st.markdown('<div class="section-header">Système & statut</div>', unsafe_allow_html=True)
+    label, color = fit_label(rec.tactic_fit)
+    st.markdown(f'<div class="card"><span class="badge badge-gray">'
+                f'{TACTICS[rec.tactic]["icon"]} {rec.tactic}</span>'
+                f'<span class="badge" style="background:{color};color:#fff">Fit {rec.tactic_fit:.0f} — {label}</span>'
+                f'</div>', unsafe_allow_html=True)
+    loyalty = res.get("loyalty") or {}
+    if loyalty:
+        st.markdown(f'<div class="card-green"><strong>🎖️ {loyalty["status"]} — {p.current_team}</strong>'
+                    f'<div style="color:#9fdfba;font-size:.85rem;margin-top:3px">'
+                    f'{p.seasons_with_team} saisons au club : Mental +{loyalty["mental"]}, '
+                    f'Leadership +{loyalty["leadership"]}</div></div>', unsafe_allow_html=True)
+
     st.markdown('<div class="section-header">Finances</div>', unsafe_allow_html=True)
     scoreboard({"SALAIRE": money(rec.salary_earned), "SPONSORS": money(rec.sponsor_earned),
                 "TOTAL SAISON": money(rec.salary_earned + rec.sponsor_earned),
@@ -597,6 +677,70 @@ def screen_season_result():
                     f'<div style="color:#8a8a96;font-size:.8rem">{p.xp}/{xp_for_level(p.level+1)} '
                     f'pour le niveau {p.level+1}</div></div>', unsafe_allow_html=True)
 
+    st.markdown("---")
+    if st.button("🎙️ Conférence de presse de fin de saison", key="to_presser"):
+        goto("interview")
+
+
+# ── End-of-season press conference ─────────────────────────────────────────────
+def screen_interview():
+    p = st.session_state.player
+    res = st.session_state.season_result
+    if not res:
+        goto("dashboard")
+
+    if not st.session_state.interview:
+        key, data = pick_interview(res["record"], p)
+        st.session_state.interview = {"key": key, **data}
+    itw = st.session_state.interview
+    result = st.session_state.interview_result
+
+    player_header(p)
+    st.markdown("## 🎙️ Conférence de presse")
+    st.markdown(f'<div class="presser"><div class="mic">Salle de presse · fin de saison {res["record"].season}</div>'
+                f'<div class="presser-q">« {itw["question"]} »</div></div>', unsafe_allow_html=True)
+
+    if result is None:
+        st.caption("Ce que tu réponds change durablement ton **mental** et ton **leadership**, "
+                   "et fixe la réaction des supporters et de la direction. Une sortie agressive "
+                   "fait grimper ta notoriété, mais coûte cher dans le vestiaire.")
+        cols = st.columns(len(itw["answers"]))
+        for i, (col, a) in enumerate(zip(cols, itw["answers"])):
+            with col:
+                def sign(v):
+                    return f"<span style='color:{'#2fa35c' if v > 0 else '#e0492c'}'>{v:+d}</span>" if v else "—"
+                st.markdown(f'<div class="answer-card">'
+                            f'<div style="color:#fff;font-size:.88rem;line-height:1.5;min-height:66px">'
+                            f'« {a["text"]} »</div>'
+                            f'<div style="font-size:.72rem;color:#8a8a96;margin-top:.5rem">'
+                            f'Mental {sign(a["mental"])} · Leadership {sign(a["leadership"])}</div></div>',
+                            unsafe_allow_html=True)
+                if st.button("Répondre", key=f"ans_{i}"):
+                    st.session_state.interview_result = apply_answer(p, a)
+                    st.rerun()
+        return
+
+    st.markdown('<div class="section-header">Réactions</div>', unsafe_allow_html=True)
+    for who, icon, key in [("Supporters", "🧣", "fans"), ("Direction & vestiaire", "🏢", "staff")]:
+        sentiment, text = result[key]
+        st.markdown(f'<div class="reaction reaction-{sentiment}">'
+                    f'<strong>{icon} {who}</strong> {SENTIMENT_ICON[sentiment]}<br>'
+                    f'<span style="color:#b4b4c0">{text}</span></div>', unsafe_allow_html=True)
+
+    def delta(label, v):
+        color = "#2fa35c" if v > 0 else "#e0492c" if v < 0 else "#8a8a96"
+        return f"<span style='color:{color};font-weight:700'>{label} {v:+d}</span>"
+
+    st.markdown(f'<div class="card">{delta("Mental", result["mental_delta"])} · '
+                f'{delta("Leadership", result["leadership_delta"])} · '
+                f'{delta("Moral", result["morale"])} · '
+                f'{delta("Réputation", result["reputation"])}</div>', unsafe_allow_html=True)
+
+    career_next_actions(p, res)
+
+
+# ── What comes next, once the press conference is done ─────────────────────────
+def career_next_actions(p, res):
     st.markdown("---\n### Suite de la carrière")
 
     if p.must_retire():
@@ -609,48 +753,78 @@ def screen_season_result():
     nxt = get_next_league(p.current_league, p.country)
     expired = res["contract_expired"]
 
+    def clear_season():
+        st.session_state.season_result = None
+        st.session_state.interview = None
+        st.session_state.interview_result = None
+
     c1, c2, c3 = st.columns(3)
     with c1:
         if expired:
             st.caption("📄 Ton contrat est arrivé à son terme.")
             if st.button("📝 Voir les offres", key="renew"):
-                st.session_state.team_offers = generate_team_offers(p, p.current_league)
+                st.session_state.team_offers = generate_team_offers(
+                    p, p.current_league, include_current=True)
                 st.session_state.offer_context = {"kind": "expiry", "league": p.current_league}
-                st.session_state.season_result = None
+                clear_season()
                 goto("offers")
         else:
             if st.button(f"🔄 Saison suivante ({p.contract_years_left} an(s) restants)", key="next"):
-                st.session_state.season_result = None
+                clear_season()
                 goto("prepare")
     with c2:
-        if nxt == "NBA":
-            if is_nba_ready(p):
-                if st.button("🏀 Se présenter à la Draft NBA", key="draft"):
-                    st.session_state.draft_result = run_draft(p)
-                    st.session_state.season_result = None
-                    goto("draft_night")
-            else:
-                need = []
-                if p.age < draft_eligibility_age(p.country):
-                    need.append(f"{draft_eligibility_age(p.country)} ans")
-                if p.nba_prospect_score() < 55:
-                    need.append(f"prospect 55 (actuel {p.nba_prospect_score()})")
-                if p.reputation < 35:
-                    need.append(f"réputation 35 (actuel {p.reputation})")
-                st.caption("🏀 Draft NBA — il te manque : " + ", ".join(need))
-        elif nxt:
+        if nxt and nxt != "NBA":
             if check_promotion_eligibility(p):
                 if st.button(f"⬆️ Monter en {LEAGUES[nxt]['name']}", key="promote"):
                     st.session_state.team_offers = generate_team_offers(p, nxt)
                     st.session_state.offer_context = {"kind": "promotion", "league": nxt}
-                    st.session_state.season_result = None
+                    clear_season()
                     goto("offers")
             else:
                 st.caption(f"⬆️ {LEAGUES[nxt]['name']} : pas encore le niveau.")
+        elif not p.in_nba:
+            st.caption("Tu es au sommet de ta filière nationale.")
     with c3:
-        if st.button("🏠 Vestiaire", key="to_dash"):
-            st.session_state.season_result = None
-            goto("dashboard")
+        # The NBA is reachable from any league — prospects declare from Pro B or the
+        # NCAA, not only after climbing every rung at home.
+        if p.in_nba:
+            st.caption("🏀 Tu es en NBA.")
+        elif can_enter_draft(p):
+            if st.button("🏀 Se présenter à la Draft NBA", key="draft"):
+                st.session_state.draft_result = run_draft(p)
+                clear_season()
+                goto("draft_night")
+            st.caption(f"Draft ouverte jusqu'à {DRAFT_MAX_AGE} ans — tu en as {p.age}.")
+        elif can_sign_nba_contract(p):
+            if st.button("🏀 Signer un contrat NBA", key="nba_contract"):
+                st.session_state.team_offers = generate_team_offers(p, "NBA")
+                st.session_state.offer_context = {"kind": "nba_contract", "league": "NBA"}
+                clear_season()
+                goto("offers")
+            st.caption(f"Trop âgé pour la draft ({DRAFT_MAX_AGE} ans max) : "
+                       "les franchises te signent sur ton bilan.")
+        elif p.age > DRAFT_MAX_AGE:
+            need = []
+            if p.overall_rating() < 70:
+                need.append(f"overall 70 (actuel {p.overall_rating()})")
+            if p.reputation < 55:
+                need.append(f"réputation 55 (actuel {p.reputation})")
+            st.caption(f"🏀 Draft fermée (>{DRAFT_MAX_AGE} ans). Contrat NBA — il manque : "
+                       + ", ".join(need))
+        else:
+            need = []
+            if p.age < draft_eligibility_age(p.country):
+                need.append(f"{draft_eligibility_age(p.country)} ans")
+            if p.nba_prospect_score() < 52:
+                need.append(f"prospect 52 (actuel {p.nba_prospect_score()})")
+            if p.reputation < 32:
+                need.append(f"réputation 32 (actuel {p.reputation})")
+            st.caption("🏀 Draft NBA — il te manque : " + ", ".join(need))
+
+    st.markdown("")
+    if st.button("🏠 Vestiaire", key="to_dash"):
+        clear_season()
+        goto("dashboard")
 
 
 def screen_draft_night():
@@ -728,14 +902,25 @@ def screen_history():
             f"<td class='num' style='color:#2fa35c'>{money(r.salary_earned + r.sponsor_earned)}</td>"
             f"<td class='num' style='color:#d054ff'>+{r.xp_gained}</td>"
             f"<td style='font-size:.72rem'>{lv}</td>"
-            f"<td style='color:#8a8a96;font-size:.7rem'>{r.training_focus or ''}</td></tr>")
+            f"<td style='color:#8a8a96;font-size:.7rem'>{r.training_focus or ''}</td>"
+            f"<td style='font-size:.7rem'>{TACTICS.get(r.tactic,{}).get('icon','')} {r.tactic or ''}"
+            f"<span style='color:{fit_label(r.tactic_fit)[1]}'> ({r.tactic_fit:.0f})</span></td>"
+            f"<td style='font-size:.7rem;color:#c9a227'>{r.club_status or ''}</td></tr>")
 
     st.markdown(
         '<div style="overflow-x:auto"><table class="boxscore"><thead><tr>'
         '<th>Sais.</th><th>Âge</th><th>Ligue</th><th>Équipe</th><th>Rôle</th>'
         '<th>G</th><th>MPG</th><th>PPG</th><th>RPG</th><th>APG</th><th>FG%</th>'
         '<th>Award</th><th>Playoffs</th><th>Revenus</th><th>XP</th><th>Niv.</th><th>Training</th>'
+        '<th>Système</th><th>Statut club</th>'
         f'</tr></thead><tbody>{rows}</tbody></table></div>', unsafe_allow_html=True)
+
+    st.markdown('<div class="section-header">Où en est cette carrière ?</div>', unsafe_allow_html=True)
+    tier, icon, color = p.career_tier()
+    st.markdown(f'<div class="verdict">'
+                f'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:1.5rem;font-weight:800;'
+                f'color:{color};margin-bottom:.5rem">{icon} {tier}</div>'
+                f'{rich(p.career_verdict())}</div>', unsafe_allow_html=True)
 
     st.markdown('<div class="section-header">Résumé</div>', unsafe_allow_html=True)
     scoreboard({"SAISONS": len(p.career_history), "MPG": p.career_mpg(), "PPG": p.career_ppg(),
@@ -772,6 +957,7 @@ def screen_retired():
                 f'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:1.6rem;font-weight:800;color:#fff">'
                 f'{verdict}</div></div>', unsafe_allow_html=True)
 
+    st.markdown(f'<div class="verdict">{rich(p.career_verdict())}</div>', unsafe_allow_html=True)
     scoreboard({"SAISONS": len(p.career_history), "PPG": p.career_ppg(), "RPG": p.career_rpg(),
                 "APG": p.career_apg(), "TITRES": champs, "AWARDS": p.total_awards(),
                 "NBA": nba, "NIVEAU": p.level})
@@ -796,6 +982,7 @@ SCREENS = {
     "home": screen_home, "create": screen_create, "offers": screen_offers,
     "dashboard": screen_dashboard, "prepare": screen_prepare,
     "season_result": screen_season_result, "sponsors": screen_sponsors,
+    "interview": screen_interview,
     "draft_night": screen_draft_night, "history": screen_history, "retired": screen_retired,
 }
 

@@ -24,12 +24,12 @@ ROLES = {
     },
     "Rotation": {
         "icon": "🔄", "minutes": 15, "usage": 0.68, "xp_mult": 1.45,
-        "salary_mult": 0.68, "rep_mult": 0.70,
+        "salary_mult": 0.50, "rep_mult": 0.70,
         "desc": "Minutes limitées, mais tu t'entraînes tous les jours avec l'élite.",
     },
     "Bout de Banc": {
         "icon": "🪑", "minutes": 7, "usage": 0.45, "xp_mult": 1.60,
-        "salary_mult": 0.45, "rep_mult": 0.45,
+        "salary_mult": 0.28, "rep_mult": 0.45,
         "desc": "Tu joues peu. Tu apprends énormément. Tu gagnes peut-être un titre.",
     },
 }
@@ -86,12 +86,29 @@ def build_offer(player, league: str, team: str, strength: float, role: str) -> d
     }
 
 
-def generate_team_offers(player, league: str, n_offers: int = 3) -> list:
-    """Offers trade role against roster quality: star on a weak team vs bench on a contender."""
+def generate_team_offers(player, league: str, n_offers: int = 3,
+                         include_current: bool = False) -> list:
+    """Offers trade role against roster quality: star on a weak team vs bench on a contender.
+
+    `include_current` keeps the player's own club on the table so that staying put —
+    and earning captaincy — is an actual choice rather than a matter of luck.
+    """
     ld = LEAGUES.get(league, {})
     teams = ld.get("teams", ["Équipe"])
-    picked = random.sample(teams, min(n_offers, len(teams)))
     baseline = starter_baseline(league)
+
+    stay = None
+    if include_current and player.current_team in teams:
+        others = [t for t in teams if t != player.current_team]
+        picked = random.sample(others, min(n_offers - 1, len(others)))
+        # The club knows you: a familiar face gets a slightly better role and terms.
+        edge = (player.overall_rating() - baseline) / 6.0 - (player.team_strength - 0.5) * 4.0 + 0.5
+        idx = max(0, min(len(ROLE_ORDER) - 1, round(2 + edge)))
+        stay = build_offer(player, league, player.current_team, player.team_strength, ROLE_ORDER[idx])
+        stay["salary"] = int(stay["salary"] * 1.08)
+        stay["loyalty"] = True
+    else:
+        picked = random.sample(teams, min(n_offers, len(teams)))
 
     offers = []
     for i, team in enumerate(picked):
@@ -105,7 +122,7 @@ def generate_team_offers(player, league: str, n_offers: int = 3) -> list:
         edge += random.uniform(-0.5, 0.5)
         idx = max(0, min(len(ROLE_ORDER) - 1, round(2 + edge)))
         offers.append(build_offer(player, league, team, strength, ROLE_ORDER[idx]))
-    return offers
+    return ([stay] + offers) if stay else offers
 
 
 def generate_draft_offers(player, draft_round: int, draft_pick: int) -> list:
