@@ -4,14 +4,21 @@ import random
 
 import streamlit as st
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Hosts differ on what they put on sys.path for the entrypoint, so put this app's
+# own directory first and make sure it wins over anything installed.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE in sys.path:
+    sys.path.remove(_HERE)
+sys.path.insert(0, _HERE)
 
-from game.player import Player, xp_for_level, RETIREMENT_AGE
-from game.leagues import LEAGUES, COUNTRIES, POSITIONS, get_next_league
-from game.teams import ROLES, generate_team_offers, generate_draft_offers, strength_label, market_value
-from game.sponsors import generate_sponsor_offers, sponsor_income, MAX_ACTIVE_SPONSORS, TIER_COLORS
-from game.simulator import (run_season, run_draft, check_promotion_eligibility,
-                            is_nba_ready, draft_eligibility_age)
+from nba_dream.player import Player, xp_for_level, RETIREMENT_AGE
+from nba_dream.leagues import LEAGUES, COUNTRIES, POSITIONS, get_next_league
+from nba_dream.teams import (ROLES, generate_team_offers, generate_draft_offers,
+                             strength_label, market_value)
+from nba_dream.sponsors import (generate_sponsor_offers, sponsor_income,
+                                MAX_ACTIVE_SPONSORS, TIER_COLORS)
+from nba_dream.simulator import (run_season, run_draft, check_promotion_eligibility,
+                                 is_nba_ready, draft_eligibility_age)
 
 st.set_page_config(page_title="NBA Dream — Career Simulator", page_icon="🏀",
                    layout="wide", initial_sidebar_state="collapsed")
