@@ -163,7 +163,7 @@ LEAGUES = {
         "difficulty": 0.95,
         "reputation_gain": 50,
         "scout_presence": 1.0,
-        "salary": 1000000,
+        "salary": 9000000,
         "games": 82,
         "teams": ["Los Angeles Lakers", "Golden State Warriors", "Boston Celtics", "Miami Heat",
                   "Chicago Bulls", "New York Knicks", "Dallas Mavericks", "Brooklyn Nets",

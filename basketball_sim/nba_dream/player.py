@@ -47,6 +47,9 @@ class SeasonRecord:
     award: Optional[str] = None
     event: Optional[str] = None
     training_focus: Optional[str] = None
+    tactic: Optional[str] = None
+    tactic_fit: float = 0.0
+    club_status: Optional[str] = None
     playoff: Optional[PlayoffResult] = None
 
 
@@ -72,6 +75,8 @@ class Player:
     team_strength: float = 0.5
     contract_salary: int = 0
     contract_years_left: int = 0
+    seasons_with_team: int = 0
+    current_tactic: str = "Motion Offense"
     reputation: int = 0
     morale: int = 75
     fitness: int = 100
@@ -194,6 +199,9 @@ class Player:
 
     # ── Career ─────────────────────────────────────────────────────────────────
     def sign_contract(self, offer: dict):
+        # Loyalty is measured in seasons at one club, so re-signing keeps the count.
+        if offer["team"] != self.current_team:
+            self.seasons_with_team = 0
         self.current_league = offer["league"]
         self.current_team = offer["team"]
         self.current_role = offer["role"]
@@ -202,6 +210,27 @@ class Player:
         self.contract_years_left = offer["years"]
         if offer["league"] == "NBA":
             self.in_nba = True
+
+    def club_status(self) -> Optional[str]:
+        """Standing earned by staying: captains lead, legends are part of the club."""
+        if self.seasons_with_team >= 6:
+            return "Légende du club"
+        if self.seasons_with_team >= 4:
+            return "Capitaine"
+        if self.seasons_with_team >= 2:
+            return "Cadre du vestiaire"
+        return None
+
+    def apply_loyalty_growth(self) -> dict:
+        """Leading the same dressing room year after year builds mental and leadership."""
+        status = self.club_status()
+        gains = {"Cadre du vestiaire": (0, 1), "Capitaine": (1, 2), "Légende du club": (2, 3)}
+        if status not in gains:
+            return {}
+        mental, leadership = gains[status]
+        self.mental = min(99, self.mental + mental)
+        self.leadership = min(99, self.leadership + leadership)
+        return {"status": status, "mental": mental, "leadership": leadership}
 
     def add_season(self, record: SeasonRecord):
         self.career_history.append(record)
@@ -221,3 +250,72 @@ class Player:
 
     def total_awards(self) -> int:
         return sum(1 for s in self.career_history if s.award)
+
+    def career_tier(self) -> tuple:
+        """Where this career stands right now. Returns (tier, icon, colour)."""
+        score = (self.overall_rating() * 0.9 + self.reputation * 0.5
+                 + self.nba_seasons * 3 + self.total_championships() * 12
+                 + self.total_awards() * 5 + self.level * 2)
+        if score >= 190: return "Légende", "🐐", "#ef4444"
+        if score >= 155: return "Superstar", "⭐", "#f59e0b"
+        if score >= 125: return "All-Star", "🌟", "#a855f7"
+        if score >= 100: return "Titulaire confirmé", "🏀", "#22c55e"
+        if score >= 75:  return "Joueur de rotation", "🔄", "#0ea5e9"
+        if score >= 50:  return "Espoir", "🌱", "#8a8a96"
+        return "Débutant", "👶", "#6b7280"
+
+    def career_verdict(self) -> str:
+        """An adaptive read on the career as it stands at this exact moment."""
+        if not self.career_history:
+            return "La carrière n'a pas encore commencé."
+
+        tier, _, _ = self.career_tier()
+        n = len(self.career_history)
+        champs, awards = self.total_championships(), self.total_awards()
+        parts = [f"Après {n} saison{'s' if n > 1 else ''}, {self.name} est un profil de "
+                 f"**{tier.lower()}** ({self.overall_rating()} d'overall, niveau {self.level})."]
+
+        # Trajectory: compare the last three seasons with the three before them.
+        if n >= 4:
+            recent = self.career_history[-3:]
+            earlier = self.career_history[-6:-3] or self.career_history[:-3]
+            r = sum(s.ppg for s in recent) / len(recent)
+            e = sum(s.ppg for s in earlier) / len(earlier)
+            if r > e + 2.5:
+                parts.append("La progression est nette : les trois dernières saisons sont "
+                             "les meilleures de la carrière.")
+            elif r < e - 2.5:
+                parts.append("La production recule sur les trois dernières saisons — "
+                             "l'âge ou le rôle pèsent.")
+            else:
+                parts.append("Le niveau de production est stable d'une saison à l'autre.")
+
+        if self.age >= 33:
+            parts.append(f"À {self.age} ans, l'essentiel de la carrière est derrière.")
+        elif self.age <= 22:
+            parts.append(f"À {self.age} ans, la marge de progression reste importante.")
+
+        if champs:
+            parts.append(f"{champs} titre{'s' if champs > 1 else ''} au palmarès"
+                         + (f" et {awards} distinction{'s' if awards > 1 else ''} individuelle"
+                            f"{'s' if awards > 1 else ''}." if awards else "."))
+        elif awards:
+            parts.append(f"{awards} distinction{'s' if awards > 1 else ''} individuelle"
+                         f"{'s' if awards > 1 else ''}, mais aucun titre collectif.")
+        else:
+            parts.append("Ni titre ni distinction individuelle pour l'instant.")
+
+        if self.nba_seasons >= 5:
+            parts.append(f"{self.nba_seasons} saisons en NBA : le plus haut niveau est atteint "
+                         "et tenu.")
+        elif self.nba_seasons:
+            parts.append(f"{self.nba_seasons} saison{'s' if self.nba_seasons > 1 else ''} "
+                         "en NBA à ce jour.")
+        elif self.age >= 28:
+            parts.append("La NBA reste hors de portée à ce stade.")
+
+        status = self.club_status()
+        if status:
+            parts.append(f"Statut de **{status.lower()}** à {self.current_team} "
+                         f"({self.seasons_with_team} saisons).")
+        return " ".join(parts)

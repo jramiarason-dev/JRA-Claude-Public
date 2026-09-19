@@ -3,6 +3,7 @@ import random
 from .player import Player, SeasonRecord, PlayoffResult
 from .leagues import LEAGUES, get_next_league
 from .teams import ROLES, market_value, starter_baseline
+from .tactics import tactic_modifiers
 from .sponsors import sponsor_income, sponsor_xp, tick_sponsors
 from .events import get_random_event
 
@@ -53,11 +54,14 @@ def simulate_season(player: Player, games_missed: int = 0) -> dict:
     role = ROLES.get(player.current_role, ROLES["Titulaire"])
     ceiling = PER36_CEILING.get(player.position, PER36_CEILING["SF"])
 
+    tac = tactic_modifiers(player, player.current_tactic)
+
     # How good you are for this level of competition.
     skill = (player.overall_rating() / 100.0) / (difficulty + 0.25)
     morale_mod = 0.80 + (player.morale / 100) * 0.25
     fitness_mod = 0.85 + (player.fitness / 100) * 0.18
-    efficiency = max(0.30, min(1.35, skill * morale_mod * fitness_mod * _age_curve(player.age)))
+    efficiency = max(0.30, min(1.35, skill * morale_mod * fitness_mod
+                               * _age_curve(player.age) * tac["efficiency"]))
 
     # Minutes come from the role; stats come from minutes. Everything stays coherent.
     mpg = round(max(3.0, min(38.0, role["minutes"] * random.uniform(0.88, 1.12)
@@ -69,8 +73,8 @@ def simulate_season(player: Player, games_missed: int = 0) -> dict:
     def stat(key, noise=0.10, mult=1.0):
         return round(max(0.0, ceiling[key] * scale * mult * random.uniform(1 - noise, 1 + noise)), 1)
 
-    ppg = stat("pts", mult=role["usage"])
-    rpg, apg = stat("reb"), stat("ast")
+    ppg = stat("pts", mult=role["usage"] * tac["pts"])
+    rpg, apg = stat("reb", mult=tac["reb"]), stat("ast", mult=tac["ast"])
     spg, bpg = stat("stl", 0.2), stat("blk", 0.2)
 
     fg_pct = round(max(0.30, min(0.62,
@@ -97,8 +101,9 @@ def simulate_season(player: Player, games_missed: int = 0) -> dict:
     elif player.career_history and ppg >= player.career_history[-1].ppg + 5 and games >= schedule * 0.7:
         award, reputation_gained = "Most Improved Player", reputation_gained + 3
 
-    # A strong roster makes the playoffs; your own level nudges it.
-    playoff_odds = player.team_strength * 0.9 + (efficiency - 0.9) * 0.25
+    # A strong roster makes the playoffs; your own level and the system nudge it.
+    effective_strength = max(0.05, min(0.98, player.team_strength + tac["team_strength"]))
+    playoff_odds = effective_strength * 0.9 + (efficiency - 0.9) * 0.25
     playoff_qualified = random.random() < max(0.05, min(0.96, playoff_odds))
 
     return {
@@ -108,15 +113,18 @@ def simulate_season(player: Player, games_missed: int = 0) -> dict:
         "salary": player.contract_salary,
         "playoff_qualified": playoff_qualified,
         "efficiency": efficiency,
+        "effective_strength": effective_strength,
+        "tactic_fit": tac["fit"], "tactic_xp": tac["xp"],
         "league_level": ld.get("level", 3),
     }
 
 
-def simulate_playoffs(player: Player, efficiency: float) -> PlayoffResult:
+def simulate_playoffs(player: Player, efficiency: float, strength: float = None) -> PlayoffResult:
     """Three rounds: quarter-final, semi-final, final. Roster quality does most of the work."""
     ld = LEAGUES.get(player.current_league, {})
     teams = [t for t in ld.get("teams", ["Adversaire"]) if t != player.current_team] or ["Adversaire"]
-    base = min(0.84, max(0.20, player.team_strength * 0.70 + (efficiency - 0.9) * 0.30))
+    strength = player.team_strength if strength is None else strength
+    base = min(0.84, max(0.20, strength * 0.70 + (efficiency - 0.9) * 0.30))
 
     rounds_won = 0
     for i in range(3):
@@ -149,18 +157,26 @@ def compute_season_xp(player: Player, sim: dict, event: dict, training_focus: st
     # A smaller role on a better roster teaches you more per minute played.
     xp = int(xp * ROLES.get(player.current_role, ROLES["Titulaire"])["xp_mult"])
     xp = int(xp * (0.85 + player.team_strength * 0.35))
+    xp = int(xp * sim.get("tactic_xp", 1.0))
     return max(10, xp + random.randint(-5, 10))
 
 
-def run_season(player: Player, training_focus: str) -> dict:
+def run_season(player: Player, training_focus: str, tactic: str = None) -> dict:
     """Play one full season and commit it to the player. Call exactly once per season."""
+    if tactic:
+        player.current_tactic = tactic
     player.train(training_focus)
+
+    # A season at the same club starts before it is played, so the standing it earns
+    # (cadre, capitaine, légende) applies to the season about to begin.
+    player.seasons_with_team += 1
+    loyalty = player.apply_loyalty_growth()
 
     role_minutes = ROLES.get(player.current_role, ROLES["Titulaire"])["minutes"]
     event = get_random_event(player.reputation, player.morale, player.season_number, role_minutes)
     sim = simulate_season(player, games_missed=event.get("games_missed", 0))
     # A season wiped out by injury cannot end with a playoff run.
-    playoff = (simulate_playoffs(player, sim["efficiency"])
+    playoff = (simulate_playoffs(player, sim["efficiency"], sim["effective_strength"])
                if sim["playoff_qualified"] and sim["games"] > 0 else None)
 
     level_before = player.level
@@ -209,6 +225,8 @@ def run_season(player: Player, training_focus: str) -> dict:
         xp_gained=xp_gained, level_before=level_before, level_after=player.level,
         award=sim.get("award"), event=event.get("title"),
         training_focus=training_focus, playoff=playoff,
+        tactic=player.current_tactic, tactic_fit=sim["tactic_fit"],
+        club_status=player.club_status(),
     )
     player.add_season(record)
 
@@ -224,10 +242,14 @@ def run_season(player: Player, training_focus: str) -> dict:
         "record": record, "sim": sim, "event": event, "playoff": playoff,
         "levels_gained": levels_gained, "expired_sponsors": expired_sponsors,
         "contract_expired": player.contract_years_left == 0,
+        "loyalty": loyalty,
     }
 
 
 # ── Progression gates ──────────────────────────────────────────────────────────
+DRAFT_MAX_AGE = 22
+
+
 def draft_eligibility_age(country: str) -> int:
     return 19 if country == "USA (NCAA)" else 18
 
@@ -244,12 +266,29 @@ def check_promotion_eligibility(player: Player) -> bool:
             and player.reputation >= 10 + current * 4)
 
 
-def is_nba_ready(player: Player) -> bool:
-    """You reach the NBA through the draft, and only once you're genuinely ready."""
-    return (player.age >= draft_eligibility_age(player.country)
-            and player.nba_prospect_score() >= 55
-            and player.reputation >= 35
+def can_enter_draft(player: Player) -> bool:
+    """The draft is for prospects: past DRAFT_MAX_AGE you are no longer draft-eligible.
+
+    Declaring does not require climbing every rung of your country's ladder first —
+    prospects come out of Pro B or the NCAA, not only out of the EuroLeague.
+    """
+    return (not player.in_nba
+            and draft_eligibility_age(player.country) <= player.age <= DRAFT_MAX_AGE
+            and player.nba_prospect_score() >= 52
+            and player.reputation >= 32
             and player.season_number >= 1)
+
+
+def can_sign_nba_contract(player: Player) -> bool:
+    """Too old for the draft, so franchises sign you on your record instead — a higher bar."""
+    return (not player.in_nba
+            and player.age > DRAFT_MAX_AGE
+            and player.overall_rating() >= starter_baseline("NBA") - 9
+            and player.reputation >= 55)
+
+
+def is_nba_ready(player: Player) -> bool:
+    return can_enter_draft(player) or can_sign_nba_contract(player)
 
 
 def run_draft(player: Player) -> dict:
