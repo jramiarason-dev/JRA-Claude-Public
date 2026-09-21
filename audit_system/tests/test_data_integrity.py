@@ -130,5 +130,41 @@ class TestEntityContext(unittest.TestCase):
             self.assertIn("background_angle", ctx, f"{key} has no background_angle")
 
 
+class TestDependencyManifests(unittest.TestCase):
+    """requirements.txt (local/CI) and environment.yml (Snowflake) must agree.
+
+    Snowflake reads environment.yml and nothing else, so a library added to one
+    file and forgotten in the other is an app that works locally and fails on
+    the stage.
+    """
+
+    def _names(self, path, marker=None):
+        names = set()
+        for raw in open(os.path.join(ROOT, path), encoding="utf-8"):
+            line = raw.split("#", 1)[0].strip().lstrip("- ").strip()
+            if not line or ":" in line and marker:
+                continue
+            names.add(line.split(">=")[0].split("==")[0].strip())
+        return names
+
+    def test_export_libraries_are_in_both(self):
+        req = self._names("requirements.txt")
+        env = self._names("environment.yml", marker=True)
+        for lib in ("streamlit", "python-docx", "python-pptx", "openpyxl", "fpdf2"):
+            self.assertIn(lib, req, f"{lib} missing from requirements.txt")
+            self.assertIn(lib, env, f"{lib} missing from environment.yml")
+
+    def test_optional_packages_stay_out_of_the_snowflake_manifest(self):
+        """anthropic and rich must not be hard requirements on Snowflake.
+
+        The app degrades to static mode without them; listing either in
+        environment.yml would fail the whole deployment on the warehouse
+        runtime, where neither is in the Anaconda channel.
+        """
+        env = self._names("environment.yml", marker=True)
+        for lib in ("anthropic", "rich", "python-dotenv"):
+            self.assertNotIn(lib, env, f"{lib} must not be required on Snowflake")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

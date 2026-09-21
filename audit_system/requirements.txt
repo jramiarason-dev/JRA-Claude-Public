@@ -1,9 +1,13 @@
+# Streamlit app — the reference library and report assembly need only these.
 streamlit>=1.37.0
+python-docx>=1.1.0      # .docx exports
+python-pptx>=0.6.23     # .pptx exports
+openpyxl>=3.1.2         # .xlsx exports
+fpdf2>=2.7.9            # .pdf exports
+
+# AI features. Without these the app still runs, in static reference mode.
 anthropic>=0.92.0
-python-pptx>=0.6.23
-openpyxl>=3.1.2
-python-docx>=1.1.0
-pypdf>=4.0.0
+
+# CLI only (main.py, agent1-3). base_agent degrades gracefully without rich.
 rich>=13.7.0
 python-dotenv>=1.0.0
-fpdf2>=2.7.9

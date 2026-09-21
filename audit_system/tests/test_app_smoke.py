@@ -5,15 +5,20 @@ break a section is to actually run the script for each one. Streamlit's AppTest
 does that headlessly — no browser, no server, and (because every section is
 exercised in static mode) no Anthropic API call.
 
-The app refuses to start without ANTHROPIC_API_KEY, so a placeholder is set
-here. Nothing in these tests reaches the network.
+A placeholder ANTHROPIC_API_KEY is set so most tests exercise the app in its
+key-configured shape. It is not required to start — TestDegradesWithoutOptional
+Packages removes it deliberately — and nothing here reaches the network.
 
 Runs with the standard library only (no pytest):  python3 -m unittest -v
 """
 
 import ast
+import builtins
+import contextlib
 import os
+import pathlib
 import sys
+import tempfile
 import unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -170,6 +175,122 @@ class TestOutputEscaping(unittest.TestCase):
             src = fh.read()
         self.assertNotIn('href="{link}"', src)
         self.assertIn("def _safe_link(", src)
+
+
+class TestExportStaging(unittest.TestCase):
+    """Generated reports must not survive on disk in a shared directory."""
+
+    def _export_bytes(self):
+        """Compile _export_bytes out of app.py — importing app.py needs Streamlit."""
+        for node in _module().body:
+            if isinstance(node, ast.FunctionDef) and node.name == "_export_bytes":
+                ns = {"tempfile": tempfile, "Path": pathlib.Path}
+                exec(compile(ast.Module([node], []), "app.py", "exec"), ns)
+                return ns["_export_bytes"]
+        raise AssertionError("_export_bytes not found in app.py")
+
+    def test_returns_bytes_and_removes_the_staging_directory(self):
+        seen = {}
+
+        def fake_generator(payload, outdir):
+            seen["outdir"] = outdir
+            target = pathlib.Path(outdir) / "report.docx"
+            target.write_bytes(b"PK\x03\x04" + payload["name"].encode())
+            return str(target)
+
+        out = self._export_bytes()(fake_generator, {"name": "audit"})
+        self.assertEqual(out, b"PK\x03\x04audit")
+        self.assertFalse(
+            pathlib.Path(seen["outdir"]).exists(),
+            "staging directory outlived the export",
+        )
+
+    def test_staging_directory_is_not_inside_the_project(self):
+        seen = {}
+
+        def fake_generator(payload, outdir):
+            seen["outdir"] = outdir
+            target = pathlib.Path(outdir) / "r.xlsx"
+            target.write_bytes(b"x")
+            return str(target)
+
+        self._export_bytes()(fake_generator, {})
+        self.assertNotIn(
+            pathlib.Path(ROOT).resolve(), pathlib.Path(seen["outdir"]).resolve().parents,
+            "exports are staged inside the repository",
+        )
+
+    def test_no_shared_output_directory(self):
+        with open(APP, encoding="utf-8") as fh:
+            src = fh.read()
+        self.assertNotIn("OUTPUT_DIR", src, "app.py still uses a process-wide output directory")
+        self.assertNotIn(
+            '_path"]', src,
+            "an export still travels as a filesystem path rather than bytes",
+        )
+
+
+class TestDegradesWithoutOptionalPackages(unittest.TestCase):
+    """The app must still run where anthropic and rich are not installable.
+
+    That is the Streamlit-in-Snowflake warehouse runtime: packages resolve
+    against the Snowflake Anaconda channel only, and outbound network access is
+    off until an administrator enables it. The static reference library needs
+    neither, so every section has to render anyway — with the AI buttons
+    disabled, not with a stopped app.
+    """
+
+    @contextlib.contextmanager
+    def _without(self, *blocked_roots):
+        real_import = builtins.__import__
+
+        def guard(name, *args, **kwargs):
+            root = name.split(".")[0]
+            if root in blocked_roots:
+                raise ImportError(f"No module named {name!r} (simulated)")
+            return real_import(name, *args, **kwargs)
+
+        evicted = {k: v for k, v in sys.modules.items() if k.split(".")[0] in blocked_roots}
+        for k in evicted:
+            del sys.modules[k]
+        builtins.__import__ = guard
+        try:
+            yield
+        finally:
+            builtins.__import__ = real_import
+            sys.modules.update(evicted)
+
+    def test_every_section_renders_without_anthropic_or_rich(self):
+        key = os.environ.pop("ANTHROPIC_API_KEY", None)
+        try:
+            with self._without("anthropic", "rich"):
+                for section_id, section in enumerate(SECTIONS):
+                    with self.subTest(section=section["name"]):
+                        at = _render(section_id)
+                        self.assertEqual(
+                            [e.message for e in at.exception], [],
+                            f"{section['name']} raised in static mode",
+                        )
+                        self.assertEqual(
+                            [e.value for e in at.error], [],
+                            f"{section['name']} errored in static mode",
+                        )
+                        self.assertGreater(len(at.markdown), 10)
+        finally:
+            if key is not None:
+                os.environ["ANTHROPIC_API_KEY"] = key
+
+    def test_static_mode_is_announced_not_fatal(self):
+        key = os.environ.pop("ANTHROPIC_API_KEY", None)
+        try:
+            at = _render(0)
+            self.assertIn(
+                "Static reference mode", " ".join(i.value for i in at.info),
+                "no banner explaining why the AI buttons are disabled",
+            )
+        finally:
+            if key is not None:
+                os.environ["ANTHROPIC_API_KEY"] = key
 
 
 class TestDocumentAnalyserRemoved(unittest.TestCase):

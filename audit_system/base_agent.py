@@ -2,17 +2,49 @@
 
 import os
 import sys
+from contextlib import contextmanager
 from pathlib import Path
 
 import anthropic
-from rich.console import Console
-from rich.panel import Panel
-from rich.prompt import Prompt, Confirm
-from rich.text import Text
-from rich.rule import Rule
 
-MODEL   = "claude-opus-4-8"
-console = Console()
+MODEL = "claude-opus-4-8"
+
+# `rich` renders the CLI (main.py, agent1-3). The Streamlit app imports this
+# module too — for MODEL, upload_file and build_file_content_blocks — but has no
+# terminal to render to. Importing rich unconditionally would make a terminal
+# library a hard requirement of the web app, which matters on a platform whose
+# package set you do not control (Snowflake's Anaconda channel, say): a missing
+# rich would take the AI features down with it. So degrade instead: without
+# rich, console.print is a no-op and the interactive prompts refuse rather than
+# guess. The CLI keeps its full output wherever rich is installed.
+try:
+    from rich.console import Console
+    from rich.prompt import Prompt, Confirm
+
+    console = Console()
+    HAS_RICH = True
+except ImportError:  # pragma: no cover - exercised only where rich is absent
+    HAS_RICH = False
+
+    class _NullConsole:
+        """Swallows CLI chrome so the library half of this module still works."""
+
+        def print(self, *args, **kwargs):
+            pass
+
+        @contextmanager
+        def status(self, *args, **kwargs):
+            yield
+
+    class _Unavailable:
+        """Any interactive prompt is a programming error without a terminal."""
+
+        @staticmethod
+        def ask(*args, **kwargs):
+            raise RuntimeError("interactive prompts require `rich` (pip install rich)")
+
+    console = _NullConsole()
+    Prompt = Confirm = _Unavailable
 
 
 def make_client() -> anthropic.Anthropic:
@@ -160,6 +192,11 @@ def stream_and_collect(client: anthropic.Anthropic, system: str,
 
 
 def print_banner(title: str, subtitle: str = ""):
+    if not HAS_RICH:
+        return
+    from rich.panel import Panel
+    from rich.text import Text
+
     console.print()
     console.print(Panel(
         Text.from_markup(f"[bold white]{title}[/bold white]\n[dim]{subtitle}[/dim]"),
@@ -170,6 +207,10 @@ def print_banner(title: str, subtitle: str = ""):
 
 
 def print_rule(text: str):
+    if not HAS_RICH:
+        return
+    from rich.rule import Rule
+
     console.print(Rule(f"[bold blue]{text}[/bold blue]"))
 
 
