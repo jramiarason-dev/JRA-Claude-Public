@@ -108,8 +108,8 @@ const SIM_LINE = (pos) => {
 const SimulatorScreen = ({ lang, sport, setRoute }) => {
   const fr = lang === 'fr';
   const t = (window.I18N && window.I18N[lang]) || {};
-  const ACC = '#CAFF33';
-  const SEC = '#3b82f6';
+  const ACC = useAccent();
+  const SEC = '#9aa0aa';  // idem : doit rester lisible face à toutes les palettes
 
   const SQUADS = window.SQUADS || {};
   const TEAMSTATS = window.TEAMSTATS || {};

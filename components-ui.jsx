@@ -29,10 +29,42 @@ const Icon = ({ name, size = 18, stroke = 1.6 }) => {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="none"
          stroke="currentColor" strokeWidth={stroke}
-         strokeLinecap="round" strokeLinejoin="round">
+         strokeLinecap="round" strokeLinejoin="round"
+         aria-hidden="true" focusable="false">
       <path d={paths[name] || paths.home} />
     </svg>
   );
+};
+
+// Rend un div cliquable équivalent à un bouton pour le clavier et les
+// lecteurs d'écran. À étaler sur l'élément : {...clickable(fn, label)}
+const clickable = (onClick, label) => onClick && {
+  onClick,
+  role: "button",
+  tabIndex: 0,
+  "aria-label": label,
+  onKeyDown: (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(e); }
+  },
+};
+
+// Couleur d'accent courante, en valeur résolue : les attributs SVG
+// (fill/stroke) n'acceptent pas var(--accent), il faut la vraie valeur.
+// L'observateur suit les changements de palette faits par App sur :root.
+const FALLBACK_ACCENT = "#CAFF33";
+const readAccent = () =>
+  getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || FALLBACK_ACCENT;
+
+const useAccent = () => {
+  const [accent, setAccent] = React.useState(readAccent);
+  React.useEffect(() => {
+    const sync = () => setAccent(readAccent());
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["style"] });
+    return () => observer.disconnect();
+  }, []);
+  return accent;
 };
 
 const Pill = ({ kind = "default", children }) => {
@@ -48,7 +80,7 @@ const Stat = ({ label, value, delta, deltaKind = "up", suffix }) => (
   <div className="stat">
     <div className="stat-label">{label}</div>
     <div className="stat-value">{value}{suffix && <span style={{fontSize: 18, color: '#888', marginLeft: 4, letterSpacing: 0}}>{suffix}</span>}</div>
-    {delta && (
+    {delta != null && delta !== "" && (
       <div className={`stat-delta ${deltaKind}`}>
         {deltaKind === "up" ? "▲" : "▼"} {delta}
       </div>
@@ -77,7 +109,8 @@ const MatchCard = ({ match, lang, onClick }) => {
   const isFinished = status === "finished";
 
   return (
-    <div className="card card-hover match-card fade-in" onClick={onClick}>
+    <div className="card card-hover match-card fade-in"
+         {...clickable(onClick, `${match.home.name} – ${match.away.name}`)}>
       <div className="match-meta">
         <span className="comp">{match.competition}</span>
         <span>
@@ -140,10 +173,10 @@ const MatchCard = ({ match, lang, onClick }) => {
   );
 };
 
-const BarCompare = ({ label, left, right, leftMax, rightMax, leftLabel, rightLabel }) => {
-  const lMax = leftMax || Math.max(left, right);
-  const rMax = rightMax || Math.max(left, right);
-  const lPct = Math.min(100, (left / (left + right)) * 100);
+const BarCompare = ({ label, left, right, leftLabel, rightLabel }) => {
+  const total = (left || 0) + (right || 0);
+  // total nul ⇒ 50/50 plutôt qu'une largeur NaN%
+  const lPct = total === 0 ? 50 : Math.min(100, (left / total) * 100);
   const rPct = 100 - lPct;
   return (
     <div className="bar-compare">
@@ -174,8 +207,9 @@ const Gauge = ({ value = 0, max = 100 }) => {
   );
 };
 
-const Switch = ({ on, onClick }) => (
-  <div className="switch" data-on={on} onClick={onClick} role="switch" aria-checked={on} />
+const Switch = ({ on, onClick, label }) => (
+  <button type="button" className="switch" data-on={on} onClick={onClick}
+          role="switch" aria-checked={on} aria-label={label} />
 );
 
-Object.assign(window, { Icon, Pill, Stat, Crest, FormBar, MatchCard, BarCompare, Gauge, Switch });
+Object.assign(window, { Icon, Pill, Stat, Crest, FormBar, MatchCard, BarCompare, Gauge, Switch, clickable, useAccent });

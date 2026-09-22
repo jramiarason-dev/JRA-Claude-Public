@@ -148,7 +148,7 @@ const PostMatchScreen = ({ lang, matchId, setRoute, sport }) => {
         </div>
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: 18 }}>
+      <div className="grid grid-detail" style={{ gap: 18 }}>
         <div className="col">
           {/* Stats */}
           <div className="card">

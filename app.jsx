@@ -37,6 +37,19 @@ function App() {
     setRoute(view === 'post' ? 'post-match' : 'pre-match');
   };
 
+  // Tiroir mobile : Échap ferme, et le fond ne défile pas derrière lui
+  React.useEffect(() => {
+    if (!sidebarOpen) return;
+    const onKey = (e) => { if (e.key === 'Escape') setSidebarOpen(false); };
+    document.addEventListener('keydown', onKey);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = previous;
+    };
+  }, [sidebarOpen]);
+
   // Apply tweaks: accent palette → CSS vars
   React.useEffect(() => {
     const root = document.documentElement;
@@ -92,15 +105,18 @@ function App() {
   return (
     <React.Fragment>
       {t.showNoise && <div className="noise" />}
-      <div className={`scrim ${sidebarOpen ? 'open' : ''}`} onClick={() => setSidebarOpen(false)} />
       <div className="shell">
+        {/* scrim doit vivre dans .shell : ce dernier crée un contexte
+            d'empilement (z-index:2), donc un scrim frère passerait
+            au-dessus de la sidebar (z-index:11) et bloquerait ses clics */}
+        <div className={`scrim ${sidebarOpen ? 'open' : ''}`} onClick={() => setSidebarOpen(false)} />
         <Sidebar sport={sport} setSport={setSport}
                  route={navRoute} setRoute={setRoute}
                  lang={lang}
                  open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <main className="main">
           <Topbar route={headerRoute} lang={lang} setLang={setLang} sport={sport}
-                  onMenu={() => setSidebarOpen(true)} />
+                  onMenu={() => setSidebarOpen(true)} menuOpen={sidebarOpen} />
           {screen}
         </main>
       </div>
@@ -128,18 +144,19 @@ function App() {
   );
 }
 
+// Un hex mal formé donnait des NaN qui se propageaient silencieusement
+// dans les variables CSS : on retombe sur du noir plutôt que sur rgba(NaN…).
+function hexToRgb(hex) {
+  const c = String(hex).replace('#', '');
+  if (!/^[0-9a-f]{6}$/i.test(c)) return [0, 0, 0];
+  return [c.slice(0, 2), c.slice(2, 4), c.slice(4, 6)].map(p => parseInt(p, 16));
+}
 function isLight(hex) {
-  const c = hex.replace('#','');
-  const r = parseInt(c.slice(0,2), 16);
-  const g = parseInt(c.slice(2,4), 16);
-  const b = parseInt(c.slice(4,6), 16);
+  const [r, g, b] = hexToRgb(hex);
   return (r * 299 + g * 587 + b * 114) / 1000 > 165;
 }
 function hexToRgba(hex, a) {
-  const c = hex.replace('#','');
-  const r = parseInt(c.slice(0,2), 16);
-  const g = parseInt(c.slice(2,4), 16);
-  const b = parseInt(c.slice(4,6), 16);
+  const [r, g, b] = hexToRgb(hex);
   return `rgba(${r},${g},${b},${a})`;
 }
 

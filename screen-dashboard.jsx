@@ -9,6 +9,14 @@ const DashboardScreen = ({ lang, sport, setRoute, openMatch }) => {
   // KPI drill-down state + real breakdowns computed from injected data
   const [openKpi, setOpenKpi] = React.useState(null);
 
+  // Échap ferme le détail KPI (la souris avait déjà le clic sur le fond)
+  React.useEffect(() => {
+    if (!openKpi) return;
+    const onKey = (e) => { if (e.key === 'Escape') setOpenKpi(null); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [openKpi]);
+
   const allMatches = [].concat(
     window.MATCHES.football || [], window.MATCHES.basket || [], window.MATCHES.rugby || []
   );
@@ -76,7 +84,7 @@ const DashboardScreen = ({ lang, sport, setRoute, openMatch }) => {
       {/* KPI row — cliquable pour le détail */}
       <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', marginBottom: 24 }}>
         <div className="card card-tight card-hover fade-in" style={{ animationDelay: '0s', cursor: 'pointer' }}
-             onClick={() => setOpenKpi('matches')}>
+             {...clickable(() => setOpenKpi('matches'), t.matches_analyzed)}>
           <Stat label={t.matches_analyzed} value="247" delta="+18 " deltaKind="up" />
           <div className="progress" style={{ marginTop: 12 }}>
             <span style={{ width: '72%' }} />
@@ -87,7 +95,7 @@ const DashboardScreen = ({ lang, sport, setRoute, openMatch }) => {
           </div>
         </div>
         <div className="card card-tight card-hover fade-in" style={{ animationDelay: '.08s', cursor: 'pointer' }}
-             onClick={() => setOpenKpi('accuracy')}>
+             {...clickable(() => setOpenKpi('accuracy'), t.avg_accuracy)}>
           <Stat label={t.avg_accuracy} value="78" suffix="%" delta="+4.2 " deltaKind="up" />
           <div className="progress" style={{ marginTop: 12 }}>
             <span style={{ width: '78%' }} />
@@ -98,7 +106,7 @@ const DashboardScreen = ({ lang, sport, setRoute, openMatch }) => {
           </div>
         </div>
         <div className="card card-tight card-hover fade-in" style={{ animationDelay: '.16s', cursor: 'pointer' }}
-             onClick={() => setOpenKpi('comps')}>
+             {...clickable(() => setOpenKpi('comps'), t.competitions)}>
           <Stat label={t.competitions} value={String(compList.length)} delta={`${['football','basket','rugby'].filter(s=>(window.MATCHES[s]||[]).length).length} actifs`} deltaKind="up" />
           <div className="row" style={{ marginTop: 12, flexWrap: 'wrap', gap: 4 }}>
             {compList.slice(0, 7).map(c => (
@@ -107,7 +115,7 @@ const DashboardScreen = ({ lang, sport, setRoute, openMatch }) => {
           </div>
         </div>
         <div className="card card-tight card-hover fade-in" style={{ animationDelay: '.24s', cursor: 'pointer' }}
-             onClick={() => setOpenKpi('reports')}>
+             {...clickable(() => setOpenKpi('reports'), t.saved_reports)}>
           <Stat label={t.saved_reports} value={String(finishedAll.length)} delta="+6 " deltaKind="up" />
           <div className="row" style={{ marginTop: 12, alignItems: 'center', gap: 6 }}>
             <Icon name="download" size={14} />
@@ -124,10 +132,12 @@ const DashboardScreen = ({ lang, sport, setRoute, openMatch }) => {
                style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.6)', zIndex: 60,
                         display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
             <div className="card fade-in" onClick={e => e.stopPropagation()}
+                 role="dialog" aria-modal="true" aria-label={info.title}
                  style={{ maxWidth: 560, width: '100%', maxHeight: '80vh', overflowY: 'auto' }}>
               <div className="card-head">
                 <h3 className="card-title">{info.title}</h3>
-                <button className="btn btn-ghost btn-sm" onClick={() => setOpenKpi(null)}>
+                <button className="btn btn-ghost btn-sm" onClick={() => setOpenKpi(null)}
+                        aria-label={lang === 'fr' ? 'Fermer' : 'Close'}>
                   <Icon name="close" size={14} />
                 </button>
               </div>
@@ -151,7 +161,7 @@ const DashboardScreen = ({ lang, sport, setRoute, openMatch }) => {
         );
       })()}
 
-      <div className="grid" style={{ gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: 18 }}>
+      <div className="grid grid-split" style={{ gap: 18 }}>
         {/* Upcoming + Recent */}
         <div className="col">
           <div className="card">

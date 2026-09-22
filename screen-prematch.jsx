@@ -102,7 +102,7 @@ const PreMatchScreen = ({ lang, matchId, setRoute, sport }) => {
         </div>
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: 18 }}>
+      <div className="grid grid-detail" style={{ gap: 18 }}>
         {/* Left col — Formation */}
         <div className="col">
           <div className="card">
@@ -247,7 +247,7 @@ const PreMatchScreen = ({ lang, matchId, setRoute, sport }) => {
               <h3 className="card-title">{lang==='fr'?'Cotes':'Odds'}</h3>
               <span style={{ fontSize: 11, color: '#666' }}>Bookmakers · {lang==='fr'?'moyenne':'avg'}</span>
             </div>
-            <div className="grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+            <div className="grid grid-odds" style={{ gap: 10 }}>
               {[
                 { code: '1', label: match.home.code, val: odds.home },
                 ...(odds.draw ? [{ code: 'X', label: t.draw, val: odds.draw }] : []),
