@@ -21,7 +21,11 @@ Une connexion Internet est nécessaire au premier chargement (Three.js est charg
    pompiers, poste, gare routière, parkings, horloge fleurie, quai et lac avec jet d'eau et voiliers, Alpes à l'horizon.
 4. **Campagne** : champs, vignobles, trois fermes (chalet, grange, silo), vaches et moutons, tracteurs.
 5. **Mobilier urbain** : feux tricolores, trottoirs, bancs, poubelles, bornes à incendie, abribus, kiosques, fontaines.
-6. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
+6. **Vue cinéma** : vue à la première personne (V), graphismes cinéma (lueurs, grain, vignettage), nuits plus
+   atmosphériques, vitrines éclairées, halos des lampadaires, trams et caténaires à Genève, passages piétons jaunes.
+7. **Téléphone** (T) : GPS avec itinéraire par les routes, appels (taxi, police 117, pompiers 118, ambulance 144,
+   mécano, pilote d'hélico), garage, météo, mode photo, réglages.
+8. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
    patrouille, limousine, bus, ambulance, camion de pompiers, fourgon postal, tracteur, hélicoptère, jet-ski, yacht), 5 armes (poings, pistolet, fusil, lance-roquettes,
    canon à confettis), jetpack, parachute, super saut, super vitesse, ralenti, téléportation par la carte.
 
@@ -39,7 +43,10 @@ Une connexion Internet est nécessaire au premier chargement (Three.js est charg
 | 1-5, R | Changer d'arme |
 | J | Jetpack |
 | H | Klaxon / sirène |
-| M | Carte + téléportation |
+| M | Carte : itinéraire GPS et téléportation |
+| V | Vue à la première personne |
+| T | Téléphone |
+| G | Effacer l'itinéraire |
 | Échap | Menu (garage, armes, téléport, monde, pouvoirs, personnage) |
 
 Sur mobile : joystick à gauche, glisser à droite pour la caméra, boutons d'action.
