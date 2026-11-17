@@ -1473,17 +1473,23 @@ cv.addEventListener('mousedown', e => {
   SFX.init();
   if (S.mode === 'creator') { drag.on = true; drag.x = e.clientX; return; }
   if (S.mode !== 'play') return;
-  if (!isTouch && document.pointerLockElement !== cv) { cv.requestPointerLock?.(); return; }
+  if (!isTouch && document.pointerLockElement !== cv && !lockFailed) {
+    try { const r = cv.requestPointerLock?.(); if (r && r.catch) r.catch(() => { lockFailed = true; }); else if (!cv.requestPointerLock) lockFailed = true; } catch (err) { lockFailed = true; }
+    return;
+  }
   if (e.button === 0) { mouseDown = true; mouseClicked = true; }
 });
 addEventListener('mouseup', e => { if (e.button === 0) mouseDown = false; drag.on = false; });
 addEventListener('mousemove', e => {
   if (S.mode === 'creator' && drag.on) { P.yaw += (e.clientX - drag.x) * 0.01; drag.x = e.clientX; return; }
-  if (S.mode === 'play' && document.pointerLockElement === cv) { CAM.yaw -= e.movementX * 0.0025; CAM.pitch = clamp(CAM.pitch + e.movementY * 0.0022, -1.1, 1.3); CAM.lastMouse = performance.now(); }
+  const dragLook = lockFailed && document.pointerLockElement !== cv && e.buttons;
+  if (S.mode === 'play' && (document.pointerLockElement === cv || dragLook)) { CAM.yaw -= e.movementX * 0.0025; CAM.pitch = clamp(CAM.pitch + e.movementY * 0.0022, -1.1, 1.3); CAM.lastMouse = performance.now(); }
 });
 cv.addEventListener('wheel', e => { CAM.dist = clamp(CAM.dist + Math.sign(e.deltaY) * 0.12, 0.45, 2.6); }, { passive: true });
 cv.addEventListener('contextmenu', e => e.preventDefault());
 const drag = { on: false, x: 0 };
+let lockFailed = false;
+document.addEventListener('pointerlockerror', () => { lockFailed = true; });
 cv.addEventListener('touchstart', e => { SFX.init(); if (S.mode === 'creator') { drag.on = true; drag.x = e.touches[0].clientX; } }, { passive: true });
 cv.addEventListener('touchmove', e => { if (S.mode === 'creator' && drag.on) { P.yaw += (e.touches[0].clientX - drag.x) * 0.012; drag.x = e.touches[0].clientX; } }, { passive: true });
 cv.addEventListener('touchend', () => drag.on = false);
@@ -1962,7 +1968,7 @@ $('crPlay').onclick = () => {
   S.mode = 'play'; layoutCreatorCam();
   if (savedPos) { P.pos.copy(savedPos.pos); P.yaw = savedPos.yaw; }
   else { P.yaw = Math.PI; CAM.yaw = Math.PI; CAM.pitch = 0.18; toast(`Bienvenue à Mirage City${CHAR.name ? ', ' + CHAR.name : ''} ! 🌴`); setTimeout(() => toast('Tout est débloqué — ouvre le menu (☰ / Échap) pour le garage'), 1600); }
-  if (!isTouch) cv.requestPointerLock?.();
+  if (!isTouch && !lockFailed) { try { const r = cv.requestPointerLock?.(); if (r && r.catch) r.catch(() => { lockFailed = true; }); } catch (err) { lockFailed = true; } }
 };
 
 /* =====================================================================
