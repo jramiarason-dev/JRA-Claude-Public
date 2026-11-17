@@ -16,8 +16,13 @@ Une connexion Internet est nécessaire au premier chargement (Three.js est charg
 2. **La ville** : très haute tour centrale, hôtel en forme de voile sur son île (avec héliport),
    île en forme de palmier, marina et tours torsadées, mall à dôme, cadre doré géant, fontaine dansante,
    plage, désert avec dunes, autoroute et oasis. Cycle jour/nuit, météo (brume, tempête de sable), feux d'artifice.
-3. **Gameplay** : circulation et piétons, 12 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
-   patrouille, limousine, hélicoptère, jet-ski, yacht), 5 armes (poings, pistolet, fusil, lance-roquettes,
+3. **Quartier de Genève** (au nord) : vieille ville aux toits pentus avec commerces (boulangerie, horlogerie,
+   chocolatier, fromagerie…), mairie avec horloge, cathédrale, hôpital (héliport sur le toit), police, caserne des
+   pompiers, poste, gare routière, parkings, horloge fleurie, quai et lac avec jet d'eau et voiliers, Alpes à l'horizon.
+4. **Campagne** : champs, vignobles, trois fermes (chalet, grange, silo), vaches et moutons, tracteurs.
+5. **Mobilier urbain** : feux tricolores, trottoirs, bancs, poubelles, bornes à incendie, abribus, kiosques, fontaines.
+6. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
+   patrouille, limousine, bus, ambulance, camion de pompiers, fourgon postal, tracteur, hélicoptère, jet-ski, yacht), 5 armes (poings, pistolet, fusil, lance-roquettes,
    canon à confettis), jetpack, parachute, super saut, super vitesse, ralenti, téléportation par la carte.
 
 ## Commandes
