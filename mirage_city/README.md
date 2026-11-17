@@ -38,3 +38,11 @@ Une connexion Internet est nécessaire au premier chargement (Three.js est charg
 | Échap | Menu (garage, armes, téléport, monde, pouvoirs, personnage) |
 
 Sur mobile : joystick à gauche, glisser à droite pour la caméra, boutons d'action.
+
+## Déployer sur Streamlit Community Cloud
+
+- Repository : ce dépôt, branche `main`
+- Main file path : `mirage_city/streamlit_app.py`
+
+Dans Streamlit, clique d'abord dans le jeu pour lui donner le focus clavier.
+Si la capture de la souris est bloquée, maintiens le clic et glisse pour tourner la caméra.
