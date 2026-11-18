@@ -35,7 +35,13 @@ Une connexion Internet est nécessaire au premier chargement (Three.js est charg
    marche et course avec flexion des genoux et des coudes, respiration au repos, regard vers le joueur,
    passants au téléphone, mains en l'air quand on les vise, déséquilibre après un choc léger, moulinets en l'air,
    bras tendus avant l'impact, pose au sol propre à chacun et relèvement en deux temps.
-10. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
+10. **Tenues et accessoires réalistes** (joueur) : matériaux séparés pour la peau (reflet sous-cutané),
+    les cheveux (reflet anisotrope), les tissus (trame, maille, denim), le cuir, le métal, le verre et les yeux.
+    Chemise (col, boutons, poche, motifs uni / carreaux / rayures / fleurs), short avec ourlet, jean avec coutures,
+    casquette (6 panneaux, visière, à l'endroit ou à l'envers), cagoule, gants noirs en cuir, montre (boîtier
+    métal, verre, bracelet cuir), lunettes (montures dorées, verres réfléchissants), chaîne à maillons. Baskets,
+    baskets montantes ou chaussures en cuir, avec couleur du dessus, de la semelle et de la bande latérale.
+11. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
    patrouille, limousine, bus, ambulance, camion de pompiers, fourgon postal, tracteur, hélicoptère, jet-ski, yacht), 5 armes (poings, pistolet, fusil, lance-roquettes,
    canon à confettis), jetpack, parachute, super saut, super vitesse, ralenti, téléportation par la carte.
 
