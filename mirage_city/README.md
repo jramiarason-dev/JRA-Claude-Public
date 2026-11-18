@@ -29,7 +29,13 @@ Une connexion Internet est nécessaire au premier chargement (Three.js est charg
    textures PBR générées par le code (bitume, pavés, dalles, herbe, sable ridé, tuiles, façades avec vitres
    réfléchissantes), peinture automobile vernie, occlusion ambiante (GTAO), anticrénelage MSAA, ombres 4K,
    étalonnage des couleurs, netteté, flou de vitesse, reflets d'objectif, pluie avec chaussée mouillée et flaques.
-9. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
+9. **Personnages articulés** : squelette de 18 os (colonne, cou, tête, épaules, coudes, poignets, hanches,
+   genoux, chevilles), corps aux formes arrondies, visage détaillé (yeux et iris, sourcils, nez, lèvres, oreilles,
+   pommettes), choix de la couleur des yeux, zoom sur le visage dans le créateur. Animations procédurales :
+   marche et course avec flexion des genoux et des coudes, respiration au repos, regard vers le joueur,
+   passants au téléphone, mains en l'air quand on les vise, déséquilibre après un choc léger, moulinets en l'air,
+   bras tendus avant l'impact, pose au sol propre à chacun et relèvement en deux temps.
+10. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
    patrouille, limousine, bus, ambulance, camion de pompiers, fourgon postal, tracteur, hélicoptère, jet-ski, yacht), 5 armes (poings, pistolet, fusil, lance-roquettes,
    canon à confettis), jetpack, parachute, super saut, super vitesse, ralenti, téléportation par la carte.
 
