@@ -50,6 +50,21 @@ Une connexion Internet est nécessaire au premier chargement (Three.js est charg
 13. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
    patrouille, limousine, bus, ambulance, camion de pompiers, fourgon postal, tracteur, hélicoptère, jet-ski, yacht), 5 armes (poings, pistolet, fusil, lance-roquettes,
    canon à confettis), jetpack, parachute, super saut, super vitesse, ralenti, téléportation par la carte.
+14. **Intérieurs visitables** (F devant une porte dorée) : galerie du Dubai Mall (boutiques, fontaine, escalator,
+    passants), hall du Grand Hôtel du Lac (colonnes, lustres, réception), horlogerie de luxe (essayer une montre en
+    or, en acier ou noire) et hall des départs de l'aéroport (comptoirs, tableau des vols, sièges).
+15. **Vie urbaine** : cycle des feux synchronisé (les voitures s'arrêtent au rouge, les piétons attendent pour
+    traverser), bus qui marquent l'arrêt aux abribus, clignotants, feux stop et de recul, phares qui éclairent la
+    route la nuit, habitacle visible en vue intérieure (tableau de bord, sièges, volant qui tourne).
+16. **Garde-robe et garage** : jusqu'à 8 tenues enregistrées (créateur ou téléphone), peinture et néons sous caisse
+    pour son véhicule, mémorisés pour les prochains appels au garage.
+17. **Mode photo** (téléphone → Photo) : caméra libre, 6 filtres, profondeur de champ, focale, 6 poses, capture
+    téléchargeable en JPEG.
+18. **Ciel physique et végétation** : diffusion atmosphérique (Rayleigh/Mie), nuages animés selon la météo,
+    palmiers et arbres détaillés qui ondulent au vent, herbe dans les parcs et la campagne.
+19. **Animation** : clignement des yeux, mâchoire qui bouge au téléphone, doigts qui se referment sur l'arme.
+20. **Performances et sauvegarde** : niveaux de détail (véhicules et piétons lointains simplifiés, herbe par zones),
+    résolution dynamique pour viser 50–60 images/s, sauvegarde automatique toutes les 8 s et bouton « Continuer ».
 
 ## Commandes
 
@@ -60,7 +75,7 @@ Une connexion Internet est nécessaire au premier chargement (Three.js est charg
 | Maj | Sprint / nitro |
 | Espace | Saut, frein à main, monter (hélico/jetpack), parachute en chute |
 | C / Ctrl | Descendre (hélico/jetpack) |
-| F | Monter / descendre d'un véhicule |
+| F | Monter / descendre d'un véhicule, entrer / sortir d'un bâtiment, interagir |
 | Clic | Tirer / frapper |
 | 1-5, R | Changer d'arme |
 | J | Jetpack |
@@ -80,3 +95,24 @@ Sur mobile : joystick à gauche, glisser à droite pour la caméra, boutons d'ac
 
 Dans Streamlit, clique d'abord dans le jeu pour lui donner le focus clavier.
 Si la capture de la souris est bloquée, maintiens le clic et glisse pour tourner la caméra.
+
+## Développement
+
+Le code est découpé en modules dans `src/` :
+
+- `src/template.html` : styles et interface ;
+- `src/js/NN-*.js` : modules JavaScript, concaténés dans l'ordre des numéros (portée partagée).
+
+`index.html` est généré : après une modification dans `src/`, lance
+
+```bash
+python3 mirage_city/build.py
+```
+
+`python3 mirage_city/build.py --check` vérifie qu'`index.html` est à jour (utilisé par la CI).
+
+Test de fumée (Chromium en rendu logiciel, nécessite Playwright) :
+
+```bash
+node mirage_city/tests/smoke.mjs
+```
