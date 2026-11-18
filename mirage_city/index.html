@@ -244,6 +244,8 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
+import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 
 /* =====================================================================
    OUTILS
@@ -508,7 +510,7 @@ function addCylBuilding(cx, cz, r, h, mat, y0 = 0, seg = 16) {
 }
 
 function buildGround() {
-  const sand = new THREE.MeshStandardMaterial({ color: 0xe0c28c, roughness: 1 });
+  const sand = new THREE.MeshStandardMaterial({ color: 0xe0c28c, roughness: 1, userData: { pbr: 'sand' } });
   // grand sol de sable (côté terre)
   plane(BOUNDS.x1 - SHORE + 200, LAKE_Z + 1200, sand, (BOUNDS.x1 + 200 + SHORE) / 2, -0.05, (LAKE_Z - 1200) / 2);
   // dunes
@@ -516,9 +518,9 @@ function buildGround() {
   const p = dg.attributes.position;
   for (let i = 0; i < p.count; i++) p.setY(i, duneH(p.getX(i), p.getZ(i)));
   dg.computeVertexNormals();
-  const dm = new THREE.Mesh(dg, new THREE.MeshStandardMaterial({ color: 0xe3b877, roughness: 1 })); dm.receiveShadow = true; scene.add(dm);
+  const dm = new THREE.Mesh(dg, new THREE.MeshStandardMaterial({ color: 0xe3b877, roughness: 1, userData: { pbr: 'sand' } })); dm.receiveShadow = true; scene.add(dm);
   // dalle urbaine
-  plane(870, 1110, new THREE.MeshStandardMaterial({ color: 0xd3cbbb, roughness: 0.95 }), 122.5, 0.01, 0);
+  plane(870, 1110, new THREE.MeshStandardMaterial({ color: 0xd3cbbb, roughness: 0.95, userData: { pbr: 'paving' } }), 122.5, 0.01, 0);
   // plage
   plane(31, 1300, new THREE.MeshStandardMaterial({ color: 0xf0dcae, roughness: 1 }), -324.5, 0.0, 0);
   // mer
@@ -530,13 +532,13 @@ function buildGround() {
 function buildRoads() {
   const mk = (len, horiz, x, z) => {
     const t = roadTex.clone(); t.needsUpdate = true; t.repeat.set(1, len / 22);
-    const m = plane(ROAD_W, len, new THREE.MeshStandardMaterial({ map: t, roughness: 0.9 }), x, 0.03, z);
+    const m = plane(ROAD_W, len, new THREE.MeshStandardMaterial({ map: t, roughness: 0.9 }), x, 0.03, z); m.material.userData.pbr = 'road';
     if (horiz) m.rotation.z = Math.PI / 2;
   };
   for (const x of ROADS_X) mk(1458, false, x, 180);
   for (const z of ROADS_Z) mk(858, true, 120, z);
   mk(960, true, 1020, HWY_Z); // autoroute du désert
-  const inter = new THREE.MeshStandardMaterial({ color: 0x44454b, roughness: 0.9 });
+  const inter = new THREE.MeshStandardMaterial({ color: 0x44454b, roughness: 0.9 }); inter.userData.pbr = 'asphalt';
   const ig = new THREE.PlaneGeometry(ROAD_W, ROAD_W); ig.rotateX(-Math.PI / 2);
   const im = new THREE.InstancedMesh(ig, inter, ROADS_X.length * ROADS_Z.length); let k = 0;
   const d = new THREE.Object3D();
@@ -703,7 +705,7 @@ function buildFrame(cx, cz) {
 }
 
 /* ---------- Parcs, fontaine, mall, héliport */
-const GRASS_MAT = new THREE.MeshStandardMaterial({ color: 0x5c9a4a, roughness: 1 });
+const GRASS_MAT = new THREE.MeshStandardMaterial({ color: 0x5c9a4a, roughness: 1, userData: { pbr: 'grass' } });
 function buildPark(cx, cz, withPad) {
   plane(88, 88, GRASS_MAT, cx, 0.05, cz);
   mapFeatures.parks.push({ x: cx, z: cz });
@@ -930,8 +932,8 @@ function updateClocks() {
 }
 
 /* ---------- bâtiments publics */
-const COBBLE_MAT = new THREE.MeshStandardMaterial({ color: 0xbdb3a3, roughness: 1 });
-const ASPHALT_MAT = new THREE.MeshStandardMaterial({ color: 0x4a4b51, roughness: 0.95 });
+const COBBLE_MAT = new THREE.MeshStandardMaterial({ color: 0xbdb3a3, roughness: 1, userData: { pbr: 'cobble' } });
+const ASPHALT_MAT = new THREE.MeshStandardMaterial({ color: 0x4a4b51, roughness: 0.95, userData: { pbr: 'asphalt' } });
 const publicSpots = {};
 function parkingLot(cx, cz, w, d, rows) {
   plane(w, d, ASPHALT_MAT, cx, 0.045, cz);
@@ -1163,7 +1165,7 @@ function updateAnimals(dt) {
 function knockAnimal(a, vx, vy, vz) { a.state = 'fly'; a.vel.set(vx, vy, vz); a.spin = rand(-4, 4); SFX.burst(0.2, 700, 0.2); }
 
 function buildCountryside() {
-  plane(1000, LAKE_Z - 556, new THREE.MeshStandardMaterial({ color: 0x7fae5a, roughness: 1 }), 1060, 0.015, (556 + LAKE_Z) / 2);
+  plane(1000, LAKE_Z - 556, new THREE.MeshStandardMaterial({ color: 0x7fae5a, roughness: 1, userData: { pbr: 'grass' } }), 1060, 0.015, (556 + LAKE_Z) / 2);
   // route de campagne
   const t = roadTex.clone(); t.needsUpdate = true; t.repeat.set(1, 900 / 22);
   const r = plane(12, 910, new THREE.MeshStandardMaterial({ map: t, roughness: 0.9 }), 1004, 0.035, 780); r.rotation.z = Math.PI / 2;
@@ -1221,7 +1223,7 @@ function buildCityProps() {
 }
 
 function buildGeneva() {
-  plane(864, LAKE_Z - 552, new THREE.MeshStandardMaterial({ color: 0xcbc4b7, roughness: 0.95 }), 122.5, 0.012, (552 + LAKE_Z) / 2);
+  plane(864, LAKE_Z - 552, new THREE.MeshStandardMaterial({ color: 0xcbc4b7, roughness: 0.95, userData: { pbr: 'cobble' } }), 122.5, 0.012, (552 + LAKE_Z) / 2);
   buildLake();
 }
 
@@ -1233,7 +1235,7 @@ function buildWorld() {
   const sm = SIGNS.mesh(SIGN_MAT); sm.castShadow = false; scene.add(sm);
   const lm = LIGHTS.mesh(LIGHT_MAT); lm.castShadow = false; scene.add(lm);
   const wm = SHOPWIN.mesh(SHOPWIN_MAT); wm.castShadow = false; scene.add(wm);
-  scene.add(ROOFS.mesh(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, metalness: 0 })));
+  ROOFS_MESH = ROOFS.mesh(new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, metalness: 0 })); scene.add(ROOFS_MESH);
   BMATS.push(SIGN_MAT);
 }
 
@@ -1469,7 +1471,7 @@ const ROCKET_GEO = (() => { const b = new GeoBag(); b.add(new THREE.CylinderGeom
 
 function buildVehicleMesh(type, color) {
   const g = new THREE.Group(), bag = new GeoBag(), wheels = [];
-  const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.24, metalness: type === 'hyper' ? 0.7 : 0.4 });
+  const mat = carPaint(type);
   const mkSiren = (y, z, w = 0.3) => { siren = [new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.15, w), new THREE.MeshBasicMaterial({ color: 0xff2020 })), new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.15, w), new THREE.MeshBasicMaterial({ color: 0x2050ff }))]; siren[0].position.set(0.3, y, z); siren[1].position.set(-0.3, y, z); g.add(...siren); };
   const GL = '#121a26', HL = '#fff7da', TL = '#ff2424';
   let rotor = null, tail = null, siren = null; const lbag = new GeoBag();
@@ -1855,7 +1857,7 @@ const S = {
   mode: 'loading', hour: 16.3, freezeTime: false, weather: 'clair', weapon: 1, slow: false,
   powers: { superJump: false, superSpeed: false, slowmo: false, jetpack: false },
   trafficN: isTouch ? 18 : 32, pedN: isTouch ? 40 : 80, fwAuto: true,
-  cinema: (() => { try { const v = localStorage.getItem('mirage_cinema'); return v === null ? !isTouch : v === '1'; } catch (e) { return !isTouch; } })(), phone: false, photo: false, waypoint: null,
+  gfx: (() => { try { return localStorage.getItem('mirage_gfx') || (isTouch ? 'standard' : 'ultra'); } catch (e) { return isTouch ? 'standard' : 'ultra'; } })(), cinema: false, wet: 0, autoTuned: false, phone: false, photo: false, waypoint: null,
 };
 let CHAR = (() => { try { return { ...DEFAULT_CHAR, ...JSON.parse(localStorage.getItem('mirage_char') || '{}') }; } catch (e) { return { ...DEFAULT_CHAR }; } })();
 const P = { pos: new V3(8, 0, 78), vel: new V3(), yaw: 0, onGround: true, vehicle: null, model: null, phase: 0, para: false, swim: false, fireCd: 0, aimT: 0, punchT: 0, prevJump: false, gun: null, jetMesh: null, chute: null };
@@ -2344,6 +2346,7 @@ function applyTime() {
   let fogC = _bot.clone(), near = lerp(350, 40, nf * 0.85), far = lerp(2600, 1100, nf * 0.85);
   if (nf > 0) fogC.lerp(new THREE.Color(0x1c2233), nf * 0.6);
   if (S.weather === 'sable') { fogC = new THREE.Color(0xc9a46a).multiplyScalar(0.35 + 0.65 * day); _top.copy(fogC); _bot.copy(fogC); near = 4; far = 150; }
+  else if (S.weather === 'pluie') { fogC.lerp(new THREE.Color(0x7d848e).multiplyScalar(0.18 + 0.82 * day), 0.75); _top.lerp(fogC, 0.8); _bot.copy(fogC); near = 15; far = 700; }
   else if (S.weather === 'brume') { fogC.lerp(new THREE.Color(0xd9d4c8).multiplyScalar(0.3 + 0.7 * day), 0.6); _top.lerp(fogC, 0.6); _bot.copy(fogC); near = 40; far = 520; }
   skyMat.uniforms.top.value.copy(_top); skyMat.uniforms.bottom.value.copy(_bot);
   skyMat.uniforms.sunDir.value.copy(elev > -0.1 ? dir : dir.clone().negate());
@@ -2353,7 +2356,8 @@ function applyTime() {
   const ldir = elev > -0.05 ? dir : new V3(-dir.x, Math.max(0.35, -elev), -dir.z).normalize();
   sun.position.copy(pp).addScaledVector(ldir, 400); sun.target.position.copy(pp);
   sun.color.set(elev > -0.05 ? 0xffe2b8 : 0x9fb3ff).lerp(new THREE.Color(0xff9a52), set * 0.6);
-  sun.intensity = elev > -0.05 ? 0.4 + 2.6 * day : 0.3;
+  sun.intensity = (elev > -0.05 ? 0.4 + 2.6 * day : 0.3) * (S.weather === 'pluie' ? 0.35 : 1);
+  lensflare.visible = S.weather === 'clair' && elev > 0.02;
   hemi.intensity = 0.22 + 0.43 * day;
   const envI = 0.18 + 0.62 * day; if (Math.abs(envI - envLevel) > 0.02) { envLevel = envI; for (const m of ENV_MATS) m.envMapIntensity = envI; } hemi.color.set(0x8193cc).lerp(new THREE.Color(0xe4f0ff), day); hemi.groundColor.set(0x3a3428).lerp(new THREE.Color(0xc9a77a), day);
   const night = 1 - smooth(-0.06, 0.2, elev);
@@ -2365,7 +2369,7 @@ function applyTime() {
   stars.material.opacity = S.weather === 'clair' ? clamp(night * 1.3 - 0.3, 0, 1) : 0;
   renderer.toneMappingExposure = 0.85 + 0.25 * day;
   const hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
-  $('clock').textContent = `${S.weather === 'sable' ? '🌪️' : S.weather === 'brume' ? '🌫️' : elev > 0 ? '☀️' : '🌙'} ${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+  $('clock').textContent = `${S.weather === 'sable' ? '🌪️' : S.weather === 'pluie' ? '🌧️' : S.weather === 'brume' ? '🌫️' : elev > 0 ? '☀️' : '🌙'} ${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
   return night;
 }
 
@@ -2512,7 +2516,8 @@ function renderMenu(tab) {
     body.innerHTML = `
       <div class="opt"><div class="l"><b>Heure</b><small id="hLbl"></small></div><input type="range" id="hour" min="0" max="23.99" step="0.05" value="${S.hour}"></div>
       <div class="opt"><div class="l"><b>Figer l'heure</b><small>Arrête le cycle jour / nuit</small></div><button class="tgl ${S.freezeTime ? 'on' : ''}" id="frz"></button></div>
-      <div class="opt"><div class="l"><b>Météo</b></div><div class="seg" id="wth">${[['clair', '☀️ Clair'], ['brume', '🌫️ Brume'], ['sable', '🌪️ Tempête de sable']].map(([k, n]) => `<button data-k="${k}" class="${S.weather === k ? 'on' : ''}">${n}</button>`).join('')}</div></div>
+      <div class="opt"><div class="l"><b>Météo</b></div><div class="seg" id="wth">${[['clair', '☀️ Clair'], ['pluie', '🌧️ Pluie'], ['brume', '🌫️ Brume'], ['sable', '🌪️ Tempête de sable']].map(([k, n]) => `<button data-k="${k}" class="${S.weather === k ? 'on' : ''}">${n}</button>`).join('')}</div></div>
+      <div class="opt"><div class="l"><b>Qualité graphique</b><small>Ultra : matériaux PBR, occlusion ambiante, ombres fines, anticrénelage</small></div><div class="seg" id="gfxSeg">${Object.entries(GFX_NAMES).map(([k, n]) => `<button data-g="${k}" class="${S.gfx === k ? 'on' : ''}">${n}</button>`).join('')}</div></div>
       <div class="opt"><div class="l"><b>Circulation</b><small id="trL">${S.trafficN} voitures</small></div><input type="range" id="trN" min="0" max="60" step="1" value="${S.trafficN}"></div>
       <div class="opt"><div class="l"><b>Piétons</b><small id="pdL">${S.pedN} passants</small></div><input type="range" id="pdN" min="0" max="120" step="1" value="${S.pedN}"></div>
       <div class="opt"><div class="l"><b>Feux d'artifice</b><small>Au-dessus du centre-ville</small></div><button class="btn" id="fw">🎆 Lancer</button></div>
@@ -2522,6 +2527,7 @@ function renderMenu(tab) {
     $('hour').oninput = e => { S.hour = +e.target.value; hl(); applyTime(); };
     $('frz').onclick = e => { S.freezeTime = !S.freezeTime; e.target.classList.toggle('on', S.freezeTime); };
     $('wth').querySelectorAll('button').forEach(b => b.onclick = () => { S.weather = b.dataset.k; renderMenu('monde'); applyTime(); });
+    $('gfxSeg').querySelectorAll('button').forEach(b => b.onclick = () => { setGfx(b.dataset.g); renderMenu('monde'); });
     $('trN').oninput = e => { S.trafficN = +e.target.value; $('trL').textContent = `${S.trafficN} voitures`; };
     $('pdN').oninput = e => { S.pedN = +e.target.value; $('pdL').textContent = `${S.pedN} passants`; };
     $('fw').onclick = () => { closeMenu(); launchFireworks(18); };
@@ -2658,7 +2664,7 @@ function updateHUD() {
 let last = performance.now(), time = 0, fwTimer = 8, hudT = 0;
 function frame(now) {
   requestAnimationFrame(frame);
-  let dt = Math.min((now - last) / 1000, 0.05); last = now;
+  const realDt = Math.min((now - last) / 1000, 0.25); let dt = Math.min(realDt, 0.05); last = now;
   if (S.mode === 'loading') return;
   if (S.powers.slowmo && S.mode === 'play') dt *= 0.35;
   time += dt;
@@ -2691,6 +2697,7 @@ function frame(now) {
     const u = P.model.userData; pose(P.model, 'walk', 0, 0); u.armL.rotation.z = 0.12 + Math.sin(time * 1.5) * 0.03; u.armR.rotation.z = -0.12 - Math.sin(time * 1.5) * 0.03;
     applyTime();
   } else applyTime();
+  updateWeatherFX(dt); autoTune(realDt);
   updateFireworks(dt); updateFountain(dt, time); if (S.mode !== 'loading') updateGeneva(dt, time); updateParticles(dt);
   WATER_NORMALS.offset.x += dt * 0.012; WATER_NORMALS.offset.y += dt * 0.007;
   for (const v of vehicles) v.group.visible = v === P.vehicle || Math.abs(v.pos.x - camera.position.x) + Math.abs(v.pos.z - camera.position.z) < 750;
@@ -2712,33 +2719,55 @@ const LIGHT_MAT = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: 
 let LIGHTS, SHOPWIN;
 const POOLS = [];
 const FILM_SHADER = {
-  uniforms: { tDiffuse: { value: null }, time: { value: 0 }, grain: { value: 0.035 }, vig: { value: 0.55 }, ab: { value: 0.0022 }, lift: { value: new THREE.Vector3(0.0, 0.0, 0.0) } },
+  uniforms: { tDiffuse: { value: null }, time: { value: 0 }, grain: { value: 0.03 }, vig: { value: 0.5 }, ab: { value: 0.0018 }, lift: { value: new THREE.Vector3() },
+    px: { value: new THREE.Vector2(1 / 1280, 1 / 720) }, sharpen: { value: 0.35 }, speed: { value: 0 }, sat: { value: 1.08 }, contrast: { value: 1.06 },
+    shadowTint: { value: new THREE.Vector3(0.94, 1.0, 1.08) }, highTint: { value: new THREE.Vector3(1.06, 1.0, 0.92) } },
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
-  fragmentShader: `uniform sampler2D tDiffuse; uniform float time, grain, vig, ab; uniform vec3 lift; varying vec2 vUv;
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float time, grain, vig, ab, sharpen, speed, sat, contrast; uniform vec2 px; uniform vec3 lift, shadowTint, highTint; varying vec2 vUv;
     float rnd(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233))) * 43758.5453); }
     void main(){
       vec2 c = vUv - 0.5; float d = length(c); vec2 off = c * ab * (0.5 + d);
       vec3 col = vec3(texture2D(tDiffuse, vUv + off).r, texture2D(tDiffuse, vUv).g, texture2D(tDiffuse, vUv - off).b);
+      vec3 nb = (texture2D(tDiffuse, vUv + vec2(px.x, 0.)).rgb + texture2D(tDiffuse, vUv - vec2(px.x, 0.)).rgb + texture2D(tDiffuse, vUv + vec2(0., px.y)).rgb + texture2D(tDiffuse, vUv - vec2(0., px.y)).rgb) * 0.25;
+      col = max(col + (col - nb) * sharpen, 0.0);
+      if (speed > 0.001) { vec3 acc = col; for (int i = 1; i < 8; i++) acc += texture2D(tDiffuse, vUv - c * speed * float(i) * 0.014).rgb; col = mix(col, acc / 8.0, smoothstep(0.12, 0.45, d)); }
+      float l = dot(col, vec3(0.2126, 0.7152, 0.0722));
+      col = mix(vec3(l), col, sat);
+      col *= mix(shadowTint, highTint, smoothstep(0.02, 0.6, l));
+      col = pow(max(col, 0.0), vec3(contrast)) * pow(0.18, 1.0 - contrast);
       col += lift;
       col *= 1.0 - vig * smoothstep(0.32, 0.86, d);
-      col += (rnd(vUv * vec2(1733.0, 977.0) + fract(time)) - 0.5) * grain;
+      col += (rnd(vUv * vec2(1733.0, 977.0) + fract(time)) - 0.5) * grain * (0.6 + 0.8 * (1.0 - min(l * 3.0, 1.0)));
       gl_FragColor = vec4(max(col, 0.0), 1.0);
     }`
 };
 let composer = null, bloomPass = null, filmPass = null;
 function setupFX() {
-  composer = new EffectComposer(renderer);
+  const pr = renderer.getPixelRatio();
+  const rt = new THREE.WebGLRenderTarget(Math.floor(innerWidth * pr), Math.floor(innerHeight * pr), { type: THREE.HalfFloatType, samples: isTouch ? 0 : 4 });
+  rt.depthTexture = new THREE.DepthTexture(rt.width, rt.height); rt.depthTexture.type = THREE.FloatType;
+  composer = new EffectComposer(renderer, rt);
   composer.addPass(new RenderPass(scene, camera));
-  bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth / 2, innerHeight / 2), 0.5, 0.55, 0.8);
+  gtaoPass = new GTAOPass(scene, camera, innerWidth, innerHeight);
+  gtaoPass.blendIntensity = 0.9;
+  gtaoPass.updateGtaoMaterial({ radius: 1.8, distanceExponent: 1.5, thickness: 1.5, scale: 1.1, samples: 12 });
+  gtaoPass.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 5, rings: 2, samples: 10 });
+  gtaoPass.enabled = S.gfx === 'ultra';
+  composer.addPass(gtaoPass);
+  bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth / 2, innerHeight / 2), 0.5, 0.6, 0.8);
   composer.addPass(bloomPass);
   filmPass = new ShaderPass(FILM_SHADER); composer.addPass(filmPass);
   composer.addPass(new OutputPass());
-  composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(innerWidth, innerHeight);
+  composer.setPixelRatio(pr); composer.setSize(innerWidth, innerHeight);
 }
 function renderFrame(time, night) {
   if (S.cinema && composer) {
-    bloomPass.strength = lerp(0.16, 0.95, night); bloomPass.threshold = lerp(0.92, 0.72, night);
-    filmPass.uniforms.time.value = time; filmPass.uniforms.lift.value.set(0.004 * night, 0.006 * night, 0.016 * night);
+    bloomPass.strength = lerp(0.14, 0.9, night) + S.wet * 0.15; bloomPass.threshold = lerp(0.95, 0.72, night);
+    const u = filmPass.uniforms;
+    u.time.value = time; u.lift.value.set(0.003 * night, 0.005 * night, 0.014 * night);
+    u.px.value.set(1 / innerWidth, 1 / innerHeight);
+    const v = P.vehicle; u.speed.value = v && S.mode === 'play' ? clamp((Math.abs(v.speed) - 25) / 60, 0, 1) * (CAM.fp ? 0.6 : 1) : 0;
+    u.sat.value = lerp(1.1, 0.92, S.wet) * (S.weather === 'brume' ? 0.85 : 1);
     composer.render();
   } else renderer.render(scene, camera);
 }
@@ -2948,11 +2977,11 @@ function renderPhone(screen, arg) {
   } else if (screen === 'garage') {
     el.innerHTML = back + `<div class="ph-title">Garage</div><div class="ph-grid small">${Object.entries(VDEF).map(([k, d]) => `<button class="ph-app" data-veh="${k}"><span style="background:#22272f">${d.icon}</span>${d.name.split(' ')[0]}</button>`).join('')}</div>`;
   } else if (screen === 'meteo') {
-    el.innerHTML = back + `<div class="ph-title">Météo</div><div class="ph-list">${[['clair', '☀️ Ciel clair'], ['brume', '🌫️ Brume'], ['sable', '🌪️ Tempête de sable']].map(([k, n]) => `<button class="ph-row" data-wx="${k}"><span><b>${n}</b></span>${S.weather === k ? '<span class="ph-dial">✓</span>' : ''}</button>`).join('')}
+    el.innerHTML = back + `<div class="ph-title">Météo</div><div class="ph-list">${[['clair', '☀️ Ciel clair'], ['pluie', '🌧️ Pluie (chaussée mouillée)'], ['brume', '🌫️ Brume'], ['sable', '🌪️ Tempête de sable']].map(([k, n]) => `<button class="ph-row" data-wx="${k}"><span><b>${n}</b></span>${S.weather === k ? '<span class="ph-dial">✓</span>' : ''}</button>`).join('')}
       ${[[8, '🌅 Matin'], [13, '🌞 Midi'], [18.6, '🌇 Coucher de soleil'], [22.5, '🌙 Nuit']].map(([h, n]) => `<button class="ph-row" data-hr="${h}"><span><b>${n}</b></span></button>`).join('')}</div>`;
   } else if (screen === 'settings') {
     const row = (k, n, on) => `<button class="ph-row" data-set="${k}"><span><b>${n}</b></span><span class="tgl ${on ? 'on' : ''}"></span></button>`;
-    el.innerHTML = back + `<div class="ph-title">Réglages</div><div class="ph-list">${row('cinema', '🎬 Graphismes cinéma', S.cinema)}${row('fp', '👁️ Vue 1re personne (V)', CAM.fp)}${row('sound', '🔊 Son', !SFX.muted)}</div>`;
+    el.innerHTML = back + `<div class="ph-title">Réglages</div><div class="ph-list"><button class="ph-row" data-set="gfx"><span><b>🎨 Graphismes</b><small>${GFX_NAMES[S.gfx]} — touche pour changer</small></span></button>${row('fp', '👁️ Vue 1re personne (V)', CAM.fp)}${row('sound', '🔊 Son', !SFX.muted)}</div>`;
   }
   el.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { if (callTimer) { clearTimeout(callTimer); callTimer = null; } renderPhone(b.dataset.go); });
   el.querySelectorAll('[data-app]').forEach(b => b.onclick = () => { const id = b.dataset.app; if (id === 'photo') { closePhone(); setPhoto(true); } else renderPhone(id); });
@@ -2964,14 +2993,192 @@ function renderPhone(screen, arg) {
   el.querySelectorAll('[data-hr]').forEach(b => b.onclick = () => { S.hour = +b.dataset.hr; applyTime(); toast('🕒 Heure changée'); });
   el.querySelectorAll('[data-set]').forEach(b => b.onclick = () => {
     const k = b.dataset.set;
-    if (k === 'cinema') setCinema(!S.cinema); else if (k === 'fp') toggleFP(); else SFX.muted = !SFX.muted;
+    if (k === 'gfx') setGfx({ standard: 'cinema', cinema: 'ultra', ultra: 'standard' }[S.gfx]); else if (k === 'fp') toggleFP(); else SFX.muted = !SFX.muted;
     renderPhone('settings');
   });
 }
-function setCinema(on) { S.cinema = on; if (on && !composer) setupFX(); try { localStorage.setItem('mirage_cinema', on ? '1' : '0'); } catch (e) { } toast(on ? '🎬 Graphismes cinéma activés' : 'Graphismes standard'); }
+function setCinema(on) { setGfx(on ? 'cinema' : 'standard'); }
 function toggleFP() { CAM.fp = !CAM.fp; toast(CAM.fp ? '👁️ Vue à la première personne' : '🎥 Vue à la troisième personne'); }
 function setPhoto(on) { S.photo = on; $('hud').hidden = on; if (isTouch) $('touch').hidden = on; if (on) setTimeout(() => toast('📷 Mode photo — appuie sur une touche pour revenir'), 50); }
 $('phHome').onclick = () => renderPhone('home');
+
+/* =====================================================================
+   RENDU RÉALISTE : textures PBR procédurales, peinture vernie, pluie,
+   chaussée mouillée, reflets d'objectif, occlusion ambiante, étalonnage
+   ===================================================================== */
+function hash2(x, y, s) { let h = (x * 374761393 + y * 668265263 + s * 1442695041) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967295; }
+function vnoise(x, y, g, s) {
+  const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi, u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+  const w = a => ((a % g) + g) % g;
+  const a = hash2(w(xi), w(yi), s), b = hash2(w(xi + 1), w(yi), s), c = hash2(w(xi), w(yi + 1), s), d = hash2(w(xi + 1), w(yi + 1), s);
+  return lerp(lerp(a, b, u), lerp(c, d, u), v);
+}
+function fbm(px, py, N, base, oct, s) { let v = 0, amp = 0.5, g = base; for (let o = 0; o < oct; o++) { v += amp * vnoise(px / N * g, py / N * g, g, s + o * 17); g *= 2; amp *= 0.5; } return v; }
+/* Cuit une carte de normales + une carte ORM (G = rugosité, B = métal) à partir d'une fonction de relief */
+function bakeMaps(N, fn, strength) {
+  const H = new Float32Array(N * N), Rg = new Float32Array(N * N), Mt = new Float32Array(N * N);
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { const o = fn(x, y), i = y * N + x; H[i] = o.h; Rg[i] = o.r; Mt[i] = o.m || 0; }
+  const mk = () => { const c = document.createElement('canvas'); c.width = c.height = N; const g = c.getContext('2d'); return [c, g, g.createImageData(N, N)]; };
+  const [nc, ng, ni] = mk(), [oc, og, oi] = mk();
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const i = y * N + x, xl = y * N + (x + N - 1) % N, xr = y * N + (x + 1) % N, yu = ((y + N - 1) % N) * N + x, yd = ((y + 1) % N) * N + x;
+    let nx = -(H[xr] - H[xl]) * strength, ny = (H[yd] - H[yu]) * strength, nz = 1; const l = Math.hypot(nx, ny, nz); nx /= l; ny /= l; nz /= l;
+    const o = i * 4;
+    ni.data[o] = (nx * 0.5 + 0.5) * 255; ni.data[o + 1] = (ny * 0.5 + 0.5) * 255; ni.data[o + 2] = (nz * 0.5 + 0.5) * 255; ni.data[o + 3] = 255;
+    oi.data[o] = 255; oi.data[o + 1] = clamp(Rg[i], 0.02, 1) * 255; oi.data[o + 2] = clamp(Mt[i], 0, 1) * 255; oi.data[o + 3] = 255;
+  }
+  ng.putImageData(ni, 0, 0); og.putImageData(oi, 0, 0);
+  const tex = c => { const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; return t; };
+  return { normal: tex(nc), orm: tex(oc) };
+}
+const inRect = (x, y, rx, ry, rw, rh) => x >= rx && x < rx + rw && y >= ry && y < ry + rh;
+const edge = (x, y, rx, ry, rw, rh) => Math.min(x - rx, rx + rw - 1 - x, y - ry, ry + rh - 1 - y);
+let PBR = null;
+function bakeAllPBR() {
+  const t0 = performance.now();
+  PBR = {
+    asphalt: bakeMaps(256, (x, y) => { const n = fbm(x, y, 256, 8, 4, 1), a = hash2(x, y, 7) > 0.9 ? hash2(x, y, 9) * 0.8 : 0, p = fbm(x, y, 256, 3, 2, 5); return { h: n * 0.6 + a, r: 0.72 + p * 0.28 - a * 0.25 }; }, 2.2),
+    paving: bakeMaps(256, (x, y) => { const T = 64, gx = x % T, gy = y % T, grout = Math.min(gx, gy) < 3; const tile = hash2(Math.floor(x / T), Math.floor(y / T), 3); return { h: grout ? 0 : 0.7 + tile * 0.15 + fbm(x, y, 256, 16, 2, 4) * 0.12 + (gx / T - 0.5) * tile * 0.1, r: grout ? 0.97 : 0.74 + tile * 0.15 }; }, 3),
+    cobble: bakeMaps(256, (x, y) => { const T = 32, cx = Math.floor(x / T), cy = Math.floor(y / T); let best = 9; for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) { const px = (cx + i + hash2((cx + i + 8) % 8, (cy + j + 8) % 8, 11) * 0.5 + 0.25) * T, py = (cy + j + hash2((cx + i + 8) % 8, (cy + j + 8) % 8, 12) * 0.5 + 0.25) * T; best = Math.min(best, Math.hypot(x - px, y - py) / (T * 0.55)); } const h = Math.sqrt(Math.max(0, 1 - best * best)); return { h: h * 0.9 + fbm(x, y, 256, 32, 2, 6) * 0.1, r: h > 0.05 ? 0.6 + fbm(x, y, 256, 8, 2, 2) * 0.25 : 0.95 }; }, 3.5),
+    grass: bakeMaps(128, (x, y) => ({ h: fbm(x, y, 128, 32, 3, 21), r: 0.9 }), 3),
+    sand: bakeMaps(256, (x, y) => { const w = fbm(x, y, 256, 4, 3, 31); return { h: 0.5 + 0.5 * Math.sin((y + w * 60) / 256 * Math.PI * 2 * 14), r: 0.96 }; }, 1.6),
+    roof: bakeMaps(128, (x, y) => { const row = Math.floor(y / 16), off = row % 2 ? 8 : 0, gx = (x + off) % 16; return { h: ((y % 16) / 16) * 0.8 + (gx < 1 ? -0.3 : 0) + fbm(x, y, 128, 16, 2, 41) * 0.15, r: 0.8 }; }, 2.5),
+    facades: [0, 1, 2].map(s => bakeMaps(256, (X, Y) => {
+      const x = X / 2, y = Y / 2; let win = null;
+      for (let i = 0; i < 4 && !win; i++) for (let j = 0; j < 4 && !win; j++) {
+        let r = [i * 32 + 4, j * 32 + 5, 24, 20]; if (s === 1) r = [i * 32 + 3, j * 32 + 1, 26, 30]; if (s === 2) r = [i * 32, j * 32 + 8, 32, 18];
+        if (inRect(x, y, ...r)) win = r;
+      }
+      const n = fbm(X, Y, 256, 16, 2, 50 + s);
+      if (win) { const e = edge(x, y, ...win); return { h: 0.15 + Math.min(e, 1.5) * 0.08, r: 0.06 + n * 0.06, m: 0.55 }; }
+      return { h: 0.9 + n * 0.08, r: 0.45 + n * 0.25, m: 0.15 };
+    }, 4)),
+    gva: bakeMaps(256, (X, Y) => {
+      const x = X / 2, y = Y / 2;
+      for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) {
+        const wx = i * 32 + 10, wy = j * 32 + 6;
+        if (inRect(x, y, wx, wy, 12, 22)) return { h: 0.1 + (Math.abs(x - wx - 6) < 1 ? 0.25 : 0), r: 0.08, m: 0.5 };
+        if (inRect(x, y, wx - 6, wy, 5, 22) || inRect(x, y, wx + 13, wy, 5, 22)) return { h: 0.75 + 0.15 * Math.sin(y * 2.4), r: 0.6 };
+        if (inRect(x, y, wx - 2, wy + 23, 16, 3)) return { h: 1, r: 0.7 };
+      }
+      const course = (y % 8) < 0.7 || ((x + (Math.floor(y / 8) % 2) * 9) % 18) < 0.7;
+      return { h: course ? 0.45 : 0.7 + fbm(X, Y, 256, 32, 3, 61) * 0.18, r: 0.88 };
+    }, 3.2),
+  };
+  console.info(`PBR : textures générées en ${Math.round(performance.now() - t0)} ms`);
+}
+function withRepeat(t, rx, ry) { const c = t.clone(); c.needsUpdate = true; c.repeat.set(rx, ry); return c; }
+function setPBR(m, set, rx, ry, normalScale = 1) {
+  m.normalMap = withRepeat(set.normal, rx, ry); m.normalScale = new THREE.Vector2(normalScale, normalScale);
+  m.roughnessMap = withRepeat(set.orm, rx, ry); m.roughness = 1;
+  m.needsUpdate = true;
+}
+const WET = [];
+function applyPBR() {
+  bakeAllPBR();
+  const done = new Set();
+  scene.traverse(o => {
+    const m = o.material; if (!m || !m.isMeshStandardMaterial || done.has(m)) return;
+    const tag = m.userData.pbr; if (!tag) return; done.add(m);
+    const p = o.geometry.parameters || {}, W = p.width || 88, H = p.height || 88;
+    if (tag === 'road') { setPBR(m, PBR.asphalt, W / 7, H / 7, 0.8); WET.push(m); }
+    else if (tag === 'asphalt') { setPBR(m, PBR.asphalt, W / 7, H / 7, 0.8); WET.push(m); }
+    else if (tag === 'paving') { setPBR(m, PBR.paving, W / 4, H / 4, 0.7); WET.push(m); }
+    else if (tag === 'cobble') { setPBR(m, PBR.cobble, W / 1.6, H / 1.6, 0.55); WET.push(m); }
+    else if (tag === 'grass') setPBR(m, PBR.grass, W / 3, H / 3, 0.8);
+    else if (tag === 'sand') setPBR(m, PBR.sand, W / 9, H / 9, 0.7);
+  });
+  for (const w of WET) w.userData.baseColor = w.color.clone();
+  // façades : mêmes coordonnées de texture que la couleur (une tuile = 15 m x 13 m)
+  const fac = m => { for (let s = 0; s < 3; s++) if (m.map === FACADES[s].map) return PBR.facades[s]; return m.map === GVA_FAC.map ? PBR.gva : null; };
+  for (const m of BMATS) {
+    const set = fac(m); if (!set) continue;
+    m.normalMap = set.normal; m.normalScale = new THREE.Vector2(1, 1); m.roughnessMap = set.orm; m.metalnessMap = set.orm; m.roughness = 1; m.metalness = set === PBR.gva ? 0.6 : 1; m.needsUpdate = true;
+  }
+  const roofMat = ROOFS_MESH && ROOFS_MESH.material; if (roofMat) { roofMat.normalMap = withRepeat(PBR.roof.normal, 6, 6); roofMat.roughnessMap = withRepeat(PBR.roof.orm, 6, 6); roofMat.needsUpdate = true; }
+}
+let ROOFS_MESH = null;
+
+/* ---------- peinture automobile vernie (vernis + flocons métalliques) */
+function carPaint(type) {
+  return new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: type === 'tractor' ? 0.6 : 0.34, metalness: type === 'hyper' ? 0.85 : 0.5, clearcoat: type === 'tractor' ? 0.2 : 1, clearcoatRoughness: 0.05, envMapIntensity: envLevel });
+}
+
+/* ---------- pluie, flaques et chaussée mouillée */
+const RAIN_N = isTouch ? 700 : 1800;
+const rainMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.025, 0.9, 0.025), new THREE.MeshBasicMaterial({ color: 0xb8c6d8, transparent: true, opacity: 0.32, depthWrite: false }), RAIN_N);
+rainMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); rainMesh.frustumCulled = false; rainMesh.visible = false; scene.add(rainMesh);
+const rainP = new Float32Array(RAIN_N * 3); for (let i = 0; i < RAIN_N; i++) { rainP[i * 3] = rand(-35, 35); rainP[i * 3 + 1] = rand(0, 30); rainP[i * 3 + 2] = rand(-35, 35); }
+const puddleMat = new THREE.MeshStandardMaterial({ color: 0x1a1c20, roughness: 0.03, metalness: 0.95, transparent: true, opacity: 0, depthWrite: false });
+let puddles = null;
+function buildPuddles() {
+  const g = new THREE.CircleGeometry(1, 20); g.rotateX(-Math.PI / 2);
+  const list = [];
+  for (let i = 0; i < 260; i++) { const onX = Math.random() < 0.5, line = onX ? pick(ROADS_X) : pick(ROADS_Z), off = rand(-11, 11), along = onX ? rand(-540, 900) : rand(-300, 540); list.push(onX ? { x: line + off, z: along } : { x: along, z: line + off }); }
+  puddles = new THREE.InstancedMesh(g, puddleMat, list.length); const d = new THREE.Object3D();
+  list.forEach((p, i) => { d.position.set(p.x, 0.075, p.z); d.scale.set(rand(1, 3.2), 1, rand(0.8, 2.4)); d.rotation.y = rand(0, 3); d.updateMatrix(); puddles.setMatrixAt(i, d.matrix); });
+  puddles.renderOrder = 1; scene.add(puddles); ENV_MATS.add(puddleMat);
+}
+let lightningT = 12;
+function updateWeatherFX(dt) {
+  const target = S.weather === 'pluie' ? 1 : 0;
+  S.wet = clamp(S.wet + (target - S.wet) * dt * (target ? 0.35 : 0.04), 0, 1);
+  for (const m of WET) { m.roughness = lerp(1, 0.22, S.wet); m.color.copy(m.userData.baseColor).multiplyScalar(lerp(1, 0.58, S.wet)); }
+  puddleMat.opacity = S.wet * 0.9; POOL_MAT.opacity *= 1 + S.wet * 1.2;
+  const raining = S.weather === 'pluie';
+  rainMesh.visible = raining && S.mode !== 'creator';
+  if (raining) {
+    const a = rainMesh.instanceMatrix.array, cp = camera.position;
+    for (let i = 0; i < RAIN_N; i++) {
+      let x = rainP[i * 3], y = rainP[i * 3 + 1], z = rainP[i * 3 + 2];
+      y -= 32 * dt; x += 3 * dt;
+      if (y < -2) { y = 30; x = rand(-35, 35); z = rand(-35, 35); if (Math.random() < 0.08) emit(cp.x + x, Math.max(0.1, heightAt(cp.x + x, cp.z + z, cp.y)) + 0.05, cp.z + z, rand(-0.6, 0.6), rand(1, 2), rand(-0.6, 0.6), 0.25, 0.06, '#cfd8e6', 0.6); }
+      if (x > 35) x -= 70;
+      rainP[i * 3] = x; rainP[i * 3 + 1] = y; rainP[i * 3 + 2] = z;
+      const o = i * 16; a.fill(0, o, o + 16); a[o] = a[o + 5] = a[o + 10] = a[o + 15] = 1; a[o + 4] = 0.08;
+      a[o + 12] = cp.x + x; a[o + 13] = cp.y - 6 + y; a[o + 14] = cp.z + z;
+    }
+    rainMesh.instanceMatrix.needsUpdate = true;
+    lightningT -= dt;
+    if (lightningT <= 0 && S.hour > 18 || lightningT <= 0 && S.hour < 6) { lightningT = rand(14, 32); hemi.intensity += 3; setTimeout(() => SFX.burst(2.2, 160, 0.7), rand(400, 1600)); }
+  }
+}
+
+/* ---------- reflets d'objectif du soleil */
+const flareTex = (draw) => { const c = document.createElement('canvas'); c.width = c.height = 128; draw(c.getContext('2d')); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; };
+const FLARE0 = flareTex(g => { const r = g.createRadialGradient(64, 64, 0, 64, 64, 64); r.addColorStop(0, 'rgba(255,250,235,1)'); r.addColorStop(0.15, 'rgba(255,230,190,.8)'); r.addColorStop(1, 'rgba(255,200,140,0)'); g.fillStyle = r; g.fillRect(0, 0, 128, 128); });
+const FLARE1 = flareTex(g => { g.strokeStyle = 'rgba(180,220,255,.35)'; g.lineWidth = 6; g.beginPath(); for (let i = 0; i <= 6; i++) { const a = i / 6 * Math.PI * 2; g[i ? 'lineTo' : 'moveTo'](64 + Math.cos(a) * 50, 64 + Math.sin(a) * 50); } g.stroke(); });
+const lensflare = new Lensflare();
+lensflare.addElement(new LensflareElement(FLARE0, 420, 0, new THREE.Color(1, 0.95, 0.85)));
+lensflare.addElement(new LensflareElement(FLARE1, 70, 0.35));
+lensflare.addElement(new LensflareElement(FLARE0, 50, 0.55, new THREE.Color(0.6, 0.8, 1)));
+lensflare.addElement(new LensflareElement(FLARE1, 120, 0.8));
+lensflare.addElement(new LensflareElement(FLARE0, 35, 1.0, new THREE.Color(1, 0.7, 0.5)));
+sun.add(lensflare);
+
+/* ---------- niveaux de qualité : Standard / Cinéma / Ultra */
+let gtaoPass = null;
+const GFX_NAMES = { standard: 'Standard', cinema: 'Cinéma', ultra: 'Ultra (réaliste)' };
+function setGfx(level, silent) {
+  S.gfx = level; S.cinema = level !== 'standard';
+  if (S.cinema && !composer) setupFX();
+  if (gtaoPass) gtaoPass.enabled = level === 'ultra';
+  const ms = level === 'ultra' ? 4096 : isTouch ? 1024 : 2048, half = level === 'ultra' ? 100 : 70;
+  if (sun.shadow.mapSize.x !== ms) { sun.shadow.mapSize.set(ms, ms); if (sun.shadow.map) { sun.shadow.map.dispose(); sun.shadow.map = null; } }
+  Object.assign(sun.shadow.camera, { left: -half, right: half, top: half, bottom: -half }); sun.shadow.camera.updateProjectionMatrix();
+  if (!silent) { try { localStorage.setItem('mirage_gfx', level); } catch (e) { } toast(`🎨 Graphismes : ${GFX_NAMES[level]}`); }
+}
+const perf = { t: 0, n: 0 };
+function autoTune(realDt) {
+  if (S.autoTuned || S.mode !== 'play') return;
+  perf.t += realDt; perf.n++;
+  if (perf.t < 6) return;
+  S.autoTuned = true; const fps = perf.n / perf.t;
+  let chosen = null; try { chosen = localStorage.getItem('mirage_gfx'); } catch (e) { }
+  if (chosen) return;
+  if (S.gfx === 'ultra' && fps < 32) { setGfx('cinema', true); toast(`🎨 Qualité ajustée : Cinéma (${Math.round(fps)} img/s)`); }
+  else if (S.gfx === 'cinema' && fps < 24) { setGfx('standard', true); toast(`🎨 Qualité ajustée : Standard (${Math.round(fps)} img/s)`); }
+}
 
 /* =====================================================================
    DEMARRAGE
@@ -3004,9 +3211,11 @@ async function start() {
   await new Promise(r => setTimeout(r, 30));
   buildWorld(); buildMapCanvas();
   rebuildPlayer();
+  $('loadTxt').textContent = 'Génération des matériaux PBR…'; await new Promise(r => setTimeout(r, 20));
+  applyPBR(); buildPuddles();
   scene.traverse(o => { const m = o.material; if (m && m.isMeshStandardMaterial) ENV_MATS.add(m); }); ENV_MATS.add(CHAR_MAT);
   placeStartVehicles(); spawnTrams();
-  if (S.cinema) setupFX();
+  setGfx(S.gfx, true);
   $('btnPhone').onclick = () => togglePhone(); $('btnView').onclick = () => toggleFP();
   $('mapTp').onclick = () => { if (!S.waypoint) { toast('Place d\'abord un point sur la carte'); return; } teleport(S.waypoint.x, S.waypoint.z); closeMap(); clearWaypoint(); toast('✨ Téléporté'); };
   $('mapClr').onclick = () => { clearWaypoint(); drawBigMap(); };
@@ -3022,7 +3231,7 @@ async function start() {
   requestAnimationFrame(frame);
   applyTime();
 }
-window.__mirage = { setWaypoint, togglePhone, toggleFP, renderPhone, setCinema, renderer, S, P, vehicles, peds, teleport, spawnVehicleForPlayer, keys, CAM, setWeapon, togglePower, launchFireworks };
+window.__mirage = { setGfx, setWaypoint, togglePhone, toggleFP, renderPhone, setCinema, renderer, S, P, vehicles, peds, teleport, spawnVehicleForPlayer, keys, CAM, setWeapon, togglePower, launchFireworks };
 S.mode = 'loading';
 start().catch(e => { $('loadTxt').textContent = 'Erreur : ' + e.message; console.error(e); });
 </script>

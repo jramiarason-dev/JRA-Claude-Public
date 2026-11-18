@@ -25,7 +25,11 @@ Une connexion Internet est nécessaire au premier chargement (Three.js est charg
    atmosphériques, vitrines éclairées, halos des lampadaires, trams et caténaires à Genève, passages piétons jaunes.
 7. **Téléphone** (T) : GPS avec itinéraire par les routes, appels (taxi, police 117, pompiers 118, ambulance 144,
    mécano, pilote d'hélico), garage, météo, mode photo, réglages.
-8. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
+8. **Rendu réaliste** (3 niveaux : Standard, Cinéma, Ultra, ajustement automatique selon les performances) :
+   textures PBR générées par le code (bitume, pavés, dalles, herbe, sable ridé, tuiles, façades avec vitres
+   réfléchissantes), peinture automobile vernie, occlusion ambiante (GTAO), anticrénelage MSAA, ombres 4K,
+   étalonnage des couleurs, netteté, flou de vitesse, reflets d'objectif, pluie avec chaussée mouillée et flaques.
+9. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
    patrouille, limousine, bus, ambulance, camion de pompiers, fourgon postal, tracteur, hélicoptère, jet-ski, yacht), 5 armes (poings, pistolet, fusil, lance-roquettes,
    canon à confettis), jetpack, parachute, super saut, super vitesse, ralenti, téléportation par la carte.
 
