@@ -29,3 +29,24 @@ jobs:
           # because the smoke test only exercises static (no-API) mode.
           ANTHROPIC_API_KEY: sk-ant-ci-placeholder
         run: python -m unittest discover -s tests -v
+
+  mirage-city:
+    name: Mirage City (build + smoke test)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: index.html à jour avec src/
+        run: python3 mirage_city/build.py --check
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save --no-package-lock playwright@1.49.1
+          npx playwright install --with-deps chromium
+
+      - name: Smoke test
+        run: node mirage_city/tests/smoke.mjs
