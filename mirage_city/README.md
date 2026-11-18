@@ -41,7 +41,13 @@ Une connexion Internet est nécessaire au premier chargement (Three.js est charg
     casquette (6 panneaux, visière, à l'endroit ou à l'envers), cagoule, gants noirs en cuir, montre (boîtier
     métal, verre, bracelet cuir), lunettes (montures dorées, verres réfléchissants), chaîne à maillons. Baskets,
     baskets montantes ou chaussures en cuir, avec couleur du dessus, de la semelle et de la bande latérale.
-11. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
+11. **Monuments reconnaissables** : Burj Khalifa (plan en Y, retraits en spirale), Burj Al Arab (exosquelette,
+    héliport, restaurant suspendu), Palm Jumeirah et Atlantis, Dubai Mall, fontaine de Dubaï, Musée du Futur,
+    Emirates Towers, Coca-Cola Arena, Dubai Frame, Dubai Marina ; à Genève : jet d'eau, vieille ville et
+    cathédrale, Palais des Nations et chaise cassée, Stade de Genève, grands hôtels du quai, rue des horlogers.
+12. **Frontière et aéroport** : mur et postes de douane avec barrières automatiques et drapeaux entre Dubaï et
+    Genève ; aéroport international dans le désert (piste, terminal, tour de contrôle, hangars) et jet privé pilotable.
+13. **Gameplay** : circulation et piétons, 17 véhicules (supercars, hypercar en or, 4x4, quad, moto, taxi,
    patrouille, limousine, bus, ambulance, camion de pompiers, fourgon postal, tracteur, hélicoptère, jet-ski, yacht), 5 armes (poings, pistolet, fusil, lance-roquettes,
    canon à confettis), jetpack, parachute, super saut, super vitesse, ralenti, téléportation par la carte.
 
